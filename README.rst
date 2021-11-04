@@ -36,9 +36,10 @@ Features
 Learn more
 ----------
 
-The documentation for Xilinx Inference Server is available in docs/.
+The documentation for Xilinx Inference Server is available in on Github.
+Use the link in the sidebar.
 
-Check out the :ref:`quickstart` on how to get started.
+Check out the `Quickstart <https://expert-funicular-ce3bc1d0.pages.github.io/quickstart.html>`__ on how to get started.
 
 Support
 -------
@@ -49,6 +50,6 @@ Refer to :ref:`Contributing` for more information.
 License
 -------
 
-Xilinx Inference Server is licensed under the terms of Apache 2.0 (see LICENSE).
+Xilinx Inference Server is licensed under the terms of Apache 2.0 (see `LICENSE <https://github.com/Xilinx/inference-server/blob/main/LICENSE>`__).
 The LICENSE file contains additional license information for third-party files distributed with this work.
-More license information can be seen in :ref:`dependencies`.
+More license information can be seen in the `dependencies <https://expert-funicular-ce3bc1d0.pages.github.io/dependencies.html>`__.
