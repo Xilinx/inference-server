@@ -45,7 +45,7 @@ Support
 -------
 
 Raise issues if you find a bug or need help.
-Refer to :ref:`Contributing` for more information.
+Refer to `Contributing <https://expert-funicular-ce3bc1d0.pages.github.io/contributing.html>`__ for more information.
 
 License
 -------
