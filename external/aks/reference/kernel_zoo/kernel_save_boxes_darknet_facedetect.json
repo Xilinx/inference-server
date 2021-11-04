@@ -1,0 +1,13 @@
+{
+  "kernel_name": "SaveBoxesDarknetFacedetect",
+  "description": "Returns detection boxes in Darknet format. Output format: {batch idx, class id, score, x, y, w, h}",
+  "kernel_type": "cpp",
+  "device_type": "cpu",
+  "kernel_lib" : "libs/libSaveBoxesDarknetFacedetect.so",
+
+  "param_list" : {
+    "output_dir": {"type": "string"},
+    "net_w": {"type": "int"},
+    "net_h": {"type": "int"}
+  }
+}

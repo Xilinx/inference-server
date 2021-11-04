@@ -1,0 +1,185 @@
+// Copyright 2021 Xilinx Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @file
+ * @brief Defines how the shared mutable state of Proteus is managed as Proteus
+ * runs
+ */
+
+#ifndef GUARD_PROTEUS_CORE_MANAGER
+#define GUARD_PROTEUS_CORE_MANAGER
+
+#include <exception>      // for exception_ptr
+#include <map>            // for map
+#include <memory>         // for allocator, unique_ptr
+#include <string>         // for string
+#include <thread>         // for thread
+#include <unordered_map>  // for unordered_map
+#include <utility>        // for move, pair
+
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/predict_api.hpp"     // for RequestParameters
+#include "proteus/helpers/queue.hpp"        // for BlockingConcurrentQueue
+#include "proteus/observation/logging.hpp"  // for LoggerPtr
+
+namespace proteus {
+class WorkerInfo;
+}  // namespace proteus
+// IWYU pragma: no_forward_declare proteus::RequestParameters
+
+namespace proteus {
+
+// class WorkerInfo;
+
+/**
+ * @brief IDs used to specify commands to update the Proteus Manager
+ *
+ */
+enum class UpdateCommandType {
+  Create,
+  Shutdown,
+  Allocate,
+  Duplicate,
+  Stop,
+  Load,
+};
+
+/**
+ * @brief Commands sent to update the Proteus Manager consist of an ID, a key
+ * value (string), an integer, and a pointer to an exception so if the update
+ * fails for some reason, this information is communicated back to the requester
+ */
+struct UpdateCommand {
+  /// Constructor for UpdateCommand
+  explicit UpdateCommand(UpdateCommandType cmd_ = UpdateCommandType::Create,
+                         std::string key_ = "", void* object_ = nullptr,
+                         void* retval_ = nullptr)
+    : cmd(cmd_),
+      key(std::move(key_)),
+      object(object_),
+      retval(retval_),
+      eptr(nullptr) {}
+  /// the command ID
+  UpdateCommandType cmd;
+  /// a string key that a command can make use of. Usually identifies the worker
+  std::string key;
+  /// pointer to an abitrary object
+  void* object;
+  /// pointer to a caller-allocated variable to hold the return value
+  void* retval;
+  /**
+   * @brief The caller making a request through the update mechanism should
+   * catch this exception which is thrown if the requested update fails so the
+   * caller is not waiting endlessly.
+   */
+  std::exception_ptr eptr;
+};
+using UpdateCommandQueue = BlockingQueue<std::shared_ptr<UpdateCommand>>;
+
+/**
+ * @brief The Proteus Manager holds all the state information about a running
+ * Proteus server. Read access to the state is thread-safe but all modifications
+ * are handled through a separate update thread to preserve consistency. It is
+ * a singleton instance and the base code is taken from
+ * https://stackoverflow.com/a/1008289.
+ */
+class Manager {
+ public:
+  /// Get the singleton Manager instance
+  static Manager& getInstance() {
+    // Guaranteed to be destroyed. Instantiated on first use.
+    static Manager instance;
+    return instance;
+  }
+
+  std::string loadWorker(std::string const& key, RequestParameters* parameters);
+  void unloadWorker(std::string const& key);
+
+  /**
+   * @brief Get the WorkerInfo object associated with the given key. If the
+   * worker does not exist, throws an exception.
+   *
+   * @param key name of the worker
+   * @return WorkerInfo*
+   */
+  WorkerInfo* getWorker(std::string const& key);
+
+  /**
+   * @brief Check if a particular worker exists already
+   *
+   * @param key name of the worker
+   * @return bool
+   */
+  bool workerExists(std::string const& key);
+  /**
+   * @brief Request that a worker support a request with num inputs. This means
+   * that the worker must allocate enough buffers to have at least num buffers.
+   *
+   * @param key name of the worker to make the request to
+   * @param num the minimum number of buffers the worker should have after
+   * allocation
+   */
+  void workerAllocate(std::string const& key, int num);
+  /**
+   * @brief Stop the Manager. This should be called prior to ending Proteus.
+   *
+   */
+  void shutdown();
+
+ private:
+  /// Construct a new Manager object
+  Manager();
+  /// Destroy the Manager object
+  ~Manager() = default;
+  /// Map (key -> WorkerInfo*) of all workers that are currently alive
+  std::unordered_map<std::string, std::unique_ptr<WorkerInfo>> active_workers_;
+  std::unordered_map<std::string,
+                     std::pair<int, std::map<RequestParameters, std::string>>>
+    active_worker_endpoints_;
+  /// A queue used to sequentially order changes to the Proteus Manager state
+  std::unique_ptr<UpdateCommandQueue> update_queue_;
+  std::thread update_thread_;
+#ifdef PROTEUS_ENABLE_LOGGING
+  LoggerPtr logger_;
+#endif
+  /**
+   * @brief Save a newly started worker in the Manager
+   *
+   * @param key name of the worker
+   * @param worker_info_ptr the worker's metadata
+   */
+  void addWorker(std::string const& key,
+                 std::unique_ptr<WorkerInfo> worker_info_ptr);
+
+  /**
+   * @brief This method is started as a separate thread when the Manager is
+   * constructed. It monitors a queue which contains commands that modify the
+   * shared state of Proteus. This queue serializes these requests and ensures
+   * consistency
+   *
+   * @param input_queue queue where update requests will arrive
+   */
+  void update_manager(UpdateCommandQueue* input_queue);
+
+ public:
+  Manager(Manager const&) = delete;             ///< Copy constructor
+  Manager& operator=(const Manager&) = delete;  ///< Copy assignment constructor
+  Manager(Manager&& other) = delete;            ///< Move constructor
+  Manager& operator=(Manager&& other) =
+    delete;  ///< Move assignment constructor
+};
+
+}  // namespace proteus
+#endif  // GUARD_PROTEUS_CORE_MANAGER

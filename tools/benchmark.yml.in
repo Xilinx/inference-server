@@ -1,0 +1,63 @@
+# Copyright 2021 Xilinx Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Specify a pytest-style filter for which benchmarks to run. Refer to the -k
+# option in pytest for syntax. Examples:
+#   - xmodel: case-insensitively match any test containing xmodel
+#   - xmodel or facedetect: match any test containing xmodel or facedetect
+# Leave blank to run all available benchmarks
+benchmarks:
+
+# Number of times to repeat each test for averaging
+repeat_count: 5
+
+# Set >0 to print out debugging information
+verbosity: 0
+
+# Run pytest's Python benchmarks that match the benchmarks filter above
+pytest:
+  # set to true to enable
+  enabled: false
+
+# Run wrk's HTTP/REST benchmarks that match the benchmarks filter above. Each
+# permutation defined by the options below is run. Note: enabling the wrk
+# benchmarks requires also enabling the pytest benchmarks
+wrk:
+  # set to true to enable
+  enabled: false
+  # number of threads to use for wrk
+  threads: [4]
+  # number of TCP connections to use for wrk
+  connections: [64]
+  # length of time to run wrk
+  time: [5s]
+  # number of workers to spawn in Proteus to handle the requests
+  workers: [4]
+
+# Run the C++ benchmarks that match the benchmarks filter above. Each
+# permutation defined by the options below is run.
+cpp:
+  # set to true to enable
+  enabled: true
+  # number of images to send to the application
+  images: [1000]
+  # number of threads to use. This value may be used differently by different
+  # benchmarks
+  threads: [1]
+  # number of workers to spawn in Proteus or number of runners to use. This value
+  # may be used differently by different benchmarks
+  workers: [1]
+  # add any other flags or options to pass to the executable. If a particular
+  # flag is not used by a benchmark, it's silently skipped.
+  flags: [""]

@@ -1,0 +1,80 @@
+# Copyright 2021 Xilinx Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+Checks: >
+  *,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -fuchsia-*,
+  -google-runtime-references,
+  -hicpp-no-array-decay,
+  -hicpp-signed-bitwise,
+  -llvm-header-guard,
+  -misc-non-private-member-variables-in-classes,
+  -misc-unused-parameters,
+  -modernize-use-trailing-return-type
+#
+# Disabled checks:
+#
+# cppcoreguidelines-non-private-member-variables-in-classes
+#   We allow protected member variables in virtual classes.
+#
+# cppcoreguidelines-pro-bounds-pointer-arithmetic
+#   We use pointer math to get at underlying buffer data
+#
+# cppcoreguidelines-pro-type-reinterpret-cast
+#   Sometimes used in type-invariant buffer data
+#
+# fuchsia-*
+#   These guidelines are particular to Fuchsia and unnecessary here
+#
+# google-runtime-references
+#   Flags non-const reference parameters but this is fine (assume caller modifies)
+#
+# hicpp-no-array-decay
+#   Alias for cppcoreguidelines-pro-bounds-array-to-pointer-decay
+#
+# hicpp-signed-bitwise
+#   This check is needlessly pedantic (https://stackoverflow.com/a/58845898)
+#
+# llvm-header-guard
+#   Doesn't seem to be satisfied easily
+#
+# misc-non-private-member-variables-in-classes
+#   Alias for cppcoreguidelines-non-private-member-variables-in-classes
+#
+# misc-unused-parameters
+#   This gets triggered too often on virtual functions that are unimplemented
+#
+# modernize-use-trailing-return-type
+#   Not using trailing type syntax here
+
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     google
+CheckOptions:
+  - key:   cppcoreguidelines-pro-type-member-init.IgnoreArrays
+    value: '1'
+  - key:   cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value: '1'
+  - key:   hicpp-member-init.IgnoreArrays
+    value: '1'
+  - key:   hicpp-special-member-functions.AllowSoleDefaultDtor
+    value: '1'
+  - key:   misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: '1'
+...

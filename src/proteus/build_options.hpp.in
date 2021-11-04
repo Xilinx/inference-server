@@ -1,0 +1,49 @@
+// Copyright 2021 Xilinx Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @file
+ * @brief Defines the Proteus's build information
+ */
+
+#ifndef GUARD_PROTEUS_BUILD_OPTIONS_HPP
+#define GUARD_PROTEUS_BUILD_OPTIONS_HPP
+
+/// Enables Proteus's rest endpoints for inference
+#cmakedefine PROTEUS_ENABLE_REST
+/// Enables Proteus's metric collection
+#cmakedefine PROTEUS_ENABLE_METRICS
+/// Enables Proteus's HTTP server
+#cmakedefine PROTEUS_ENABLE_HTTP
+/// Enables Proteus's tracing
+#cmakedefine PROTEUS_ENABLE_TRACING
+/// Enables Proteus's logging
+#cmakedefine PROTEUS_ENABLE_LOGGING
+/// Enables AKS in proteus
+#cmakedefine PROTEUS_ENABLE_AKS
+/// Enables AKS in proteus
+#cmakedefine PROTEUS_ENABLE_VITIS
+
+/// Port used by Proteus's HTTP server
+constexpr auto kDefaultHttpPort = @PROTEUS_DEFAULT_HTTP_PORT@;
+
+/// Number of threads used by Drogon
+constexpr auto kDefaultDrogonThreads = 16;
+
+/// Maximum size of a HTTP request body in MiB. Arbitrarily set here to 4MiB
+constexpr auto kDefaultClientBodySize = 4194304;
+
+/// Maximum number of characters usable for a model name used in an endpoint.
+constexpr auto kMaxModelNameSize = 64;
+#endif  // GUARD_PROTEUS_BUILD_OPTIONS_HPP
