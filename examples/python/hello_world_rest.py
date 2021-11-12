@@ -18,10 +18,11 @@ to it over REST and parse the response. Look at the documentation for more
 detailed commentary on this example.
 """
 
+# fmt: off
 # +imports:
 import proteus
-
 # -imports:
+# fmt: on
 
 # +main:
 def main():

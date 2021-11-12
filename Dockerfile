@@ -470,7 +470,7 @@ RUN apt-get update \
         breathe \
         fastcov \
         sphinx \
-        sphinx_rtd_theme \
+        sphinx_copybutton \
         sphinxcontrib-confluencebuilder \
         # install linting tool
         black \
@@ -572,7 +572,7 @@ RUN ldconfig \
     && ./proteus install --all \
     && ./proteus install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     # build the static GUI files
-    # && cd src/gui && npm install && npm run build \
+    && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
@@ -634,7 +634,11 @@ COPY --from=proteus_builder /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
 # get the gosu executable
 COPY --from=proteus_builder /usr/local/bin/gosu /usr/local/bin/
 
-ENV LD_LIBRARY_PATH="/opt/xilinx/proteus/lib:/opt/xilinx/proteus/aks"
+COPY --from=proteus_builder $PROTEUS_ROOT/external/overlaybins /opt/xilinx/overlaybins
+COPY --from=proteus_builder $PROTEUS_ROOT/external/aks/graph_zoo /opt/xilinx/proteus/aks/graph_zoo
+COPY --from=proteus_builder $PROTEUS_ROOT/external/aks/kernel_zoo /opt/xilinx/proteus/aks/kernel_zoo
+
+ENV LD_LIBRARY_PATH="/usr/local/lib/proteus:/opt/xilinx/proteus/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
 ENV AKS_ROOT="/opt/xilinx/proteus/aks"

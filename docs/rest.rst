@@ -16,7 +16,7 @@
 REST Endpoints
 ==============
 
-The REST endpoints are based on `KFServing's v2 specification <https://github.com/kubeflow/kfserving/tree/master/docs/predict-api/v2>`__.
+The REST endpoints are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__.
 
 Health
 ------

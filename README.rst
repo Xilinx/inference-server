@@ -23,7 +23,7 @@ Xilinx Inference Server can also be extended to support other hardware accelerat
 Features
 --------
 
-* Inference Server: Xilinx Inference Server supports client requests using HTTP REST / websockets protocols using an API based on `KFServing's v2 specification <https://github.com/kubeflow/kfserving/tree/master/docs/predict-api/v2>`__
+* Inference Server: Xilinx Inference Server supports client requests using HTTP REST / websockets protocols using an API based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__
 * C++ API: custom applications to directly call the backend to bypass the REST interface
 * Python REST library: clients can submit requests to the inference server from Python through this simplified Python API
 * Efficient hardware usage: Xilinx Inference Server will automatically make use of all available FPGAs on a machine as needed with `XRM <https://github.com/Xilinx/XRM>`__
@@ -36,8 +36,7 @@ Features
 Learn more
 ----------
 
-The documentation for Xilinx Inference Server is available in on Github.
-Use the link in the sidebar.
+The documentation for Xilinx Inference Server is available `online <https://expert-funicular-ce3bc1d0.pages.github.io>`__.
 
 Check out the `Quickstart <https://expert-funicular-ce3bc1d0.pages.github.io/quickstart.html>`__ on how to get started.
 

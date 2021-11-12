@@ -51,10 +51,10 @@ extensions = [
     # adds .nojekyll to the generated HTML for GitHub
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
+    "sphinx_copybutton",
 ]
 
 # Breathe configuration
-
 
 
 breathe_projects = {"proteus": "../build/docs/doxygen/xml"}
@@ -87,8 +87,8 @@ extlinks = {
 nitpicky = True
 
 # Configure 'Edit on GitHub' extension
-edit_on_github_project = 'Xilinx/inference-server'
-edit_on_github_branch = 'main/docs'
+edit_on_github_project = "Xilinx/inference-server"
+edit_on_github_branch = "main/docs"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -110,7 +110,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 #     "sticky_navigation": True,
 #     "navigation_depth": 4,
 # }
-html_theme = 'xilinx'
+html_theme = "xilinx"
 html_theme_path = ["./_themes"]
 
 # Add any paths that contain custom static files (such as style sheets) here,

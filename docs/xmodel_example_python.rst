@@ -55,7 +55,7 @@ Get Images
 ----------
 
 Now, we can prepare our request.
-In this example, we use one image and duplicate it *batch_size* times.
+In this example, we use one image and duplicate it *batch_size* times so we can create one whole batch.
 
 .. literalinclude:: ../examples/python/custom_processing.py
     :start-after: +get images:

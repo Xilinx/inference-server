@@ -15,6 +15,7 @@
 # directories
 .benchmarks/
 build/
+private/
 uploads/
 docs/_build/
 external/artifacts/

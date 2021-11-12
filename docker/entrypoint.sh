@@ -22,11 +22,11 @@ if systemctl --all --type service | grep -q xrmd; then
   fi
 fi
 
-# if the user has mounted any directories into /workspace, get the UID/GID from
-# the first found directory and use it to adjust the UID/GID of proteus-user
+# if the user has mounted any files/directories into /workspace, get the UID/GID
+# from the first found one and use it to adjust the UID/GID of proteus-user
 # Changing UID/GID taken from https://stackoverflow.com/a/46057716
-for dir in /workspace/*/; do  # list directories in the form "/workspace/dir/"
-  if [ ! -d $dir ]; then
+for dir in /workspace/*; do  # lists the absolute path to the file/directory
+  if [ ! -d "$dir" ] && [ ! -f "$dir" ]; then
     continue
   fi
 
