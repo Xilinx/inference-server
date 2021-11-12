@@ -62,6 +62,7 @@ namespace workers {
  */
 class Aks : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -75,8 +76,6 @@ class Aks : public Worker {
 
   /// the AKS system manager
   AKS::SysManagerExt* sysMan_ = nullptr;
-  /// the AKS graph to run
-  std::string graphName_;
   /// the corresponding graph to the name
   AKS::AIGraph* graph_ = nullptr;
 };
@@ -90,9 +89,6 @@ void Aks::doInit(RequestParameters* parameters) {
 
   /// Get AKS System Manager instance
   this->sysMan_ = AKS::SysManagerExt::getGlobal();
-
-  /// Get Graph
-  this->graphName_ = std::string("graph_adder");
 
   auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
@@ -122,7 +118,14 @@ void Aks::doAcquire(RequestParameters* parameters) {
   autoExpandEnvironmentVariables(path);
   this->sysMan_->loadGraphs(path);
 
-  this->graph_ = sysMan_->getGraph(graphName_);
+  std::string graph_name = "graph_adder";
+  this->graph_ = sysMan_->getGraph(graph_name);
+
+  this->metadata_.addInputTensor("input", types::DataType::FP32,
+                                 {this->batch_size_, 1});
+  this->metadata_.addOutputTensor("output", types::DataType::FP32,
+                                  {this->batch_size_, 1});
+  this->metadata_.setName(graph_name);
 }
 
 void Aks::doRun(BatchPtrQueue* input_queue) {
@@ -201,5 +204,7 @@ void Aks::doDestroy() {}
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() { return new proteus::workers::Aks(); }
+proteus::workers::Worker* getWorker() {
+  return new proteus::workers::Aks("AKS", "AKS");
+}
 }  // extern C

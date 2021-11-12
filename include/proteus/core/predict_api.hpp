@@ -50,7 +50,7 @@ namespace proteus {
 using Parameter = std::variant<bool, double, int32_t, std::string>;
 
 /**
- * @brief Holds any parameters from JSON (defined by KFserving spec as one of
+ * @brief Holds any parameters from JSON (defined by KServe spec as one of
  * bool, number or string). We further restrict numbers to be doubles or int32.
  *
  */
@@ -290,7 +290,7 @@ class InferenceRequestOutput {
 };
 
 /**
- * @brief Creates an inference response object based on KFserving's V2 spec that
+ * @brief Creates an inference response object based on KServe's V2 spec that
  * is used to respond back to clients.
  */
 class InferenceResponse {
@@ -344,7 +344,7 @@ class InferenceResponse {
 using Callback = std::function<void(const InferenceResponse &)>;
 
 /**
- * @brief Creates an inference request object based on KFserving's V2 spec that
+ * @brief Creates an inference request object based on KServe's V2 spec that
  * is used to communicate between workers in Proteus
  */
 class InferenceRequest {
@@ -443,6 +443,49 @@ class InferenceRequest {
 };
 using InferenceResponsePromisePtr =
   std::shared_ptr<std::promise<InferenceResponse>>;
+
+class ModelMetadataTensor final {
+ public:
+  ModelMetadataTensor(const std::string &name, types::DataType datatype,
+                      std::vector<uint64_t> shape);
+
+  Json::Value toJson();
+
+ private:
+  std::string name_;
+  types::DataType datatype_;
+  std::vector<uint64_t> shape_;
+};
+
+class ModelMetadata final {
+ public:
+  ModelMetadata(const std::string &name, const std::string &platform);
+
+  void addInputTensor(const std::string &name, types::DataType datatype,
+                      std::initializer_list<uint64_t> shape);
+  void addInputTensor(const std::string &name, types::DataType datatype,
+                      std::vector<int> shape);
+  void addOutputTensor(const std::string &name, types::DataType datatype,
+                       std::initializer_list<uint64_t> shape);
+  void addOutputTensor(const std::string &name, types::DataType datatype,
+                       std::vector<int> shape);
+
+  void setName(const std::string &name);
+
+  void setReady();
+  void setNotReady();
+  bool isReady();
+
+  Json::Value toJson();
+
+ private:
+  std::string name_;
+  std::vector<std::string> versions_;
+  std::string platform_;
+  std::vector<ModelMetadataTensor> inputs_;
+  std::vector<ModelMetadataTensor> outputs_;
+  bool ready_;
+};
 
 }  // namespace proteus
 

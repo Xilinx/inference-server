@@ -28,6 +28,7 @@
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING, kMax...
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
 #include "proteus/helpers/thread.hpp"    // for setThreadName
+#include "proteus/workers/worker.hpp"    // for Worker
 
 namespace proteus {
 
@@ -108,6 +109,17 @@ WorkerInfo* Manager::getWorker(std::string const& key) {
 
 bool Manager::workerExists(std::string const& key) {
   return active_workers_.find(key) != active_workers_.end();
+}
+
+bool Manager::workerReady(std::string const& key) {
+  auto metadata = this->getWorkerMetadata(key);
+  return metadata.isReady();
+}
+
+ModelMetadata Manager::getWorkerMetadata(std::string const& key) {
+  auto* worker = this->getWorker(key);
+  auto* foo = worker->workers_.begin()->second;
+  return foo->getMetadata();
 }
 
 void Manager::addWorker(std::string const& key,

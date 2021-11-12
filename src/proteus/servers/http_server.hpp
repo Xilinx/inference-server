@@ -100,6 +100,9 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   /// Register the getServerMetadata endpoint
   ADD_METHOD_TO(ProteusHttpServer::getServerMetadata, "v2", drogon::Get,
                 drogon::Options);
+  /// Register the getModelMetadata endpoint
+  ADD_METHOD_TO(ProteusHttpServer::getModelMetadata, "v2/models/{model}",
+                drogon::Get, drogon::Options);
   /// Register the getHardware endpoint
   ADD_METHOD_TO(ProteusHttpServer::getHardware, "v2/hardware", drogon::Get,
                 drogon::Options);
@@ -162,6 +165,18 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   void getServerMetadata(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+
+  /**
+   * @brief Returns metadata associated with a model
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param model name of the model to serve the request
+   */
+  void getModelMetadata(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    std::string const &model);
 
   /**
    * @brief Returns the available hardware on the server

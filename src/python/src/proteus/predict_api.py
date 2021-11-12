@@ -229,8 +229,12 @@ class ResponseOutput:
 class ErrorResponse(Response):
     def __init__(self, response):
         super().__init__(True)
-        content = response.json()
-        self.error_msg = content["error"]
+        if "application/json" in response.headers.get("content-type"):
+            content = response.json()
+            self.error_msg = content["error"]
+        else:
+            content = response.content
+            self.error_msg = response.content.decode("utf-8")
         self.status_code = response.status_code
 
 

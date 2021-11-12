@@ -78,6 +78,7 @@ namespace workers {
  */
 class ResNet50Stream : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -145,6 +146,13 @@ void ResNet50Stream::doAcquire(RequestParameters* parameters) {
   this->sysMan_->loadGraphs(path);
 
   this->graph_ = this->sysMan_->getGraph(this->graphName_);
+
+  this->metadata_.addInputTensor(
+    "input", types::DataType::INT8,
+    {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
+  // TODO(varunsh): what should we return here?
+  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {0});
+  this->metadata_.setName(this->graphName_);
 }
 
 void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
@@ -324,6 +332,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 proteus::workers::Worker* getWorker() {
-  return new proteus::workers::ResNet50Stream();
+  return new proteus::workers::ResNet50Stream("ResNet50Stream", "AKS");
 }
 }  // extern C

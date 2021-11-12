@@ -61,7 +61,6 @@ void* findFunc(const std::string& func, const std::string& soPath,
 void* findFunc(const std::string& func, const std::string& soPath) {
 #endif
   if (func.empty() || soPath.empty()) {
-    SPDLOG_LOGGER_WARN(logger, "Function or .so path empty");
     throw std::invalid_argument("Function or .so path empty");
   }
 
@@ -72,7 +71,6 @@ void* findFunc(const std::string& func, const std::string& soPath) {
   void* handle = dlopen(soPath.c_str(), RTLD_LOCAL | RTLD_LAZY);
   if (handle == nullptr) {
     char* error_str = dlerror();
-    SPDLOG_LOGGER_WARN(logger, error_str);
     throw std::invalid_argument(error_str);
   }
 
@@ -80,7 +78,6 @@ void* findFunc(const std::string& func, const std::string& soPath) {
   void* fptr = dlsym(handle, func.c_str());
   if (fptr == nullptr) {
     char* error_str = dlerror();
-    SPDLOG_LOGGER_WARN(logger, error_str);
     throw std::invalid_argument(error_str);
   }
 #ifdef PROTEUS_LOGGING_ACTIVE

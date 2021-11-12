@@ -33,7 +33,7 @@
 #else
 #ifndef SPDLOG_ACTIVE_LEVEL
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL 6
+#define SPDLOG_ACTIVE_LEVEL 2
 #endif
 #endif
 

@@ -59,6 +59,7 @@ namespace workers {
  */
 class InvertVideo : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -93,15 +94,20 @@ size_t InvertVideo::doAllocate(size_t num) {
   constexpr auto kBufferSize = 128;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::STRING);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::STRING);
+  VectorBuffer::allocate(this->input_buffers_, buffer_num, kBufferSize,
+                         DataType::STRING);
+  VectorBuffer::allocate(this->output_buffers_, buffer_num, 1920 * 1080 * 3,
+                         DataType::INT8);
   return buffer_num;
 }
 
 void InvertVideo::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
+
+  this->metadata_.addInputTensor("input", types::DataType::STRING, {128});
+  // TODO(varunsh): output is variable
+  this->metadata_.addOutputTensor("output", types::DataType::INT8,
+                                  {1080, 1920, 3});
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
@@ -204,6 +210,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 proteus::workers::Worker* getWorker() {
-  return new proteus::workers::InvertVideo();
+  return new proteus::workers::InvertVideo("InvertVideo", "CPU");
 }
 }  // extern C

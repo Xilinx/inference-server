@@ -71,7 +71,7 @@ namespace workers {
  */
 class XModel : public Worker {
  public:
-  XModel() {
+  XModel() : Worker("XModel", "XModel") {
     this->subgraph_ = nullptr;
     this->input_type_ = DataType::UINT32;
     this->input_size_ = 0;
@@ -167,6 +167,10 @@ void XModel::doInit(RequestParameters* parameters) {
   // +1 to skip the batch size
   output_size_ = std::accumulate(output_shape.begin() + 1, output_shape.end(),
                                  1, std::multiplies<>());
+
+  this->metadata_.addInputTensor("input", this->input_type_, input_shape);
+  // TODO(varunsh): what should we return here?
+  this->metadata_.addOutputTensor("output", this->output_type_, output_shape);
 }
 
 size_t XModel::doAllocate(size_t num) {

@@ -540,4 +540,82 @@ std::vector<InferenceResponseOutput> InferenceResponse::getOutputs() const {
   return this->outputs_;
 }
 
+ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
+                                         types::DataType datatype,
+                                         std::vector<uint64_t> shape) {
+  this->name_ = name;
+  this->datatype_ = datatype;
+  this->shape_ = shape;
+}
+
+Json::Value ModelMetadataTensor::toJson() {
+  Json::Value ret;
+  ret["name"] = this->name_;
+  ret["datatype"] = types::mapTypeToStr(this->datatype_);
+  ret["shape"] = Json::arrayValue;
+  for (auto i = 0U; i < this->shape_.size(); i++) {
+    ret["shape"][i] = static_cast<Json::UInt64>(this->shape_[i]);
+  }
+  return ret;
+}
+
+ModelMetadata::ModelMetadata(const std::string &name,
+                             const std::string &platform) {
+  this->name_ = name;
+  this->platform_ = platform;
+  this->ready_ = false;
+}
+
+void ModelMetadata::addInputTensor(const std::string &name,
+                                   types::DataType datatype,
+                                   std::initializer_list<uint64_t> shape) {
+  this->inputs_.emplace_back(name, datatype, shape);
+}
+
+void ModelMetadata::addInputTensor(const std::string &name,
+                                   types::DataType datatype,
+                                   std::vector<int> shape) {
+  std::vector<uint64_t> new_shape;
+  std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
+  this->inputs_.emplace_back(name, datatype, new_shape);
+}
+
+void ModelMetadata::addOutputTensor(const std::string &name,
+                                    types::DataType datatype,
+                                    std::initializer_list<uint64_t> shape) {
+  this->outputs_.emplace_back(name, datatype, shape);
+}
+
+void ModelMetadata::addOutputTensor(const std::string &name,
+                                    types::DataType datatype,
+                                    std::vector<int> shape) {
+  std::vector<uint64_t> new_shape;
+  std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
+  this->outputs_.emplace_back(name, datatype, new_shape);
+}
+
+void ModelMetadata::setName(const std::string &name) { this->name_ = name; }
+
+void ModelMetadata::setReady() { this->ready_ = true; }
+
+void ModelMetadata::setNotReady() { this->ready_ = false; }
+
+bool ModelMetadata::isReady() { return this->ready_; }
+
+Json::Value ModelMetadata::toJson() {
+  Json::Value ret;
+  ret["name"] = this->name_;
+  ret["versions"] = Json::arrayValue;
+  ret["platform"] = this->platform_;
+  ret["inputs"] = Json::arrayValue;
+  for (auto i = 0U; i < this->inputs_.size(); i++) {
+    ret["inputs"][i] = this->inputs_[i].toJson();
+  }
+  ret["outputs"] = Json::arrayValue;
+  for (auto i = 0U; i < this->outputs_.size(); i++) {
+    ret["outputs"][i] = this->outputs_[i].toJson();
+  }
+  return ret;
+}
+
 }  // namespace proteus

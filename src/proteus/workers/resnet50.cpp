@@ -71,6 +71,7 @@ namespace workers {
  */
 class ResNet50 : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -138,6 +139,13 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
   this->sysMan_->loadGraphs(path);
 
   this->graph_ = this->sysMan_->getGraph(this->graphName_);
+
+  this->metadata_.addInputTensor(
+    "input", types::DataType::INT8,
+    {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
+  // TODO(varunsh): what should we return here?
+  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {0});
+  this->metadata_.setName(this->graphName_);
 }
 
 void ResNet50::doRun(BatchPtrQueue* input_queue) {
@@ -161,7 +169,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     auto batches = 1;
     if (batches != 1) {
       /*
-        While the KFserving spec allows any number of input tensors in the
+        While the KServe spec allows any number of input tensors in the
         request, AKS works most easily when a particular request has 1 batch
         size worth of data. Supporting more data complicates this code and so
         for now, we exclude this case.
@@ -302,6 +310,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 proteus::workers::Worker* getWorker() {
-  return new proteus::workers::ResNet50();
+  return new proteus::workers::ResNet50("ResNet50", "AKS");
 }
 }  // extern C
