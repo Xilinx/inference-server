@@ -59,6 +59,7 @@ namespace workers {
  */
 class Fake : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -114,6 +115,9 @@ void Fake::doAcquire(RequestParameters* parameters) {
     threads = parameters->get<int32_t>("threads");
   }
   this->pool_.resize(threads);
+
+  this->metadata_.addInputTensor("input", types::DataType::UINT32, {1});
+  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {1});
 }
 
 void Fake::doRun(BatchPtrQueue* input_queue) {
@@ -185,5 +189,7 @@ void Fake::doDestroy() {}
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() { return new proteus::workers::Fake(); }
+proteus::workers::Worker* getWorker() {
+  return new proteus::workers::Fake("Fake", "CPU");
+}
 }  // extern C

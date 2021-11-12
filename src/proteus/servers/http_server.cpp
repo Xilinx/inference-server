@@ -142,8 +142,12 @@ void v2::ProteusHttpServer::getModelReady(
   (void)req;  // suppress unused variable warning
 
   auto resp = HttpResponse::newHttpResponse();
-  if (!Manager::getInstance().workerExists(model)) {
-    resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
+  try {
+    if (!Manager::getInstance().workerReady(model)) {
+      resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
+    }
+  } catch (const std::invalid_argument &e) {
+    resp->setStatusCode(HttpStatusCode::k400BadRequest);
   }
   callback(resp);
 }
@@ -168,6 +172,37 @@ void v2::ProteusHttpServer::getServerMetadata(
   ret["extensions"][0] = "foo";
   ret["extensions"][1] = "bar";
   auto resp = HttpResponse::newHttpJsonResponse(ret);
+  callback(resp);
+}
+
+void v2::ProteusHttpServer::getModelMetadata(
+  const HttpRequestPtr &req,
+  std::function<void(const HttpResponsePtr &)> &&callback,
+  const std::string &model) {
+  SPDLOG_LOGGER_INFO(this->logger_, "Received getModelMetadata request");
+#ifdef PROTEUS_ENABLE_METRICS
+  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+#endif
+  (void)req;  // suppress unused variable warning
+
+#ifdef PROTEUS_ENABLE_TRACING
+  auto span = startSpan("getModelMetadata");
+#endif
+
+  Json::Value ret;
+  bool error = false;
+  try {
+    auto metadata = Manager::getInstance().getWorkerMetadata(model);
+    ret = metadata.toJson();
+  } catch (const std::invalid_argument &e) {
+    ret["error"] = "Model " + model + " not found.";
+    error = true;
+  }
+
+  auto resp = HttpResponse::newHttpJsonResponse(ret);
+  if (error) {
+    resp->setStatusCode(HttpStatusCode::k400BadRequest);
+  }
   callback(resp);
 }
 

@@ -95,14 +95,15 @@ class Client:
     The Client class provides methods to communicate to the proteus-server.
     """
 
-    def __init__(self, address):
+    def __init__(self, address, headers=None):
         self.http_addr = "http://" + address
         self.https_addr = "https://" + address
+        self.headers = headers if headers is not None else {}
 
     def _get(self, endpoint, error_str):
         url = f"{self.http_addr}/{endpoint}"
         try:
-            response = requests.get(url)
+            response = requests.get(url, headers=self.headers)
         except requests.ConnectionError:
             raise ConnectionError(error_str + f"Cannot connect to Proteus at {url}.")
         except requests.exceptions.MissingSchema:
@@ -127,17 +128,19 @@ class Client:
             body = body.asdict()
 
         if compress:
-            headers = {"content-encoding": "gzip"}
+            self.headers["content-encoding"] = "gzip"
             body = zlib.compress(json.dumps(body).encode())
             try:
                 response = requests.post(
-                    f"{self.http_addr}/{endpoint}", data=body, headers=headers
+                    f"{self.http_addr}/{endpoint}", data=body, headers=self.headers
                 )
             except requests.ConnectionError:
                 raise ConnectionError(error_str + "Cannot connect to Proteus.")
         else:
             try:
-                response = requests.post(f"{self.http_addr}/{endpoint}", json=body)
+                response = requests.post(
+                    f"{self.http_addr}/{endpoint}", json=body, headers=self.headers
+                )
             except requests.ConnectionError:
                 raise ConnectionError(error_str + "Cannot connect to Proteus.")
 
@@ -176,7 +179,10 @@ class Client:
 
         response = self._post(endpoint, request, error_str)
 
-        if response.headers.get("content-type") == "application/json":
+        if (
+            "application/json" in response.headers.get("content-type")
+            or response.status_code != 200
+        ):
             return ErrorResponse(response)
         return HtmlResponse(response.content.decode("utf-8"))
 
@@ -195,7 +201,7 @@ class Client:
         endpoint = self.get_endpoint("unload")
 
         response = self._post(endpoint, request, error_str)
-        if response.headers.get("content-type") == "application/json":
+        if "application/json" in response.headers.get("content-type"):
             return ErrorResponse(response)
         return HtmlResponse(response.content.decode("utf-8"))
 

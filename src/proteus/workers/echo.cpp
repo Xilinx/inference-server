@@ -51,6 +51,7 @@ namespace workers {
  */
 class Echo : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -102,6 +103,9 @@ size_t Echo::doAllocate(size_t num) {
 
 void Echo::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
+
+  this->metadata_.addInputTensor("input", types::DataType::UINT32, {1});
+  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {1});
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {
@@ -193,5 +197,7 @@ void Echo::doDestroy() {}
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() { return new proteus::workers::Echo(); }
+proteus::workers::Worker* getWorker() {
+  return new proteus::workers::Echo("echo", "cpu");
+}
 }  // extern C

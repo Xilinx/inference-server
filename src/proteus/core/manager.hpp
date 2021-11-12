@@ -41,8 +41,6 @@ class WorkerInfo;
 
 namespace proteus {
 
-// class WorkerInfo;
-
 /**
  * @brief IDs used to specify commands to update the Proteus Manager
  *
@@ -123,6 +121,10 @@ class Manager {
    * @return bool
    */
   bool workerExists(std::string const& key);
+
+  bool workerReady(std::string const& key);
+  ModelMetadata getWorkerMetadata(std::string const& key);
+
   /**
    * @brief Request that a worker support a request with num inputs. This means
    * that the worker must allocate enough buffers to have at least num buffers.

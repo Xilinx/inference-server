@@ -88,6 +88,7 @@ namespace workers {
  */
 class InvertImage : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -135,6 +136,11 @@ size_t InvertImage::doAllocate(size_t num) {
 
 void InvertImage::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
+
+  this->metadata_.addInputTensor("input", types::DataType::UINT8,
+                                 {this->batch_size_, 1080, 1920, 3});
+  this->metadata_.addOutputTensor("output", types::DataType::UINT32,
+                                  {this->batch_size_, 1080, 1920, 3});
 }
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
@@ -239,6 +245,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 proteus::workers::Worker* getWorker() {
-  return new proteus::workers::InvertImage();
+  return new proteus::workers::InvertImage("InvertImage", "CPU");
 }
 }  // extern C

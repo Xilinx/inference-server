@@ -58,7 +58,8 @@ enum class WorkerStatus {
 class Worker {
  public:
   /// The constructor only initializes the private class members
-  Worker() {
+  Worker(const std::string& name, const std::string& platform)
+    : metadata_(name, platform) {
     this->status_ = WorkerStatus::kNew;
 #ifdef PROTEUS_ENABLE_LOGGING
     this->logger_ = getLogger();
@@ -96,6 +97,7 @@ class Worker {
   void acquire(RequestParameters* parameters) {
     this->status_ = WorkerStatus::kAcquire;
     this->doAcquire(parameters);
+    this->metadata_.setReady();
   }
   /**
    * @brief The main body of the worker executes the work
@@ -110,6 +112,7 @@ class Worker {
   /// Release any hardware resources
   void release() {
     this->status_ = WorkerStatus::kRelease;
+    this->metadata_.setNotReady();
     this->doRelease();
   }
   /// Free the input and output buffers
@@ -171,6 +174,8 @@ class Worker {
     return batchers;
   }
 
+  ModelMetadata getMetadata() { return this->metadata_; }
+
  protected:
   BufferPtrsQueue* input_buffers_;
   BufferPtrsQueue* output_buffers_;
@@ -179,6 +184,7 @@ class Worker {
   LoggerPtr logger_;
 #endif
   size_t batch_size_;
+  ModelMetadata metadata_;
 
  private:
   /// Perform low-cost initialization of the worker

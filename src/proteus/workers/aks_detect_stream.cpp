@@ -73,6 +73,7 @@ namespace workers {
  */
 class AksDetectStream : public Worker {
  public:
+  using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -85,7 +86,6 @@ class AksDetectStream : public Worker {
   void doDestroy() override;
 
   AKS::SysManagerExt* sysMan_ = nullptr;
-  std::string graphName_;
   AKS::AIGraph* graph_ = nullptr;
 };
 
@@ -94,17 +94,11 @@ std::thread AksDetectStream::spawn(BatchPtrQueue* input_queue) {
 }
 
 void AksDetectStream::doInit(RequestParameters* parameters) {
+  (void)parameters;  // suppress unused variable warning
   constexpr auto kBatchSize = 4;
-  std::string kGraphName = "yolov3";
 
   /// Get AKS System Manager instance
   this->sysMan_ = AKS::SysManagerExt::getGlobal();
-
-  auto graph_name = kGraphName;
-  if (parameters->has("aks_graph_name")) {
-    graph_name = parameters->get<std::string>("aks_graph_name");
-  }
-  this->graphName_ = graph_name;
 
   this->batch_size_ = kBatchSize;
 }
@@ -116,18 +110,20 @@ constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
 
 size_t AksDetectStream::doAllocate(size_t num) {
   constexpr auto kBufferNum = 10U;
+  constexpr auto kBufferSize = 128;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::UINT8);
+  VectorBuffer::allocate(this->input_buffers_, buffer_num, kBufferSize,
+                         DataType::STRING);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::UINT8);
+                         kImageSize * this->batch_size_, DataType::INT8);
   return buffer_num;
 }
 
 void AksDetectStream::doAcquire(RequestParameters* parameters) {
   auto kPath =
     std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_proteus.json");
+  std::string kGraphName = "yolov3";
 
   auto path = kPath;
   if (parameters->has("aks_graph")) {
@@ -136,7 +132,18 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
   autoExpandEnvironmentVariables(path);
   this->sysMan_->loadGraphs(path);
 
-  this->graph_ = this->sysMan_->getGraph(this->graphName_);
+  auto graph_name = kGraphName;
+  if (parameters->has("aks_graph_name")) {
+    graph_name = parameters->get<std::string>("aks_graph_name");
+  }
+  this->graph_ = this->sysMan_->getGraph(graph_name);
+
+  this->metadata_.addInputTensor(
+    "input", types::DataType::INT8,
+    {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
+  // TODO(varunsh): what should we return here?
+  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {0});
+  this->metadata_.setName(graph_name);
 }
 
 void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
@@ -354,6 +361,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 proteus::workers::Worker* getWorker() {
-  return new proteus::workers::AksDetectStream();
+  return new proteus::workers::AksDetectStream("AksDetectStream", "AKS");
 }
 }  // extern C
