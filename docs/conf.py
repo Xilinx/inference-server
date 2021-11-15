@@ -55,8 +55,6 @@ extensions = [
 ]
 
 # Breathe configuration
-
-
 breathe_projects = {"proteus": "../build/docs/doxygen/xml"}
 breathe_default_project = "proteus"
 
@@ -82,6 +80,9 @@ extlinks = {
         None,
     ),
 }
+
+# strip leading $ from bash code blocks
+copybutton_prompt_text = "$ "
 
 # raise a warning if a cross-reference cannot be found
 nitpicky = True

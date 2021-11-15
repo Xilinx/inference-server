@@ -30,11 +30,12 @@ Metadata
 
 *  GET ``v2``: Get Xilinx Inference Server's metadata
 *  GET ``v2/hardware``: Get a string describing the number and type of kernels that are available
+*  GET ``v2/models/{model}``: Get model metadata
 
 Inference
 ---------
 
-*  POST ``v2/load``: Load a model
+*  POST ``v2/load``: Load a model. The HTML body in the response contains the endpoint to use for this model
 *  POST ``v2/unload``: Unload a model
 *  POST ``v2/models/{model}/infer``: Make an inference request to a particular model
 

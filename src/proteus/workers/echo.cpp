@@ -63,6 +63,8 @@ class Echo : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
+  // workers define what batcher implementation should be used for them.
+  // if not explicitly defined here, a default value is used from worker.hpp.
   using Worker::makeBatcher;
   std::vector<std::unique_ptr<Batcher>> makeBatcher(int num = 1) override {
     return this->makeBatcher<HardBatcher>(num);
@@ -138,21 +140,10 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         // auto* input_buffer = dynamic_cast<VectorBuffer*>(input_ptr);
         // auto* output_buffer = dynamic_cast<VectorBuffer*>(output_ptr);
 
-        // two ways to get data:
-        //   1. Get a pointer to the underlying data
-        //   2. Read through the buffer
-        // Here we know that the buffer is one element (defined above)
-        uint32_t value = 0;
+        uint32_t value = *static_cast<uint32_t*>(input_buffer);
 
-        // Approach 1:
-        uint32_t* data = nullptr;
-        data = static_cast<uint32_t*>(input_buffer);
-        value = *data;
-        // Approach 2:
-        // input_buffer->read(0, value);
-
-        value =
-          value + 1;  // this is my operation: add one to the read argument
+        // this is my operation: add one to the read argument
+        value++;
 
         // output_buffer->write(value);
 
@@ -173,6 +164,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 
+      // respond back to the client
       req->getCallback()(resp);
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
