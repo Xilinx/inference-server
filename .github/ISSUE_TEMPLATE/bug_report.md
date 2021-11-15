@@ -1,16 +1,28 @@
-# Expected Behavior
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: bug
+assignees: ''
 
-What's supposed to happen?
+---
 
-# Actual Behavior
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-What actually happens?
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. '...'
 
-# Steps to Reproduce
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-1. ...
-2. ...
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
 
-# Versions
-
+**OS/Versions:**
 Provide any relevant tools/system information (version, compiler, OS etc.)
+
+**Additional context**
+Add any other context about the problem here.
