@@ -82,7 +82,6 @@ Getting Artifacts
 -----------------
 
 For running tests and certain examples, you may need to get artifacts such as test images and XModels.
-You
 
 .. code-block:: console
 
@@ -95,7 +94,7 @@ Running Xilinx Inference Server
 
 Once the server is built, start the server to begin serving requests.
 
-.. code-block:: console
+.. code-block:: bash
 
     # start proteus-server in the background
     $ proteus start &
@@ -110,7 +109,7 @@ Once the server is built, start the server to begin serving requests.
 
 You can also try running the test suite.
 
-.. code-block:: console
+.. code-block:: bash
 
     # this will start the server and test the REST API from Python.
     $ proteus test

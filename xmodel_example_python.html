@@ -44,6 +44,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -57,6 +59,7 @@
   <link rel="stylesheet" href="_static/css/pro.min.css" media="all" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Running an XModel (C++)" href="xmodel_example_cpp.html" />
@@ -490,7 +493,7 @@ The parameter we add is to pass the path to the XModel that we want to use.</p>
 <div class="section" id="get-images">
 <h2>Get Images<a class="headerlink" href="#get-images" title="Permalink to this headline">¶</a></h2>
 <p>Now, we can prepare our request.
-In this example, we use one image and duplicate it <em>batch_size</em> times.</p>
+In this example, we use one image and duplicate it <em>batch_size</em> times so we can create one whole batch.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path_to_image</span><span class="p">)</span>
@@ -570,7 +573,7 @@ The pre- and post-processing functions used in this example can be seen in the s
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 04, 2021.
+        Last updated on November 15, 2021.
       </span>
 
     </p>

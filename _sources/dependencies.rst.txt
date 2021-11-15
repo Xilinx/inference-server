@@ -104,7 +104,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :pypipackages:`rich`,latest,MIT,Printing tables when benchmarking
     :pypipackages:`setuptools`,latest,MIT,Manage Python packages
     :pypipackages:`sphinx`,latest,BSD-2 + others,Building documentation
-    :pypipackages:`sphinx_rtd_theme`,latest,MIT,HTML theme for documentation
+    :pypipackages:`sphinx_copybutton`,latest,MIT,Adds copy button for code blocks
     :pypipackages:`sphinxcontrib-confluencebuilder`,latest,BSD-2,Sphinx plugin to export documentation to Confluence
     :pypipackages:`websocket-client`,latest,Apache-2.0,Using websockets in Python
     :pypipackages:`wheel`,latest,MIT,Support wheels for Python packages
