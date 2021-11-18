@@ -345,7 +345,7 @@ RUN wget --progress=dot:mega https://github.com/google/googletest/archive/refs/t
     && dpkg -L gtest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
-# install protobuf 3.4.0
+# install protobuf 3.4.0 - dependency on pre-built target-factory, VART and XIR
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         autoconf \
@@ -356,14 +356,14 @@ RUN apt-get update \
     # clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && cd /tmp && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v3.4.0/protobuf-cpp-3.4.0.tar.gz \
-    && tar -xzf protobuf-cpp-3.4.0.tar.gz \
-    && cd protobuf-3.4.0 \
+    && VERSION=3.4.0 \
+    && cd /tmp && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
+    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
+    && cd protobuf-${VERSION} \
     && ./autogen.sh \
     && ./configure \
     && make -j \
-    && checkinstall -y --pkgname protobuf --pkgversion 3.4.0 --pkgrelease 1 make install \
-    && cd /tmp \
+    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
     && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -fr /tmp/*
 
@@ -388,6 +388,10 @@ RUN apt-get update \
     && dpkg -L iwyu | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -fr /tmp/*
 
+# Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
+# Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
+RUN cp -r ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
+    && rm -rf ${COPY_DIR}/usr/local/man/
 
 # install doxygen 1.9.2
 # RUN cd /tmp && wget --progress=dot:mega https://github.com/doxygen/doxygen/archive/refs/tags/Release_1_9_2.tar.gz \
