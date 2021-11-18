@@ -39,8 +39,8 @@ namespace proteus {
 CounterFamily::CounterFamily(
   const std::string& name, const std::string& help,
   prometheus::Registry* registry,
-  const std::unordered_map<MetricIDs, std::map<std::string, std::string>>&
-    labels)
+  const std::unordered_map<MetricCounterIDs,
+                           std::map<std::string, std::string>>& labels)
   : family_(
       prometheus::BuildCounter().Name(name).Help(help).Register(*registry)) {
   for (const auto& [id, label] : labels) {
@@ -48,14 +48,14 @@ CounterFamily::CounterFamily(
   }
 }
 
-void CounterFamily::increment(MetricIDs id) {
+void CounterFamily::increment(MetricCounterIDs id) {
   if (this->counters_.find(id) != this->counters_.end()) {
     auto& counter = this->counters_.at(id);
     counter.Increment();
   }
 }
 
-void CounterFamily::increment(MetricIDs id, size_t increment) {
+void CounterFamily::increment(MetricCounterIDs id, size_t increment) {
   if (this->counters_.find(id) != this->counters_.end()) {
     auto& counter = this->counters_.at(id);
     counter.Increment(increment);
@@ -65,7 +65,7 @@ void CounterFamily::increment(MetricIDs id, size_t increment) {
 GaugeFamily::GaugeFamily(
   const std::string& name, const std::string& help,
   prometheus::Registry* registry,
-  const std::unordered_map<MetricIDs, std::map<std::string, std::string>>&
+  const std::unordered_map<MetricGaugeIDs, std::map<std::string, std::string>>&
     labels)
   : family_(
       prometheus::BuildGauge().Name(name).Help(help).Register(*registry)) {
@@ -74,7 +74,7 @@ GaugeFamily::GaugeFamily(
   }
 }
 
-void GaugeFamily::set(MetricIDs id, double value) {
+void GaugeFamily::set(MetricGaugeIDs id, double value) {
   if (this->gauges_.find(id) != this->gauges_.end()) {
     auto& gauge = this->gauges_.at(id);
     gauge.Set(value);
@@ -91,37 +91,37 @@ Metrics::Metrics()
     ingress_requests_total_(
       "proteus_requests_ingress_total",
       "Number of incoming requests to Proteus", registry_.get(),
-      {{MetricIDs::kCounterCppNative, {{"api", "cpp"}, {"method", "native"}}},
-       {MetricIDs::kCounterRestGet, {{"api", "rest"}, {"method", "GET"}}},
-       {MetricIDs::kCounterRestPost, {{"api", "rest"}, {"method", "POST"}}}}),
+      {{MetricCounterIDs::kCppNative, {{"api", "cpp"}, {"method", "native"}}},
+       {MetricCounterIDs::kRestGet, {{"api", "rest"}, {"method", "GET"}}},
+       {MetricCounterIDs::kRestPost, {{"api", "rest"}, {"method", "POST"}}}}),
     pipeline_ingress_total_(
       "proteus_pipeline_ingress_total",
       "Number of incoming requests at different pipeline stages",
       registry_.get(),
-      {{MetricIDs::kCounterPipelineIngressBatcher, {{"stage", "batcher"}}},
-       {MetricIDs::kCounterPipelineIngressWorker, {{"stage", "worker"}}}}),
+      {{MetricCounterIDs::kPipelineIngressBatcher, {{"stage", "batcher"}}},
+       {MetricCounterIDs::kPipelineIngressWorker, {{"stage", "worker"}}}}),
     pipeline_egress_total_(
       "proteus_pipeline_egress_total",
       "Number of outgoing requests at different pipeline stages",
       registry_.get(),
-      {{MetricIDs::kCounterPipelineEgressBatcher, {{"stage", "batcher"}}},
-       {MetricIDs::kCounterPipelineEgressWorker, {{"stage", "worker"}}}}),
+      {{MetricCounterIDs::kPipelineEgressBatcher, {{"stage", "batcher"}}},
+       {MetricCounterIDs::kPipelineEgressWorker, {{"stage", "worker"}}}}),
     bytes_transferred_("exposer_transferred_bytes_total",
                        "Transferred bytes to metrics services", registry_.get(),
-                       {{MetricIDs::kCounterTransferredBytes, {}}}),
+                       {{MetricCounterIDs::kTransferredBytes, {}}}),
     num_scrapes_("exposer_scrapes_total",
                  "Number of times metrics were scraped", registry_.get(),
-                 {{MetricIDs::kCounterMetricScrapes, {}}}),
+                 {{MetricCounterIDs::kMetricScrapes, {}}}),
     queue_sizes_total_("proteus_queue_sizes_total",
                        "Number of elements in the queues in Proteus",
                        registry_.get(),
-                       {{MetricIDs::kGaugeQueuesBatcherInput,
+                       {{MetricGaugeIDs::kQueuesBatcherInput,
                          {{"direction", "input"}, {"stage", "batcher"}}},
-                        {MetricIDs::kGaugeQueuesBatcherOutput,
+                        {MetricGaugeIDs::kQueuesBatcherOutput,
                          {{"direction", "output"}, {"stage", "batcher"}}},
-                        {MetricIDs::kGaugeQueuesBufferInput,
+                        {MetricGaugeIDs::kQueuesBufferInput,
                          {{"direction", "input"}, {"stage", "buffer"}}},
-                        {MetricIDs::kGaugeQueuesBufferOutput,
+                        {MetricGaugeIDs::kQueuesBufferOutput,
                          {{"direction", "output"}, {"stage", "buffer"}}}}),
     req_latencies_(
       prometheus::BuildSummary()
@@ -140,25 +140,25 @@ Metrics::Metrics()
   this->serializer_ = std::make_unique<prometheus::TextSerializer>();
 }
 
-void Metrics::incrementCounter(MetricIDs id, size_t increment) {
+void Metrics::incrementCounter(MetricCounterIDs id, size_t increment) {
   switch (id) {
-    case MetricIDs::kCounterRestGet:
-    case MetricIDs::kCounterRestPost:
-    case MetricIDs::kCounterCppNative:
+    case MetricCounterIDs::kRestGet:
+    case MetricCounterIDs::kRestPost:
+    case MetricCounterIDs::kCppNative:
       this->ingress_requests_total_.increment(id);
       break;
-    case MetricIDs::kCounterPipelineIngressBatcher:
-    case MetricIDs::kCounterPipelineIngressWorker:
+    case MetricCounterIDs::kPipelineIngressBatcher:
+    case MetricCounterIDs::kPipelineIngressWorker:
       this->pipeline_ingress_total_.increment(id);
       break;
-    case MetricIDs::kCounterPipelineEgressBatcher:
-    case MetricIDs::kCounterPipelineEgressWorker:
+    case MetricCounterIDs::kPipelineEgressBatcher:
+    case MetricCounterIDs::kPipelineEgressWorker:
       this->pipeline_egress_total_.increment(id);
       break;
-    case MetricIDs::kCounterTransferredBytes:
+    case MetricCounterIDs::kTransferredBytes:
       this->bytes_transferred_.increment(id, increment);
       break;
-    case MetricIDs::kCounterMetricScrapes:
+    case MetricCounterIDs::kMetricScrapes:
       this->num_scrapes_.increment(id);
       break;
     default:
@@ -166,12 +166,12 @@ void Metrics::incrementCounter(MetricIDs id, size_t increment) {
   }
 }
 
-void Metrics::setGauge(MetricIDs id, double value) {
+void Metrics::setGauge(MetricGaugeIDs id, double value) {
   switch (id) {
-    case MetricIDs::kGaugeQueuesBatcherInput:
-    case MetricIDs::kGaugeQueuesBatcherOutput:
-    case MetricIDs::kGaugeQueuesBufferInput:
-    case MetricIDs::kGaugeQueuesBufferOutput:
+    case MetricGaugeIDs::kQueuesBatcherInput:
+    case MetricGaugeIDs::kQueuesBatcherOutput:
+    case MetricGaugeIDs::kQueuesBufferInput:
+    case MetricGaugeIDs::kQueuesBufferOutput:
       this->queue_sizes_total_.set(id, value);
       break;
     default:
@@ -207,9 +207,9 @@ std::string Metrics::getMetrics() {
     stop_time_of_request - start_time_of_request);
   this->req_latencies_counter_.Observe(duration.count());
 
-  this->bytes_transferred_.increment(MetricIDs::kCounterTransferredBytes,
+  this->bytes_transferred_.increment(MetricCounterIDs::kTransferredBytes,
                                      bodySize);
-  this->num_scrapes_.increment(MetricIDs::kCounterMetricScrapes);
+  this->num_scrapes_.increment(MetricCounterIDs::kMetricScrapes);
 
   return response;
 }

@@ -103,7 +103,7 @@ void v2::ProteusHttpServer::getServerLive(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received getServerLive request");
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -120,7 +120,7 @@ void v2::ProteusHttpServer::getServerReady(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received getServerReady request");
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -137,7 +137,7 @@ void v2::ProteusHttpServer::getModelReady(
   std::string const &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received getModelReady request");
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -157,7 +157,7 @@ void v2::ProteusHttpServer::getServerMetadata(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received getServerMetadata request");
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -181,7 +181,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   const std::string &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received getModelMetadata request");
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -211,7 +211,7 @@ void v2::ProteusHttpServer::getHardware(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received getHardware request");
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -228,7 +228,7 @@ void v2::ProteusHttpServer::inferModel(
   std::string const &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received inferModel request for " + model);
 #ifdef PROTEUS_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricIDs::kCounterRestPost);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestPost);
 #endif
 
 #ifdef PROTEUS_ENABLE_TRACING

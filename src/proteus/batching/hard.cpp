@@ -87,7 +87,7 @@ void HardBatcher::run(WorkerInfo* worker) {
 
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricIDs::kCounterPipelineIngressBatcher);
+        MetricCounterIDs::kPipelineIngressBatcher);
 #endif
 
       size_t input_size = 0;
@@ -163,7 +163,7 @@ void HardBatcher::run(WorkerInfo* worker) {
       this->output_queue_->enqueue(std::move(batch));
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricIDs::kCounterPipelineEgressBatcher);
+        MetricCounterIDs::kPipelineEgressBatcher);
 #endif
     }
   }

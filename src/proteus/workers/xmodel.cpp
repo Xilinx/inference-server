@@ -233,7 +233,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricIDs::kCounterPipelineIngressWorker);
+      MetricCounterIDs::kPipelineIngressWorker);
 #endif
     pool_size++;
     if (pool_size > max_pool_size) {
@@ -352,7 +352,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         req->getCallback()(resp);
 #ifdef PROTEUS_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
-          MetricIDs::kCounterPipelineEgressWorker);
+          MetricCounterIDs::kPipelineEgressWorker);
 #endif
       }
       this->returnBuffers(std::move(batch->input_buffers),

@@ -75,9 +75,9 @@ void SoftBatcher::run(WorkerInfo* worker) {
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS
-    Metrics::getInstance().setGauge(MetricIDs::kGaugeQueuesBatcherInput,
+    Metrics::getInstance().setGauge(MetricGaugeIDs::kQueuesBatcherInput,
                                     input_queue_->size_approx());
-    Metrics::getInstance().setGauge(MetricIDs::kGaugeQueuesBatcherOutput,
+    Metrics::getInstance().setGauge(MetricGaugeIDs::kQueuesBatcherOutput,
                                     output_queue_->size_approx());
 #endif
 
@@ -129,7 +129,7 @@ void SoftBatcher::run(WorkerInfo* worker) {
 
 #ifdef PROTEUS_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
-          MetricIDs::kCounterPipelineIngressBatcher);
+          MetricCounterIDs::kPipelineIngressBatcher);
 #endif
 
         size_t input_size = 0;
@@ -212,7 +212,7 @@ void SoftBatcher::run(WorkerInfo* worker) {
       this->output_queue_->enqueue(std::move(batch));
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricIDs::kCounterPipelineEgressBatcher);
+        MetricCounterIDs::kPipelineEgressBatcher);
 #endif
       first_request = true;
     }
