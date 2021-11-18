@@ -126,7 +126,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricIDs::kCounterPipelineIngressWorker);
+      MetricCounterIDs::kPipelineIngressWorker);
 #endif
     for (auto& req : *(batch->requests)) {
       InferenceResponse resp;
@@ -168,7 +168,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
       req->getCallback()(resp);
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricIDs::kCounterPipelineEgressWorker);
+        MetricCounterIDs::kPipelineEgressWorker);
 #endif
     }
     this->returnBuffers(std::move(batch->input_buffers),

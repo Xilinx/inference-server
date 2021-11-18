@@ -51,20 +51,23 @@ namespace proteus {
  * Prometheus is tracking.
  *
  */
-enum class MetricIDs {
-  kCounterRestGet,
-  kCounterRestPost,
-  kCounterCppNative,
-  kCounterPipelineIngressBatcher,
-  kCounterPipelineIngressWorker,
-  kCounterPipelineEgressBatcher,
-  kCounterPipelineEgressWorker,
-  kCounterTransferredBytes,
-  kCounterMetricScrapes,
-  kGaugeQueuesBatcherInput,
-  kGaugeQueuesBatcherOutput,
-  kGaugeQueuesBufferInput,
-  kGaugeQueuesBufferOutput,
+enum class MetricCounterIDs {
+  kRestGet,
+  kRestPost,
+  kCppNative,
+  kPipelineIngressBatcher,
+  kPipelineIngressWorker,
+  kPipelineEgressBatcher,
+  kPipelineEgressWorker,
+  kTransferredBytes,
+  kMetricScrapes,
+};
+
+enum class MetricGaugeIDs {
+  kQueuesBatcherInput,
+  kQueuesBatcherOutput,
+  kQueuesBufferInput,
+  kQueuesBufferOutput,
 };
 
 class CounterFamily {
@@ -72,30 +75,29 @@ class CounterFamily {
   CounterFamily(
     const std::string& name, const std::string& help,
     prometheus::Registry* registry,
-    const std::unordered_map<MetricIDs, std::map<std::string, std::string>>&
-      labels);
+    const std::unordered_map<MetricCounterIDs,
+                             std::map<std::string, std::string>>& labels);
 
-  void increment(MetricIDs id);
-  void increment(MetricIDs id, size_t increment);
+  void increment(MetricCounterIDs id);
+  void increment(MetricCounterIDs id, size_t increment);
 
  private:
   prometheus::Family<prometheus::Counter>& family_;
-  std::unordered_map<MetricIDs, prometheus::Counter&> counters_;
+  std::unordered_map<MetricCounterIDs, prometheus::Counter&> counters_;
 };
 
 class GaugeFamily {
  public:
-  GaugeFamily(
-    const std::string& name, const std::string& help,
-    prometheus::Registry* registry,
-    const std::unordered_map<MetricIDs, std::map<std::string, std::string>>&
-      labels);
+  GaugeFamily(const std::string& name, const std::string& help,
+              prometheus::Registry* registry,
+              const std::unordered_map<
+                MetricGaugeIDs, std::map<std::string, std::string>>& labels);
 
-  void set(MetricIDs id, double value);
+  void set(MetricGaugeIDs id, double value);
 
  private:
   prometheus::Family<prometheus::Gauge>& family_;
-  std::unordered_map<MetricIDs, prometheus::Gauge&> gauges_;
+  std::unordered_map<MetricGaugeIDs, prometheus::Gauge&> gauges_;
 };
 
 /**
@@ -131,9 +133,9 @@ class Metrics {
    *
    * @param id counter to increment
    */
-  void incrementCounter(MetricIDs id, size_t increment = 1);
+  void incrementCounter(MetricCounterIDs id, size_t increment = 1);
 
-  void setGauge(MetricIDs id, double value);
+  void setGauge(MetricGaugeIDs id, double value);
 
  private:
   /// Construct a new Metrics object
