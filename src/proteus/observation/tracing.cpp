@@ -32,6 +32,16 @@
 
 namespace proteus {
 
+void startTracer() {
+  auto sampler =
+    jaegertracing::samplers::Config(jaegertracing::kSamplerTypeConst, 1);
+  auto config = jaegertracing::Config(false, false, sampler);
+  auto tracer = jaegertracing::Tracer::make(
+    "proteus", config, jaegertracing::logging::consoleLogger());
+  opentracing::Tracer::InitGlobal(
+    std::static_pointer_cast<opentracing::Tracer>(tracer));
+}
+
 void startTracer(const char* configFilePath) {
   auto configYAML = YAML::LoadFile(configFilePath);
   auto config = jaegertracing::Config::parse(configYAML);
