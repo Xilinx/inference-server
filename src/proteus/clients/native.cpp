@@ -50,7 +50,7 @@ void initialize() {
   initLogging();
 #endif
 #ifdef PROTEUS_ENABLE_TRACING
-  startTracer("/workspace/proteus/src/proteus/observation/tracing.yml");
+  startTracer();
 #endif
 
 #ifdef PROTEUS_ENABLE_AKS

@@ -30,6 +30,7 @@ namespace proteus {
 
 using SpanPtr = std::unique_ptr<opentracing::Span>;
 
+void startTracer();
 void startTracer(const char* configFilePath);
 void stopTracer();
 SpanPtr startSpan(const char* name);

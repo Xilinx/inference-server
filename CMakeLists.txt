@@ -100,7 +100,7 @@ configure_file(${PROJECT_SOURCE_DIR}/src/proteus/version.hpp.in ${PROJECT_SOURCE
 option(PROTEUS_ENABLE_REST "Enable the REST server" ON)
 option(PROTEUS_ENABLE_METRICS "Enable Prometheus metrics" ON)
 option(PROTEUS_ENABLE_LOGGING "Enable logging" ${spdlog_FOUND})
-option(PROTEUS_ENABLE_TRACING "Enable Jaeger tracing" OFF)
+option(PROTEUS_ENABLE_TRACING "Enable Jaeger tracing" ON)
 option(PROTEUS_ENABLE_AKS "Enable AKS dependencies" ${PROTEUS_AKS_FOUND})
 option(PROTEUS_ENABLE_VITIS "Enable Vitis dependencies" ${PROTEUS_VITIS_FOUND})
 option(PROTEUS_BUILD_EXAMPLES "Build examples" ON)
