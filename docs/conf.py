@@ -103,16 +103,12 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# a list of builtin themes. Attempts to use a custom Xilinx theme if it exists,
+# otherwise the default theme is used
 #
-# html_theme = "sphinx_rtd_theme"
-# html_theme_options = {
-#     "collapse_navigation": False,
-#     "sticky_navigation": True,
-#     "navigation_depth": 4,
-# }
-html_theme = "xilinx"
-html_theme_path = ["./_themes"]
+if os.path.exists("./_themes/xilinx"):
+    html_theme = "xilinx"
+    html_theme_path = ["./_themes"]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
