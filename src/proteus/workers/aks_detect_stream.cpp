@@ -158,10 +158,12 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
     }
 
     SPDLOG_LOGGER_INFO(this->logger_, "Got request in AksDetectStream");
+    for (unsigned int k = 0; k < batch->requests->size(); k++) {
+      auto& req = batch->requests->at(k);
 #ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "aks_detect_stream");
+      auto span =
+        startFollowSpan(batch->spans.at(k).get(), "aks_detect_stream");
 #endif
-    for (auto& req : *(batch->requests)) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto key = req->getParameters()->get<std::string>("key");

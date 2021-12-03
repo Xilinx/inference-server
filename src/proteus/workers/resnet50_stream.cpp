@@ -42,7 +42,6 @@
 
 #include "proteus/batching/batcher.hpp"       // for Batch, BatchPtrQueue
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::STRING
 #include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infer...
 #include "proteus/helpers/base64.hpp"         // for base64_encode
@@ -50,7 +49,6 @@
 #include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVar...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
 #include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
 
 namespace AKS {
@@ -167,9 +165,6 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
     }
 
     SPDLOG_LOGGER_INFO(this->logger_, "Got request in ResNet50Stream");
-#ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "ResNet50Stream");
-#endif
     for (auto& req : *(batch->requests)) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();

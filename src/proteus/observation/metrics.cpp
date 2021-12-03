@@ -25,7 +25,6 @@
 #include <prometheus/metric_family.h>    // for MetricFamily
 #include <prometheus/registry.h>         // for Registry
 #include <prometheus/serializer.h>       // for Serializer
-#include <prometheus/summary.h>          // for Summary, BuildSummary, Summa...
 #include <prometheus/text_serializer.h>  // for TextSerializer
 
 #include <chrono>    // for microseconds, duration, dura...
@@ -81,6 +80,25 @@ void GaugeFamily::set(MetricGaugeIDs id, double value) {
   }
 }
 
+SummaryFamily::SummaryFamily(
+  const std::string& name, const std::string& help,
+  prometheus::Registry* registry,
+  const std::unordered_map<MetricSummaryIDs, prometheus::Summary::Quantiles>&
+    quantiles)
+  : family_(
+      prometheus::BuildSummary().Name(name).Help(help).Register(*registry)) {
+  for (const auto& [id, quantile] : quantiles) {
+    summaries_.emplace(id, family_.Add({}, quantile));
+  }
+}
+
+void SummaryFamily::observe(MetricSummaryIDs id, double value) {
+  if (this->summaries_.find(id) != this->summaries_.end()) {
+    auto& summary = this->summaries_.at(id);
+    summary.Observe(value);
+  }
+}
+
 Metrics::Metrics()
   :
 #ifdef PROTEUS_ENABLE_LOGGING
@@ -123,16 +141,18 @@ Metrics::Metrics()
                          {{"direction", "input"}, {"stage", "buffer"}}},
                         {MetricGaugeIDs::kQueuesBufferOutput,
                          {{"direction", "output"}, {"stage", "buffer"}}}}),
-    req_latencies_(
-      prometheus::BuildSummary()
-        .Name("exposer_request_latencies")
-        .Help("Latencies of serving scrape requests, in microseconds")
-        .Register(*this->registry_)),
-    req_latencies_counter_(
-      // quantiles are represented by {quantile, error_margin}
-      req_latencies_.Add(
-        {}, prometheus::Summary::Quantiles{
-              {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}})) {  // NOLINT
+    metric_latency_("exposer_request_latencies",
+                    "Latencies of serving scrape requests, in microseconds",
+                    registry_.get(),
+                    {{MetricSummaryIDs::kMetricLatency,
+                      prometheus::Summary::Quantiles{
+                        {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}}}}),
+    request_latency_("proteus_request_latency",
+                     "Latencies of serving requests, in microseconds",
+                     registry_.get(),
+                     {{MetricSummaryIDs::kRequestLatency,
+                       prometheus::Summary::Quantiles{
+                         {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}}}}) {
 
   std::lock_guard<std::mutex> lock{this->collectables_mutex_};
   collectables_.push_back(this->registry_);
@@ -179,6 +199,19 @@ void Metrics::setGauge(MetricGaugeIDs id, double value) {
   }
 }
 
+void Metrics::observeSummary(MetricSummaryIDs id, double value) {
+  switch (id) {
+    case MetricSummaryIDs::kMetricLatency:
+      this->metric_latency_.observe(id, value);
+      break;
+    case MetricSummaryIDs::kRequestLatency:
+      this->request_latency_.observe(id, value);
+      break;
+    default:
+      break;
+  }
+}
+
 std::string Metrics::getMetrics() {
   auto start_time_of_request = std::chrono::steady_clock::now();
 
@@ -205,7 +238,7 @@ std::string Metrics::getMetrics() {
   auto stop_time_of_request = std::chrono::steady_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
     stop_time_of_request - start_time_of_request);
-  this->req_latencies_counter_.Observe(duration.count());
+  this->observeSummary(MetricSummaryIDs::kMetricLatency, duration.count());
 
   this->bytes_transferred_.increment(MetricCounterIDs::kTransferredBytes,
                                      bodySize);

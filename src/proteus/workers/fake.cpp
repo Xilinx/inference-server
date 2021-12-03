@@ -131,9 +131,6 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
       break;
     }
     SPDLOG_LOGGER_INFO(this->logger_, "Got request in fake");
-#ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "fake");
-#endif
     this->pool_.push([this, batch = std::move(batch)](int id) {
       (void)id;  // suppress unused variable warning
 
@@ -141,7 +138,11 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
       responses.reserve(batch->requests->size());
 
       // int tensor_count = 0;
-      for (auto& req : *(batch->requests)) {
+      for (unsigned int j = 0; j < batch->requests->size(); j++) {
+        auto& req = batch->requests->at(j);
+#ifdef PROTEUS_ENABLE_TRACING
+        auto span = startFollowSpan(batch->spans.at(j).get(), "fake");
+#endif
         auto& resp = responses.emplace_back();
         resp.setID("");
         resp.setModel("fake");

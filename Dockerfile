@@ -257,9 +257,10 @@ RUN apt-get update \
         bison \
         flex \
         libboost-all-dev \
-    && cd /tmp && wget --progress=dot:mega https://github.com/apache/thrift/archive/refs/tags/v0.12.0.tar.gz \
-    && tar -xzf v0.12.0.tar.gz \
-    && cd thrift-0.12.0 \
+    && VERSION=0.12.0 \
+    && cd /tmp && wget --progress=dot:mega https://github.com/apache/thrift/archive/refs/tags/v${VERSION}.tar.gz \
+    && tar -xzf v${VERSION}.tar.gz \
+    && cd thrift-${VERSION} \
     && mkdir -p build && cd build \
     && cmake .. \
         -DBUILD_TESTING=OFF \
@@ -269,9 +270,11 @@ RUN apt-get update \
         -DBUILD_C_GLIB=OFF \
         -DBUILD_JAVA=OFF \
         -DBUILD_PYTHON=OFF \
+        # -DBUILD_JAVASCRIPT=OFF \
+        # -DBUILD_NODEJS=OFF \
         # -DBUILD_SHARED_LIBS=ON \
     && make -j \
-    && checkinstall -y --pkgname thrift --pkgversion 0.12.0 --pkgrelease 1 make install \
+    && checkinstall -y --pkgname thrift --pkgversion ${VERSION} --pkgrelease 1 make install \
     && cd /tmp \
     && dpkg -L thrift | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
