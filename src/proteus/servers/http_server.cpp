@@ -228,6 +228,7 @@ void v2::ProteusHttpServer::inferModel(
   std::string const &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received inferModel request for " + model);
 #ifdef PROTEUS_ENABLE_METRICS
+  auto now = std::chrono::high_resolution_clock::now();
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestPost);
 #endif
 
@@ -248,6 +249,9 @@ void v2::ProteusHttpServer::inferModel(
   }
 
   auto request = std::make_unique<DrogonHttp>(req, std::move(callback));
+#ifdef PROTEUS_ENABLE_METRICS
+  request->set_time(now);
+#endif
   auto *batcher = worker->getBatcher();
 #ifdef PROTEUS_ENABLE_TRACING
   span->Finish();

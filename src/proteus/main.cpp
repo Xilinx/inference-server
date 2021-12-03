@@ -77,6 +77,7 @@ int main(int argc, char* argv[]) {
   proteus::initialize();
 
 #ifdef PROTEUS_ENABLE_HTTP
+  std::cout << "Server starting at port " << http_port << "\n";
   proteus::http::start(http_port);
 #endif
 

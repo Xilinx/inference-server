@@ -47,6 +47,11 @@ class Interface {
   void setSpan(SpanPtr span);
   opentracing::Span *getSpan();
 #endif
+#ifdef PROTEUS_ENABLE_METRICS
+  void set_time(
+    const std::chrono::high_resolution_clock::time_point &start_time);
+  std::chrono::high_resolution_clock::time_point get_time();
+#endif
   virtual size_t getInputSize() = 0;
   virtual std::shared_ptr<InferenceRequest> getRequest(
     size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
@@ -64,6 +69,9 @@ class Interface {
 #endif
 #ifdef PROTEUS_ENABLE_TRACING
   SpanPtr span_;
+#endif
+#ifdef PROTEUS_ENABLE_METRICS
+  std::chrono::_V2::system_clock::time_point start_time_;
 #endif
 };
 

@@ -41,6 +41,7 @@
 #include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVar...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
 #include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
+#include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
 
@@ -139,10 +140,11 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
       break;
     }
     SPDLOG_LOGGER_INFO(this->logger_, "Got request in aks");
+    for (unsigned int j = 0; j < batch->requests->size(); j++) {
+      auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "aks");
+      auto span = startFollowSpan(batch->spans.at(j).get(), "aks");
 #endif
-    for (auto& req : *(batch->requests)) {
       InferenceResponse resp;
       resp.setID(req->getID());
       resp.setModel("aks");
@@ -183,6 +185,13 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
         output.setData(std::move(my_data_cast));
         resp.addOutput(output);
       }
+
+#ifdef PROTEUS_ENABLE_METRICS
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+                                            duration.count());
+#endif
 
       req->getCallback()(resp);
     }

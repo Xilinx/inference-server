@@ -70,9 +70,6 @@ void SoftBatcher::run(WorkerInfo* worker) {
     auto output_buffer = worker->getOutputBuffer();
     std::vector<size_t> output_offset = {0};
     size_t batch_size = 0;
-#ifdef PROTEUS_ENABLE_TRACING
-    SpanPtr span;
-#endif
 
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().setGauge(MetricGaugeIDs::kQueuesBatcherInput,
@@ -85,6 +82,9 @@ void SoftBatcher::run(WorkerInfo* worker) {
     auto start_time = std::chrono::high_resolution_clock::now();
 
     do {
+#ifdef PROTEUS_ENABLE_TRACING
+      SpanPtr span;
+#endif
       if (first_request) {
         // wait for the first request
         count = this->input_queue_->wait_dequeue_bulk(
@@ -197,6 +197,13 @@ void SoftBatcher::run(WorkerInfo* worker) {
           if (first_request) {
             first_request = false;
           }
+#ifdef PROTEUS_ENABLE_TRACING
+          span->Finish();
+          batch->spans.emplace_back(std::move(span));
+#endif
+#ifdef PROTEUS_ENABLE_METRICS
+          batch->start_times.emplace_back(req->get_time());
+#endif
         }
       }
     } while (batch_size % this->batch_size_ != 0);
@@ -205,10 +212,6 @@ void SoftBatcher::run(WorkerInfo* worker) {
       SPDLOG_LOGGER_DEBUG(this->logger_, "Enqueuing batch for " + this->model_);
       batch->input_buffers->push_back(std::move(input_buffer));
       batch->output_buffers->push_back(std::move(output_buffer));
-#ifdef PROTEUS_ENABLE_TRACING
-      span->Finish();
-      batch->span = std::move(span);
-#endif
       this->output_queue_->enqueue(std::move(batch));
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(

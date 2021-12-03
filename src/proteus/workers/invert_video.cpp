@@ -122,10 +122,11 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
     }
 
     SPDLOG_LOGGER_INFO(this->logger_, "Got request in InvertVideo");
+    for (unsigned int j = 0; j < batch->requests->size(); j++) {
+      auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "InvertVideo");
+      auto span = startFollowSpan(batch->spans.at(j).get(), "InvertVideo");
 #endif
-    for (auto& req : *(batch->requests)) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto key = req->getParameters()->get<std::string>("key");

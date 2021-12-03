@@ -39,4 +39,15 @@ void Interface::setSpan(SpanPtr span) { this->span_ = std::move(span); }
 opentracing::Span* Interface::getSpan() { return this->span_.get(); }
 #endif
 
+#ifdef PROTEUS_ENABLE_METRICS
+void Interface::set_time(
+  const std::chrono::high_resolution_clock::time_point& start_time) {
+  this->start_time_ = start_time;
+}
+
+std::chrono::high_resolution_clock::time_point Interface::get_time() {
+  return this->start_time_;
+}
+#endif
+
 }  // namespace proteus

@@ -156,16 +156,20 @@ void FakeBatcher::run(WorkerInfo *worker) {
     // }
 
     batch->requests->push_back(new_req);
+
+#ifdef PROTEUS_ENABLE_TRACING
+    span->Finish();
+    batch->spans.emplace_back(std::move(span));
+#endif
+#ifdef PROTEUS_ENABLE_METRICS
+    batch->start_times.emplace_back(req->get_time());
+#endif
     // batch_size += 1;
 
     if (!batch->requests->empty()) {
       SPDLOG_LOGGER_DEBUG(this->logger_, "Enqueuing batch for " + this->model_);
       batch->input_buffers->push_back(std::move(input_buffer));
       batch->output_buffers->push_back(std::move(output_buffer));
-#ifdef PROTEUS_ENABLE_TRACING
-      span->Finish();
-      batch->span = std::move(span);
-#endif
       this->output_queue_->enqueue(std::move(batch));
     }
   }

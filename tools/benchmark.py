@@ -632,6 +632,8 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                         parameters["share"] = False
                     for _ in range(load):
                         client.load(model, parameters)
+                    while not client.model_ready(model):
+                        pass
                     infer_endpoint = client.get_address("infer", model)
                     # print(f"Loading {load} copies of the {model} model")
                     total = (
@@ -913,7 +915,8 @@ if __name__ == "__main__":
     if args.k:
         config.benchmarks = args.k
 
-    if config.pytest.enabled:
+    # if wrk tests are run, we need to also run pytest tests
+    if config.pytest.enabled or config.wrk.enabled:
         pytest_benchmarks(config)
     else:
         # if pytest is disabled, run anyway with a small test suite to create a

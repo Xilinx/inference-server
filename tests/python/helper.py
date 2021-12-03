@@ -18,8 +18,12 @@ import os
 import re
 
 root_path = pathlib.Path(os.getenv("PROTEUS_ROOT"))
-with open(os.getenv("PROTEUS_ROOT") + "/build/config.txt", "r") as f:
-    build = f.read().strip()
+try:
+    with open(os.getenv("PROTEUS_ROOT") + "/build/config.txt", "r") as f:
+        build = f.read().strip().split(" ")[0]
+except FileNotFoundError:
+    print("No config.txt found in build/. Using default value of 'Debug'")
+    build = "Debug"
 run_path = root_path / f"build/{build}/src/proteus/proteus-server"
 
 

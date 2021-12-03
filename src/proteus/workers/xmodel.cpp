@@ -228,9 +228,6 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     SPDLOG_LOGGER_INFO(
       this->logger_,
       "Got request in xmodel: " + std::to_string(batch->requests->size()));
-#ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "xmodel");
-#endif
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -241,6 +238,14 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     }
     this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
       (void)id;  // suppress unused variable warning
+#ifdef PROTEUS_ENABLE_TRACING
+      std::vector<SpanPtr> spans;
+      spans.reserve(batch->requests->size());
+
+      for (unsigned int j = 0; j < batch->requests->size(); j++) {
+        spans.emplace_back(startFollowSpan(batch->spans.at(j).get(), "xmodel"));
+      }
+#endif
 
       std::queue<std::pair<uint32_t, int>> futures;
       std::vector<vart::TensorBuffer*> outputs_ptrs_global;
@@ -353,6 +358,10 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #ifdef PROTEUS_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
           MetricCounterIDs::kPipelineEgressWorker);
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+          std::chrono::high_resolution_clock::now() - batch->start_times[k]);
+        Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+                                              duration.count());
 #endif
       }
       this->returnBuffers(std::move(batch->input_buffers),

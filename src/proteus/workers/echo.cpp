@@ -121,14 +121,15 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
       break;
     }
     SPDLOG_LOGGER_INFO(this->logger_, "Got request in echo");
-#ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(batch->span.get(), "echo");
-#endif
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
-    for (auto& req : *(batch->requests)) {
+    for (unsigned int j = 0; j < batch->requests->size(); j++) {
+      auto& req = batch->requests->at(j);
+#ifdef PROTEUS_ENABLE_TRACING
+      auto span = startFollowSpan(batch->spans.at(j).get(), "echo");
+#endif
       InferenceResponse resp;
       resp.setID(req->getID());
       resp.setModel("echo");
@@ -169,6 +170,10 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressWorker);
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+                                            duration.count());
 #endif
     }
     this->returnBuffers(std::move(batch->input_buffers),

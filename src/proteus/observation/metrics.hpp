@@ -21,6 +21,7 @@
 #define GUARD_PROTEUS_OBSERVATION_METRICS
 
 #include <prometheus/serializer.h>  // for Serializer
+#include <prometheus/summary.h>     // for Summary, BuildSummary, Summa...
 
 #include <map>
 #include <memory>         // for weak_ptr, shared_ptr, uni...
@@ -41,7 +42,6 @@ class Gauge;
 template <class T>
 class Family;
 class Registry;
-class Summary;
 }  // namespace prometheus
 
 namespace proteus {
@@ -68,6 +68,11 @@ enum class MetricGaugeIDs {
   kQueuesBatcherOutput,
   kQueuesBufferInput,
   kQueuesBufferOutput,
+};
+
+enum class MetricSummaryIDs {
+  kMetricLatency,
+  kRequestLatency,
 };
 
 class CounterFamily {
@@ -98,6 +103,21 @@ class GaugeFamily {
  private:
   prometheus::Family<prometheus::Gauge>& family_;
   std::unordered_map<MetricGaugeIDs, prometheus::Gauge&> gauges_;
+};
+
+class SummaryFamily {
+ public:
+  SummaryFamily(
+    const std::string& name, const std::string& help,
+    prometheus::Registry* registry,
+    const std::unordered_map<MetricSummaryIDs, prometheus::Summary::Quantiles>&
+      quantiles);
+
+  void observe(MetricSummaryIDs id, double value);
+
+ private:
+  prometheus::Family<prometheus::Summary>& family_;
+  std::unordered_map<MetricSummaryIDs, prometheus::Summary&> summaries_;
 };
 
 /**
@@ -137,6 +157,8 @@ class Metrics {
 
   void setGauge(MetricGaugeIDs id, double value);
 
+  void observeSummary(MetricSummaryIDs id, double value);
+
  private:
   /// Construct a new Metrics object
   Metrics();
@@ -158,9 +180,8 @@ class Metrics {
   CounterFamily bytes_transferred_;
   CounterFamily num_scrapes_;
   GaugeFamily queue_sizes_total_;
-
-  prometheus::Family<prometheus::Summary>& req_latencies_;
-  prometheus::Summary& req_latencies_counter_;
+  SummaryFamily metric_latency_;
+  SummaryFamily request_latency_;
 };
 
 }  // namespace proteus
