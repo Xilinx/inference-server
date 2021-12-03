@@ -462,7 +462,8 @@ To see the actual commands that are run by the script, use <code class="xref std
 </pre></div>
 </div>
 <p>Note that the <code class="xref std std-option docutils literal notranslate"><span class="pre">--dry-run</span></code> must be specified before the subcommand!</p>
-<p>Some options also require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a>.</p>
+<p>Some options also require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a>.
+Running tests requires using Git LFS when cloning this repository to get testing assets.</p>
 <div class="section" id="build-or-get-the-docker-image">
 <h2>Build or Get the Docker Image<a class="headerlink" href="#build-or-get-the-docker-image" title="Permalink to this headline">¶</a></h2>
 <p>We can build several types of containers:</p>
@@ -524,7 +525,8 @@ $ curl -I http://localhost:8998/v2/health/ready
 $ <span class="nb">kill</span> -2 <span class="k">$(</span>pidof proteus-server<span class="k">)</span>
 </pre></div>
 </div>
-<p>You can also try running the test suite.</p>
+<p>You can also try running the test suite.
+You may need to get testing artifacts (see above) and have cloned the repository with Git LFS enabled.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this will start the server and test the REST API from Python.</span>
 $ proteus <span class="nb">test</span>
 </pre></div>
@@ -564,7 +566,7 @@ Ignore any failures with that model at this time.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 18, 2021.
+        Last updated on December 03, 2021.
       </span>
 
     </p>

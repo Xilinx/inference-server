@@ -34,6 +34,7 @@ To see the actual commands that are run by the script, use :option:`--dry-run`:
 Note that the :option:`--dry-run` must be specified before the subcommand!
 
 Some options also require `Docker-Compose <https://docs.docker.com/compose/install/>`__.
+Running tests requires using Git LFS when cloning this repository to get testing assets.
 
 Build or Get the Docker Image
 -----------------------------
@@ -110,6 +111,7 @@ Once the server is built, start the server to begin serving requests.
     $ kill -2 $(pidof proteus-server)
 
 You can also try running the test suite.
+You may need to get testing artifacts (see above) and have cloned the repository with Git LFS enabled.
 
 .. code-block:: bash
 
