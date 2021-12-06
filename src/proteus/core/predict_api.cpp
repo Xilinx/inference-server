@@ -278,7 +278,16 @@ void InferenceRequest::setCallback(Callback &&callback) {
   callback_ = callback;
 }
 
-Callback InferenceRequest::getCallback() { return callback_; }
+void InferenceRequest::runCallbackOnce(const InferenceResponse &response) {
+  if (this->callback_ != nullptr) {
+    (this->callback_)(response);
+    this->callback_ = nullptr;
+  }
+}
+
+void InferenceRequest::runCallback(const InferenceResponse &response) {
+  (this->callback_)(response);
+}
 
 std::vector<InferenceRequestInput> InferenceRequest::getInputs() {
   return this->inputs_;

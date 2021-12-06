@@ -203,7 +203,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
         output.setData(&message);
         output.setShape({message.size()});
         resp.addOutput(output);
-        req->getCallback()(resp);
+        req->runCallback(resp);
         // round to nearest multiple of batch size
         auto count_adjusted = count - (count % this->batch_size_);
         std::queue<
@@ -269,7 +269,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
               output.setData(&message);
               output.setShape({message.size()});
               resp.addOutput(output);
-              req->getCallback()(resp);
+              req->runCallback(resp);
               frames.pop();
             }
           }
@@ -302,7 +302,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
             output.setData(&message);
             output.setShape({message.size()});
             resp.addOutput(output);
-            req->getCallback()(resp);
+            req->runCallback(resp);
             frames.pop();
           }
         }
