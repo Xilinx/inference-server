@@ -92,7 +92,7 @@ std::vector<std::vector<int8_t>> preprocess(
  * @param size number of elements in the raw data
  * @param result pointer to store the computed results
  */
-void calc_softmax(const int8_t* data, size_t size, float* result) {
+void calc_softmax(const int8_t* data, size_t size, double* result) {
   double sum = 0;
 
   auto max = data[0];
@@ -120,7 +120,7 @@ void calc_softmax(const int8_t* data, size_t size, float* result) {
  * @param k number of top elements to return
  * @return std::vector<int>
  */
-std::vector<int> get_top_k(const float* d, int size, int k) {
+std::vector<int> get_top_k(const double* d, int size, int k) {
   std::priority_queue<std::pair<float, int>> q;
 
   for (auto i = 0; i < size; ++i) {
@@ -146,7 +146,7 @@ std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
   auto* data = static_cast<std::vector<int8_t>*>(output.getData());
   auto size = output.getSize();
 
-  std::vector<float> softmax;
+  std::vector<double> softmax;
   softmax.resize(size);
 
   calc_softmax(data->data(), size, softmax.data());
@@ -206,7 +206,8 @@ int main() {
   std::queue<proteus::InferenceResponseFuture> queue;
 
   for (auto i = 0; i < batch_size; i++) {
-    proteus::InferenceRequestInput request((void*)images[i].data(), shape,
+    proteus::InferenceRequestInput request(static_cast<void*>(images[i].data()),
+                                           shape,
                                            proteus::types::DataType::INT8);
     queue.push(proteus::enqueue(workerName, request));
   }

@@ -360,7 +360,7 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && VERSION=3.4.0 \
-    && cd /tmp && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
+    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
     && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
     && cd protobuf-${VERSION} \
     && ./autogen.sh \
@@ -379,7 +379,7 @@ RUN apt-get update \
     # clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && cd /tmp && wget --progress=dot:mega https://github.com/include-what-you-use/include-what-you-use/archive/refs/tags/0.14.tar.gz \
+    && wget --progress=dot:mega https://github.com/include-what-you-use/include-what-you-use/archive/refs/tags/0.14.tar.gz \
     && tar -xzf 0.14.tar.gz \
     && cd include-what-you-use-0.14 \
     && mkdir build \

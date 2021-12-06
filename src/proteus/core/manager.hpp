@@ -31,12 +31,10 @@
 
 #include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/predict_api.hpp"     // for RequestParameters
+#include "proteus/core/worker_info.hpp"     // for WorkerInfo
 #include "proteus/helpers/queue.hpp"        // for BlockingConcurrentQueue
 #include "proteus/observation/logging.hpp"  // for LoggerPtr
 
-namespace proteus {
-class WorkerInfo;
-}  // namespace proteus
 // IWYU pragma: no_forward_declare proteus::RequestParameters
 
 namespace proteus {

@@ -217,7 +217,6 @@ void SoftBatcher::run(WorkerInfo* worker) {
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressBatcher);
 #endif
-      first_request = true;
     }
   }
 }

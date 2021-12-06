@@ -211,11 +211,9 @@ class InferenceRequestInput {
   /// Set the tensor's shape
   void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
   /// Set the tensor's shape
-  void setShape(const std::vector<uint64_t> &shape) {
-    this->shape_ = std::move(shape);
-  }
+  void setShape(const std::vector<uint64_t> &shape) { this->shape_ = shape; }
   /// Set the tensor's shape
-  void setShape(std::vector<int32_t> shape) {
+  void setShape(const std::vector<int32_t> &shape) {
     this->shape_.reserve(shape.size());
     for (const auto &index : shape) {
       this->shape_.push_back(index);
@@ -474,7 +472,7 @@ class ModelMetadata final {
 
   void setReady();
   void setNotReady();
-  bool isReady();
+  bool isReady() const;
 
   Json::Value toJson();
 

@@ -56,8 +56,13 @@ class Batcher {
  public:
   Batcher();
   explicit Batcher(const std::string& name);
-  Batcher(const Batcher& batcher);
+  Batcher(const Batcher& batcher);              ///< copy constructor
+  Batcher& operator=(const Batcher&) = delete;  ///< Copy assignment constructor
+  Batcher(Batcher&& other) = delete;            ///< Move constructor
+  Batcher& operator=(Batcher&& other) =
+    delete;  ///< Move assignment constructor
   virtual ~Batcher() = default;
+
   void start(WorkerInfo* worker);
   void setBatchSize(size_t batch_size);
   void setName(const std::string& name);
