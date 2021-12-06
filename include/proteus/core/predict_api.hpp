@@ -405,11 +405,19 @@ class InferenceRequest {
    */
   void setCallback(Callback &&callback);
   /**
-   * @brief Get the request's callback function
+   * @brief Run the request's callback function.
    *
-   * @return Callback
+   * @param response the response data
    */
-  Callback getCallback();
+  void runCallback(const InferenceResponse &response);
+  /**
+   * @brief Run the request's callback function and clear it after. This
+   * prevents calling the callback multiple times. If this function is called
+   * again, it's a no-op.
+   *
+   * @param response the response data
+   */
+  void runCallbackOnce(const InferenceResponse &response);
 
   /// Get a vector of all the input request objects
   std::vector<InferenceRequestInput> getInputs();

@@ -172,7 +172,8 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
         size worth of data. Supporting more data complicates this code and so
         for now, we exclude this case.
       */
-      req->getCallback()(InferenceResponse());
+      req->runCallbackOnce(InferenceResponse());
+      continue;
     }
     v.reserve(batches);
 
@@ -298,7 +299,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
                                             duration.count());
 #endif
 
-      req->getCallback()(resp);
+      req->runCallbackOnce(resp);
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));

@@ -169,7 +169,7 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
         output.setData(std::move(my_data_cast));
         resp.addOutput(output);
 
-        req->getCallback()(resp);
+        req->runCallbackOnce(resp);
       }
       this->returnBuffers(std::move(batch->input_buffers),
                           std::move(batch->output_buffers));

@@ -354,7 +354,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           tensor_count++;
         }
 
-        req->getCallback()(resp);
+        req->runCallbackOnce(resp);
 #ifdef PROTEUS_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
           MetricCounterIDs::kPipelineEgressWorker);

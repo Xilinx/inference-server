@@ -159,7 +159,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         output.setData(&message);
         output.setShape({message.size()});
         resp.addOutput(output);
-        req->getCallback()(resp);
+        req->runCallback(resp);
         for (int frameNum = 0; frameNum < count; frameNum++) {
           cv::Mat frame;
           cap >> frame;  // get the next frame from video
@@ -185,7 +185,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
           output.setData(&message);
           output.setShape({message.size()});
           resp.addOutput(output);
-          req->getCallback()(resp);
+          req->runCallback(resp);
         }
       }
     }

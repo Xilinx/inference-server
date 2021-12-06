@@ -193,7 +193,7 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
                                             duration.count());
 #endif
 
-      req->getCallback()(resp);
+      req->runCallbackOnce(resp);
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
