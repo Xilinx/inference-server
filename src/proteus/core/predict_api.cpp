@@ -545,7 +545,7 @@ ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
                                          std::vector<uint64_t> shape) {
   this->name_ = name;
   this->datatype_ = datatype;
-  this->shape_ = shape;
+  this->shape_ = std::move(shape);
 }
 
 Json::Value ModelMetadataTensor::toJson() {
@@ -600,7 +600,7 @@ void ModelMetadata::setReady() { this->ready_ = true; }
 
 void ModelMetadata::setNotReady() { this->ready_ = false; }
 
-bool ModelMetadata::isReady() { return this->ready_; }
+bool ModelMetadata::isReady() const { return this->ready_; }
 
 Json::Value ModelMetadata::toJson() {
   Json::Value ret;

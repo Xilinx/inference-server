@@ -19,7 +19,7 @@
 
 namespace proteus {
 class WorkerInfo;
-}
+}  // namespace proteus
 
 namespace proteus {
 

@@ -23,8 +23,6 @@
 
 namespace proteus {
 
-using types::DataType;
-
 VartTensorBuffer::VartTensorBuffer(const std::string& name,
                                    std::vector<int32_t>& shape,
                                    xir::DataType data_type)

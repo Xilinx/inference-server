@@ -35,7 +35,7 @@
 
 namespace proteus {
 class RequestParameters;
-}
+}  // namespace proteus
 
 namespace proteus {
 
