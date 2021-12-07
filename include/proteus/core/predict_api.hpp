@@ -29,6 +29,7 @@
 #include <memory>            // for shared_ptr, allocator
 #include <ostream>           // for operator<<, ostream, bas...
 #include <string>            // for string, operator<<, char...
+#include <string_view>       // for string_view
 #include <utility>           // for move
 #include <variant>           // for operator!=, operator<
 #include <vector>            // for vector
@@ -294,7 +295,10 @@ class InferenceRequestOutput {
 class InferenceResponse {
  public:
   /// Construct a new InferenceResponse object
-  explicit InferenceResponse();
+  InferenceResponse();
+
+  /// Construct a new InferenceResponse error object
+  explicit InferenceResponse(const std::string &error);
 
   /// Get a vector of the requested output information
   [[nodiscard]] std::vector<InferenceResponseOutput> getOutputs() const;
@@ -314,6 +318,9 @@ class InferenceResponse {
   /// get the model name of the response
   std::string getModel();
 
+  bool isError() const;
+  std::string_view getError() const;
+
   /// Get a pointer to the parameters associated with this response
   RequestParameters *getParameters() { return this->parameters_.get(); }
 
@@ -324,11 +331,12 @@ class InferenceResponse {
     os << "  Model: " << my_class.model_ << "\n";
     os << "  ID: " << my_class.id_ << "\n";
     os << "  Parameters:\n";
-    os << *(my_class.parameters_.get()) << "\n";
+    os << "    " << *(my_class.parameters_.get()) << "\n";
     os << "  Outputs:\n";
     for (const auto &output : my_class.outputs_) {
-      os << output << "\n";
+      os << "    " << output << "\n";
     }
+    os << "  Error Message: " << my_class.error_msg_ << "\n";
     return os;
   }
 
@@ -337,6 +345,7 @@ class InferenceResponse {
   std::string id_;
   std::shared_ptr<RequestParameters> parameters_;
   std::vector<InferenceResponseOutput> outputs_;
+  std::string error_msg_;
 };
 
 using Callback = std::function<void(const InferenceResponse &)>;
@@ -418,6 +427,13 @@ class InferenceRequest {
    * @param response the response data
    */
   void runCallbackOnce(const InferenceResponse &response);
+  /**
+   * @brief Run the request's callback function with an error response. The
+   * callback function is not cleared
+   *
+   * @param error_msg error message to send back to the client
+   */
+  void runCallbackError(std::string_view error_msg);
 
   /// Get a vector of all the input request objects
   std::vector<InferenceRequestInput> getInputs();

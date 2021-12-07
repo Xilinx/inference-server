@@ -217,7 +217,10 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {
-            SPDLOG_LOGGER_WARN(this->logger_, "Wait, image is empty!");
+            const char* error = "Decoded image is empty";
+            SPDLOG_LOGGER_ERROR(this->logger_, error);
+            req->runCallbackError(error);
+            continue;
           }
           // set size to actual size of image instead of size of base64 str
           input_size = img.step[0] * img.rows;

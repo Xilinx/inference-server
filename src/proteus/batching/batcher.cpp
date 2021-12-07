@@ -84,7 +84,7 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
 
 void CppNativeApi::errorHandler(const std::invalid_argument &e) {
   SPDLOG_LOGGER_ERROR(this->logger_, e.what());
-  (void)e;  // suppress unused variable warning
+  this->getPromise()->set_value(InferenceResponse(e.what()));
 }
 
 Batcher::Batcher() {

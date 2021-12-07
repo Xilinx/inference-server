@@ -143,8 +143,15 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 
         uint32_t value = *static_cast<uint32_t*>(input_buffer);
 
-        // this is my operation: add one to the read argument
-        value++;
+        // this is my operation: add one to the read argument. While this can't
+        // raise an exception, if exceptions can happen, they should be handled
+        try {
+          value++;
+        } catch (const std::exception& e) {
+          SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+          req->runCallbackError("Something went wrong");
+          continue;
+        }
 
         // output_buffer->write(value);
 

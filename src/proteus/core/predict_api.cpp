@@ -289,6 +289,10 @@ void InferenceRequest::runCallback(const InferenceResponse &response) {
   (this->callback_)(response);
 }
 
+void InferenceRequest::runCallbackError(std::string_view error_msg) {
+  this->runCallback(InferenceResponse(std::string{error_msg}));
+}
+
 std::vector<InferenceRequestInput> InferenceRequest::getInputs() {
   return this->inputs_;
 }
@@ -529,8 +533,12 @@ void InferenceRequestOutput::setName(const std::string &name) {
 }
 
 InferenceResponse::InferenceResponse() {
-  this->id_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
+}
+
+InferenceResponse::InferenceResponse(const std::string &error_msg) {
+  this->parameters_ = nullptr;
+  this->error_msg_ = error_msg;
 }
 
 void InferenceResponse::setID(const std::string &id) { this->id_ = id; }
@@ -540,6 +548,12 @@ void InferenceResponse::setModel(const std::string &model) {
 }
 
 std::string InferenceResponse::getModel() { return this->model_; }
+
+bool InferenceResponse::isError() const { return !this->error_msg_.empty(); }
+
+std::string_view InferenceResponse::getError() const {
+  return this->error_msg_;
+}
 
 void InferenceResponse::addOutput(const InferenceResponseOutput &output) {
   this->outputs_.push_back(output);

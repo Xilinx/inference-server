@@ -137,7 +137,10 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
 
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
-          SPDLOG_LOGGER_WARN(this->logger_, "Cannot open video file");
+          const char* error = "Cannot open video file";
+          SPDLOG_LOGGER_ERROR(this->logger_, error);
+          req->runCallbackError(error);
+          continue;
         }
 
         InferenceResponse resp;
