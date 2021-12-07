@@ -55,10 +55,10 @@ using drogon::HttpStatusCode;
 
 namespace proteus::http {
 
-drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
+drogon::HttpResponsePtr errorHttpResponse(std::string_view error,
                                           int status_code) {
   Json::Value ret;
-  ret["error"] = error;
+  ret["error"] = error.data();
   auto resp = drogon::HttpResponse::newHttpJsonResponse(ret);
   resp->setStatusCode(static_cast<drogon::HttpStatusCode>(status_code));
   return resp;
@@ -535,8 +535,18 @@ Json::Value parseResponse(InferenceResponse response) {
 
 void drogonCallback(const DrogonCallback &callback,
                     const InferenceResponse &response) {
-  Json::Value ret = parseResponse(response);
-  auto resp = drogon::HttpResponse::newHttpJsonResponse(ret);
+  drogon::HttpResponsePtr resp;
+  if (response.isError()) {
+    resp =
+      errorHttpResponse(response.getError(), HttpStatusCode::k400BadRequest);
+  } else {
+    try {
+      Json::Value ret = parseResponse(response);
+      resp = drogon::HttpResponse::newHttpJsonResponse(ret);
+    } catch (const std::invalid_argument &e) {
+      resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
+    }
+  }
   callback(resp);
 }
 

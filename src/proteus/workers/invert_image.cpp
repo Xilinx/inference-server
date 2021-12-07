@@ -199,9 +199,20 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           auto* idata = static_cast<char*>(input_buffer);
           auto decoded_str = base64_decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
-          cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
+          cv::Mat img;
+          try {
+            img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
+          } catch (const cv::Exception& e) {
+            SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+            req->runCallbackError("Failed to decode base64 image data");
+            continue;
+          }
+
           if (img.empty()) {
-            SPDLOG_LOGGER_WARN(this->logger_, "Wait, image is empty!");
+            const char* error = "Decoded image is empty";
+            SPDLOG_LOGGER_ERROR(this->logger_, error);
+            req->runCallbackError(error);
+            continue;
           }
           cv::bitwise_not(img, img);
           std::vector<unsigned char> buf;
