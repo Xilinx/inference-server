@@ -121,6 +121,9 @@ void Aks::doAcquire(RequestParameters* parameters) {
 
   std::string graph_name = "graph_adder";
   this->graph_ = sysMan_->getGraph(graph_name);
+  if (this->graph_ == nullptr) {
+    throw std::runtime_error("AKS graph " + graph_name + " not found");
+  }
 
   this->metadata_.addInputTensor("input", types::DataType::FP32,
                                  {this->batch_size_, 1});

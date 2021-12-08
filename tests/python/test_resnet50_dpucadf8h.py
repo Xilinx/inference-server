@@ -34,6 +34,7 @@ def parameters_fixture():
     }
 
 
+@pytest.mark.extensions(["aks", "vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
 class TestInferImageResNet50DPUCADF8H:

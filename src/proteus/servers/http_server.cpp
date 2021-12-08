@@ -169,8 +169,12 @@ void v2::ProteusHttpServer::getServerMetadata(
   ret["name"] = "proteus";
   ret["version"] = kProteusVersion;
   ret["extensions"] = Json::arrayValue;
-  ret["extensions"][0] = "foo";
-  ret["extensions"][1] = "bar";
+#ifdef PROTEUS_ENABLE_AKS
+  ret["extensions"].append("aks");
+#endif
+#ifdef PROTEUS_ENABLE_VITIS
+  ret["extensions"].append("vitis");
+#endif
   auto resp = HttpResponse::newHttpJsonResponse(ret);
   callback(resp);
 }

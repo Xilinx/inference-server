@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(custom_processing custom_processing.cpp)
+if(${PROTEUS_ENABLE_VITIS})
+  add_executable(custom_processing custom_processing.cpp)
 
-target_link_libraries(custom_processing PRIVATE
-  proteus
-  opencv_imgcodecs opencv_imgproc opencv_core
-)
-target_include_directories(custom_processing PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+  target_link_libraries(custom_processing PRIVATE
+    proteus
+    opencv_imgcodecs opencv_imgproc opencv_core
+  )
+  target_include_directories(custom_processing PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+endif()
