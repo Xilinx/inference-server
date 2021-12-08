@@ -300,9 +300,9 @@ void v2::ProteusHttpServer::load(
 #endif
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(name, parameters.get());
-  } catch (const std::invalid_argument &e) {
-    SPDLOG_LOGGER_INFO(this->logger_, e.what());
+    endpoint = Manager::getInstance().loadWorker(name, *parameters);
+  } catch (const std::exception &e) {
+    SPDLOG_LOGGER_ERROR(this->logger_, e.what());
     auto resp = errorHttpResponse("Error loading worker " + name,
                                   HttpStatusCode::k400BadRequest);
     callback(resp);

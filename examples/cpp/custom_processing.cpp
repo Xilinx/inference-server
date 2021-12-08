@@ -241,7 +241,7 @@ int main() {
   proteus::terminate();
   // -clean:
 
-  std::cout << "custom_processing: Passed\n";
+  std::cout << "custom_processing.cpp: Passed\n";
 
   return 0;
 }

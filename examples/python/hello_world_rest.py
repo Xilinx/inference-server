@@ -70,7 +70,7 @@ def main():
         client.wait_until_stop()
     # -clean up:
 
-    print("Passed hello_world_rest.py")
+    print("hello_world_rest.py: Passed")
 
 
 # -main:
