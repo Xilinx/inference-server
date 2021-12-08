@@ -217,6 +217,7 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture(scope="class")
 def load(request, rest_client, model_fixture, parameters_fixture):
     response = rest_client.load(model_fixture, parameters_fixture)
+    assert not response.error, response.error_msg
     model = response.html
     request.cls.model = model
 

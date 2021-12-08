@@ -88,8 +88,10 @@ void stopHttpServer() {
 }
 
 std::string load(const std::string& worker, RequestParameters* parameters) {
-  // FIXME(varunsh): parameters can't be null to loadWorker
-  return Manager::getInstance().loadWorker(worker, parameters);
+  if (parameters == nullptr) {
+    return Manager::getInstance().loadWorker(worker, RequestParameters());
+  }
+  return Manager::getInstance().loadWorker(worker, *parameters);
 }
 
 InferenceResponseFuture enqueue(const std::string& workerName,

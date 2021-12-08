@@ -138,6 +138,8 @@ def main():
         server.stop()
         client.wait_until_stop()
 
+    print("custom_processing.py: Passed")
+
 
 if __name__ == "__main__":
     main()

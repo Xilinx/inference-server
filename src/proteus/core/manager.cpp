@@ -42,22 +42,13 @@ Manager::Manager() {
 }
 
 std::string Manager::loadWorker(std::string const& key,
-                                RequestParameters* parameters) {
-  bool share = true;
-  if (parameters->has("share")) {
-    share = parameters->get<bool>("share");
-  } else {
-    parameters->put("share", share);
-  }
-  // TODO(varunsh): if we modify the passed parameters, we can't reuse it
-  // parameters->erase("share");
-
+                                RequestParameters parameters) {
   std::shared_ptr<proteus::UpdateCommand> request;
   std::string retval;
   retval.reserve(kMaxModelNameSize);
   retval = "";
-  request = std::make_shared<UpdateCommand>(UpdateCommandType::Load, key,
-                                            parameters, &retval);
+  request = std::make_shared<UpdateCommand>(UpdateCommandType::Add, key,
+                                            &parameters, &retval);
   update_queue_->enqueue(request);
 
   while (static_cast<std::string*>(request->retval)->empty() &&
@@ -68,64 +59,34 @@ std::string Manager::loadWorker(std::string const& key,
     std::rethrow_exception(request->eptr);
   }
   auto endpoint = *(static_cast<std::string*>(request->retval));
-
-  bool creating = true;
-  if (!workerExists(endpoint)) {
-    request = std::make_shared<UpdateCommand>(UpdateCommandType::Create,
-                                              endpoint, parameters, &creating);
-  } else if (!share) {
-    request = std::make_shared<UpdateCommand>(UpdateCommandType::Duplicate,
-                                              endpoint, parameters, &creating);
-  } else {
-    // share is true and worker already exists. This is a superfluous load.
-    return endpoint;
-  }
-  update_queue_->enqueue(request);
-
-  while (*static_cast<bool*>(request->retval) && request->eptr == nullptr) {
-    std::this_thread::yield();
-  }
-  if (request->eptr != nullptr) {
-    std::rethrow_exception(request->eptr);
-  }
-
   return endpoint;
 }
 
-void Manager::unloadWorker(std::string const& key) {
-  if (workerExists(key)) {
+void Manager::unloadWorker(const std::string& key) {
+  if (this->endpoints_.exists(key)) {
     auto request =
-      std::make_shared<UpdateCommand>(UpdateCommandType::Stop, key);
+      std::make_shared<UpdateCommand>(UpdateCommandType::Delete, key);
     update_queue_->enqueue(request);
   }
 }
 
-WorkerInfo* Manager::getWorker(std::string const& key) {
-  if (active_workers_.find(key) != active_workers_.end()) {
-    return active_workers_.at(key).get();
+WorkerInfo* Manager::getWorker(const std::string& key) {
+  auto worker_info = this->endpoints_.get(key);
+  if (worker_info == nullptr) {
+    throw std::invalid_argument("worker " + key + " not found");
   }
-  throw std::invalid_argument("Worker " + key + " not started");
+  return worker_info;
 }
 
-bool Manager::workerExists(std::string const& key) {
-  return active_workers_.find(key) != active_workers_.end();
-}
-
-bool Manager::workerReady(std::string const& key) {
+bool Manager::workerReady(const std::string& key) {
   auto metadata = this->getWorkerMetadata(key);
   return metadata.isReady();
 }
 
-ModelMetadata Manager::getWorkerMetadata(std::string const& key) {
+ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   auto* worker = this->getWorker(key);
   auto* foo = worker->workers_.begin()->second;
   return foo->getMetadata();
-}
-
-void Manager::addWorker(std::string const& key,
-                        std::unique_ptr<WorkerInfo> worker_info_ptr) {
-  active_workers_.insert(std::pair<std::string, std::unique_ptr<WorkerInfo> >(
-    key, std::move(worker_info_ptr)));
 }
 
 void Manager::workerAllocate(std::string const& key, int num) {
@@ -158,56 +119,16 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
     input_queue->wait_dequeue(request);
     SPDLOG_LOGGER_DEBUG(this->logger_, "Got request in Manager update thread");
     switch (request->cmd) {
-      case UpdateCommandType::Duplicate:
-        if (workerExists(request->key)) {
-          auto* parameters = static_cast<RequestParameters*>(request->object);
-          SPDLOG_LOGGER_DEBUG(this->logger_, "Adding a new worker");
-          try {
-            auto* worker_info = this->active_workers_.at(request->key).get();
-            worker_info->addAndStartWorker(request->key, parameters);
-          } catch (...) {
-            request->eptr = std::current_exception();
-          }
-        }
-        // fall through
-      case UpdateCommandType::Create:
-        if (!workerExists(request->key)) {
-          auto* parameters = static_cast<RequestParameters*>(request->object);
-          SPDLOG_LOGGER_DEBUG(this->logger_, "Creating a new worker");
-          try {
-            auto worker_info =
-              std::make_unique<WorkerInfo>(request->key, parameters);
-            this->addWorker(request->key, std::move(worker_info));
-          } catch (...) {
-            request->eptr = std::current_exception();
-          }
-        }
-        *static_cast<bool*>(request->retval) = false;
-        break;
       case UpdateCommandType::Shutdown:
-        for (auto const& worker_info : this->active_workers_) {
-          worker_info.second->shutdown();
-        }
-        this->active_workers_.clear();
+        this->endpoints_.shutdown();
         run = false;
         break;
-      case UpdateCommandType::Stop:
-        if (workerExists(request->key)) {
-          auto* worker_info = active_workers_.at(request->key).get();
-          worker_info->unload();
-          if (worker_info->getGroupSize() == 0) {
-            this->active_workers_.erase(request->key);
-            auto hyphen_pos = request->key.find('-');
-            if (hyphen_pos != std::string::npos) {
-              request->key.erase(hyphen_pos);
-            }
-            this->active_worker_endpoints_.erase(request->key);
-          }
-        }
+      case UpdateCommandType::Delete:
+        this->endpoints_.unload(request->key);
         break;
       case UpdateCommandType::Allocate:
         try {
-          WorkerInfo* worker_info = active_workers_.at(request->key).get();
+          auto* worker_info = this->endpoints_.get(request->key);
           auto num = *static_cast<int*>(request->object);
           if (!worker_info->inputSizeValid(num)) {
             SPDLOG_LOGGER_DEBUG(
@@ -219,33 +140,12 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
           request->eptr = std::current_exception();
         }
         break;
-      case UpdateCommandType::Load:
+      case UpdateCommandType::Add:
+        auto* parameters = static_cast<RequestParameters*>(request->object);
         try {
-          auto parameters = *static_cast<RequestParameters*>(request->object);
-          if (active_worker_endpoints_.find(request->key) ==
-              active_worker_endpoints_.end()) {
-            // this is a brand-new worker we haven't seen before
-            std::map<RequestParameters, std::string> map;
-            map.insert(std::make_pair(parameters, ""));
-            active_worker_endpoints_.insert(
-              std::make_pair(request->key, std::make_pair(0, map)));
-            static_cast<std::string*>(request->retval)->assign(request->key);
-          } else {
-            auto endpoint = active_worker_endpoints_.at(request->key);
-            auto index = endpoint.first;
-            auto map = endpoint.second;
-            if (map.find(parameters) == map.end()) {
-              // we've seen this worker before but not with these parameters
-              std::string url = "-" + std::to_string(index);
-              map.insert(std::make_pair(parameters, url));
-              index++;
-              static_cast<std::string*>(request->retval)
-                ->assign(request->key + url);
-            } else {
-              static_cast<std::string*>(request->retval)
-                ->assign(request->key + map.at(parameters));
-            }
-          }
+          auto endpoint = this->endpoints_.add(request->key, *parameters);
+          static_cast<std::string*>(request->retval)
+            ->assign(std::string{endpoint});
         } catch (...) {
           request->eptr = std::current_exception();
         }
@@ -253,6 +153,119 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
     }
   }
   SPDLOG_LOGGER_DEBUG(this->logger_, "Ending update_thread");
+}
+
+std::string Manager::Endpoints::load(const std::string& worker,
+                                     RequestParameters* parameters) {
+  if (worker_endpoints_.find(worker) == worker_endpoints_.end()) {
+    // this is a brand-new worker we haven't seen before
+    std::map<RequestParameters, std::string> map;
+    map.insert(std::make_pair(*parameters, worker));
+    worker_endpoints_.insert(std::make_pair(worker, map));
+    worker_parameters_.insert(std::make_pair(worker, *parameters));
+    return worker;
+  } else {
+    auto& map = worker_endpoints_.at(worker);
+
+    // we've seen this worker before but not with these parameters
+    if (map.find(*parameters) == map.end()) {
+      int index;
+      if (worker_indices_.find(worker) == worker_indices_.end()) {
+        index = 0;
+      } else {
+        // technically, this can overflow and cause problems but that's unlikely
+        index = worker_indices_.at(worker) + 1;
+      }
+      std::string url = worker + "-" + std::to_string(index);
+      map.insert(std::make_pair(*parameters, url));
+
+      worker_indices_.insert_or_assign(worker, index);
+      worker_parameters_.insert(std::make_pair(url, *parameters));
+      return url;
+    } else {
+      return map.at(*parameters);
+    }
+  }
+}
+
+void Manager::Endpoints::unload(const std::string& endpoint) {
+  auto hyphen_pos = endpoint.find('-');
+  auto worker =
+    hyphen_pos != std::string::npos ? endpoint.substr(0, hyphen_pos) : endpoint;
+
+  auto* worker_info = this->get(endpoint);
+  if (worker_info != nullptr) {
+    worker_info->unload();
+  }
+
+  // if it's a brand-new worker that failed or the last worker being unloaded,
+  // clean up our parameters and endpoint metadata
+  if (worker_info == nullptr || worker_info->getGroupSize() == 0) {
+    this->workers_.erase(endpoint);
+
+    if (worker_endpoints_.find(worker) != worker_endpoints_.end()) {
+      auto& map = worker_endpoints_.at(worker);
+      auto& parameters = worker_parameters_.at(endpoint);
+
+      map.erase(parameters);
+      if (map.empty()) {
+        worker_endpoints_.erase(worker);
+        worker_indices_.erase(worker);
+      }
+      worker_parameters_.erase(endpoint);
+    }
+  }
+}
+
+bool Manager::Endpoints::exists(const std::string& endpoint) {
+  return workers_.find(endpoint) != workers_.end();
+}
+
+WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) {
+  auto iterator = workers_.find(endpoint);
+  if (iterator != workers_.end()) {
+    return iterator->second.get();
+  }
+  return nullptr;
+}
+
+std::string Manager::Endpoints::add(const std::string& worker,
+                                    RequestParameters parameters) {
+  bool share = true;
+  if (parameters.has("share")) {
+    share = parameters.get<bool>("share");
+    parameters.erase("share");
+  }
+
+  auto endpoint = this->load(worker, &parameters);
+  auto* worker_info = this->get(endpoint);
+
+  // if the worker doesn't exist yet, we need to create it
+  try {
+    if (worker_info == nullptr) {
+      auto new_worker = std::make_unique<WorkerInfo>(endpoint, &parameters);
+      this->workers_.insert(std::make_pair(endpoint, std::move(new_worker)));
+      // if the worker exists but the share parameter is false, we need to add
+      // one
+    } else if (!share) {
+      worker_info->addAndStartWorker(endpoint, &parameters);
+    }
+  } catch (...) {
+    // undo the load if the worker creation fails
+    this->unload(endpoint);
+    throw;
+  }
+  return endpoint;
+}
+
+void Manager::Endpoints::shutdown() {
+  for (auto const& worker_info : this->workers_) {
+    worker_info.second->shutdown();
+  }
+  this->workers_.clear();
+  this->worker_endpoints_.clear();
+  this->worker_indices_.clear();
+  this->worker_parameters_.clear();
 }
 
 }  // namespace proteus

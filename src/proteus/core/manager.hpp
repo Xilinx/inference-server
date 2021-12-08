@@ -44,12 +44,10 @@ namespace proteus {
  *
  */
 enum class UpdateCommandType {
-  Create,
   Shutdown,
   Allocate,
-  Duplicate,
-  Stop,
-  Load,
+  Add,
+  Delete,
 };
 
 /**
@@ -59,9 +57,8 @@ enum class UpdateCommandType {
  */
 struct UpdateCommand {
   /// Constructor for UpdateCommand
-  explicit UpdateCommand(UpdateCommandType cmd_ = UpdateCommandType::Create,
-                         std::string key_ = "", void* object_ = nullptr,
-                         void* retval_ = nullptr)
+  UpdateCommand(UpdateCommandType cmd_, std::string key_ = "",
+                void* object_ = nullptr, void* retval_ = nullptr)
     : cmd(cmd_),
       key(std::move(key_)),
       object(object_),
@@ -100,7 +97,7 @@ class Manager {
     return instance;
   }
 
-  std::string loadWorker(std::string const& key, RequestParameters* parameters);
+  std::string loadWorker(std::string const& key, RequestParameters parameters);
   void unloadWorker(std::string const& key);
 
   /**
@@ -111,14 +108,6 @@ class Manager {
    * @return WorkerInfo*
    */
   WorkerInfo* getWorker(std::string const& key);
-
-  /**
-   * @brief Check if a particular worker exists already
-   *
-   * @param key name of the worker
-   * @return bool
-   */
-  bool workerExists(std::string const& key);
 
   bool workerReady(std::string const& key);
   ModelMetadata getWorkerMetadata(std::string const& key);
@@ -143,25 +132,44 @@ class Manager {
   Manager();
   /// Destroy the Manager object
   ~Manager() = default;
-  /// Map (key -> WorkerInfo*) of all workers that are currently alive
-  std::unordered_map<std::string, std::unique_ptr<WorkerInfo>> active_workers_;
-  std::unordered_map<std::string,
-                     std::pair<int, std::map<RequestParameters, std::string>>>
-    active_worker_endpoints_;
+
+  /**
+   * @brief The Endpoints class is a helper class to bundle up all the worker
+   * state data structures and operations within the Manager. Its methods should
+   * be called from the update_manager.
+   */
+  class Endpoints {
+   public:
+    std::string load(const std::string& worker, RequestParameters* parameters);
+    void unload(const std::string& endpoint);
+
+    bool exists(const std::string& endpoint);
+    WorkerInfo* get(const std::string& endpoint);
+
+    std::string add(const std::string& worker, RequestParameters parameters);
+
+    void shutdown();
+
+   private:
+    // worker -> map[parameters -> endpoint]
+    std::unordered_map<std::string, std::map<RequestParameters, std::string>>
+      worker_endpoints_;
+    // worker -> index
+    std::unordered_map<std::string, int> worker_indices_;
+    // endpoint -> parameters
+    std::unordered_map<std::string, RequestParameters> worker_parameters_;
+    // endpoint -> Worker_Info*
+    std::unordered_map<std::string, std::unique_ptr<WorkerInfo>> workers_;
+  };
+
+  /// instantiation of the Endpoints class for maintaining state
+  Endpoints endpoints_;
   /// A queue used to sequentially order changes to the Proteus Manager state
   std::unique_ptr<UpdateCommandQueue> update_queue_;
   std::thread update_thread_;
 #ifdef PROTEUS_ENABLE_LOGGING
   LoggerPtr logger_;
 #endif
-  /**
-   * @brief Save a newly started worker in the Manager
-   *
-   * @param key name of the worker
-   * @param worker_info_ptr the worker's metadata
-   */
-  void addWorker(std::string const& key,
-                 std::unique_ptr<WorkerInfo> worker_info_ptr);
 
   /**
    * @brief This method is started as a separate thread when the Manager is
