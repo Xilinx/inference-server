@@ -28,6 +28,7 @@ def parameters_fixture():
 
 
 @pytest.mark.usefixtures("load")
+@pytest.mark.extensions(["aks", "vitis"])
 class TestAks:
     def test_aks_0(self):
         numbers = [3.0, 5.0]

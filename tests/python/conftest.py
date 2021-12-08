@@ -115,6 +115,9 @@ def pytest_addoption(parser):
     parser.addoption("--fpgas", action="store", default="")
     parser.addoption("--benchmark", action="store", default="skip")
 
+    # TODO(varunsh): this is currently not exposed via the test runner script
+    parser.addoption("--skip-extensions", nargs="+", default=[])
+
 
 def get_server_addr(config):
     """
@@ -145,6 +148,10 @@ def pytest_configure(config):
 
     config.addinivalue_line(
         "markers", "benchmark: indicates a benchmark test with logging output"
+    )
+
+    config.addinivalue_line(
+        "markers", "extensions([names]): indicates a test that uses extensions"
     )
 
     # Install the signal handlers that we want to process.
@@ -186,11 +193,12 @@ def pytest_collection_modifyitems(config, items):
             if "benchmark" in item.keywords:
                 item.add_marker(skip_bench)
 
+    server_addr = "http://" + get_server_addr(config)
+
     fpgas_option = str(config.getoption("--fpgas"))
     if fpgas_option:
         fpga_arg: str = fpgas_option
     else:
-        server_addr = "http://" + get_server_addr(config)
         endpoint = server_addr + "/v2/hardware"
         response = requests.get(endpoint)
         fpga_arg = response.content.decode("utf-8")
@@ -212,6 +220,24 @@ def pytest_collection_modifyitems(config, items):
                     reason=f"Needs {fpga_num_i} {fpga_i} FPGA(s). Use --fpgas {fpga_i}:{fpga_num_i} to specify"
                 )
                 item.add_marker(skip_fpga)
+
+    endpoint = server_addr + "/v2"
+    response = requests.get(endpoint).json()
+    extensions = set(extension for extension in response["extensions"])
+
+    for extension in config.getoption("--skip-extensions"):
+        if extension in extensions:
+            del extensions[extension]
+
+    for item in items:
+        for mark in item.iter_markers(name="extensions"):
+            requested_extensions = set(mark.args[0])
+
+            if not requested_extensions.issubset(extensions):
+                skip_extension = pytest.mark.skip(
+                    reason=f"Needs {requested_extensions} support from the server. Server provides {extensions}."
+                )
+                item.add_marker(skip_extension)
 
 
 @pytest.fixture(scope="class")

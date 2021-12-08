@@ -34,6 +34,7 @@ def parameters_fixture():
     return None
 
 
+@pytest.mark.extensions(["vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
 class TestXmodel:

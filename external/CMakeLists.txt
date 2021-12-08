@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+add_custom_target(extra)
+
 if(${PROTEUS_ENABLE_AKS})
     set(AKS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aks)
 
@@ -29,4 +31,6 @@ if(${PROTEUS_ENABLE_AKS})
         COMMAND bash cmake-kernels.sh --type release
         COMMENT "Building AKS kernels"
     )
+
+    add_dependencies(extra aks)
 endif()

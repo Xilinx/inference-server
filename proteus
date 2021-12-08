@@ -396,7 +396,7 @@ class Build:
 
         if args.all:
             args.jobs = mp.cpu_count()
-            Make.parse(args, ["aks"])
+            Make.parse(args, ["extra"])
             Make.parse(args, ["doxygen"])
             Make.parse(args, ["sphinx"])
 
