@@ -64,9 +64,9 @@ using types::DataType;
 namespace workers {
 
 /**
- * @brief The XModel worker is a simple worker that accepts a single uint32_t
- * argument and adds 1 to it and returns. It accepts multiple input tensors and
- * returns the corresponding number of output tensors.
+ * @brief The XModel worker accepts a path to an XModel from the user and runs
+ * the DPU subgraph associated with the XModel. The incoming requests are sent
+ * to the FPGA using the Vitis AI runtime libraries.
  *
  */
 class XModel : public Worker {

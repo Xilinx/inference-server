@@ -479,6 +479,7 @@ RUN apt-get update \
         sphinx \
         sphinx_copybutton \
         sphinxcontrib-confluencebuilder \
+        sphinx-argparse \
         # install linting tool
         black \
         cpplint \

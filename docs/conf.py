@@ -18,10 +18,15 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
+import imp
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../src/python"))
+
+# to parse the CLI, we need to import it by file path since it's not in a Python package
+imp.load_source("proteus_cli", os.path.abspath("../proteus"))
 
 
 # -- Project information -----------------------------------------------------
@@ -43,8 +48,10 @@ release = f"v{raw_version}"
 # ones.
 extensions = [
     "breathe",
+    "sphinxarg.ext",
     "sphinxcontrib.confluencebuilder",
     "sphinx.ext.autodoc",
+    # automatically labels headings
     "sphinx.ext.autosectionlabel",
     # used to define templatized links (see config below)
     "sphinx.ext.extlinks",
@@ -86,6 +93,9 @@ copybutton_prompt_text = "$ "
 
 # raise a warning if a cross-reference cannot be found
 nitpicky = True
+
+# number all figures with captions
+numfig = True
 
 # Configure 'Edit on GitHub' extension
 edit_on_github_project = "Xilinx/inference-server"

@@ -29,6 +29,7 @@
     hello_world_python
     xmodel_example_python
     xmodel_example_cpp
+    cli
 
 .. toctree::
     :maxdepth: 2
@@ -46,6 +47,7 @@
     logging
     benchmarking
     metrics
+    tracing
 
 .. toctree::
     :maxdepth: 2
