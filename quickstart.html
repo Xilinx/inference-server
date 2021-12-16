@@ -351,6 +351,7 @@
 <li class="toctree-l1"><a class="reference internal" href="hello_world_python.html">Hello World (Python)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="xmodel_example_python.html">Running an XModel (Python)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="xmodel_example_cpp.html">Running an XModel (C++)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
 <ul>
@@ -362,6 +363,7 @@
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -456,12 +458,7 @@ For these instructions, you’ll need Git, Python3, and <a class="reference exte
 <p>Note: the sequence of instructions in the code blocks below is valid only as written.
 If you add or change flags to commands, you may need to change the subsequent commands.
 The helper script used for most of the commands here is <code class="file docutils literal notranslate"><span class="pre">proteus</span></code>.
-The most up-to-date documentation for this script can be seen with <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code>.
-To see the actual commands that are run by the script, use <code class="xref std std-option docutils literal notranslate"><span class="pre">--dry-run</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus --dry-run &lt;subcommand&gt; &lt;subcommand options&gt;
-</pre></div>
-</div>
-<p>Note that the <code class="xref std std-option docutils literal notranslate"><span class="pre">--dry-run</span></code> must be specified before the subcommand!</p>
+The most up-to-date documentation for this script can be seen with <a class="reference internal" href="cli.html#command-line-interface"><span class="std std-ref">online</span></a> or on the terminal with <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code>.</p>
 <p>Some options also require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a>.
 Running tests requires using Git LFS when cloning this repository to get testing assets.</p>
 <div class="section" id="build-or-get-the-docker-image">
@@ -485,7 +482,7 @@ After the image is built, run the container:</p>
 </pre></div>
 </div>
 <p>This command runs the <code class="docutils literal notranslate"><span class="pre">{username}/proteus-dev:latest</span></code> image, which corresponds to the latest local dev image.
-The dev container will mount the working directory into <code class="file docutils literal notranslate"><span class="pre">/workspace/proteus/</span></code>, mount some additional directories into the container, expose some ports to the host and pass in FPGAs.
+The dev container will mount the working directory into <code class="file docutils literal notranslate"><span class="pre">/workspace/proteus/</span></code>, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
 These details are the <code class="xref std std-option docutils literal notranslate"><span class="pre">--dev</span></code> profile.
 Some options may be overridden on the command-line (use <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code> to see the options).</p>
 </div>
@@ -566,7 +563,7 @@ Ignore any failures with that model at this time.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on December 03, 2021.
+        Last updated on December 15, 2021.
       </span>
 
     </p>

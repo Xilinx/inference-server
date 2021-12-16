@@ -24,14 +24,7 @@ For these instructions, you'll need Git, Python3, and `Docker <https://docs.dock
 Note: the sequence of instructions in the code blocks below is valid only as written.
 If you add or change flags to commands, you may need to change the subsequent commands.
 The helper script used for most of the commands here is :file:`proteus`.
-The most up-to-date documentation for this script can be seen with :option:`--help`.
-To see the actual commands that are run by the script, use :option:`--dry-run`:
-
-.. code-block:: console
-
-    $ ./proteus --dry-run <subcommand> <subcommand options>
-
-Note that the :option:`--dry-run` must be specified before the subcommand!
+The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
 
 Some options also require `Docker-Compose <https://docs.docker.com/compose/install/>`__.
 Running tests requires using Git LFS when cloning this repository to get testing assets.
@@ -60,7 +53,7 @@ After the image is built, run the container:
     $ ./proteus run --dev
 
 This command runs the ``{username}/proteus-dev:latest`` image, which corresponds to the latest local dev image.
-The dev container will mount the working directory into :file:`/workspace/proteus/`, mount some additional directories into the container, expose some ports to the host and pass in FPGAs.
+The dev container will mount the working directory into :file:`/workspace/proteus/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
 These details are the :option:`--dev` profile.
 Some options may be overridden on the command-line (use :option:`--help` to see the options).
 
