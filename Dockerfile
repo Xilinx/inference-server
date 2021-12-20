@@ -192,6 +192,70 @@ RUN wget --progress=dot:mega https://github.com/libb64/libb64/archive/refs/tags/
     && mkdir -p ${COPY_DIR}/usr/local/include && cp -r include/b64 ${COPY_DIR}/usr/local/include \
     && rm -rf /tmp/*
 
+# install GTest 1.11.0 for C++ testing
+RUN wget --progress=dot:mega https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz \
+    && tar -xzf release-1.11.0.tar.gz \
+    && cd googletest-release-1.11.0 \
+    && mkdir -p build && cd build \
+    && cmake .. \
+    && checkinstall -y --pkgname gtest --pkgversion 1.11.0 --pkgrelease 1 make install \
+    && cd /tmp \
+    && dpkg -L gtest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -rf /tmp/*
+
+# install FFmpeg 3.4.8 for opencv
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        nasm \
+    && wget --progress=dot:mega https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.gz \
+    && tar -xzf n3.4.8.tar.gz \
+    && cd FFmpeg-n3.4.8 \
+    && ./configure --disable-static --enable-shared \
+    && make -j \
+    && checkinstall -y --pkgname ffmpeg --pkgversion 3.4.8 --pkgrelease 1 make install \
+    && cd /tmp \
+    && dpkg -L ffmpeg | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -rf /tmp/*
+
+# install opencv 3.4.3 for image and video processing
+# pkg-config is needed to find ffmpeg
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        pkg-config \
+    && wget --progress=dot:mega https://github.com/opencv/opencv/archive/3.4.3.tar.gz \
+    && tar -xzf 3.4.3.tar.gz \
+    && cd opencv-3.4.3 \
+    && mkdir -p build \
+    && cd build \
+    && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=OFF -DBUILD_PERF_TESTS=OFF -DWITH_FFMPEG=ON .. \
+    && make -j \
+    && checkinstall -y --pkgname opencv --pkgversion 3.4.3 --pkgrelease 1 make install \
+    && cd /tmp \
+    && dpkg -L opencv | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -rf /tmp/*
+
+# install protobuf 3.4.0 - dependency on pre-built target-factory, VART and XIR
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        autoconf \
+        automake \
+        curl \
+        libtool \
+        unzip \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && VERSION=3.4.0 \
+    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
+    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
+    && cd protobuf-${VERSION} \
+    && ./autogen.sh \
+    && ./configure \
+    && make -j \
+    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -fr /tmp/*
+
 # install spdlog 1.8.2
 RUN wget --progress=dot:mega https://github.com/gabime/spdlog/archive/refs/tags/v1.8.2.tar.gz \
     && tar -xzf v1.8.2.tar.gz \
@@ -221,43 +285,24 @@ RUN wget --progress=dot:mega https://github.com/jupp0r/prometheus-cpp/archive/re
     && dpkg -L prometheus-cpp | xargs -i bash -c "if [ -f {} ]; then cp --parents -P -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
-# install yaml-cpp 0.6.2 for running jaeger-client-cpp
-RUN wget --progress=dot:mega https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.6.2.tar.gz \
-    && tar -xzf yaml-cpp-0.6.2.tar.gz \
-    && cd yaml-cpp-yaml-cpp-0.6.2 \
+# get Nlohmann JSON for building opentelemetry
+RUN wget --progress=dot:mega https://github.com/nlohmann/json/archive/refs/tags/v3.7.3.tar.gz \
+    && tar -xzf v3.7.3.tar.gz \
+    && cd json-3.7.3 \
     && mkdir -p build && cd build \
     && cmake .. \
-        -DYAML_CPP_BUILD_TESTS=OFF \
-        -DYAML_CPP_BUILD_TOOLS=OFF \
-        -DBUILD_SHARED_LIBS=ON \
-    && make -j \
-    && checkinstall -y --pkgname yaml-cpp --pkgversion 0.12.2 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L yaml-cpp | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -rf /tmp/*
-
-# install opentracing-cpp 1.6.0 for running jaeger-client-cpp
-RUN wget --progress=dot:mega https://github.com/opentracing/opentracing-cpp/archive/refs/tags/v1.6.0.tar.gz \
-    && tar -xzf v1.6.0.tar.gz \
-    && cd opentracing-cpp-1.6.0 \
-    && mkdir -p build && cd build \
-    && cmake .. \
-        -DBUILD_MOCKTRACER=OFF \
         -DBUILD_TESTING=OFF \
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     && make -j \
-    && checkinstall -y --pkgname opentracing-cpp --pkgversion 1.6.0 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L opentracing-cpp | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && checkinstall -y --pkgname nlohmann-json --pkgversion 3.7.3 --pkgrelease 1 make install \
     && rm -rf /tmp/*
 
-# install Apache Thrift 0.12.0 for running jaeger-client-cpp
+# install Apache Thrift 0.12.0 for running the jaeger exporter in opentelemetry
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         bison \
         flex \
         libboost-all-dev \
-    && VERSION=0.12.0 \
+    && VERSION=0.15.0 \
     && cd /tmp && wget --progress=dot:mega https://github.com/apache/thrift/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd thrift-${VERSION} \
@@ -270,36 +315,37 @@ RUN apt-get update \
         -DBUILD_C_GLIB=OFF \
         -DBUILD_JAVA=OFF \
         -DBUILD_PYTHON=OFF \
-        # -DBUILD_JAVASCRIPT=OFF \
-        # -DBUILD_NODEJS=OFF \
-        # -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_JAVASCRIPT=OFF \
+        -DBUILD_NODEJS=OFF \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        -DBUILD_SHARED_LIBS=OFF \
     && make -j \
     && checkinstall -y --pkgname thrift --pkgversion ${VERSION} --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L thrift | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    # && cd /tmp \
+    # && dpkg -L thrift | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
-# get Nlohmann JSON for building jaeger-client-cpp
-RUN wget --progress=dot:mega https://github.com/nlohmann/json/archive/refs/tags/v3.7.3.tar.gz \
-    && tar -xzf v3.7.3.tar.gz \
-    && cd json-3.7.3 \
-    && mkdir -p build && cd build \
+# install opentelemetry 1.1.0 for tracing
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        libcurl4-openssl-dev \
+    && VERSION=1.1.0 \
+    && wget https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
+    && tar -xzf v${VERSION}.tar.gz \
+    && cd opentelemetry-cpp-${VERSION} \
+    && mkdir build && cd build \
     && cmake .. \
+        -DWITH_JAEGER=ON \
         -DBUILD_TESTING=OFF \
+        -DWITH_EXAMPLES=OFF \
+        -DWITH_PROMETHEUS=ON \
+        -DWITH_STL=ON \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        -DBUILD_SHARED_LIBS=ON \
     && make -j \
-    && checkinstall -y --pkgname nlohmann-json --pkgversion 3.7.3 --pkgrelease 1 make install \
-    && rm -rf /tmp/*
-
-# install jaeger-client-cpp 0.7.0 for tracing
-RUN wget --progress=dot:mega https://github.com/jaegertracing/jaeger-client-cpp/archive/refs/tags/v0.7.0.tar.gz \
-    && tar -xzf v0.7.0.tar.gz \
-    && cd jaeger-client-cpp-0.7.0 \
-    && mkdir -p build && cd build \
-    && cmake .. -DBUILD_TESTING=OFF -DHUNTER_ENABLED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-    && make -j \
-    && checkinstall -y --pkgname jaeger-client-cpp --pkgversion 0.7.0 --pkgrelease 1 make install \
+    && checkinstall -y --pkgname opentelemetry --pkgversion ${VERSION} --pkgrelease 1 make install \
     && cd /tmp \
-    && dpkg -L jaeger-client-cpp | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && dpkg -L opentelemetry | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # install wrk for http benchmarking
@@ -309,66 +355,6 @@ RUN wget --progress=dot:mega https://github.com/wg/wrk/archive/refs/tags/4.1.0.t
     && make -j \
     && mkdir -p ${COPY_DIR}/usr/local/bin && cp wrk ${COPY_DIR}/usr/local/bin \
     && rm -rf /tmp/*
-
-# install FFmpeg 3.4.8 for opencv
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        nasm \
-    && wget --progress=dot:mega https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.gz \
-    && tar -xzf n3.4.8.tar.gz \
-    && cd FFmpeg-n3.4.8 \
-    && ./configure --disable-static --enable-shared \
-    && make -j \
-    && checkinstall -y --pkgname ffmpeg --pkgversion 3.4.8 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L ffmpeg | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -rf /tmp/*
-
-# install opencv 3.4.3 for image and video processing
-RUN wget --progress=dot:mega https://github.com/opencv/opencv/archive/3.4.3.tar.gz \
-    && tar -xzf 3.4.3.tar.gz \
-    && cd opencv-3.4.3 \
-    && mkdir -p build \
-    && cd build \
-    && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=OFF -DBUILD_PERF_TESTS=OFF -DWITH_FFMPEG=ON .. \
-    && make -j \
-    && checkinstall -y --pkgname opencv --pkgversion 3.4.3 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L opencv | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -rf /tmp/*
-
-# install GTest 1.11.0 for C++ testing
-RUN wget --progress=dot:mega https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz \
-    && tar -xzf release-1.11.0.tar.gz \
-    && cd googletest-release-1.11.0 \
-    && mkdir -p build && cd build \
-    && cmake .. \
-    && checkinstall -y --pkgname gtest --pkgversion 1.11.0 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L gtest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -rf /tmp/*
-
-# install protobuf 3.4.0 - dependency on pre-built target-factory, VART and XIR
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        autoconf \
-        automake \
-        curl \
-        libtool \
-        unzip \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && VERSION=3.4.0 \
-    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
-    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
-    && cd protobuf-${VERSION} \
-    && ./autogen.sh \
-    && ./configure \
-    && make -j \
-    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
-    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -fr /tmp/*
 
 # install include-what-you-use 0.14
 RUN apt-get update \

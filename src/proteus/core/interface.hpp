@@ -44,8 +44,8 @@ class Interface {
   virtual ~Interface() = default;
   InterfaceType getType();
 #ifdef PROTEUS_ENABLE_TRACING
-  void setSpan(SpanPtr span);
-  opentracing::Span *getSpan();
+  void setTrace(TracePtr &&span);
+  TracePtr &&getTrace();
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
   void set_time(
@@ -68,7 +68,7 @@ class Interface {
   LoggerPtr logger_;
 #endif
 #ifdef PROTEUS_ENABLE_TRACING
-  SpanPtr span_;
+  TracePtr trace_;
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
   std::chrono::_V2::system_clock::time_point start_time_;

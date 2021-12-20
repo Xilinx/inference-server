@@ -155,10 +155,10 @@ void ResNet50Stream::doAcquire(RequestParameters* parameters) {
 
 void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("ResNet50Stream");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;

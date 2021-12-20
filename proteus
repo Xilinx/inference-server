@@ -850,9 +850,12 @@ class List:
     @staticmethod
     def parse(args, unknown_args):
         if args.images:
-            command = 'docker image list -f reference=*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}"'
+            command = 'docker image list -f reference=*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
         else:
-            command = 'docker ps --filter "label=project=proteus" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}"'
+            command = 'docker ps --filter "label=project=proteus" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
+
+        if unknown_args:
+            command += " ".join(unknown_args)
 
         run_command(command, args.dry_run)
 

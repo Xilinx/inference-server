@@ -14,11 +14,11 @@
 
 #include "proteus/observation/tracing.hpp"
 
-#include <jaegertracing/Config.h>   // for Config
-#include <jaegertracing/Logging.h>  // for consoleLogger, Logger
-#include <jaegertracing/Tracer.h>   // for Tracer
-#include <opentracing/tracer.h>     // for Tracer, ChildOf, FollowsFrom
-#include <yaml-cpp/yaml.h>          // for LoadFile
+#include <opentelemetry/exporters/ostream/span_exporter.h>
+#include <opentelemetry/sdk/resource/resource.h>
+#include <opentelemetry/sdk/trace/simple_processor.h>
+#include <opentelemetry/sdk/trace/tracer_provider.h>
+#include <opentelemetry/trace/provider.h>
 
 #include <cstdint>  // for int32_t
 #include <map>      // for _Rb_tree_iterator, operator!=
@@ -30,44 +30,55 @@
 
 #ifdef PROTEUS_ENABLE_TRACING
 
+namespace trace_api = opentelemetry::trace;
+namespace trace_sdk = opentelemetry::sdk::trace;
+namespace nostd = opentelemetry::nostd;
+
 namespace proteus {
 
 void startTracer() {
-  auto sampler =
-    jaegertracing::samplers::Config(jaegertracing::kSamplerTypeConst, 1);
-  auto config = jaegertracing::Config(false, false, sampler);
-  auto tracer = jaegertracing::Tracer::make(
-    "proteus", config, jaegertracing::logging::consoleLogger());
-  opentracing::Tracer::InitGlobal(
-    std::static_pointer_cast<opentracing::Tracer>(tracer));
+  auto exporter =
+    std::make_unique<opentelemetry::exporter::trace::OStreamSpanExporter>();
+  auto processor =
+    std::make_unique<trace_sdk::SimpleSpanProcessor>(std::move(exporter));
+  auto provider =
+    nostd::shared_ptr<trace_api::TracerProvider>(new trace_sdk::TracerProvider(
+      std::move(processor),
+      opentelemetry::sdk::resource::Resource::Create({})));
+
+  // Set the global trace provider
+  trace_api::Provider::SetTracerProvider(provider);
 }
 
-void startTracer(const char* configFilePath) {
-  auto configYAML = YAML::LoadFile(configFilePath);
-  auto config = jaegertracing::Config::parse(configYAML);
-  auto tracer = jaegertracing::Tracer::make(
-    "proteus", config, jaegertracing::logging::consoleLogger());
-  opentracing::Tracer::InitGlobal(
-    std::static_pointer_cast<opentracing::Tracer>(tracer));
+nostd::shared_ptr<trace_api::Tracer> get_tracer() {
+  auto provider = trace_api::Provider::GetTracerProvider();
+  return provider->GetTracer("proteus");
 }
 
-void stopTracer() { opentracing::Tracer::Global()->Close(); }
-
-SpanPtr startSpan(const char* name) {
-  return opentracing::Tracer::Global()->StartSpan(name);
+void stopTracer() {
+  auto tracer = get_tracer();
+  tracer->Close(std::chrono::milliseconds(1));
 }
 
-SpanPtr startChildSpan(opentracing::Span* parentSpan, const char* name) {
-  return opentracing::Tracer::Global()->StartSpan(
-    name, {opentracing::ChildOf(&(parentSpan->context()))});
+Trace::Trace(const char* name) {
+  auto tracer = get_tracer();
+  this->spans_.emplace(tracer->StartSpan(name));
 }
 
-SpanPtr startFollowSpan(opentracing::Span* previousSpan, const char* name) {
-  return opentracing::Tracer::Global()->StartSpan(
-    name, {opentracing::FollowsFrom(&(previousSpan->context()))});
+Trace::~Trace() { this->endTrace(); }
+
+void Trace::startSpan(const char* name) {
+  auto scope = trace_api::Scope(this->spans_.top());
+  auto tracer = get_tracer();
+  this->spans_.emplace(tracer->StartSpan(name));
 }
 
-void setTags(opentracing::Span* span, RequestParameters* parameters) {
+void Trace::setAttribute(nostd::string_view key,
+                         const opentelemetry::common::AttributeValue& value) {
+  this->spans_.top()->SetAttribute(key, value);
+}
+
+void Trace::setAttributes(RequestParameters* parameters) {
   auto data = parameters->data();
   // a range-based for loop doesn't work here because we can't pass the key when
   // it's a structured binding.
@@ -75,19 +86,32 @@ void setTags(opentracing::Span* span, RequestParameters* parameters) {
     auto key = it->first;
     auto value = it->second;
     std::visit(
-      [key, &span](Parameter&& arg) {
+      [key, this](Parameter&& arg) {
         if (std::holds_alternative<bool>(arg))
-          span->SetTag(key, std::get<bool>(arg));
+          this->spans_.top()->SetAttribute(key, std::get<bool>(arg));
         else if (std::holds_alternative<double>(arg))
-          span->SetTag(key, std::get<double>(arg));
+          this->spans_.top()->SetAttribute(key, std::get<double>(arg));
         else if (std::holds_alternative<int32_t>(arg))
-          span->SetTag(key, std::get<int32_t>(arg));
+          this->spans_.top()->SetAttribute(key, std::get<int32_t>(arg));
         else if (std::holds_alternative<std::string>(arg))
-          span->SetTag(key, std::get<std::string>(arg));
+          this->spans_.top()->SetAttribute(key, std::get<std::string>(arg));
       },
       value);
   }
 }
+
+void Trace::endSpan() {
+  this->spans_.top()->End();
+  this->spans_.pop();
+}
+
+void Trace::endTrace() {
+  while (!this->spans_.empty()) {
+    this->endSpan();
+  }
+}
+
+TracePtr startTrace(const char* name) { return std::make_unique<Trace>(name); }
 
 }  // namespace proteus
 

@@ -146,10 +146,10 @@ void InvertImage::doAcquire(RequestParameters* parameters) {
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("InvertImage");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
@@ -159,7 +159,8 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto span = startFollowSpan(batch->spans.at(j).get(), "InvertImage");
+      auto& trace = batch->traces.at(j);
+      trace->startSpan("InvertImage");
 #endif
       InferenceResponse resp;
       resp.setID(req->getID());

@@ -27,16 +27,13 @@ Interface::Interface() {
   this->logger_ = getLogger();
 #endif
   this->type_ = InterfaceType::kUnknown;
-#ifdef PROTEUS_ENABLE_TRACING
-  this->span_ = nullptr;
-#endif
 }
 
 InterfaceType Interface::getType() { return this->type_; }
 
 #ifdef PROTEUS_ENABLE_TRACING
-void Interface::setSpan(SpanPtr span) { this->span_ = std::move(span); }
-opentracing::Span* Interface::getSpan() { return this->span_.get(); }
+void Interface::setTrace(TracePtr&& trace) { this->trace_ = std::move(trace); }
+TracePtr&& Interface::getTrace() { return std::move(this->trace_); }
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS

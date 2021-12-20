@@ -46,7 +46,8 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                                        const WebSocketMessageType &type) {
   (void)type;  // suppress unused variable warning
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("websocket");
+  auto trace = startTrace(__func__);
+  trace->startSpan("websocket_handler");
 #endif
 
   auto json = std::make_shared<Json::Value>();
@@ -89,8 +90,8 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   }
   auto *batcher = worker->getBatcher();
 #ifdef PROTEUS_ENABLE_TRACING
-  span->Finish();
-  request->setSpan(std::move(span));
+  trace->endSpan();
+  request->setTrace(std::move(trace));
 #endif
   batcher->enqueue(std::move(request));
 }
