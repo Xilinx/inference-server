@@ -151,10 +151,10 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
 
 void ResNet50::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("ResNet50");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
@@ -181,7 +181,8 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto span = startFollowSpan(batch->spans.at(j).get(), "Resnet50");
+      auto& trace = batch->traces.at(j);
+      trace->startSpan("Resnet50");
 #endif
       auto& resp = responses.emplace_back();
       resp.setID(req->getID());

@@ -133,13 +133,14 @@ void Batcher::enqueue(InterfacePtr request) {
 
 InferenceResponseFuture Batcher::enqueue(InferenceRequestInput request) {
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("C++ enqueue");
+  auto trace = startTrace(__func__);
+  trace->startSpan("C++ enqueue");
 #endif
   auto api = std::make_unique<CppNativeApi>(std::move(request));
   auto future = api->getPromise()->get_future();
 #ifdef PROTEUS_ENABLE_TRACING
-  span->Finish();
-  api->setSpan(std::move(span));
+  trace->endSpan();
+  api->setTrace(std::move(trace));
 #endif
   this->input_queue_->enqueue(std::move(api));
   this->cv_.notify_one();

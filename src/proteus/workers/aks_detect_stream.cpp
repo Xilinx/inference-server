@@ -148,10 +148,10 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
 
 void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("AksDetectStream");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
@@ -161,8 +161,8 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
     for (unsigned int k = 0; k < batch->requests->size(); k++) {
       auto& req = batch->requests->at(k);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto span =
-        startFollowSpan(batch->spans.at(k).get(), "aks_detect_stream");
+      auto& trace = batch->traces.at(k);
+      trace->startSpan("aks_detect_stream");
 #endif
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -220,7 +220,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
           v.reserve(1);
 
 #ifdef PROTEUS_ENABLE_TRACING
-          auto batch_span = startChildSpan(span.get(), "enqueue_batch");
+          trace->startSpan("enqueue_batch");
 #endif
 
           for (size_t i = 0; i < this->batch_size_; i++) {
@@ -254,7 +254,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
           futures.push(
             this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr));
 #ifdef PROTEUS_ENABLE_TRACING
-          batch_span->Finish();
+          trace->endSpan();
 #endif
           auto status = futures.front().wait_for(std::chrono::seconds(0));
           if (status == std::future_status::ready) {

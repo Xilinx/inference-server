@@ -61,9 +61,6 @@ void HardBatcher::run(WorkerInfo* worker) {
     size_t batch_size = 0;
 
     do {
-#ifdef PROTEUS_ENABLE_TRACING
-      SpanPtr span;
-#endif
       std::vector<BufferRawPtrs> input_buffers;
       input_buffers.emplace_back();
       for (const auto& buffer : input_buffer) {
@@ -82,7 +79,8 @@ void HardBatcher::run(WorkerInfo* worker) {
       }
 
 #ifdef PROTEUS_ENABLE_TRACING
-      span = startFollowSpan(req->getSpan(), "hard_batcher");
+      auto trace = req->getTrace();
+      trace->startSpan("hard_batcher");
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS
@@ -151,8 +149,8 @@ void HardBatcher::run(WorkerInfo* worker) {
       } else {
         batch->requests->push_back(new_req);
 #ifdef PROTEUS_ENABLE_TRACING
-        span->Finish();
-        batch->spans.emplace_back(std::move(span));
+        trace->endSpan();
+        batch->traces.emplace_back(std::move(trace));
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
         batch->start_times.emplace_back(req->get_time());

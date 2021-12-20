@@ -82,9 +82,6 @@ void SoftBatcher::run(WorkerInfo* worker) {
     auto start_time = std::chrono::high_resolution_clock::now();
 
     do {
-#ifdef PROTEUS_ENABLE_TRACING
-      SpanPtr span;
-#endif
       if (first_request) {
         // wait for the first request
         count = this->input_queue_->wait_dequeue_bulk(
@@ -124,7 +121,8 @@ void SoftBatcher::run(WorkerInfo* worker) {
         }
 
 #ifdef PROTEUS_ENABLE_TRACING
-        span = startFollowSpan(req->getSpan(), "soft_batcher");
+        auto trace = req->getTrace();
+        trace->startSpan("soft_batcher");
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS
@@ -198,8 +196,8 @@ void SoftBatcher::run(WorkerInfo* worker) {
             first_request = false;
           }
 #ifdef PROTEUS_ENABLE_TRACING
-          span->Finish();
-          batch->spans.emplace_back(std::move(span));
+          trace->endSpan();
+          batch->traces.emplace_back(std::move(trace));
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
           batch->start_times.emplace_back(req->get_time());

@@ -122,10 +122,10 @@ void Fake::doAcquire(RequestParameters* parameters) {
 
 void Fake::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  BatchPtr batch;
   setThreadName("Fake");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
@@ -141,7 +141,8 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int j = 0; j < batch->requests->size(); j++) {
         auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
-        auto span = startFollowSpan(batch->spans.at(j).get(), "fake");
+        auto& trace = batch->traces.at(j);
+        trace->startSpan("fake");
 #endif
         auto& resp = responses.emplace_back();
         resp.setID("");

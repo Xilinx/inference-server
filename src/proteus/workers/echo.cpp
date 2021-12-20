@@ -112,10 +112,10 @@ void Echo::doAcquire(RequestParameters* parameters) {
 
 void Echo::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("Echo");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
@@ -128,7 +128,8 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto span = startFollowSpan(batch->spans.at(j).get(), "echo");
+      auto& trace = batch->traces.at(j);
+      trace->startSpan("echo");
 #endif
       InferenceResponse resp;
       resp.setID(req->getID());

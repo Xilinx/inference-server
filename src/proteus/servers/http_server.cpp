@@ -108,7 +108,7 @@ void v2::ProteusHttpServer::getServerLive(
   (void)req;  // suppress unused variable warning
 
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("getServerLive");
+  auto trace = startTrace(__func__);
 #endif
 
   auto resp = HttpResponse::newHttpResponse();
@@ -162,7 +162,7 @@ void v2::ProteusHttpServer::getServerMetadata(
   (void)req;  // suppress unused variable warning
 
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("getServerMetadata");
+  auto trace = startTrace(__func__);
 #endif
 
   Json::Value ret;
@@ -190,7 +190,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   (void)req;  // suppress unused variable warning
 
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("getModelMetadata");
+  auto trace = startTrace(__func__);
 #endif
 
   Json::Value ret;
@@ -230,6 +230,11 @@ void v2::ProteusHttpServer::inferModel(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) {
+#ifdef PROTEUS_ENABLE_TRACING
+  auto trace = startTrace(__func__);
+  trace->setAttribute("model", model);
+#endif
+
   SPDLOG_LOGGER_INFO(this->logger_, "Received inferModel request for " + model);
 #ifdef PROTEUS_ENABLE_METRICS
   auto now = std::chrono::high_resolution_clock::now();
@@ -237,8 +242,7 @@ void v2::ProteusHttpServer::inferModel(
 #endif
 
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("inferModel");
-  span->SetTag("model", model);
+  trace->startSpan("request_handler");
 #endif
 
   WorkerInfo *worker = nullptr;
@@ -258,8 +262,8 @@ void v2::ProteusHttpServer::inferModel(
 #endif
   auto *batcher = worker->getBatcher();
 #ifdef PROTEUS_ENABLE_TRACING
-  span->Finish();
-  request->setSpan(std::move(span));
+  trace->endSpan();
+  request->setTrace(std::move(trace));
 #endif
   batcher->enqueue(std::move(request));
 }
@@ -269,7 +273,7 @@ void v2::ProteusHttpServer::load(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received load request");
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("load");
+  auto trace = startTrace(__func__);
 #endif
 
   auto json = req->getJsonObject();
@@ -283,7 +287,7 @@ void v2::ProteusHttpServer::load(
     return;
   }
 #ifdef PROTEUS_ENABLE_TRACING
-  span->SetTag("model", name);
+  trace->setAttribute("model", name);
 #endif
   SPDLOG_LOGGER_INFO(this->logger_, "Received load request is for " + name);
 
@@ -300,7 +304,7 @@ void v2::ProteusHttpServer::load(
   }
 
 #ifdef PROTEUS_ENABLE_TRACING
-  setTags(span.get(), parameters.get());
+  trace->setAttributes(parameters.get());
 #endif
   std::string endpoint;
   try {
@@ -322,7 +326,7 @@ void v2::ProteusHttpServer::unload(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received unload request");
 #ifdef PROTEUS_ENABLE_TRACING
-  auto span = startSpan("unload");
+  auto trace = startTrace(__func__);
 #endif
 
   auto json = req->getJsonObject();
@@ -337,7 +341,7 @@ void v2::ProteusHttpServer::unload(
   }
 
 #ifdef PROTEUS_ENABLE_TRACING
-  span->SetTag("model", name);
+  trace->setAttribute("model", name);
 #endif
 
   Manager::getInstance().unloadWorker(name);

@@ -42,7 +42,7 @@ struct Batch {
   std::unique_ptr<std::vector<BufferPtrs>> input_buffers;
   std::unique_ptr<std::vector<BufferPtrs>> output_buffers;
 #ifdef PROTEUS_ENABLE_TRACING
-  std::vector<SpanPtr> spans;
+  std::vector<TracePtr> traces;
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
   std::vector<std::chrono::high_resolution_clock::time_point> start_times;

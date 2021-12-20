@@ -215,12 +215,12 @@ void XModel::doAcquire(RequestParameters* parameters) {
 
 void XModel::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  BatchPtr batch;
   std::atomic_int32_t pool_size = 0;
   const int max_pool_size = this->pool_.size() * 4;  // 4 is arbitrary
   setThreadName("XModel");
 
   while (true) {
+    BatchPtr batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
@@ -239,11 +239,9 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
       (void)id;  // suppress unused variable warning
 #ifdef PROTEUS_ENABLE_TRACING
-      std::vector<SpanPtr> spans;
-      spans.reserve(batch->requests->size());
-
       for (unsigned int j = 0; j < batch->requests->size(); j++) {
-        spans.emplace_back(startFollowSpan(batch->spans.at(j).get(), "xmodel"));
+        auto& trace = batch->traces.at(j);
+        trace->startSpan("xmodel");
       }
 #endif
 

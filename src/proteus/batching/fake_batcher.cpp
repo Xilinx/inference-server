@@ -141,7 +141,8 @@ void FakeBatcher::run(WorkerInfo *worker) {
     }
 
 #ifdef PROTEUS_ENABLE_TRACING
-    auto span = startFollowSpan(req->getSpan(), "fake_batcher");
+    auto trace = req->getTrace();
+    trace->startSpan("fake_batcher");
 #endif
     // auto fake_req = dynamic_cast<FakeCppNativeApi*>(req.get());
     // InferenceRequestPtr new_req;
@@ -158,8 +159,8 @@ void FakeBatcher::run(WorkerInfo *worker) {
     batch->requests->push_back(new_req);
 
 #ifdef PROTEUS_ENABLE_TRACING
-    span->Finish();
-    batch->spans.emplace_back(std::move(span));
+    trace->endSpan();
+    batch->traces.emplace_back(std::move(trace));
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
     batch->start_times.emplace_back(req->get_time());
