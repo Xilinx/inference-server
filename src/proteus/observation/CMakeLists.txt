@@ -15,50 +15,51 @@
 add_library(observation INTERFACE)
 
 if(${PROTEUS_ENABLE_LOGGING})
-  add_library(logging OBJECT logging.cpp)
-  target_link_libraries(logging INTERFACE spdlog)
-  target_include_directories(logging PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  enable_ipo_on_target(logging)
+    add_library(logging OBJECT logging.cpp)
+    target_link_libraries(logging INTERFACE spdlog)
+    target_include_directories(logging PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    enable_ipo_on_target(logging)
 
-  target_link_libraries(observation INTERFACE
-    $<TARGET_OBJECTS:logging> logging
-  )
+    target_link_libraries(observation INTERFACE
+        $<TARGET_OBJECTS:logging> logging
+    )
 
-  set(OBSERVATION_OBJS
-    $<TARGET_OBJECTS:logging>
-  )
+    set(OBSERVATION_OBJS
+        $<TARGET_OBJECTS:logging>
+    )
 endif()
 
 if(${PROTEUS_ENABLE_METRICS})
-  add_library(metrics OBJECT metrics.cpp)
-  target_link_libraries(metrics INTERFACE prometheus-cpp-core)
-  target_include_directories(metrics PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  enable_ipo_on_target(metrics)
+    add_library(metrics OBJECT metrics.cpp)
+    target_link_libraries(metrics INTERFACE prometheus-cpp-core)
+    target_include_directories(metrics PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    enable_ipo_on_target(metrics)
 
-  target_link_libraries(observation INTERFACE
-    $<TARGET_OBJECTS:metrics> metrics
-  )
+    target_link_libraries(observation INTERFACE
+        $<TARGET_OBJECTS:metrics> metrics
+    )
 
-  set(OBSERVATION_OBJS
-    ${OBSERVATION_OBJS}
-    $<TARGET_OBJECTS:metrics>
-  )
+    set(OBSERVATION_OBJS
+        ${OBSERVATION_OBJS}
+        $<TARGET_OBJECTS:metrics>
+    )
 endif()
 
 if(${PROTEUS_ENABLE_TRACING})
-  add_library(tracing OBJECT tracing.cpp)
-  target_include_directories(tracing PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  target_link_libraries(tracing INTERFACE opentelemetry_trace libopentelemetry_resources.so opentelemetry_exporter_ostream_span)
-  enable_ipo_on_target(tracing)
+    add_library(tracing OBJECT tracing.cpp)
+    target_include_directories(tracing PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    # switch to opentelemetry_exporter_ostream_span for debugging traces locally
+    target_link_libraries(tracing INTERFACE opentelemetry_trace libopentelemetry_resources.so opentelemetry_exporter_jaeger_trace)
+    enable_ipo_on_target(tracing)
 
-  target_link_libraries(observation INTERFACE
-    $<TARGET_OBJECTS:tracing> tracing
-  )
+    target_link_libraries(observation INTERFACE
+        $<TARGET_OBJECTS:tracing> tracing
+    )
 
-  set(OBSERVATION_OBJS
-    ${OBSERVATION_OBJS}
-    $<TARGET_OBJECTS:tracing>
-  )
+    set(OBSERVATION_OBJS
+        ${OBSERVATION_OBJS}
+        $<TARGET_OBJECTS:tracing>
+    )
 endif()
 
 set(OBSERVATION_OBJS ${OBSERVATION_OBJS} PARENT_SCOPE)

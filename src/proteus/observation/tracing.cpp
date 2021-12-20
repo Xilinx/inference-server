@@ -14,7 +14,8 @@
 
 #include "proteus/observation/tracing.hpp"
 
-#include <opentelemetry/exporters/ostream/span_exporter.h>
+#include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
+// #include <opentelemetry/exporters/ostream/span_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/simple_processor.h>
 #include <opentelemetry/sdk/trace/tracer_provider.h>
@@ -37,14 +38,23 @@ namespace nostd = opentelemetry::nostd;
 namespace proteus {
 
 void startTracer() {
-  auto exporter =
-    std::make_unique<opentelemetry::exporter::trace::OStreamSpanExporter>();
+  /**
+   * Using "new" here instead of make_unique because g++ complains during
+   * compilation about the destructor of the unique_ptr using an incomplete
+   * type ThriftSender. This is forward-declared in jaeger_exporter.h and
+   * already statically-linked into opentelemetry. We'd need to include Thrift
+   * headers to use make_unique
+   */
+  // auto exporter  = std::unique_ptr<trace_sdk::SpanExporter>(new
+  // opentelemetry::exporter::trace::OStreamSpanExporter());
+  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
+    new opentelemetry::exporter::jaeger::JaegerExporter());
   auto processor =
     std::make_unique<trace_sdk::SimpleSpanProcessor>(std::move(exporter));
   auto provider =
     nostd::shared_ptr<trace_api::TracerProvider>(new trace_sdk::TracerProvider(
-      std::move(processor),
-      opentelemetry::sdk::resource::Resource::Create({})));
+      std::move(processor), opentelemetry::sdk::resource::Resource::Create(
+                              {{"service.name", "proteus"}})));
 
   // Set the global trace provider
   trace_api::Provider::SetTracerProvider(provider);
@@ -68,7 +78,8 @@ Trace::Trace(const char* name) {
 Trace::~Trace() { this->endTrace(); }
 
 void Trace::startSpan(const char* name) {
-  auto scope = trace_api::Scope(this->spans_.top());
+  auto scope =
+    trace_api::Scope(this->spans_.top());  // mark last span as active
   auto tracer = get_tracer();
   this->spans_.emplace(tracer->StartSpan(name));
 }
