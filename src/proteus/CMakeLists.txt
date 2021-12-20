@@ -67,7 +67,8 @@ if(${PROTEUS_ENABLE_HTTP})
     target_link_libraries(proteus PUBLIC drogon)
 endif()
 if(${PROTEUS_ENABLE_TRACING})
-    target_link_libraries(proteus PUBLIC opentelemetry_trace libopentelemetry_resources.so opentelemetry_exporter_ostream_span)
+    get_target_property(TRACING_LINK_LIBS tracing INTERFACE_LINK_LIBRARIES)
+    target_link_libraries(proteus PUBLIC ${TRACING_LINK_LIBS})
 endif()
 
 # add alias to keep build and install interface the same
