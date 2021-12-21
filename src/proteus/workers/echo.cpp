@@ -173,6 +173,11 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 
+#ifdef PROTEUS_ENABLE_TRACING
+      auto context = trace->propagate();
+      resp.setContext(std::move(context));
+#endif
+
       // respond back to the client
       req->runCallbackOnce(resp);
 #ifdef PROTEUS_ENABLE_METRICS

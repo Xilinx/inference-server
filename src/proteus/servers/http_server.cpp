@@ -89,6 +89,14 @@ void start(int port) {
 
 void stop() { drogon::app().quit(); }
 
+#ifdef PROTEUS_ENABLE_TRACING
+void propagate(HttpResponse *resp, const StringMap &context) {
+  for (const auto &[key, value] : context) {
+    resp->addHeader(key, value);
+  }
+}
+#endif
+
 v2::ProteusHttpServer::ProteusHttpServer() {
 #ifdef PROTEUS_ENABLE_LOGGING
   this->logger_ = getLogger();
@@ -105,13 +113,17 @@ void v2::ProteusHttpServer::getServerLive(
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
-  (void)req;  // suppress unused variable warning
-
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(__func__, req->getHeaders());
+#else
+  (void)req;  // suppress unused variable warning
 #endif
 
   auto resp = HttpResponse::newHttpResponse();
+#ifdef PROTEUS_ENABLE_TRACING
+  auto context = trace->propagate();
+  propagate(resp.get(), context);
+#endif
   callback(resp);
 }
 
@@ -161,10 +173,6 @@ void v2::ProteusHttpServer::getServerMetadata(
 #endif
   (void)req;  // suppress unused variable warning
 
-#ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
-#endif
-
   Json::Value ret;
   ret["name"] = "proteus";
   ret["version"] = kProteusVersion;
@@ -188,10 +196,6 @@ void v2::ProteusHttpServer::getModelMetadata(
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
-
-#ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
-#endif
 
   Json::Value ret;
   bool error = false;
@@ -231,7 +235,7 @@ void v2::ProteusHttpServer::inferModel(
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) {
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(__func__, req->getHeaders());
   trace->setAttribute("model", model);
 #endif
 
@@ -252,6 +256,10 @@ void v2::ProteusHttpServer::inferModel(
     SPDLOG_LOGGER_INFO(this->logger_, e.what());
     auto resp = errorHttpResponse("Worker " + model + " not found",
                                   HttpStatusCode::k400BadRequest);
+#ifdef PROTEUS_ENABLE_TRACING
+    auto context = trace->propagate();
+    propagate(resp.get(), context);
+#endif
     callback(resp);
     return;
   }
@@ -273,7 +281,7 @@ void v2::ProteusHttpServer::load(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received load request");
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(__func__, req->getHeaders());
 #endif
 
   auto json = req->getJsonObject();
@@ -283,6 +291,10 @@ void v2::ProteusHttpServer::load(
   } else {
     auto resp = errorHttpResponse("No model name specifed in load request",
                                   HttpStatusCode::k400BadRequest);
+#ifdef PROTEUS_ENABLE_TRACING
+    auto context = trace->propagate();
+    propagate(resp.get(), context);
+#endif
     callback(resp);
     return;
   }
@@ -294,11 +306,7 @@ void v2::ProteusHttpServer::load(
   RequestParametersPtr parameters = nullptr;
   if (json->isMember("parameters")) {
     auto json_parameters = json->get("parameters", "");
-    // #ifdef PROTEUS_ENABLE_LOGGING
-    //     parameters = addParameters(json_parameters, this->logger_);
-    // #else
     parameters = addParameters(json_parameters);
-    // #endif
   } else {
     parameters = std::make_unique<RequestParameters>();
   }
@@ -313,11 +321,19 @@ void v2::ProteusHttpServer::load(
     SPDLOG_LOGGER_ERROR(this->logger_, e.what());
     auto resp = errorHttpResponse("Error loading worker " + name,
                                   HttpStatusCode::k400BadRequest);
+#ifdef PROTEUS_ENABLE_TRACING
+    auto context = trace->propagate();
+    propagate(resp.get(), context);
+#endif
     callback(resp);
   }
 
   auto resp = HttpResponse::newHttpResponse();
   resp->setBody(endpoint);
+#ifdef PROTEUS_ENABLE_TRACING
+  auto context = trace->propagate();
+  propagate(resp.get(), context);
+#endif
   callback(resp);
 }
 
@@ -326,7 +342,7 @@ void v2::ProteusHttpServer::unload(
   std::function<void(const HttpResponsePtr &)> &&callback) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received unload request");
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(__func__, req->getHeaders());
 #endif
 
   auto json = req->getJsonObject();
@@ -336,6 +352,10 @@ void v2::ProteusHttpServer::unload(
   } else {
     auto resp = errorHttpResponse("No model name specifed in unload request",
                                   HttpStatusCode::k400BadRequest);
+#ifdef PROTEUS_ENABLE_TRACING
+    auto context = trace->propagate();
+    propagate(resp.get(), context);
+#endif
     callback(resp);
     return;
   }
@@ -347,6 +367,10 @@ void v2::ProteusHttpServer::unload(
   Manager::getInstance().unloadWorker(name);
 
   auto resp = HttpResponse::newHttpResponse();
+#ifdef PROTEUS_ENABLE_TRACING
+  auto context = trace->propagate();
+  propagate(resp.get(), context);
+#endif
   callback(resp);
 }
 
@@ -555,6 +579,10 @@ void drogonCallback(const DrogonCallback &callback,
       resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
     }
   }
+#ifdef PROTEUS_ENABLE_TRACING
+  auto context = response.getContext();
+  propagate(resp.get(), context);
+#endif
   callback(resp);
 }
 

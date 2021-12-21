@@ -14,11 +14,14 @@
 
 #include "proteus/observation/tracing.hpp"
 
+#include <opentelemetry/context/propagation/global_propagator.h>
+#include <opentelemetry/context/propagation/text_map_propagator.h>
 #include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
-// #include <opentelemetry/exporters/ostream/span_exporter.h>
+#include <opentelemetry/exporters/ostream/span_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/simple_processor.h>
 #include <opentelemetry/sdk/trace/tracer_provider.h>
+#include <opentelemetry/trace/propagation/http_trace_context.h>
 #include <opentelemetry/trace/provider.h>
 
 #include <cstdint>  // for int32_t
@@ -37,6 +40,35 @@ namespace nostd = opentelemetry::nostd;
 
 namespace proteus {
 
+/**
+ * @brief This class provides the interface to hold the HTTP context from
+ * incoming requests so we can propogate it. This class is taken from the HTTP
+ * example in opentelemetry.
+ *
+ */
+class HttpTextMapCarrier
+  : public opentelemetry::context::propagation::TextMapCarrier {
+ public:
+  HttpTextMapCarrier(const StringMap& headers) : headers_(headers) {}
+  HttpTextMapCarrier() = default;
+  virtual opentelemetry::nostd::string_view Get(
+    opentelemetry::nostd::string_view key) const noexcept override {
+    auto it = headers_.find(key.data());
+    if (it != headers_.end()) {
+      return it->second;
+    }
+    return "";
+  }
+
+  virtual void Set(opentelemetry::nostd::string_view key,
+                   opentelemetry::nostd::string_view value) noexcept override {
+    headers_.insert(std::pair<std::string, std::string>(std::string(key),
+                                                        std::string(value)));
+  }
+
+  StringMap headers_;
+};
+
 void startTracer() {
   /**
    * Using "new" here instead of make_unique because g++ complains during
@@ -46,7 +78,7 @@ void startTracer() {
    * headers to use make_unique
    */
   // auto exporter  = std::unique_ptr<trace_sdk::SpanExporter>(new
-  // opentelemetry::exporter::trace::OStreamSpanExporter());
+  //   opentelemetry::exporter::trace::OStreamSpanExporter());
   auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
     new opentelemetry::exporter::jaeger::JaegerExporter());
   auto processor =
@@ -56,8 +88,15 @@ void startTracer() {
       std::move(processor), opentelemetry::sdk::resource::Resource::Create(
                               {{"service.name", "proteus"}})));
 
+  auto propagator =
+    nostd::shared_ptr<opentelemetry::context::propagation::TextMapPropagator>(
+      new opentelemetry::trace::propagation::HttpTraceContext());
+
   // Set the global trace provider
   trace_api::Provider::SetTracerProvider(provider);
+  // set global propagator
+  opentelemetry::context::propagation::GlobalTextMapPropagator::
+    SetGlobalPropagator(propagator);
 }
 
 nostd::shared_ptr<trace_api::Tracer> get_tracer() {
@@ -70,16 +109,16 @@ void stopTracer() {
   tracer->Close(std::chrono::milliseconds(1));
 }
 
-Trace::Trace(const char* name) {
+Trace::Trace(const char* name,
+             const opentelemetry::v1::trace::StartSpanOptions& options) {
   auto tracer = get_tracer();
-  this->spans_.emplace(tracer->StartSpan(name));
+  this->spans_.emplace(tracer->StartSpan(name, options));
 }
 
 Trace::~Trace() { this->endTrace(); }
 
 void Trace::startSpan(const char* name) {
-  auto scope =
-    trace_api::Scope(this->spans_.top());  // mark last span as active
+  auto scope = trace_api::Scope(this->spans_.top());  // mark last span active
   auto tracer = get_tracer();
   this->spans_.emplace(tracer->StartSpan(name));
 }
@@ -116,6 +155,21 @@ void Trace::endSpan() {
   this->spans_.pop();
 }
 
+StringMap Trace::propagate() {
+  while (this->spans_.size() > 1) {
+    this->endSpan();
+  }
+  auto scope = trace_api::Scope(this->spans_.top());  // mark last span active
+  this->spans_.top()->End();
+
+  auto current_ctx = opentelemetry::context::RuntimeContext::GetCurrent();
+  HttpTextMapCarrier carrier;
+  auto prop = opentelemetry::context::propagation::GlobalTextMapPropagator::
+    GetGlobalPropagator();
+  prop->Inject(carrier, current_ctx);
+  return carrier.headers_;
+}
+
 void Trace::endTrace() {
   while (!this->spans_.empty()) {
     this->endSpan();
@@ -123,6 +177,23 @@ void Trace::endTrace() {
 }
 
 TracePtr startTrace(const char* name) { return std::make_unique<Trace>(name); }
+
+TracePtr startTrace(
+  const char* name,
+  const std::unordered_map<std::string, std::string>& http_headers) {
+  auto prop = opentelemetry::context::propagation::GlobalTextMapPropagator::
+    GetGlobalPropagator();
+  auto current_ctx = opentelemetry::context::RuntimeContext::GetCurrent();
+
+  const HttpTextMapCarrier carrier(http_headers);
+  auto new_context = prop->Extract(carrier, current_ctx);
+
+  trace_api::StartSpanOptions options;
+  options.kind = trace_api::SpanKind::kServer;
+  options.parent = trace_api::GetSpan(new_context)->GetContext();
+
+  return std::make_unique<Trace>(name, options);
+}
 
 }  // namespace proteus
 

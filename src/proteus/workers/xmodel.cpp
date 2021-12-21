@@ -352,6 +352,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           tensor_count++;
         }
 
+#ifdef PROTEUS_ENABLE_TRACING
+        auto context = batch->traces.at(k)->propagate();
+        resp.setContext(std::move(context));
+#endif
+
         req->runCallbackOnce(resp);
 #ifdef PROTEUS_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(

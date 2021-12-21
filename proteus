@@ -533,8 +533,8 @@ class Clean:
         commands = [
             "rm -f docker-compose.devices.yml",
             "rm -f docker-compose.yml",
-            "rm -f proteus/build_options.hpp",
-            "rm -f proteus/version.hpp",
+            "rm -f include/proteus/build_options.hpp",
+            "rm -f src/proteus/version.hpp",
             "rm -f tools/benchmark.yml",
             "rm -rf external/aks/graph_zoo",
             "rm -rf external/aks/kernel_src",

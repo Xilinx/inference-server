@@ -48,7 +48,7 @@ endif()
 if(${PROTEUS_ENABLE_TRACING})
     add_library(tracing OBJECT tracing.cpp)
     target_include_directories(tracing PRIVATE ${PROTEUS_INCLUDE_DIRS})
-    # switch to opentelemetry_exporter_ostream_span for debugging traces locally
+    # switch opentelemetry_exporter_jaeger_trace to opentelemetry_exporter_ostream_span for debugging traces locally
     target_link_libraries(tracing INTERFACE opentelemetry_trace libopentelemetry_resources.so opentelemetry_exporter_jaeger_trace)
     enable_ipo_on_target(tracing)
 

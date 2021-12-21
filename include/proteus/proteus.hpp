@@ -15,6 +15,7 @@
 #ifndef GUARD_PROTEUS_PROTEUS
 #define GUARD_PROTEUS_PROTEUS
 
+#include "proteus/build_options.hpp"         // IWYU pragma: export
 #include "proteus/clients/native.hpp"        // IWYU pragma: export
 #include "proteus/core/data_types.hpp"       // IWYU pragma: export
 #include "proteus/core/predict_api.hpp"      // IWYU pragma: export

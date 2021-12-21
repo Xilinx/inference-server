@@ -130,7 +130,7 @@ message(STATUS "Derived Options:")
 message(STATUS "  PROTEUS_ENABLE_REST: " ${PROTEUS_ENABLE_REST})
 message(STATUS "  PROTEUS_DEFAULT_HTTP_PORT: " ${PROTEUS_DEFAULT_HTTP_PORT})
 
-configure_file(src/proteus/build_options.hpp.in ${PROJECT_SOURCE_DIR}/src/proteus/build_options.hpp)
+configure_file(src/proteus/build_options.hpp.in ${PROJECT_SOURCE_DIR}/include/proteus/build_options.hpp)
 configure_file(src/gui/src/build_options.ts.in ${PROJECT_SOURCE_DIR}/src/gui/src/build_options.ts)
 if(NOT EXISTS ${PROJECT_SOURCE_DIR}/tools/benchmark.yml)
     configure_file(tools/benchmark.yml.in ${PROJECT_SOURCE_DIR}/tools/benchmark.yml)
