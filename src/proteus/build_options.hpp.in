@@ -14,7 +14,8 @@
 
 /**
  * @file
- * @brief Defines the Proteus's build information
+ * @brief Defines the Proteus's build information. This file is updated
+ * automatically by CMake. To update, recompile the proteus source code.
  */
 
 #ifndef GUARD_PROTEUS_BUILD_OPTIONS_HPP

@@ -24,9 +24,13 @@
 #include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uin...
 #include <string>   // for string
 
+#include "proteus/build_options.hpp"
+
+#ifdef PROTEUS_ENABLE_VITIS
 namespace xir {
 class DataType;
 }  // namespace xir
+#endif
 
 /**
  * @brief The types namespace defines the datatypes that Proteus supports in
@@ -102,6 +106,7 @@ constexpr size_t getSize(DataType type) {
  */
 std::string mapTypeToStr(DataType type);
 
+#ifdef PROTEUS_ENABLE_VITIS
 /**
  * @brief Given an XIR type, return the corresponding Proteus type
  *
@@ -117,6 +122,7 @@ DataType mapXirType(xir::DataType type);
  * @return xir::DataType
  */
 xir::DataType mapTypeToXir(DataType type);
+#endif
 
 }  // namespace proteus::types
 #endif  // GUARD_PROTEUS_CORE_DATA_TYPES
