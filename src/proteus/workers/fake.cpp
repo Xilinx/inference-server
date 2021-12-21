@@ -170,6 +170,11 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
         output.setData(std::move(my_data_cast));
         resp.addOutput(output);
 
+#ifdef PROTEUS_ENABLE_TRACING
+        auto context = batch->traces.at(k)->propagate();
+        resp.setContext(std::move(context));
+#endif
+
         req->runCallbackOnce(resp);
       }
       this->returnBuffers(std::move(batch->input_buffers),

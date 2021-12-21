@@ -72,6 +72,6 @@ def run_benchmark(benchmark, benchmark_name, func, request, **kwargs):
 
 kDefaultHttpPort = int(
     getConstexprFromHeader(
-        "kDefaultHttpPort", root_path / "src/proteus/build_options.hpp"
+        "kDefaultHttpPort", root_path / "include/proteus/build_options.hpp"
     )
 )

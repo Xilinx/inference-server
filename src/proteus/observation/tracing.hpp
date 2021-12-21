@@ -16,9 +16,11 @@
 #define GUARD_PROTEUS_OBSERVATION_TRACING
 
 #include <memory>  // for shared_ptr
+#include <unordered_map>
 
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/predict_api.hpp"  // for RequestParameters
+#include "proteus/helpers/declarations.hpp"
 
 // IWYU pragma: no_forward_declare proteus::RequestParameters
 
@@ -31,12 +33,17 @@
 #include <opentelemetry/nostd/shared_ptr.h>
 #include <opentelemetry/trace/scope.h>
 #include <opentelemetry/trace/span.h>  // IWYU pragma: export
+#include <opentelemetry/trace/span_startoptions.h>
 
 namespace proteus {
 
+void startTracer();
+void stopTracer();
+
 class Trace final {
  public:
-  explicit Trace(const char* name);
+  Trace(const char* name,
+        const opentelemetry::v1::trace::StartSpanOptions& options = {});
   ~Trace();
   Trace(Trace const&) = delete;              ///< Copy constructor
   Trace& operator=(const Trace&) = delete;   ///< Copy assignment constructor
@@ -55,6 +62,9 @@ class Trace final {
   /// set all parameters as attributes in the active span in the trace
   void setAttributes(RequestParameters* parameters);
 
+  /// ends all spans except the last one and returns its context for propagation
+  StringMap propagate();
+
   /// Ends the active span in the trace
   void endSpan();
 
@@ -69,17 +79,10 @@ class Trace final {
 
 using TracePtr = std::unique_ptr<Trace>;
 
-void startTracer();
-void stopTracer();
-
 TracePtr startTrace(const char* name);
-
-// Span startSpan(const char* name);
-// SpanPtr startChildSpan(opentracing::Span* parentSpan, const char* name);
-// Span startChildSpan(const Span& parent_span, const char* name);
-// Span startChildSpan(const Span* parent_span, const char* name);
-// SpanPtr startFollowSpan(opentracing::Span* previousSpan, const char* name);
-// void setTags(opentracing::Span* span, RequestParameters* parameters);
+TracePtr startTrace(
+  const char* name,
+  const std::unordered_map<std::string, std::string>& http_headers);
 
 }  // namespace proteus
 

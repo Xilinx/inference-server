@@ -34,6 +34,7 @@
 #include <variant>           // for operator!=, operator<
 #include <vector>            // for vector
 
+#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/data_types.hpp"       // for DataType, mapTypeToStr
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
 
@@ -321,6 +322,11 @@ class InferenceResponse {
   bool isError() const;
   std::string_view getError() const;
 
+#ifdef PROTEUS_ENABLE_TRACING
+  void setContext(StringMap &&context);
+  const StringMap &getContext() const;
+#endif
+
   /// Get a pointer to the parameters associated with this response
   RequestParameters *getParameters() { return this->parameters_.get(); }
 
@@ -346,6 +352,9 @@ class InferenceResponse {
   std::shared_ptr<RequestParameters> parameters_;
   std::vector<InferenceResponseOutput> outputs_;
   std::string error_msg_;
+#ifdef PROTEUS_ENABLE_TRACING
+  StringMap context_;
+#endif
 };
 
 using Callback = std::function<void(const InferenceResponse &)>;

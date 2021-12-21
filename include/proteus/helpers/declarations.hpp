@@ -17,6 +17,8 @@
 
 #include <future>
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace proteus {
@@ -43,6 +45,8 @@ using BufferRawPtrs = std::vector<Buffer*>;
 using InferenceRequestPtr = std::shared_ptr<InferenceRequest>;
 
 using InferenceResponseFuture = std::future<proteus::InferenceResponse>;
+
+using StringMap = std::unordered_map<std::string, std::string>;
 
 }  // namespace proteus
 

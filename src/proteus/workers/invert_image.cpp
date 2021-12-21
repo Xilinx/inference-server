@@ -244,6 +244,10 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
+#ifdef PROTEUS_ENABLE_TRACING
+      auto context = trace->propagate();
+      resp.setContext(std::move(context));
+#endif
       req->runCallbackOnce(resp);
     }
     this->returnBuffers(std::move(batch->input_buffers),

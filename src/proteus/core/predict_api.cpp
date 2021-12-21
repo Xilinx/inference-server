@@ -563,6 +563,16 @@ std::vector<InferenceResponseOutput> InferenceResponse::getOutputs() const {
   return this->outputs_;
 }
 
+#ifdef PROTEUS_ENABLE_TRACING
+void InferenceResponse::setContext(StringMap &&context) {
+  this->context_ = std::move(context);
+}
+
+const StringMap &InferenceResponse::getContext() const {
+  return this->context_;
+}
+#endif
+
 ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
                                          types::DataType datatype,
                                          std::vector<uint64_t> shape) {
