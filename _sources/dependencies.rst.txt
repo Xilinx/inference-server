@@ -129,18 +129,15 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`tianon/gosu`,1.12,Apache 2.0,Executable used to drop down to user when starting container
     :github:`google/googletest`,1.11.0,BSD-3,Statically linked by proteus's test executables
     :github:`include-what-you-use/include-what-you-use`,0.14,LLVM License,Executable used to check C++ header inclusions
-    :github:`jaegertracing/jaeger-client-cpp`,0.7.0,Apache 2.0,Dynamically linked by proteus-server
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by proteus-server for base64 codec
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development
     :github:`opencv/opencv`,3.4.4,Apache 2.0,Dynamically linked by proteus-server for image and video processing
-    :github:`opentracing/opentracing-cpp`,1.6.0,Apache 2.0,Dynamically linked by jaeger-client-cpp
+    :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server
     :github:`jupp0r/prometheus-cpp`,0.12.2,MIT,Dynamically linked by proteus-server for metrics
     :github:`protocolbuffers/protobuf`,3.4.0,BSD-3,Dynamically linked by proteus-server and Vitis libraries
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging
-    :github:`apache/thrift`,0.12.0,Apache 2.0,Dynamically linked by jaeger-client-cpp
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking proteus-server
-    :github:`jbeder/yaml-cpp`,0.6.2,MIT,Dynamically linked by jaeger-client-cpp
 
 Xilinx
 ^^^^^^
