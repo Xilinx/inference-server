@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Defines the fake batcher implementation
+ */
+
 #ifndef GUARD_PROTEUS_BATCHING_FAKE_BATCHER
 #define GUARD_PROTEUS_BATCHING_FAKE_BATCHER
 

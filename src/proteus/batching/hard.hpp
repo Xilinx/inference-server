@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Defines the hard batcher implementation
+ */
+
 #ifndef GUARD_PROTEUS_BATCHING_HARD
 #define GUARD_PROTEUS_BATCHING_HARD
 
@@ -23,6 +28,13 @@ class WorkerInfo;
 
 namespace proteus {
 
+/**
+ * @brief The HardBatcher batches to a multiple of the requested batch size and
+ * blocks until a valid batch forms. Note: this batcher is only meant for
+ * testing purposes or if the batch size is fixed to be one since it can block
+ * indefinitely.
+ *
+ */
 class HardBatcher : public Batcher {
  public:
   using Batcher::Batcher;

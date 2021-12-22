@@ -19,7 +19,7 @@
 
 #include "proteus/buffers/vart_tensor_buffer.hpp"
 
-#include <xir/tensor/tensor.hpp>
+#include <utility>  // for pair
 
 namespace proteus {
 

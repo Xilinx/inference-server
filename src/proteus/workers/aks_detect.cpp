@@ -20,7 +20,7 @@
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
-#include <algorithm>               // for max
+#include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for uint64_t, uint8_t, int32_t
 #include <cstring>                 // for memcpy

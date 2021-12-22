@@ -15,8 +15,10 @@
 #ifndef GUARD_PROTEUS_OBSERVATION_TRACING
 #define GUARD_PROTEUS_OBSERVATION_TRACING
 
-#include <memory>  // for shared_ptr
-#include <unordered_map>
+#include <memory>         // for shared_ptr
+#include <stack>          // for stack
+#include <string>         // for string
+#include <unordered_map>  // for unordered_map
 
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/predict_api.hpp"  // for RequestParameters
@@ -30,10 +32,11 @@
 // library was compiled with this flag set
 #define HAVE_CPP_STDLIB
 
+#include <opentelemetry/common/attribute_value.h>  // for AttributeValue
 #include <opentelemetry/nostd/shared_ptr.h>
-#include <opentelemetry/trace/scope.h>
-#include <opentelemetry/trace/span.h>  // IWYU pragma: export
-#include <opentelemetry/trace/span_startoptions.h>
+#include <opentelemetry/std/string_view.h>          // for string_view
+#include <opentelemetry/trace/span.h>               // for span
+#include <opentelemetry/trace/span_startoptions.h>  // for StartSpanOptions
 
 namespace proteus {
 
@@ -42,8 +45,9 @@ void stopTracer();
 
 class Trace final {
  public:
-  Trace(const char* name,
-        const opentelemetry::v1::trace::StartSpanOptions& options = {});
+  explicit Trace(
+    const char* name,
+    const opentelemetry::v1::trace::StartSpanOptions& options = {});
   ~Trace();
   Trace(Trace const&) = delete;              ///< Copy constructor
   Trace& operator=(const Trace&) = delete;   ///< Copy assignment constructor

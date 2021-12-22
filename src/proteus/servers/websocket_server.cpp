@@ -134,8 +134,9 @@ void drogonCallback(const drogon::WebSocketConnectionPtr &conn,
 }
 
 std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
-  size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
-  std::vector<size_t> &input_offset, std::vector<BufferRawPtrs> output_buffers,
+  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
+  std::vector<size_t> &input_offset,
+  const std::vector<BufferRawPtrs> &output_buffers,
   std::vector<size_t> &output_offset, const size_t &batch_size,
   size_t &batch_offset) {
   std::shared_ptr<InferenceRequest> request;

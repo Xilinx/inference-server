@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements the hard batcher
+ */
+
 #include "proteus/batching/hard.hpp"
 
+#include <chrono>     // for system_clock::time_point
 #include <cstddef>    // for size_t
 #include <memory>     // for unique_ptr, make_unique
 #include <mutex>      // for mutex, unique_lock
@@ -22,7 +28,7 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "proteus/buffers/buffer.hpp"        // for Buffer
+#include "proteus/buffers/buffer.hpp"        // IWYU pragma: keep
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/interface.hpp"        // for InterfacePtr, Interface
 #include "proteus/core/manager.hpp"          // for Manager
@@ -36,7 +42,6 @@
 namespace proteus {
 class InferenceRequest;
 }  // namespace proteus
-
 // IWYU pragma: no_forward_declare proteus::Buffer
 
 namespace proteus {

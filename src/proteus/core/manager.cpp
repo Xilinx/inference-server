@@ -20,11 +20,11 @@
 
 #include "proteus/core/manager.hpp"
 
-#include <stdexcept>  // for invalid_argument
-#include <thread>     // for yield, thread
-#include <utility>    // for pair, make_pair, move
+#include <stdexcept>    // for invalid_argument
+#include <thread>       // for yield, thread
+#include <type_traits>  // for __decay_and_strip<>::__type
+#include <utility>      // for pair, make_pair, move
 
-#include "proteus/batching/batcher.hpp"  // for Batcher
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING, kMax...
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
 #include "proteus/helpers/thread.hpp"    // for setThreadName
@@ -71,7 +71,7 @@ void Manager::unloadWorker(const std::string& key) {
 }
 
 WorkerInfo* Manager::getWorker(const std::string& key) {
-  auto worker_info = this->endpoints_.get(key);
+  auto* worker_info = this->endpoints_.get(key);
   if (worker_info == nullptr) {
     throw std::invalid_argument("worker " + key + " not found");
   }
@@ -164,28 +164,27 @@ std::string Manager::Endpoints::load(const std::string& worker,
     worker_endpoints_.insert(std::make_pair(worker, map));
     worker_parameters_.insert(std::make_pair(worker, *parameters));
     return worker;
-  } else {
-    auto& map = worker_endpoints_.at(worker);
-
-    // we've seen this worker before but not with these parameters
-    if (map.find(*parameters) == map.end()) {
-      int index;
-      if (worker_indices_.find(worker) == worker_indices_.end()) {
-        index = 0;
-      } else {
-        // technically, this can overflow and cause problems but that's unlikely
-        index = worker_indices_.at(worker) + 1;
-      }
-      std::string url = worker + "-" + std::to_string(index);
-      map.insert(std::make_pair(*parameters, url));
-
-      worker_indices_.insert_or_assign(worker, index);
-      worker_parameters_.insert(std::make_pair(url, *parameters));
-      return url;
-    } else {
-      return map.at(*parameters);
-    }
   }
+
+  auto& map = worker_endpoints_.at(worker);
+
+  // we've seen this worker before but not with these parameters
+  if (map.find(*parameters) == map.end()) {
+    int index;
+    if (worker_indices_.find(worker) == worker_indices_.end()) {
+      index = 0;
+    } else {
+      // technically, this can overflow and cause problems but that's unlikely
+      index = worker_indices_.at(worker) + 1;
+    }
+    std::string url = worker + "-" + std::to_string(index);
+    map.insert(std::make_pair(*parameters, url));
+
+    worker_indices_.insert_or_assign(worker, index);
+    worker_parameters_.insert(std::make_pair(url, *parameters));
+    return url;
+  }
+  return map.at(*parameters);
 }
 
 void Manager::Endpoints::unload(const std::string& endpoint) {

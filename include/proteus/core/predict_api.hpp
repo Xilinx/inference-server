@@ -319,11 +319,19 @@ class InferenceResponse {
   /// get the model name of the response
   std::string getModel();
 
+  /// Check if this is an error response
   bool isError() const;
+  /// Get the error message if it exists. Defaults to an empty string
   std::string_view getError() const;
 
 #ifdef PROTEUS_ENABLE_TRACING
+  /**
+   * @brief Set the Context object to propagate tracing data on
+   *
+   * @param context
+   */
   void setContext(StringMap &&context);
+  /// Get the response's context to use to initialize a new span
   const StringMap &getContext() const;
 #endif
 
@@ -388,9 +396,9 @@ class InferenceRequest {
    * @param batch_offset current batch offset to start with
    */
   InferenceRequest(InferenceRequestInput &req, size_t &buffer_index,
-                   std::vector<BufferRawPtrs> input_buffers,
+                   const std::vector<BufferRawPtrs> &input_buffers,
                    std::vector<size_t> &input_offsets,
-                   std::vector<BufferRawPtrs> output_buffers,
+                   const std::vector<BufferRawPtrs> &output_buffers,
                    std::vector<size_t> &output_offsets,
                    const size_t &batch_size, size_t &batch_offset);
 
@@ -409,9 +417,9 @@ class InferenceRequest {
    */
   InferenceRequest(std::shared_ptr<Json::Value> const &req,
                    size_t &buffer_index,
-                   std::vector<BufferRawPtrs> input_buffers,
+                   const std::vector<BufferRawPtrs> &input_buffers,
                    std::vector<size_t> &input_offsets,
-                   std::vector<BufferRawPtrs> output_buffers,
+                   const std::vector<BufferRawPtrs> &output_buffers,
                    std::vector<size_t> &output_offsets,
                    const size_t &batch_size, size_t &batch_offset);
 
@@ -475,8 +483,19 @@ class InferenceRequest {
 using InferenceResponsePromisePtr =
   std::shared_ptr<std::promise<InferenceResponse>>;
 
+/**
+ * @brief This class holds the metadata associated with an input tensor
+ *
+ */
 class ModelMetadataTensor final {
  public:
+  /**
+   * @brief Construct a new Model Metadata Tensor object
+   *
+   * @param name name of the tensor
+   * @param datatype the datatype this tensor accepts
+   * @param shape the expected shape of the data
+   */
   ModelMetadataTensor(const std::string &name, types::DataType datatype,
                       std::vector<uint64_t> shape);
 
@@ -488,25 +507,69 @@ class ModelMetadataTensor final {
   std::vector<uint64_t> shape_;
 };
 
+/**
+ * @brief This class holds the metadata associated with a model (per the KServe
+ * spec). This allows clients to query this information from the server.
+ *
+ */
 class ModelMetadata final {
  public:
+  /**
+   * @brief Construct a new Model Metadata object
+   *
+   * @param name Name of the model
+   * @param platform the platform this model runs on
+   */
   ModelMetadata(const std::string &name, const std::string &platform);
 
+  /**
+   * @brief Add an input tensor to this model
+   *
+   * @param name name of the tensor
+   * @param datatype datatype of the tensor
+   * @param shape shape of the tensor
+   */
   void addInputTensor(const std::string &name, types::DataType datatype,
                       std::initializer_list<uint64_t> shape);
+  /**
+   * @brief Add an input tensor to this model
+   *
+   * @param name name of the tensor
+   * @param datatype datatype of the tensor
+   * @param shape shape of the tensor
+   */
   void addInputTensor(const std::string &name, types::DataType datatype,
                       std::vector<int> shape);
+  /**
+   * @brief Add an output tensor to this model
+   *
+   * @param name name of the tensor
+   * @param datatype datatype of the tensor
+   * @param shape shape of the tensor
+   */
   void addOutputTensor(const std::string &name, types::DataType datatype,
                        std::initializer_list<uint64_t> shape);
+  /**
+   * @brief Add an output tensor to this model
+   *
+   * @param name name of the tensor
+   * @param datatype datatype of the tensor
+   * @param shape shape of the tensor
+   */
   void addOutputTensor(const std::string &name, types::DataType datatype,
                        std::vector<int> shape);
 
+  /// set the model's name
   void setName(const std::string &name);
 
+  /// mark this model as ready
   void setReady();
+  /// mark this model as not ready
   void setNotReady();
-  bool isReady() const;
+  /// check if this model is ready
+  [[nodiscard]] bool isReady() const;
 
+  /// convert the metadata to a JSON representation compatible with the server
   Json::Value toJson();
 
  private:

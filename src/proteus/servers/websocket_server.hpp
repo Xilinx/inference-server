@@ -26,15 +26,15 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/interface.hpp"       // for Interface
-#include "proteus/observation/logging.hpp"  // for LoggerPtr
+#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/interface.hpp"        // for Interface
+#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
+#include "proteus/observation/logging.hpp"   // for LoggerPtr
 
 namespace Json {
 class Value;
 }  // namespace Json
 namespace proteus {
-class Buffer;
 class InferenceRequest;
 }  // namespace proteus
 
@@ -46,9 +46,9 @@ class DrogonWs : public Interface {
            std::shared_ptr<Json::Value> json);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
+    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
-    std::vector<BufferRawPtrs> output_buffers,
+    const std::vector<BufferRawPtrs> &output_buffers,
     std::vector<size_t> &output_offsets, const size_t &batch_size,
     size_t &batch_offset) override;
 

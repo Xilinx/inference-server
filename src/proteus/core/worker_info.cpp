@@ -22,20 +22,18 @@
 
 #include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
 
-#include <cctype>     // for toupper
-#include <climits>    // for UINT_MAX
-#include <stdexcept>  // for invalid_argument
-#include <string>     // for string, operator+, basic_string
-#include <utility>    // for pair, move, make_pair
+#include <cctype>       // for toupper
+#include <climits>      // for UINT_MAX
+#include <cstdint>      // for int32_t
+#include <stdexcept>    // for invalid_argument
+#include <string>       // for string, operator+, basic_string
+#include <type_traits>  // for remove_reference<>::type
+#include <utility>      // for pair, move, make_pair
 
 #include "proteus/batching/batcher.hpp"  // for Batcher, BatchPtrQueue
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
-#include "proteus/observation/metrics.hpp"
-#include "proteus/workers/worker.hpp"  // for Worker, WorkerStatus
-
-namespace proteus {
-class RequestParameters;
-}  // namespace proteus
+#include "proteus/core/predict_api.hpp"  // for RequestParameters
+#include "proteus/workers/worker.hpp"    // for Worker, WorkerStatus
 
 namespace proteus {
 

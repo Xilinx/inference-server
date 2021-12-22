@@ -19,9 +19,12 @@
 
 #include "proteus/core/predict_api.hpp"
 
-#include <json/value.h>  // for Value, arrayValue, object...
+#include <json/config.h>  // for UInt64
+#include <json/value.h>   // for Value, arrayValue, object...
 
+#include <algorithm>  // for fill, copy
 #include <cstring>    // for memcpy
+#include <iterator>   // for back_insert_iterator, bac...
 #include <numeric>    // for accumulate
 #include <stdexcept>  // for invalid_argument
 #include <utility>    // for pair, move, make_pair
@@ -111,14 +114,13 @@ RequestParametersPtr addParameters(Json::Value parameters) {
   return parameters_;
 }
 
-InferenceRequest::InferenceRequest(InferenceRequestInput &req,
-                                   size_t &buffer_index,
-                                   std::vector<BufferRawPtrs> input_buffers,
-                                   std::vector<size_t> &input_offsets,
-                                   std::vector<BufferRawPtrs> output_buffers,
-                                   std::vector<size_t> &output_offsets,
-                                   const size_t &batch_size,
-                                   size_t &batch_offset) {
+InferenceRequest::InferenceRequest(
+  InferenceRequestInput &req, size_t &buffer_index,
+  const std::vector<BufferRawPtrs> &input_buffers,
+  std::vector<size_t> &input_offsets,
+  const std::vector<BufferRawPtrs> &output_buffers,
+  std::vector<size_t> &output_offsets, const size_t &batch_size,
+  size_t &batch_offset) {
   this->id_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
   this->callback_ = nullptr;
@@ -185,14 +187,13 @@ InferenceRequest::InferenceRequest(std::shared_ptr<Json::Value> const &req) {
   this->callback_ = nullptr;
 }
 
-InferenceRequest::InferenceRequest(std::shared_ptr<Json::Value> const &req,
-                                   size_t &buffer_index,
-                                   std::vector<BufferRawPtrs> input_buffers,
-                                   std::vector<size_t> &input_offsets,
-                                   std::vector<BufferRawPtrs> output_buffers,
-                                   std::vector<size_t> &output_offsets,
-                                   const size_t &batch_size,
-                                   size_t &batch_offset)
+InferenceRequest::InferenceRequest(
+  std::shared_ptr<Json::Value> const &req, size_t &buffer_index,
+  const std::vector<BufferRawPtrs> &input_buffers,
+  std::vector<size_t> &input_offsets,
+  const std::vector<BufferRawPtrs> &output_buffers,
+  std::vector<size_t> &output_offsets, const size_t &batch_size,
+  size_t &batch_offset)
   : InferenceRequest(req) {
   auto inputs = req->get("inputs", Json::arrayValue);
 
@@ -204,7 +205,7 @@ InferenceRequest::InferenceRequest(std::shared_ptr<Json::Value> const &req,
         "At least one element in 'inputs' is not an obj");
     }
     try {
-      auto buffers = input_buffers[buffer_index];
+      auto &buffers = input_buffers[buffer_index];
       for (size_t j = 0; j < buffers.size(); j++) {
         auto &buffer = buffers[j];
         auto &offset = input_offsets[j];
@@ -358,7 +359,7 @@ InferenceRequestInput::InferenceRequestInput(
   auto logger = getLogger();
 #endif
   this->data_ = input_buffer->data();
-  ;
+
   this->shared_data_ = nullptr;
   if (!req->isMember("name")) {
     throw std::invalid_argument("No 'name' key present in request input");
@@ -476,7 +477,7 @@ InferenceRequestInput::InferenceRequestInput(void *data,
                                              std::string name) {
   this->data_ = data;
   this->shared_data_ = nullptr;
-  this->shape_ = shape;
+  this->shape_ = std::move(shape);
   this->dataType_ = dataType;
   this->name_ = std::move(name);
   this->parameters_ = std::make_unique<RequestParameters>();

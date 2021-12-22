@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Defines the soft batcher implementation
+ */
+
 #ifndef GUARD_PROTEUS_BATCHING_SOFT
 #define GUARD_PROTEUS_BATCHING_SOFT
 
@@ -23,6 +28,12 @@ class WorkerInfo;
 
 namespace proteus {
 
+/**
+ * @brief The SoftBatcher attempts to batch requests to the requested batch size
+ * but has a timeout that passes an incomplete batch onwards if the batch cannot
+ * be completed.
+ *
+ */
 class SoftBatcher : public Batcher {
  public:
   using Batcher::Batcher;

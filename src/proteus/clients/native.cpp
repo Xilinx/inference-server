@@ -21,7 +21,6 @@
 #include "proteus/clients/native.hpp"
 
 #include <cstdlib>        // for getenv, size_t
-#include <memory>         // for unique_ptr
 #include <stdexcept>      // for invalid_argument
 #include <string>         // for string, basic_string, all...
 #include <thread>         // for thread

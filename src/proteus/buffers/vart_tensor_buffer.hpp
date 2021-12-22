@@ -20,13 +20,21 @@
 #ifndef GUARD_PROTEUS_BUFFERS_VART_TENSOR_BUFFER
 #define GUARD_PROTEUS_BUFFERS_VART_TENSOR_BUFFER
 
-#include <cstdint>
-#include <string>
-#include <vart/experimental/runner_helper.hpp>
-#include <vector>
+#include <stddef.h>  // for size_t
+
+#include <cstdint>                              // for int32_t
+#include <memory>                               // for unique_ptr
+#include <string>                               // for string
+#include <vart/experimental/runner_helper.hpp>  // for CpuFlatTensorBufferOwned
+#include <vector>                               // for vector
+#include <xir/tensor/tensor.hpp>                // for Tensor
+#include <xir/util/data_type.hpp>               // for DataType
 
 #include "proteus/buffers/buffer.hpp"
-#include "proteus/core/data_types.hpp"
+
+namespace vart {
+class TensorBuffer;
+}
 
 namespace proteus {
 
@@ -55,6 +63,7 @@ class VartTensorBuffer : public Buffer {
    */
   void reset() override;
 
+  /// Get a pointer to the underlying TensorBuffer
   vart::TensorBuffer* getTensorBuffer();
 
  private:

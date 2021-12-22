@@ -16,14 +16,26 @@
 
 #include <opentelemetry/context/propagation/global_propagator.h>
 #include <opentelemetry/context/propagation/text_map_propagator.h>
+#include <opentelemetry/context/runtime_context.h>
 #include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
-#include <opentelemetry/exporters/ostream/span_exporter.h>
+// #include <opentelemetry/exporters/ostream/span_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
+#include <opentelemetry/sdk/trace/exporter.h>
+#include <opentelemetry/sdk/trace/processor.h>
+#include <opentelemetry/sdk/trace/recordable.h>
 #include <opentelemetry/sdk/trace/simple_processor.h>
 #include <opentelemetry/sdk/trace/tracer_provider.h>
+#include <opentelemetry/std/utility.h>
+#include <opentelemetry/trace/canonical_code.h>
+#include <opentelemetry/trace/context.h>
 #include <opentelemetry/trace/propagation/http_trace_context.h>
 #include <opentelemetry/trace/provider.h>
+#include <opentelemetry/trace/scope.h>
+#include <opentelemetry/trace/span_metadata.h>
+#include <opentelemetry/trace/tracer.h>
+#include <opentelemetry/trace/tracer_provider.h>
 
+#include <chrono>
 #include <cstdint>  // for int32_t
 #include <map>      // for _Rb_tree_iterator, operator!=
 #include <string>   // for string, basic_string
@@ -49,9 +61,10 @@ namespace proteus {
 class HttpTextMapCarrier
   : public opentelemetry::context::propagation::TextMapCarrier {
  public:
-  HttpTextMapCarrier(const StringMap& headers) : headers_(headers) {}
+  explicit HttpTextMapCarrier(StringMap headers)
+    : headers_(std::move(headers)) {}
   HttpTextMapCarrier() = default;
-  virtual opentelemetry::nostd::string_view Get(
+  opentelemetry::nostd::string_view Get(
     opentelemetry::nostd::string_view key) const noexcept override {
     auto it = headers_.find(key.data());
     if (it != headers_.end()) {
@@ -60,10 +73,9 @@ class HttpTextMapCarrier
     return "";
   }
 
-  virtual void Set(opentelemetry::nostd::string_view key,
-                   opentelemetry::nostd::string_view value) noexcept override {
-    headers_.insert(std::pair<std::string, std::string>(std::string(key),
-                                                        std::string(value)));
+  void Set(opentelemetry::nostd::string_view key,
+           opentelemetry::nostd::string_view value) noexcept override {
+    headers_.try_emplace(std::string(key), std::string(value));
   }
 
   StringMap headers_;
@@ -137,14 +149,15 @@ void Trace::setAttributes(RequestParameters* parameters) {
     auto value = it->second;
     std::visit(
       [key, this](Parameter&& arg) {
-        if (std::holds_alternative<bool>(arg))
+        if (std::holds_alternative<bool>(arg)) {
           this->spans_.top()->SetAttribute(key, std::get<bool>(arg));
-        else if (std::holds_alternative<double>(arg))
+        } else if (std::holds_alternative<double>(arg)) {
           this->spans_.top()->SetAttribute(key, std::get<double>(arg));
-        else if (std::holds_alternative<int32_t>(arg))
+        } else if (std::holds_alternative<int32_t>(arg)) {
           this->spans_.top()->SetAttribute(key, std::get<int32_t>(arg));
-        else if (std::holds_alternative<std::string>(arg))
+        } else if (std::holds_alternative<std::string>(arg)) {
           this->spans_.top()->SetAttribute(key, std::get<std::string>(arg));
+        }
       },
       value);
   }

@@ -22,6 +22,7 @@
 #include <prometheus/collectable.h>      // for Collectable
 #include <prometheus/counter.h>          // for Builder, Counter, BuildCounter
 #include <prometheus/family.h>           // for Family
+#include <prometheus/gauge.h>            // for Gauge, BuildGauge
 #include <prometheus/metric_family.h>    // for MetricFamily
 #include <prometheus/registry.h>         // for Registry
 #include <prometheus/serializer.h>       // for Serializer
@@ -153,7 +154,6 @@ Metrics::Metrics()
                      {{MetricSummaryIDs::kRequestLatency,
                        prometheus::Summary::Quantiles{
                          {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}}}}) {
-
   std::lock_guard<std::mutex> lock{this->collectables_mutex_};
   collectables_.push_back(this->registry_);
 
