@@ -17,6 +17,7 @@
 
 #include <concurrentqueue/blockingconcurrentqueue.h>  // for BlockingConcurr...
 
+#include <algorithm>              // for max
 #include <cstdint>                // for uint64_t
 #include <cstring>                // for memcpy
 #include <filesystem>             // for path, directory...
@@ -50,7 +51,8 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
     imgData.reserve(size);
     memcpy(imgData.data(), img.data, size);
 
-    proteus::InferenceRequestInput request((void*)imgData.data(), shape,
+    proteus::InferenceRequestInput request(static_cast<void*>(imgData.data()),
+                                           shape,
                                            proteus::types::DataType::UINT8);
 
     auto future = proteus::enqueue(workerName, std::move(request));
@@ -92,7 +94,7 @@ std::vector<std::string> getImages(std::string imgDirPath) {
   std::vector<std::string> image_paths;
 
   // Load Dataset
-  for (auto& p : fs::directory_iterator(imgDirPath)) {
+  for (const auto& p : fs::directory_iterator(imgDirPath)) {
     std::string fileExtension = p.path().extension().string();
     if (fileExtension == ".jpg" || fileExtension == ".JPEG" ||
         fileExtension == ".png") {
@@ -102,7 +104,7 @@ std::vector<std::string> getImages(std::string imgDirPath) {
 
   constexpr int bt = 4;  // DPU batch size
   int left_out = image_paths.size() % bt;
-  if (left_out) {  // Make a batch complete
+  if (left_out != 0) {  // Make a batch complete
     for (int b = 0; b < (bt - left_out); b++) {
       image_paths.push_back(image_paths[0]);
     }

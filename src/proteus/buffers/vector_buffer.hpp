@@ -21,14 +21,11 @@
 #define GUARD_PROTEUS_BUFFERS_VECTOR_BUFFER
 
 #include <cstddef>  // for size_t, byte
-#include <cstdint>  // for int16_t, int32_t, int64_t
-#include <string>   // for string
 #include <vector>   // for vector
 
-#include "proteus/buffers/buffer.hpp"      // for Buffer
-#include "proteus/core/data_types.hpp"     // for DataType
-#include "proteus/helpers/queue.hpp"       // for BufferPtrsQueue
-#include "proteus/observation/status.hpp"  // for Status
+#include "proteus/buffers/buffer.hpp"   // for Buffer
+#include "proteus/core/data_types.hpp"  // for DataType
+#include "proteus/helpers/queue.hpp"    // for BufferPtrsQueue
 
 namespace proteus {
 
@@ -79,7 +76,7 @@ class VectorBuffer : public Buffer {
   /// Our actual data is allocated as bytes to support different types
   std::vector<std::byte> data_;
   /// Counter to track the next index to write at
-  size_t write_counter_ = 0;
+  // size_t write_counter_ = 0;
 };
 
 }  // namespace proteus

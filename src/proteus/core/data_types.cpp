@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements the type-related methods
+ */
+
 #include "proteus/core/data_types.hpp"
 
 #include <cstddef>    // for size_t

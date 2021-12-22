@@ -12,30 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements the soft batcher
+ */
+
 #include "proteus/batching/soft.hpp"
 
-#include <algorithm>           // for transform
-#include <chrono>              // for duration, high_resolution_clock
-#include <condition_variable>  // for condition_variable, cv_s...
-#include <cstddef>             // for size_t
-#include <memory>              // for unique_ptr, make_unique
-#include <mutex>               // for mutex, unique_lock
-#include <stdexcept>           // for invalid_argument
-#include <string>              // for operator+
-#include <utility>             // for move
-#include <vector>              // for vector
+#include <algorithm>  // for max
+#include <chrono>     // for system_clock::time_point
+#include <cstddef>    // for size_t
+#include <iterator>   // for move_iterator, make_move...
+#include <memory>     // for unique_ptr, shared_ptr
+#include <stdexcept>  // for invalid_argument
+#include <string>     // for operator+
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include "proteus/buffers/buffer.hpp"        // for Buffer
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/interface.hpp"        // for InterfacePtr, Interface
+#include "proteus/buffers/buffer.hpp"        // IWYU pragma: keep
+#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
+#include "proteus/core/interface.hpp"        // for Interface
 #include "proteus/core/manager.hpp"          // for Manager
 #include "proteus/core/worker_info.hpp"      // for WorkerInfo
-#include "proteus/helpers/declarations.hpp"  // for BufferPtr, InferenceRequ...
+#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs, BufferPtrs
 #include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"        // for setThreadName
 #include "proteus/observation/logging.hpp"   // for SPDLOG_LOGGER_DEBUG
-#include "proteus/observation/metrics.hpp"   // for Metrics
-#include "proteus/observation/tracing.hpp"   // for startFollowSpan, SpanPtr
+#include "proteus/observation/metrics.hpp"   // for Metrics, MetricCounterIDs
+#include "proteus/observation/tracing.hpp"   // for TracePtr, Trace
 
 namespace proteus {
 class InferenceRequest;

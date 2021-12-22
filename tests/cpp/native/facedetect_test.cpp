@@ -50,7 +50,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       EXPECT_STREQ(output.getName().c_str(), "");
       EXPECT_STREQ(proteus::types::mapTypeToStr(output.getDatatype()).c_str(),
                    "FP32");
-      auto parameters = output.getParameters();
+      auto* parameters = output.getParameters();
       ASSERT_NE(parameters, nullptr);
       EXPECT_TRUE(parameters->empty());
       auto num_boxes = std::size(gold_response_output) / 6;
@@ -60,7 +60,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       EXPECT_EQ(shape[1], num_boxes);
       EXPECT_EQ(size, std::size(gold_response_output));
       for (size_t i = 0; i < size; i++) {
-        EXPECT_FLOAT_EQ(data->data()[i], gold_response_output[i]);
+        EXPECT_FLOAT_EQ((*data)[i], gold_response_output[i]);
       }
     }
   }

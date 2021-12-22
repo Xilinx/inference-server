@@ -17,25 +17,24 @@
 
 #include <concurrentqueue/blockingconcurrentqueue.h>  // for BlockingConcurr...
 
-#include <chrono>                 // for duration, opera...
-#include <cstdint>                // for uint64_t, uint32_t
-#include <cstring>                // for memcpy
-#include <filesystem>             // for path, directory...
-#include <functional>             // for ref
-#include <future>                 // for future, async
-#include <iostream>               // for operator<<, bas...
-#include <memory>                 // for unique_ptr, mak...
-#include <numeric>                // for accumulate
-#include <opencv2/core.hpp>       // for Mat, MatSize
-#include <opencv2/imgcodecs.hpp>  // for imread
-#include <string>                 // for string, operator==
-#include <system_error>           // for system_error
-#include <thread>                 // for thread
-#include <utility>                // for move, pair
-#include <vart/runner.hpp>        // for Runner::TensorF...
-#include <vart/runner_ext.hpp>    // for RunnerExt
-#include <vector>                 // for vector
-#include <xir/graph/graph.hpp>    // for Graph
+#include <algorithm>               // for max, copy
+#include <chrono>                  // for duration, opera...
+#include <cstdint>                 // for uint64_t, uint32_t
+#include <functional>              // for ref
+#include <future>                  // for future, async
+#include <iostream>                // for operator<<, bas...
+#include <iterator>                // for back_insert_ite...
+#include <memory>                  // for unique_ptr, mak...
+#include <numeric>                 // for accumulate
+#include <string>                  // for string, operator==
+#include <system_error>            // for system_error
+#include <utility>                 // for move, pair
+#include <vart/runner.hpp>         // for Runner::TensorF...
+#include <vart/runner_ext.hpp>     // for RunnerExt
+#include <vector>                  // for vector
+#include <xir/graph/graph.hpp>     // for Graph
+#include <xir/graph/subgraph.hpp>  // for Subgraph
+#include <xir/tensor/tensor.hpp>   // for Tensor
 
 #include "proteus/proteus.hpp"
 
@@ -58,7 +57,7 @@ void queue_reference(int images, vart::Runner* runner, PairQueue& my_queue) {
   auto dpu_runner = dynamic_cast<vart::RunnerExt*>(runner);
   auto inputs = dpu_runner->get_inputs();
   auto outputs = dpu_runner->get_outputs();
-  std::pair<uint32_t, int> elem;
+  // std::pair<uint32_t, int> elem;
   for (int i = 0; i < images; i++) {
     // for (auto input : inputs) {
     //   input->sync_for_write(0, input->get_tensor()->get_element_num() /
@@ -203,7 +202,8 @@ int run(std::string xmodel, int images, int threads, int runners) {
   data.reserve(num_elements * proteus::types::getSize(type));
 
   FutureQueue my_queue;
-  proteus::InferenceRequestInput request((void*)data.data(), shape, type);
+  proteus::InferenceRequestInput request(static_cast<void*>(data.data()), shape,
+                                         type);
 
   std::vector<std::future<void>> futures;
   const int enqueue_threads = 1;

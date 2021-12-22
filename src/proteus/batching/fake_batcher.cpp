@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements the fake batcher
+ */
+
 #include "proteus/batching/fake_batcher.hpp"
 
+#include <chrono>              // for system_clock::time_point
 #include <condition_variable>  // for condition_variable
 #include <cstddef>             // for size_t
 #include <functional>          // for _Bind_helper<>::type
@@ -24,7 +30,7 @@
 #include <utility>             // for move
 #include <vector>              // for vector
 
-#include "proteus/buffers/buffer.hpp"         // for Buffer
+#include "proteus/buffers/buffer.hpp"         // IWYU pragma: keep
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
 #include "proteus/core/interface.hpp"         // for InterfacePtr, Interface
@@ -44,9 +50,9 @@ class FakeCppNativeApi : public Interface {
   explicit FakeCppNativeApi(InferenceRequestInput request);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
+    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
-    std::vector<BufferRawPtrs> output_buffers,
+    const std::vector<BufferRawPtrs> &output_buffers,
     std::vector<size_t> &output_offsets, const size_t &batch_size,
     size_t &batch_offset) override;
 
@@ -76,8 +82,9 @@ void fakeCppCallback(const InferenceResponsePromisePtr &promise,
 }
 
 std::shared_ptr<InferenceRequest> FakeCppNativeApi::getRequest(
-  size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
-  std::vector<size_t> &input_offsets, std::vector<BufferRawPtrs> output_buffers,
+  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
+  std::vector<size_t> &input_offsets,
+  const std::vector<BufferRawPtrs> &output_buffers,
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
   auto request = std::make_shared<FakeInferenceRequest>(
@@ -113,7 +120,7 @@ void FakeBatcher::run(WorkerInfo *worker) {
     batch->requests =
       std::make_unique<std::vector<std::shared_ptr<InferenceRequest>>>();
     batch->input_buffers = std::make_unique<std::vector<BufferPtrs>>();
-    ;
+
     batch->output_buffers = std::make_unique<std::vector<BufferPtrs>>();
     auto input_buffer = worker->getInputBuffer();
     std::vector<size_t> input_offset = {0};

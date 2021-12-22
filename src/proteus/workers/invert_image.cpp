@@ -17,6 +17,7 @@
  * @brief Implements the InvertImage worker
  */
 
+#include <chrono>                 // for microseconds, duration_...
 #include <climits>                // for CHAR_BIT
 #include <cstddef>                // for size_t, byte
 #include <cstdint>                // for uint8_t, uint64_t, int32_t

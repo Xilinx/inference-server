@@ -43,7 +43,6 @@ namespace Json {
 class Value;
 }  // namespace Json
 namespace proteus {
-class Buffer;
 class InferenceRequest;
 }  // namespace proteus
 
@@ -58,9 +57,9 @@ class DrogonHttp : public Interface {
   DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
+    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
-    std::vector<BufferRawPtrs> output_buffers,
+    const std::vector<BufferRawPtrs> &output_buffers,
     std::vector<size_t> &output_offsets, const size_t &batch_size,
     size_t &batch_offset) override;
 

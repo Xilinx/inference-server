@@ -29,12 +29,15 @@
 #include <unordered_map>  // for unordered_map
 #include <utility>        // for move, pair
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api.hpp"     // for RequestParameters
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
+#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/predict_api.hpp"  // for RequestParameters
+// #include "proteus/core/worker_info.hpp"     // for WorkerInfo
 #include "proteus/helpers/queue.hpp"        // for BlockingConcurrentQueue
 #include "proteus/observation/logging.hpp"  // for LoggerPtr
 
+namespace proteus {
+class WorkerInfo;
+}
 // IWYU pragma: no_forward_declare proteus::RequestParameters
 
 namespace proteus {
@@ -57,8 +60,8 @@ enum class UpdateCommandType {
  */
 struct UpdateCommand {
   /// Constructor for UpdateCommand
-  UpdateCommand(UpdateCommandType cmd_, std::string key_ = "",
-                void* object_ = nullptr, void* retval_ = nullptr)
+  explicit UpdateCommand(UpdateCommandType cmd_, std::string key_ = "",
+                         void* object_ = nullptr, void* retval_ = nullptr)
     : cmd(cmd_),
       key(std::move(key_)),
       object(object_),

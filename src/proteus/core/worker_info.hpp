@@ -26,6 +26,7 @@
 #include <memory>   // for unique_ptr
 #include <string>   // for string
 #include <thread>   // for thread, thread::id
+#include <vector>   // for vector
 
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
 #include "proteus/helpers/declarations.hpp"  // for BufferPtr

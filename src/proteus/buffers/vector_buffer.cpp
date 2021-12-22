@@ -19,13 +19,10 @@
 
 #include "proteus/buffers/vector_buffer.hpp"
 
-#include <algorithm>
-#include <cstring>
-#include <memory>
-#include <string>
+#include <memory>   // for make_unique
+#include <utility>  // for move
 
-#include "proteus/helpers/declarations.hpp"
-#include "proteus/observation/status.hpp"
+#include "proteus/helpers/declarations.hpp"  // for BufferPtrs
 
 namespace proteus {
 

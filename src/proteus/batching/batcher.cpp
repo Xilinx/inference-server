@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements the base batcher and CppNativeApi interface
+ */
+
 #include "proteus/batching/batcher.hpp"
 
 #include <functional>  // for _Bind_helper<>::type, _Pl...
@@ -21,7 +26,6 @@
 #include <string>      // for string
 #include <utility>     // for move
 
-#include "proteus/buffers/buffer.hpp"       // for Buffer
 #include "proteus/core/interface.hpp"       // for InterfacePtr, Interface
 #include "proteus/core/manager.hpp"         // for Manager
 #include "proteus/core/predict_api.hpp"     // for InferenceResponsePromisePtr
@@ -37,9 +41,9 @@ class CppNativeApi : public Interface {
   explicit CppNativeApi(InferenceRequestInput request);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
+    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
-    std::vector<BufferRawPtrs> output_buffers,
+    const std::vector<BufferRawPtrs> &output_buffers,
     std::vector<size_t> &output_offsets, const size_t &batch_size,
     size_t &batch_offset) override;
 
@@ -69,8 +73,9 @@ void cppCallback(const InferenceResponsePromisePtr &promise,
 }
 
 std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
-  size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
-  std::vector<size_t> &input_offsets, std::vector<BufferRawPtrs> output_buffers,
+  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
+  std::vector<size_t> &input_offsets,
+  const std::vector<BufferRawPtrs> &output_buffers,
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
   auto request = std::make_shared<InferenceRequest>(

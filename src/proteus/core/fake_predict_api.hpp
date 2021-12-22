@@ -12,27 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Defines the fake predict API InferenceRequest
+ */
+
 #ifndef GUARD_PROTEUS_CORE_FAKE_PREDICT_API
 #define GUARD_PROTEUS_CORE_FAKE_PREDICT_API
 
 #include <cstddef>  // for size_t
 #include <vector>   // for vector
 
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest, InferenceR...
-
-namespace proteus {
-class Buffer;
-}  // namespace proteus
+#include "proteus/core/predict_api.hpp"      // for InferenceRequest, Infere...
+#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
 
 namespace proteus {
 
+/**
+ * @brief The FakeInferenceRequest object is used to mock the real thing for
+ * testing purposes.
+ *
+ */
 class FakeInferenceRequest : public InferenceRequest {
  public:
-  FakeInferenceRequest();
+  FakeInferenceRequest();  ///< Constructor
   FakeInferenceRequest(InferenceRequestInput& req, size_t& buffer_index,
-                       std::vector<BufferRawPtrs> input_buffers,
+                       const std::vector<BufferRawPtrs>& input_buffers,
                        std::vector<size_t>& input_offsets,
-                       std::vector<BufferRawPtrs> output_buffers,
+                       const std::vector<BufferRawPtrs>& output_buffers,
                        std::vector<size_t>& output_offsets,
                        const size_t& batch_size, size_t& batch_offset);
 };

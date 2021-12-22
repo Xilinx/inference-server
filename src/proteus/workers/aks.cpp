@@ -20,10 +20,12 @@
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
+#include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for int32_t
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, allocator
+#include <stdexcept>               // for runtime_error
 #include <string>                  // for string, basic_string
 #include <thread>                  // for thread
 #include <utility>                 // for move, pair

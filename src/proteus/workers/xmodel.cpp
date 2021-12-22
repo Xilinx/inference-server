@@ -40,6 +40,7 @@
 #include <xir/tensor/tensor.hpp>        // for Tensor
 
 #include "proteus/batching/batcher.hpp"  // for BatchPtr, Batch, BatchPt...
+#include "proteus/buffers/buffer.hpp"    // for Buffer
 #include "proteus/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
 #include "proteus/build_options.hpp"               // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/data_types.hpp"             // for mapXirType, DataType
@@ -47,6 +48,7 @@
 #include "proteus/helpers/ctpl.h"            // for thread_pool
 #include "proteus/helpers/declarations.hpp"  // for BufferPtr, InferenceResp...
 #include "proteus/helpers/parse_env.hpp"     // for autoExpandEnvironmentVar...
+#include "proteus/helpers/queue.hpp"         // for BufferPtrsQueue
 #include "proteus/helpers/thread.hpp"        // for setThreadName
 #include "proteus/observation/logging.hpp"   // for SPDLOG_LOGGER_INFO, SPDL...
 #include "proteus/observation/metrics.hpp"   // for Metrics
@@ -143,7 +145,7 @@ void XModel::doInit(RequestParameters* parameters) {
   // graphs
   this->subgraph_ = dpu_graphs[0];
   if (this->subgraph_->has_attr("dpu_fingerprint")) {
-    const uint64_t fingerprint =
+    const auto fingerprint =
       this->subgraph_->get_attr<std::uint64_t>("dpu_fingerprint");
     this->kernel_ = vitis::ai::target_factory()->create(fingerprint).type();
   } else {
@@ -273,7 +275,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         // identified and fixed so this check can be removed once it's live
         if (this->kernel_ != "DPUCADF8H") {
           for (auto* input : inputsPtr) {
-            auto* tensor = input->get_tensor();
+            const auto* tensor = input->get_tensor();
             input->sync_for_write(
               0, tensor->get_element_num() / (tensor->get_shape())[0]);
           }
@@ -300,7 +302,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 
       if (this->kernel_ != "DPUCADF8H") {
         for (auto* output : outputs_ptrs_global) {
-          auto* tensor = output->get_tensor();
+          const auto* tensor = output->get_tensor();
           output->sync_for_read(
             0, tensor->get_element_num() / (tensor->get_shape())[0]);
         }

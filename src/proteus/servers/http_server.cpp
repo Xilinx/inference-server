@@ -26,7 +26,9 @@
 #include <json/value.h>               // for Value, arrayValue, objec...
 #include <trantor/utils/Logger.h>     // for Logger, Logger::kWarn
 
+#include <chrono>       // for high_resolution_clock
 #include <cstdint>      // for int16_t, int32_t, int64_t
+#include <exception>    // for exception
 #include <iostream>     // for operator<<, cout, ostream
 #include <memory>       // for allocator, shared_ptr
 #include <string>       // for operator+, string, basic...
@@ -580,15 +582,16 @@ void drogonCallback(const DrogonCallback &callback,
     }
   }
 #ifdef PROTEUS_ENABLE_TRACING
-  auto context = response.getContext();
+  const auto &context = response.getContext();
   propagate(resp.get(), context);
 #endif
   callback(resp);
 }
 
 std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
-  size_t &buffer_index, std::vector<BufferRawPtrs> input_buffers,
-  std::vector<size_t> &input_offsets, std::vector<BufferRawPtrs> output_buffers,
+  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
+  std::vector<size_t> &input_offsets,
+  const std::vector<BufferRawPtrs> &output_buffers,
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
   try {

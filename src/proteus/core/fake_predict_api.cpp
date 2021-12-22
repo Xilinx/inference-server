@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements the fake predict api InferenceRequest
+ */
+
 #include "proteus/core/fake_predict_api.hpp"
 
 #include <memory>  // for make_unique
@@ -22,8 +27,9 @@ namespace proteus {
 
 FakeInferenceRequest::FakeInferenceRequest(
   InferenceRequestInput& req, size_t& buffer_index,
-  std::vector<BufferRawPtrs> input_buffers, std::vector<size_t>& input_offsets,
-  std::vector<BufferRawPtrs> output_buffers,
+  const std::vector<BufferRawPtrs>& input_buffers,
+  std::vector<size_t>& input_offsets,
+  const std::vector<BufferRawPtrs>& output_buffers,
   std::vector<size_t>& output_offsets, const size_t& batch_size,
   size_t& batch_offset) {
   this->id_ = "";

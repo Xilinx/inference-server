@@ -21,10 +21,12 @@
 #ifndef GUARD_PROTEUS_BUFFERS_BUFFER
 #define GUARD_PROTEUS_BUFFERS_BUFFER
 
+#include <cstddef>  // for size_t
+#include <cstdint>  // for int16_t, int32_t, int64_t
 #include <string>
 
-#include "proteus/build_options.hpp"
-#include "proteus/observation/logging.hpp"
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/observation/logging.hpp"  // for getLogger, LoggerPtr
 
 namespace proteus {
 
@@ -256,6 +258,7 @@ class Buffer {
   // virtual Status read(int index, double& value) = 0;
 
 #ifdef PROTEUS_ENABLE_LOGGING
+
  protected:
   /// Base logger inherited by all buffers
   LoggerPtr logger_;

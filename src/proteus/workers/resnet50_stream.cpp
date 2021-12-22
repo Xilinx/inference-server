@@ -20,11 +20,9 @@
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
-#include <algorithm>               // for copy, max, copy_backward
 #include <chrono>                  // for seconds
 #include <cstdint>                 // for int32_t, uint8_t
 #include <cstring>                 // for size_t, memcpy
-#include <functional>              // for function
 #include <future>                  // for future, future_status
 #include <memory>                  // for allocator, unique_ptr
 #include <opencv2/core.hpp>        // for Mat, Size

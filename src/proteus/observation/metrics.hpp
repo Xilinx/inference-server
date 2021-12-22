@@ -23,7 +23,8 @@
 #include <prometheus/serializer.h>  // for Serializer
 #include <prometheus/summary.h>     // for Summary, BuildSummary, Summa...
 
-#include <map>
+#include <cstddef>        // for size_t
+#include <map>            // for map
 #include <memory>         // for weak_ptr, shared_ptr, uni...
 #include <mutex>          // for mutex
 #include <string>         // for string
