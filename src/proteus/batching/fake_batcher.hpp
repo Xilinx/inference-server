@@ -30,6 +30,11 @@ class WorkerInfo;
 
 namespace proteus {
 
+/**
+ * @brief The FakeBatcher can be used for testing purposes to simplify the
+ * batching implementation. It always produces batches of size 1.
+ *
+ */
 class FakeBatcher : public Batcher {
  public:
   using Batcher::Batcher;

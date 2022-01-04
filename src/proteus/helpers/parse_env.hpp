@@ -19,9 +19,10 @@
 
 namespace proteus {
 
+/// Expand any environment variables in the string in place
 void autoExpandEnvironmentVariables(std::string& text);
 
-// Leave input alone and return new string.
+// Expand any environment variables in the string and return a copy
 std::string expandEnvironmentVariables(const std::string& input);
 
 }  // namespace proteus

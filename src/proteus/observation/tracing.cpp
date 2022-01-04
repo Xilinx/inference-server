@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Implements tracing in Proteus
+ */
+
 #include "proteus/observation/tracing.hpp"
 
 #include <opentelemetry/context/propagation/global_propagator.h>
@@ -191,9 +196,7 @@ void Trace::endTrace() {
 
 TracePtr startTrace(const char* name) { return std::make_unique<Trace>(name); }
 
-TracePtr startTrace(
-  const char* name,
-  const std::unordered_map<std::string, std::string>& http_headers) {
+TracePtr startTrace(const char* name, const StringMap& http_headers) {
   auto prop = opentelemetry::context::propagation::GlobalTextMapPropagator::
     GetGlobalPropagator();
   auto current_ctx = opentelemetry::context::RuntimeContext::GetCurrent();

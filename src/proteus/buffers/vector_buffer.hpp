@@ -30,9 +30,7 @@
 namespace proteus {
 
 /**
- * @brief VectorBuffer uses vectors for storing data. By default, the write
- * methods auto-increment the address so calling write(value) repeatedly, size_t
- * offset writes to sequentially increasing indices.
+ * @brief VectorBuffer uses vectors for storing data
  *
  */
 class VectorBuffer : public Buffer {

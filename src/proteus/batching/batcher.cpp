@@ -36,6 +36,11 @@
 
 namespace proteus {
 
+/**
+ * @brief The C++ Interface class encapsulates incoming requests from the C++
+ * API to the batcher.
+ *
+ */
 class CppNativeApi : public Interface {
  public:
   explicit CppNativeApi(InferenceRequestInput request);

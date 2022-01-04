@@ -14,8 +14,8 @@
 
 /**
  * @file
- * @brief Implements the information the Proteus Manager saves on each active
- * worker
+ * @brief Implements the WorkerInfo class - information the Proteus Manager
+ * saves on each active worker
  */
 
 #include "proteus/core/worker_info.hpp"

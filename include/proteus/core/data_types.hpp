@@ -57,6 +57,7 @@ enum class DataType {
   STRING,
 };
 
+/// size of FP16 in bytes
 constexpr auto kFp16Size = 2U;
 
 /**

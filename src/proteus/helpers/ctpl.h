@@ -45,6 +45,11 @@
 
 namespace ctpl {
 
+/**
+ * @brief The thread pool is configured with a number of threads and accepts
+ * lambdas as functions to run in one of the threads in the pool.
+ *
+ */
 class thread_pool {
  public:
   thread_pool() : q(_ctplThreadPoolLength_) { this->init(); }

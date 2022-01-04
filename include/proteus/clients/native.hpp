@@ -52,6 +52,7 @@ void stopHttpServer();
 
 /// Get a string that lists the available kernels ("<name>:i,<name>:j...")
 std::string getHardware();
+
 /**
  * @brief Check if a particular kernel exists on the server. The string
  * splitting code is inspired from: https://stackoverflow.com/a/14266139
@@ -72,6 +73,7 @@ bool hasHardware(const std::string &kernel, size_t num);
  * requests
  */
 std::string load(const std::string &worker, RequestParameters *parameters);
+
 /**
  * @brief Enqueue an inference request to Proteus
  *

@@ -47,11 +47,7 @@ class Registry;
 
 namespace proteus {
 
-/**
- * @brief Defines the IDs we can use to refer to different metrics that
- * Prometheus is tracking.
- *
- */
+/// Defines the IDs of the counters tracked in Proteus
 enum class MetricCounterIDs {
   kRestGet,
   kRestPost,
@@ -64,6 +60,7 @@ enum class MetricCounterIDs {
   kMetricScrapes,
 };
 
+/// Defines the IDs of the gauges tracked in Proteus
 enum class MetricGaugeIDs {
   kQueuesBatcherInput,
   kQueuesBatcherOutput,
@@ -71,20 +68,36 @@ enum class MetricGaugeIDs {
   kQueuesBufferOutput,
 };
 
+/// Defines the IDs of the summaries tracked in Proteus
 enum class MetricSummaryIDs {
   kMetricLatency,
   kRequestLatency,
 };
 
+/**
+ * @brief The CounterFamily class stores the counters tracked in Proteus and
+ * provides methods to increment them using an ID.
+ *
+ */
 class CounterFamily {
  public:
+  /**
+   * @brief Construct a new CounterFamily object
+   *
+   * @param name name of the counter
+   * @param help help message for the counter
+   * @param registry
+   * @param labels map of IDs to counter labels
+   */
   CounterFamily(
     const std::string& name, const std::string& help,
     prometheus::Registry* registry,
     const std::unordered_map<MetricCounterIDs,
                              std::map<std::string, std::string>>& labels);
 
+  /// Increment the named counter by 1
   void increment(MetricCounterIDs id);
+  /// Increment the named counter by increment
   void increment(MetricCounterIDs id, size_t increment);
 
  private:
@@ -92,13 +105,27 @@ class CounterFamily {
   std::unordered_map<MetricCounterIDs, prometheus::Counter&> counters_;
 };
 
+/**
+ * @brief The GaugeFamily class stores the gauges tracked in Proteus and
+ * provides methods to set them using an ID.
+ *
+ */
 class GaugeFamily {
  public:
+  /**
+   * @brief Construct a new GaugeFamily object
+   *
+   * @param name name of the gauge
+   * @param help help message for the gauge
+   * @param registry
+   * @param labels map of IDs to gauge labels
+   */
   GaugeFamily(const std::string& name, const std::string& help,
               prometheus::Registry* registry,
               const std::unordered_map<
                 MetricGaugeIDs, std::map<std::string, std::string>>& labels);
 
+  /// Set the named gauge to a particular value
   void set(MetricGaugeIDs id, double value);
 
  private:
@@ -106,14 +133,28 @@ class GaugeFamily {
   std::unordered_map<MetricGaugeIDs, prometheus::Gauge&> gauges_;
 };
 
+/**
+ * @brief The SummaryFamily class stores the summaries tracked in Proteus and
+ * provides methods to record events.
+ *
+ */
 class SummaryFamily {
  public:
+  /**
+   * @brief Construct a new SummaryFamily object
+   *
+   * @param name name of the summary
+   * @param help help message of the summary
+   * @param registry
+   * @param quantiles map of IDs to quantiles to compute
+   */
   SummaryFamily(
     const std::string& name, const std::string& help,
     prometheus::Registry* registry,
     const std::unordered_map<MetricSummaryIDs, prometheus::Summary::Quantiles>&
       quantiles);
 
+  /// Record an event for a particular summary
   void observe(MetricSummaryIDs id, double value);
 
  private:
@@ -140,8 +181,6 @@ class Metrics {
   Metrics& operator=(Metrics&& other) =
     delete;  ///< Move assignment constructor
 
-  /// Gets a shared pointer to the registry of metrics that are being tracked.
-  // std::shared_ptr<prometheus::Registry> getRegistry();
   /**
    * @brief Returns the collected metrics as a serialized string. This logic was
    * influenced by the examples included in prometheus-cpp pull (handler.cc).
@@ -156,8 +195,20 @@ class Metrics {
    */
   void incrementCounter(MetricCounterIDs id, size_t increment = 1);
 
+  /**
+   * @brief Set one named gauge
+   *
+   * @param id gauge to set
+   * @param value value to set the gauge to
+   */
   void setGauge(MetricGaugeIDs id, double value);
 
+  /**
+   * @brief Record one event in a summary
+   *
+   * @param id summary to make the observation
+   * @param value value to record
+   */
   void observeSummary(MetricSummaryIDs id, double value);
 
  private:

@@ -52,8 +52,19 @@ namespace proteus::http {
 
 using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
 
+/**
+ * @brief The DrogonHttp Interface class encapsulates incoming requests from
+ * Drogon's HTTP interface to the batcher.
+ *
+ */
 class DrogonHttp : public Interface {
  public:
+  /**
+   * @brief Construct a new DrogonHttp object
+   *
+   * @param req
+   * @param callback
+   */
   DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback);
 
   std::shared_ptr<InferenceRequest> getRequest(
@@ -67,6 +78,7 @@ class DrogonHttp : public Interface {
   void errorHandler(const std::invalid_argument &e) override;
 
  private:
+  /// parse the request's JSON payload and save it for future use
   void setJson();
 
   drogon::HttpRequestPtr req_;

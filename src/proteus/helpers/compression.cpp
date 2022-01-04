@@ -19,14 +19,6 @@
 #include <array>    // for array
 #include <cstring>  // for memset
 
-/**
- * @brief Inflate a deflated (i.e. compressed) argument with zlib. Taken from
- * https://stackoverflow.com/a/50082615
- *
- * @param str the deflated string as a char*
- * @param len length of the deflated string
- * @return std::string the inflated string
- */
 std::string z_decompress(const char *str, int len) {
   constexpr auto buffer_size = 32768;
 

@@ -40,6 +40,11 @@ class InferenceRequest;
 
 namespace proteus::http {
 
+/**
+ * @brief The DrogonWs Interface class encapsulates incoming requests from
+ * Drogon's Websocket interface to the batcher.
+ *
+ */
 class DrogonWs : public Interface {
  public:
   DrogonWs(const drogon::WebSocketConnectionPtr &conn,
@@ -62,15 +67,39 @@ class DrogonWs : public Interface {
   drogon::WebSocketConnectionPtr conn_;
 };
 
+/**
+ * @brief The Websocket server handles incoming websocket requests. Currently,
+ * this is primarily used to make inferences to video streaming workers.
+ *
+ */
 class WebsocketServer : public drogon::WebSocketController<WebsocketServer> {
  public:
-  WebsocketServer();
+  WebsocketServer();  ///< constructor
 
+  /**
+   * @brief When a client sends a new message, this handler is invoked to parse
+   * the request
+   *
+   * @param conn the websocket connection the client is using
+   * @param message the message
+   * @param type the type of message
+   */
   void handleNewMessage(const drogon::WebSocketConnectionPtr &conn,
                         std::string &&message,
                         const drogon::WebSocketMessageType &type) override;
+  /**
+   * @brief When a client closes the connection, this handler is invoked.
+   *
+   * @param conn
+   */
   void handleConnectionClosed(
     const drogon::WebSocketConnectionPtr &conn) override;
+  /**
+   * @brief When a client opens a connection, this handler is invoked.
+   *
+   * @param req
+   * @param conn
+   */
   void handleNewConnection(const drogon::HttpRequestPtr &req,
                            const drogon::WebSocketConnectionPtr &conn) override;
   WS_PATH_LIST_BEGIN
