@@ -15,7 +15,7 @@
 /**
  * @file
  * @brief Defines the information the Proteus Manager saves on each active
- * worker
+ * worker group.
  */
 
 #ifndef GUARD_PROTEUS_CORE_WORKER_INFO
@@ -65,14 +65,23 @@ class WorkerInfo {
    * @return InferenceRequestPtrQueue*
    */
   Batcher* getBatcher();
-  void join(
-    std::thread::id id);  ///< Blocks until the associated worker's thread joins
-  void joinAll();         ///< Blocks until all workers in the group join
+  /// Blocks until the associated worker's thread joins
+  void join(std::thread::id id);
+  void joinAll();  ///< Blocks until all workers in the group join
 
+  /**
+   * @brief Start a new worker in the group with the given parameters. The name
+   * is used to uniquely identify a particular worker to dynamically load.
+   *
+   * @param name
+   * @param parameters pointer to parameters. Should not be nullptr
+   */
   void addAndStartWorker(const std::string& name,
                          RequestParameters* parameters);
 
+  /// unload one worker from this worker group
   void unload();
+  /// unload all workers from this worker group
   void shutdown();
 
   /**
@@ -100,6 +109,15 @@ class WorkerInfo {
    */
   void putOutputBuffer(BufferPtrs buffer);
 
+  /**
+   * @brief Checks if this worker group supports a particular number of input
+   * tensors.
+   *
+   * @param size
+   * @exception invalid_argument too many input tensors for this worker
+   * @return true if the number of input tensors is acceptable
+   * @return false if more buffers need to be allocated but the number is okay
+   */
   [[nodiscard]] bool inputSizeValid(size_t size) const;
 
   /**
@@ -117,9 +135,17 @@ class WorkerInfo {
    */
   [[nodiscard]] auto getMaxBufferNum() const { return this->max_buffer_num_; }
 
+  /**
+   * @brief Allocate enough buffers to fulfill a particular request size
+   *
+   * @param request_size
+   */
   void allocate(size_t request_size);
 
+  /// get the number of workers in the group
   int getGroupSize();
+
+  /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
 
  private:

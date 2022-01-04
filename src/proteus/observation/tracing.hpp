@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file
+ * @brief Defines tracing in Proteus
+ */
+
 #ifndef GUARD_PROTEUS_OBSERVATION_TRACING
 #define GUARD_PROTEUS_OBSERVATION_TRACING
 
@@ -29,7 +34,7 @@
 #ifdef PROTEUS_ENABLE_TRACING
 
 // opentelemetry needs this definition prior to any header inclusions if the
-// library was compiled with this flag set
+// library was compiled with this flag set, which it is in the Docker build
 #define HAVE_CPP_STDLIB
 
 #include <opentelemetry/common/attribute_value.h>  // for AttributeValue
@@ -40,9 +45,16 @@
 
 namespace proteus {
 
+/// initialize tracing globally
 void startTracer();
+/// clean up the tracing prior to shutdown
 void stopTracer();
 
+/**
+ * @brief The Trace object abstracts the details of how tracing is implemented.
+ * This object should not be created directly (use startTrace()).
+ *
+ */
 class Trace final {
  public:
   explicit Trace(
@@ -54,9 +66,7 @@ class Trace final {
   Trace(Trace&& other) = delete;             ///< Move constructor
   Trace& operator=(Trace&& other) = delete;  ///< Move assignment constructor
 
-  // opentelemetry::nostd::shared_ptr<opentelemetry::trace::Span> getSpan()
-  // const;
-
+  /// start a new span with the given name
   void startSpan(const char* name);
 
   /// set an attribute in the active span in the trace
@@ -83,10 +93,17 @@ class Trace final {
 
 using TracePtr = std::unique_ptr<Trace>;
 
+/// Start a trace with the given name
 TracePtr startTrace(const char* name);
-TracePtr startTrace(
-  const char* name,
-  const std::unordered_map<std::string, std::string>& http_headers);
+
+/**
+ * @brief Start a trace with context from HTTP headers
+ *
+ * @param name name of the trace
+ * @param http_headers headers from HTTP request to extract context from
+ * @return TracePtr
+ */
+TracePtr startTrace(const char* name, const StringMap& http_headers);
 
 }  // namespace proteus
 

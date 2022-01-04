@@ -38,6 +38,7 @@ inline void setThreadName(const char* name) {
 #endif
 }
 
+/// string overload for setThreadName
 inline void setThreadName(const std::string& name) {
   setThreadName(name.c_str());
 }

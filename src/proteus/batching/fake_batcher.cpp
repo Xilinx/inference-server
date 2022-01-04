@@ -45,6 +45,11 @@
 
 namespace proteus {
 
+/**
+ * @brief For testing purposes, this fake C++ interface returns a
+ * fakeInferenceRequest object similar to how the real one does.
+ *
+ */
 class FakeCppNativeApi : public Interface {
  public:
   explicit FakeCppNativeApi(InferenceRequestInput request);

@@ -60,6 +60,7 @@ void initLogging();
 
 using LoggerPtr = std::shared_ptr<spdlog::logger>;
 
+/// get a pointer to the global logger
 LoggerPtr getLogger();
 
 }  // namespace proteus

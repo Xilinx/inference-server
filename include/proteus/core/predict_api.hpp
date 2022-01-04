@@ -48,7 +48,7 @@ class Buffer;
 
 namespace proteus {
 
-// parameters in Proteus may be one of these types
+/// parameters in Proteus may be one of these types
 using Parameter = std::variant<bool, double, int32_t, std::string>;
 
 /**
@@ -585,12 +585,19 @@ class ModelMetadata final {
 
 namespace std {
 template <>
+/**
+ * @brief Overload the "less than" operator so we can compare two
+ * RequestParameter objects. We need this functionality to store objects of
+ * this class in a map. Note, since hashing is not implemented, these objects
+ * cannot be stored in an unordered_map.
+ *
+ */
 struct less<proteus::RequestParameters> {
   /**
-   * @brief Overload the "less than" operator so we can compare two
-   * RequestParameter objects. We need this functionality to store objects of
-   * this class in a map. Note, since hashing is not implemented, these objects
-   * cannot be stored in an unordered_map.
+   * @brief Implementation of the comparison of two RequestParameter objects.
+   * We compare the size and then check each key is present and finally, compare
+   * the key values. The types supported in RequestParameters all support
+   * direct comparison with the "less than" operator already.
    *
    * @param lhs the RequestParameter object on the left-hand-side
    * @param rhs the RequestParameter object on the right-hand-side

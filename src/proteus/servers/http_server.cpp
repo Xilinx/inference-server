@@ -84,7 +84,7 @@ void start(int port) {
       (void)req;  // suppress unused variable warning
       resp->addHeader("Access-Control-Allow-Origin", "*");
     })
-    .setClientMaxBodySize(kDefaultClientBodySize)
+    .setClientMaxBodySize(kMaxClientBodySize)
     // .enableRunAsDaemon()
     .run();
 }

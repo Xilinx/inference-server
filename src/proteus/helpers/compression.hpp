@@ -17,6 +17,14 @@
 
 #include <string>
 
+/**
+ * @brief Inflate a deflated (i.e. compressed) argument with zlib. Taken from
+ * https://stackoverflow.com/a/50082615
+ *
+ * @param str the deflated string as a char*
+ * @param len length of the deflated string
+ * @return std::string the inflated string
+ */
 std::string z_decompress(const char *str, int len);
 
 #endif  // GUARD_PROTEUS_HELPERS_COMPRESSION
