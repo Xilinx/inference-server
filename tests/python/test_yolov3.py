@@ -64,7 +64,7 @@ class TestInferImageYoloV3DPUCADF8H:
             )
 
         num_inputs = len(request.inputs)
-        # for this picture and xmodel combination, we expect the following output
+        # for this picture and xmodel combination, we expect the following output with Vitis 1.4
         gold_response_output = [
             1,
             0.7396191358566284,
@@ -72,6 +72,22 @@ class TestInferImageYoloV3DPUCADF8H:
             198.21803283691406,
             167.64910888671875,
             130.1903839111328,
+            14,
+            0.9992860555648804,
+            232.0582733154297,
+            148.03860473632812,
+            109.48860168457031,
+            161.711181640625,
+        ]
+
+        # for this picture and xmodel combination, we expect the following output with Vitis 2.0
+        gold_response_output_2 = [
+            1,
+            0.9974043369293213,
+            220.02317810058594,
+            213.84378051757812,
+            138.98597717285156,
+            107.931640625,
             14,
             0.9992860555648804,
             232.0582733154297,
@@ -93,7 +109,7 @@ class TestInferImageYoloV3DPUCADF8H:
                 num_boxes = int(len(output.data) / 6)
                 assert output.shape == [6, num_boxes]
                 assert len(output.data) == len(gold_response_output)
-                assert output.data == gold_response_output
+                assert output.data == gold_response_output or output.data == gold_response_output_2
         return response
 
     def construct_request(self, asTensor):

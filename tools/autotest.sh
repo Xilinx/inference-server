@@ -13,14 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Instructions:
+#   1. git clone <url to Proteus repo>
+#   2. cd proteus
+#   4. ./tools/autotest.sh 2>&1 | tee test.txt
 
+# print an easily searchable header so we can navigate the output. Search for
+# "+++---" in the output text
 function print_header(){
   len=$(echo -n $1 | wc -m)
+  len="$((len-3))" # leave room for the +++
 
   echo ""
+  printf "+++"
   printf '%0.s-' $(seq 1 $len)
   echo ""
   echo "$1"
+  printf "+++"
   printf '%0.s-' $(seq 1 $len)
   echo ""
   echo ""
@@ -28,12 +37,6 @@ function print_header(){
 
 # end the script if any command has a non-zero return value
 set -e
-
-# Instructions:
-#   1. git clone <url to Proteus repo>
-#   2. cd proteus
-#   3. git submodule update --init --recursive
-#   4. ./tools/autotest.sh
 
 print_header "Verifying autotesting prerequisites"
 
@@ -59,11 +62,14 @@ commit=$(git rev-parse HEAD)
 echo "Git commit: $commit"
 test -e ./proteus
 
-print_header "Building the stable docker images"
+print_header "Building the stable dev docker image"
 
 # use the --dry-run flag to log the "docker build" commands used
 ./proteus --dry-run dockerize
 ./proteus dockerize
+
+print_header "Building the stable production docker image"
+
 ./proteus --dry-run dockerize --production
 ./proteus dockerize --production
 
@@ -73,7 +79,7 @@ print_header "Building the stable docker images"
 # <user>/proteus[-dev]:<proteus-version>+<build num>. They also update the
 # latest tags on these images
 
-print_header "Testing the stable docker images"
+print_header "Testing the stable dev docker image"
 
 ./proteus --dry-run up --profile autotest-dev
 ./proteus up --profile autotest-dev
@@ -81,14 +87,19 @@ print_header "Testing the stable docker images"
 # This test must be run after the previous one. It requires that certain files
 # e.g. the AKS files exist in the repository. These files are created when
 # the project is built in the autotest-dev test.
+print_header "Testing the stable production docker image"
+
 ./proteus --dry-run up --profile autotest
 ./proteus up --profile autotest
 
-print_header "Building the nightly docker images"
+print_header "Building the nightly dev docker image"
 
 # use the --dry-run flag to log the "docker build" commands used
 ./proteus --dry-run dockerize --nightly
 ./proteus dockerize --nightly
+
+print_header "Building the nightly production docker image"
+
 ./proteus --dry-run dockerize --production --nightly
 ./proteus dockerize --production --nightly
 
@@ -98,9 +109,12 @@ print_header "Building the nightly docker images"
 # <user>/proteus[-dev]:<proteus-version>.nightly+<build num>. They also update
 # the latest tags on these images
 
-print_header "Testing the nightly docker images"
+print_header "Testing the nightly dev docker image"
 
 ./proteus --dry-run up --profile autotest-dev
 ./proteus up --profile autotest-dev
+
+print_header "Testing the nightly production docker image"
+
 ./proteus --dry-run up --profile autotest
 ./proteus up --profile autotest

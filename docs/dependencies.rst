@@ -129,6 +129,7 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`tianon/gosu`,1.12,Apache 2.0,Executable used to drop down to user when starting container
     :github:`google/googletest`,1.11.0,BSD-3,Statically linked by proteus's test executables
     :github:`include-what-you-use/include-what-you-use`,0.14,LLVM License,Executable used to check C++ header inclusions
+    :github:`json-c/json-c`,0.15,MIT,Dynamically linked by Vitis libraries
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by proteus-server for base64 codec
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development

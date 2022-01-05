@@ -24,7 +24,7 @@ services:
       - $AKS_ROOT/graph_zoo:/opt/xilinx/proteus/aks/graph_zoo
       - $AKS_ROOT/kernel_zoo:/opt/xilinx/proteus/aks/kernel_zoo
   proteus-tester:
-    command: [./tests/test.sh, --mode, python, --hostname, proteus_proteus_1, "-k", "(not invert_video) and (not resnet50_stream)"]
+    command: [./tests/test.sh, --mode, python, --hostname, proteus, "-k", "(not invert_video) and (not resnet50_stream)"]
     depends_on:
       - proteus
     extra_hosts:

@@ -145,7 +145,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     setup_target_for_coverage_fastcov(
         NAME coverage # New target name
         EXECUTABLE ${PROJECT_SOURCE_DIR}/tests/test.sh
-        EXECUTABLE_ARGS --mode all --build Coverage -k "not facedetect"
+        EXECUTABLE_ARGS --mode all --build Coverage -k "not facedetect" --load-before
         DEPENDENCIES proteus-server
         FASTCOV_ARGS "--include" ${PROJECT_SOURCE_DIR} "--exceptional-branch-coverage"
         BASE_DIRECTORY ${PROJECT_SOURCE_DIR}

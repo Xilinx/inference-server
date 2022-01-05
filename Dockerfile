@@ -377,6 +377,23 @@ RUN apt-get update \
     && dpkg -L iwyu | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -fr /tmp/*
 
+# install json-c 0.15 for Vitis AI 2.0 libraries (used by VART)
+RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
+    && tar -xzf json-c-0.15-20200726.tar.gz \
+    && cd json-c-json-c-0.15-20200726 \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_STATIC_LIBS=OFF \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_BUILD_TYPE=Release \
+    && make -j \
+    && checkinstall -y --pkgname json-c --pkgversion 0.15.0 --pkgrelease 1 make install \
+    && cd /tmp \
+    && dpkg -L json-c | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -fr /tmp/*
+
 # Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
 # Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
 RUN cp -r ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
@@ -552,15 +569,51 @@ RUN pip install --no-cache-dir "pyinstaller!=4.6" \
 COPY --from=builder ${COPY_DIR} /
 COPY . $PROTEUS_ROOT
 
-RUN ldconfig \
-    && mkdir ${COPY_DIR} \
+RUN \
     # make binary for custom script to get FPGAs
-    && pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
+    pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
     && cp dist/fpga_util /usr/local/bin/fpga-util \
     && chmod a+x /usr/local/bin/fpga-util \
     # create package for the Proteus python library
     && cd ${PROTEUS_ROOT}/src/python \
-    && python3 setup.py bdist_wheel \
+    && python3 setup.py bdist_wheel
+
+FROM proteus_dev_vitis_${NIGHTLY} as proteus_dev_vitis
+
+ARG COPY_DIR
+ARG PROTEUS_ROOT
+
+COPY --from=builder ${COPY_DIR} /
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* /home/proteus-user/
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/proteus-user/
+COPY --from=proteus_builder /usr/local/bin/fpga-util /usr/local/bin/fpga-util
+COPY --from=proteus_builder /bin/systemctl /bin/systemctl
+COPY --from=proteus_builder ${PROTEUS_ROOT}/src/python/dist/*.whl /tmp/
+
+# run any final commands before finishing the dev image
+RUN git lfs install \
+    && npm install -g gh-pages \
+    && proteus_wheel=$(find /tmp/ -name *.whl 2>/dev/null) \
+    && pip install "$proteus_wheel" \
+    && rm "$proteus_wheel" \
+    && ldconfig
+
+ENTRYPOINT [ "/root/entrypoint.sh" ]
+CMD [ "/bin/bash" ]
+
+FROM proteus_dev_vitis_${NIGHTLY} as proteus_builder_2
+
+ARG COPY_DIR
+ARG PROTEUS_ROOT
+
+COPY --from=builder ${COPY_DIR} /
+# get the systemctl executable
+COPY --from=proteus_builder /bin/systemctl /bin/systemctl
+COPY . $PROTEUS_ROOT
+
+RUN ldconfig \
+    && mkdir ${COPY_DIR} \
     # install libproteus.so
     && cd ${PROTEUS_ROOT} \
     && ./proteus install --all \
@@ -582,31 +635,6 @@ RUN ldconfig \
         /usr/local/lib/proteus/* \
         ./external/aks/libs/*
 
-FROM proteus_dev_vitis_${NIGHTLY} as proteus_dev_vitis
-
-ARG COPY_DIR
-ARG PROTEUS_ROOT
-
-COPY --from=builder ${COPY_DIR} /
-COPY --from=proteus_builder ${COPY_DIR} /
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* /home/proteus-user/
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/proteus-user/
-COPY --from=proteus_builder /usr/local/bin/fpga-util /usr/local/bin/fpga-util
-COPY --from=proteus_builder /bin/systemctl /bin/systemctl
-COPY --from=proteus_builder ${PROTEUS_ROOT}/src/python/dist/*.whl /tmp/
-
-# run any final commands before finishing the dev image
-RUN git lfs install \
-    && npm install -g gh-pages \
-    && proteus_wheel=$(find /tmp/ -name *.whl 2>/dev/null) \
-    && pip install "$proteus_wheel" \
-    && rm "$proteus_wheel" \
-    && ldconfig
-
-ENTRYPOINT [ "/root/entrypoint.sh" ]
-CMD [ "/bin/bash" ]
-
 FROM proteus_base AS proteus
 
 ARG PROTEUS_ROOT
@@ -614,23 +642,25 @@ ARG COPY_DIR
 WORKDIR /home/proteus-user
 
 # get all the installed files: the server, workers, and C++ headers
-COPY --from=proteus_builder ${COPY_DIR} /
+COPY --from=proteus_builder_2 ${COPY_DIR} /
 # get the dynamic libraries needed (created by get_dynamic_dependencies.sh)
-COPY --from=proteus_builder $PROTEUS_ROOT/deps /
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/deps /
 # get AKS kernels
-COPY --from=proteus_builder $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs
 # get the static gui files
-COPY --from=proteus_builder $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
 # get the entrypoint script
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the fpga-util executable
 COPY --from=proteus_builder /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
+# get the systemctl executable
+COPY --from=proteus_builder /bin/systemctl /bin/systemctl
 # get the gosu executable
 COPY --from=proteus_builder /usr/local/bin/gosu /usr/local/bin/
 
-COPY --from=proteus_builder $PROTEUS_ROOT/external/overlaybins /opt/xilinx/overlaybins
-COPY --from=proteus_builder $PROTEUS_ROOT/external/aks/graph_zoo /opt/xilinx/proteus/aks/graph_zoo
-COPY --from=proteus_builder $PROTEUS_ROOT/external/aks/kernel_zoo /opt/xilinx/proteus/aks/kernel_zoo
+# COPY --from=proteus_builder $PROTEUS_ROOT/external/overlaybins /opt/xilinx/overlaybins
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/graph_zoo /opt/xilinx/proteus/aks/graph_zoo
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/kernel_zoo /opt/xilinx/proteus/aks/kernel_zoo
 
 ENV LD_LIBRARY_PATH="/usr/local/lib/proteus:/opt/xilinx/proteus/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"

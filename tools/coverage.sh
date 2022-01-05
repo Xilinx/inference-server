@@ -59,7 +59,7 @@ coverage(){
     ./proteus get
   fi
 
-  ./proteus build --coverage --regen --all
+  ./proteus build --coverage --regen --clean --all
   ./proteus make coverage
 
   cd -

@@ -753,8 +753,13 @@ class Get:
                 if args.dry_run:
                     print(f"Downloading {filename} from {url} to {location}")
                 else:
+                    # need to specify the user-agent for accessing wikimedia
+                    headers = {
+                        "User-Agent": "proteus 0.1.0",
+                    }
                     with open(tmp_dir / filename, "wb") as f:
-                        f.write(requests.get(url).content)
+                        response = requests.get(url, headers=headers)
+                        f.write(response.content)
 
                     if filename.endswith("tar.gz"):
                         tar_file = tarfile.open(str(tmp_dir / filename), mode="r:gz")
