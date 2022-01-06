@@ -84,10 +84,13 @@ async def _async_post(session, url, body):
 
 
 def _parse_infer_response(response):
-    content = response.json()
-    if "error" in content:
-        return ErrorResponse(response)
-    return InferenceResponse(content)
+    content_type = response.headers.get("content-type")
+    if "application/json" in content_type:
+        content = response.json()
+        if "error" in content:
+            return ErrorResponse(response)
+        return InferenceResponse(content)
+    return ErrorResponse(response)
 
 
 class Client:

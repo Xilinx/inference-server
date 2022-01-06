@@ -20,31 +20,36 @@
 #ifndef GUARD_PROTEUS_OBSERVATION_LOGGING
 #define GUARD_PROTEUS_OBSERVATION_LOGGING
 
+#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_LOGGING
+
 // NDEBUG is defined by Cmake for release builds but could be defined manually
-// The log levels are defined in spdlog/common.h
+// The log levels are defined in spdlog/common.h. As a quick guide, 0 allows
+// all logging statements while 6 removes all. We need to define this macro
+// before including the spdlog header.
 #ifndef PROTEUS_ENABLE_LOGGING
 #define SPDLOG_ACTIVE_LEVEL 6
 #endif
+
 #ifndef NDEBUG
 #ifndef SPDLOG_ACTIVE_LEVEL
+// used for debug builds
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL 2
+#define SPDLOG_ACTIVE_LEVEL 1
 #endif
 #else
 #ifndef SPDLOG_ACTIVE_LEVEL
+// used for release builds
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define SPDLOG_ACTIVE_LEVEL 2
 #endif
 #endif
-
-#include <spdlog/spdlog.h>  // IWYU pragma: export
 
 #include <memory>  // for shared_ptr
 #include <string>  // for string
 
-#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_LOGGING
-
 #ifdef PROTEUS_ENABLE_LOGGING
+
+#include <spdlog/spdlog.h>  // IWYU pragma: export
 
 #if SPDLOG_ACTIVE_LEVEL < SPDLOG_LEVEL_OFF
 #define PROTEUS_LOGGING_ACTIVE

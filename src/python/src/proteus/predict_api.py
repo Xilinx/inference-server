@@ -31,7 +31,9 @@ class Datatype(Enum):
     INT64 = "INT64"
     FP16 = "FP16"
     FP32 = "FP32"
+    FLOAT32 = "FP32"  # handles numpy's float32 type
     FP64 = "FP64"
+    FLOAT64 = "FP64"  # handles numpy's float64 type
     STRING = "STRING"
 
 
@@ -158,7 +160,7 @@ class ImageInferenceRequest(InferenceRequest):
             if isinstance(image, str):
                 if asTensor:
                     read_image = cv2.imread(image)
-                    input.datatype = Datatype(str(read_image.dtype).upper())
+                    input.datatype = Datatype[str(read_image.dtype).upper()]
                     input.shape = [*read_image.shape]  # Convert tuple to list
                     input.data = read_image.flatten().tolist()
                 else:
@@ -167,7 +169,7 @@ class ImageInferenceRequest(InferenceRequest):
                         input.data = [base64.b64encode(f.read()).decode("utf-8")]
                     input.shape = [len(input.data[0])]
             elif isinstance(image, np.ndarray):
-                input.datatype = Datatype(str(image.dtype).upper())
+                input.datatype = Datatype[str(image.dtype).upper()]
                 input.shape = [*image.shape]  # Convert tuple to list
                 input.data = image.flatten().tolist()
             else:
