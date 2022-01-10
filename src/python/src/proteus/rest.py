@@ -61,7 +61,9 @@ async def _async_get(session, url):
     resp = await session.get(url)
     async with resp:
         content_type = resp.headers.get("content-type")
-        if "application/json" in content_type:
+        if content_type is None:
+            raise BadResponseError("Content type is None")
+        elif "application/json" in content_type:
             content = await resp.json()
         elif "text/html" in content_type:
             content = await resp.text()
@@ -74,7 +76,9 @@ async def _async_post(session, url, body):
     resp = await session.post(url, json=body)
     async with resp:
         content_type = resp.headers.get("content-type")
-        if "application/json" in content_type:
+        if content_type is None:
+            return None
+        elif "application/json" in content_type:
             content = await resp.json()
         elif "text/html" in content_type:
             content = await resp.text()
@@ -83,13 +87,13 @@ async def _async_post(session, url, body):
         return _Response(resp, content)
 
 
-def _parse_infer_response(response):
-    content_type = response.headers.get("content-type")
-    if "application/json" in content_type:
-        content = response.json()
-        if "error" in content:
-            return ErrorResponse(response)
-        return InferenceResponse(content)
+def _parse_infer_response(response: requests.Response):
+    if response.status_code == 200:
+        content_type = response.headers.get("content-type")
+        if content_type is not None and "application/json" in content_type:
+            content = response.json()
+            if "error" not in content:
+                return InferenceResponse(content)
     return ErrorResponse(response)
 
 
@@ -204,7 +208,8 @@ class Client:
         endpoint = self.get_endpoint("unload")
 
         response = self._post(endpoint, request, error_str)
-        if "application/json" in response.headers.get("content-type"):
+        content_type = response.headers.get("content-type")
+        if content_type is None or "application/json" in content_type:
             return ErrorResponse(response)
         return HtmlResponse(response.content.decode("utf-8"))
 

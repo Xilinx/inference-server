@@ -17,6 +17,7 @@ from enum import Enum
 import base64
 import cv2
 import numpy as np
+import requests
 
 
 class Datatype(Enum):
@@ -229,14 +230,17 @@ class ResponseOutput:
 
 
 class ErrorResponse(Response):
-    def __init__(self, response):
+    def __init__(self, response: requests.Response):
         super().__init__(True)
-        if "application/json" in response.headers.get("content-type"):
+        content_type = response.headers.get("content-type")
+        if content_type is not None and "application/json" in content_type:
             content = response.json()
             self.error_msg = content["error"]
         else:
             content = response.content
             self.error_msg = response.content.decode("utf-8")
+            if not self.error_msg:
+                self.error_msg = f"status code: {str(response.status_code)}"
         self.status_code = response.status_code
 
 
