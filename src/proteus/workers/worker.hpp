@@ -160,14 +160,16 @@ class Worker {
   [[nodiscard]] size_t getBatchSize() const { return this->batch_size_; }
   [[nodiscard]] WorkerStatus getStatus() const { return this->status_; }
 
-  virtual std::vector<std::unique_ptr<Batcher>> makeBatcher(int num = 1) {
-    return this->makeBatcher<SoftBatcher>(num);
+  virtual std::vector<std::unique_ptr<Batcher>> makeBatcher(
+    int num, RequestParameters* parameters) {
+    return this->makeBatcher<SoftBatcher>(num, parameters);
   }
 
   template <typename T>
-  std::vector<std::unique_ptr<Batcher>> makeBatcher(int num) {
+  std::vector<std::unique_ptr<Batcher>> makeBatcher(
+    int num, RequestParameters* parameters) {
     std::vector<std::unique_ptr<Batcher>> batchers;
-    batchers.emplace_back(std::make_unique<T>());
+    batchers.emplace_back(std::make_unique<T>(parameters));
     for (int i = 1; i < num; i++) {
       batchers.push_back(
         std::make_unique<T>(*dynamic_cast<T*>(batchers.back().get())));

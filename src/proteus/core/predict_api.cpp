@@ -155,12 +155,15 @@ InferenceRequest::InferenceRequest(
   }
 
   batch_offset++;
-  if (batch_offset == batch_size) {
-    batch_offset = 0;
-    buffer_index++;
-    std::fill(input_offsets.begin(), input_offsets.end(), 0);
-    std::fill(output_offsets.begin(), output_offsets.end(), 0);
-  }
+  // FIXME(varunsh): this was intended to support multiple input tensors but it
+  // creates a bug where the batch_offset gets reset to zero too early
+  (void)batch_size;
+  // if (batch_offset == batch_size) {
+  //   batch_offset = 0;
+  //   buffer_index++;
+  //   std::fill(input_offsets.begin(), input_offsets.end(), 0);
+  //   std::fill(output_offsets.begin(), output_offsets.end(), 0);
+  // }
 }
 
 InferenceRequest::InferenceRequest(std::shared_ptr<Json::Value> const &req) {

@@ -12,19 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROTEUS_TEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+include(GoogleTest)
 
-add_subdirectory(native)
-add_subdirectory(performance)
-add_subdirectory(src/proteus)
-add_subdirectory(unit)
+list(APPEND targets
+    vector_buffer
+)
 
-# add_executable(test_gtest gtest.cpp ${filenames})
+foreach(target ${targets})
+    add_executable(${target}_test ${target}.cpp)
+    target_include_directories(${target}_test BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS})
+    target_include_directories(${target}_test AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    target_link_libraries(${target}_test buffer data_types fake_observation ${target} gtest gtest_main)
 
-# target_link_libraries(test_gtest PRIVATE gtest proteus ${libraries})
-# target_include_directories(test_gtest PRIVATE ${PROTEUS_INCLUDE_DIRS})
-
-# add_subdirectory(unit)
-
-# include(GoogleTest)
-# gtest_discover_tests(test_gtest)
+    gtest_discover_tests(${target}_test)
+endforeach()

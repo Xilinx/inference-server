@@ -17,7 +17,7 @@
  * @brief Implements the fake batcher
  */
 
-#include "proteus/batching/fake_batcher.hpp"
+#include "proteus/batching/batcher.hpp"
 
 #include <chrono>              // for system_clock::time_point
 #include <condition_variable>  // for condition_variable
@@ -50,9 +50,9 @@ namespace proteus {
  * fakeInferenceRequest object similar to how the real one does.
  *
  */
-class FakeCppNativeApi : public Interface {
+class FakeInterface : public Interface {
  public:
-  explicit FakeCppNativeApi(InferenceRequestInput request);
+  explicit FakeInterface(InferenceRequestInput request);
 
   std::shared_ptr<InferenceRequest> getRequest(
     size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
@@ -70,14 +70,14 @@ class FakeCppNativeApi : public Interface {
   InferenceResponsePromisePtr promise_;
 };
 
-FakeCppNativeApi::FakeCppNativeApi(InferenceRequestInput request)
+FakeInterface::FakeInterface(InferenceRequestInput request)
   : request_(std::move(request)) {
   this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
 }
 
-size_t FakeCppNativeApi::getInputSize() { return 1; }
+size_t FakeInterface::getInputSize() { return 1; }
 
-std::promise<proteus::InferenceResponse> *FakeCppNativeApi::getPromise() {
+std::promise<proteus::InferenceResponse> *FakeInterface::getPromise() {
   return this->promise_.get();
 }
 
@@ -86,7 +86,7 @@ void fakeCppCallback(const InferenceResponsePromisePtr &promise,
   promise->set_value(response);
 }
 
-std::shared_ptr<InferenceRequest> FakeCppNativeApi::getRequest(
+std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
   size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
   std::vector<size_t> &input_offsets,
   const std::vector<BufferRawPtrs> &output_buffers,
@@ -101,20 +101,12 @@ std::shared_ptr<InferenceRequest> FakeCppNativeApi::getRequest(
   return request;
 }
 
-void FakeCppNativeApi::errorHandler(const std::invalid_argument &e) {
+void FakeInterface::errorHandler(const std::invalid_argument &e) {
   SPDLOG_LOGGER_ERROR(this->logger_, e.what());
   (void)e;  // suppress unused variable warning
 }
 
-InferenceResponseFuture FakeBatcher::enqueue(InferenceRequestInput request) {
-  auto api = std::make_unique<FakeCppNativeApi>(std::move(request));
-  auto future = api->getPromise()->get_future();
-  this->input_queue_->enqueue(std::move(api));
-  this->cv_.notify_one();
-  return future;
-}
-
-void FakeBatcher::run(WorkerInfo *worker) {
+void Batcher::run(WorkerInfo *worker) {
   auto thread_name = "batch" + this->getName();
   setThreadName(thread_name);
   InterfacePtr req;
@@ -156,7 +148,7 @@ void FakeBatcher::run(WorkerInfo *worker) {
     auto trace = req->getTrace();
     trace->startSpan("fake_batcher");
 #endif
-    // auto fake_req = dynamic_cast<FakeCppNativeApi*>(req.get());
+    // auto fake_req = dynamic_cast<FakeInterface*>(req.get());
     // InferenceRequestPtr new_req;
     // if(fake_req != nullptr){
     req->getInputSize();  // initialize the req object

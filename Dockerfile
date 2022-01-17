@@ -16,6 +16,7 @@ ARG NIGHTLY=stable
 ARG PROTEUS_ROOT=/workspace/proteus
 ARG BASE_IMAGE=ubuntu:18.04
 ARG COPY_DIR=/root/deps
+ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
 FROM ${BASE_IMAGE} AS proteus_base
 
@@ -83,7 +84,9 @@ RUN apt-get update \
 
 FROM dev_base AS builder
 ARG COPY_DIR
+ARG TARGETPLATFORM
 WORKDIR /tmp
+SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
@@ -98,15 +101,26 @@ RUN apt-get update \
 RUN mkdir ${COPY_DIR}
 
 # install gosu 1.12 for dropping down to the user in the entrypoint
-RUN wget -O gosu --progress=dot:mega "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" \
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        url="https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64"; \
+    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        url="https://github.com/tianon/gosu/releases/download/1.12/gosu-arm64"; \
+    else false; fi; \
+    wget -O gosu --progress=dot:mega ${url} \
     && chmod 755 gosu \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp gosu ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
 
 # install git-lfs 2.13.3 for managing large files
-RUN wget --progress=dot:mega https://github.com/git-lfs/git-lfs/releases/download/v2.13.3/git-lfs-linux-amd64-v2.13.3.tar.gz \
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        archive="git-lfs-linux-amd64-v2.13.3.tar.gz"; \
+    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        archive="git-lfs-linux-arm64-v2.13.3.tar.gz"; \
+    else false; fi; \
+    url="https://github.com/git-lfs/git-lfs/releases/download/v2.13.3/${archive}" \
+    && wget --progress=dot:mega ${url} \
     && mkdir git-lfs \
-    && tar -xzf git-lfs-linux-amd64-v2.13.3.tar.gz -C git-lfs \
+    && tar -xzf ${archive} -C git-lfs \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp git-lfs/git-lfs ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
 
@@ -120,17 +134,29 @@ RUN wget --progress=dot:mega https://github.com/linux-test-project/lcov/releases
     && rm -rf /tmp/*
 
 # install Cmake 3.21.1
-RUN wget --progress=dot:mega https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-linux-x86_64.tar.gz \
-    && tar --strip-components=1 -xzf cmake-3.21.1-linux-x86_64.tar.gz  -C /usr/local \
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        archive="cmake-3.21.1-linux-x86_64.tar.gz"; \
+    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        archive="cmake-3.22.1-linux-aarch64.tar.gz"; \
+    else false; fi; \
+    url="https://github.com/Kitware/CMake/releases/download/v3.22.1/${archive}" \
+    && wget --progress=dot:mega ${url} \
+    && tar --strip-components=1 -xzf ${archive} -C /usr/local \
     && mkdir -p {COPY_DIR}/usr/local \
-    && tar --strip-components=1 -xzf cmake-3.21.1-linux-x86_64.tar.gz  -C ${COPY_DIR}/usr/local \
+    && tar --strip-components=1 -xzf ${archive} -C ${COPY_DIR}/usr/local \
     && rm -rf /tmp/*
 
 # install NodeJS 14.16.0 for web gui development
-RUN wget --progress=dot:mega https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz \
-    && tar --strip-components=1 -xf node-v14.16.0-linux-x64.tar.xz  -C /usr/local \
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        archive="node-v14.16.0-linux-x64.tar.xz"; \
+    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        archive="node-v14.16.0-linux-arm64.tar.xz"; \
+    else false; fi; \
+    url="https://nodejs.org/dist/v14.16.0/${archive}" \
+    && wget --progress=dot:mega ${url} \
+    && tar --strip-components=1 -xf ${archive} -C /usr/local \
     && mkdir -p ${COPY_DIR}/usr/local \
-    && tar --strip-components=1 -xf node-v14.16.0-linux-x64.tar.xz  -C ${COPY_DIR}/usr/local \
+    && tar --strip-components=1 -xf ${archive} -C ${COPY_DIR}/usr/local \
     && rm -rf /tmp/*
 
 # install cxxopts 2.2.1 for argument parsing
@@ -187,7 +213,7 @@ RUN apt-get update \
 RUN wget --progress=dot:mega https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.tar.gz \
     && tar -xzf v2.0.0.1.tar.gz \
     && cd libb64-2.0.0.1 \
-    && make all_src \
+    && make -j all_src \
     && mkdir -p ${COPY_DIR}/usr/local/lib && cp src/libb64.a ${COPY_DIR}/usr/local/lib \
     && mkdir -p ${COPY_DIR}/usr/local/include && cp -r include/b64 ${COPY_DIR}/usr/local/include \
     && rm -rf /tmp/*
@@ -414,10 +440,16 @@ RUN cp -r ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
 
 FROM dev_base AS proteus_dev
 
+ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+    && if [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+            # needed to build some wheels (e.g. typed-ast)
+            python3-dev; \
+    fi; \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         # used for auto-completing bash commands
         bash-completion \
         curl \
@@ -497,15 +529,17 @@ RUN apt-get update \
 
 # Install XRT and XRM
 RUN apt-get update \
-    && cd /tmp \
-    && wget --progress=dot:mega -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202110.2.11.648_18.04-amd64-xrt.deb \
-    && wget --progress=dot:mega -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202110.1.2.1539_18.04-x86_64.deb \
-    && apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        ./xrt.deb \
-        ./xrm.deb \
+    if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        cd /tmp \
+        && wget --progress=dot:mega -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202110.2.11.648_18.04-amd64-xrt.deb \
+        && wget --progress=dot:mega -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202110.1.2.1539_18.04-x86_64.deb \
+        && apt-get update -y \
+        && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+            ./xrt.deb \
+            ./xrm.deb; \
+    fi; \
     # clean up
-    && apt-get clean -y \
+    apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
@@ -534,19 +568,20 @@ RUN mkdir -p /etc/apt/sources.list.d \
 FROM proteus_dev as proteus_dev_vitis_stable
 
 RUN apt-get update \
-    && cd /tmp \
-    && wget --progress=dot:mega -O libunilog.deb https://www.xilinx.com/bin/public/openDownload?filename=libunilog_1.4.0-r75_amd64.deb \
-    && wget --progress=dot:mega -O libtarget-factory.deb https://www.xilinx.com/bin/public/openDownload?filename=libtarget-factory_1.4.0-r77_amd64.deb \
-    && wget --progress=dot:mega -O libxir.deb https://www.xilinx.com/bin/public/openDownload?filename=libxir_1.4.0-r80_amd64.deb \
-    && wget --progress=dot:mega -O libvart.deb https://www.xilinx.com/bin/public/openDownload?filename=libvart_1.4.0-r117_amd64.deb \
-    && wget --progress=dot:mega -O libvitis_ai_library.deb https://www.xilinx.com/bin/public/openDownload?filename=libvitis_ai_library_1.4.0-r105_amd64.deb \
-    && wget --progress=dot:mega -O librt-engine.deb https://www.xilinx.com/bin/public/openDownload?filename=librt-engine_1.4.0-r178_amd64.deb \
-    && wget --progress=dot:mega -O aks.deb https://www.xilinx.com/bin/public/openDownload?filename=aks_1.4.0-r73_amd64.deb \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        ./*.deb \
+    if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        cd /tmp \
+        && wget --progress=dot:mega -O libunilog.deb https://www.xilinx.com/bin/public/openDownload?filename=libunilog_1.4.0-r75_amd64.deb \
+        && wget --progress=dot:mega -O libtarget-factory.deb https://www.xilinx.com/bin/public/openDownload?filename=libtarget-factory_1.4.0-r77_amd64.deb \
+        && wget --progress=dot:mega -O libxir.deb https://www.xilinx.com/bin/public/openDownload?filename=libxir_1.4.0-r80_amd64.deb \
+        && wget --progress=dot:mega -O libvart.deb https://www.xilinx.com/bin/public/openDownload?filename=libvart_1.4.0-r117_amd64.deb \
+        && wget --progress=dot:mega -O libvitis_ai_library.deb https://www.xilinx.com/bin/public/openDownload?filename=libvitis_ai_library_1.4.0-r105_amd64.deb \
+        && wget --progress=dot:mega -O librt-engine.deb https://www.xilinx.com/bin/public/openDownload?filename=librt-engine_1.4.0-r178_amd64.deb \
+        && wget --progress=dot:mega -O aks.deb https://www.xilinx.com/bin/public/openDownload?filename=aks_1.4.0-r73_amd64.deb \
+        && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+            ./*.deb; \
+    fi; \
     # clean up
-    && apt-get clean -y \
+    apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
 

@@ -20,9 +20,10 @@
 #ifndef GUARD_PROTEUS_CORE_DATA_TYPES
 #define GUARD_PROTEUS_CORE_DATA_TYPES
 
-#include <cstddef>  // for size_t
-#include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uin...
-#include <string>   // for string
+#include <cstddef>   // for size_t
+#include <cstdint>   // for int16_t, int32_t, int64_t, int8_t, uint16_t, uin...
+#include <iostream>  // for ostream
+#include <string>    // for string
 
 #include "proteus/build_options.hpp"
 
@@ -106,6 +107,8 @@ constexpr size_t getSize(DataType type) {
  * @return std::string
  */
 std::string mapTypeToStr(DataType type);
+
+std::ostream& operator<<(std::ostream& os, const DataType& bar);
 
 #ifdef PROTEUS_ENABLE_VITIS
 /**

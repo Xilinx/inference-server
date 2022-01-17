@@ -74,12 +74,13 @@ class Batcher {
  public:
   /// Construct a new Batcher object
   Batcher();
+  explicit Batcher(RequestParameters* parameters);
   /**
    * @brief Construct a new Batcher object
    *
    * @param name the endpoint corresponding to the batcher's worker group
    */
-  explicit Batcher(const std::string& name);
+  // explicit Batcher(const std::string& name);
   Batcher(const Batcher& batcher);              ///< copy constructor
   Batcher& operator=(const Batcher&) = delete;  ///< Copy assignment constructor
   Batcher(Batcher&& other) = delete;            ///< Move constructor
@@ -147,6 +148,7 @@ class Batcher {
   std::condition_variable cv_;
   std::mutex cv_m_;
   std::string model_;
+  RequestParameters parameters_;
 #ifdef PROTEUS_ENABLE_LOGGING
   LoggerPtr logger_;
 #endif

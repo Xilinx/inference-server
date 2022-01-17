@@ -12,27 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include(GoogleTest)
+
 list(APPEND targets)
 
 if(${PROTEUS_ENABLE_VITIS})
-    add_executable(xmodel xmodel.cpp)
-    target_link_libraries(xmodel PRIVATE
-        proteus
-        opencv_core opencv_imgcodecs
-        xir vart-runner vart-dpu-controller vart-dpu-runner rt-engine
-    )
-    target_include_directories(xmodel PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
     set(targets ${targets} xmodel)
 endif()
 
 if(${PROTEUS_ENABLE_AKS})
-    add_executable(facedetect facedetect.cpp)
-    target_link_libraries(facedetect PRIVATE
-        proteus
-        opencv_core opencv_imgcodecs
-    )
-    target_include_directories(facedetect PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
     set(targets ${targets} facedetect)
 endif()
 
-set(TARGETS ${targets} PARENT_SCOPE)
+foreach(target ${targets})
+    add_executable(${target} ${target}.cpp)
+    target_link_libraries(${target} PRIVATE proteus)
+    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+endforeach()
+
+if(${PROTEUS_ENABLE_VITIS})
+    target_link_libraries(xmodel PRIVATE
+        opencv_core opencv_imgcodecs
+        xir vart-runner vart-dpu-controller vart-dpu-runner rt-engine
+    )
+endif()
+
+if(${PROTEUS_ENABLE_AKS})
+    target_link_libraries(facedetect PRIVATE
+        opencv_core opencv_imgcodecs
+    )
+endif()
+
+foreach(target ${targets})
+    add_executable(${target}_test ${target}_test.cpp)
+    get_target_property(${target}_libs ${target} LINK_LIBRARIES)
+    target_link_libraries(${target}_test ${${target}_libs} gtest gtest_main)
+    target_include_directories(${target}_test PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+
+    gtest_discover_tests(${target}_test)
+endforeach()

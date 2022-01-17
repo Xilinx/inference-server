@@ -68,8 +68,9 @@ class Echo : public Worker {
   // workers define what batcher implementation should be used for them.
   // if not explicitly defined here, a default value is used from worker.hpp.
   using Worker::makeBatcher;
-  std::vector<std::unique_ptr<Batcher>> makeBatcher(int num = 1) override {
-    return this->makeBatcher<HardBatcher>(num);
+  std::vector<std::unique_ptr<Batcher>> makeBatcher(
+    int num, RequestParameters* parameters) override {
+    return this->makeBatcher<HardBatcher>(num, parameters);
   };
 };
 

@@ -37,7 +37,7 @@
 #include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs, BufferPtrs
 #include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"        // for setThreadName
-#include "proteus/observation/logging.hpp"   // for SPDLOG_LOGGER_DEBUG
+#include "proteus/observation/logging.hpp"   // for SPDLOG_DEBUG
 #include "proteus/observation/metrics.hpp"   // for Metrics, MetricCounterIDs
 #include "proteus/observation/tracing.hpp"   // for TracePtr, Trace
 
@@ -47,7 +47,7 @@ class InferenceRequest;
 // IWYU pragma: no_forward_declare proteus::Buffer
 
 using std::chrono::duration_cast;
-using std::chrono::nanoseconds;
+using std::chrono::milliseconds;
 
 namespace proteus {
 
@@ -60,8 +60,11 @@ void SoftBatcher::run(WorkerInfo* worker) {
   size_t count = 0;
   bool run = true;
 
-  const auto kTimeout =
-    duration_cast<nanoseconds>(std::chrono::milliseconds(100));
+  auto kTimeout = duration_cast<milliseconds>(milliseconds(100));
+  if (this->parameters_.has("timeout")) {
+    kTimeout = duration_cast<milliseconds>(
+      milliseconds(this->parameters_.get<int32_t>("timeout")));
+  }
 
   while (run) {
     auto batch = std::make_unique<Batch>();
@@ -91,13 +94,12 @@ void SoftBatcher::run(WorkerInfo* worker) {
         count = this->input_queue_->wait_dequeue_bulk(
           std::make_move_iterator(reqs.begin()), this->batch_size_);
         start_time = std::chrono::high_resolution_clock::now();
-        SPDLOG_LOGGER_DEBUG(this->logger_,
-                            "Got request of a new batch for " + this->model_);
+        SPDLOG_DEBUG("Got request of a new batch for " + this->model_);
       } else {
         count = 1;
         auto remaining_time =
           kTimeout - (std::chrono::high_resolution_clock::now() - start_time);
-        auto duration = std::max(remaining_time, nanoseconds(0));
+        auto duration = std::max(remaining_time, std::chrono::nanoseconds(0));
         bool valid = this->input_queue_->wait_dequeue_timed(reqs[0], duration);
         if (!valid) {
           break;
@@ -177,9 +179,8 @@ void SoftBatcher::run(WorkerInfo* worker) {
           buffer_index, input_buffers, input_offset, output_buffers,
           output_offset, this->batch_size_, batch_size);
         if (new_req == nullptr) {
-          SPDLOG_LOGGER_DEBUG(this->logger_, "Making request for " +
-                                               this->model_ +
-                                               " failed. Reverting buffers.");
+          SPDLOG_DEBUG("Making request for " + this->model_ +
+                       " failed. Reverting buffers.");
           for (size_t i = 1; i < buffers_needed; i++) {
             worker->putInputBuffer(std::move(input_buffer));
             input_buffer = std::move(batch->input_buffers->back());
@@ -211,7 +212,7 @@ void SoftBatcher::run(WorkerInfo* worker) {
     } while (batch_size % this->batch_size_ != 0);
 
     if (!batch->requests->empty()) {
-      SPDLOG_LOGGER_DEBUG(this->logger_, "Enqueuing batch for " + this->model_);
+      SPDLOG_DEBUG("Enqueuing batch for " + this->model_);
       batch->input_buffers->push_back(std::move(input_buffer));
       batch->output_buffers->push_back(std::move(output_buffer));
       this->output_queue_->enqueue(std::move(batch));
