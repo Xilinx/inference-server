@@ -67,6 +67,8 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
 }
 
 TEST(Native, Facedetect) {
+  proteus::initialize();
+
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
     GTEST_SKIP();
@@ -81,4 +83,6 @@ TEST(Native, Facedetect) {
   run(image_paths, 1, worker_name, my_queue);
 
   dequeue_validate(my_queue, num_images);
+
+  proteus::terminate();
 }

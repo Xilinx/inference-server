@@ -15,6 +15,7 @@
 #include "xmodel.hpp"
 
 #include <cstdlib>  // for getenv, EXIT_SUCCESS
+#include <iostream>
 
 #include "gtest/gtest.h"  // for Test, AssertionResult, SuiteApiRe...
 
@@ -26,7 +27,14 @@ int threads = 1;
 int runners = 1;
 std::string path = std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets";
 
-TEST(Native, xmodel) {
+class XModelFixture : public testing::Test {
+ public:
+  static void SetUpTestSuite() { proteus::initialize(); };
+
+  static void TearDownTestSuite() { proteus::terminate(); }
+};
+
+TEST_F(XModelFixture, proteus) {
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
     GTEST_SKIP();
@@ -34,7 +42,7 @@ TEST(Native, xmodel) {
   EXPECT_TRUE(run(xmodel, images, threads, runners) == EXIT_SUCCESS);
 }
 
-TEST(Native, xmodel_reference) {
+TEST_F(XModelFixture, reference) {
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
     GTEST_SKIP();

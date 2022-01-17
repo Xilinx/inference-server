@@ -30,18 +30,7 @@
 
 namespace proteus {
 
-std::string getLogDirectory() {
-  auto* home = std::getenv("HOME");
-  std::string dir;
-  if (home != nullptr) {
-    dir = home;
-    dir += "/.proteus";
-  } else {
-    dir = ".";
-  }
-  dir += "/logs";
-  return dir;
-}
+std::string getLogDirectory() { return "."; }
 
 void initLogging() {
   // if already initialized, return early to prevent duplicating logger
@@ -57,7 +46,7 @@ void initLogging() {
   auto dir = getLogDirectory();
   auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
     dir + "/proteus.log", true);
-  file_sink->set_level(spdlog::level::trace);
+  file_sink->set_level(spdlog::level::off);
 
   std::vector<spdlog::sink_ptr> sinks;
   sinks.push_back(file_sink);
@@ -65,8 +54,8 @@ void initLogging() {
 
   logger =
     std::make_shared<spdlog::logger>("proteus", begin(sinks), end(sinks));
-  logger->set_level(spdlog::level::trace);
-  logger->flush_on(spdlog::level::info);
+  logger->set_level(spdlog::level::off);
+  // logger->flush_on(spdlog::level::info);
   spdlog::register_logger(logger);
   spdlog::set_default_logger(logger);
 }

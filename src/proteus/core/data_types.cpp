@@ -168,4 +168,8 @@ std::string mapTypeToStr(DataType type) {
   }
 }
 
+std::ostream& operator<<(std::ostream& os, const DataType& bar) {
+  return os << mapTypeToStr(bar);
+}
+
 }  // namespace proteus::types

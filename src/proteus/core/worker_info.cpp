@@ -133,7 +133,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
     if (parameters->has("batchers")) {
       batcher_count = parameters->get<int32_t>("batchers");
     }
-    this->batchers_ = worker->makeBatcher(batcher_count);
+    this->batchers_ = worker->makeBatcher(batcher_count, parameters);
 
     for (const auto& batcher : this->batchers_) {
       batcher->setName(name);
@@ -181,9 +181,7 @@ void WorkerInfo::unload() {
 
   bool last_worker = this->workers_.size() == 1;
   if (last_worker) {
-    for (const auto& batcher : this->batchers_) {
-      batcher->enqueue(nullptr);
-    }
+    this->joinAll();
     for (const auto& batcher : this->batchers_) {
       batcher->end();
     }

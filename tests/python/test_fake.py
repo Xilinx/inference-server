@@ -29,21 +29,21 @@ def parameters_fixture():
     return None
 
 
-@pytest.mark.usefixtures("load")
-class TestFake:
-    """
-    Test the Fake worker
-    """
+# @pytest.mark.usefixtures("load")
+# class TestFake:
+#     """
+#     Test the Fake worker
+#     """
 
-    def test_fake_0(self):
-        """
-        Send a request to echo with no optional parameters with too many input
-        tensors.
-        """
-        input_0 = RequestInput("fake")
-        input_0.datatype = Datatype.UINT32
-        input_0.shape.append(1)
-        input_0.data.append(1)
-        request = InferenceRequest(input_0)
-        response = self.rest_client._infer("fake", request)
-        assert response.status_code == 200
+#     def test_fake_0(self):
+#         """
+#         Send a request to echo with no optional parameters with too many input
+#         tensors.
+#         """
+#         input_0 = RequestInput("fake")
+#         input_0.datatype = Datatype.UINT32
+#         input_0.shape.append(1)
+#         input_0.data.append(1)
+#         request = InferenceRequest(input_0)
+#         response = self.rest_client._infer("fake", request)
+#         assert response.status_code == 200

@@ -17,11 +17,6 @@ target_include_directories(batcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
 target_link_libraries(batcher INTERFACE core observation Threads::Threads)
 enable_ipo_on_target(batcher)
 
-add_library(fakeBatcher OBJECT fake_batcher.cpp)
-target_include_directories(fakeBatcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_libraries(fakeBatcher INTERFACE core observation Threads::Threads)
-enable_ipo_on_target(fakeBatcher)
-
 add_library(hardBatcher OBJECT hard.cpp)
 target_include_directories(hardBatcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
 target_link_libraries(hardBatcher INTERFACE batcher core observation)
@@ -34,7 +29,6 @@ enable_ipo_on_target(softBatcher)
 
 set(BATCHING_OBJS
   $<TARGET_OBJECTS:batcher>
-  $<TARGET_OBJECTS:fakeBatcher>
   $<TARGET_OBJECTS:hardBatcher>
   $<TARGET_OBJECTS:softBatcher>
 )
@@ -43,7 +37,6 @@ add_library(batching INTERFACE)
 target_link_libraries(batching INTERFACE
   ${BATCHING_OBJS}
   batcher
-  fakeBatcher
   hardBatcher
   softBatcher
 )

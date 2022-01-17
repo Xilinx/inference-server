@@ -110,9 +110,8 @@ fi
 
 if [[ $MODE == "cpp" || $MODE == "all" ]]; then
   # ctest fails to detect the tests in Coverage build for some reason
-  # ctest --test-dir $PROTEUS_ROOT/build/$BUILD/tests/cpp/ --output-on-failure
-  # TODO(varunsh): facedetect is excluded while it's being debugged
-  $PROTEUS_ROOT/build/$BUILD/tests/cpp/test_gtest --gtest_filter=-Native.Facedetect
+  # exclude all perf tests with -E option
+  ctest --test-dir $PROTEUS_ROOT/build/$BUILD/tests/cpp/ -E "\/Perf"
   retval=$(($retval | $?))
 fi
 

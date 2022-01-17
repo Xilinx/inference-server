@@ -27,7 +27,6 @@
 #include <utility>     // for move
 
 #include "proteus/core/interface.hpp"       // for InterfacePtr, Interface
-#include "proteus/core/manager.hpp"         // for Manager
 #include "proteus/core/predict_api.hpp"     // for InferenceResponsePromisePtr
 #include "proteus/core/worker_info.hpp"     // for WorkerInfo
 #include "proteus/observation/logging.hpp"  // for LoggerPtr, SPDLOG_LOGGER_...
@@ -106,7 +105,11 @@ Batcher::Batcher() {
 #endif
 }
 
-Batcher::Batcher(const std::string &name) : Batcher() { this->model_ = name; }
+Batcher::Batcher(RequestParameters *parameters) : Batcher() {
+  if (parameters != nullptr) {
+    this->parameters_ = *parameters;
+  }
+}
 
 Batcher::Batcher(const Batcher &batcher) {
   this->input_queue_ = batcher.input_queue_;
@@ -158,8 +161,7 @@ InferenceResponseFuture Batcher::enqueue(InferenceRequestInput request) {
 }
 
 void Batcher::end() {
-  auto *worker = Manager::getInstance().getWorker(this->model_);
-  worker->joinAll();
+  this->enqueue(nullptr);
   this->thread_.join();
 }
 

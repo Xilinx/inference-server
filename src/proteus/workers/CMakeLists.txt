@@ -18,7 +18,7 @@ list(APPEND workers
     Echo
     InvertImage
     InvertVideo
-    Fake
+    # Fake
 )
 
 if(${PROTEUS_ENABLE_VITIS})
@@ -47,7 +47,7 @@ target_link_libraries(workerInvertVideo PRIVATE base64 opencv_core opencv_imgcod
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(workerXmodel PRIVATE parse_env vart-runner target-factory xir observation)
 endif()
-target_link_libraries(workerFake PRIVATE observation)
+# target_link_libraries(workerFake PRIVATE observation)
 
 if(${PROTEUS_ENABLE_AKS})
 
@@ -93,14 +93,14 @@ else()
     message(STATUS "AKS not enabled, skipping AKS workers")
 endif()
 
-if(NOT DURATION)
-    set(DURATION 1ms)
-    message(STATUS "Using default DURATION value of " ${DURATION})
-else()
-    message(STATUS "Using DURATION value of " ${DURATION})
-endif()
-target_compile_definitions(workerFake PRIVATE DURATION=${DURATION})
-unset(DURATION CACHE)
+# if(NOT DURATION)
+#     set(DURATION 1ms)
+#     message(STATUS "Using default DURATION value of " ${DURATION})
+# else()
+#     message(STATUS "Using DURATION value of " ${DURATION})
+# endif()
+# target_compile_definitions(workerFake PRIVATE DURATION=${DURATION})
+# unset(DURATION CACHE)
 
 install(TARGETS ${WORKER_TARGETS}
     LIBRARY COMPONENT proteus_Runtime
