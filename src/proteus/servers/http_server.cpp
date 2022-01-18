@@ -280,26 +280,28 @@ void v2::ProteusHttpServer::inferModel(
 
 void v2::ProteusHttpServer::load(
   const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) {
+  std::function<void(const HttpResponsePtr &)> &&callback,
+  const std::string &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received load request");
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(__func__, req->getHeaders());
 #endif
 
   auto json = req->getJsonObject();
-  std::string name;
-  if (json->isMember("model_name")) {
-    name = json->get("model_name", "").asString();
-  } else {
-    auto resp = errorHttpResponse("No model name specifed in load request",
-                                  HttpStatusCode::k400BadRequest);
-#ifdef PROTEUS_ENABLE_TRACING
-    auto context = trace->propagate();
-    propagate(resp.get(), context);
-#endif
-    callback(resp);
-    return;
-  }
+  //   std::string name;
+  //   if (json->isMember("model_name")) {
+  //     name = json->get("model_name", "").asString();
+  //   } else {
+  //     auto resp = errorHttpResponse("No model name specifed in load request",
+  //                                   HttpStatusCode::k400BadRequest);
+  // #ifdef PROTEUS_ENABLE_TRACING
+  //     auto context = trace->propagate();
+  //     propagate(resp.get(), context);
+  // #endif
+  //     callback(resp);
+  //     return;
+  //   }
+  std::string name = model;
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", name);
 #endif
@@ -341,26 +343,29 @@ void v2::ProteusHttpServer::load(
 
 void v2::ProteusHttpServer::unload(
   const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) {
+  std::function<void(const HttpResponsePtr &)> &&callback,
+  const std::string &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received unload request");
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(__func__, req->getHeaders());
 #endif
 
-  auto json = req->getJsonObject();
-  std::string name;
-  if (json->isMember("model_name")) {
-    name = json->get("model_name", "").asString();
-  } else {
-    auto resp = errorHttpResponse("No model name specifed in unload request",
-                                  HttpStatusCode::k400BadRequest);
-#ifdef PROTEUS_ENABLE_TRACING
-    auto context = trace->propagate();
-    propagate(resp.get(), context);
-#endif
-    callback(resp);
-    return;
-  }
+  //   auto json = req->getJsonObject();
+  //   std::string name;
+  //   if (json->isMember("model_name")) {
+  //     name = json->get("model_name", "").asString();
+  //   } else {
+  //     auto resp = errorHttpResponse("No model name specifed in unload
+  //     request",
+  //                                   HttpStatusCode::k400BadRequest);
+  // #ifdef PROTEUS_ENABLE_TRACING
+  //     auto context = trace->propagate();
+  //     propagate(resp.get(), context);
+  // #endif
+  //     callback(resp);
+  //     return;
+  //   }
+  std::string name = model;
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", name);

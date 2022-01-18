@@ -182,7 +182,7 @@ class Client:
         if parameters:
             request["parameters"] = parameters
         error_str = f"Failed to load {model}. "
-        endpoint = self.get_endpoint("load")
+        endpoint = self.get_endpoint("load", model)
 
         response = self._post(endpoint, request, error_str)
 
@@ -205,7 +205,7 @@ class Client:
         """
         request = {"model_name": model}
         error_str = f"Failed to unload {model}. "
-        endpoint = self.get_endpoint("unload")
+        endpoint = self.get_endpoint("unload", model)
 
         response = self._post(endpoint, request, error_str)
         content_type = response.headers.get("content-type")
@@ -321,8 +321,8 @@ class Client:
             "server_live": "v2/health/live",
             "infer": f"v2/models/{arg_0}/infer",
             "model_ready": f"v2/models/{arg_0}/ready",
-            "unload": "v2/unload",
-            "load": "v2/load",
+            "unload": f"v2/repository/models/{arg_0}/unload",
+            "load": f"v2/repository/models/{arg_0}/load",
         }
         return commands[command]
 

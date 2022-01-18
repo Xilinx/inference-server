@@ -112,7 +112,8 @@ async function postLoad({model, parameters}: loadRequest) {
   if(parameters !== null){
     body.parameters = parameters
   }
-  return sendSimplePostRequest("/v2/load", JSON.stringify(body));
+  let endpoint:string = "v2/repository/models/" + model + "/load"
+  return sendSimplePostRequest(endpoint, JSON.stringify(body));
 }
 
 interface invertImageRequest {
