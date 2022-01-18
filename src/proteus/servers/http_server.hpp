@@ -121,10 +121,11 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   ADD_METHOD_TO(ProteusHttpServer::inferModel, "v2/models/{model}/infer",
                 drogon::Post, drogon::Options);
   /// Register the load endpoint
-  ADD_METHOD_TO(ProteusHttpServer::load, "v2/load", drogon::Post,
-                drogon::Options);
+  ADD_METHOD_TO(ProteusHttpServer::load, "v2/repository/models/{model}/load",
+                drogon::Post, drogon::Options);
   /// Register the unload endpoint
-  ADD_METHOD_TO(ProteusHttpServer::unload, "v2/unload", drogon::Post,
+  ADD_METHOD_TO(ProteusHttpServer::unload,
+                "v2/repository/models/{model}/unload", drogon::Post,
                 drogon::Options);
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
@@ -216,18 +217,22 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
    *
    * @param req the REST request object
    * @param callback the callback function to respond to the client
+   * @param model name of the model to load
    */
   void load(const drogon::HttpRequestPtr &req,
-            std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+            std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+            std::string const &model);
 
   /**
    * @brief Unloads a model
    *
    * @param req the REST request object
    * @param callback the callback function to respond to the client
+   * @param model name of the model to unload
    */
   void unload(const drogon::HttpRequestPtr &req,
-              std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+              std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+              std::string const &model);
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS

@@ -135,7 +135,7 @@ RUN wget --progress=dot:mega https://github.com/linux-test-project/lcov/releases
 
 # install Cmake 3.21.1
 RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
-        archive="cmake-3.21.1-linux-x86_64.tar.gz"; \
+        archive="cmake-3.22.1-linux-x86_64.tar.gz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
         archive="cmake-3.22.1-linux-aarch64.tar.gz"; \
     else false; fi; \
@@ -529,7 +529,7 @@ RUN apt-get update \
 
 # Install XRT and XRM
 RUN apt-get update \
-    if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+    && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         cd /tmp \
         && wget --progress=dot:mega -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202110.2.11.648_18.04-amd64-xrt.deb \
         && wget --progress=dot:mega -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202110.1.2.1539_18.04-x86_64.deb \
@@ -568,7 +568,7 @@ RUN mkdir -p /etc/apt/sources.list.d \
 FROM proteus_dev as proteus_dev_vitis_stable
 
 RUN apt-get update \
-    if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+    && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         cd /tmp \
         && wget --progress=dot:mega -O libunilog.deb https://www.xilinx.com/bin/public/openDownload?filename=libunilog_1.4.0-r75_amd64.deb \
         && wget --progress=dot:mega -O libtarget-factory.deb https://www.xilinx.com/bin/public/openDownload?filename=libtarget-factory_1.4.0-r77_amd64.deb \
