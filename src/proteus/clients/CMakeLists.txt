@@ -26,7 +26,7 @@ endforeach()
 
 target_link_libraries(native INTERFACE exec observation)
 if(${PROTEUS_ENABLE_AKS})
-    target_link_libraries(native INTERFACE aks::aks)
+    target_link_libraries(native INTERFACE aks)
 endif()
 if(${PROTEUS_ENABLE_HTTP})
     target_link_libraries(native INTERFACE drogon)

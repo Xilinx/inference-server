@@ -67,10 +67,10 @@ if(${PROTEUS_ENABLE_AKS})
 
         add_library(${worker_name} SHARED ${file_name}.cpp)
         target_link_options(${worker_name} PUBLIC "LINKER:-E")
-        target_link_libraries(${worker_name}
-            PRIVATE batching buffers core base64 ${OpenCV_LIBS} parse_env observation
-            PRIVATE ${aks_LIBRARIES}
-            PRIVATE vart-runner glog xir unilog
+        target_link_libraries(${worker_name} PRIVATE
+            batching buffers core base64 parse_env observation
+            aks vart-runner xir
+            opencv_core opencv_imgcodecs
         )
         target_include_directories(${worker_name} PRIVATE ${PROTEUS_INCLUDE_DIRS})
         enable_ipo_on_target(${worker_name})
@@ -78,13 +78,15 @@ if(${PROTEUS_ENABLE_AKS})
         list(APPEND WORKER_TARGETS ${worker_name})
     endforeach()
 
+    target_link_libraries(workerResnet50Stream PRIVATE opencv_imgproc opencv_videoio)
+    target_link_libraries(workerAksDetectStream PRIVATE opencv_videoio)
+
   # AKS Worker
     add_library(workerAks SHARED aks.cpp)
     target_link_options(workerAks PUBLIC "LINKER:-E")
     target_link_libraries(workerAks
         PRIVATE batching buffers core parse_env observation
-        PRIVATE ${aks_LIBRARIES}
-        PRIVATE vart-runner glog xir unilog
+        PRIVATE aks vart-runner xir
     )
     target_include_directories(workerAks PRIVATE ${PROTEUS_INCLUDE_DIRS})
     enable_ipo_on_target(workerAks)
