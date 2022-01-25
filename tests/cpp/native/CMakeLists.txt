@@ -26,14 +26,13 @@ endif()
 
 foreach(target ${targets})
     add_executable(${target} ${target}.cpp)
-    target_link_libraries(${target} PRIVATE proteus)
+    target_link_libraries(${target} PRIVATE proteus Threads::Threads)
     target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
 endforeach()
 
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(xmodel PRIVATE
-        opencv_core opencv_imgcodecs
-        xir vart-runner vart-dpu-controller vart-dpu-runner rt-engine
+        xir vart-runner
     )
 endif()
 

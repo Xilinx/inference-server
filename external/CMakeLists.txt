@@ -26,11 +26,11 @@ if(${PROTEUS_ENABLE_AKS})
     file(MAKE_DIRECTORY ${AKS_PATH}/libs)
 
     add_custom_target(
-        aks
+        aks-kernels
         WORKING_DIRECTORY ${AKS_PATH}
         COMMAND bash cmake-kernels.sh --type release
         COMMENT "Building AKS kernels"
     )
 
-    add_dependencies(extra aks)
+    add_dependencies(extra aks-kernels)
 endif()

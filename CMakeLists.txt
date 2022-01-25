@@ -44,9 +44,13 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
+    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
     set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     set(CMAKE_CXX_LINKER_WRAPPER_FLAG "-Wl,")
+    # add_link_options("LINKER:--as-needed")
+    add_link_options("LINKER:--no-undefined")
+    add_link_options("LINKER:--no-allow-shlib-undefined")
     set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Coverage" CACHE STRING
         "Available build-types: Debug, Release and Coverage")
 
