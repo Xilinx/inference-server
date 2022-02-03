@@ -40,7 +40,24 @@ class XRMClient:
             raise msg
 
     def receive(self):
-        return self.sock.recv(131072)
+        total_data = bytearray()
+        total_len = 0
+        cur_len = 0
+        while True:
+            cur_data = self.sock.recv(131072)
+            if cur_data:
+                if total_len == 0:
+                    total_len = int.from_bytes(cur_data[0:4], byteorder='little')
+                    cur_len = len(cur_data) - 4
+                    total_data = bytearray(cur_data[4:])
+                else:
+                    cur_len += len(cur_data)
+                    total_data += bytearray(cur_data)
+                if cur_len >= total_len:
+                    break
+            else:
+                break
+        return bytes(total_data)
 
     def close(self):
         self.sock.close()

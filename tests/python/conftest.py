@@ -181,14 +181,15 @@ def pytest_runtest_protocol(item, nextitem):
 
 def pytest_collection_modifyitems(config, items):
     benchmark_mode = config.getoption("--benchmark")
-    skip_bench = pytest.mark.skip(reason="use --benchmark option to run")
     if benchmark_mode == "only":
+        skip_bench = pytest.mark.skip(reason="Not a benchmark test. Use --benchmark [all, skip] to run")
         for item in items:
             if "benchmark" not in item.keywords:
                 item.add_marker(skip_bench)
     elif benchmark_mode == "all":
         pass
     else:
+        skip_bench = pytest.mark.skip(reason="Benchmark test. use --benchmark [all, only] to run")
         for item in items:
             if "benchmark" in item.keywords:
                 item.add_marker(skip_bench)

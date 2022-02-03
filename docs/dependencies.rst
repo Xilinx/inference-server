@@ -29,7 +29,6 @@ Base Image
 ^^^^^^^^^^
 
 The base image for Xilinx Inference Server containers is `Ubuntu 18.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
-More information about what's in this image can be found at the link above.
 
 Ubuntu Bionic Repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -156,8 +155,8 @@ The following packages are installed in the Xilinx Inference Server dev containe
     vart,1.4.0-r117,:xilinxdownload:`Debian package <libvart_1.4.0-r117_amd64.deb>`,Apache 2.0
     vitis-ai-library,1.4.0-r105,:xilinxdownload:`Debian package <libvitis_ai_library_1.4.0-r105_amd64.deb>`,Apache 2.0
     xir,1.4.0-r80,:xilinxdownload:`Debian package <libxir_1.4.0-r80_amd64.deb>`,Apache 2.0
-    xrm,1.2.1539,:xilinxdownload:`Debian package <xrm_202110.1.2.1539_18.04-x86_64.deb>`,Apache 2.0
-    xrt,2.11.648,:xilinxdownload:`Debian package <xrt_202110.2.11.648_18.04-amd64-xrt.deb>`,Apache 2.0
+    xrm,1.3.29,:xilinxdownload:`Debian package <xrm_202120.1.3.29_18.04-x86_64.deb>`,Apache 2.0
+    xrt,2.12.427,:xilinxdownload:`Debian package <xrt_202120.2.12.427_18.04-amd64-xrt.deb>`,Apache 2.0
 
 Included
 --------
