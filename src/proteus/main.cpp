@@ -49,6 +49,7 @@ void signal_callback_handler(int signum) {
  */
 int main(int argc, char* argv[]) {
   signal(SIGINT, signal_callback_handler);
+  signal(SIGTERM, signal_callback_handler);
 #ifdef PROTEUS_ENABLE_HTTP
   int http_port = kDefaultHttpPort;
 #endif

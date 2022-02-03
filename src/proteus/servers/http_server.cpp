@@ -288,25 +288,6 @@ void v2::ProteusHttpServer::load(
 #endif
 
   auto json = req->getJsonObject();
-  //   std::string name;
-  //   if (json->isMember("model_name")) {
-  //     name = json->get("model_name", "").asString();
-  //   } else {
-  //     auto resp = errorHttpResponse("No model name specifed in load request",
-  //                                   HttpStatusCode::k400BadRequest);
-  // #ifdef PROTEUS_ENABLE_TRACING
-  //     auto context = trace->propagate();
-  //     propagate(resp.get(), context);
-  // #endif
-  //     callback(resp);
-  //     return;
-  //   }
-  std::string name = model;
-#ifdef PROTEUS_ENABLE_TRACING
-  trace->setAttribute("model", name);
-#endif
-  SPDLOG_LOGGER_INFO(this->logger_, "Received load request is for " + name);
-
   RequestParametersPtr parameters = nullptr;
   if (json->isMember("parameters")) {
     auto json_parameters = json->get("parameters", "");
@@ -314,6 +295,26 @@ void v2::ProteusHttpServer::load(
   } else {
     parameters = std::make_unique<RequestParameters>();
   }
+
+  auto hyphen_pos = model.find('-');
+  std::string name;
+  // if there's a hyphen in the name, currently assuming it's for xmodel. So,
+  // extract the first part as the worker and the second part as the xmodel file
+  // name. Put that information into the parameters with the default path for
+  // KServe (/mnt/models)
+  if (hyphen_pos != std::string::npos) {
+    name = model.substr(0, hyphen_pos);
+    auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
+    parameters->put("xmodel",
+                    "/mnt/models/" + model + "/" + xmodel + ".xmodel");
+  } else {
+    name = model;
+  }
+
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->setAttribute("model", name);
+#endif
+  SPDLOG_LOGGER_INFO(this->logger_, "Received load request is for " + name);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());

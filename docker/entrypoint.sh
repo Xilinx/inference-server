@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+user="$1"
+shift
 
 # start the XRM daemon if it exists and if the XRM port isn't in use
 if systemctl --all --type service | grep -q xrmd; then
@@ -60,5 +62,9 @@ done
 # insert line break
 echo ""
 
-# drop access to proteus-user and run cmd
-gosu proteus-user "$@"
+# drop access to the right user and run the CMD
+if [ "$user" = "root" ]; then
+  exec gosu root "$@"
+else
+  exec gosu proteus-user "$@"
+fi

@@ -531,8 +531,8 @@ RUN apt-get update \
 RUN apt-get update \
     && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         cd /tmp \
-        && wget --progress=dot:mega -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202110.2.11.648_18.04-amd64-xrt.deb \
-        && wget --progress=dot:mega -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202110.1.2.1539_18.04-x86_64.deb \
+        && wget --progress=dot:mega -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202120.2.12.427_18.04-amd64-xrt.deb \
+        && wget --progress=dot:mega -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202120.1.3.29_18.04-x86_64.deb \
         && apt-get update -y \
         && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
             ./xrt.deb \
@@ -634,7 +634,7 @@ RUN git lfs install \
     && rm "$proteus_wheel" \
     && ldconfig
 
-ENTRYPOINT [ "/root/entrypoint.sh" ]
+ENTRYPOINT [ "/root/entrypoint.sh", "user"]
 CMD [ "/bin/bash" ]
 
 FROM proteus_dev_vitis_${NIGHTLY} as proteus_builder_2
@@ -681,7 +681,7 @@ COPY --from=proteus_builder_2 ${COPY_DIR} /
 # get the dynamic libraries needed (created by get_dynamic_dependencies.sh)
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/deps /
 # get AKS kernels
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs/
 # get the static gui files
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
 # get the entrypoint script
@@ -692,13 +692,21 @@ COPY --from=proteus_builder /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
 COPY --from=proteus_builder /bin/systemctl /bin/systemctl
 # get the gosu executable
 COPY --from=proteus_builder /usr/local/bin/gosu /usr/local/bin/
+# get the .bashrc and .env to configure the environment for all shells
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/proteus-user/
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /root/
 
-# COPY --from=proteus_builder $PROTEUS_ROOT/external/overlaybins /opt/xilinx/overlaybins
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/graph_zoo /opt/xilinx/proteus/aks/graph_zoo
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/kernel_zoo /opt/xilinx/proteus/aks/kernel_zoo
+# we need the xclbins in the image and they must be copied from a path local
+# to the build tree
+COPY --from=proteus_builder $PROTEUS_ROOT/external/overlaybins/ /opt/xilinx/overlaybins/
+# get the pre-defined AKS graphs and kernels
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/proteus/aks/graph_zoo/
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/proteus/aks/kernel_zoo/
 
 ENV LD_LIBRARY_PATH="/usr/local/lib/proteus:/opt/xilinx/proteus/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"
+# TODO(varunsh): we shouldn't hardcode dpuv3int8 here
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
 ENV AKS_ROOT="/opt/xilinx/proteus/aks"
 ENV AKS_XMODEL_ROOT="/opt/xilinx/proteus"
@@ -707,5 +715,7 @@ ENV PATH="/opt/xilinx/proteus/bin:${PATH}"
 # run any final commands before finishing the production image
 RUN ldconfig
 
-ENTRYPOINT [ "/root/entrypoint.sh" ]
+# we need to run as root because KServe mounts models to /mnt/models which means
+# the server needs root access to access the mounted assets
+ENTRYPOINT [ "/root/entrypoint.sh", "root" ]
 CMD [ "proteus-server" ]

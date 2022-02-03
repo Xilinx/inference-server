@@ -17,9 +17,12 @@ import pathlib
 import os
 import re
 
-root_path = pathlib.Path(os.getenv("PROTEUS_ROOT"))
+root = os.getenv("PROTEUS_ROOT")
+if root is None:
+    raise RuntimeError("PROTEUS_ROOT not defined in the environment")
+root_path = pathlib.Path(root)
 try:
-    with open(os.getenv("PROTEUS_ROOT") + "/build/config.txt", "r") as f:
+    with open(root_path / "build/config.txt", "r") as f:
         build = f.read().strip().split(" ")[0]
 except FileNotFoundError:
     print("No config.txt found in build/. Using default value of 'Debug'")
