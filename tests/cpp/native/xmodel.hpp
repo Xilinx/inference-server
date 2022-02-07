@@ -151,7 +151,7 @@ using FutureQueue =
   moodycamel::BlockingConcurrentQueue<std::future<proteus::InferenceResponse>>;
 
 void enqueue(int images, const std::string& workerName,
-             proteus::InferenceRequestInput request, FutureQueue& my_queue) {
+             proteus::InferenceRequest request, FutureQueue& my_queue) {
   for (int i = 0; i < images; i++) {
     auto future = proteus::enqueue(workerName, request);
     my_queue.enqueue(std::move(future));
@@ -202,8 +202,8 @@ int run(std::string xmodel, int images, int threads, int runners) {
   data.reserve(num_elements * proteus::types::getSize(type));
 
   FutureQueue my_queue;
-  proteus::InferenceRequestInput request(static_cast<void*>(data.data()), shape,
-                                         type);
+  proteus::InferenceRequest request;
+  request.addInputTensor(static_cast<void*>(data.data()), shape, type);
 
   std::vector<std::future<void>> futures;
   const int enqueue_threads = 1;

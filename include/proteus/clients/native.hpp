@@ -82,7 +82,7 @@ std::string load(const std::string &worker, RequestParameters *parameters);
  * @return InferenceResponseFuture a future to get the results of the request
  */
 InferenceResponseFuture enqueue(const std::string &workerName,
-                                InferenceRequestInput request);
+                                InferenceRequest request);
 
 }  // namespace proteus
 

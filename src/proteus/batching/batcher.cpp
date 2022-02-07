@@ -26,8 +26,8 @@
 #include <string>      // for string
 #include <utility>     // for move
 
-#include "proteus/core/interface.hpp"       // for InterfacePtr, Interface
-#include "proteus/core/predict_api.hpp"     // for InferenceResponsePromisePtr
+#include "proteus/core/interface.hpp"  // for InterfacePtr, Interface
+#include "proteus/core/predict_api_internal.hpp"
 #include "proteus/core/worker_info.hpp"     // for WorkerInfo
 #include "proteus/observation/logging.hpp"  // for LoggerPtr, SPDLOG_LOGGER_...
 
@@ -42,7 +42,7 @@ namespace proteus {
  */
 class CppNativeApi : public Interface {
  public:
-  explicit CppNativeApi(InferenceRequestInput request);
+  explicit CppNativeApi(InferenceRequest request);
 
   std::shared_ptr<InferenceRequest> getRequest(
     size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
@@ -56,11 +56,11 @@ class CppNativeApi : public Interface {
   std::promise<proteus::InferenceResponse> *getPromise();
 
  private:
-  InferenceRequestInput request_;
+  InferenceRequest request_;
   InferenceResponsePromisePtr promise_;
 };
 
-CppNativeApi::CppNativeApi(InferenceRequestInput request)
+CppNativeApi::CppNativeApi(InferenceRequest request)
   : request_(std::move(request)) {
   this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
 }
@@ -82,7 +82,7 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   const std::vector<BufferRawPtrs> &output_buffers,
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
-  auto request = std::make_shared<InferenceRequest>(
+  auto request = InferenceRequestBuilder::fromInput(
     this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
     output_offsets, batch_size, batch_offset);
   Callback callback =
@@ -144,7 +144,7 @@ void Batcher::enqueue(InterfacePtr request) {
   this->cv_.notify_one();
 }
 
-InferenceResponseFuture Batcher::enqueue(InferenceRequestInput request) {
+InferenceResponseFuture Batcher::enqueue(InferenceRequest request) {
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(__func__);
   trace->startSpan("C++ enqueue");

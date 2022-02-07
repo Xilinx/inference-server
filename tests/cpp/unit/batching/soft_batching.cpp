@@ -50,8 +50,9 @@ class UnitSoftBatcherFixture
       data_[i] = i;
     }
 
-    this->request_ = InferenceRequestInput{static_cast<void*>(data_.data()),
-                                           kDataShape, types::DataType::UINT8};
+    this->request_ = InferenceRequest();
+    this->request_.addInputTensor(static_cast<void*>(data_.data()), kDataShape,
+                                  types::DataType::UINT8);
   }
 
   void TearDown() override { batcher_->end(); }
@@ -82,7 +83,7 @@ class UnitSoftBatcherFixture
 
   int data_size_;
   std::vector<uint8_t> data_;
-  InferenceRequestInput request_;
+  InferenceRequest request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;
 };

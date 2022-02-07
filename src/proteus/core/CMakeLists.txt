@@ -14,6 +14,7 @@
 
 list(APPEND targets
   predict_api
+  predict_api_internal
   fake_predict_api
   manager
   worker_info
@@ -34,6 +35,14 @@ target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
   target_link_libraries(data_types INTERFACE xir)
 endif()
+
+add_library(lib_predict_api INTERFACE)
+target_link_libraries(lib_predict_api INTERFACE
+  $<TARGET_OBJECTS:predict_api>
+  predict_api
+  $<TARGET_OBJECTS:predict_api_internal>
+  predict_api_internal
+)
 
 add_library(core INTERFACE)
 target_link_libraries(core INTERFACE

@@ -135,7 +135,7 @@ class Batcher {
    * @param request the request
    * @return InferenceResponseFuture a future that returns the response
    */
-  InferenceResponseFuture enqueue(InferenceRequestInput request);
+  InferenceResponseFuture enqueue(InferenceRequest request);
 
   /// End the batcher
   void end();

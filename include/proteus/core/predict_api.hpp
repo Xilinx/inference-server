@@ -38,10 +38,6 @@
 #include "proteus/core/data_types.hpp"       // for DataType, mapTypeToStr
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
 
-namespace Json {
-class Value;
-}  // namespace Json
-
 namespace proteus {
 class Buffer;
 }  // namespace proteus
@@ -145,17 +141,6 @@ class RequestParameters {
 
 using RequestParametersPtr = std::shared_ptr<RequestParameters>;
 
-template <>
-Parameter *RequestParameters::get(const std::string &key);
-
-/**
- * @brief Convert JSON-styled parameters to Proteus's implementation
- *
- * @param parameters
- * @return RequestParametersPtr
- */
-RequestParametersPtr addParameters(Json::Value parameters);
-
 /**
  * @brief Holds an inference request's input data
  */
@@ -163,24 +148,6 @@ class InferenceRequestInput {
  public:
   /// Construct a new InferenceRequestInput object
   InferenceRequestInput();
-  /**
-   * @brief Construct a new InferenceRequestInput object
-   *
-   * @param req the JSON request from the user
-   * @param input_buffer buffer to hold the incoming data
-   * @param offset offset for the buffer to store data at
-   */
-  InferenceRequestInput(std::shared_ptr<Json::Value> const &req,
-                        Buffer *input_buffer, size_t offset);
-  /**
-   * @brief Construct a new InferenceRequestInput object
-   *
-   * @param req an existing InferenceRequestInput to copy
-   * @param input_buffer buffer to hold the incoming data
-   * @param offset offset for the buffer to store data at
-   */
-  InferenceRequestInput(InferenceRequestInput &req, Buffer *input_buffer,
-                        size_t offset);
 
   /**
    * @brief Construct a new InferenceRequestInput object
@@ -259,6 +226,8 @@ class InferenceRequestInput {
   RequestParametersPtr parameters_;
   void *data_;
   std::shared_ptr<std::byte> shared_data_;
+
+  friend class InferenceRequestInputBuilder;
 };
 
 /**
@@ -269,9 +238,6 @@ class InferenceRequestOutput {
  public:
   /// Construct a new Request Output object
   InferenceRequestOutput();
-
-  /// Construct a new Request Output object
-  explicit InferenceRequestOutput(std::shared_ptr<Json::Value> const &req);
 
   /// Set the request's data
   void setData(void *buffer) { this->data_ = buffer; }
@@ -287,6 +253,8 @@ class InferenceRequestOutput {
   std::string name_;
   RequestParametersPtr parameters_;
   void *data_;
+
+  friend class InferenceRequestOutputBuilder;
 };
 
 /**
@@ -375,53 +343,6 @@ class InferenceRequest {
  public:
   // Construct a new InferenceRequest object
   InferenceRequest() = default;
-  /**
-   * @brief Partially construct a new InferenceRequest object
-   *
-   * @param req the JSON request received from the client
-   */
-  explicit InferenceRequest(std::shared_ptr<Json::Value> const &req);
-
-  /**
-   * @brief Construct a new InferenceRequest object
-   *
-   * @param req one input request object
-   * @param buffer_index current buffer index to start with for the buffers
-   * @param input_buffers a vector of input buffers to store the inputs data
-   * @param input_offsets a vector of offsets for the input buffers to store
-   * data
-   * @param output_buffers a vector of output buffers
-   * @param output_offsets a vector of offsets for the output buffers
-   * @param batch_size batch size to use when creating the request
-   * @param batch_offset current batch offset to start with
-   */
-  InferenceRequest(InferenceRequestInput &req, size_t &buffer_index,
-                   const std::vector<BufferRawPtrs> &input_buffers,
-                   std::vector<size_t> &input_offsets,
-                   const std::vector<BufferRawPtrs> &output_buffers,
-                   std::vector<size_t> &output_offsets,
-                   const size_t &batch_size, size_t &batch_offset);
-
-  /**
-   * @brief Construct a new InferenceRequest object
-   *
-   * @param req JSON request from the client
-   * @param buffer_index current buffer index to start with for the buffers
-   * @param input_buffers a vector of input buffers to store the inputs data
-   * @param input_offsets a vector of offsets for the input buffers to store
-   * data
-   * @param output_buffers a vector of output buffers
-   * @param output_offsets a vector of offsets for the output buffers
-   * @param batch_size batch size to use when creating the request
-   * @param batch_offset current batch offset to start with
-   */
-  InferenceRequest(std::shared_ptr<Json::Value> const &req,
-                   size_t &buffer_index,
-                   const std::vector<BufferRawPtrs> &input_buffers,
-                   std::vector<size_t> &input_offsets,
-                   const std::vector<BufferRawPtrs> &output_buffers,
-                   std::vector<size_t> &output_offsets,
-                   const size_t &batch_size, size_t &batch_offset);
 
   /**
    * @brief Set the request's callback function used by the last worker to
@@ -452,6 +373,9 @@ class InferenceRequest {
    */
   void runCallbackError(std::string_view error_msg);
 
+  void addInputTensor(void *data, std::vector<uint64_t> shape,
+                      types::DataType dataType, std::string name = "");
+
   /// Get a vector of all the input request objects
   std::vector<InferenceRequestInput> getInputs();
   /// Get the number of input request objects
@@ -479,6 +403,7 @@ class InferenceRequest {
 
   // TODO(varunsh): do we need this still?
   friend class FakeInferenceRequest;
+  friend class InferenceRequestBuilder;
 };
 using InferenceResponsePromisePtr =
   std::shared_ptr<std::promise<InferenceResponse>>;
@@ -499,7 +424,9 @@ class ModelMetadataTensor final {
   ModelMetadataTensor(const std::string &name, types::DataType datatype,
                       std::vector<uint64_t> shape);
 
-  Json::Value toJson();
+  const std::string &getName() const;
+  const types::DataType &getDataType() const;
+  const std::vector<uint64_t> &getShape() const;
 
  private:
   std::string name_;
@@ -540,6 +467,9 @@ class ModelMetadata final {
    */
   void addInputTensor(const std::string &name, types::DataType datatype,
                       std::vector<int> shape);
+
+  const std::vector<ModelMetadataTensor> &getInputs() const;
+
   /**
    * @brief Add an output tensor to this model
    *
@@ -559,18 +489,19 @@ class ModelMetadata final {
   void addOutputTensor(const std::string &name, types::DataType datatype,
                        std::vector<int> shape);
 
+  const std::vector<ModelMetadataTensor> &getOutputs() const;
+
   /// set the model's name
   void setName(const std::string &name);
+  /// get the model's name
+  const std::string &getName() const;
 
-  /// mark this model as ready
-  void setReady();
-  /// mark this model as not ready
-  void setNotReady();
+  const std::string &getPlatform() const;
+
+  /// mark this model as ready/not ready
+  void setReady(bool ready);
   /// check if this model is ready
   [[nodiscard]] bool isReady() const;
-
-  /// convert the metadata to a JSON representation compatible with the server
-  Json::Value toJson();
 
  private:
   std::string name_;

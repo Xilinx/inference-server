@@ -98,7 +98,7 @@ class Worker {
   void acquire(RequestParameters* parameters) {
     this->status_ = WorkerStatus::kAcquire;
     this->doAcquire(parameters);
-    this->metadata_.setReady();
+    this->metadata_.setReady(true);
   }
   /**
    * @brief The main body of the worker executes the work
@@ -113,7 +113,7 @@ class Worker {
   /// Release any hardware resources
   void release() {
     this->status_ = WorkerStatus::kRelease;
-    this->metadata_.setNotReady();
+    this->metadata_.setReady(false);
     this->doRelease();
   }
   /// Free the input and output buffers

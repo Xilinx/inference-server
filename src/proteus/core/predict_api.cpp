@@ -19,9 +19,6 @@
 
 #include "proteus/core/predict_api.hpp"
 
-#include <json/config.h>  // for UInt64
-#include <json/value.h>   // for Value, arrayValue, object...
-
 #include <algorithm>  // for fill, copy
 #include <cstring>    // for memcpy
 #include <iterator>   // for back_insert_iterator, bac...
@@ -29,16 +26,10 @@
 #include <stdexcept>  // for invalid_argument
 #include <utility>    // for pair, move, make_pair
 
-#include "proteus/buffers/buffer.hpp"       // for Buffer
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/buffers/buffer.hpp"  // for Buffer
+#include "proteus/build_options.hpp"   // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/predict_api_internal.hpp"
 #include "proteus/observation/logging.hpp"  // for getLogger, SPDLOG_LOGGER_...
-
-// taken from https://stackoverflow.com/a/46711735
-// used for hashing strings for switch statements
-constexpr unsigned int hash(const char *s, int off = 0) {
-  // NOLINTNEXTLINE
-  return !s[off] ? 5381 : (hash(s, off + 1) * 33) ^ s[off];
-}
 
 namespace proteus {
 
@@ -82,202 +73,6 @@ std::map<std::string, Parameter> RequestParameters::data() const {
   return parameters_;
 }
 
-template <>
-Parameter *RequestParameters::get(const std::string &key) {
-  if (this->parameters_.find(key) != this->parameters_.end()) {
-    return &this->parameters_.at(key);
-  }
-  return nullptr;
-}
-
-RequestParametersPtr addParameters(Json::Value parameters) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  auto logger = getLogger();
-#endif
-  auto parameters_ = std::make_shared<RequestParameters>();
-  for (auto const &id : parameters.getMemberNames()) {
-    if (parameters[id].isString()) {
-      parameters_->put(id, parameters[id].asString());
-    } else if (parameters[id].isBool()) {
-      parameters_->put(id, parameters[id].asBool());
-    } else if (parameters[id].isUInt()) {
-      parameters_->put(id, static_cast<int32_t>(parameters[id].asInt()));
-    } else if (parameters[id].isDouble()) {
-      parameters_->put(id, parameters[id].asDouble());
-    } else {
-      SPDLOG_LOGGER_WARN(logger, "Unknown parameter type, skipping");
-    }
-  }
-#ifdef PROTEUS_LOGGING_ACTIVE
-  (void)logger;  // suppress unused variable warning
-#endif
-  return parameters_;
-}
-
-InferenceRequest::InferenceRequest(
-  InferenceRequestInput &req, size_t &buffer_index,
-  const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
-  this->id_ = "";
-  this->parameters_ = std::make_unique<RequestParameters>();
-  this->callback_ = nullptr;
-
-  try {
-    auto buffers = input_buffers[buffer_index];
-    for (size_t i = 0; i < buffers.size(); i++) {
-      auto &buffer = buffers[i];
-      auto &offset = input_offsets[i];
-
-      this->inputs_.emplace_back(req, buffer, offset);
-      offset += this->inputs_.back().getSize();
-    }
-  } catch (const std::invalid_argument &e) {
-    throw;
-  }
-
-  try {
-    auto buffers = output_buffers[buffer_index];
-    for (size_t i = 0; i < buffers.size(); i++) {
-      auto &buffer = buffers[i];
-      const auto &offset = output_offsets[i];
-
-      this->outputs_.emplace_back();
-      this->outputs_.back().setData(static_cast<std::byte *>(buffer->data()) +
-                                    offset);
-      // TODO(varunsh): output_offset is currently ignored! The size of the
-      // output needs to come from the worker but we have no such information.
-    }
-  } catch (const std::invalid_argument &e) {
-    throw;
-  }
-
-  batch_offset++;
-  // FIXME(varunsh): this was intended to support multiple input tensors but it
-  // creates a bug where the batch_offset gets reset to zero too early
-  (void)batch_size;
-  // if (batch_offset == batch_size) {
-  //   batch_offset = 0;
-  //   buffer_index++;
-  //   std::fill(input_offsets.begin(), input_offsets.end(), 0);
-  //   std::fill(output_offsets.begin(), output_offsets.end(), 0);
-  // }
-}
-
-InferenceRequest::InferenceRequest(std::shared_ptr<Json::Value> const &req) {
-  if (req->isMember("id")) {
-    this->id_ = req->get("id", "").asString();
-  } else {
-    this->id_ = "";
-  }
-  if (req->isMember("parameters")) {
-    auto parameters = req->get("parameters", Json::objectValue);
-    this->parameters_ = addParameters(parameters);
-  } else {
-    this->parameters_ = std::make_unique<RequestParameters>();
-  }
-
-  if (!req->isMember("inputs")) {
-    throw std::invalid_argument("No 'inputs' key present in request");
-  }
-  auto inputs = req->get("inputs", Json::arrayValue);
-  if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
-  }
-
-  this->callback_ = nullptr;
-}
-
-InferenceRequest::InferenceRequest(
-  std::shared_ptr<Json::Value> const &req, size_t &buffer_index,
-  const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset)
-  : InferenceRequest(req) {
-  auto inputs = req->get("inputs", Json::arrayValue);
-
-  auto buffer_index_backup = buffer_index;
-  auto batch_offset_backup = batch_offset;
-  for (auto const &i : inputs) {
-    if (!i.isObject()) {
-      throw std::invalid_argument(
-        "At least one element in 'inputs' is not an obj");
-    }
-    try {
-      auto &buffers = input_buffers[buffer_index];
-      for (size_t j = 0; j < buffers.size(); j++) {
-        auto &buffer = buffers[j];
-        auto &offset = input_offsets[j];
-
-        InferenceRequestInput input(std::make_shared<Json::Value>(i), buffer,
-                                    offset);
-        offset += input.getSize();
-
-        this->inputs_.push_back(std::move(input));
-      }
-    } catch (const std::invalid_argument &e) {
-      throw;
-    }
-    batch_offset++;
-    if (batch_offset == batch_size) {
-      batch_offset = 0;
-      buffer_index++;
-      std::fill(input_offsets.begin(), input_offsets.end(), 0);
-    }
-  }
-
-  // TODO(varunsh): output_offset is currently ignored! The size of the output
-  // needs to come from the worker but we have no such information.
-  buffer_index = buffer_index_backup;
-  batch_offset = batch_offset_backup;
-  if (req->isMember("outputs")) {
-    auto outputs = req->get("outputs", Json::arrayValue);
-    for (auto const &i : outputs) {
-      try {
-        auto buffers = output_buffers[buffer_index];
-        for (size_t j = 0; j < buffers.size(); j++) {
-          auto &buffer = buffers[j];
-          auto &offset = output_offsets[j];
-
-          this->outputs_.emplace_back(std::make_shared<Json::Value>(i));
-          this->outputs_.back().setData(
-            static_cast<std::byte *>(buffer->data()) + offset);
-          // output += this->outputs_.back().getSize(); // see TODO
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
-      }
-    }
-  } else {
-    for (auto const &i : inputs) {
-      (void)i;  // suppress unused variable warning
-      try {
-        auto buffers = output_buffers[buffer_index];
-        for (size_t j = 0; j < buffers.size(); j++) {
-          auto &buffer = buffers[j];
-          const auto &offset = output_offsets[j];
-
-          this->outputs_.emplace_back();
-          this->outputs_.back().setData(
-            static_cast<std::byte *>(buffer->data()) + offset);
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
-      }
-      batch_offset++;
-      if (batch_offset == batch_size) {
-        batch_offset = 0;
-        buffer_index++;
-        std::fill(output_offsets.begin(), output_offsets.end(), 0);
-      }
-    }
-  }
-}
-
 void InferenceRequest::setCallback(Callback &&callback) {
   callback_ = callback;
 }
@@ -297,6 +92,12 @@ void InferenceRequest::runCallbackError(std::string_view error_msg) {
   this->runCallback(InferenceResponse(std::string{error_msg}));
 }
 
+void InferenceRequest::addInputTensor(void *data, std::vector<uint64_t> shape,
+                                      types::DataType dataType,
+                                      std::string name) {
+  this->inputs_.emplace_back(data, shape, dataType, name);
+}
+
 std::vector<InferenceRequestInput> InferenceRequest::getInputs() {
   return this->inputs_;
 }
@@ -305,173 +106,6 @@ size_t InferenceRequest::getInputSize() { return this->inputs_.size(); }
 
 std::vector<InferenceRequestOutput> InferenceRequest::getOutputs() {
   return this->outputs_;
-}
-
-DataType parseDatatypeStr(std::string const &data_type_str) {
-  DataType data_type = DataType::BOOL;
-  switch (hash(data_type_str.c_str())) {
-    case hash("BOOL"):
-      data_type = DataType::BOOL;
-      break;
-    case hash("UINT8"):
-      data_type = DataType::UINT8;
-      break;
-    case hash("UINT16"):
-      data_type = DataType::UINT16;
-      break;
-    case hash("UINT32"):
-      data_type = DataType::UINT32;
-      break;
-    case hash("UINT64"):
-      data_type = DataType::UINT64;
-      break;
-    case hash("INT8"):
-      data_type = DataType::INT8;
-      break;
-    case hash("INT16"):
-      data_type = DataType::INT16;
-      break;
-    case hash("INT32"):
-      data_type = DataType::INT32;
-      break;
-    case hash("INT64"):
-      data_type = DataType::INT64;
-      break;
-    case hash("FP16"):
-      data_type = DataType::FP16;
-      break;
-    case hash("FP32"):
-      data_type = DataType::FP32;
-      break;
-    case hash("FP64"):
-      data_type = DataType::FP64;
-      break;
-    case hash("STRING"):
-      data_type = DataType::STRING;
-      break;
-    default:
-      throw std::invalid_argument("Unknown datatype " + data_type_str);
-  }
-  return data_type;
-}
-
-InferenceRequestInput::InferenceRequestInput(
-  std::shared_ptr<Json::Value> const &req, Buffer *input_buffer,
-  size_t offset) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  auto logger = getLogger();
-#endif
-  this->data_ = input_buffer->data();
-
-  this->shared_data_ = nullptr;
-  if (!req->isMember("name")) {
-    throw std::invalid_argument("No 'name' key present in request input");
-  }
-  this->name_ = req->get("name", "").asString();
-  if (!req->isMember("shape")) {
-    throw std::invalid_argument("No 'shape' key present in request input");
-  }
-  auto shape = req->get("shape", Json::arrayValue);
-  for (auto const &i : shape) {
-    if (!i.isUInt64()) {
-      throw std::invalid_argument(
-        "'shape' must be specified by uint64 elements");
-    }
-    this->shape_.push_back(i.asUInt64());
-  }
-  if (!req->isMember("datatype")) {
-    throw std::invalid_argument("No 'datatype' key present in request input");
-  }
-  std::string data_type_str = req->get("datatype", "").asString();
-  this->dataType_ = parseDatatypeStr(data_type_str);
-  if (req->isMember("parameters")) {
-    auto parameters = req->get("parameters", Json::objectValue);
-    this->parameters_ = addParameters(parameters);
-  } else {
-    this->parameters_ = std::make_unique<RequestParameters>();
-  }
-  if (!req->isMember("data")) {
-    throw std::invalid_argument("No 'data' key present in request input");
-  }
-  auto data = req->get("data", Json::arrayValue);
-  try {
-    for (auto const &i : data) {
-      switch (this->dataType_) {
-        case DataType::BOOL:
-          offset = input_buffer->write(i.asBool(), offset);
-          break;
-        case DataType::UINT8:
-          offset =
-            input_buffer->write(static_cast<uint8_t>(i.asUInt()), offset);
-          break;
-        case DataType::UINT16:
-          offset =
-            input_buffer->write(static_cast<uint16_t>(i.asUInt()), offset);
-          break;
-        case DataType::UINT32:
-          offset =
-            input_buffer->write(static_cast<uint32_t>(i.asUInt()), offset);
-          break;
-        case DataType::UINT64:
-          offset =
-            input_buffer->write(static_cast<uint64_t>(i.asUInt64()), offset);
-          break;
-        case DataType::INT8:
-          offset = input_buffer->write(static_cast<int8_t>(i.asInt()), offset);
-          break;
-        case DataType::INT16:
-          offset = input_buffer->write(static_cast<int16_t>(i.asInt()), offset);
-          break;
-        case DataType::INT32:
-          offset = input_buffer->write(static_cast<int32_t>(i.asInt()), offset);
-          break;
-        case DataType::INT64:
-          offset =
-            input_buffer->write(static_cast<int64_t>(i.asInt64()), offset);
-          break;
-        case DataType::FP16:
-          // FIXME(varunsh): this is not handled
-          SPDLOG_LOGGER_WARN(logger, "Writing FP16 not supported");
-          break;
-        case DataType::FP32:
-          offset = input_buffer->write(static_cast<float>(i.asFloat()), offset);
-          break;
-        case DataType::FP64:
-          offset =
-            input_buffer->write(static_cast<double>(i.asDouble()), offset);
-          break;
-        case DataType::STRING:
-          offset = input_buffer->write(i.asString(), offset);
-          break;
-        default:
-          // TODO(varunsh): what should we do here?
-          SPDLOG_LOGGER_WARN(logger, "Unknown datatype");
-          break;
-      }
-    }
-  } catch (const Json::LogicError &e) {
-    throw std::invalid_argument(
-      "Could not convert some data to the provided data type");
-  }
-}
-
-InferenceRequestInput::InferenceRequestInput(InferenceRequestInput &req,
-                                             Buffer *input_buffer,
-                                             size_t offset) {
-  this->data_ = req.data_;
-  this->shared_data_ = nullptr;
-  this->name_ = req.name_;
-  this->shape_.reserve(req.shape_.size());
-  this->shape_ = req.shape_;
-  this->dataType_ = req.dataType_;
-  this->parameters_ = std::move(req.parameters_);
-  auto size = std::accumulate(this->shape_.begin(), this->shape_.end(), 1,
-                              std::multiplies<>()) *
-              types::getSize(this->dataType_);
-  auto *dest = static_cast<std::byte *>(input_buffer->data()) + offset;
-  memcpy(dest, req.data_, size);
-
-  this->data_ = dest;
 }
 
 InferenceRequestInput::InferenceRequestInput(void *data,
@@ -518,18 +152,6 @@ InferenceRequestOutput::InferenceRequestOutput() {
   this->data_ = nullptr;
   this->name_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
-}
-
-InferenceRequestOutput::InferenceRequestOutput(
-  std::shared_ptr<Json::Value> const &req) {
-  this->data_ = nullptr;
-  this->name_ = req->get("name", "").asString();
-  if (req->isMember("parameters")) {
-    auto parameters = req->get("parameters", Json::objectValue);
-    this->parameters_ = addParameters(parameters);
-  } else {
-    this->parameters_ = std::make_unique<RequestParameters>();
-  }
 }
 
 void InferenceRequestOutput::setName(const std::string &name) {
@@ -585,15 +207,13 @@ ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
   this->shape_ = std::move(shape);
 }
 
-Json::Value ModelMetadataTensor::toJson() {
-  Json::Value ret;
-  ret["name"] = this->name_;
-  ret["datatype"] = types::mapTypeToStr(this->datatype_);
-  ret["shape"] = Json::arrayValue;
-  for (auto i = 0U; i < this->shape_.size(); i++) {
-    ret["shape"][i] = static_cast<Json::UInt64>(this->shape_[i]);
-  }
-  return ret;
+const std::string &ModelMetadataTensor::getName() const { return this->name_; }
+
+const types::DataType &ModelMetadataTensor::getDataType() const {
+  return this->datatype_;
+}
+const std::vector<uint64_t> &ModelMetadataTensor::getShape() const {
+  return this->shape_;
 }
 
 ModelMetadata::ModelMetadata(const std::string &name,
@@ -631,28 +251,23 @@ void ModelMetadata::addOutputTensor(const std::string &name,
   this->outputs_.emplace_back(name, datatype, new_shape);
 }
 
+const std::string &ModelMetadata::getName() const { return this->name_; }
 void ModelMetadata::setName(const std::string &name) { this->name_ = name; }
 
-void ModelMetadata::setReady() { this->ready_ = true; }
-
-void ModelMetadata::setNotReady() { this->ready_ = false; }
+void ModelMetadata::setReady(bool ready) { this->ready_ = ready; }
 
 bool ModelMetadata::isReady() const { return this->ready_; }
 
-Json::Value ModelMetadata::toJson() {
-  Json::Value ret;
-  ret["name"] = this->name_;
-  ret["versions"] = Json::arrayValue;
-  ret["platform"] = this->platform_;
-  ret["inputs"] = Json::arrayValue;
-  for (auto i = 0U; i < this->inputs_.size(); i++) {
-    ret["inputs"][i] = this->inputs_[i].toJson();
-  }
-  ret["outputs"] = Json::arrayValue;
-  for (auto i = 0U; i < this->outputs_.size(); i++) {
-    ret["outputs"][i] = this->outputs_[i].toJson();
-  }
-  return ret;
+const std::string &ModelMetadata::getPlatform() const {
+  return this->platform_;
+}
+
+const std::vector<ModelMetadataTensor> &ModelMetadata::getInputs() const {
+  return this->inputs_;
+}
+
+const std::vector<ModelMetadataTensor> &ModelMetadata::getOutputs() const {
+  return this->outputs_;
 }
 
 }  // namespace proteus

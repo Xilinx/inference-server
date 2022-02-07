@@ -205,35 +205,32 @@ int main() {
   const std::initializer_list<uint64_t> shape = {224, 224, 3};
   std::queue<proteus::InferenceResponseFuture> queue;
 
+  proteus::InferenceRequest request;
   for (auto i = 0; i < batch_size; i++) {
-    proteus::InferenceRequestInput request(static_cast<void*>(images[i].data()),
-                                           shape,
-                                           proteus::types::DataType::INT8);
-    queue.push(proteus::enqueue(workerName, request));
+    request.addInputTensor(static_cast<void*>(images[i].data()), shape,
+                           proteus::types::DataType::INT8);
   }
+  queue.push(proteus::enqueue(workerName, request));
   // -inference:
 
-  for (auto i = 0; i < batch_size; i++) {
-    // +get output:
-    auto front = std::move(queue.front());
-    queue.pop();
-    auto results = front.get();
-    // -get output:
+  // +get output:
+  auto front = std::move(queue.front());
+  queue.pop();
+  auto results = front.get();
+  // -get output:
 
-    // +validate:
-    auto outputs = results.getOutputs();
-    for (auto& output : outputs) {
-      auto top_k = postprocess(output, k);
-      for (size_t j = 0; j < k; j++) {
-        if (top_k[j] != gold_response_output[j]) {
-          std::cerr << "Output (" << top_k[j] << ") does not match golden ("
-                    << gold_response_output[j] << ")\n";
-          proteus::terminate();
-          return 1;
-        }
+  // +validate:
+  auto outputs = results.getOutputs();
+  for (auto& output : outputs) {
+    auto top_k = postprocess(output, k);
+    for (size_t j = 0; j < k; j++) {
+      if (top_k[j] != gold_response_output[j]) {
+        std::cerr << "Output (" << top_k[j] << ") does not match golden ("
+                  << gold_response_output[j] << ")\n";
+        proteus::terminate();
+        return 1;
       }
     }
-    // -validate:
   }
   // -validate:
 

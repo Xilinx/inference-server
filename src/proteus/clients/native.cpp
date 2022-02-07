@@ -94,7 +94,7 @@ std::string load(const std::string& worker, RequestParameters* parameters) {
 }
 
 InferenceResponseFuture enqueue(const std::string& workerName,
-                                InferenceRequestInput request) {
+                                InferenceRequest request) {
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif

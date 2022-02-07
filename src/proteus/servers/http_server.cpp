@@ -36,19 +36,19 @@
 #include <utility>      // for move
 #include <vector>       // for vector, _Bit_reference
 
-#include "proteus/batching/batcher.hpp"      // for Batcher
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/native.hpp"        // for getHardware
-#include "proteus/core/data_types.hpp"       // for DataType, mapTypeToStr
-#include "proteus/core/manager.hpp"          // for Manager
-#include "proteus/core/predict_api.hpp"      // for RequestParametersPtr
-#include "proteus/core/worker_info.hpp"      // for WorkerInfo
-#include "proteus/helpers/compression.hpp"   // for z_decompress
-#include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
-#include "proteus/observation/logging.hpp"   // for SPDLOG_LOGGER_INFO, getL...
-#include "proteus/observation/metrics.hpp"   // for Metrics, MetricIDs, Metr...
-#include "proteus/observation/tracing.hpp"   // for startSpan, Span, setTags
-#include "proteus/version.hpp"               // for kProteusVersion
+#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/native.hpp"             // for getHardware
+#include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "proteus/core/manager.hpp"               // for Manager
+#include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
+#include "proteus/core/worker_info.hpp"           // for WorkerInfo
+#include "proteus/helpers/compression.hpp"        // for z_decompress
+#include "proteus/helpers/declarations.hpp"       // for InferenceResponseOutput
+#include "proteus/observation/logging.hpp"  // for SPDLOG_LOGGER_INFO, getL...
+#include "proteus/observation/metrics.hpp"  // for Metrics, MetricIDs, Metr...
+#include "proteus/observation/tracing.hpp"  // for startSpan, Span, setTags
+#include "proteus/version.hpp"              // for kProteusVersion
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;
@@ -203,7 +203,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   bool error = false;
   try {
     auto metadata = Manager::getInstance().getWorkerMetadata(model);
-    ret = metadata.toJson();
+    ret = ModelMetadataToJson(metadata);
   } catch (const std::invalid_argument &e) {
     ret["error"] = "Model " + model + " not found.";
     error = true;
@@ -601,7 +601,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
   try {
-    auto request = std::make_shared<InferenceRequest>(
+    auto request = InferenceRequestBuilder::fromJson(
       this->json_, buffer_index, input_buffers, input_offsets, output_buffers,
       output_offsets, batch_size, batch_offset);
     Callback callback =

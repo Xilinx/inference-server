@@ -51,9 +51,9 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
     imgData.reserve(size);
     memcpy(imgData.data(), img.data, size);
 
-    proteus::InferenceRequestInput request(static_cast<void*>(imgData.data()),
-                                           shape,
-                                           proteus::types::DataType::UINT8);
+    proteus::InferenceRequest request;
+    request.addInputTensor(static_cast<void*>(imgData.data()), shape,
+                           proteus::types::DataType::UINT8);
 
     auto future = proteus::enqueue(workerName, std::move(request));
     my_queue.enqueue(std::move(future));

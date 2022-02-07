@@ -22,11 +22,11 @@
 #include <string>      // for string, operator+, char_t...
 #include <utility>     // for move
 
-#include "proteus/batching/batcher.hpp"     // for Batcher
-#include "proteus/core/manager.hpp"         // for Manager
-#include "proteus/core/predict_api.hpp"     // for InferenceRequest, Callback
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/observation/tracing.hpp"  // for startSpan, Span
+#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/core/manager.hpp"               // for Manager
+#include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
+#include "proteus/core/worker_info.hpp"           // for WorkerInfo
+#include "proteus/observation/tracing.hpp"        // for startSpan, Span
 
 using drogon::HttpRequestPtr;
 using drogon::WebSocketConnectionPtr;
@@ -141,7 +141,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
   size_t &batch_offset) {
   std::shared_ptr<InferenceRequest> request;
   try {
-    auto request = std::make_shared<InferenceRequest>(
+    auto request = InferenceRequestBuilder::fromJson(
       this->json_, buffer_index, input_buffers, input_offset, output_buffers,
       output_offset, batch_size, batch_offset);
     Callback callback =
