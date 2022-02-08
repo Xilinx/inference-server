@@ -17,6 +17,7 @@ REST Endpoints
 ==============
 
 The REST endpoints are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__.
+Additional endpoints are driven by community adoption.
 
 Health
 ------
@@ -35,8 +36,8 @@ Metadata
 Inference
 ---------
 
-*  POST ``v2/load``: Load a model. The HTML body in the response contains the endpoint to use for this model
-*  POST ``v2/unload``: Unload a model
+*  POST ``v2/repository/models/{model}/load``: Load a model. The HTML body in the response contains the endpoint to use for this model
+*  POST ``v2/repository/models/{model}/unload``: Unload a model
 *  POST ``v2/models/{model}/infer``: Make an inference request to a particular model
 
 Observation

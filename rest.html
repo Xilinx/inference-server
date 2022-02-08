@@ -453,7 +453,8 @@
             
   <div class="section" id="rest-endpoints">
 <h1>REST Endpoints<a class="headerlink" href="#rest-endpoints" title="Permalink to this headline">¶</a></h1>
-<p>The REST endpoints are based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>.</p>
+<p>The REST endpoints are based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>.
+Additional endpoints are driven by community adoption.</p>
 <div class="section" id="health">
 <h2>Health<a class="headerlink" href="#health" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -473,8 +474,8 @@
 <div class="section" id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/load</span></code>: Load a model. The HTML body in the response contains the endpoint to use for this model</p></li>
-<li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/unload</span></code>: Unload a model</p></li>
+<li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/repository/models/{model}/load</span></code>: Load a model. The HTML body in the response contains the endpoint to use for this model</p></li>
+<li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/repository/models/{model}/unload</span></code>: Unload a model</p></li>
 <li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/models/{model}/infer</span></code>: Make an inference request to a particular model</p></li>
 </ul>
 </div>
@@ -515,7 +516,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on December 21, 2021.
+        Last updated on February 08, 2022.
       </span>
 
     </p>
