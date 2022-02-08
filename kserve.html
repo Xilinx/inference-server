@@ -62,9 +62,8 @@
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
- 
-
-
+    <link rel="next" title="REST Endpoints" href="rest.html" />
+    <link rel="prev" title="Tracing" href="tracing.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -353,13 +352,19 @@
 <li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Using Xilinx Inference Server</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">KServe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-kserve">Setting up KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-server">Building the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-the-service">Starting the Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-requests">Making Requests</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -380,6 +385,11 @@
 
             
 			
+			<p class="caption"><span class="caption-text">This Page</span></p>
+				<ul class="current">
+				  <li class="toctree-l1"><a href="_sources/kserve.rst.txt"
+						rel="nofollow">Show Source</a></li>
+				</ul>
           
         </div>
         
@@ -423,10 +433,14 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Python Module Index</li>
+      <li>KServe</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/kserve.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -438,34 +452,116 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-p"><strong>p</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-p"><td></td><td>
-       <strong>p</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <a href="python_api.html#module-proteus"><code class="xref">proteus</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="python_api.html#module-proteus.rest"><code class="xref">proteus.rest</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="python_api.html#module-proteus.websocket"><code class="xref">proteus.websocket</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="kserve">
+<span id="id1"></span><h1>KServe<a class="headerlink" href="#kserve" title="Permalink to this headline">¶</a></h1>
+<p>The Xilinx Inference Server can be used with <a class="reference external" href="https://github.com/kserve/kserve">KServe</a> to deploy the server on a Kubernetes cluster.</p>
+<div class="section" id="setting-up-kserve">
+<h2>Setting up KServe<a class="headerlink" href="#setting-up-kserve" title="Permalink to this headline">¶</a></h2>
+<p>Install KServe using the <a class="reference external" href="https://kserve.github.io/website/admin/serverless/">instructions</a> provided by KServe.
+We have tested with KServe 0.7 using the standard serverless installation but other versions/configurations may work as well.
+Once KServe is installed, verify basic functionality of the cluster using the <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">basic tutorial</a> provided by KServe.
+If this succeeds, KServe should be installed correctly.</p>
+<p>If you want to use FPGAs for your inferences, install the <a class="reference external" href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-fpga-device-plugin">Xilinx FPGA Kubernetes plugin</a>.
+This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.
+You may also wish to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
+Refer to the documentation for these respective projects on installation details.
+The <a class="reference external" href="https://github.com/prometheus-operator/kube-prometheus/">kube-prometheus</a> project may be a good starting point to install some of these tools.</p>
+</div>
+<div class="section" id="building-the-server">
+<h2>Building the Server<a class="headerlink" href="#building-the-server" title="Permalink to this headline">¶</a></h2>
+<p>To use with KServe, we will need to build the production container.
+The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
+Update the <code class="docutils literal notranslate"><span class="pre">PROTEUS_DEFAULT_HTTP_PORT</span></code> variable in the top-level <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to 8080 prior to building the production container.
+This change is needed because KServe (currently) has some limitations around using custom ports and this value is hard-coded in some places.
+To build the production container <a class="footnote-reference brackets" href="#f1" id="id2">1</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize --production
+</pre></div>
+</div>
+<p>The resulting image must be pushed to a Docker registry.
+If you don’t have access to one, you can start a local registry using <a class="reference external" href="https://docs.docker.com/registry/deploying/">these instructions</a> from Docker.
+Make sure to set up a secure registry if you need access to the registry from more than one host.
+Once the image is pushed to the registry, verify that it can be pulled with Docker from all hosts in the Kubernetes cluster.</p>
+</div>
+<div class="section" id="starting-the-service">
+<h2>Starting the Service<a class="headerlink" href="#starting-the-service" title="Permalink to this headline">¶</a></h2>
+<p>Services in Kubernetes can be started with YAML configuration files.
+KServe provides two CRDs that we will use: <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> and <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code>.
+A sample configuration file to start the Inference Server is provided below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1beta1&quot;</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="w"></span>
+<span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="nt">predictor</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span><span class="w"></span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry/image:version</span><span class="w"></span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">env</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTI_MODEL_SERVER</span><span class="w"></span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">value</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span><span class="w"></span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">protocol</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">xilinx.com/fpga-xilinx_u250_gen3x16_xdma_shell_3_1-0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Some comments about this configuration file:</p>
+<ol class="arabic simple">
+<li><p>The autoscaling target defines how the service should be autoscaled in response to incoming requests. The value of 5 indicates that additional containers should be deployed when the number of concurrent requests exceeds 5.</p></li>
+<li><p>The image string should point to image in the registry that you created earlier. In some cases, Kubernetes may fail to pull the image, even if it’s tagged with the right version due to some issues with mapping the version to the image. In these cases, you can use the SHA value of the image directly to skip this lookup. In this case, the image string would be <code class="docutils literal notranslate"><span class="pre">registry/image&#64;sha256:&lt;SHA&gt;</span></code>.</p></li>
+<li><p>We have requested one U250 FPGA using the Xilinx FPGA plugin here. Depending on your use cases, this value may be different or not present.</p></li>
+</ol>
+<p>This service can be deployed on the cluster using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -f &lt;path to yaml file&gt;
+</pre></div>
+</div>
+<p>Next, we will deploy the model we want to run.
+This use case takes advantage of the multi-model serving feature of KServe.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1alpha1&quot;</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TrainedModel</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xmodel-resnet</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="nt">inferenceService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus</span><span class="w"></span>
+<span class="nt">model</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytorch</span><span class="w"></span>
+<span class="w">    </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/resnet/xmodel</span><span class="w"></span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The string passed to the <code class="docutils literal notranslate"><span class="pre">name</span></code> field is significant and should be <code class="docutils literal notranslate"><span class="pre">xmodel-&lt;something&gt;</span></code> for running XModels.
+The string passed to <code class="docutils literal notranslate"><span class="pre">inferenceService</span></code> should match the name used in the InferenceServer YAML.
+The value of the <code class="docutils literal notranslate"><span class="pre">framework</span></code> key is unimportant but must be one of the values expected by KServe.
+As before, we can deploy this using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -f &lt;path to yaml file&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="making-requests">
+<h2>Making Requests<a class="headerlink" href="#making-requests" title="Permalink to this headline">¶</a></h2>
+<p>The method by which you communicate with your service depends on your Kubernetes cluster configuration.
+For example, one way to make requests is to get the address of the INGRESS_HOST and INGRESS_PORT, and then make requests to this URL by setting the <code class="docutils literal notranslate"><span class="pre">Host</span></code> header on all requests to your targeted service.
+This use case may be needed if your cluster doesn’t have a load-balancer and/or DNS enabled.</p>
+<p>Once you can communicate with your service, you can make requests to the Inference Server using REST (e.g. with the Python API).
+The request will be routed to the server and the response will be returned.</p>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>Before building the production container, make sure you have all the xclbins for the FPGAs platforms you’re targeting in <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/</span></code>.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren’t searched).</p>
+</dd>
+</dl>
+</div>
+</div>
 
 
            </div>
@@ -480,6 +576,15 @@
 
 
 	  <!-- Sphinx Page Footer block -->
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rest.html" class="btn btn-neutral float-right" title="REST Endpoints" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tracing.html" class="btn btn-neutral float-left" title="Tracing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
