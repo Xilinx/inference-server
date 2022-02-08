@@ -48,6 +48,7 @@
     benchmarking
     metrics
     tracing
+    kserve
 
 .. toctree::
     :maxdepth: 2
