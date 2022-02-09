@@ -38,7 +38,7 @@ author = "Xilinx Inc."
 with open(os.path.abspath("../VERSION")) as f:
     raw_version = f.read().strip()
 
-version = "Main"
+version = "main"
 release = f"v{raw_version}"
 
 # -- General configuration ---------------------------------------------------

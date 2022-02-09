@@ -24,5 +24,20 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 [Unreleased]
 ------------
 
+[0.1.0] - 2022-02-08
+--------------------
+
 Added
 ^^^^^
+
+- Core inference server functionality
+- Batching support
+- Support for running multiple workers simultaneously
+- Support for different batcher and buffer implementations
+- XModel support
+- Logging, metrics and tracing support
+- REST API based on KServe v2 API
+- C++ API
+- Python library for REST
+- Documentation, examples, and some tests
+- Experimental GUI

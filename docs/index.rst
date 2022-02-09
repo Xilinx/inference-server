@@ -72,6 +72,7 @@
     :hidden:
     :caption: About
 
+    roadmap
     changelog
     dependencies
 
