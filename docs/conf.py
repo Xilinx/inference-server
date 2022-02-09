@@ -59,6 +59,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
+    "sphinx_issues",
 ]
 
 # Breathe configuration
@@ -87,6 +88,9 @@ extlinks = {
         None,
     ),
 }
+
+# sphinx-issues configuration
+issues_default_group_project = "Xilinx/inference-server"
 
 # strip leading $ from bash code blocks
 copybutton_prompt_text = "$ "

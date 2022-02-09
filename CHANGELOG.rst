@@ -21,10 +21,16 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`__,
 and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`__.
 
-[Unreleased]
-------------
+Unreleased
+----------
 
-[0.1.0] - 2022-02-08
+Fixed
+^^^^^
+
+- Get the right request size in the batcher when enqueuing with the C++ API (:commit:`d1ad81d`)
+- Construct responses correctly in the XModel worker if there are multiple input buffers (:commit:`d1ad81d`)
+
+`0.1.0 <https://github.com/Xilinx/inference-server/releases/tag/v0.1.0>`__ - 2022-02-08
 --------------------
 
 Added
