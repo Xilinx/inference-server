@@ -267,7 +267,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromInput(
       auto buffers = input_buffers[buffer_index];
       for (size_t i = 0; i < buffers.size(); i++) {
         auto &buffer = buffers[i];
-        auto &offset = input_offsets[i];
+        auto &offset = input_offsets[buffer_index];
 
         request->inputs_.push_back(std::move(
           InferenceRequestInputBuilder::fromInput(input, buffer, offset)));
@@ -280,7 +280,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromInput(
     if (batch_offset == batch_size) {
       batch_offset = 0;
       buffer_index++;
-      std::fill(input_offsets.begin(), input_offsets.end(), 0);
+      // std::fill(input_offsets.begin(), input_offsets.end(), 0);
     }
   }
 
@@ -294,7 +294,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromInput(
         auto buffers = output_buffers[buffer_index];
         for (size_t i = 0; i < buffers.size(); i++) {
           auto &buffer = buffers[i];
-          auto &offset = output_offsets[i];
+          auto &offset = output_offsets[buffer_index];
 
           request->outputs_.emplace_back(output);
           request->outputs_.back().setData(
@@ -317,7 +317,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromInput(
         auto buffers = output_buffers[buffer_index];
         for (size_t j = 0; j < buffers.size(); j++) {
           auto &buffer = buffers[j];
-          const auto &offset = output_offsets[j];
+          const auto &offset = output_offsets[buffer_index];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
@@ -334,49 +334,6 @@ InferenceRequestPtr InferenceRequestBuilder::fromInput(
       }
     }
   }
-
-  // try {
-  //   auto buffers = input_buffers[buffer_index];
-  //   for (size_t i = 0; i < buffers.size(); i++) {
-  //     auto &buffer = buffers[i];
-  //     auto &offset = input_offsets[i];
-
-  //     request->inputs_.push_back(std::move(InferenceRequestInputBuilder::fromInput(req,
-  //     buffer, offset))); offset += request->inputs_.back().getSize();
-  //   }
-  // } catch (const std::invalid_argument &e) {
-  //   throw;
-  // }
-
-  // try {
-  //   auto buffers = output_buffers[buffer_index];
-  //   for (size_t i = 0; i < buffers.size(); i++) {
-  //     auto &buffer = buffers[i];
-  //     const auto &offset = output_offsets[i];
-
-  //     request->outputs_.emplace_back();
-  //     request->outputs_.back().setData(static_cast<std::byte
-  //     *>(buffer->data()) +
-  //                                   offset);
-  //     // TODO(varunsh): output_offset is currently ignored! The size of the
-  //     // output needs to come from the worker but we have no such
-  //     information.
-  //   }
-  // } catch (const std::invalid_argument &e) {
-  //   throw;
-  // }
-
-  // batch_offset++;
-  // // FIXME(varunsh): this was intended to support multiple input tensors but
-  // it
-  // // creates a bug where the batch_offset gets reset to zero too early
-  // (void)batch_size;
-  // // if (batch_offset == batch_size) {
-  // //   batch_offset = 0;
-  // //   buffer_index++;
-  // //   std::fill(input_offsets.begin(), input_offsets.end(), 0);
-  // //   std::fill(output_offsets.begin(), output_offsets.end(), 0);
-  // // }
 
   return request;
 }
@@ -423,7 +380,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromJson(
       auto &buffers = input_buffers[buffer_index];
       for (size_t j = 0; j < buffers.size(); j++) {
         auto &buffer = buffers[j];
-        auto &offset = input_offsets[j];
+        auto &offset = input_offsets[buffer_index];
 
         auto input = InferenceRequestInputBuilder::fromJson(
           std::make_shared<Json::Value>(i), buffer, offset);
@@ -438,7 +395,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromJson(
     if (batch_offset == batch_size) {
       batch_offset = 0;
       buffer_index++;
-      std::fill(input_offsets.begin(), input_offsets.end(), 0);
+      // std::fill(input_offsets.begin(), input_offsets.end(), 0);
     }
   }
 
@@ -453,7 +410,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromJson(
         auto buffers = output_buffers[buffer_index];
         for (size_t j = 0; j < buffers.size(); j++) {
           auto &buffer = buffers[j];
-          auto &offset = output_offsets[j];
+          auto &offset = output_offsets[buffer_index];
 
           auto output = InferenceRequestOutputBuilder::fromJson(
             std::make_shared<Json::Value>(i));
@@ -472,7 +429,7 @@ InferenceRequestPtr InferenceRequestBuilder::fromJson(
         auto buffers = output_buffers[buffer_index];
         for (size_t j = 0; j < buffers.size(); j++) {
           auto &buffer = buffers[j];
-          const auto &offset = output_offsets[j];
+          const auto &offset = output_offsets[buffer_index];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(

@@ -170,7 +170,7 @@ int main() {
   std::string root = root_env;
 
   // +user variables: update as needed!
-  const auto batch_size = 4;
+  const auto request_num = 8;
   const auto* path_to_xmodel =
     "${AKS_XMODEL_ROOT}/artifacts/u200_u250/resnet_v1_50_tf/"
     "resnet_v1_50_tf.xmodel";
@@ -192,9 +192,9 @@ int main() {
 
   // +prepare images:
   std::vector<std::string> paths;
-  paths.reserve(batch_size);
+  paths.reserve(request_num);
 
-  for (auto i = 0; i < batch_size; i++) {
+  for (auto i = 0; i < request_num; i++) {
     paths.emplace_back(path_to_image);
   }
 
@@ -206,7 +206,7 @@ int main() {
   std::queue<proteus::InferenceResponseFuture> queue;
 
   proteus::InferenceRequest request;
-  for (auto i = 0; i < batch_size; i++) {
+  for (auto i = 0; i < request_num; i++) {
     request.addInputTensor(static_cast<void*>(images[i].data()), shape,
                            proteus::types::DataType::INT8);
   }

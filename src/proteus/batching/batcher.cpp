@@ -65,7 +65,7 @@ CppNativeApi::CppNativeApi(InferenceRequest request)
   this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
 }
 
-size_t CppNativeApi::getInputSize() { return 1; }
+size_t CppNativeApi::getInputSize() { return this->request_.getInputSize(); }
 
 std::promise<proteus::InferenceResponse> *CppNativeApi::getPromise() {
   return this->promise_.get();

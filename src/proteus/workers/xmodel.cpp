@@ -287,7 +287,6 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       std::vector<InferenceResponse> responses;
       responses.reserve(batch->requests->size());
 
-      int tensor_count = 0;
       for (auto& req : *(batch->requests)) {
         auto& resp = responses.emplace_back();
         resp.setID(req->getID());
@@ -308,18 +307,18 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         }
       }
 
-      // auto output_index = outputsPtr[0]->data().first;
-      // TODO(varunsh): assuming 1 output tensor (per 1 input) and single batch!
-      auto* output_index = (*batch->output_buffers)[0][0]->data();
-
-      tensor_count = 0;
       for (unsigned int k = 0; k < batch->requests->size(); k++) {
         auto req = (*batch->requests)[k];
         auto inputs = req->getInputs();
         auto outputs = req->getOutputs();
         auto& resp = responses[k];
 
+        auto tensor_count = 0U;
+        auto buffer_index = 0;
         for (unsigned int i = 0; i < inputs.size(); i++) {
+          // TODO(varunsh): assuming 1 output tensor (per 1 input)!
+          auto* output_index =
+            (*batch->output_buffers)[buffer_index][0]->data();
           InferenceResponseOutput output;
           auto output_tensors = getRunner()->get_output_tensors();
           auto output_shape =
@@ -352,6 +351,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 
           resp.addOutput(output);
           tensor_count++;
+          if (tensor_count == this->batch_size_) {
+            tensor_count = 0;
+            buffer_index++;
+            // std::fill(input_offsets.begin(), input_offsets.end(), 0);
+          }
         }
 
 #ifdef PROTEUS_ENABLE_TRACING
