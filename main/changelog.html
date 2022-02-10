@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Dependencies" href="dependencies.html" />
-    <link rel="prev" title="Contributing" href="contributing.html" /> 
+    <link rel="prev" title="Roadmap" href="roadmap.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -373,8 +373,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.1.0 - 2022-02-08</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 </ul>
 </li>
@@ -452,15 +457,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="changelog"></span><div class="section" id="id1">
+<h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <div class="section" id="unreleased">
-<h2>[Unreleased]<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
+<h2>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Get the right request size in the batcher when enqueuing with the C++ API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
+<li><p>Construct responses correctly in the XModel worker if there are multiple input buffers (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id2">
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core inference server functionality</p></li>
+<li><p>Batching support</p></li>
+<li><p>Support for running multiple workers simultaneously</p></li>
+<li><p>Support for different batcher and buffer implementations</p></li>
+<li><p>XModel support</p></li>
+<li><p>Logging, metrics and tracing support</p></li>
+<li><p>REST API based on KServe v2 API</p></li>
+<li><p>C++ API</p></li>
+<li><p>Python library for REST</p></li>
+<li><p>Documentation, examples, and some tests</p></li>
+<li><p>Experimental GUI</p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -484,7 +512,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
         <a href="dependencies.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="roadmap.html" class="btn btn-neutral float-left" title="Roadmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
