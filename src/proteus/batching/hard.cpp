@@ -126,6 +126,8 @@ void HardBatcher::run(WorkerInfo* worker) {
           for (const auto& buffer : output_buffer) {
             output_buffers.back().push_back(buffer.get());
           }
+          input_offset.push_back(0);
+          output_offset.push_back(0);
         }
       }
 
