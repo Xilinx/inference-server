@@ -514,6 +514,7 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         autoconf \
         automake \
+        checkinstall \
         curl \
         libtool \
         unzip \
@@ -527,9 +528,10 @@ RUN apt-get update \
     && ./autogen.sh \
     && ./configure \
     && make -j \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -fr /tmp/*
+    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && cd /tmp \
+    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -rf /tmp/*
 
 # install json-c 0.15 for Vitis AI 2.0 libraries (used by VART)
 RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
@@ -717,37 +719,20 @@ RUN ldconfig \
     && cd ${PROTEUS_ROOT} \
     && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS}
 
-FROM proteus_base AS proteus
+FROM proteus_base AS proteus_production_vitis_yes
 
 ARG PROTEUS_ROOT
-ARG COPY_DIR
-ARG UNAME
-WORKDIR /home/${UNAME}
 
-# get all the installed files: the server, workers, C++ headers and dependencies
-COPY --from=proteus_builder_2 ${COPY_DIR} /
-# get the dynamic libraries needed (created by get_dynamic_dependencies.sh)
-# COPY --from=proteus_builder_2 $PROTEUS_ROOT/deps /
 # get AKS kernels
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs/
-# get the static gui files
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
-# get the entrypoint script
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the fpga-util executable
 COPY --from=proteus_dev_final /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
-# get the systemctl executable
-COPY --from=proteus_dev_final /bin/systemctl /bin/systemctl
-# get the gosu executable
-COPY --from=proteus_dev_final /usr/local/bin/gosu /usr/local/bin/
-# get the .bashrc and .env to configure the environment for all shells
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/${UNAME}/
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.env /root/
 
 # we need the xclbins in the image and they must be copied from a path local
-# to the build tree
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/overlaybins/ /opt/xilinx/overlaybins/
+# to the build tree. But we also need this hack so the copy doesn't fail
+# if this directory doesn't exist
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.env $PROTEUS_ROOT/external/overlaybin[s]/ /opt/xilinx/overlaybins/
+
 # get the pre-defined AKS graphs and kernels
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/proteus/aks/graph_zoo/
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/proteus/aks/kernel_zoo/
@@ -759,6 +744,31 @@ ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
 ENV AKS_ROOT="/opt/xilinx/proteus/aks"
 ENV AKS_XMODEL_ROOT="/opt/xilinx/proteus"
 ENV PATH="/opt/xilinx/proteus/bin:${PATH}"
+
+FROM proteus_base AS proteus_production_vitis_no
+
+FROM proteus_production_vitis_${ENABLE_VITIS} AS proteus
+
+ARG PROTEUS_ROOT
+ARG COPY_DIR
+ARG UNAME
+WORKDIR /home/${UNAME}
+
+# get all the installed files: the server, workers, C++ headers and dependencies
+COPY --from=proteus_builder_2 ${COPY_DIR} /
+
+# get the static gui files
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
+# get the entrypoint script
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
+# get the systemctl executable
+COPY --from=proteus_dev_final /bin/systemctl /bin/systemctl
+# get the gosu executable
+COPY --from=proteus_dev_final /usr/local/bin/gosu /usr/local/bin/
+# get the .bashrc and .env to configure the environment for all shells
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/${UNAME}/
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.env /root/
 
 # run any final commands before finishing the production image
 RUN ldconfig
