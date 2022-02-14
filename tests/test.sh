@@ -90,8 +90,10 @@ if [[ $MODE == "python" || $MODE == "all" ]]; then
     source ~/.env
   fi
 
-  if [[ -n "$LOAD" ]]; then
-    fpga-util load-all
+  if [[ -n "$LOAD" ]] ; then
+    if command -v fpga-util &> /dev/null; then
+      fpga-util load-all
+    fi
   fi
 
   cd "$python_tests_path"

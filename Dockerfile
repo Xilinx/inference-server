@@ -12,21 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG NIGHTLY=stable
 ARG PROTEUS_ROOT=/workspace/proteus
 ARG BASE_IMAGE=ubuntu:18.04
 ARG COPY_DIR=/root/deps
 ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
+ARG UNAME=proteus-user
+
+ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
+ARG VITIS_BUILD=${VITIS_BUILD:-stable}
 
 FROM ${BASE_IMAGE} AS proteus_base
-
-ARG UNAME=proteus-user
+ARG UNAME
 ARG GNAME=proteus
 ARG UID=1000
 ARG GID=1000
 ARG PROTEUS_ROOT
 
+ARG ENABLE_VITIS
+ARG VITIS_BUILD
+
 LABEL project="proteus"
+LABEL vitis=${ENABLE_VITIS}
+LABEL vitis_build=${VITIS_BUILD}
 
 ENV TZ=America/Los_Angeles
 ENV LANG=en_US.UTF-8
@@ -34,8 +41,6 @@ ENV LANG=en_US.UTF-8
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         locales \
-        # used to detect if ports are in use for XRM
-        net-tools \
         sudo \
         tzdata \
     # clean up
@@ -59,10 +64,14 @@ ENV PROTEUS_ROOT=$PROTEUS_ROOT
 
 FROM proteus_base AS dev_base
 
+ARG TARGETPLATFORM
+SHELL ["/bin/bash", "-c"]
+
 # install a newer compiler for all development images
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         gcc \
+        make \
         # add the add-apt-repository command
         software-properties-common \
         # used to get packages
@@ -81,6 +90,20 @@ RUN apt-get update \
     && apt-get -y purge --auto-remove software-properties-common \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
+
+# install Cmake 3.21.1
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        archive="cmake-3.22.1-linux-x86_64.tar.gz"; \
+    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        archive="cmake-3.22.1-linux-aarch64.tar.gz"; \
+    else false; fi; \
+    url="https://github.com/Kitware/CMake/releases/download/v3.22.1/${archive}" \
+    && cd /tmp/ \
+    && wget --progress=dot:mega ${url} \
+    && tar --strip-components=1 -xzf ${archive} -C /usr/local \
+    # && mkdir -p {COPY_DIR}/usr/local \
+    # && tar --strip-components=1 -xzf ${archive} -C ${COPY_DIR}/usr/local \
+    && rm -rf /tmp/*
 
 FROM dev_base AS builder
 ARG COPY_DIR
@@ -133,21 +156,14 @@ RUN wget --progress=dot:mega https://github.com/linux-test-project/lcov/releases
     && dpkg -L lcov | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
-# install Cmake 3.21.1
-RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
-        archive="cmake-3.22.1-linux-x86_64.tar.gz"; \
-    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
-        archive="cmake-3.22.1-linux-aarch64.tar.gz"; \
-    else false; fi; \
-    url="https://github.com/Kitware/CMake/releases/download/v3.22.1/${archive}" \
-    && wget --progress=dot:mega ${url} \
-    && tar --strip-components=1 -xzf ${archive} -C /usr/local \
-    && mkdir -p {COPY_DIR}/usr/local \
-    && tar --strip-components=1 -xzf ${archive} -C ${COPY_DIR}/usr/local \
-    && rm -rf /tmp/*
-
 # install NodeJS 14.16.0 for web gui development
-RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        xz-utils \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         archive="node-v14.16.0-linux-x64.tar.xz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
         archive="node-v14.16.0-linux-arm64.tar.xz"; \
@@ -172,9 +188,9 @@ RUN wget --progress=dot:mega https://github.com/cameron314/concurrentqueue/archi
     && tar -xzf v1.0.3.tar.gz \
     && cd concurrentqueue-1.0.3 \
     && cmake . \
-    && checkinstall -y --pkgname concurrentqueue --pkgversion 1.0.3 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L concurrentqueue | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # install drogon 1.3.0 for a http server
@@ -204,9 +220,9 @@ RUN apt-get update \
         -DBUILD_DROGON_SHARED=ON \
         -DBUILD_CTL=OFF \
     && make -j \
-    && checkinstall -y --pkgname drogon --pkgversion 1.3.0 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L drogon | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # install libb64 2.0.0.1. The default version in apt adds linebreaks when encoding
@@ -224,9 +240,9 @@ RUN wget --progress=dot:mega https://github.com/google/googletest/archive/refs/t
     && cd googletest-release-1.11.0 \
     && mkdir -p build && cd build \
     && cmake .. \
-    && checkinstall -y --pkgname gtest --pkgversion 1.11.0 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L gtest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # install FFmpeg 3.4.8 for opencv
@@ -236,7 +252,7 @@ RUN apt-get update \
     && wget --progress=dot:mega https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.gz \
     && tar -xzf n3.4.8.tar.gz \
     && cd FFmpeg-n3.4.8 \
-    && ./configure --disable-static --enable-shared \
+    && ./configure --disable-static --enable-shared --disable-doc \
     && make -j \
     && checkinstall -y --pkgname ffmpeg --pkgversion 3.4.8 --pkgrelease 1 make install \
     && cd /tmp \
@@ -255,32 +271,10 @@ RUN apt-get update \
     && cd build \
     && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=OFF -DBUILD_PERF_TESTS=OFF -DWITH_FFMPEG=ON .. \
     && make -j \
-    && checkinstall -y --pkgname opencv --pkgversion 3.4.3 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L opencv | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
-
-# install protobuf 3.4.0 - dependency on pre-built target-factory, VART and XIR
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        autoconf \
-        automake \
-        curl \
-        libtool \
-        unzip \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && VERSION=3.4.0 \
-    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
-    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
-    && cd protobuf-${VERSION} \
-    && ./autogen.sh \
-    && ./configure \
-    && make -j \
-    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
-    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -fr /tmp/*
 
 # install spdlog 1.8.2
 RUN wget --progress=dot:mega https://github.com/gabime/spdlog/archive/refs/tags/v1.8.2.tar.gz \
@@ -289,9 +283,9 @@ RUN wget --progress=dot:mega https://github.com/gabime/spdlog/archive/refs/tags/
     && mkdir -p build && cd build \
     && cmake .. \
     && make -j \
-    && checkinstall -y --pkgname spdlog --pkgversion 1.8.2 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L spdlog | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # install prometheus-cpp 0.12.2 for metrics
@@ -306,9 +300,9 @@ RUN wget --progress=dot:mega https://github.com/jupp0r/prometheus-cpp/archive/re
         -DBUILD_SHARED_LIBS=ON \
         -DUSE_THIRDPARTY_LIBRARIES=OFF \
     && make -j \
-    && checkinstall -y --pkgname prometheus-cpp --pkgversion 0.12.2 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L prometheus-cpp | xargs -i bash -c "if [ -f {} ]; then cp --parents -P -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # get Nlohmann JSON for building opentelemetry
@@ -319,7 +313,7 @@ RUN wget --progress=dot:mega https://github.com/nlohmann/json/archive/refs/tags/
     && cmake .. \
         -DBUILD_TESTING=OFF \
     && make -j \
-    && checkinstall -y --pkgname nlohmann-json --pkgversion 3.7.3 --pkgrelease 1 make install \
+    && make install \
     && rm -rf /tmp/*
 
 # install Apache Thrift 0.12.0 for running the jaeger exporter in opentelemetry
@@ -346,7 +340,7 @@ RUN apt-get update \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=OFF \
     && make -j \
-    && checkinstall -y --pkgname thrift --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && make install \
     # && cd /tmp \
     # && dpkg -L thrift | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
@@ -369,9 +363,9 @@ RUN apt-get update \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=ON \
     && make -j \
-    && checkinstall -y --pkgname opentelemetry --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L opentelemetry | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -rf /tmp/*
 
 # install wrk for http benchmarking
@@ -398,32 +392,15 @@ RUN apt-get update \
     && cd build \
     && cmake -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10 .. \
     && make -j \
-    && checkinstall -y --pkgname iwyu --pkgversion 0.14.0 --pkgrelease 1 make install \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L iwyu | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -fr /tmp/*
-
-# install json-c 0.15 for Vitis AI 2.0 libraries (used by VART)
-RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
-    && tar -xzf json-c-0.15-20200726.tar.gz \
-    && cd json-c-json-c-0.15-20200726 \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-        -DBUILD_SHARED_LIBS=ON \
-        -DBUILD_STATIC_LIBS=OFF \
-        -DBUILD_TESTING=OFF \
-        -DCMAKE_BUILD_TYPE=Release \
-    && make -j \
-    && checkinstall -y --pkgname json-c --pkgversion 0.15.0 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L json-c | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && rm -fr /tmp/*
 
 # Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
 # Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
-RUN cp -r ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
-    && rm -rf ${COPY_DIR}/usr/local/man/
+# RUN cp -rf ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
+#     && rm -rf ${COPY_DIR}/usr/local/man/
 
 # install doxygen 1.9.2
 # RUN cd /tmp && wget --progress=dot:mega https://github.com/doxygen/doxygen/archive/refs/tags/Release_1_9_2.tar.gz \
@@ -433,9 +410,9 @@ RUN cp -r ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
 #     && cd build \
 #     && cmake ..
 #     && make -j \
-#     && checkinstall -y --pkgname doxygen --pkgversion 1.9.2 --pkgrelease 1 make install \
+#     && make install \
+#     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
 #     && cd /tmp \
-#     && dpkg -L doxygen | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
 #     && rm -fr /tmp/*
 
 FROM dev_base AS proteus_dev
@@ -479,11 +456,6 @@ RUN apt-get update \
         libc-ares-dev \
         libssl-dev \
         uuid-dev \
-        # used by librt-engine.so. Technically, only libjson-c3 is needed at runtime
-        # but the dev package is needed to build rt-engine
-        libjson-c-dev \
-        # used by libunilog as a fallback to find glog
-        pkg-config \
     # symlink the versioned clang-*-10 executables to clang-*
     && ln -s /usr/bin/clang-format-10 /usr/bin/clang-format \
     && ln -s /usr/bin/clang-tidy-10 /usr/bin/clang-tidy \
@@ -528,6 +500,73 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+FROM proteus_dev as proteus_install_vitis_no
+
+FROM dev_base as proteus_install_vitis_builder
+
+WORKDIR /tmp/
+ARG COPY_DIR
+
+RUN mkdir -p ${COPY_DIR}
+
+# install protobuf 3.4.0 - dependency on pre-built target-factory, VART and XIR
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        autoconf \
+        automake \
+        curl \
+        libtool \
+        unzip \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && VERSION=3.4.0 \
+    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
+    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
+    && cd protobuf-${VERSION} \
+    && ./autogen.sh \
+    && ./configure \
+    && make -j \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -fr /tmp/*
+
+# install json-c 0.15 for Vitis AI 2.0 libraries (used by VART)
+RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
+    && tar -xzf json-c-0.15-20200726.tar.gz \
+    && cd json-c-json-c-0.15-20200726 \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_STATIC_LIBS=OFF \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_BUILD_TYPE=Release \
+    && make -j \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cd /tmp \
+    && rm -fr /tmp/*
+
+FROM proteus_dev as proteus_install_vitis
+
+ARG COPY_DIR
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        # used by librt-engine.so. Technically, only libjson-c3 is needed at runtime
+        # but the dev package is needed to build rt-engine
+        libjson-c-dev \
+        # used to detect if ports are in use for XRM
+        net-tools \
+        # used by libunilog as a fallback to find glog
+        pkg-config \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=proteus_install_vitis_builder ${COPY_DIR} /
+
 # Install XRT and XRM
 RUN apt-get update \
     && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
@@ -544,7 +583,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-FROM proteus_dev as proteus_dev_vitis_nightly
+FROM proteus_install_vitis as proteus_install_vitis_yes_nightly
 ARG CACHEBUST=1
 
 RUN mkdir -p /etc/apt/sources.list.d \
@@ -566,7 +605,7 @@ RUN mkdir -p /etc/apt/sources.list.d \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-FROM proteus_dev as proteus_dev_vitis_stable
+FROM proteus_install_vitis as proteus_install_vitis_yes_stable
 
 RUN apt-get update \
     && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
@@ -586,10 +625,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
 
-FROM proteus_dev_vitis_${NIGHTLY} as proteus_builder
+FROM proteus_install_vitis_yes_${VITIS_BUILD} as proteus_install_vitis_yes
+
+FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_builder
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT
+ARG ENABLE_VITIS
+SHELL ["/bin/bash", "-c"]
 
 # pyinstaller 4.6 has a bug https://github.com/pyinstaller/pyinstaller/issues/6331
 RUN pip install --no-cache-dir "pyinstaller!=4.6" \
@@ -598,33 +641,38 @@ RUN pip install --no-cache-dir "pyinstaller!=4.6" \
     && tar -xzf v1.5.4505.tar.gz \
     && cd docker-systemctl-replacement-1.5.4505 \
     && pyinstaller files/docker/systemctl3.py --onefile \
-    && cp dist/systemctl3 /bin/systemctl \
-    && chmod a+x /bin/systemctl \
+    && chmod a+x dist/systemctl3 \
+    && mkdir -p ${COPY_DIR}/bin/  \
+    && cp dist/systemctl3 ${COPY_DIR}/bin/systemctl \
     && rm -fr /tmp/*
 
-COPY --from=builder ${COPY_DIR} /
+# COPY --from=builder ${COPY_DIR} /
 COPY . $PROTEUS_ROOT
 
-RUN \
-    # make binary for custom script to get FPGAs
-    pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
-    && cp dist/fpga_util /usr/local/bin/fpga-util \
-    && chmod a+x /usr/local/bin/fpga-util \
+RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
+        # make binary for custom script to get FPGAs
+        pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
+        && chmod a+x dist/fpga_util \
+        && mkdir -p ${COPY_DIR}/usr/local/bin/ \
+        && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
+    fi; \
     # create package for the Proteus python library
-    && cd ${PROTEUS_ROOT}/src/python \
+    cd ${PROTEUS_ROOT}/src/python \
     && python3 setup.py bdist_wheel
 
-FROM proteus_dev_vitis_${NIGHTLY} as proteus_dev_vitis
+FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_dev_final
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT
+ARG UNAME
 
 COPY --from=builder ${COPY_DIR} /
+COPY --from=proteus_builder ${COPY_DIR} /
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* /home/proteus-user/
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/proteus-user/
-COPY --from=proteus_builder /usr/local/bin/fpga-util /usr/local/bin/fpga-util
-COPY --from=proteus_builder /bin/systemctl /bin/systemctl
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* /home/${UNAME}/
+COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/${UNAME}/
+# COPY --from=proteus_builder /usr/local/bin/fpga-util /usr/local/bin/fpga-util
+# COPY --from=proteus_builder /bin/systemctl /bin/systemctl
 COPY --from=proteus_builder ${PROTEUS_ROOT}/src/python/dist/*.whl /tmp/
 
 # run any final commands before finishing the dev image
@@ -638,18 +686,19 @@ RUN git lfs install \
 ENTRYPOINT [ "/root/entrypoint.sh", "user"]
 CMD [ "/bin/bash" ]
 
-FROM proteus_dev_vitis_${NIGHTLY} as proteus_builder_2
+FROM proteus_dev_final as proteus_builder_2
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT
+ARG ENABLE_VITIS
 
-COPY --from=builder ${COPY_DIR} /
+# COPY --from=builder ${COPY_DIR} /
 # get the systemctl executable
-COPY --from=proteus_builder /bin/systemctl /bin/systemctl
+# COPY --from=proteus_builder /bin/systemctl /bin/systemctl
 COPY . $PROTEUS_ROOT
 
 RUN ldconfig \
-    && mkdir ${COPY_DIR} \
+    && mkdir -p ${COPY_DIR} \
     # install libproteus.so
     && cd ${PROTEUS_ROOT} \
     && ./proteus install --all \
@@ -666,41 +715,39 @@ RUN ldconfig \
     && rm -rf /var/lib/apt/lists/* \
     # create a copy of all the dynamic libraries needed by the server and workers
     && cd ${PROTEUS_ROOT} \
-    && ./docker/get_dynamic_dependencies.sh --copy \
-        /usr/local/bin/proteus-server \
-        /usr/local/lib/proteus/* \
-        ./external/aks/libs/*
+    && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS}
 
 FROM proteus_base AS proteus
 
 ARG PROTEUS_ROOT
 ARG COPY_DIR
-WORKDIR /home/proteus-user
+ARG UNAME
+WORKDIR /home/${UNAME}
 
-# get all the installed files: the server, workers, and C++ headers
+# get all the installed files: the server, workers, C++ headers and dependencies
 COPY --from=proteus_builder_2 ${COPY_DIR} /
 # get the dynamic libraries needed (created by get_dynamic_dependencies.sh)
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/deps /
+# COPY --from=proteus_builder_2 $PROTEUS_ROOT/deps /
 # get AKS kernels
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs/
 # get the static gui files
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
 # get the entrypoint script
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the fpga-util executable
-COPY --from=proteus_builder /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
+COPY --from=proteus_dev_final /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
 # get the systemctl executable
-COPY --from=proteus_builder /bin/systemctl /bin/systemctl
+COPY --from=proteus_dev_final /bin/systemctl /bin/systemctl
 # get the gosu executable
-COPY --from=proteus_builder /usr/local/bin/gosu /usr/local/bin/
+COPY --from=proteus_dev_final /usr/local/bin/gosu /usr/local/bin/
 # get the .bashrc and .env to configure the environment for all shells
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/proteus-user/
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
-COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /root/
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/${UNAME}/
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.env /root/
 
 # we need the xclbins in the image and they must be copied from a path local
 # to the build tree
-COPY --from=proteus_builder $PROTEUS_ROOT/external/overlaybins/ /opt/xilinx/overlaybins/
+COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/overlaybins/ /opt/xilinx/overlaybins/
 # get the pre-defined AKS graphs and kernels
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/proteus/aks/graph_zoo/
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/proteus/aks/kernel_zoo/

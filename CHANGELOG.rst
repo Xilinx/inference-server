@@ -29,6 +29,7 @@ Fixed
 
 - Get the right request size in the batcher when enqueuing with the C++ API (:commit:`d1ad81d`)
 - Construct responses correctly in the XModel worker if there are multiple input buffers (:commit:`d1ad81d`)
+- Populate the right number of offsets in the hard batcher (:commit:`6666142`)
 
 `0.1.0 <https://github.com/Xilinx/inference-server/releases/tag/v0.1.0>`__ - 2022-02-08
 --------------------

@@ -47,7 +47,7 @@ get_dependencies() {
   done
 }
 
-add_vitis_libs() {
+add_vitis_deps() {
   # some vitis libraries are found in .xmodels or are otherwise not linked to.
   # As such, we don't find them in get_dependencies. We add them here manually
 
@@ -65,11 +65,8 @@ add_vitis_libs() {
     lib_path=$(dpkg -L $lib | grep -F .so)
     echo "$lib_path" >> $DEPS_FILE
   done
-}
 
-add_other_deps() {
   # we need xrm in the production container. Manually copy over the needed files
-
   other_files=(
     /etc/systemd/system/xrmd.service
     /opt/xilinx/xrt/version.json
@@ -78,13 +75,23 @@ add_other_deps() {
   for file in ${other_files[@]}; do
     echo "$file" >> $DEPS_FILE
   done
+
+  # any other binary dependencies needed
+  other_files=(
+    /opt/xilinx/xrm/bin/xrmd
+    /bin/netstat
+  )
+
+  for bin in ${other_files[@]}; do
+    get_dependencies $bin
+    echo "$bin" >> $DEPS_FILE
+  done
 }
 
 add_other_bins() {
   # any other binary dependencies needed
 
   other_files=(
-    /opt/xilinx/xrm/bin/xrmd
     /bin/systemctl
   )
 
@@ -100,8 +107,7 @@ remove_duplicates() {
 }
 
 copy_files() {
-  rm -f deps
-  cat $UNIQUE_DEPS_FILE | xargs -I % sh -c 'mkdir -p $(dirname deps%); cp -P % deps%;'
+  cat $UNIQUE_DEPS_FILE | xargs -I{} bash -c "if [ -f {} ]; then cp --parents -P {} $1; fi"
 }
 
 parse_path() {
@@ -121,9 +127,9 @@ parse_path() {
 }
 
 COPY=""
+VITIS=""
 
 # Parse Options
-arg_counter=0
 while true; do
   if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     usage;
@@ -133,7 +139,8 @@ while true; do
     break;
   fi
   case "$1" in
-    "-c" | "--copy" )   COPY=1    ; shift 1; arg_counter=$((arg_counter+1))   ;;
+    "-c" | "--copy" ) COPY=$2 ; shift 2 ;;
+    "--vitis"       ) VITIS=$2; shift 2 ;;
     *) break;;
   esac
 done
@@ -141,20 +148,28 @@ done
 # overwrite the file
 echo -n > $DEPS_FILE
 
-rest_args=("${ALL_ARGS[@]:${arg_counter}}")
+# rest_args=("${ALL_ARGS[@]:${arg_counter}}")
 
-for path in "${rest_args[@]}"; do
+paths=("/usr/local/bin/proteus-server" "/usr/local/lib/proteus/*")
+
+if [[ $VITIS == "yes" ]]; then
+  paths+=("./external/aks/libs/*")
+fi
+
+for path in "${paths[@]}"; do
   parse_path $path
 done
 
-add_vitis_libs
-add_other_deps
+if [[ $VITIS == "yes" ]]; then
+  add_vitis_deps
+fi
+
 add_other_bins
 
 remove_duplicates
 
 if [[ ! -z $COPY ]]; then
-  copy_files
+  copy_files $COPY
 else
   cat $UNIQUE_DEPS_FILE
   rm $UNIQUE_DEPS_FILE

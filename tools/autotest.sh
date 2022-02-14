@@ -95,13 +95,13 @@ print_header "Testing the stable production docker image"
 print_header "Building the nightly dev docker image"
 
 # use the --dry-run flag to log the "docker build" commands used
-./proteus --dry-run dockerize --nightly
-./proteus dockerize --nightly
+./proteus --dry-run dockerize --vitis-nightly
+./proteus dockerize --vitis-nightly
 
 print_header "Building the nightly production docker image"
 
-./proteus --dry-run dockerize --production --nightly
-./proteus dockerize --production --nightly
+./proteus --dry-run dockerize --production --vitis-nightly
+./proteus dockerize --production --vitis-nightly
 
 # These commands add <user>/proteus-dev:<proteus-version>.nightly and
 # <user>/proteus:<proteus-version>.nightly to the local machine. Append

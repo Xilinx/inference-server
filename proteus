@@ -125,6 +125,14 @@ def run_command(command: str, dry_run: bool, exit_on_error=True):
             return error.returncode
 
 
+def run_shell_command(command: str, dry_run: bool):
+    if dry_run:
+        print(command)
+        return
+
+    subprocess.call(command, shell=True)
+
+
 class WriteComposeFile:
     @staticmethod
     def get_devices():
@@ -604,22 +612,16 @@ class Dockerize:
             target = "proteus"
         else:
             tag_prefix += f"/proteus-dev"
-            target = "proteus_dev_vitis"
+            target = "proteus_dev_final"
 
         latest_tag = f"{tag_prefix}:latest"
 
-        version = get_version()
-        if args.nightly:
-            build_args = f"--build-arg NIGHTLY=nightly --build-arg CACHEBUST={str(int(time.time()))}"
-            if "-" in version:
-                version += ".nightly"
-            else:
-                version += "-nightly"
+        build_args = ""
+        if not args.vitis:
+            build_args += f"--build-arg ENABLE_VITIS=no"
         else:
-            build_args = ""
-
-        if args.build_meta:
-            version += "." + args.build_meta
+            if args.vitis_nightly:
+                build_args = f"--build-arg VITIS_BUILD=nightly --build-arg CACHEBUST={str(int(time.time()))}"
 
         try:
             git_branch = (
@@ -644,6 +646,7 @@ class Dockerize:
 
         labels = f"--label git-branch={git_branch} --label git-commit={git_commit}"
 
+        version = get_version()
         command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} ."
         run_command(command, args.dry_run)
 
@@ -670,9 +673,15 @@ class Dockerize:
             "-h", "--help", action="help", help="show this help message and exit"
         )
         command_group.add_argument(
-            "--nightly",
+            "--no-vitis",
+            dest="vitis",
+            action="store_false",
+            help="Remove Vitis dependencies from the container",
+        )
+        command_group.add_argument(
+            "--vitis-nightly",
             action="store_true",
-            help=f"Build a nightly tagged image. Defaults to false",
+            help=f"Build Vitis with nightly dependencies. Defaults to false",
         )
         command_group.add_argument(
             "--production",
@@ -854,15 +863,23 @@ class Install:
 class List:
     @staticmethod
     def parse(args, unknown_args):
-        if args.images:
+        if args.type == "images":
             command = 'docker image list -f reference=*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
+        elif args.type == "labels":
+            command = 'docker image list -f reference=*/*proteus* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
         else:
             command = 'docker ps --filter "label=project=proteus" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
 
-        if unknown_args:
-            command += " ".join(unknown_args)
+        if args.type == "labels":
+            if shutil.which("jq") is not None:
+                run_shell_command(command, args.dry_run)
+            else:
+                print("Install jq to use this command")
+        else:
+            if unknown_args:
+                command += " ".join(unknown_args)
 
-        run_command(command, args.dry_run)
+            run_command(command, args.dry_run)
 
     @classmethod
     def add(cls, parser):
@@ -872,7 +889,13 @@ class List:
             add_help=False,
         )
 
-        subparser.add_argument("images", nargs="?", action="store", default=False)
+        subparser.add_argument(
+            "type",
+            nargs="?",
+            action="store",
+            default=False,
+            help="List the active containers (default) or specify 'images' or 'labels'",
+        )
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument(

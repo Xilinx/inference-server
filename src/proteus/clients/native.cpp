@@ -103,15 +103,14 @@ InferenceResponseFuture enqueue(const std::string& workerName,
 }
 
 std::string getHardware() {
-  auto* env = std::getenv("PROTEUS_ROOT");
-  if (env != nullptr) {
-    auto kernels = exec("fpga-util get-kernels");
-    if (!kernels.empty()) {
-      kernels.pop_back();  // remove trailing newline character
-    }
-    return kernels;
+  std::string hardware;
+#ifdef PROTEUS_ENABLE_VITIS
+  hardware = exec("fpga-util get-kernels");
+  if (!hardware.empty()) {
+    hardware.pop_back();  // remove trailing newline character
   }
-  return "";
+#endif
+  return hardware;
 }
 
 bool hasHardware(const std::string& kernel, size_t num) {
