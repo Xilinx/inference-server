@@ -19,7 +19,6 @@ ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 ARG UNAME=proteus-user
 
 ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
-ARG VITIS_BUILD=${VITIS_BUILD:-stable}
 
 FROM ${BASE_IMAGE} AS proteus_base
 ARG UNAME
@@ -29,11 +28,9 @@ ARG GID=1000
 ARG PROTEUS_ROOT
 
 ARG ENABLE_VITIS
-ARG VITIS_BUILD
 
 LABEL project="proteus"
 LABEL vitis=${ENABLE_VITIS}
-LABEL vitis_build=${VITIS_BUILD}
 
 ENV TZ=America/Los_Angeles
 ENV LANG=en_US.UTF-8
@@ -276,6 +273,30 @@ RUN apt-get update \
     && cd /tmp \
     && rm -rf /tmp/*
 
+# install protobuf 3.19.4 for Vitis AI runtime and gRPC
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        autoconf \
+        automake \
+        checkinstall \
+        curl \
+        libtool \
+        unzip \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && VERSION=3.19.4 \
+    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
+    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
+    && cd protobuf-${VERSION} \
+    && ./autogen.sh \
+    && ./configure \
+    && make -j \
+    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && cd /tmp \
+    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && rm -rf /tmp/*
+
 # install spdlog 1.8.2
 RUN wget --progress=dot:mega https://github.com/gabime/spdlog/archive/refs/tags/v1.8.2.tar.gz \
     && tar -xzf v1.8.2.tar.gz \
@@ -502,38 +523,15 @@ RUN apt-get update \
 
 FROM proteus_dev as proteus_install_vitis_no
 
-FROM dev_base as proteus_install_vitis_builder
+FROM builder as proteus_install_vitis_builder
 
 WORKDIR /tmp/
+SHELL ["/bin/bash", "-c"]
 ARG COPY_DIR
 
 RUN mkdir -p ${COPY_DIR}
 
-# install protobuf 3.4.0 - dependency on pre-built target-factory, VART and XIR
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        autoconf \
-        automake \
-        checkinstall \
-        curl \
-        libtool \
-        unzip \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && VERSION=3.4.0 \
-    && wget --progress=dot:mega https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
-    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
-    && cd protobuf-${VERSION} \
-    && ./autogen.sh \
-    && ./configure \
-    && make -j \
-    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && rm -rf /tmp/*
-
-# install json-c 0.15 for Vitis AI 2.0 libraries (used by VART)
+# install json-c 0.15 for Vitis AI runtime
 RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
     && tar -xzf json-c-0.15-20200726.tar.gz \
     && cd json-c-json-c-0.15-20200726 \
@@ -550,25 +548,6 @@ RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/
     && cd /tmp \
     && rm -fr /tmp/*
 
-FROM proteus_dev as proteus_install_vitis
-
-ARG COPY_DIR
-
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        # used by librt-engine.so. Technically, only libjson-c3 is needed at runtime
-        # but the dev package is needed to build rt-engine
-        libjson-c-dev \
-        # used to detect if ports are in use for XRM
-        net-tools \
-        # used by libunilog as a fallback to find glog
-        pkg-config \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=proteus_install_vitis_builder ${COPY_DIR} /
-
 # Install XRT and XRM
 RUN apt-get update \
     && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
@@ -580,54 +559,104 @@ RUN apt-get update \
             ./xrt.deb \
             ./xrm.deb; \
     fi; \
+    # copy over debians to COPY_DIR so we can install them as debians in
+    # the final image for easy removal later if needed
+    cp ./xrt.deb ${COPY_DIR} \
+    && cp ./xrm.deb ${COPY_DIR} \
     # clean up
-    apt-get clean -y \
+    && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-FROM proteus_install_vitis as proteus_install_vitis_yes_nightly
-ARG CACHEBUST=1
-
-RUN mkdir -p /etc/apt/sources.list.d \
-    # add both in case one is inaccessible
-    && echo "deb [trusted=yes] http://artifactory/artifactory/vitis-ai-deb-master bionic main" >> /etc/apt/sources.list.d/xlnx.list \
-    && echo "deb [trusted=yes] http://xcoartifactory/artifactory/vitis-ai-deb-master bionic main" >> /etc/apt/sources.list.d/xlnx.list \
-    # force true in case update fails due to one repository being inaccessible
-    && apt-get update || true \
+# install Vitis AI runtime build dependencies
+RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        aks \
-        libunilog \
-        librt-engine \
-        libtarget-factory \
-        libvart \
-        libvitis_ai_library \
-        libxir \
-    && rm -rf /etc/apt/sources.list.d/xlnx.list \
+        git \
+        libgoogle-glog-dev \
+        libssl-dev \
+        pkg-config \
+        python3-dev \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && VERSION=2.9.1 \
+    && wget https://github.com/pybind/pybind11/archive/refs/tags/v${VERSION}.tar.gz \
+    && tar -xzf v${VERSION}.tar.gz \
+    && cd pybind11-${VERSION}/ \
+    && mkdir build \
+    && cd build \
+    && cmake -DPYBIND11_TEST=OFF .. \
+    && make -j \
+    && make install \
+    && rm -fr /tmp/*
+
+# Install Vitis AI runtime
+RUN apt-get update \
+    && git clone --recursive --single-branch --branch v2.0 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
+    && export VITIS_ROOT=/tmp/Vitis-AI/tools/Vitis-AI-Runtime/VART \
+    && git clone --single-branch --branch master --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
+    # build unilog
+    cd ${VITIS_ROOT}/unilog \
+    && ./cmake.sh --clean --type=release --build-only --pack=deb --build-dir ./build \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libunilog_2.0.0_amd64.deb \
+    # build xir
+    && cd ${VITIS_ROOT}/xir \
+    && ./cmake.sh --clean --type=release --build-only --pack=deb --build-dir ./build --build-python \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libxir_2.0.0_amd64.deb \
+    # build target-factory
+    && cd ${VITIS_ROOT}/target_factory \
+    && ./cmake.sh --clean --type=release --build-only --pack=deb --build-dir ./build \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libtarget-factory_2.0.0_amd64.deb \
+    # build vart
+    && cd ${VITIS_ROOT}/vart \
+    && ./cmake.sh --clean --type=release --build-only --cmake-options="-DBUILD_TEST=OFF" --build-python --pack=deb --build-dir ./build \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libvart_2.0.0_amd64.deb \
+    # build rt-engine
+    && cd ${VITIS_ROOT}/rt-engine \
+    && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --build-only --pack=deb \
+    # copy over debians to COPY_DIR so we can install them as debians in
+    # the final image for easy removal later if needed
+    && cp ${VITIS_ROOT}/unilog/build/libunilog_2.0.0_amd64.deb ${COPY_DIR} \
+    && cp ${VITIS_ROOT}/xir/build/libxir_2.0.0_amd64.deb ${COPY_DIR} \
+    && cp ${VITIS_ROOT}/target_factory/build/libtarget-factory_2.0.0_amd64.deb ${COPY_DIR} \
+    && cp ${VITIS_ROOT}/vart/build/libvart_2.0.0_amd64.deb ${COPY_DIR} \
+    && cp ${VITIS_ROOT}/rt-engine/build/librt-engine_2.0.0_amd64.deb ${COPY_DIR} \
+    # clean up
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -fr /tmp/*
+
+FROM proteus_dev as proteus_install_vitis_yes
+
+ARG COPY_DIR
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        # used by vitis ai runtime
+        libgoogle-glog-dev \
+        libboost-filesystem1.65.1 \
+        libboost-system1.65.1 \
+        libboost-serialization1.65.1 \
+        libboost-thread1.65.1 \
+        libboost1.65-dev \
+        # used to detect if ports are in use for XRM
+        net-tools \
+        # used by libunilog as a fallback to find glog
+        pkg-config \
     # clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-FROM proteus_install_vitis as proteus_install_vitis_yes_stable
+COPY --from=proteus_install_vitis_builder ${COPY_DIR} /
 
+# install all the Vitis AI runtime libraries built from source as debians
 RUN apt-get update \
-    && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
-        cd /tmp \
-        && wget --progress=dot:mega -O libunilog.deb https://www.xilinx.com/bin/public/openDownload?filename=libunilog_1.4.0-r75_amd64.deb \
-        && wget --progress=dot:mega -O libtarget-factory.deb https://www.xilinx.com/bin/public/openDownload?filename=libtarget-factory_1.4.0-r77_amd64.deb \
-        && wget --progress=dot:mega -O libxir.deb https://www.xilinx.com/bin/public/openDownload?filename=libxir_1.4.0-r80_amd64.deb \
-        && wget --progress=dot:mega -O libvart.deb https://www.xilinx.com/bin/public/openDownload?filename=libvart_1.4.0-r117_amd64.deb \
-        && wget --progress=dot:mega -O libvitis_ai_library.deb https://www.xilinx.com/bin/public/openDownload?filename=libvitis_ai_library_1.4.0-r105_amd64.deb \
-        && wget --progress=dot:mega -O librt-engine.deb https://www.xilinx.com/bin/public/openDownload?filename=librt-engine_1.4.0-r178_amd64.deb \
-        && wget --progress=dot:mega -O aks.deb https://www.xilinx.com/bin/public/openDownload?filename=aks_1.4.0-r73_amd64.deb \
-        && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-            ./*.deb; \
-    fi; \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        /*.deb \
     # clean up
-    apt-get clean -y \
+    && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/*
-
-FROM proteus_install_vitis_yes_${VITIS_BUILD} as proteus_install_vitis_yes
+    && rm /*.deb
 
 FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_builder
 
@@ -652,8 +681,10 @@ RUN pip install --no-cache-dir "pyinstaller!=4.6" \
 COPY . $PROTEUS_ROOT
 
 RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
+        # move AKS for easier copying in final image
+        cp ${PROTEUS_ROOT}/external/aks/reference/aks_2.0.0_proteus_amd64.deb ${COPY_DIR}/aks.deb \
         # make binary for custom script to get FPGAs
-        pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
+        && pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
         && chmod a+x dist/fpga_util \
         && mkdir -p ${COPY_DIR}/usr/local/bin/ \
         && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
@@ -673,8 +704,6 @@ COPY --from=proteus_builder ${COPY_DIR} /
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* /home/${UNAME}/
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/${UNAME}/
-# COPY --from=proteus_builder /usr/local/bin/fpga-util /usr/local/bin/fpga-util
-# COPY --from=proteus_builder /bin/systemctl /bin/systemctl
 COPY --from=proteus_builder ${PROTEUS_ROOT}/src/python/dist/*.whl /tmp/
 
 # run any final commands before finishing the dev image
@@ -683,6 +712,13 @@ RUN git lfs install \
     && proteus_wheel=$(find /tmp/ -name *.whl 2>/dev/null) \
     && pip install "$proteus_wheel" \
     && rm "$proteus_wheel" \
+    # install any debians that may exist at the root. Use true to pass even if
+    # there's nothing to install
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        /*.deb || true \
+    && apt-get clean -y \
+    && rm -f /*.deb \
     && ldconfig
 
 ENTRYPOINT [ "/root/entrypoint.sh", "user"]
@@ -694,9 +730,6 @@ ARG COPY_DIR
 ARG PROTEUS_ROOT
 ARG ENABLE_VITIS
 
-# COPY --from=builder ${COPY_DIR} /
-# get the systemctl executable
-# COPY --from=proteus_builder /bin/systemctl /bin/systemctl
 COPY . $PROTEUS_ROOT
 
 RUN ldconfig \

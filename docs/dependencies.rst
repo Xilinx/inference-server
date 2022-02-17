@@ -136,7 +136,7 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`opencv/opencv`,3.4.4,Apache 2.0,Dynamically linked by proteus-server for image and video processing
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server
     :github:`jupp0r/prometheus-cpp`,0.12.2,MIT,Dynamically linked by proteus-server for metrics
-    :github:`protocolbuffers/protobuf`,3.4.0,BSD-3,Dynamically linked by proteus-server and Vitis libraries
+    :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by proteus-server and Vitis libraries
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking proteus-server
 

@@ -619,9 +619,6 @@ class Dockerize:
         build_args = ""
         if not args.vitis:
             build_args += f"--build-arg ENABLE_VITIS=no"
-        else:
-            if args.vitis_nightly:
-                build_args = f"--build-arg VITIS_BUILD=nightly --build-arg CACHEBUST={str(int(time.time()))}"
 
         try:
             git_branch = (
@@ -677,11 +674,6 @@ class Dockerize:
             dest="vitis",
             action="store_false",
             help="Remove Vitis dependencies from the container",
-        )
-        command_group.add_argument(
-            "--vitis-nightly",
-            action="store_true",
-            help=f"Build Vitis with nightly dependencies. Defaults to false",
         )
         command_group.add_argument(
             "--production",
