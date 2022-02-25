@@ -565,7 +565,7 @@ RUN apt-get update \
         && cp ./xrm.deb ${COPY_DIR}; \
     fi; \
     # clean up
-    && apt-get clean -y \
+    apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
