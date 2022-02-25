@@ -108,6 +108,8 @@ constexpr size_t getSize(DataType type) {
  */
 std::string mapTypeToStr(DataType type);
 
+DataType mapStrToType(const std::string& type);
+
 std::ostream& operator<<(std::ostream& os, const DataType& bar);
 
 #ifdef PROTEUS_ENABLE_VITIS

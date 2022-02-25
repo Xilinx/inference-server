@@ -1,4 +1,4 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2022 Xilinx Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROTEUS_TEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_executable(grpc_server_live server_live.cpp)
 
-add_subdirectory(grpc)
-add_subdirectory(native)
-add_subdirectory(performance)
-add_subdirectory(src/proteus)
-add_subdirectory(unit)
+get_target_property(grpc_include lib_grpc INCLUDE_DIRECTORIES)
+target_include_directories(grpc_server_live PRIVATE ${grpc_include})
+target_link_libraries(grpc_server_live PRIVATE lib_grpc)
 
-# add_executable(test_gtest gtest.cpp ${filenames})
+add_executable(grpc_model_infer model_infer.cpp)
 
-# target_link_libraries(test_gtest PRIVATE gtest proteus ${libraries})
-# target_include_directories(test_gtest PRIVATE ${PROTEUS_INCLUDE_DIRS})
-
-# add_subdirectory(unit)
-
-# include(GoogleTest)
-# gtest_discover_tests(test_gtest)
+target_include_directories(grpc_model_infer PRIVATE ${grpc_include})
+target_link_libraries(grpc_model_infer PRIVATE lib_grpc)

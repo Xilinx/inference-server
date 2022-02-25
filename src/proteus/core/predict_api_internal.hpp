@@ -29,6 +29,8 @@ class Value;
 
 namespace proteus {
 
+class CallDataModelInfer;
+
 /**
  * @brief Convert JSON-styled parameters to Proteus's implementation
  *
@@ -36,29 +38,6 @@ namespace proteus {
  * @return RequestParametersPtr
  */
 RequestParametersPtr addParameters(Json::Value parameters);
-
-class InferenceRequestInputBuilder {
- public:
-  /**
-   * @brief Construct a new InferenceRequestInput object
-   *
-   * @param req the JSON request from the user
-   * @param input_buffer buffer to hold the incoming data
-   * @param offset offset for the buffer to store data at
-   */
-  static InferenceRequestInput fromJson(std::shared_ptr<Json::Value> const &req,
-                                        Buffer *input_buffer, size_t offset);
-
-  /**
-   * @brief Construct a new InferenceRequestInput object
-   *
-   * @param req an existing InferenceRequestInput to copy
-   * @param input_buffer buffer to hold the incoming data
-   * @param offset offset for the buffer to store data at
-   */
-  static InferenceRequestInput fromInput(InferenceRequestInput &req,
-                                         Buffer *input_buffer, size_t offset);
-};
 
 class InferenceRequestOutputBuilder {
  public:
@@ -104,6 +83,27 @@ class InferenceRequestBuilder {
    */
   static InferenceRequestPtr fromJson(
     std::shared_ptr<Json::Value> const &req, size_t &buffer_index,
+    const std::vector<BufferRawPtrs> &input_buffers,
+    std::vector<size_t> &input_offsets,
+    const std::vector<BufferRawPtrs> &output_buffers,
+    std::vector<size_t> &output_offsets, const size_t &batch_size,
+    size_t &batch_offset);
+
+  /**
+   * @brief Construct a new InferenceRequest object
+   *
+   * @param req one inference request object
+   * @param buffer_index current buffer index to start with for the buffers
+   * @param input_buffers a vector of input buffers to store the inputs data
+   * @param input_offsets a vector of offsets for the input buffers to store
+   * data
+   * @param output_buffers a vector of output buffers
+   * @param output_offsets a vector of offsets for the output buffers
+   * @param batch_size batch size to use when creating the request
+   * @param batch_offset current batch offset to start with
+   */
+  static InferenceRequestPtr fromGrpc(
+    CallDataModelInfer *calldata, size_t &buffer_index,
     const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
     const std::vector<BufferRawPtrs> &output_buffers,

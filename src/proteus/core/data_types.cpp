@@ -168,6 +168,48 @@ std::string mapTypeToStr(DataType type) {
   }
 }
 
+// TODO(varunsh): fix long if-else tree
+DataType mapStrToType(const std::string& type) {
+  if (type == "BOOL") {
+    return DataType::BOOL;
+  }
+  if (type == "UINT8") {
+    return DataType::UINT8;
+  }
+  if (type == "UINT16") {
+    return DataType::UINT16;
+  }
+  if (type == "UINT32") {
+    return DataType::UINT32;
+  }
+  if (type == "UINT64") {
+    return DataType::UINT64;
+  }
+  if (type == "INT8") {
+    return DataType::INT8;
+  }
+  if (type == "INT16") {
+    return DataType::INT16;
+  }
+  if (type == "INT32") {
+    return DataType::INT32;
+  }
+  if (type == "INT64") {
+    return DataType::INT64;
+  }
+  if (type == "FP16") {
+    return DataType::FP16;
+  }
+  if (type == "FP32") {
+    return DataType::FP32;
+  }
+  if (type == "FP64") {
+    return DataType::FP64;
+  } else {
+    return DataType::STRING;
+  }
+}
+
 std::ostream& operator<<(std::ostream& os, const DataType& bar) {
   return os << mapTypeToStr(bar);
 }

@@ -109,15 +109,20 @@ def run_tty_command(command: str, dry_run: bool):
         sys.exit(exit_code)
 
 
-def run_command(command: str, dry_run: bool, exit_on_error=True):
+def run_command(command: str, dry_run: bool, exit_on_error=True, quiet=False):
     if dry_run:
         print(command)
         return
 
     try:
-        subprocess.check_call(
-            shlex.split(command), stdout=sys.stdout, stderr=subprocess.STDOUT
-        )
+        if quiet:
+            subprocess.check_call(
+                shlex.split(command), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+        else:
+            subprocess.check_call(
+                shlex.split(command), stdout=sys.stdout, stderr=subprocess.STDOUT
+            )
     except subprocess.CalledProcessError as error:
         if exit_on_error:
             sys.exit(error.returncode)
@@ -397,6 +402,8 @@ class Build:
         shared_libs = " ".join(glob.glob(f"{str(build_dir)}/src/proteus/workers/*.so"))
         command = f"cp -fs {shared_libs} {path}/"
         run_command(command, args.dry_run)
+        command = f"symlinks -rc {path}"
+        run_command(command, args.dry_run, quiet=True)
         if not args.dry_run:
             print("")
             print("======================")

@@ -35,7 +35,7 @@ foreach( worker ${workers})
 
     add_library(${worker_name} SHARED ${file_name}.cpp)
     target_link_options(${worker_name} PUBLIC "LINKER:-E")
-    target_link_libraries(${worker_name} PRIVATE batching buffers core)
+    target_link_libraries(${worker_name} PRIVATE batching buffers core $<TARGET_OBJECTS:grpc_server>)
     target_include_directories(${worker_name} PRIVATE ${PROTEUS_INCLUDE_DIRS})
     enable_ipo_on_target(${worker_name})
 
@@ -68,7 +68,7 @@ if(${PROTEUS_ENABLE_AKS})
         add_library(${worker_name} SHARED ${file_name}.cpp)
         target_link_options(${worker_name} PUBLIC "LINKER:-E")
         target_link_libraries(${worker_name} PRIVATE
-            batching buffers core base64 parse_env observation
+            batching buffers core base64 parse_env observation $<TARGET_OBJECTS:grpc_server>
             aks vart-runner xir
             opencv_core opencv_imgcodecs
         )
@@ -85,7 +85,7 @@ if(${PROTEUS_ENABLE_AKS})
     add_library(workerAks SHARED aks.cpp)
     target_link_options(workerAks PUBLIC "LINKER:-E")
     target_link_libraries(workerAks
-        PRIVATE batching buffers core parse_env observation
+        PRIVATE batching buffers core parse_env observation $<TARGET_OBJECTS:grpc_server>
         PRIVATE aks vart-runner xir
     )
     target_include_directories(workerAks PRIVATE ${PROTEUS_INCLUDE_DIRS})
