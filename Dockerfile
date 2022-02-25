@@ -216,7 +216,7 @@ RUN apt-get update \
         -DBUILD_ORM=OFF \
         -DBUILD_DROGON_SHARED=ON \
         -DBUILD_CTL=OFF \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -226,7 +226,7 @@ RUN apt-get update \
 RUN wget --progress=dot:mega https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.tar.gz \
     && tar -xzf v2.0.0.1.tar.gz \
     && cd libb64-2.0.0.1 \
-    && make -j all_src \
+    && make -j$(($(nproc) - 1)) all_src \
     && mkdir -p ${COPY_DIR}/usr/local/lib && cp src/libb64.a ${COPY_DIR}/usr/local/lib \
     && mkdir -p ${COPY_DIR}/usr/local/include && cp -r include/b64 ${COPY_DIR}/usr/local/include \
     && rm -rf /tmp/*
@@ -250,7 +250,7 @@ RUN apt-get update \
     && tar -xzf n3.4.8.tar.gz \
     && cd FFmpeg-n3.4.8 \
     && ./configure --disable-static --enable-shared --disable-doc \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && checkinstall -y --pkgname ffmpeg --pkgversion 3.4.8 --pkgrelease 1 make install \
     && cd /tmp \
     && dpkg -L ffmpeg | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
@@ -267,7 +267,7 @@ RUN apt-get update \
     && mkdir -p build \
     && cd build \
     && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=OFF -DBUILD_PERF_TESTS=OFF -DWITH_FFMPEG=ON .. \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -291,7 +291,7 @@ RUN apt-get update \
     && cd protobuf-${VERSION} \
     && ./autogen.sh \
     && ./configure \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
     && cd /tmp \
     && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
@@ -303,7 +303,7 @@ RUN wget --progress=dot:mega https://github.com/gabime/spdlog/archive/refs/tags/
     && cd spdlog-1.8.2 \
     && mkdir -p build && cd build \
     && cmake .. \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -320,7 +320,7 @@ RUN wget --progress=dot:mega https://github.com/jupp0r/prometheus-cpp/archive/re
         -DENABLE_TESTING=OFF \
         -DBUILD_SHARED_LIBS=ON \
         -DUSE_THIRDPARTY_LIBRARIES=OFF \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -333,7 +333,7 @@ RUN wget --progress=dot:mega https://github.com/nlohmann/json/archive/refs/tags/
     && mkdir -p build && cd build \
     && cmake .. \
         -DBUILD_TESTING=OFF \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && rm -rf /tmp/*
 
@@ -360,7 +360,7 @@ RUN apt-get update \
         -DBUILD_NODEJS=OFF \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=OFF \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     # && cd /tmp \
     # && dpkg -L thrift | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
@@ -383,7 +383,7 @@ RUN apt-get update \
         -DWITH_STL=ON \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=ON \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -393,7 +393,7 @@ RUN apt-get update \
 RUN wget --progress=dot:mega https://github.com/wg/wrk/archive/refs/tags/4.1.0.tar.gz \
     && tar -xzf 4.1.0.tar.gz \
     && cd wrk-4.1.0 \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && mkdir -p ${COPY_DIR}/usr/local/bin && cp wrk ${COPY_DIR}/usr/local/bin \
     && rm -rf /tmp/*
 
@@ -412,7 +412,7 @@ RUN apt-get update \
     && mkdir build \
     && cd build \
     && cmake -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10 .. \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -430,7 +430,7 @@ RUN apt-get update \
 #     && mkdir -p build \
 #     && cd build \
 #     && cmake ..
-#     && make -j \
+#     && make -j$(($(nproc) - 1)) \
 #     && make install \
 #     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
 #     && cd /tmp \
@@ -528,6 +528,7 @@ FROM builder as proteus_install_vitis_builder
 WORKDIR /tmp/
 SHELL ["/bin/bash", "-c"]
 ARG COPY_DIR
+ARG TARGETPLATFORM
 
 RUN mkdir -p ${COPY_DIR}
 
@@ -542,7 +543,7 @@ RUN wget --progress=dot:mega https://github.com/json-c/json-c/archive/refs/tags/
         -DBUILD_STATIC_LIBS=OFF \
         -DBUILD_TESTING=OFF \
         -DCMAKE_BUILD_TYPE=Release \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
@@ -557,12 +558,12 @@ RUN apt-get update \
         && apt-get update -y \
         && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
             ./xrt.deb \
-            ./xrm.deb; \
+            ./xrm.deb \
+        # copy over debians to COPY_DIR so we can install them as debians in
+        # the final image for easy removal later if needed
+        && cp ./xrt.deb ${COPY_DIR} \
+        && cp ./xrm.deb ${COPY_DIR}; \
     fi; \
-    # copy over debians to COPY_DIR so we can install them as debians in
-    # the final image for easy removal later if needed
-    cp ./xrt.deb ${COPY_DIR} \
-    && cp ./xrm.deb ${COPY_DIR} \
     # clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
@@ -586,7 +587,7 @@ RUN apt-get update \
     && mkdir build \
     && cd build \
     && cmake -DPYBIND11_TEST=OFF .. \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && rm -fr /tmp/*
 
