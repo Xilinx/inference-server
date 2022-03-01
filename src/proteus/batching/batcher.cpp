@@ -40,61 +40,6 @@ namespace proteus {
  * API to the batcher.
  *
  */
-class CppNativeApi : public Interface {
- public:
-  explicit CppNativeApi(InferenceRequest request);
-
-  std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) override;
-
-  size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
-  std::promise<proteus::InferenceResponse> *getPromise();
-
- private:
-  InferenceRequest request_;
-  InferenceResponsePromisePtr promise_;
-};
-
-CppNativeApi::CppNativeApi(InferenceRequest request)
-  : request_(std::move(request)) {
-  this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
-}
-
-size_t CppNativeApi::getInputSize() { return this->request_.getInputSize(); }
-
-std::promise<proteus::InferenceResponse> *CppNativeApi::getPromise() {
-  return this->promise_.get();
-}
-
-void cppCallback(const InferenceResponsePromisePtr &promise,
-                 const InferenceResponse &response) {
-  promise->set_value(response);
-}
-
-std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
-  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
-  auto request = InferenceRequestBuilder::fromInput(
-    this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
-    output_offsets, batch_size, batch_offset);
-  Callback callback =
-    std::bind(cppCallback, this->promise_, std::placeholders::_1);
-  request->setCallback(std::move(callback));
-  return request;
-}
-
-void CppNativeApi::errorHandler(const std::invalid_argument &e) {
-  SPDLOG_LOGGER_ERROR(this->logger_, e.what());
-  this->getPromise()->set_value(InferenceResponse(e.what()));
-}
 
 Batcher::Batcher() {
   this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
@@ -142,22 +87,6 @@ BatchPtrQueue *Batcher::getOutputQueue() { return this->output_queue_.get(); }
 void Batcher::enqueue(InterfacePtr request) {
   this->input_queue_->enqueue(std::move(request));
   this->cv_.notify_one();
-}
-
-InferenceResponseFuture Batcher::enqueue(InferenceRequest request) {
-#ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
-  trace->startSpan("C++ enqueue");
-#endif
-  auto api = std::make_unique<CppNativeApi>(std::move(request));
-  auto future = api->getPromise()->get_future();
-#ifdef PROTEUS_ENABLE_TRACING
-  trace->endSpan();
-  api->setTrace(std::move(trace));
-#endif
-  this->input_queue_->enqueue(std::move(api));
-  this->cv_.notify_one();
-  return future;
 }
 
 void Batcher::end() {

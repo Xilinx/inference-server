@@ -1,4 +1,4 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2022 Xilinx Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,29 @@
 
 /**
  * @file
- * @brief Implements the internal objects used to hold incoming inference
- * requests
+ * @brief Defines the methods for interacting with Proteus with HTTP/REST
  */
 
-#include "proteus/core/predict_api_internal.hpp"
-
-#include "proteus/buffers/buffer.hpp"
-#include "proteus/observation/logging.hpp"  // for getLogger, SPDLOG_LOGGER_...
-#include "proteus/servers/grpc_server.hpp"
+#ifndef GUARD_PROTEUS_CLIENTS_HTTP
+#define GUARD_PROTEUS_CLIENTS_HTTP
 
 namespace proteus {
 
-using types::DataType;
+/**
+ * @brief Start the HTTP server for collecting metrics. This is a no-op if
+ * Proteus is compiled without HTTP support.
+ *
+ * @param port port to use
+ */
+void startHttpServer(int port);
+
+/**
+ * @brief Stop the HTTP server. This is a no-op if Proteus is compiled without
+ * HTTP support.
+ *
+ */
+void stopHttpServer();
 
 }  // namespace proteus
+
+#endif  // GUARD_PROTEUS_CLIENTS_HTTP

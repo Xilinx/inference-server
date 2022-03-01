@@ -21,7 +21,7 @@ list(APPEND targets
 
 list(APPEND targets_libs
     "$<TARGET_OBJECTS:fake_worker_info_buffers_infinite>~fake_observation~fake_manager~interface~lib_predict_api~data_types~$<TARGET_OBJECTS:softBatcher>"
-    "$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~fake_observation~fake_manager~interface~lib_predict_api~data_types~$<TARGET_OBJECTS:softBatcher>~vector_buffer~buffer"
+    "$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~fake_observation~fake_manager~interface~lib_predict_api~data_types~$<TARGET_OBJECTS:softBatcher>~vector_buffer~buffer~$<TARGET_OBJECTS:native_internal>"
 )
 
 foreach(target lib_str IN ZIP_LISTS targets targets_libs)

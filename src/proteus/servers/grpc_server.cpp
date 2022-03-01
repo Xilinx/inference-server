@@ -21,6 +21,7 @@
 
 #include "predict_api.grpc.pb.h"
 #include "proteus/batching/batcher.hpp"
+#include "proteus/clients/grpc_internal.hpp"
 #include "proteus/core/interface.hpp"
 #include "proteus/core/manager.hpp"
 #include "proteus/core/predict_api_internal.hpp"
@@ -145,7 +146,7 @@ class GrpcApi : public Interface {
     std::vector<size_t>& output_offsets, const size_t& batch_size,
     size_t& batch_offset) override {
     try {
-      auto request = InferenceRequestBuilder::fromGrpc(
+      auto request = RequestBuilder::build(
         this->calldata_, buffer_index, input_buffers, input_offsets,
         output_buffers, output_offsets, batch_size, batch_offset);
       Callback callback =
@@ -223,7 +224,7 @@ void CallDataModelInfer::handleRequest() {
   batcher->enqueue(std::move(request));
 }
 
-inference::ModelInferRequest& CallDataModelInfer::getRequest() {
+const inference::ModelInferRequest& CallDataModelInfer::getRequest() const {
   return this->request_;
 }
 

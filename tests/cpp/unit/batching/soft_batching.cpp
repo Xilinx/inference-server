@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "proteus/batching/soft.hpp"
 #include "proteus/buffers/vector_buffer.hpp"
+#include "proteus/clients/native_internal.hpp"
 #include "proteus/core/worker_info.hpp"
 
 namespace proteus {
@@ -94,7 +95,8 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
   const auto kBatchCount = num_requests / batch_size + kLeftover;
 
   for (auto i = 0; i < num_requests; i++) {
-    batcher_->enqueue(request_);
+    auto req = std::make_unique<CppNativeApi>(this->request_);
+    batcher_->enqueue(std::move(req));
   }
 
   this->check_batch(kBatchCount - kLeftover, batch_size);

@@ -27,16 +27,19 @@
 #include <unordered_map>  // for unordered_map, operator==
 #include <utility>        // for pair, make_pair, move
 
-#include "proteus/batching/batcher.hpp"     // for Batcher
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/manager.hpp"         // for Manager
-#include "proteus/core/predict_api.hpp"     // for InferenceRequestInput
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/helpers/exec.hpp"         // for exec
-#include "proteus/observation/logging.hpp"  // for initLogging
-#include "proteus/observation/metrics.hpp"  // for Metrics
-#include "proteus/observation/tracing.hpp"  // for startTracer, stopTracer
-#include "proteus/servers/http_server.hpp"  // for start
+#include "proteus/batching/batcher.hpp"  // for Batcher
+#include "proteus/buffers/buffer.hpp"    // for Buffer
+#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRA...
+#include "proteus/clients/native_internal.hpp"
+#include "proteus/core/interface.hpp"
+#include "proteus/core/manager.hpp"               // for Manager
+#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
+#include "proteus/core/worker_info.hpp"           // for WorkerInfo
+#include "proteus/helpers/exec.hpp"               // for exec
+#include "proteus/observation/logging.hpp"        // for initLogging
+#include "proteus/observation/metrics.hpp"        // for Metrics
+#include "proteus/observation/tracing.hpp"        // for startTracer, stopT...
+#include "proteus/servers/http_server.hpp"        // for start
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
@@ -72,20 +75,6 @@ void terminate() {
 #endif
 }
 
-void startHttpServer(int port) {
-#ifdef PROTEUS_ENABLE_HTTP
-  std::thread{proteus::http::start, port}.detach();
-#else
-  (void)port;  // suppress unused variable warning
-#endif
-}
-
-void stopHttpServer() {
-#ifdef PROTEUS_ENABLE_HTTP
-  proteus::http::stop();
-#endif
-}
-
 std::string load(const std::string& worker, RequestParameters* parameters) {
   if (parameters == nullptr) {
     return Manager::getInstance().loadWorker(worker, RequestParameters());
@@ -99,7 +88,20 @@ InferenceResponseFuture enqueue(const std::string& workerName,
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
   auto* worker = proteus::Manager::getInstance().getWorker(workerName);
-  return worker->getBatcher()->enqueue(std::move(request));
+
+#ifdef PROTEUS_ENABLE_TRACING
+  auto trace = startTrace(__func__);
+  trace->startSpan("C++ enqueue");
+#endif
+  auto api = std::make_unique<CppNativeApi>(std::move(request));
+  auto future = api->getPromise()->get_future();
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->endSpan();
+  api->setTrace(std::move(trace));
+#endif
+  worker->getBatcher()->enqueue(std::move(api));
+  // this->cv_.notify_one();
+  return future;
 }
 
 std::string getHardware() {

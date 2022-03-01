@@ -35,21 +35,6 @@ void initialize();
 /// Shut down proteus
 void terminate();
 
-/**
- * @brief Start the HTTP server for collecting metrics. This is a no-op if
- * Proteus is compiled without HTTP support.
- *
- * @param port port to use
- */
-void startHttpServer(int port);
-
-/**
- * @brief Stop the HTTP server. This is a no-op if Proteus is compiled without
- * HTTP support.
- *
- */
-void stopHttpServer();
-
 /// Get a string that lists the available kernels ("<name>:i,<name>:j...")
 std::string getHardware();
 

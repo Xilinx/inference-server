@@ -121,7 +121,7 @@ class CallDataModelInfer : public CallData<inference::ModelInferRequest,
  public:
   CallDataModelInfer(AsyncService* service, ::grpc::ServerCompletionQueue* cq);
 
-  inference::ModelInferRequest& getRequest();
+  const inference::ModelInferRequest& getRequest() const;
   inference::ModelInferResponse& getReply();
 
  protected:

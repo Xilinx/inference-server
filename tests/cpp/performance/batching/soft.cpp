@@ -6,6 +6,7 @@
 
 #include "gtest/gtest.h"
 #include "proteus/buffers/vector_buffer.hpp"
+#include "proteus/clients/native_internal.hpp"
 #include "proteus/core/worker_info.hpp"
 
 namespace proteus {
@@ -24,7 +25,8 @@ class PerfSoftBatcherFixture
     int count = 0;
 
     do {
-      batcher_->enqueue(request_);
+      auto req = std::make_unique<CppNativeApi>(this->request_);
+      batcher_->enqueue(std::move(req));
       count++;
 
       auto end_time = std::chrono::high_resolution_clock::now();

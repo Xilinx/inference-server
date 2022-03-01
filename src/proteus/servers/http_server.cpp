@@ -36,8 +36,9 @@
 #include <utility>      // for move
 #include <vector>       // for vector, _Bit_reference
 
-#include "proteus/batching/batcher.hpp"           // for Batcher
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/batching/batcher.hpp"  // for Batcher
+#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/http_internal.hpp"
 #include "proteus/clients/native.hpp"             // for getHardware
 #include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
 #include "proteus/core/manager.hpp"               // for Manager
@@ -601,7 +602,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
   try {
-    auto request = InferenceRequestBuilder::fromJson(
+    auto request = RequestBuilder::build(
       this->json_, buffer_index, input_buffers, input_offsets, output_buffers,
       output_offsets, batch_size, batch_offset);
     Callback callback =

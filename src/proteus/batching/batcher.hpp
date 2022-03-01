@@ -129,13 +129,6 @@ class Batcher {
    * @param request
    */
   void enqueue(InterfacePtr request);
-  /**
-   * @brief Enqueue a new request to the batcher from the C++ API
-   *
-   * @param request the request
-   * @return InferenceResponseFuture a future that returns the response
-   */
-  InferenceResponseFuture enqueue(InferenceRequest request);
 
   /// End the batcher
   void end();

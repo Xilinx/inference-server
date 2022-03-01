@@ -227,6 +227,7 @@ class InferenceRequestInput {
   void *data_;
   std::shared_ptr<std::byte> shared_data_;
 
+  template <typename U>
   friend class InferenceRequestInputBuilder;
 };
 
@@ -254,6 +255,7 @@ class InferenceRequestOutput {
   RequestParametersPtr parameters_;
   void *data_;
 
+  template <typename U>
   friend class InferenceRequestOutputBuilder;
 };
 
@@ -403,6 +405,7 @@ class InferenceRequest {
 
   // TODO(varunsh): do we need this still?
   friend class FakeInferenceRequest;
+  template <typename U>
   friend class InferenceRequestBuilder;
 };
 using InferenceResponsePromisePtr =

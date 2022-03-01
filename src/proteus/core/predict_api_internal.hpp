@@ -23,34 +23,15 @@
 
 #include "proteus/core/predict_api.hpp"  // IWYU pragma: export
 
-namespace Json {
-class Value;
-}
-
 namespace proteus {
 
-class CallDataModelInfer;
-
-/**
- * @brief Convert JSON-styled parameters to Proteus's implementation
- *
- * @param parameters
- * @return RequestParametersPtr
- */
-RequestParametersPtr addParameters(Json::Value parameters);
-
-class InferenceRequestOutputBuilder {
- public:
-  static InferenceRequestOutput fromJson(
-    std::shared_ptr<Json::Value> const &req);
-};
-
+template <typename T>
 class InferenceRequestBuilder {
  public:
   /**
    * @brief Construct a new InferenceRequest object
    *
-   * @param req one inference request object
+   * @param req some valid type holding data
    * @param buffer_index current buffer index to start with for the buffers
    * @param input_buffers a vector of input buffers to store the inputs data
    * @param input_offsets a vector of offsets for the input buffers to store
@@ -60,50 +41,8 @@ class InferenceRequestBuilder {
    * @param batch_size batch size to use when creating the request
    * @param batch_offset current batch offset to start with
    */
-  static InferenceRequestPtr fromInput(
-    InferenceRequest &req, size_t &buffer_index,
-    const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset);
-
-  /**
-   * @brief Construct a new InferenceRequest object
-   *
-   * @param req JSON request from the client
-   * @param buffer_index current buffer index to start with for the buffers
-   * @param input_buffers a vector of input buffers to store the inputs data
-   * @param input_offsets a vector of offsets for the input buffers to store
-   * data
-   * @param output_buffers a vector of output buffers
-   * @param output_offsets a vector of offsets for the output buffers
-   * @param batch_size batch size to use when creating the request
-   * @param batch_offset current batch offset to start with
-   */
-  static InferenceRequestPtr fromJson(
-    std::shared_ptr<Json::Value> const &req, size_t &buffer_index,
-    const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset);
-
-  /**
-   * @brief Construct a new InferenceRequest object
-   *
-   * @param req one inference request object
-   * @param buffer_index current buffer index to start with for the buffers
-   * @param input_buffers a vector of input buffers to store the inputs data
-   * @param input_offsets a vector of offsets for the input buffers to store
-   * data
-   * @param output_buffers a vector of output buffers
-   * @param output_offsets a vector of offsets for the output buffers
-   * @param batch_size batch size to use when creating the request
-   * @param batch_offset current batch offset to start with
-   */
-  static InferenceRequestPtr fromGrpc(
-    CallDataModelInfer *calldata, size_t &buffer_index,
+  static InferenceRequestPtr build(
+    const T req, size_t &buffer_index,
     const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
     const std::vector<BufferRawPtrs> &output_buffers,
@@ -111,8 +50,32 @@ class InferenceRequestBuilder {
     size_t &batch_offset);
 };
 
-/// convert the metadata to a JSON representation compatible with the server
-Json::Value ModelMetadataToJson(const ModelMetadata &metadata);
+template <typename T>
+class InferenceRequestInputBuilder {
+ public:
+  /**
+   * @brief Construct a new InferenceRequestInput object
+   *
+   * @param req some valid type holding data
+   * @param input_buffer buffer to hold the incoming data
+   * @param offset offset for the buffer to store data at
+   */
+  static InferenceRequestInput build(const T &req, Buffer *input_buffer,
+                                     size_t offset);
+};
+
+template <typename T>
+class InferenceRequestOutputBuilder {
+ public:
+  /**
+   * @brief Construct a new InferenceRequestOutput object
+   *
+   * @param req some valid type holding data
+   * @param input_buffer buffer to hold the incoming data
+   * @param offset offset for the buffer to store data at
+   */
+  static InferenceRequestOutput build(const T &req);
+};
 
 }  // namespace proteus
 

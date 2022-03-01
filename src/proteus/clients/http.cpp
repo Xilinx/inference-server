@@ -12,16 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PROTEUS
-#define GUARD_PROTEUS_PROTEUS
+/**
+ * @file
+ * @brief Implements the methods for interacting with Proteus with HTTP/REST
+ */
 
-#include "proteus/build_options.hpp"         // IWYU pragma: export
-#include "proteus/clients/http.hpp"          // IWYU pragma: export
-#include "proteus/clients/native.hpp"        // IWYU pragma: export
-#include "proteus/core/data_types.hpp"       // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"      // IWYU pragma: export
-#include "proteus/helpers/declarations.hpp"  // IWYU pragma: export
+#include "proteus/clients/http.hpp"
 
-namespace proteus {}  // namespace proteus
+#include <thread>
 
-#endif  // GUARD_PROTEUS_PROTEUS
+#include "proteus/build_options.hpp"
+#include "proteus/servers/http_server.hpp"
+
+namespace proteus {
+
+void startHttpServer(int port) {
+#ifdef PROTEUS_ENABLE_HTTP
+  std::thread{http::start, port}.detach();
+#else
+  (void)port;  // suppress unused variable warning
+#endif
+}
+
+void stopHttpServer() {
+#ifdef PROTEUS_ENABLE_HTTP
+  http::stop();
+#endif
+}
+
+}  // namespace proteus

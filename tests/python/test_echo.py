@@ -319,7 +319,7 @@ class TestEchoErrors:
             "outputs": [],
         }
 
-        self.send_request(request, "Unknown datatype BAD_TYPE")
+        self.send_request(request, "Unknown datatype: BAD_TYPE")
 
     def test_bad_inputs_7(self):
         """

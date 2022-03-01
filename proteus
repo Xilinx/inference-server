@@ -644,7 +644,7 @@ class Dockerize:
         except subprocess.CalledProcessError:
             git_commit = "unknown"
         else:
-            retval = run_command("git diff-index --quiet HEAD", False, False)
+            retval = run_command("git diff --quiet -- . ':(exclude)VERSION'", False, False)
             if retval:
                 git_commit += "-dirty"
 
