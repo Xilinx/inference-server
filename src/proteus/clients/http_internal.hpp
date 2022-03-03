@@ -20,6 +20,9 @@
 #ifndef GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
 #define GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
 
+#include <drogon/utils/FunctionTraits.h>
+
+#include "proteus/core/interface.hpp"
 #include "proteus/core/predict_api_internal.hpp"
 
 namespace Json {
@@ -55,6 +58,49 @@ class InferenceRequestBuilder<std::shared_ptr<Json::Value>> {
 };
 
 using RequestBuilder = InferenceRequestBuilder<std::shared_ptr<Json::Value>>;
+
+#ifdef PROTEUS_ENABLE_TRACING
+void propagate(drogon::HttpResponse *resp, const StringMap &context);
+#endif
+
+using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
+
+/**
+ * @brief The DrogonHttp Interface class encapsulates incoming requests from
+ * Drogon's HTTP interface to the batcher.
+ *
+ */
+class DrogonHttp : public Interface {
+ public:
+  /**
+   * @brief Construct a new DrogonHttp object
+   *
+   * @param req
+   * @param callback
+   */
+  DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback);
+
+  std::shared_ptr<InferenceRequest> getRequest(
+    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
+    std::vector<size_t> &input_offsets,
+    const std::vector<BufferRawPtrs> &output_buffers,
+    std::vector<size_t> &output_offsets, const size_t &batch_size,
+    size_t &batch_offset) override;
+
+  size_t getInputSize() override;
+  void errorHandler(const std::invalid_argument &e) override;
+
+ private:
+  /// parse the request's JSON payload and save it for future use
+  void setJson();
+
+  drogon::HttpRequestPtr req_;
+  DrogonCallback callback_;
+  std::shared_ptr<Json::Value> json_;
+};
+
+drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
+                                          int status_code);
 
 /// convert the metadata to a JSON representation compatible with the server
 Json::Value ModelMetadataToJson(const ModelMetadata &metadata);

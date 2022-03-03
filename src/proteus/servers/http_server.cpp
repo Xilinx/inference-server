@@ -44,7 +44,6 @@
 #include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
-#include "proteus/helpers/compression.hpp"        // for z_decompress
 #include "proteus/helpers/declarations.hpp"       // for InferenceResponseOutput
 #include "proteus/observation/logging.hpp"  // for SPDLOG_LOGGER_INFO, getL...
 #include "proteus/observation/metrics.hpp"  // for Metrics, MetricIDs, Metr...
@@ -57,15 +56,6 @@ using drogon::HttpResponsePtr;
 using drogon::HttpStatusCode;
 
 namespace proteus::http {
-
-drogon::HttpResponsePtr errorHttpResponse(std::string_view error,
-                                          int status_code) {
-  Json::Value ret;
-  ret["error"] = error.data();
-  auto resp = drogon::HttpResponse::newHttpJsonResponse(ret);
-  resp->setStatusCode(static_cast<drogon::HttpStatusCode>(status_code));
-  return resp;
-}
 
 void start(int port) {
   auto &app = drogon::app();
@@ -91,14 +81,6 @@ void start(int port) {
 }
 
 void stop() { drogon::app().quit(); }
-
-#ifdef PROTEUS_ENABLE_TRACING
-void propagate(HttpResponse *resp, const StringMap &context) {
-  for (const auto &[key, value] : context) {
-    resp->addHeader(key, value);
-  }
-}
-#endif
 
 v2::ProteusHttpServer::ProteusHttpServer() {
 #ifdef PROTEUS_ENABLE_LOGGING
@@ -398,228 +380,5 @@ void v2::ProteusHttpServer::metrics(
   callback(resp);
 }
 #endif
-
-DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
-                       DrogonCallback callback) {
-  this->req_ = req;
-  this->callback_ = std::move(callback);
-  this->type_ = InterfaceType::kDrogonHttp;
-  this->json_ = nullptr;
-}
-
-void DrogonHttp::setJson() {
-  const auto &json_raw = this->req_->getJsonObject();
-
-  // if we fail to get the JSON object, return
-  if (json_raw == nullptr) {
-    auto root = std::make_shared<Json::Value>();
-    std::string errors;
-    Json::CharReaderBuilder builder;
-    Json::CharReader *reader = builder.newCharReader();
-    auto body = this->req_->getBody();
-    auto body_parsed = z_decompress(body.data(), body.length());
-    if (body_parsed.empty()) {
-      this->callback_(errorHttpResponse("Failed attempt to inflate request",
-                                        HttpStatusCode::k400BadRequest));
-      return;
-    }
-    bool parsingSuccessful =
-      reader->parse(body_parsed.data(), body_parsed.data() + body_parsed.size(),
-                    root.get(), &errors);
-    if (!parsingSuccessful) {
-      this->callback_(errorHttpResponse("Failed to parse JSON request",
-                                        HttpStatusCode::k400BadRequest));
-      return;
-    }
-    SPDLOG_LOGGER_INFO(this->logger_, "Successfully inflated request");
-    this->json_ = std::move(root);
-  } else {
-    this->json_ = json_raw;
-  }
-}
-
-size_t DrogonHttp::getInputSize() {
-  if (this->json_ == nullptr) {
-    this->setJson();
-  }
-
-  if (!this->json_->isMember("inputs")) {
-    throw std::invalid_argument("No 'inputs' key present in request");
-  }
-  auto inputs = this->json_->get("inputs", Json::arrayValue);
-  if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
-  }
-  return inputs.size();
-}
-
-using types::DataType;
-
-Json::Value parseResponse(InferenceResponse response) {
-  Json::Value ret;
-  ret["model_name"] = response.getModel();
-  ret["outputs"] = Json::arrayValue;
-  ret["id"] = response.getID();
-  auto outputs = response.getOutputs();
-  for (InferenceResponseOutput &output : outputs) {
-    Json::Value json_output;
-    json_output["name"] = output.getName();
-    json_output["parameters"] = Json::objectValue;
-    json_output["data"] = Json::arrayValue;
-    json_output["shape"] = Json::arrayValue;
-    json_output["datatype"] = types::mapTypeToStr(output.getDatatype());
-    auto shape = output.getShape();
-    for (const size_t &index : shape) {
-      json_output["shape"].append(static_cast<Json::UInt>(index));
-    }
-
-    switch (output.getDatatype()) {
-      case DataType::BOOL: {
-        auto *data = static_cast<std::vector<bool> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append(static_cast<bool>((*data)[i]));
-        }
-        break;
-      }
-      case DataType::UINT8: {
-        auto *data = static_cast<std::vector<uint8_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::UINT16: {
-        auto *data = static_cast<std::vector<uint16_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::UINT32: {
-        auto *data = static_cast<std::vector<uint32_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::UINT64: {
-        auto *data = static_cast<std::vector<uint64_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append(static_cast<Json::UInt64>((*data)[i]));
-        }
-        break;
-      }
-      case DataType::INT8: {
-        auto *data = static_cast<std::vector<int8_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::INT16: {
-        auto *data = static_cast<std::vector<int16_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::INT32: {
-        auto *data = static_cast<std::vector<int32_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::INT64: {
-        auto *data = static_cast<std::vector<int64_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append(static_cast<Json::Int64>((*data)[i]));
-        }
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        std::cout << "Writing FP16 not supported\n";
-        break;
-      }
-      case DataType::FP32: {
-        auto *data = static_cast<std::vector<float> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::FP64: {
-        auto *data = static_cast<std::vector<double> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
-        }
-        break;
-      }
-      case DataType::STRING: {
-        auto *data = static_cast<std::string *>(output.getData());
-        json_output["data"].append(*data);
-        // for(size_t i = 0; i < output.getSize(); i++){
-        //   json_output["data"].append(data->data()[i]);
-        // }
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
-    ret["outputs"].append(json_output);
-  }
-  return ret;
-}
-
-void drogonCallback(const DrogonCallback &callback,
-                    const InferenceResponse &response) {
-  drogon::HttpResponsePtr resp;
-  if (response.isError()) {
-    resp =
-      errorHttpResponse(response.getError(), HttpStatusCode::k400BadRequest);
-  } else {
-    try {
-      Json::Value ret = parseResponse(response);
-      resp = drogon::HttpResponse::newHttpJsonResponse(ret);
-    } catch (const std::invalid_argument &e) {
-      resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
-    }
-  }
-#ifdef PROTEUS_ENABLE_TRACING
-  const auto &context = response.getContext();
-  propagate(resp.get(), context);
-#endif
-  callback(resp);
-}
-
-std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
-  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
-  try {
-    auto request = RequestBuilder::build(
-      this->json_, buffer_index, input_buffers, input_offsets, output_buffers,
-      output_offsets, batch_size, batch_offset);
-    Callback callback =
-      std::bind(drogonCallback, this->callback_, std::placeholders::_1);
-    request->setCallback(std::move(callback));
-    return request;
-  } catch (const std::invalid_argument &e) {
-    SPDLOG_LOGGER_INFO(this->logger_, e.what());
-    this->callback_(
-      errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
-    return nullptr;
-  }
-}
-
-void DrogonHttp::errorHandler(const std::invalid_argument &e) {
-  SPDLOG_LOGGER_DEBUG(this->logger_, e.what());
-  this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
-}
 
 }  // namespace proteus::http

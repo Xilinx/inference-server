@@ -100,19 +100,21 @@ void parseResponse(CallDataModelInfer* calldata, InferenceResponse response) {
     // auto* parameters = tensor->mutable_parameters();
     tensor->set_datatype(types::mapTypeToStr(output.getDatatype()));
     auto shape = output.getShape();
+    auto size = 1U;
     for (const size_t& index : shape) {
       tensor->add_shape(index);
+      size *= index;
     }
-    tensor->set_allocated_contents(
-      static_cast<inference::InferTensorContents*>(output.getData()));
+    auto* contents = tensor->mutable_contents()->mutable_bool_contents();
+    contents->Reserve(size);
+    std::memcpy(contents->mutable_data(), output.getData(), size);
   }
 }
 
 void grpcCallback(CallDataModelInfer* calldata,
                   const InferenceResponse& response) {
   if (response.isError()) {
-    calldata->finish(
-      Status(StatusCode::UNKNOWN, std::string{response.getError()}));
+    calldata->finish(Status(StatusCode::UNKNOWN, response.getError()));
     return;
   } else {
     try {
@@ -182,6 +184,48 @@ CALLDATA_IMPL(ServerMetadata) {
 #ifdef PROTEUS_ENABLE_VITIS
   reply_.add_extensions("vitis");
 #endif
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(ModelLoad) {
+  auto parameters = addParameters(request_.parameters());
+
+  const std::string& model = request_.name();
+
+  auto hyphen_pos = model.find('-');
+  std::string name;
+  // if there's a hyphen in the name, currently assuming it's for xmodel. So,
+  // extract the first part as the worker and the second part as the xmodel file
+  // name. Put that information into the parameters with the default path for
+  // KServe (/mnt/models)
+  if (hyphen_pos != std::string::npos) {
+    name = model.substr(0, hyphen_pos);
+    auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
+    parameters->put("xmodel",
+                    "/mnt/models/" + model + "/" + xmodel + ".xmodel");
+  } else {
+    name = model;
+  }
+
+  std::string endpoint;
+  try {
+    endpoint = Manager::getInstance().loadWorker(name, *parameters);
+  } catch (const std::exception& e) {
+    SPDLOG_ERROR(e.what());
+    finish(Status(StatusCode::NOT_FOUND, e.what()));
+    return;
+  }
+
+  reply_.set_endpoint(endpoint);
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(ModelUnload) {
+  const auto& name = request_.name();
+
+  Manager::getInstance().unloadWorker(name);
   finish();
 }
 CALLDATA_IMPL_END
@@ -287,6 +331,12 @@ class GrpcServer final {
 
     // Spawn a new CallData instance to serve new clients.
     new CallDataServerLive(&service_, my_cq.get());
+    new CallDataServerMetadata(&service_, my_cq.get());
+    new CallDataServerReady(&service_, my_cq.get());
+    new CallDataModelReady(&service_, my_cq.get());
+    new CallDataModelLoad(&service_, my_cq.get());
+    new CallDataModelUnload(&service_, my_cq.get());
+    new CallDataModelInfer(&service_, my_cq.get());
     void* tag;  // uniquely identifies a request.
     bool ok;
     while (true) {
@@ -296,7 +346,9 @@ class GrpcServer final {
       // The return value of Next should always be checked. This return value
       // tells us whether there is any kind of event or cq_ is shutting down.
       GPR_ASSERT(my_cq->Next(&tag, &ok));
-      GPR_ASSERT(ok);
+      if (GPR_UNLIKELY(!(ok))) {
+        break;
+      }
       static_cast<CallDataBase*>(tag)->proceed();
     }
   };
@@ -311,7 +363,11 @@ namespace grpc {
 
 void start(const std::string& address) { GrpcServer::create(address, 1); }
 
-void stop() { GrpcServer::getInstance().~GrpcServer(); }
+void stop() {
+  // the GrpcServer's destructor is called automatically
+  // auto& foo = GrpcServer::getInstance();
+  // foo.~GrpcServer();
+}
 
 }  // namespace grpc
 

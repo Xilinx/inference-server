@@ -98,13 +98,14 @@ void InferenceRequest::addInputTensor(void *data, std::vector<uint64_t> shape,
   this->inputs_.emplace_back(data, shape, dataType, name);
 }
 
-std::vector<InferenceRequestInput> InferenceRequest::getInputs() {
+const std::vector<InferenceRequestInput> &InferenceRequest::getInputs() const {
   return this->inputs_;
 }
 
 size_t InferenceRequest::getInputSize() { return this->inputs_.size(); }
 
-std::vector<InferenceRequestOutput> InferenceRequest::getOutputs() {
+const std::vector<InferenceRequestOutput> &InferenceRequest::getOutputs()
+  const {
   return this->outputs_;
 }
 
@@ -177,9 +178,7 @@ std::string InferenceResponse::getModel() { return this->model_; }
 
 bool InferenceResponse::isError() const { return !this->error_msg_.empty(); }
 
-std::string_view InferenceResponse::getError() const {
-  return this->error_msg_;
-}
+std::string InferenceResponse::getError() const { return this->error_msg_; }
 
 void InferenceResponse::addOutput(const InferenceResponseOutput &output) {
   this->outputs_.push_back(output);

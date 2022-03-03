@@ -14,7 +14,6 @@
 
 list(APPEND targets
     predict_api
-    predict_api_internal
     fake_predict_api
     manager
     worker_info
@@ -30,10 +29,10 @@ foreach(target ${targets})
     list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
-if(${PROTEUS_ENABLE_GRPC})
-    target_include_directories(predict_api_internal PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-    target_link_libraries(predict_api_internal INTERFACE lib_grpc)
-endif()
+# if(${PROTEUS_ENABLE_GRPC})
+#     target_include_directories(predict_api_internal PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+#     target_link_libraries(predict_api_internal INTERFACE lib_grpc)
+# endif()
 target_link_libraries(predict_api INTERFACE jsoncpp)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
@@ -44,8 +43,8 @@ add_library(lib_predict_api INTERFACE)
 target_link_libraries(lib_predict_api INTERFACE
     $<TARGET_OBJECTS:predict_api>
     predict_api
-    $<TARGET_OBJECTS:predict_api_internal>
-    predict_api_internal
+    # $<TARGET_OBJECTS:predict_api_internal>
+    # predict_api_internal
 )
 
 if(${PROTEUS_ENABLE_GRPC})

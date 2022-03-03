@@ -28,6 +28,24 @@
 
 namespace proteus {
 
+RequestParametersPtr addParameters(
+  const google::protobuf::Map<std::string, inference::InferParameter> &params) {
+  auto parameters = std::make_shared<RequestParameters>();
+  for (const auto &[key, value] : params) {
+    if (value.has_bool_param()) {
+      parameters->put(key, value.bool_param());
+    } else if (value.has_int64_param()) {
+      // TODO(varunsh): parameters should switch to uint64?
+      parameters->put(key, static_cast<int>(value.int64_param()));
+    } else if (value.has_double_param()) {
+      parameters->put(key, value.double_param());
+    } else {
+      parameters->put(key, value.string_param());
+    }
+  }
+  return parameters;
+}
+
 template <>
 class InferenceRequestInputBuilder<
   inference::ModelInferRequest_InferInputTensor> {
@@ -44,18 +62,7 @@ class InferenceRequestInputBuilder<
     }
     input.dataType_ = types::mapStrToType(req.datatype());
 
-    input.parameters_ = std::make_shared<RequestParameters>();
-    const auto &params = req.parameters();
-    for (const auto &[key, value] : params) {
-      if (value.has_bool_param()) {
-        input.parameters_->put(key, value.bool_param());
-      } else if (value.has_int64_param()) {
-        // TODO(varunsh): parameters should switch to uint64?
-        input.parameters_->put(key, static_cast<int>(value.int64_param()));
-      } else {
-        input.parameters_->put(key, value.string_param());
-      }
-    }
+    input.parameters_ = addParameters(req.parameters());
 
     auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
                                 std::multiplies<>()) *
@@ -84,18 +91,7 @@ InferenceRequestPtr RequestBuilder::build(
 
   request->id_ = grpc_request.id();
 
-  request->parameters_ = std::make_shared<RequestParameters>();
-  const auto &params = grpc_request.parameters();
-  for (const auto &[key, value] : params) {
-    if (value.has_bool_param()) {
-      request->parameters_->put(key, value.bool_param());
-    } else if (value.has_int64_param()) {
-      // TODO(varunsh): parameters should switch to uint64?
-      request->parameters_->put(key, static_cast<int>(value.int64_param()));
-    } else {
-      request->parameters_->put(key, value.string_param());
-    }
-  }
+  request->parameters_ = addParameters(grpc_request.parameters());
 
   request->callback_ = nullptr;
 

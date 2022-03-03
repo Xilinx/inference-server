@@ -22,7 +22,7 @@ if(${PROTEUS_ENABLE_HTTP})
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
-    set(TARGETS ${TARGETS} grpc_internal)
+    set(TARGETS ${TARGETS} grpc grpc_internal)
 endif()
 
 foreach(target ${TARGETS})
@@ -43,6 +43,8 @@ if(${PROTEUS_ENABLE_HTTP})
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
+    target_include_directories(grpc PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+    target_link_libraries(grpc INTERFACE lib_grpc)
     target_include_directories(grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
     target_link_libraries(grpc_internal INTERFACE lib_grpc)
 endif()

@@ -12,13 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(grpc_server_live server_live.cpp)
+list(APPEND targets
+    server_live
+    model_infer
+    model_load
+)
 
-get_target_property(grpc_include lib_grpc INCLUDE_DIRECTORIES)
-target_include_directories(grpc_server_live PRIVATE ${grpc_include})
-target_link_libraries(grpc_server_live PRIVATE lib_grpc)
+foreach(target ${targets})
+    add_executable(grpc_${target} ${target}.cpp)
 
-add_executable(grpc_model_infer model_infer.cpp)
-
-target_include_directories(grpc_model_infer PRIVATE ${grpc_include})
-target_link_libraries(grpc_model_infer PRIVATE lib_grpc)
+    target_include_directories(grpc_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+    target_link_libraries(grpc_${target} PRIVATE proteus gtest gtest_main)
+endforeach()

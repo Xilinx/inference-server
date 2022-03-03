@@ -1,4 +1,4 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2022 Xilinx Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @file
- * @brief Implements the internal objects used to hold incoming inference
- * requests
- */
+#include "fixture.hpp"
 
-#include "proteus/core/predict_api_internal.hpp"
-
-#include "proteus/buffers/buffer.hpp"
-#include "proteus/observation/logging.hpp"  // for getLogger, SPDLOG_LOGGER_...
-#include "proteus/servers/grpc_server.hpp"
-
-namespace proteus {
-
-using types::DataType;
-
-}  // namespace proteus
+TEST_F(Grpc, model_load) {
+  auto endpoint = client_->modelLoad("echo");
+  EXPECT_EQ(endpoint, "echo");
+}

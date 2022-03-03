@@ -39,7 +39,6 @@
 #include "proteus/observation/logging.hpp"        // for initLogging
 #include "proteus/observation/metrics.hpp"        // for Metrics
 #include "proteus/observation/tracing.hpp"        // for startTracer, stopT...
-#include "proteus/servers/http_server.hpp"        // for start
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt

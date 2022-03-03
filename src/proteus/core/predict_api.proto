@@ -43,6 +43,17 @@ service GRPCInferenceService
   // indicated by the google.rpc.Status returned for the request. The OK code
   // indicates success and other codes indicate failure.
   rpc ModelInfer(ModelInferRequest) returns (ModelInferResponse) {}
+
+  // The ModelLoad API loads a named model. Models must be loaded prior to
+  // making inferences. Errors are indicated by the google.rpc.Status returned
+  // for the request. The OK code indicates success and other codes indicate
+  // failure.
+  rpc ModelLoad(ModelLoadRequest) returns (ModelLoadResponse) {}
+
+  // The ModelUnload API unloads a named model. Errors are indicated by the
+  // google.rpc.Status returned for the request. The OK code indicates success
+  // and other codes indicate failure.
+  rpc ModelUnload(ModelUnloadRequest) returns (ModelUnloadResponse) {}
 }
 
 message ServerLiveRequest {}
@@ -250,6 +261,26 @@ message ModelInferResponse{
   repeated bytes raw_output_contents = 6;
 }
 
+message ModelLoadRequest{
+  // Model name.
+  string name = 1;
+
+  // Optional load-time parameters.
+  map<string, InferParameter> parameters = 2;
+}
+
+message ModelLoadResponse{
+  // Endpoint to use for further interactions with this model.
+  string endpoint = 1;
+}
+
+message ModelUnloadRequest{
+  // Model name.
+  string name = 1;
+}
+
+message ModelUnloadResponse{}
+
 // An inference parameter value. The Parameters message describes a
 // "name"/"value" pair, where the "name" is the name of the parameter
 // and the "value" is a boolean, integer, or string corresponding to
@@ -267,6 +298,9 @@ message InferParameter{
 
     // A string parameter value.
     string string_param = 3;
+
+    // A double parameter value
+    double double_param = 4;
   }
 }
 

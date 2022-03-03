@@ -171,12 +171,12 @@ class InferenceRequestInput {
   [[nodiscard]] void *getData() const;
 
   /// Get the input tensor's name
-  std::string getName() { return this->name_; }
+  const std::string &getName() const { return this->name_; }
   /// Set the input tensor's name
   void setName(std::string name);
 
   /// Get the input tensor's shape
-  std::vector<uint64_t> getShape() { return this->shape_; }
+  const std::vector<uint64_t> &getShape() const { return this->shape_; }
   /// Set the tensor's shape
   void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
   /// Set the tensor's shape
@@ -190,12 +190,12 @@ class InferenceRequestInput {
   }
 
   /// Get the input tensor's datatype
-  types::DataType getDatatype() { return this->dataType_; }
+  types::DataType getDatatype() const { return this->dataType_; }
   /// Set the tensor's data type
   void setDatatype(types::DataType type);
 
   /// Get the input tensor's parameters
-  RequestParameters *getParameters() { return this->parameters_.get(); }
+  RequestParameters *getParameters() const { return this->parameters_.get(); }
 
   /// Set the tensor's size
   size_t getSize();
@@ -292,7 +292,7 @@ class InferenceResponse {
   /// Check if this is an error response
   bool isError() const;
   /// Get the error message if it exists. Defaults to an empty string
-  std::string_view getError() const;
+  std::string getError() const;
 
 #ifdef PROTEUS_ENABLE_TRACING
   /**
@@ -379,22 +379,22 @@ class InferenceRequest {
                       types::DataType dataType, std::string name = "");
 
   /// Get a vector of all the input request objects
-  std::vector<InferenceRequestInput> getInputs();
+  const std::vector<InferenceRequestInput> &getInputs() const;
   /// Get the number of input request objects
   size_t getInputSize();
 
   /// Get a vector of the requested output information
-  std::vector<InferenceRequestOutput> getOutputs();
+  const std::vector<InferenceRequestOutput> &getOutputs() const;
 
   /**
    * @brief Get the ID associated with this request
    *
    * @return std::string
    */
-  std::string getID() { return id_; }
+  const std::string &getID() const { return id_; }
 
   /// Get a pointer to the request's parameters
-  RequestParameters *getParameters() { return this->parameters_.get(); }
+  RequestParameters *getParameters() const { return this->parameters_.get(); }
 
  private:
   std::string id_;

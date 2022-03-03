@@ -22,6 +22,15 @@
 
 #include "proteus/core/predict_api_internal.hpp"
 
+namespace google::protobuf {
+template <typename T, typename U>
+class Map;
+}
+
+namespace inference {
+class InferParameter;
+}
+
 namespace proteus {
 
 class CallDataModelInfer;
@@ -39,6 +48,9 @@ class InferenceRequestBuilder<CallDataModelInfer *> {
 };
 
 using RequestBuilder = InferenceRequestBuilder<CallDataModelInfer *>;
+
+RequestParametersPtr addParameters(
+  const google::protobuf::Map<std::string, inference::InferParameter> &params);
 
 }  // namespace proteus
 
