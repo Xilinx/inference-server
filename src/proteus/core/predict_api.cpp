@@ -137,7 +137,7 @@ void InferenceRequestInput::setDatatype(types::DataType type) {
   this->dataType_ = type;
 }
 
-size_t InferenceRequestInput::getSize() {
+size_t InferenceRequestInput::getSize() const {
   return std::accumulate(this->shape_.begin(), this->shape_.end(), 1,
                          std::multiplies<>());
 }

@@ -198,7 +198,7 @@ class InferenceRequestInput {
   RequestParameters *getParameters() const { return this->parameters_.get(); }
 
   /// Set the tensor's size
-  size_t getSize();
+  size_t getSize() const;
 
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,

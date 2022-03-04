@@ -35,6 +35,8 @@ using grpc::Status;
 
 namespace proteus {
 
+using types::DataType;
+
 class GrpcClient::GrpcClientImpl {
  public:
   GrpcClientImpl(std::shared_ptr<::grpc::Channel> channel) {
@@ -144,46 +146,146 @@ void setParameters(
   }
 }
 
-InferenceResponse GrpcClient::modelInfer(const InferenceRequest& request) {
+InferenceResponse GrpcClient::modelInfer(const std::string& model,
+                                         const InferenceRequest& request) {
   inference::ModelInferRequest grpc_request;
   inference::ModelInferResponse reply;
 
   ClientContext context;
 
+  grpc_request.set_model_name(model);
   grpc_request.set_id(request.getID());
 
-  auto parameters = request.getParameters()->data();
-  auto* grpc_parameters = grpc_request.mutable_parameters();
-  setParameters(parameters, grpc_parameters);
+  auto* parameters = request.getParameters();
+  if (parameters != nullptr) {
+    auto params = parameters->data();
+    auto* grpc_parameters = grpc_request.mutable_parameters();
+    setParameters(params, grpc_parameters);
+  }
 
   auto inputs = request.getInputs();
   for (const auto& input : inputs) {
-    inference::ModelInferRequest_InferInputTensor tensor;
+    auto* tensor = grpc_request.add_inputs();
 
-    tensor.set_name(input.getName());
+    tensor->set_name(input.getName());
     auto shape = input.getShape();
     auto size = 1U;
     for (const auto& index : shape) {
-      tensor.add_shape(index);
+      tensor->add_shape(index);
       size *= index;
     }
     auto datatype = input.getDatatype();
-    tensor.set_datatype(types::mapTypeToStr(datatype));
-    setParameters(input.getParameters()->data(), tensor.mutable_parameters());
+    tensor->set_datatype(types::mapTypeToStr(datatype));
+    setParameters(input.getParameters()->data(), tensor->mutable_parameters());
 
-    auto* contents = tensor.mutable_contents();
-    // TODO(varunsh): for now, just store as bool
-    contents->mutable_bool_contents()->Reserve(size);
-    std::memcpy(contents->mutable_bool_contents()->mutable_data(),
-                input.getData(), size);
-    // switch (datatype){
-    //   case types::DataType::BOOL:
-    //     contents->mutable_bool_contents()->Reserve(size);
-    //     std::memcpy(contents->mutable_bool_contents()->mutable_data(),
-    //     input.getData(), size); break;
-    //   default:
-    //     break;
-    // }
+    switch (input.getDatatype()) {
+      case DataType::BOOL: {
+        auto* data = static_cast<bool*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_bool_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::UINT8: {
+        auto* data = static_cast<uint8_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::UINT16: {
+        auto* data = static_cast<uint16_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::UINT32: {
+        auto* data = static_cast<uint32_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::UINT64: {
+        auto* data = static_cast<uint64_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint64_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::INT8: {
+        auto* data = static_cast<int8_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::INT16: {
+        auto* data = static_cast<int16_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::INT32: {
+        auto* data = static_cast<int32_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::INT64: {
+        auto* data = static_cast<int64_t*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int64_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::FP16: {
+        // FIXME(varunsh): this is not handled
+        std::cout << "Writing FP16 not supported\n";
+        break;
+      }
+      case DataType::FP32: {
+        auto* data = static_cast<float*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_fp32_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::FP64: {
+        auto* data = static_cast<double*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_fp64_contents();
+        for (size_t i = 0; i < input.getSize(); i++) {
+          contents->Add(data[i]);
+        }
+        break;
+      }
+      case DataType::STRING: {
+        auto* data = static_cast<std::string*>(input.getData());
+        auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
+        contents->Add((*data).c_str());
+        // for(size_t i = 0; i < output.getSize(); i++){
+        //   contents->Add(data->data()[i]);
+        // }
+        break;
+      }
+      default:
+        // TODO(varunsh): what should we do here?
+        std::cout << "Unknown datatype\n";
+        break;
+    }
   }
 
   // TODO(varunsh): skipping outputs for now
@@ -210,11 +312,95 @@ InferenceResponse GrpcClient::modelInfer(const InferenceRequest& request) {
     output.setShape(shape);
     // TODO(varunsh): skipping parameters for now
 
+    switch (output.getDatatype()) {
+      case DataType::BOOL: {
+        auto data = std::make_shared<std::vector<char>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().bool_contents().data(),
+                    size * sizeof(char));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        break;
+      }
+      case DataType::UINT8:
+      case DataType::UINT16:
+      case DataType::UINT32: {
+        auto data = std::make_shared<std::vector<uint32_t>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().uint_contents().data(),
+                    size * sizeof(uint32_t));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setDatatype(DataType::UINT32);
+        break;
+      }
+      case DataType::UINT64: {
+        auto data = std::make_shared<std::vector<uint64_t>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().uint64_contents().data(),
+                    size * sizeof(uint64_t));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        break;
+      }
+      case DataType::INT8:
+      case DataType::INT16:
+      case DataType::INT32: {
+        auto data = std::make_shared<std::vector<int32_t>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().int_contents().data(),
+                    size * sizeof(int32_t));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setDatatype(DataType::INT32);
+        break;
+      }
+      case DataType::INT64: {
+        auto data = std::make_shared<std::vector<int64_t>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().int64_contents().data(),
+                    size * sizeof(int64_t));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        break;
+      }
+      case DataType::FP16: {
+        // FIXME(varunsh): this is not handled
+        std::cout << "Writing FP16 not supported\n";
+        break;
+      }
+      case DataType::FP32: {
+        auto data = std::make_shared<std::vector<float>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().fp32_contents().data(),
+                    size * sizeof(float));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        break;
+      }
+      case DataType::FP64: {
+        auto data = std::make_shared<std::vector<double>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().fp64_contents().data(),
+                    size * sizeof(double));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        break;
+      }
+      case DataType::STRING: {
+        auto data = std::make_shared<std::vector<std::byte>>();
+        data->reserve(size);
+        std::memcpy(data->data(), tensor.contents().bytes_contents().data(),
+                    size * sizeof(std::byte));
+        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        break;
+      }
+      default:
+        // TODO(varunsh): what should we do here?
+        std::cout << "Unknown datatype\n";
+        break;
+    }
+
     // auto data = std::make_shared<std::byte[]>(size);
-    auto data = std::shared_ptr<std::byte>(new std::byte[size],
-                                           std::default_delete<std::byte[]>());
-    std::memcpy(data.get(), tensor.contents().bool_contents().data(), size);
-    output.setData(data);
+    // auto data = std::shared_ptr<std::byte>(new std::byte[size],
+    //                                        std::default_delete<std::byte[]>());
+    // std::memcpy(data.get(), tensor.contents().bool_contents().data(), size);
+    // auto data = std::make_shared<std::vector<uint64_t>>();
+    // data->push_back(tensor.contents().int64_contents(0));
+    // output.setData(std::reinterpret_pointer_cast<std::byte>(data));
     response.addOutput(output);
   }
 

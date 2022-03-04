@@ -28,6 +28,8 @@
 
 namespace proteus {
 
+using types::DataType;
+
 RequestParametersPtr addParameters(
   const google::protobuf::Map<std::string, inference::InferParameter> &params) {
   auto parameters = std::make_shared<RequestParameters>();
@@ -68,8 +70,61 @@ class InferenceRequestInputBuilder<
                                 std::multiplies<>()) *
                 types::getSize(input.dataType_);
     auto *dest = static_cast<std::byte *>(input_buffer->data()) + offset;
-    // TODO(varunsh): is this legal or do we need to check the type?
-    memcpy(dest, req.contents().bool_contents().data(), size);
+
+    const auto tensor = req.contents();
+    switch (input.getDatatype()) {
+      case DataType::BOOL: {
+        std::memcpy(dest, tensor.bool_contents().data(), size * sizeof(char));
+        break;
+      }
+      case DataType::UINT8:
+      case DataType::UINT16:
+      case DataType::UINT32: {
+        auto value = tensor.uint_contents().data();
+        std::memcpy(dest, value, size * sizeof(uint32_t));
+        input.setDatatype(DataType::UINT32);
+        break;
+      }
+      case DataType::UINT64: {
+        std::memcpy(dest, tensor.uint64_contents().data(),
+                    size * sizeof(uint64_t));
+        break;
+      }
+      case DataType::INT8:
+      case DataType::INT16:
+      case DataType::INT32: {
+        std::memcpy(dest, tensor.int_contents().data(), size * sizeof(int32_t));
+        input.setDatatype(DataType::INT32);
+        break;
+      }
+      case DataType::INT64: {
+        std::memcpy(dest, tensor.int64_contents().data(),
+                    size * sizeof(int64_t));
+        break;
+      }
+      case DataType::FP16: {
+        // FIXME(varunsh): this is not handled
+        std::cout << "Writing FP16 not supported\n";
+        break;
+      }
+      case DataType::FP32: {
+        std::memcpy(dest, tensor.fp32_contents().data(), size * sizeof(float));
+        break;
+      }
+      case DataType::FP64: {
+        std::memcpy(dest, tensor.fp64_contents().data(), size * sizeof(double));
+        break;
+      }
+      case DataType::STRING: {
+        std::memcpy(dest, tensor.bytes_contents().data(),
+                    size * sizeof(std::byte));
+        break;
+      }
+      default:
+        // TODO(varunsh): what should we do here?
+        std::cout << "Unknown datatype\n";
+        break;
+    }
 
     input.data_ = dest;
     return input;

@@ -41,6 +41,7 @@ endif()
 if(${PROTEUS_ENABLE_GRPC})
     target_include_directories(grpc_server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
     target_link_libraries(grpc_server INTERFACE lib_grpc)
+    add_dependencies(grpc_server lib_grpc)
 endif()
 
 add_library(servers INTERFACE)

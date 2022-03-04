@@ -51,7 +51,8 @@ class GrpcClient {
   bool modelReady(const std::string& model);
 
   std::string modelLoad(const std::string& model);
-  InferenceResponse modelInfer(const InferenceRequest& request);
+  InferenceResponse modelInfer(const std::string& model,
+                               const InferenceRequest& request);
 
  private:
   class GrpcClientImpl;

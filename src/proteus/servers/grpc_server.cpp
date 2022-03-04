@@ -42,6 +42,8 @@ using StatusCode = grpc::StatusCode;
 
 namespace proteus {
 
+using types::DataType;
+
 #define CALLDATA_IMPL(endpoint)                                               \
   class CallData##endpoint : public CallData<inference::endpoint##Request,    \
                                              inference::endpoint##Response> { \
@@ -105,9 +107,115 @@ void parseResponse(CallDataModelInfer* calldata, InferenceResponse response) {
       tensor->add_shape(index);
       size *= index;
     }
-    auto* contents = tensor->mutable_contents()->mutable_bool_contents();
-    contents->Reserve(size);
-    std::memcpy(contents->mutable_data(), output.getData(), size);
+
+    switch (output.getDatatype()) {
+      case DataType::BOOL: {
+        auto* data = static_cast<std::vector<bool>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_bool_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add(static_cast<bool>((*data)[i]));
+        }
+        break;
+      }
+      case DataType::UINT8: {
+        auto* data = static_cast<std::vector<uint8_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::UINT16: {
+        auto* data = static_cast<std::vector<uint16_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::UINT32: {
+        auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::UINT64: {
+        auto* data = static_cast<std::vector<uint64_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_uint64_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::INT8: {
+        auto* data = static_cast<std::vector<int8_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::INT16: {
+        auto* data = static_cast<std::vector<int16_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::INT32: {
+        auto* data = static_cast<std::vector<int32_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::INT64: {
+        auto* data = static_cast<std::vector<int64_t>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_int64_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::FP16: {
+        // FIXME(varunsh): this is not handled
+        std::cout << "Writing FP16 not supported\n";
+        break;
+      }
+      case DataType::FP32: {
+        auto* data = static_cast<std::vector<float>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_fp32_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::FP64: {
+        auto* data = static_cast<std::vector<double>*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_fp64_contents();
+        for (size_t i = 0; i < output.getSize(); i++) {
+          contents->Add((*data)[i]);
+        }
+        break;
+      }
+      case DataType::STRING: {
+        auto* data = static_cast<std::string*>(output.getData());
+        auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
+        contents->Add((*data).c_str());
+        // for(size_t i = 0; i < output.getSize(); i++){
+        //   contents->Add(data->data()[i]);
+        // }
+        break;
+      }
+      default:
+        // TODO(varunsh): what should we do here?
+        std::cout << "Unknown datatype\n";
+        break;
+    }
   }
 }
 
@@ -116,14 +224,14 @@ void grpcCallback(CallDataModelInfer* calldata,
   if (response.isError()) {
     calldata->finish(Status(StatusCode::UNKNOWN, response.getError()));
     return;
-  } else {
-    try {
-      parseResponse(calldata, response);
-    } catch (const std::invalid_argument& e) {
-      calldata->finish(Status(StatusCode::UNKNOWN, e.what()));
-      return;
-    }
   }
+  try {
+    parseResponse(calldata, response);
+  } catch (const std::invalid_argument& e) {
+    calldata->finish(Status(StatusCode::UNKNOWN, e.what()));
+    return;
+  }
+
   // #ifdef PROTEUS_ENABLE_TRACING
   //   const auto &context = response.getContext();
   //   propagate(resp.get(), context);
@@ -139,7 +247,9 @@ class GrpcApi : public Interface {
    * @param req
    * @param callback
    */
-  GrpcApi(CallDataModelInfer* calldata) : calldata_(calldata){};
+  GrpcApi(CallDataModelInfer* calldata) : calldata_(calldata) {
+    this->type_ = InterfaceType::kGrpc;
+  };
 
   std::shared_ptr<InferenceRequest> getRequest(
     size_t& buffer_index, const std::vector<BufferRawPtrs>& input_buffers,
@@ -246,6 +356,11 @@ void CallDataModelInfer::waitForRequest() {
 
 void CallDataModelInfer::handleRequest() {
   auto& model = request_.model_name();
+#ifdef PROTEUS_ENABLE_TRACING
+  auto trace = startTrace(__func__);
+  trace->setAttribute("model", model);
+  trace->startSpan("request_handler");
+#endif
 
   WorkerInfo* worker = nullptr;
   try {
@@ -261,10 +376,10 @@ void CallDataModelInfer::handleRequest() {
   //   request->set_time(now);
   // #endif
   auto* batcher = worker->getBatcher();
-  // #ifdef PROTEUS_ENABLE_TRACING
-  //   trace->endSpan();
-  //   request->setTrace(std::move(trace));
-  // #endif
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->endSpan();
+  request->setTrace(std::move(trace));
+#endif
   batcher->enqueue(std::move(request));
 }
 
