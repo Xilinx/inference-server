@@ -46,7 +46,7 @@ class InferenceRequest;
 
 namespace proteus {
 
-void HardBatcher::run(WorkerInfo* worker) {
+void HardBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
   setThreadName(thread_name);
   std::unique_lock<std::mutex> lk(this->cv_m_);

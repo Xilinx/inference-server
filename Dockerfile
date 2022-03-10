@@ -520,6 +520,8 @@ RUN apt-get update \
     && pip install --no-cache-dir \
         # install testing dependencies
         pytest \
+        pytest-cpp \
+        pytest-xprocess \
         requests \
         websocket-client \
         # install documentation dependencies

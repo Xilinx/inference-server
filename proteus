@@ -117,7 +117,9 @@ def run_command(command: str, dry_run: bool, exit_on_error=True, quiet=False):
     try:
         if quiet:
             subprocess.check_call(
-                shlex.split(command), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                shlex.split(command),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
         else:
             subprocess.check_call(
@@ -644,7 +646,9 @@ class Dockerize:
         except subprocess.CalledProcessError:
             git_commit = "unknown"
         else:
-            retval = run_command("git diff --quiet -- . ':(exclude)VERSION'", False, False)
+            retval = run_command(
+                "git diff --quiet -- . ':(exclude)VERSION'", False, False
+            )
             if retval:
                 git_commit += "-dirty"
 

@@ -45,6 +45,7 @@ Batcher::Batcher() {
   this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
   this->batch_size_ = 1;
+  this->status_ = BatcherStatus::kNew;
 #ifdef PROTEUS_ENABLE_LOGGING
   this->logger_ = getLogger();
 #endif
@@ -60,6 +61,7 @@ Batcher::Batcher(const Batcher &batcher) {
   this->input_queue_ = batcher.input_queue_;
   this->output_queue_ = batcher.output_queue_;
   this->batch_size_ = batcher.batch_size_;
+  this->status_ = BatcherStatus::kNew;
 #ifdef PROTEUS_ENABLE_LOGGING
   this->logger_ = getLogger();
 #endif
@@ -89,9 +91,17 @@ void Batcher::enqueue(InterfacePtr request) {
   this->cv_.notify_one();
 }
 
+void Batcher::run(WorkerInfo *worker) {
+  this->status_ = BatcherStatus::kRun;
+  this->doRun(worker);
+  this->status_ = BatcherStatus::kInactive;
+}
+
+BatcherStatus Batcher::getStatus() { return this->status_; }
+
 void Batcher::end() {
-  this->enqueue(nullptr);
   this->thread_.join();
+  this->status_ = BatcherStatus::kDead;
 }
 
 }  // namespace proteus

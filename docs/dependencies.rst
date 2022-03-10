@@ -99,6 +99,8 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :pypipackages:`pip`,latest,MIT,Python package installer
     :pypipackages:`pytest`,latest,MIT,Python testing infrastructure
     :pypipackages:`pytest-benchmark`,latest,BSD-2,Plugin for Pytest to add benchmarking
+    :pypipackages:`pytest-cpp`,latest,MIT,Plugin for Pytest to run C++ tests
+    :pypipackages:`pytest-xprocess`,latest,MIT,Plugin for Pytest to run external processes
     :pypipackages:`requests`,latest,Apache-2.0,Making REST requests
     :pypipackages:`rich`,latest,MIT,Printing tables when benchmarking
     :pypipackages:`setuptools`,latest,MIT,Manage Python packages

@@ -43,6 +43,8 @@ class WorkerInfo;
 
 namespace proteus {
 
+enum class BatcherStatus { kNew, kRun, kInactive, kDead };
+
 /**
  * @brief The Batch is what the batcher produces and pushes to the workers. It
  * represents the requests, the buffers associated with the request and other
@@ -115,13 +117,9 @@ class Batcher {
   /// Get the batcher's output queue (used to push batches to the worker group)
   BatchPtrQueue* getOutputQueue();
 
-  /**
-   * @brief The run method defines the exact process by which the batcher
-   * consumes incoming Interface objects and uses them to create batches.
-   *
-   * @param worker pointer to this batcher's worker [group]
-   */
-  virtual void run(WorkerInfo* worker) = 0;
+  void run(WorkerInfo* worker);
+
+  BatcherStatus getStatus();
 
   /**
    * @brief Enqueue a new request to the batcher
@@ -145,6 +143,17 @@ class Batcher {
 #ifdef PROTEUS_ENABLE_LOGGING
   LoggerPtr logger_;
 #endif
+
+ private:
+  /**
+   * @brief The doRun method defines the exact process by which the batcher
+   * consumes incoming Interface objects and uses them to create batches.
+   *
+   * @param worker pointer to this batcher's worker [group]
+   */
+  virtual void doRun(WorkerInfo* worker) = 0;
+
+  BatcherStatus status_;
 };
 
 }  // namespace proteus

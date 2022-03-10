@@ -51,7 +51,7 @@ using std::chrono::milliseconds;
 
 namespace proteus {
 
-void SoftBatcher::run(WorkerInfo* worker) {
+void SoftBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
   setThreadName(thread_name);
 
@@ -106,9 +106,9 @@ void SoftBatcher::run(WorkerInfo* worker) {
         }
       }
 
-      for (size_t foo = 0; foo < count; foo++) {
+      for (size_t j = 0; j < count; j++) {
         InterfacePtr req;
-        req = std::move(reqs[foo]);
+        req = std::move(reqs[j]);
 
         if (req == nullptr) {
           run = false;
@@ -209,7 +209,7 @@ void SoftBatcher::run(WorkerInfo* worker) {
 #endif
         }
       }
-    } while (batch_size % this->batch_size_ != 0);
+    } while (batch_size % this->batch_size_ != 0 && run);
 
     if (!batch->requests->empty()) {
       SPDLOG_DEBUG("Enqueuing batch for " + this->model_);

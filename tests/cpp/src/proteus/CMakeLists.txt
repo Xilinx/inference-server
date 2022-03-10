@@ -1,8 +1,0 @@
-add_subdirectory(batching)
-# add_subdirectory(buffers)
-# add_subdirectory(clients)
-add_subdirectory(core)
-# add_subdirectory(helpers)
-add_subdirectory(observation)
-# add_subdirectory(servers)
-# add_subdirectory(workers)

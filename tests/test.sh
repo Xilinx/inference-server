@@ -20,16 +20,15 @@ cat << EOF
 usage: ./test.sh [--mode MODE] [mode args]
 
 Args:
-  --mode <python|cpp|examples|all>: choose which tests to run. Defaults to python
+  --mode <tests|examples|all>: choose whether to run tests, examples or both. Defaults to tests
   --load-before: attempt to load xclbins to all unloaded FPGAs before running tests
-
-Python args:
   -k <STR>: run specific tests matching this substring
   -s: disable capturing stdout in pytest. Set this option to enable printing
   --hostname <STR>: hostname of Proteus server. Defaults to localhost
   --http_port <NUM>: port to use for Proteus's HTTP server. Defaults to Proteus's default value
   --fpgas name:num,...: type and number of FPGAs to use for testing. Autodetects by default
   --benchmark <skip|only|all>: skip or only run benchmark tests, or run everything. Defaults to skip
+  --perf <skip|only|all>: skip or only run performance tests, or run everything. Defaults to skip
 
 CPP args:
   --build <Debug|Coverage>: build to test. Defaults to Debug
@@ -45,12 +44,13 @@ PORT=""
 TESTS=""
 CAPTURE=""
 BENCHMARK="skip"
+PERF="skip"
 SAVE_BENCHMARK=""
 
 BUILD="Debug"
 
 full_path=$(realpath $0)
-python_tests_path=$(dirname $full_path)/python
+python_tests_path=$(dirname $full_path)
 examples_path=$(dirname $full_path)/../examples
 cur_path=$(pwd)
 
@@ -63,6 +63,7 @@ do
     --fpgas           ) FPGAS=$2         ; shift 2 ;;
     --load-before     ) LOAD="1"         ; shift 1 ;;
     --mode            ) MODE="$2"        ; shift 2 ;;
+    --perf            ) PERF=$2          ; shift 2 ;;
     -k                ) TESTS="$2"       ; shift 2 ;;
     -s                ) CAPTURE="-s"     ; shift 1 ;;
     --build           ) BUILD="$2"       ; shift 2 ;;
@@ -98,23 +99,16 @@ if [[ $MODE == "python" || $MODE == "all" ]]; then
 
   cd "$python_tests_path"
   if [[ -n $TESTS ]]; then
-    pytest $CAPTURE -ra --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
-      $FPGAS --benchmark $BENCHMARK --benchmark-quiet -k "$TESTS"
+    pytest $CAPTURE -ra --tb=short --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
+      $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet -k "$TESTS"
     retval=$(($retval | $?))
   else
-    pytest $CAPTURE -ra --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
-      $FPGAS --benchmark $BENCHMARK --benchmark-quiet
+    pytest $CAPTURE -ra  --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
+      $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet
     retval=$(($retval | $?))
   fi
 
   cd "$cur_path"
-fi
-
-if [[ $MODE == "cpp" || $MODE == "all" ]]; then
-  # ctest fails to detect the tests in Coverage build for some reason
-  # exclude all perf tests with -E option
-  ctest --test-dir $PROTEUS_ROOT/build/$BUILD/tests/cpp/ -E "\/Perf"
-  retval=$(($retval | $?))
 fi
 
 if [[ $MODE == "examples" || $MODE == "all" ]]; then

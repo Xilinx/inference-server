@@ -182,8 +182,19 @@ void WorkerInfo::unload() {
   bool last_worker = this->workers_.size() == 1;
   if (last_worker) {
     this->joinAll();
+    // we enqueue nullptrs to kill the batchers but don't know which batcher
+    // may receive the nullptr if there are multiple. So, we loop through all of
+    // of them until we find one that's inactive, indicating it received the
+    // nullptr, and end that one.
     for (const auto& batcher : this->batchers_) {
-      batcher->end();
+      batcher->enqueue(nullptr);
+      auto i = -1;
+      BatcherStatus status;
+      do {
+        i = (i + 1) % this->batchers_.size();
+        status = batchers_[i]->getStatus();
+      } while (status != BatcherStatus::kInactive);
+      this->batchers_[i]->end();
     }
   }
 
