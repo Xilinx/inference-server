@@ -34,7 +34,7 @@ class XModelFixture : public testing::Test {
 };
 
 // @pytest.mark.extensions(["vitis"])
-// @pytest.mark.fpgas("DPUCADF8H", 2)
+// @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST_F(XModelFixture, proteus) {
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
@@ -44,7 +44,7 @@ TEST_F(XModelFixture, proteus) {
 }
 
 // @pytest.mark.extensions(["vitis"])
-// @pytest.mark.fpgas("DPUCADF8H", 2)
+// @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST_F(XModelFixture, reference) {
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {

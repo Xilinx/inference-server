@@ -13,12 +13,10 @@
 # limitations under the License.
 
 import pytest
-import cv2
-import os
-import numpy as np
 import math
-import asyncio
-import aiohttp
+
+import cv2
+import numpy as np
 
 from helper import run_benchmark, root_path
 from proteus.predict_api import Datatype, ImageInferenceRequest

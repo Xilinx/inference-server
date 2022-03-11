@@ -15,7 +15,7 @@
 #include "proteus/testing/gtest_fixtures.hpp"
 
 TEST_F(Grpc, model_infer) {
-  auto endpoint = client_->modelLoad("echo");
+  auto endpoint = client_->modelLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
   std::vector<uint8_t> imgData;
@@ -38,6 +38,7 @@ TEST_F(Grpc, model_infer) {
   EXPECT_EQ(outputs.size(), 1);
   for (auto& output : outputs) {
     auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
+    EXPECT_EQ(data->size(), 1);
     EXPECT_EQ((*data)[0], 2);
   }
 }

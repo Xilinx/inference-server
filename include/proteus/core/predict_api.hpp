@@ -196,6 +196,9 @@ class InferenceRequestInput {
 
   /// Get the input tensor's parameters
   RequestParameters *getParameters() const { return this->parameters_.get(); }
+  void setParameters(RequestParametersPtr parameters) {
+    parameters_ = parameters;
+  }
 
   /// Set the tensor's size
   size_t getSize() const;
@@ -249,6 +252,11 @@ class InferenceRequestOutput {
   /// Get the output tensor's name
   std::string getName() { return this->name_; }
   void setName(const std::string &name);
+
+  void setParameters(RequestParametersPtr parameters) {
+    parameters_ = parameters;
+  }
+  RequestParameters *getParameters() { return parameters_.get(); }
 
  private:
   std::string name_;
@@ -378,6 +386,9 @@ class InferenceRequest {
   void addInputTensor(void *data, std::vector<uint64_t> shape,
                       types::DataType dataType, std::string name = "");
 
+  void addInputTensor(InferenceRequestInput input);
+  void addOutputTensor(InferenceRequestOutput output);
+
   /// Get a vector of all the input request objects
   const std::vector<InferenceRequestInput> &getInputs() const;
   /// Get the number of input request objects
@@ -392,9 +403,13 @@ class InferenceRequest {
    * @return std::string
    */
   const std::string &getID() const { return id_; }
+  void setID(const std::string &id) { id_ = id; }
 
   /// Get a pointer to the request's parameters
   RequestParameters *getParameters() const { return this->parameters_.get(); }
+  void setParameters(RequestParametersPtr parameters) {
+    parameters_ = parameters;
+  }
 
  private:
   std::string id_;

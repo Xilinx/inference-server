@@ -50,7 +50,9 @@ class GrpcClient {
   bool serverReady();
   bool modelReady(const std::string& model);
 
-  std::string modelLoad(const std::string& model);
+  std::string modelLoad(const std::string& model,
+                        RequestParametersPtr parameters);
+  void modelUnload(const std::string& model);
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request);
 

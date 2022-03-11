@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
-
 import pytest
+
 from proteus.exceptions import ConnectionError
 from proteus.predict_api import Datatype, InferenceRequest, RequestInput, RequestOutput
 

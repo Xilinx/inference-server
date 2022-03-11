@@ -60,6 +60,13 @@ bool hasHardware(const std::string &kernel, size_t num);
 std::string load(const std::string &worker, RequestParameters *parameters);
 
 /**
+ * @brief Unload a worker
+ *
+ * @param worker name of the worker to unload
+ */
+void unload(const std::string &worker);
+
+/**
  * @brief Enqueue an inference request to Proteus
  *
  * @param workerName name of the worker to make the request to

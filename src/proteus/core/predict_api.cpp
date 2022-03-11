@@ -98,6 +98,10 @@ void InferenceRequest::addInputTensor(void *data, std::vector<uint64_t> shape,
   this->inputs_.emplace_back(data, shape, dataType, name);
 }
 
+void InferenceRequest::addInputTensor(InferenceRequestInput input) {
+  this->inputs_.push_back(input);
+}
+
 const std::vector<InferenceRequestInput> &InferenceRequest::getInputs() const {
   return this->inputs_;
 }
@@ -107,6 +111,10 @@ size_t InferenceRequest::getInputSize() { return this->inputs_.size(); }
 const std::vector<InferenceRequestOutput> &InferenceRequest::getOutputs()
   const {
   return this->outputs_;
+}
+
+void InferenceRequest::addOutputTensor(InferenceRequestOutput output) {
+  this->outputs_.push_back(output);
 }
 
 InferenceRequestInput::InferenceRequestInput(void *data,

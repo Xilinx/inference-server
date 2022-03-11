@@ -103,6 +103,10 @@ InferenceResponseFuture enqueue(const std::string& workerName,
   return future;
 }
 
+void unload(const std::string& worker) {
+  Manager::getInstance().unloadWorker(worker);
+}
+
 std::string getHardware() {
   std::string hardware;
 #ifdef PROTEUS_ENABLE_VITIS

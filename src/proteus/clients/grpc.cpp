@@ -109,24 +109,6 @@ bool GrpcClient::modelReady(const std::string& model) {
   }
 }
 
-std::string GrpcClient::modelLoad(const std::string& model) {
-  inference::ModelLoadRequest request;
-  inference::ModelLoadResponse reply;
-
-  ClientContext context;
-
-  request.set_name(model);
-
-  auto* stub = this->impl_->getStub();
-  Status status = stub->ModelLoad(&context, request, &reply);
-
-  if (status.ok()) {
-    return reply.endpoint();
-  } else {
-    throw std::runtime_error(status.error_message());
-  }
-}
-
 void setParameters(
   const std::map<std::string, proteus::Parameter>& parameters,
   google::protobuf::Map<std::string, inference::InferParameter>*
@@ -143,6 +125,45 @@ void setParameters(
       param.set_string_param(std::get<std::string>(value));
     }
     grpc_parameters->insert({key, param});
+  }
+}
+
+std::string GrpcClient::modelLoad(const std::string& model,
+                                  RequestParametersPtr parameters) {
+  inference::ModelLoadRequest request;
+  inference::ModelLoadResponse reply;
+
+  ClientContext context;
+
+  request.set_name(model);
+  auto* params = request.mutable_parameters();
+  if (parameters) {
+    setParameters(parameters->data(), params);
+  }
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->ModelLoad(&context, request, &reply);
+
+  if (status.ok()) {
+    return reply.endpoint();
+  } else {
+    throw std::runtime_error(status.error_message());
+  }
+}
+
+void GrpcClient::modelUnload(const std::string& model) {
+  inference::ModelUnloadRequest request;
+  inference::ModelUnloadResponse reply;
+
+  ClientContext context;
+
+  request.set_name(model);
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->ModelUnload(&context, request, &reply);
+
+  if (!status.ok()) {
+    throw std::runtime_error(status.error_message());
   }
 }
 
@@ -293,6 +314,10 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelInfer(&context, grpc_request, &reply);
 
+  if (!status.ok()) {
+    throw std::runtime_error(status.error_message());
+  }
+
   InferenceResponse response;
 
   response.setModel(reply.model_name());
@@ -315,7 +340,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
     switch (output.getDatatype()) {
       case DataType::BOOL: {
         auto data = std::make_shared<std::vector<char>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().bool_contents().data(),
                     size * sizeof(char));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -325,7 +350,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       case DataType::UINT16:
       case DataType::UINT32: {
         auto data = std::make_shared<std::vector<uint32_t>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().uint_contents().data(),
                     size * sizeof(uint32_t));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -334,7 +359,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       }
       case DataType::UINT64: {
         auto data = std::make_shared<std::vector<uint64_t>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().uint64_contents().data(),
                     size * sizeof(uint64_t));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -344,7 +369,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       case DataType::INT16:
       case DataType::INT32: {
         auto data = std::make_shared<std::vector<int32_t>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().int_contents().data(),
                     size * sizeof(int32_t));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -353,7 +378,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       }
       case DataType::INT64: {
         auto data = std::make_shared<std::vector<int64_t>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().int64_contents().data(),
                     size * sizeof(int64_t));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -366,7 +391,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       }
       case DataType::FP32: {
         auto data = std::make_shared<std::vector<float>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().fp32_contents().data(),
                     size * sizeof(float));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -374,7 +399,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       }
       case DataType::FP64: {
         auto data = std::make_shared<std::vector<double>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().fp64_contents().data(),
                     size * sizeof(double));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -382,7 +407,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
       }
       case DataType::STRING: {
         auto data = std::make_shared<std::vector<std::byte>>();
-        data->reserve(size);
+        data->resize(size);
         std::memcpy(data->data(), tensor.contents().bytes_contents().data(),
                     size * sizeof(std::byte));
         output.setData(std::reinterpret_pointer_cast<std::byte>(data));
@@ -404,11 +429,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
     response.addOutput(output);
   }
 
-  if (status.ok()) {
-    return response;
-  } else {
-    throw std::runtime_error(status.error_message());
-  }
+  return response;
 }
 
 void startGrpcServer(int port) {

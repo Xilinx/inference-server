@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include(GoogleTest)
-
-list(APPEND targets)
+list(APPEND targets
+    echo
+)
 
 if(${PROTEUS_ENABLE_VITIS})
     set(targets ${targets} xmodel)
@@ -25,28 +25,29 @@ if(${PROTEUS_ENABLE_AKS})
 endif()
 
 foreach(target ${targets})
-    add_executable(${target} ${target}.cpp)
-    target_link_libraries(${target} PRIVATE proteus Threads::Threads)
-    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+    add_executable(test_${target} test_${target}.cpp)
+    target_link_libraries(test_${target} PRIVATE proteus Threads::Threads gtest gtest_main)
+    target_include_directories(test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+
+    gtest_discover_tests(test_${target})
 endforeach()
 
 if(${PROTEUS_ENABLE_VITIS})
-    target_link_libraries(xmodel PRIVATE
+    target_link_libraries(test_xmodel PRIVATE
         xir vart-runner
     )
 endif()
 
 if(${PROTEUS_ENABLE_AKS})
-    target_link_libraries(facedetect PRIVATE
+    target_link_libraries(test_facedetect PRIVATE
         opencv_core opencv_imgcodecs
     )
 endif()
 
 foreach(target ${targets})
-    add_executable(test_${target} test_${target}.cpp)
-    get_target_property(${target}_libs ${target} LINK_LIBRARIES)
-    target_link_libraries(test_${target} ${${target}_libs} gtest gtest_main)
-    target_include_directories(test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
-
-    gtest_discover_tests(test_${target})
+    if(EXISTS ${target}.cpp)
+        add_executable(${target} ${target}.cpp)
+        target_link_libraries(${target} PRIVATE $<TARGET_PROPERTY:test_${target},LINK_LIBRARIES>)
+        target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+    endif()
 endforeach()
