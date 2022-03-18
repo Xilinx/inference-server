@@ -14,7 +14,7 @@
 
 #include "proteus/testing/gtest_fixtures.hpp"
 
-TEST_F(Grpc, server_live) {
+TEST_F(GrpcFixture, server_live) {
   auto reply = client_->serverLive();
   EXPECT_TRUE(reply);
 }

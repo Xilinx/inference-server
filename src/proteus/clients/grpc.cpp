@@ -27,6 +27,7 @@
 
 #include "predict_api.grpc.pb.h"
 #include "proteus/build_options.hpp"
+#include "proteus/clients/grpc_internal.hpp"
 #include "proteus/core/data_types.hpp"
 #include "proteus/servers/grpc_server.hpp"
 
@@ -109,21 +110,28 @@ bool GrpcClient::modelReady(const std::string& model) {
   }
 }
 
-void setParameters(
+// refer to cppreference for std::visit
+// helper type for the visitor #4
+template <class... Ts>
+struct overloaded : Ts... {
+  using Ts::operator()...;
+};
+// explicit deduction guide (not needed as of C++20)
+template <class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+
+void mapParametersToProto(
   const std::map<std::string, proteus::Parameter>& parameters,
   google::protobuf::Map<std::string, inference::InferParameter>*
     grpc_parameters) {
   for (const auto& [key, value] : parameters) {
     inference::InferParameter param;
-    if (std::holds_alternative<bool>(value)) {
-      param.set_bool_param(std::get<bool>(value));
-    } else if (std::holds_alternative<double>(value)) {
-      param.set_double_param(std::get<double>(value));
-    } else if (std::holds_alternative<int32_t>(value)) {
-      param.set_int64_param(std::get<int32_t>(value));
-    } else {
-      param.set_string_param(std::get<std::string>(value));
-    }
+    std::visit(
+      overloaded{[&](bool arg) { param.set_bool_param(arg); },
+                 [&](double arg) { param.set_double_param(arg); },
+                 [&](int32_t arg) { param.set_int64_param(arg); },
+                 [&](std::string arg) { param.set_string_param(arg); }},
+      value);
     grpc_parameters->insert({key, param});
   }
 }
@@ -138,7 +146,7 @@ std::string GrpcClient::modelLoad(const std::string& model,
   request.set_name(model);
   auto* params = request.mutable_parameters();
   if (parameters) {
-    setParameters(parameters->data(), params);
+    mapParametersToProto(parameters->data(), params);
   }
 
   auto* stub = this->impl_->getStub();
@@ -167,21 +175,15 @@ void GrpcClient::modelUnload(const std::string& model) {
   }
 }
 
-InferenceResponse GrpcClient::modelInfer(const std::string& model,
-                                         const InferenceRequest& request) {
-  inference::ModelInferRequest grpc_request;
-  inference::ModelInferResponse reply;
-
-  ClientContext context;
-
-  grpc_request.set_model_name(model);
+void mapRequestToProto(const InferenceRequest& request,
+                       inference::ModelInferRequest& grpc_request) {
   grpc_request.set_id(request.getID());
 
   auto* parameters = request.getParameters();
   if (parameters != nullptr) {
     auto params = parameters->data();
     auto* grpc_parameters = grpc_request.mutable_parameters();
-    setParameters(params, grpc_parameters);
+    mapParametersToProto(params, grpc_parameters);
   }
 
   auto inputs = request.getInputs();
@@ -197,7 +199,8 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
     }
     auto datatype = input.getDatatype();
     tensor->set_datatype(types::mapTypeToStr(datatype));
-    setParameters(input.getParameters()->data(), tensor->mutable_parameters());
+    mapParametersToProto(input.getParameters()->data(),
+                         tensor->mutable_parameters());
 
     switch (input.getDatatype()) {
       case DataType::BOOL: {
@@ -310,16 +313,10 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   }
 
   // TODO(varunsh): skipping outputs for now
+}
 
-  auto* stub = this->impl_->getStub();
-  Status status = stub->ModelInfer(&context, grpc_request, &reply);
-
-  if (!status.ok()) {
-    throw std::runtime_error(status.error_message());
-  }
-
-  InferenceResponse response;
-
+void mapPrototoResponse(const inference::ModelInferResponse& reply,
+                        InferenceResponse& response) {
   response.setModel(reply.model_name());
   response.setID(reply.id());
 
@@ -428,7 +425,27 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
     // output.setData(std::reinterpret_pointer_cast<std::byte>(data));
     response.addOutput(output);
   }
+}
 
+InferenceResponse GrpcClient::modelInfer(const std::string& model,
+                                         const InferenceRequest& request) {
+  inference::ModelInferRequest grpc_request;
+  inference::ModelInferResponse reply;
+
+  ClientContext context;
+
+  grpc_request.set_model_name(model);
+  mapRequestToProto(request, grpc_request);
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->ModelInfer(&context, grpc_request, &reply);
+
+  if (!status.ok()) {
+    throw std::runtime_error(status.error_message());
+  }
+
+  InferenceResponse response;
+  mapPrototoResponse(reply, response);
   return response;
 }
 

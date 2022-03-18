@@ -14,7 +14,7 @@
 
 #include "proteus/testing/gtest_fixtures.hpp"
 
-TEST_F(Grpc, model_infer) {
+TEST_F(GrpcFixture, model_infer) {
   auto endpoint = client_->modelLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 

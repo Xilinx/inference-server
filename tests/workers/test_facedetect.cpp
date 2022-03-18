@@ -18,7 +18,8 @@
 #include "facedetect.hpp"
 #include "gtest/gtest.h"  // for Test, AssertionResult, EXPECT_EQ
 
-const float gold_response_output[6] = {
+const int gold_response_size = 6;
+const float gold_response_output[gold_response_size] = {
   -1, 0.9937100410461426, 268, 79.875, 156, 169.06874084472656,
 };
 
@@ -52,13 +53,13 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       auto* parameters = output.getParameters();
       ASSERT_NE(parameters, nullptr);
       EXPECT_TRUE(parameters->empty());
-      auto num_boxes = std::size(gold_response_output) / 6;
+      auto num_boxes = gold_response_size / 6;
       auto shape = output.getShape();
       EXPECT_EQ(shape.size(), 2);
       EXPECT_EQ(shape[0], 6);
       EXPECT_EQ(shape[1], num_boxes);
-      EXPECT_EQ(size, std::size(gold_response_output));
-      for (size_t i = 0; i < size; i++) {
+      EXPECT_EQ(size, gold_response_size);
+      for (size_t i = 0; i < gold_response_size; i++) {
         EXPECT_FLOAT_EQ((*data)[i], gold_response_output[i]);
       }
     }

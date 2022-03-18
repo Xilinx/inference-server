@@ -29,28 +29,18 @@ class Map;
 
 namespace inference {
 class InferParameter;
-}
+class ModelInferResponse;
+}  // namespace inference
 
 namespace proteus {
 
-class CallDataModelInfer;
-
-template <>
-class InferenceRequestBuilder<CallDataModelInfer *> {
- public:
-  static InferenceRequestPtr build(
-    const CallDataModelInfer *req, size_t &buffer_index,
-    const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset);
-};
-
-using RequestBuilder = InferenceRequestBuilder<CallDataModelInfer *>;
-
-RequestParametersPtr addParameters(
-  const google::protobuf::Map<std::string, inference::InferParameter> &params);
+RequestParametersPtr mapProtoToParameters(
+  const google::protobuf::Map<std::string, inference::InferParameter>& params);
+void mapProtoToParameters(
+  const google::protobuf::Map<std::string, inference::InferParameter>& params,
+  RequestParameters& parameters);
+void mapResponsetoProto(InferenceResponse response,
+                        inference::ModelInferResponse& reply);
 
 }  // namespace proteus
 

@@ -44,6 +44,11 @@ service GRPCInferenceService
   // indicates success and other codes indicate failure.
   rpc ModelInfer(ModelInferRequest) returns (ModelInferResponse) {}
 
+  // The StreamModelInfer API performs an inference to the specified streaming
+  // model. Errors are indicated by the google.rpc.Status returned for the
+  // request. The OK code indicates success and other codes indicate failure.
+  // rpc StreamModelInfer(ModelInferRequest) returns (stream ModelInferResponse) {}
+
   // The ModelLoad API loads a named model. Models must be loaded prior to
   // making inferences. Errors are indicated by the google.rpc.Status returned
   // for the request. The OK code indicates success and other codes indicate

@@ -867,9 +867,9 @@ class List:
     @staticmethod
     def parse(args, unknown_args):
         if args.type == "images":
-            command = 'docker image list -f reference=*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
+            command = 'docker image list -f reference=*/*proteus* -f reference=*/*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
         elif args.type == "labels":
-            command = 'docker image list -f reference=*/*proteus* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
+            command = 'docker image list -f reference=*/*proteus* -f reference=*/*/*proteus* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
         else:
             command = 'docker ps --filter "label=project=proteus" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
 

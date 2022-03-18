@@ -55,6 +55,10 @@ class GrpcClient {
   void modelUnload(const std::string& model);
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request);
+  // int streamModelInferStart(const std::string& model,
+  //                           const InferenceRequest& request,
+  //                           RequestParameters& metadata);
+  // bool streamModelInfer(int index, InferenceResponse& response);
 
  private:
   class GrpcClientImpl;

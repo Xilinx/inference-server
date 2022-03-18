@@ -17,14 +17,16 @@
 
 #include <proteus/proteus.hpp>
 
-#include "gtest/gtest.h"  // for Test, AssertionResult, EXPECT_EQ
+#include "gtest/gtest.h"  // for Test
 
-class Grpc : public testing::Test {
+class BaseFixture : public testing::Test {
  public:
   static void SetUpTestSuite() { proteus::initialize(); };
 
   static void TearDownTestSuite() { proteus::terminate(); }
+};
 
+class GrpcFixture : public BaseFixture {
  protected:
   void SetUp() override {
     proteus::startGrpcServer(50051);
