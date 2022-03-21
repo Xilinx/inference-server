@@ -617,17 +617,19 @@ class Dockerize:
 
         tag_prefix = f"{args.registry}"
         if args.production:
-            tag_prefix += f"/proteus"
+            tag_prefix += f"/proteus" + args.suffix
             target = "proteus"
         else:
-            tag_prefix += f"/proteus-dev"
+            tag_prefix += f"/proteus-dev" + args.suffix
             target = "proteus_dev_final"
 
         latest_tag = f"{tag_prefix}:latest"
 
         build_args = ""
         if not args.vitis:
-            build_args += f"--build-arg ENABLE_VITIS=no"
+            build_args += "--build-arg ENABLE_VITIS=no "
+        if args.dev_base:
+            build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
         try:
             git_branch = (
@@ -672,10 +674,11 @@ class Dockerize:
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument(
-            "--build-meta",
+            "--dev-base",
+            dest="dev_base",
             action="store",
-            help=f"Add a build string to the version.",
-            default=None,
+            help=f"Name of the image to use as dev image to build the production image.",
+            default="",
         )
         command_group.add_argument(
             "-h", "--help", action="help", help="show this help message and exit"
@@ -701,6 +704,12 @@ class Dockerize:
             action="store",
             help=f"Docker image registry. Defaults to {getpass.getuser()}",
             default=getpass.getuser(),
+        )
+        command_group.add_argument(
+            "--suffix",
+            action="store",
+            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -1243,19 +1252,26 @@ class Test:
 class Up:
     @staticmethod
     def parse(args, unknown_args: list):
-        unknown_args.sort()
+        if unknown_args:
+            unknown_arguments = " ".join(unknown_args)
+            raise argparse.ArgumentError(
+                None, f"Unknown argument(s) passed: {unknown_arguments}"
+            )
 
         extra_flags = ""
         if args.profile == "dev":
-            args.tag = f"{args.registry}/proteus-dev"
+            args.name = "proteus-dev" + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--detach"
         elif args.profile == "prod":
-            args.tag = f"{args.registry}/proteus"
+            args.name = "proteus"  + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
             extra_flags = "--abort-on-container-exit --exit-code-from proteus-tester"
         elif args.profile == "autotest-dev":
-            args.tag = f"{args.registry}/proteus-dev"
+            args.name = "proteus-dev"  + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--abort-on-container-exit --exit-code-from proteus"
         elif args.profile == "test":
             args.tag = args.registry
@@ -1263,6 +1279,8 @@ class Up:
         else:
             raise argparse.ArgumentError(None, f"Unknown profile: {args.profile}")
 
+        # used by WriteComposeFile
+        args.devices = True
         WriteComposeFile.write(args, args.profile)
 
         image = f"{args.tag}:{args.version}"
@@ -1271,7 +1289,8 @@ class Up:
 
         if args.dry_run:
             print(f"IMAGE: {image}")
-            print(f"TAG: {args.tag}")
+            print(f"SUFFIX: {args.suffix}")
+            print(f"REGISTRY: {args.registry}")
             print(f"VERSION: {args.version}")
             print("AKS_ROOT: $PWD/external/aks")
         else:
@@ -1279,7 +1298,8 @@ class Up:
                 filedata = f.read()
                 filedata = "# " + command + "\n" + filedata
                 filedata = filedata.replace("$IMAGE", image)
-                filedata = filedata.replace("$TAG", args.tag)
+                filedata = filedata.replace("$SUFFIX", args.suffix)
+                filedata = filedata.replace("$REGISTRY", args.registry)
                 filedata = filedata.replace("$VERSION", args.version)
                 filedata = filedata.replace("$AKS_ROOT", "$PWD/external/aks")
             with open("docker-compose.yml", "w") as f:
@@ -1296,14 +1316,6 @@ class Up:
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument(
-            "--devices",
-            "--no-devices",
-            dest="devices",
-            action=NegateAction,
-            help="Pass devices from host to container, if they exist. Defaults to true",
-            default=True,
-        )
-        command_group.add_argument(
             "-h", "--help", action="help", help="show this help message and exit"
         )
         command_group.add_argument(
@@ -1318,6 +1330,12 @@ class Up:
             action="store",
             help=f"Registry to use for the Docker images. Defaults to {getpass.getuser()}",
             default=getpass.getuser(),
+        )
+        command_group.add_argument(
+            "--suffix",
+            action="store",
+            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
         )
         command_group.add_argument(
             "-v",
@@ -1404,5 +1422,5 @@ if __name__ == "__main__":
         sys.exit(-1)
     except KeyboardInterrupt:
         pass
-    except AttributeError:
-        parser.print_help()
+    except AttributeError as ex:
+        print(ex)

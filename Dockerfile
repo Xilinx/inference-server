@@ -14,6 +14,7 @@
 
 ARG PROTEUS_ROOT=/workspace/proteus
 ARG BASE_IMAGE=ubuntu:18.04
+ARG DEV_BASE_IMAGE=${DEV_BASE_IMAGE:-proteus_dev_final}
 ARG COPY_DIR=/root/deps
 ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 ARG UNAME=proteus-user
@@ -748,7 +749,7 @@ RUN git lfs install \
 ENTRYPOINT [ "/root/entrypoint.sh", "user"]
 CMD [ "/bin/bash" ]
 
-FROM proteus_dev_final as proteus_builder_2
+FROM ${DEV_BASE_IMAGE} as proteus_builder_2
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT
@@ -778,12 +779,13 @@ RUN ldconfig \
 
 FROM proteus_base AS proteus_production_vitis_yes
 
+ARG COPY_DIR
 ARG PROTEUS_ROOT
 
 # get AKS kernels
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs/
 # get the fpga-util executable
-COPY --from=proteus_dev_final /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
+COPY --from=proteus_builder ${COPY_DIR}/usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
 
 # we need the xclbins in the image and they must be copied from a path local
 # to the build tree. But we also need this hack so the copy doesn't fail
@@ -818,10 +820,10 @@ COPY --from=proteus_builder_2 ${COPY_DIR} /
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
 # get the entrypoint script
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
-# get the systemctl executable
-COPY --from=proteus_dev_final /bin/systemctl /bin/systemctl
+# get the systemctl executable - pulled in by get_dynamic_dependencies.sh
+# COPY --from=proteus_builder ${COPY_DIR}/bin/systemctl /bin/systemctl
 # get the gosu executable
-COPY --from=proteus_dev_final /usr/local/bin/gosu /usr/local/bin/
+COPY --from=builder ${COPY_DIR}/usr/local/bin/gosu /usr/local/bin/
 # get the .bashrc and .env to configure the environment for all shells
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/${UNAME}/
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
