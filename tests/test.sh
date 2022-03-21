@@ -47,12 +47,17 @@ BENCHMARK="skip"
 PERF="skip"
 SAVE_BENCHMARK=""
 
-BUILD="Debug"
-
 full_path=$(realpath $0)
 python_tests_path=$(dirname $full_path)
-examples_path=$(dirname $full_path)/../examples
+root_path=${python_tests_path}/..
+examples_path=${root_path}/examples
 cur_path=$(pwd)
+
+if [[ -f ${root_path}/build/config.txt ]]; then
+  BUILD=$(<${root_path}/build/config.txt)
+else
+  BUILD="Debug"
+fi
 
 while true
 do
@@ -97,13 +102,15 @@ if [[ $MODE == "python" || $MODE == "all" ]]; then
     fi
   fi
 
+  testpaths="${python_tests_path}/../build/$BUILD/tests ${python_tests_path}"
+
   cd "$python_tests_path"
   if [[ -n $TESTS ]]; then
-    pytest $CAPTURE -ra --tb=short --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
+    pytest ${testpaths} $CAPTURE -ra --tb=short --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
       $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet -k "$TESTS"
     retval=$(($retval | $?))
   else
-    pytest $CAPTURE -ra  --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
+    pytest ${testpaths} $CAPTURE -ra  --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
       $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet
     retval=$(($retval | $?))
   fi

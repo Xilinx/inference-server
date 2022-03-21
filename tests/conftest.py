@@ -208,23 +208,27 @@ def server(xprocess):
     global http_server_addr
     global proteus_command
 
-    class Starter(ProcessStarter):
-        pattern = "HTTP server starting at port"
+    if not isUp(http_server_addr):
 
-        terminate_on_interrupt = True
+        class Starter(ProcessStarter):
+            pattern = "HTTP server starting at port"
 
-        def startup_check(self):
-            while not isUp(http_server_addr):
-                time.sleep(1)
-            return True
+            terminate_on_interrupt = True
 
-        args = proteus_command
+            def startup_check(self):
+                while not isUp(http_server_addr):
+                    time.sleep(1)
+                return True
 
-    xprocess.ensure("server", Starter)
+            args = proteus_command
 
-    yield
+        xprocess.ensure("server", Starter)
 
-    xprocess.getinfo("server").terminate()
+        yield
+
+        xprocess.getinfo("server").terminate()
+    else:
+        yield
 
 
 @pytest.fixture(scope="class")

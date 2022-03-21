@@ -597,6 +597,11 @@ class GrpcServer final {
     // Always shutdown the completion queues after the server.
     for (auto& cq : cq_) {
       cq->Shutdown();
+      // drain the completion queue to prevent assertion errors in grpc
+      void* tag;
+      bool ok;
+      while (cq->Next(&tag, &ok)) {
+      }
     }
   };
 
