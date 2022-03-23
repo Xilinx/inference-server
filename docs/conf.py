@@ -48,6 +48,7 @@ release = f"v{raw_version}"
 # ones.
 extensions = [
     "breathe",
+    # adds argparse directive to parse CLIs
     "sphinxarg.ext",
     "sphinxcontrib.confluencebuilder",
     "sphinx.ext.autodoc",
@@ -76,7 +77,10 @@ confluence_ask_password = True
 confluence_server_url = "https://confluence.xilinx.com/"
 
 # sphinx.ext.autodoc configuration
+# prefix all generated labels with the document
 autosectionlabel_prefix_document = True
+# only auto label top-level headings
+autosectionlabel_maxdepth = 1
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {

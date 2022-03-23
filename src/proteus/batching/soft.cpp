@@ -220,6 +220,9 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressBatcher);
 #endif
+    } else {
+      worker->putInputBuffer(std::move(input_buffer));
+      worker->putOutputBuffer(std::move(output_buffer));
     }
   }
 }

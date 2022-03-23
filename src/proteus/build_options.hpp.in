@@ -44,8 +44,11 @@ constexpr auto kDefaultHttpPort = @PROTEUS_DEFAULT_HTTP_PORT@;
 /// Number of threads used by Drogon
 constexpr auto kDefaultDrogonThreads = 16;
 
-/// Maximum size of a HTTP request body in MiB. Arbitrarily set to 4MiB
+/// Maximum size of a HTTP request body in bytes. Arbitrarily set to 4MiB
 constexpr auto kMaxClientBodySize = 4194304;
+
+/// Maximum size of gRPC messages in bytes. Arbitrarily set to 20MiB
+constexpr auto kMaxGrpcMessageSize = 20971520;
 
 /// Maximum number of characters usable for a model name used in an endpoint.
 constexpr auto kMaxModelNameSize = 64;

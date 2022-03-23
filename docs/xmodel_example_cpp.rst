@@ -16,8 +16,10 @@
 Running an XModel (C++)
 =======================
 
-This example walks you through the process to make an inference request to a custom XModel in C++.
-This example is similar to the :ref:`xmodel_example_python` one but it uses C++ to create a new executable instead of making requests to a server.
+This example walks you through the process to make an inference request to a custom XModel in C++ using two methods: the native C++ API and the gRPC API.
+This example is similar to the :ref:`xmodel_example_python` one but it uses C++ to create a new executable instead of making requests to a server if using the native C++ API.
+With the gRPC API, our executable instead makes a gRPC request to the inference server.
+We first show the example with the native C++ API and then highlight the differences if you were using the gRPC API instead.
 The complete program used here is available: :file:`examples/cpp/custom_processing.cpp`.
 
 Include the library
@@ -70,8 +72,8 @@ The parameter we add is to pass the path to the XModel that we want to use.
 If the worker we're using doesn't accept or need load-time parameters, a null pointer can be passed instead.
 
 .. literalinclude:: ../examples/cpp/custom_processing.cpp
-    :start-after: +load:
-    :end-before: -load:
+    :start-after: +load native:
+    :end-before: -load native:
     :language: cpp
     :dedent: 2
 
@@ -91,37 +93,38 @@ The implementation of the pre-processing function can be seen in the example's s
     :language: cpp
     :dedent: 2
 
-Inference
----------
+Construct request
+-----------------
 
 Using our images, we can construct a request to Xilinx Inference Server's backend.
 We hardcode the shape of the image to the size we know that the pre-processing enforces.
 We also pass the data-type of the data, which we again know to be an signed 8-bit integer from the pre-processing.
-We can then send the request to Xilinx Inference Server by passing in a name from the output of a previous ``load()`` and the request itself.
-Enqueueing the request returns a Future object that we can later check to get the response.
-For now, we push all these Future objects into a queue to save them for later.
 
 .. literalinclude:: ../examples/cpp/custom_processing.cpp
-    :start-after: +inference:
-    :end-before: -inference:
+    :start-after: +construct request:
+    :end-before: -construct request:
+    :language: cpp
+    :dedent: 2
+
+Inference
+---------
+
+We can then send the request to Xilinx Inference Server by passing in a name from the output of a previous ``load()`` and the request itself.
+With the native C++ API, enqueueing the request returns a Future object that we can later check to get the response.
+For now, since there's only one, we can call ``get()`` on a Future object, which will block until the response is available.
+The Future object will return a :cpp:class:`proteus::InferenceResponse` object.
+This object can be parsed to analyze the data.
+
+.. literalinclude:: ../examples/cpp/custom_processing.cpp
+    :start-after: +inference native:
+    :end-before: -inference native:
     :language: cpp
     :dedent: 2
 
 Check the response
 ------------------
 
-At some point later, we can use our queue of Future objects to get the responses for each inference.
-Calling ``get()`` on a Future object will block until the response is available.
-
-.. literalinclude:: ../examples/cpp/custom_processing.cpp
-    :start-after: +get output:
-    :end-before: -get output:
-    :language: cpp
-    :dedent: 2
-
-The Future object will return a :cpp:class:`proteus::InferenceResponse` object.
-This object can be parsed to analyze the data.
-For this model, we need to post-process the raw output from Xilinx Inference Server to make a useful classification for our image.
+For this model, we need to post-process the raw output to make a useful classification for our image.
 For each output, we post-process the results to extract the top *k* indices for the classification.
 We can check this against our expected golden output to confirm that the inference is correct.
 
@@ -141,5 +144,47 @@ Note that this function was also called in the validation step above.
 .. literalinclude:: ../examples/cpp/custom_processing.cpp
     :start-after: +clean:
     :end-before: -clean:
+    :language: cpp
+    :dedent: 2
+
+Using gRPC
+----------
+
+Using the gRPC API instead just requires a few changes in how requests are made to the server.
+
+Initialize
+^^^^^^^^^^
+
+In addition to the regular initialization, using the gRPC API requires creating a gRPC client, which defines how we can interact with the gRPC server.
+We construct it with the address of the gRPC server.
+Here, we're also starting the gRPC server directly by this application at a known port.
+Of course, if the gRPC server already exists, then we don't need to start it in the client application.
+
+.. literalinclude:: ../examples/cpp/custom_processing.cpp
+    :start-after: +initialize grpc:
+    :end-before: -initialize grpc:
+    :language: cpp
+    :dedent: 2
+
+Load a worker
+^^^^^^^^^^^^^
+
+As before, we need to load the appropriate worker.
+The only difference is that we use our gRPC client object to make the request.
+
+.. literalinclude:: ../examples/cpp/custom_processing.cpp
+    :start-after: +load grpc:
+    :end-before: -load grpc:
+    :language: cpp
+    :dedent: 2
+
+Inference
+^^^^^^^^^
+
+After preparing the request, we can make a synchronous request to the gRPC server using the gRPC API using the worker name returned from the ``load``.
+
+.. literalinclude:: ../examples/cpp/custom_processing.cpp
+    :start-after: +inference grpc:
+    :end-before: -inference grpc:
     :language: cpp
     :dedent: 2

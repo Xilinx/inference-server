@@ -13,11 +13,18 @@
 # limitations under the License.
 
 if(${PROTEUS_ENABLE_VITIS})
-  add_executable(custom_processing custom_processing.cpp)
+    list(APPEND apps
+        custom_processing_native
+        custom_processing_grpc
+    )
+    foreach(app ${apps})
+        add_executable(${app} custom_processing.cpp)
 
-  target_link_libraries(custom_processing PRIVATE
-    proteus
-    opencv_imgcodecs opencv_imgproc opencv_core
-  )
-  target_include_directories(custom_processing PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+        target_link_libraries(${app} PRIVATE
+            proteus
+            opencv_imgcodecs opencv_imgproc opencv_core
+        )
+        target_include_directories(${app} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+    endforeach()
+    target_compile_definitions(custom_processing_grpc PRIVATE ENABLE_GRPC)
 endif()

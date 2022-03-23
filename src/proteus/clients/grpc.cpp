@@ -137,7 +137,7 @@ void mapParametersToProto(
 }
 
 std::string GrpcClient::modelLoad(const std::string& model,
-                                  RequestParametersPtr parameters) {
+                                  RequestParameters* parameters) {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -145,7 +145,7 @@ std::string GrpcClient::modelLoad(const std::string& model,
 
   request.set_name(model);
   auto* params = request.mutable_parameters();
-  if (parameters) {
+  if (parameters != nullptr) {
     mapParametersToProto(parameters->data(), params);
   }
 

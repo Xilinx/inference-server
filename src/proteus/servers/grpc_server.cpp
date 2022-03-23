@@ -25,6 +25,7 @@
 #include "predict_api.grpc.pb.h"
 #include "proteus/batching/batcher.hpp"
 #include "proteus/buffers/buffer.hpp"
+#include "proteus/build_options.hpp"
 #include "proteus/clients/grpc_internal.hpp"
 #include "proteus/core/interface.hpp"
 #include "proteus/core/manager.hpp"
@@ -186,9 +187,7 @@ class InferenceRequestInputBuilder<
 
     input.parameters_ = mapProtoToParameters(req.parameters());
 
-    auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
-                                std::multiplies<>()) *
-                types::getSize(input.dataType_);
+    auto size = input.getSize();
     auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
 
     const auto tensor = req.contents();
@@ -197,12 +196,23 @@ class InferenceRequestInputBuilder<
         std::memcpy(dest, tensor.bool_contents().data(), size * sizeof(char));
         break;
       }
-      case DataType::UINT8:
-      case DataType::UINT16:
+      case DataType::UINT8: {
+        auto* value = tensor.uint_contents().data();
+        for (size_t i = 0; i < size; i++) {
+          dest[i] = static_cast<std::byte>(value[i]);
+        }
+        break;
+      }
+      case DataType::UINT16: {
+        auto* value = tensor.uint_contents().data();
+        for (size_t i = 0; i < size; i++) {
+          std::memcpy(dest + i, value + i, sizeof(uint16_t));
+        }
+        break;
+      }
       case DataType::UINT32: {
         auto value = tensor.uint_contents().data();
         std::memcpy(dest, value, size * sizeof(uint32_t));
-        input.setDatatype(DataType::UINT32);
         break;
       }
       case DataType::UINT64: {
@@ -210,11 +220,22 @@ class InferenceRequestInputBuilder<
                     size * sizeof(uint64_t));
         break;
       }
-      case DataType::INT8:
-      case DataType::INT16:
+      case DataType::INT8: {
+        auto* value = tensor.int_contents().data();
+        for (size_t i = 0; i < size; i++) {
+          dest[i] = static_cast<std::byte>(value[i]);
+        }
+        break;
+      }
+      case DataType::INT16: {
+        auto* value = tensor.int_contents().data();
+        for (size_t i = 0; i < size; i++) {
+          std::memcpy(dest + i, value + i, sizeof(int16_t));
+        }
+        break;
+      }
       case DataType::INT32: {
         std::memcpy(dest, tensor.int_contents().data(), size * sizeof(int32_t));
-        input.setDatatype(DataType::INT32);
         break;
       }
       case DataType::INT64: {
@@ -608,6 +629,8 @@ class GrpcServer final {
  private:
   GrpcServer(const std::string& address, const int cq_count) {
     ServerBuilder builder;
+    builder.SetMaxReceiveMessageSize(kMaxGrpcMessageSize);
+    builder.SetMaxSendMessageSize(kMaxGrpcMessageSize);
     // Listen on the given address without any authentication mechanism.
     builder.AddListeningPort(address, ::grpc::InsecureServerCredentials());
     // Register "service_" as the instance through which we'll communicate with
