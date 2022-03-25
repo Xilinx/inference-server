@@ -16,16 +16,19 @@ import argparse
 import copy
 from enum import Enum, auto
 import functools
+import ipaddress
 import json
 import itertools
 import math
 import os
 import pathlib
+import pprint
 import statistics
 import subprocess
 import sys
 from typing import Optional
 
+import proteus
 from proteus.server import Server
 from proteus.rest import Client
 import pytest_benchmark.utils
@@ -56,14 +59,38 @@ class Options:
 class Config:
     def __init__(self, path) -> None:
         with open(path, "r") as f:
-            config = yaml.safe_load(f)
-        self.benchmarks = config["benchmarks"]
-        self.repeat = config["repeat_count"]
-        self.verbosity = config["verbosity"]
+            self.config = yaml.safe_load(f)
 
-        self.pytest = Options(config["pytest"])
-        self.wrk = Options(config["wrk"])
-        self.cpp = Options(config["cpp"])
+        self.pytest = Options(self.config["pytest"])
+        self.wrk = Options(self.config["wrk"])
+        self.cpp = Options(self.config["cpp"])
+
+    @property
+    def benchmarks(self):
+        return self.config["benchmarks"]
+
+    @benchmarks.setter
+    def benchmarks(self, value):
+        self.config["benchmarks"] = value
+
+    @property
+    def repeat(self):
+        return self.config["repeat_count"]
+
+    @property
+    def verbosity(self):
+        return self.config["verbosity"]
+
+    @property
+    def http_address(self):
+        return self.config["http_address"]
+
+    @property
+    def start_server(self):
+        return self.config["start_local_server"]
+
+    def __str__(self):
+        return pprint.pformat(self.config, 2)
 
 
 class Benchmark:
@@ -82,33 +109,39 @@ class Benchmark:
             benchmark (dict): The dict defining the benchmark. This is in the
             same format as output from pytest_benchmark.
         """
-        load = benchmark["load"]
-        benchmark_type = benchmark["type"]
-        benchmark_config = benchmark["config"]
-        self.stats = {
-            "load": [load],
-            "type": [benchmark_type],
-            "config": [benchmark_config],
-            "name": [benchmark["name"]],
-            "min": [benchmark["stats"]["min"]],
-            "max": [benchmark["stats"]["max"]],
-            "mean": [benchmark["stats"]["mean"]],
-            "stddev": [benchmark["stats"]["stddev"]],
-            "rounds": [benchmark["stats"]["rounds"]],
-            "median": [benchmark["stats"]["median"]],
-            "iqr": [benchmark["stats"]["iqr"]],
-            "q1": [benchmark["stats"]["q1"]],
-            "q3": [benchmark["stats"]["q3"]],
-            "iqr_outliers": [benchmark["stats"]["iqr_outliers"]],
-            "stddev_outliers": [benchmark["stats"]["stddev_outliers"]],
-            "outliers": [benchmark["stats"]["outliers"]],
-            "ld15iqr": [benchmark["stats"]["ld15iqr"]],
-            "hd15iqr": [benchmark["stats"]["hd15iqr"]],
-            "ops": [benchmark["stats"]["ops"]],
-            "ops_uncertainty": [benchmark["stats"]["ops_uncertainty"]],
-            "total": [benchmark["stats"]["total"]],
-            "iterations": [benchmark["stats"]["iterations"]],
-        }
+        try:
+            load = benchmark["load"]
+            benchmark_type = benchmark["type"]
+            benchmark_config = benchmark["config"]
+            self.stats = {
+                "load": [load],
+                "type": [benchmark_type],
+                "config": [benchmark_config],
+                "name": [benchmark["name"]],
+                "min": [benchmark["stats"]["min"]],
+                "max": [benchmark["stats"]["max"]],
+                "mean": [benchmark["stats"]["mean"]],
+                "stddev": [benchmark["stats"]["stddev"]],
+                "rounds": [benchmark["stats"]["rounds"]],
+                "median": [benchmark["stats"]["median"]],
+                "iqr": [benchmark["stats"]["iqr"]],
+                "q1": [benchmark["stats"]["q1"]],
+                "q3": [benchmark["stats"]["q3"]],
+                "iqr_outliers": [benchmark["stats"]["iqr_outliers"]],
+                "stddev_outliers": [benchmark["stats"]["stddev_outliers"]],
+                "outliers": [benchmark["stats"]["outliers"]],
+                "ld15iqr": [benchmark["stats"]["ld15iqr"]],
+                "hd15iqr": [benchmark["stats"]["hd15iqr"]],
+                "ops": [benchmark["stats"]["ops"]],
+                "ops_uncertainty": [benchmark["stats"]["ops_uncertainty"]],
+                "total": [benchmark["stats"]["total"]],
+                "iterations": [benchmark["stats"]["iterations"]],
+            }
+        except KeyError:
+            print(
+                "This benchmark cannot be opened as it has not been normalized due to an error"
+            )
+            sys.exit(1)
         self._final_stats = {}
 
     def add(self, benchmark: dict):
@@ -399,33 +432,43 @@ class Benchmarks:
         return json.dumps(self._benchmark)
 
 
-def get_last_benchmark_path() -> Optional[str]:
+def get_last_benchmark_path(index) -> Optional[str]:
     """
     Get the path to the last generated benchmark in the benchmark directory
+
+    Args:
+        index (int): return the nth benchmark (0 means newest)
 
     Returns:
         Optional[str]: Path to the benchmark if found
     """
-    dir = os.getenv("PROTEUS_ROOT") + "/tests/python/.benchmarks"
+    dir = os.getenv("PROTEUS_ROOT") + "/tests/.benchmarks"
     machine_id = pytest_benchmark.utils.get_machine_id()
 
     list_of_files = pathlib.Path(f"{dir}/{machine_id}").rglob("*.json")
     if list_of_files:
-        return max(list_of_files, key=os.path.getctime)
+        return sorted(list_of_files, key=os.path.getctime, reverse=True)[index]
     return None
 
 
-def get_benchmark(path: Optional[str] = None, normalize=False) -> Optional[Benchmarks]:
+def get_benchmark(
+    path: Optional[str] = None, index=0, normalize=False
+) -> Optional[Benchmarks]:
     """
-    Get the last generated benchmark from the directory
+    Get the last nth generated benchmark from the directory
+
+    Args:
+        path (Optional[str], optional): Get a specific benchmark. Defaults to None.
+        index (int, optional): Get the nth newest benchmark. Defaults to 0.
+        normalize (bool, optional): Normalize the benchmark. Defaults to False.
 
     Returns:
-        Optional[dict]: The last benchmark or None if an empty directory is used
+        Optional[Benchmarks]: The chosen benchmark or None if an empty directory is used
     """
     if path is not None:
         last_benchmark = path
     else:
-        last_benchmark = get_last_benchmark_path()
+        last_benchmark = get_last_benchmark_path(index)
     if last_benchmark is not None:
         with open(last_benchmark, "r") as f:
             return Benchmarks(json.load(f), last_benchmark, normalize)
@@ -590,8 +633,12 @@ def combine_wrk_stats(samples):
 
 
 def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
-    client = Client("127.0.0.1:8998")
-    server = Server()
+    client = Client(config.http_address)
+    if not ipaddress.ip_address(config.http_address.split(":")[0]).is_loopback:
+        assert client.server_live()
+        server = None
+    else:
+        server = Server()
     wrk_options = config.wrk
     with Progress() as progress:
         task0 = progress.add_task(
@@ -605,7 +652,8 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 continue
             if "lua" in extra_info:
                 lua_file = (
-                    os.getenv("PROTEUS_ROOT") + f"/tests/python/{extra_info['lua']}.lua"
+                    os.getenv("PROTEUS_ROOT")
+                    + f"/tests/workers/{extra_info['lua']}.lua"
                 )
                 if not os.path.exists(lua_file):
                     print(f"Lua file not found, skipping: {lua_file}")
@@ -616,8 +664,11 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 else:
                     loads = [1]
 
-                server.start(True)
-                client.wait_until_live()
+                if server is not None and config.start_server:
+                    server.start(True)
+                    client.wait_until_live()
+                else:
+                    assert client.server_live()
 
                 repeat_wrk_count = config.repeat
                 task1 = progress.add_task(
@@ -665,9 +716,17 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                             total=repeat_wrk_count,
                         )
                         for _ in range(repeat_wrk_count):
-                            ret = subprocess.run(
-                                wrk_command, check=True, stdout=subprocess.PIPE
-                            )
+                            try:
+                                ret = subprocess.run(
+                                    wrk_command,
+                                    check=True,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                )
+                            except subprocess.CalledProcessError as ex:
+                                print(ex.stdout)
+                                print(ex.stderr)
+                                sys.exit(ex.returncode)
 
                             wrk_output = ret.stdout.decode("utf-8")
                             wrk_stats.append(parse_wrk_output(wrk_output))
@@ -684,8 +743,9 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
 
                     progress.update(task1, advance=1)
 
-                server.stop()
-                client.wait_until_stop()
+                if server is not None and config.start_server:
+                    server.stop()
+                    client.wait_until_stop()
             progress.update(task0, advance=1)
 
     return benchmarks
@@ -795,7 +855,7 @@ def get_benchmark_exe(path: pathlib.Path):
 
 def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
     benchmarks_to_run = set()
-    benchmark_dir = os.getenv("PROTEUS_ROOT") + "/tests/cpp"
+    benchmark_dir = os.getenv("PROTEUS_ROOT") + "/tests"
     accept_all_benchmarks = True if config.benchmarks is None else False
     for path in pathlib.Path(benchmark_dir).rglob("*.cpp"):
         if not accept_all_benchmarks:
@@ -875,19 +935,43 @@ def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
 
 
 def pytest_benchmarks(config: Config, quiet=False):
-    def task():
-        subprocess.run(["/bin/bash", "-c", cmd], stdout=subprocess.PIPE, check=True)
-
-    cmd = os.getenv("PROTEUS_ROOT") + "/tests/test.sh --benchmark only"
+    hostname, port = config.http_address.split(":")
+    client = Client(config.http_address)
+    if not ipaddress.ip_address(hostname).is_loopback or not config.start_server:
+        try:
+            assert client.server_live()
+        except proteus.exceptions.ConnectionError:
+            print(
+                f"Cannot connect to HTTP server at {config.http_address}. Check the address or set it to start automatically"
+            )
+            sys.exit(1)
+    cmd = (
+        os.getenv("PROTEUS_ROOT")
+        + f"/tests/test.sh --benchmark only --hostname {hostname} --http_port {port}"
+    )
     if config.benchmarks:
         cmd += f' -k "{config.benchmarks}"'
-    if not quiet:
-        with Progress() as progress:
-            task1 = progress.add_task(f"Running pytest benchmarks...", total=1)
-            task()
-            progress.update(task1, advance=1)
-    else:
-        task()
+    try:
+        if not quiet:
+            subprocess.run(
+                ["/bin/bash", "-c", cmd],
+                stdout=sys.stdout,
+                stderr=subprocess.PIPE,
+                check=True,
+            )
+        else:
+            subprocess.run(
+                ["/bin/bash", "-c", cmd],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=True,
+            )
+    except subprocess.CalledProcessError as ex:
+        print("Running pytest tests failed. Exiting benchmarking")
+        sys.exit(ex.returncode)
+
+    benchmarks = get_benchmark(normalize=True)
+    benchmarks.write()
 
 
 if __name__ == "__main__":
@@ -899,21 +983,35 @@ if __name__ == "__main__":
         help="choose which benchmarks to run by substring",
     )
     parser.add_argument(
-        "--print",
+        "-print",
+        action="store",
+        default=None,
+        type=int,
+        help="print the last nth benchmark and exit",
+    )
+    parser.add_argument(
+        "--force",
         action="store_true",
         default=False,
-        help="print the last benchmark and exit",
+        help="don't prompt to verify configuration",
     )
     args = parser.parse_args()
 
-    if args.print:
-        benchmarks = get_benchmark()
+    if args.print is not None:
+        benchmarks = get_benchmark(index=int(args.print))
         benchmarks.print()
         sys.exit(0)
 
     config = Config(os.getenv("PROTEUS_ROOT") + "/tools/benchmark.yml")
     if args.k:
         config.benchmarks = args.k
+
+    if not args.force:
+        print(config)
+        retval = input("Run benchmarking with this configuration? [Y/N] ")
+        if retval.upper() != "Y":
+            print("Exiting...")
+            sys.exit(0)
 
     # if wrk tests are run, we need to also run pytest tests
     if config.pytest.enabled or config.wrk.enabled:

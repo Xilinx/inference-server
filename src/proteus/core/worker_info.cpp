@@ -138,7 +138,6 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
     for (const auto& batcher : this->batchers_) {
       batcher->setName(name);
       batcher->setBatchSize(this->batch_size_);
-      batcher->start(this);
     }
   }
 
@@ -151,6 +150,9 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
     max_buffers == UINT_MAX ? UINT_MAX : this->max_buffer_num_ + max_buffers;
 
   worker->acquire(parameters);
+  for (const auto& batcher : this->batchers_) {
+    batcher->start(this);
+  }
   auto thread = worker->spawn(this->batchers_[0]->getOutputQueue());
 
   auto thread_id = thread.get_id();

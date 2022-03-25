@@ -20,9 +20,7 @@ Quickstart
 
 The easiest way to use Xilinx Inference Server is to run it inside a Docker container.
 For these instructions, you'll need Git, Python3, and `Docker <https://docs.docker.com/get-docker/>`__.
-
-Note: the sequence of instructions in the code blocks below is valid only as written.
-If you add or change flags to commands, you may need to change the subsequent commands.
+Also ensure that you set up your host appropriately depending on which platform(s) you are using (e.g. :ref:`Vitis AI <vitis_ai:vitis ai>`).
 The helper script used for most of the commands here is :file:`proteus`.
 The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
 
@@ -110,8 +108,5 @@ You may need to get testing artifacts (see above) and have cloned the repository
 
     # this will start the server and test the REST API from Python.
     $ proteus test
-
-Note: the facedetect test may fail due to a known issue with parsing the XModel.
-Ignore any failures with that model at this time.
 
 Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to Xilinx Inference Server using the C++ API.

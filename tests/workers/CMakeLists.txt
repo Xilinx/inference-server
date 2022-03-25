@@ -45,7 +45,7 @@ if(${PROTEUS_ENABLE_AKS})
 endif()
 
 foreach(target ${targets})
-    if(EXISTS ${target}.cpp)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${target}.cpp)
         add_executable(${target} ${target}.cpp)
         target_link_libraries(${target} PRIVATE $<TARGET_PROPERTY:test_${target},LINK_LIBRARIES>)
         target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})

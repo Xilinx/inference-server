@@ -114,9 +114,11 @@ class Client:
         except requests.ConnectionError:
             raise exceptions.ConnectionError(
                 error_str + f"Cannot connect to Proteus at {url}."
-            )
+            ) from None
         except requests.exceptions.MissingSchema:
-            raise exceptions.ConnectionError(error_str + f"Invalid URL: {url}")
+            raise exceptions.ConnectionError(
+                error_str + f"Invalid URL: {url}"
+            ) from None
 
         return response
 
@@ -280,7 +282,7 @@ class Client:
         Returns:
             bool: True if live
         """
-        error_str = f"Failed to check if server is live."
+        error_str = f"Failed to check if server is live. "
         endpoint = self.get_endpoint("server_live")
         response = self._get(endpoint, error_str)
         return response.status_code == 200

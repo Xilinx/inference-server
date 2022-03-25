@@ -53,7 +53,7 @@ def write_lua(filename: str, data: str):
         f"wrk.body = '{data}'",
     ]
 
-    with open(root_path / "tests/python" / (filename + ".lua"), "w") as f:
+    with open(root_path / "tests/workers" / (filename + ".lua"), "w") as f:
         for line in lua_file:
             f.write(line + "\n")
 

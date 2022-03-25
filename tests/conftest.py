@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import ipaddress
 import os
 import re
 import subprocess
@@ -33,7 +34,7 @@ http_server_addr = ""
 
 def isUp(server_addr):
     try:
-        response = requests.get(f"{server_addr}/v2/health/ready")
+        response = requests.get(f"{server_addr}/v2/health/ready", timeout=5)
     except:
         return False
     else:
@@ -52,11 +53,15 @@ def pytest_sessionstart(session):
     proteus_command.extend(["--http_port", str(http_port)])
 
     http_server_addr = "http://" + get_http_addr(session.config)
+    ip_addr = ipaddress.ip_address(session.config.getoption("hostname"))
+    if not ip_addr.is_loopback:
+        if not isUp(http_server_addr):
+            pytest.exit(f"No HTTP server found at {http_server_addr}", returncode=1)
 
 
 @pytest.hookimpl
 def pytest_addoption(parser):
-    parser.addoption("--hostname", action="store", default="localhost")
+    parser.addoption("--hostname", action="store", default="127.0.0.1")
     parser.addoption("--http_port", action="store", default=kDefaultHttpPort)
     parser.addoption("--fpgas", action="store", default="")
     parser.addoption("--benchmark", action="store", default="skip")
@@ -103,10 +108,10 @@ def add_cpp_markers(items):
         test_name = base_name[1] if len(base_name) > 1 else base_name[0]
         test = test_name.split(".")
         bar = f"((\/\/ @pytest.*\s)*)^TEST[_]?[FP]?\({test[0]}, {test[1]}\)"
-        foo = re.search(bar, lines, re.MULTILINE)
-        if not foo:
+        match = re.search(bar, lines, re.MULTILINE)
+        if not match:
             continue
-        marks = foo.group(1).split("\n")
+        marks = match.group(1).split("\n")
         for mark in marks:
             if not mark:
                 continue

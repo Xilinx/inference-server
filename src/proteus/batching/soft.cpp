@@ -91,8 +91,14 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
     do {
       if (first_request) {
         // wait for the first request
-        count = this->input_queue_->wait_dequeue_bulk(
-          std::make_move_iterator(reqs.begin()), this->batch_size_);
+        count = 1;
+        this->input_queue_->wait_dequeue(reqs.at(0));
+        // TODO(varunsh): there's a bug where if batch size is 4, and we get
+        // requests of size 4, we pull in 4 of them. In the loop below, more
+        // buffers aren't correctly grabbed so we end up with only using one
+        // buffer for input/output instead of 4
+        // count = this->input_queue_->wait_dequeue_bulk(
+        //   std::make_move_iterator(reqs.begin()), this->batch_size_);
         start_time = std::chrono::high_resolution_clock::now();
         SPDLOG_DEBUG("Got request of a new batch for " + this->model_);
       } else {

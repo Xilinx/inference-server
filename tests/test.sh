@@ -24,7 +24,7 @@ Args:
   --load-before: attempt to load xclbins to all unloaded FPGAs before running tests
   -k <STR>: run specific tests matching this substring
   -s: disable capturing stdout in pytest. Set this option to enable printing
-  --hostname <STR>: hostname of Proteus server. Defaults to localhost
+  --hostname <STR>: hostname of Proteus server. Defaults to 127.0.0.1
   --http_port <NUM>: port to use for Proteus's HTTP server. Defaults to Proteus's default value
   --fpgas name:num,...: type and number of FPGAs to use for testing. Autodetects by default
   --benchmark <skip|only|all>: skip or only run benchmark tests, or run everything. Defaults to skip
@@ -39,7 +39,7 @@ MODE="python"
 LOAD=""
 
 FPGAS=""
-HOSTNAME="localhost"
+HOSTNAME="127.0.0.1"
 PORT=""
 TESTS=""
 CAPTURE=""
@@ -110,7 +110,7 @@ if [[ $MODE == "python" || $MODE == "all" ]]; then
       $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet -k "$TESTS"
     retval=$(($retval | $?))
   else
-    pytest ${testpaths} $CAPTURE -ra  --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
+    pytest ${testpaths} $CAPTURE -ra --tb=short --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
       $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet
     retval=$(($retval | $?))
   fi
