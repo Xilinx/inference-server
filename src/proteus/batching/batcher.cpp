@@ -69,6 +69,7 @@ Batcher::Batcher(const Batcher &batcher) {
 }
 
 void Batcher::start(WorkerInfo *worker) {
+  this->status_ = BatcherStatus::kRun;
   this->thread_ = std::thread(&Batcher::run, this, worker);
 }
 
@@ -92,7 +93,6 @@ void Batcher::enqueue(InterfacePtr request) {
 }
 
 void Batcher::run(WorkerInfo *worker) {
-  this->status_ = BatcherStatus::kRun;
   this->doRun(worker);
   this->status_ = BatcherStatus::kInactive;
 }

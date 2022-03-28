@@ -151,7 +151,9 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
 
   worker->acquire(parameters);
   for (const auto& batcher : this->batchers_) {
-    batcher->start(this);
+    if (batcher->getStatus() != BatcherStatus::kRun) {
+      batcher->start(this);
+    }
   }
   auto thread = worker->spawn(this->batchers_[0]->getOutputQueue());
 
