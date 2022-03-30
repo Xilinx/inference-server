@@ -777,15 +777,17 @@ class Get:
                     with open(tmp_dir / filename, "wb") as f:
                         req = urllib.request.Request(url)
                         # need to specify the user-agent for accessing wikimedia
-                        req.add_header("User-Agent", "proteus 0.1.0")
+                        req.add_header("User-Agent", f"proteus {get_version()}")
                         response = urllib.request.urlopen(req)
                         f.write(response.read())
 
+                    filepath = str(tmp_dir / filename)
                     if filename.endswith("tar.gz"):
-                        tar_file = tarfile.open(str(tmp_dir / filename), mode="r:gz")
+                        tar_file = tarfile.open(filepath, mode="r:gz")
                         tar_file.extractall(location)
                     else:
-                        shutil.move(str(tmp_dir / filename), str(location / filename))
+                        shutil.copy2(filepath, str(location / filename))
+                        os.remove(filepath)
                     if not args.quiet:
                         print(f"Downloaded {url} to {str(location/filename)}")
 
