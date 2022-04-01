@@ -30,10 +30,11 @@
 #include <type_traits>  // for remove_reference<>::type
 #include <utility>      // for pair, move, make_pair
 
-#include "proteus/batching/batcher.hpp"  // for Batcher, BatchPtrQueue
+#include "proteus/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/interface.hpp"    // IWYU pragma: keep
 #include "proteus/core/predict_api.hpp"  // for RequestParameters
-#include "proteus/workers/worker.hpp"    // for Worker, WorkerStatus
+#include "proteus/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
 
 namespace proteus {
 

@@ -13,10 +13,9 @@
 // limitations under the License.
 
 #include <cstdlib>  // for getenv, EXIT_SUCCESS
-#include <iostream>
 
 #include "gtest/gtest.h"  // for Test, AssertionResult, SuiteApiRe...
-#include "xmodel.hpp"
+#include "xmodel.hpp"     // IWYU pragma: associated
 
 std::string xmodel = std::string(std::getenv("AKS_XMODEL_ROOT")) +
                      "/artifacts/u200_u250/densebox_320_320/"

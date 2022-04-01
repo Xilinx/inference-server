@@ -20,25 +20,23 @@
 
 #include "proteus/clients/native.hpp"
 
-#include <cstdlib>        // for getenv, size_t
+#include <cstdlib>        // for getenv
+#include <future>         // for promise
+#include <memory>         // for unique_ptr, make_unique
 #include <stdexcept>      // for invalid_argument
-#include <string>         // for string, basic_string, all...
-#include <thread>         // for thread
-#include <unordered_map>  // for unordered_map, operator==
-#include <utility>        // for pair, make_pair, move
+#include <string>         // for string, basic_string
+#include <unordered_map>  // for unordered_map, operat...
+#include <utility>        // for move, pair, make_pair
 
-#include "proteus/batching/batcher.hpp"  // for Batcher
-#include "proteus/buffers/buffer.hpp"    // for Buffer
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRA...
-#include "proteus/clients/native_internal.hpp"
-#include "proteus/core/interface.hpp"
-#include "proteus/core/manager.hpp"               // for Manager
-#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "proteus/core/worker_info.hpp"           // for WorkerInfo
-#include "proteus/helpers/exec.hpp"               // for exec
-#include "proteus/observation/logging.hpp"        // for initLogging
-#include "proteus/observation/metrics.hpp"        // for Metrics
-#include "proteus/observation/tracing.hpp"        // for startTracer, stopT...
+#include "proteus/batching/batcher.hpp"         // for Batcher
+#include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/manager.hpp"             // for Manager
+#include "proteus/core/worker_info.hpp"         // for WorkerInfo
+#include "proteus/helpers/exec.hpp"             // for exec
+#include "proteus/observation/logging.hpp"      // for initLogging
+#include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
+#include "proteus/observation/tracing.hpp"      // for startTrace, startTracer
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt

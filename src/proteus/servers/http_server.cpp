@@ -20,35 +20,28 @@
 #include "proteus/servers/http_server.hpp"
 
 #include <drogon/HttpAppFramework.h>  // for HttpAppFramework, app
-#include <drogon/HttpRequest.h>       // for HttpRequest
-#include <json/config.h>              // for Int64, UInt, UInt64
-#include <json/reader.h>              // for CharReaderBuilder, CharR...
-#include <json/value.h>               // for Value, arrayValue, objec...
+#include <drogon/HttpRequest.h>       // for HttpRequestPtr, Htt...
+#include <json/value.h>               // for Value, arrayValue
 #include <trantor/utils/Logger.h>     // for Logger, Logger::kWarn
 
-#include <chrono>       // for high_resolution_clock
-#include <cstdint>      // for int16_t, int32_t, int64_t
-#include <exception>    // for exception
-#include <iostream>     // for operator<<, cout, ostream
-#include <memory>       // for allocator, shared_ptr
-#include <string>       // for operator+, string, basic...
-#include <string_view>  // for basic_string_view
-#include <utility>      // for move
-#include <vector>       // for vector, _Bit_reference
+#include <chrono>     // for high_resolution_clock
+#include <exception>  // for exception
+#include <memory>     // for allocator, shared_ptr
+#include <stdexcept>  // for invalid_argument
+#include <string>     // for operator+, string
+#include <utility>    // for move
 
-#include "proteus/batching/batcher.hpp"  // for Batcher
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/http_internal.hpp"
+#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/http_internal.hpp"      // for propagate, DrogonHttp
 #include "proteus/clients/native.hpp"             // for getHardware
-#include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
 #include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
-#include "proteus/helpers/declarations.hpp"       // for InferenceResponseOutput
-#include "proteus/observation/logging.hpp"  // for SPDLOG_LOGGER_INFO, getL...
-#include "proteus/observation/metrics.hpp"  // for Metrics, MetricIDs, Metr...
-#include "proteus/observation/tracing.hpp"  // for startSpan, Span, setTags
-#include "proteus/version.hpp"              // for kProteusVersion
+#include "proteus/observation/logging.hpp"        // for SPDLOG_LOGGER_INFO
+#include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
+#include "proteus/observation/tracing.hpp"        // for startTrace, Trace
+#include "proteus/version.hpp"                    // for kProteusVersion
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;

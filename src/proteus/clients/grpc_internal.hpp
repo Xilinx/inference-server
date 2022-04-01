@@ -20,6 +20,8 @@
 #ifndef GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
 #define GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
 
+#include <string>
+
 #include "proteus/core/predict_api_internal.hpp"
 
 namespace google::protobuf {

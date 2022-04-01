@@ -19,15 +19,26 @@
 
 #include "proteus/clients/http_internal.hpp"
 
-#include <drogon/HttpRequest.h>   // for HttpRequest
-#include <drogon/HttpResponse.h>  // for HttpResponse
-#include <json/value.h>
+#include <drogon/HttpRequest.h>   // for HttpRequestPtr, Htt...
+#include <drogon/HttpResponse.h>  // for HttpResponsePtr
+#include <drogon/HttpTypes.h>     // for HttpStatusCode, k40...
+#include <json/config.h>          // for UInt64, Int64, UInt
+#include <json/reader.h>          // for CharReaderBuilder
+#include <json/value.h>           // for Value, arrayValue
 
-#include "proteus/buffers/buffer.hpp"
-#include "proteus/core/interface.hpp"
-#include "proteus/core/predict_api_internal.hpp"
-#include "proteus/helpers/compression.hpp"  // for z_decompress
-#include "proteus/observation/logging.hpp"
+#include <algorithm>    // for fill
+#include <cstddef>      // for size_t, byte
+#include <cstdint>      // for uint64_t, int32_t
+#include <iostream>     // for operator<<, cout
+#include <string_view>  // for basic_string_view
+#include <utility>      // for move
+
+#include "proteus/buffers/buffer.hpp"             // for Buffer
+#include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
+#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
+#include "proteus/helpers/compression.hpp"        // for z_decompress
+#include "proteus/observation/logging.hpp"        // for getLogger, SPDLOG_L...
 
 namespace proteus {
 

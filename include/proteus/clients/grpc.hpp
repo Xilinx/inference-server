@@ -20,9 +20,10 @@
 #ifndef GUARD_PROTEUS_CLIENTS_GRPC
 #define GUARD_PROTEUS_CLIENTS_GRPC
 
-#include <memory>
+#include <memory>  // for shared_ptr, unique_ptr
+#include <string>  // for string
 
-#include "proteus/core/predict_api.hpp"
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
 namespace grpc {
 class Channel;

@@ -18,8 +18,8 @@ file(GLOB_RECURSE ALL_SOURCE_FILES CONFIGURE_DEPENDS
   ${PROJECT_SOURCE_DIR}/include/proteus/*.hpp
   ${PROJECT_SOURCE_DIR}/src/proteus/*.cpp
   ${PROJECT_SOURCE_DIR}/src/proteus/*.hpp
-  ${PROJECT_SOURCE_DIR}/tests/cpp/*.cpp
-  ${PROJECT_SOURCE_DIR}/tests/cpp/*.hpp
+  ${PROJECT_SOURCE_DIR}/tests/*.cpp
+  ${PROJECT_SOURCE_DIR}/tests/*.hpp
 )
 
 find_program(CLANG_FORMAT_EXECUTABLE clang-format)

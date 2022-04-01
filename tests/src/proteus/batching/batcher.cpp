@@ -19,16 +19,15 @@
 
 #include "proteus/batching/batcher.hpp"
 
-#include <chrono>              // for system_clock::time_point
-#include <condition_variable>  // for condition_variable
-#include <cstddef>             // for size_t
-#include <functional>          // for _Bind_helper<>::type
-#include <future>              // for promise
-#include <memory>              // for unique_ptr, shared_ptr
-#include <stdexcept>           // for invalid_argument
-#include <string>              // for operator+
-#include <utility>             // for move
-#include <vector>              // for vector
+#include <chrono>      // for system_clock::time_point
+#include <cstddef>     // for size_t
+#include <functional>  // for _Bind_helper<>::type
+#include <future>      // for promise
+#include <memory>      // for unique_ptr, shared_ptr
+#include <stdexcept>   // for invalid_argument
+#include <string>      // for operator+
+#include <utility>     // for move
+#include <vector>      // for vector
 
 #include "proteus/buffers/buffer.hpp"         // IWYU pragma: keep
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING

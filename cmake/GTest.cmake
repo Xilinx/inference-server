@@ -18,11 +18,16 @@
 # against a precompiled library.
 include(FetchContent)
 FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(INSTALL_GTEST OFF CACHE INTERNAL "")
 
 FetchContent_MakeAvailable(googletest)
+
+# disable iwyu on GTest sources
+set_target_properties(gtest PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+set_target_properties(gtest_main PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+set_target_properties(gmock PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")

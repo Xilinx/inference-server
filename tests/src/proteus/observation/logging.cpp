@@ -22,7 +22,6 @@
 #include <spdlog/sinks/basic_file_sink.h>     // for basic_file_sink_mt, bas...
 #include <spdlog/sinks/stdout_color_sinks.h>  // for ansicolor_stdout_sink
 
-#include <cstdlib>   // for getenv
 #include <iterator>  // for begin, end
 #include <memory>    // for allocator, make_shared
 #include <string>    // for string, operator+, char...

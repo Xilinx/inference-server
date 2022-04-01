@@ -19,17 +19,12 @@
 
 #include "proteus/core/predict_api.hpp"
 
-#include <algorithm>  // for fill, copy
-#include <cstring>    // for memcpy
-#include <iterator>   // for back_insert_iterator, bac...
+#include <algorithm>  // for copy
+#include <iterator>   // for back_insert_iterator, back_inse...
 #include <numeric>    // for accumulate
-#include <stdexcept>  // for invalid_argument
-#include <utility>    // for pair, move, make_pair
+#include <utility>    // for pair, make_pair, move
 
-#include "proteus/buffers/buffer.hpp"  // for Buffer
-#include "proteus/build_options.hpp"   // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api_internal.hpp"
-#include "proteus/observation/logging.hpp"  // for getLogger, SPDLOG_LOGGER_...
+#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_TRACING
 
 namespace proteus {
 

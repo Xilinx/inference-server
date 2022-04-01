@@ -12,11 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "gtest/gtest.h"
-#include "proteus/batching/soft.hpp"
-#include "proteus/buffers/vector_buffer.hpp"
-#include "proteus/clients/native_internal.hpp"
-#include "proteus/core/worker_info.hpp"
+#include <cstddef>   // for size_t
+#include <cstdint>   // for uint8_t, uint64_t
+#include <memory>    // for allocator, make_unique
+#include <optional>  // for optional
+#include <utility>   // for pair, move
+#include <vector>    // for vector
+
+#include "gtest/gtest.h"                        // for EXPECT_EQ, UnitTest
+#include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
+#include "proteus/buffers/buffer.hpp"           // for Buffer
+#include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
+#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/data_types.hpp"          // for DataType, DataType::U...
+#include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
+#include "proteus/core/worker_info.hpp"         // for WorkerInfo
+#include "proteus/helpers/declarations.hpp"     // for BufferPtrs
 
 namespace proteus {
 

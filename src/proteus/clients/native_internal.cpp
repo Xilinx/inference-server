@@ -19,10 +19,28 @@
 
 #include "proteus/clients/native_internal.hpp"
 
-#include <numeric>  // for accumulate
+#include <spdlog/spdlog.h>  // for SPDLOG_LOGGER_ERROR
 
-#include "proteus/buffers/buffer.hpp"
-#include "proteus/core/predict_api_internal.hpp"
+#include <algorithm>   // for fill
+#include <cstddef>     // for size_t, byte
+#include <cstdint>     // for uint64_t
+#include <cstring>     // for memcpy
+#include <functional>  // for _Bind_helper<>::type, _Placeh...
+#include <numeric>     // for accumulate
+#include <string>      // for string
+#include <utility>     // for move
+
+#include "proteus/buffers/buffer.hpp"   // for Buffer
+#include "proteus/core/data_types.hpp"  // for getSize
+
+namespace proteus {
+template <typename T>
+class InferenceRequestBuilder;
+}
+namespace proteus {
+template <typename T>
+class InferenceRequestInputBuilder;
+}
 
 namespace proteus {
 
@@ -79,7 +97,7 @@ class InferenceRequestBuilder<InferenceRequest> {
           auto &offset = input_offsets[buffer_index];
 
           request->inputs_.push_back(
-            std::move(InputBuilder::build(input, buffer, offset)));
+            InputBuilder::build(input, buffer, offset));
           offset += request->inputs_.back().getSize();
         }
       } catch (const std::invalid_argument &e) {

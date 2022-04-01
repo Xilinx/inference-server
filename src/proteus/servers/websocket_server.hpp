@@ -107,6 +107,7 @@ class WebsocketServer : public drogon::WebSocketController<WebsocketServer> {
   WS_PATH_LIST_END
 
 #ifdef PROTEUS_ENABLE_LOGGING
+
  private:
   LoggerPtr logger_;
 #endif

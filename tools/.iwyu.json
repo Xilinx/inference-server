@@ -1,4 +1,5 @@
 [
+  { "include": ["@<grpcpp/.*>", "private", "<grpcpp/grpcpp.h>", "public"] },
   { "include": ["@<opencv2/core/.*>", "private", "<opencv2/core.hpp>", "public"] },
   { "include": ["@<opencv2/videoio/.*>", "private", "<opencv2/videoio.hpp>", "public"] },
   { "include": ["<b64/cdecode.h>", "private", "<b64/decode.h>", "public"] },
@@ -10,12 +11,17 @@
   { "include": ["<spdlog/sinks/ansicolor_sink-inl.h>", "private", "<spdlog/sinks/ansicolor_sink.h>", "private"] },
   { "include": ["<spdlog/sinks/sink-inl.h>", "private", "<spdlog/sinks/sink.h>", "private"] },
   { "include": ["<spdlog/sinks/sink.h>", "private", "<spdlog/sinks/basic_file_sink.h>", "public"] },
-  { "include": ["<spdlog/common.h>", "private", "<spdlog/sinks/basic_file_sink.h>", "public"] },
+  { "include": ["<spdlog/common.h>", "private", "<spdlog/spdlog.h>", "public"] },
   { "include": ["<spdlog/details/file_helper-inl.h>", "private", "<spdlog/details/file_helper.h>", "private"] },
   { "include": ["<spdlog/details/file_helper.h>", "private", "<spdlog/sinks/basic_file_sink.h>", "public"] },
   { "include": ["@<yaml-cpp/node/.*>", "private", "<yaml-cpp/yaml.h>", "public"] },
-  { "include": ["@<gtest/.*>", "private", "<gtest/gtest.h>", "public"] },
+  { "include": ["@<gtest/.*>", "private", "\"gtest/gtest.h\"", "public"] },
   { "include": ["<zconf.h>", "private", "<zlib.h>", "public"] },
+  { "include": ["<system_error>", "public", "<future>", "public"] },
+  { "include": ["<bits/exception.h>", "private", "<exception>", "public"] },
+  { "include": ["<cxxabi.h>", "public", "<future>", "public"] },
   { "symbol": ["size_t", "private", "<cstddef>", "public"] },
+  { "symbol": ["memcpy", "private", "<cstring>", "public"] },
+  { "symbol": ["int32_t", "private", "<cstdint>", "public"] },
   { "symbol": ["drogon::HttpRequestPtr", "private", "<drogon/HttpRequest.h>", "public"] }
 ]

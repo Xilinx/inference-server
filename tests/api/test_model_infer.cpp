@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/testing/gtest_fixtures.hpp"
+#include <cstdint>  // for uint8_t, uint64_t, uin...
+#include <memory>   // for allocator, unique_ptr
+#include <vector>   // for vector
+
+#include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
+#include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
 TEST_F(GrpcFixture, model_infer) {
   auto endpoint = client_->modelLoad("echo", nullptr);

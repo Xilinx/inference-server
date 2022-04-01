@@ -22,10 +22,11 @@
 #include <algorithm>  // for max
 #include <chrono>     // for system_clock::time_point
 #include <cstddef>    // for size_t
-#include <iterator>   // for move_iterator, make_move...
-#include <memory>     // for unique_ptr, shared_ptr
+#include <cstdint>    // for int32_t
+#include <memory>     // for unique_ptr, allocator
+#include <ratio>      // for ratio
 #include <stdexcept>  // for invalid_argument
-#include <string>     // for operator+
+#include <string>     // for operator+, char_traits
 #include <utility>    // for move
 #include <vector>     // for vector
 
@@ -33,18 +34,14 @@
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
 #include "proteus/core/interface.hpp"        // for Interface
 #include "proteus/core/manager.hpp"          // for Manager
+#include "proteus/core/predict_api.hpp"      // for RequestParameters, Infer...
 #include "proteus/core/worker_info.hpp"      // for WorkerInfo
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs, BufferPtrs
+#include "proteus/helpers/declarations.hpp"  // for InterfacePtr, BufferPtrs
 #include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"        // for setThreadName
 #include "proteus/observation/logging.hpp"   // for SPDLOG_DEBUG
 #include "proteus/observation/metrics.hpp"   // for Metrics, MetricCounterIDs
 #include "proteus/observation/tracing.hpp"   // for TracePtr, Trace
-
-namespace proteus {
-class InferenceRequest;
-}  // namespace proteus
-// IWYU pragma: no_forward_declare proteus::Buffer
 
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdlib>   // for getenv
-#include <iterator>  // for size
+#include <cstdlib>  // for getenv
 
-#include "facedetect.hpp"
-#include "gtest/gtest.h"  // for Test, AssertionResult, EXPECT_EQ
+#include "facedetect.hpp"  // IWYU pragma: associated
+#include "gtest/gtest.h"   // for Test, AssertionResult, EXPECT_EQ
 
 const int gold_response_size = 6;
 const float gold_response_output[gold_response_size] = {

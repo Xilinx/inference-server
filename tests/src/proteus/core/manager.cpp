@@ -20,14 +20,12 @@
 
 #include "proteus/core/manager.hpp"
 
-#include <stdexcept>    // for invalid_argument
-#include <thread>       // for yield, thread
-#include <type_traits>  // for __decay_and_strip<>::__type
-#include <utility>      // for pair, make_pair, move
+#include <stdexcept>  // for invalid_argument
+#include <thread>     // for thread
+#include <utility>    // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING, kMax...
+#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
-#include "proteus/helpers/thread.hpp"    // for setThreadName
 #include "proteus/workers/worker.hpp"    // for Worker
 
 namespace proteus {

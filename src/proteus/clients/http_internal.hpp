@@ -20,13 +20,24 @@
 #ifndef GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
 #define GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
 
-#include <drogon/utils/FunctionTraits.h>
+#include <drogon/HttpRequest.h>           // for HttpRequestPtr
+#include <drogon/utils/FunctionTraits.h>  // for HttpResponsePtr
+#include <json/value.h>                   // for Value
 
-#include "proteus/core/interface.hpp"
-#include "proteus/core/predict_api_internal.hpp"
+#include <cstddef>     // for size_t
+#include <functional>  // for function
+#include <memory>      // for shared_ptr
+#include <stdexcept>   // for invalid_argument
+#include <string>      // for string
+#include <vector>      // for vector
 
-namespace Json {
-class Value;
+#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/core/interface.hpp"             // for Interface
+#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestBui...
+#include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
+
+namespace drogon {
+class HttpResponse;
 }
 
 namespace proteus {

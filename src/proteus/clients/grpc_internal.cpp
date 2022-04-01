@@ -19,8 +19,18 @@
 
 #include "proteus/clients/grpc_internal.hpp"
 
-#include "predict_api.grpc.pb.h"
-#include "proteus/core/predict_api_internal.hpp"
+#include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
+
+#include <cstddef>   // for size_t
+#include <cstdint>   // for int16_t, int32_t
+#include <iostream>  // for operator<<, cout
+#include <memory>    // for make_shared, shared...
+#include <vector>    // for vector, _Bit_reference
+
+#include "predict_api.pb.h"                       // for ModelInferResponse_...
+#include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "proteus/core/predict_api_internal.hpp"  // for RequestParameters
+#include "proteus/helpers/declarations.hpp"       // for InferenceResponseOu...
 
 namespace proteus {
 

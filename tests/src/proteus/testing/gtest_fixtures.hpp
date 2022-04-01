@@ -15,9 +15,10 @@
 #ifndef GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
 #define GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
 
+#include <memory>  // for allocator, unique_ptr
 #include <proteus/proteus.hpp>
 
-#include "gtest/gtest.h"  // for Test
+#include "gtest/gtest.h"  // IWYU pragma: export
 
 class BaseFixture : public testing::Test {
  public:

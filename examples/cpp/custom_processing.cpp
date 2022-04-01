@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <algorithm>              // for max
 #include <array>                  // for array
 #include <cmath>                  // for exp
 #include <cstdint>                // for int8_t, uint64_t
 #include <cstdlib>                // for getenv, size_t
-#include <future>                 // for future
+#include <future>                 // IWYU pragma: keep
 #include <initializer_list>       // for initializer_list
 #include <iostream>               // for operator<<, basic_ostream::operator<<
+#include <memory>                 // for allocator_traits<>::value_type
 #include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
 #include <opencv2/imgcodecs.hpp>  // for imread
 #include <opencv2/imgproc.hpp>    // for resize
 #include <queue>                  // for priority_queue
 #include <string>                 // for string, allocator, operator==, basi...
-#include <utility>                // for pair, move
+#include <utility>                // for pair
 #include <vector>                 // for vector
 
 // +include:

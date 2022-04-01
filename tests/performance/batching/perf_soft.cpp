@@ -12,15 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <chrono>
-#include <future>
-#include <memory>
+#include <chrono>    // for duration, operator-
+#include <cstddef>   // for size_t
+#include <cstdint>   // for uint8_t, uint64_t
+#include <future>    // for async, future, launch
+#include <iostream>  // for operator<<, basic_ost...
+#include <memory>    // for allocator, make_unique
+#include <optional>  // for optional
+#include <ratio>     // for ratio
+#include <thread>    // for sleep_for
+#include <tuple>     // for tuple
+#include <utility>   // for move
+#include <vector>    // for vector
 
-#include "gtest/gtest.h"
-#include "proteus/batching/soft.hpp"
-#include "proteus/buffers/vector_buffer.hpp"
-#include "proteus/clients/native_internal.hpp"
-#include "proteus/core/worker_info.hpp"
+#include "gtest/gtest.h"                        // for UnitTest, EXPECT_NEAR
+#include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
+#include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
+#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/data_types.hpp"          // for DataType, DataType::U...
+#include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
+#include "proteus/core/worker_info.hpp"         // for WorkerInfo
+#include "proteus/helpers/declarations.hpp"     // for BufferPtrs
 
 namespace proteus {
 

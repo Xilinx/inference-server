@@ -19,20 +19,13 @@
 
 #include "proteus/batching/batcher.hpp"
 
-#include <functional>  // for _Bind_helper<>::type, _Pl...
-#include <future>      // for promise
-#include <memory>      // for shared_ptr, make_unique
-#include <stdexcept>   // for invalid_argument
-#include <string>      // for string
-#include <utility>     // for move
+#include <memory>   // for shared_ptr, make_sh...
+#include <string>   // for string
+#include <utility>  // for move
 
-#include "proteus/core/interface.hpp"  // for InterfacePtr, Interface
-#include "proteus/core/predict_api_internal.hpp"
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/observation/logging.hpp"  // for LoggerPtr, SPDLOG_LOGGER_...
-
-// IWYU pragma: no_forward_declare proteus::Buffer
-
+#include "proteus/core/interface.hpp"
+#include "proteus/core/predict_api_internal.hpp"  // for RequestParameters
+#include "proteus/observation/logging.hpp"        // for getLogger, LoggerPtr
 namespace proteus {
 
 /**

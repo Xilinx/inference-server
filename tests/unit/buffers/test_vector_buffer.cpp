@@ -12,9 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "gtest/gtest.h"
-#include "proteus/buffers/vector_buffer.hpp"
-#include "proteus/core/data_types.hpp"
+#include <cstddef>  // for size_t
+#include <cstdint>  // for uint16_t, int16_t, int32_t
+#include <memory>   // for allocator
+
+#include "gtest/gtest.h"                      // for EXPECT_EQ, FAIL, UnitTest
+#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "proteus/core/data_types.hpp"        // for DataType, getSize, oper...
+#include "proteus/helpers/declarations.hpp"   // for BufferPtrs
+#include "proteus/helpers/queue.hpp"          // for BufferPtrsQueue
 
 namespace proteus {
 

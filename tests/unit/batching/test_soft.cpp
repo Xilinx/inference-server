@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "gtest/gtest.h"
-#include "proteus/batching/soft.hpp"
-#include "proteus/core/worker_info.hpp"
+#include <memory>  // for allocator
+
+#include "gtest/gtest.h"                 // for Test, SuiteApiResolver, TEST
+#include "proteus/batching/soft.hpp"     // for SoftBatcher
+#include "proteus/core/interface.hpp"    // IWYU pragma: keep
+#include "proteus/core/worker_info.hpp"  // for WorkerInfo
 
 namespace proteus {
 

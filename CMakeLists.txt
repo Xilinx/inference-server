@@ -60,6 +60,14 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
     set(PROTEUS_BUILD_TESTING_DEFAULT ON)
+
+    find_program(IWYU_PATH NAMES include-what-you-use iwyu)
+    if(IWYU_PATH)
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH}
+            -Xiwyu --mapping_file=${PROJECT_SOURCE_DIR}/tools/.iwyu.json
+            -Xiwyu --cxx17n
+        )
+    endif()
 else()
     set(PROTEUS_BUILD_TESTING_DEFAULT OFF)
 endif()

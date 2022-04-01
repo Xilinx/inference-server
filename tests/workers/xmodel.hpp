@@ -27,7 +27,6 @@
 #include <memory>                  // for unique_ptr, mak...
 #include <numeric>                 // for accumulate
 #include <string>                  // for string, operator==
-#include <system_error>            // for system_error
 #include <utility>                 // for move, pair
 #include <vart/runner.hpp>         // for Runner::TensorF...
 #include <vart/runner_ext.hpp>     // for RunnerExt

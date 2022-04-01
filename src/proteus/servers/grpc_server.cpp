@@ -19,21 +19,48 @@
 
 #include "proteus/servers/grpc_server.hpp"
 
-#include <numeric>  // for accumulate
+#include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
+#include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
+#include <grpcpp/grpcpp.h>                       // for Status, InsecureSer...
 
-#include "grpcpp/grpcpp.h"
-#include "predict_api.grpc.pb.h"
-#include "proteus/batching/batcher.hpp"
-#include "proteus/buffers/buffer.hpp"
-#include "proteus/build_options.hpp"
-#include "proteus/clients/grpc_internal.hpp"
-#include "proteus/core/interface.hpp"
-#include "proteus/core/manager.hpp"
-#include "proteus/core/predict_api_internal.hpp"
-#include "proteus/core/worker_info.hpp"
-#include "proteus/helpers/queue.hpp"
-#include "proteus/observation/logging.hpp"
-#include "proteus/version.hpp"
+#include <algorithm>   // for fill, max
+#include <cstddef>     // for size_t, byte
+#include <cstdint>     // for uint64_t, int16_t
+#include <cstring>     // for memcpy
+#include <exception>   // for exception
+#include <functional>  // for _Bind_helper<>::type
+#include <iostream>    // for operator<<, cout
+#include <memory>      // for unique_ptr, shared_ptr
+#include <stdexcept>   // for invalid_argument
+#include <thread>      // for thread, yield
+#include <utility>     // for move
+#include <vector>      // for vector
+
+#include "predict_api.grpc.pb.h"                  // for GRPCInferenceServic...
+#include "predict_api.pb.h"                       // for InferTensorContents
+#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/buffers/buffer.hpp"             // for Buffer
+#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
+#include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
+#include "proteus/core/interface.hpp"             // for Interface, Interfac...
+#include "proteus/core/manager.hpp"               // for Manager
+#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
+#include "proteus/core/worker_info.hpp"           // for WorkerInfo
+#include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
+#include "proteus/observation/logging.hpp"        // for SPDLOG_INFO, SPDLOG...
+#include "proteus/observation/tracing.hpp"        // for Trace, startTrace
+#include "proteus/version.hpp"                    // for kProteusVersion
+
+namespace proteus {
+class CallDataModelInfer;
+class CallDataModelLoad;
+class CallDataModelReady;
+class CallDataModelUnload;
+class CallDataServerLive;
+class CallDataServerMetadata;
+class CallDataServerReady;
+}  // namespace proteus
 
 // use aliases to prevent clashes between grpc:: and proteus::grpc::
 using ServerBuilder = grpc::ServerBuilder;
@@ -283,7 +310,7 @@ using InputBuilder =
     CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \
       : CallData##type(service, cq) {                                         \
       proceed();                                                              \
-    };                                                                        \
+    }                                                                         \
                                                                               \
    protected:                                                                 \
     void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
@@ -337,7 +364,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
           auto& offset = input_offsets[buffer_index];
 
           request->inputs_.push_back(
-            std::move(InputBuilder::build(input, buffer, offset)));
+            InputBuilder::build(input, buffer, offset));
           offset += request->inputs_.back().getSize();
         }
       } catch (const std::invalid_argument& e) {
@@ -406,7 +433,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     }
 
     return request;
-  };
+  }
 };
 
 using RequestBuilder = InferenceRequestBuilder<CallDataModelInfer*>;
@@ -447,9 +474,9 @@ class GrpcApiUnary : public Interface {
    * @param req
    * @param callback
    */
-  GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {
+  explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {
     this->type_ = InterfaceType::kGrpc;
-  };
+  }
 
   std::shared_ptr<InferenceRequest> getRequest(
     size_t& buffer_index, const std::vector<BufferRawPtrs>& input_buffers,
@@ -599,12 +626,12 @@ void CallDataModelInfer::handleRequest() {
 class GrpcServer final {
  public:
   /// Get the singleton GrpcServer instance
-  static GrpcServer& getInstance() { return create("", -1); };
+  static GrpcServer& getInstance() { return create("", -1); }
 
   static GrpcServer& create(const std::string& address, const int cq_count) {
     static GrpcServer server(address, cq_count);
     return server;
-  };
+  }
 
   GrpcServer(GrpcServer const&) = delete;  ///< Copy constructor
   GrpcServer& operator=(const GrpcServer&) =
@@ -624,7 +651,7 @@ class GrpcServer final {
       while (cq->Next(&tag, &ok)) {
       }
     }
-  };
+  }
 
  private:
   GrpcServer(const std::string& address, const int cq_count) {
@@ -650,7 +677,7 @@ class GrpcServer final {
       // just detach threads for now to simplify shutdown
       threads_.back().detach();
     }
-  };
+  }
 
   // This can be run in multiple threads if needed.
   void handleRpcs(int index) {
@@ -679,7 +706,7 @@ class GrpcServer final {
       }
       static_cast<CallDataBase*>(tag)->proceed();
     }
-  };
+  }
 
   std::vector<std::unique_ptr<::grpc::ServerCompletionQueue>> cq_;
   inference::GRPCInferenceService::AsyncService service_;

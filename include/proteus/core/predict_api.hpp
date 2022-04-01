@@ -39,10 +39,6 @@
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
 
 namespace proteus {
-class Buffer;
-}  // namespace proteus
-
-namespace proteus {
 
 /// parameters in Proteus may be one of these types
 using Parameter = std::variant<bool, double, int32_t, std::string>;

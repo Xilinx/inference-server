@@ -18,19 +18,21 @@
  * worker has a queue that can be manually populated for providing buffers
  */
 
-#include <cctype>       // for toupper
-#include <climits>      // for UINT_MAX
-#include <cstdint>      // for int32_t
-#include <stdexcept>    // for invalid_argument
-#include <string>       // for string, operator+, basic_string
-#include <type_traits>  // for remove_reference<>::type
-#include <utility>      // for pair, move, make_pair
+#include <cstddef>  // for size_t
+#include <cstdint>  // for int32_t
+#include <memory>   // for unique_ptr, make_unique
+#include <string>   // for allocator, string
+#include <thread>   // for thread::id, thread
+#include <utility>  // for move
 
-#include "proteus/batching/batcher.hpp"  // for Batcher, BatchPtrQueue
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api.hpp"  // for RequestParameters
-#include "proteus/core/worker_info.hpp"
-#include "proteus/workers/worker.hpp"  // for Worker, WorkerStatus
+#include "proteus/batching/batcher.hpp"      // for Batcher
+#include "proteus/buffers/buffer.hpp"        // IWYU pragma: keep
+#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/predict_api.hpp"      // for RequestParameters
+#include "proteus/core/worker_info.hpp"      // for WorkerInfo
+#include "proteus/helpers/declarations.hpp"  // for BufferPtrs
+#include "proteus/helpers/queue.hpp"         // for BufferPtrsQueue, Blockin...
+#include "proteus/observation/logging.hpp"   // for getLogger, LoggerPtr
 
 namespace proteus {
 

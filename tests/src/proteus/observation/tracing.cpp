@@ -19,35 +19,10 @@
 
 #include "proteus/observation/tracing.hpp"
 
-#include <opentelemetry/context/propagation/global_propagator.h>
-#include <opentelemetry/context/propagation/text_map_propagator.h>
-#include <opentelemetry/context/runtime_context.h>
-#include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
-// #include <opentelemetry/exporters/ostream/span_exporter.h>
-#include <opentelemetry/sdk/resource/resource.h>
-#include <opentelemetry/sdk/trace/exporter.h>
-#include <opentelemetry/sdk/trace/processor.h>
-#include <opentelemetry/sdk/trace/recordable.h>
-#include <opentelemetry/sdk/trace/simple_processor.h>
-#include <opentelemetry/sdk/trace/tracer_provider.h>
-#include <opentelemetry/std/utility.h>
-#include <opentelemetry/trace/canonical_code.h>
-#include <opentelemetry/trace/context.h>
-#include <opentelemetry/trace/propagation/http_trace_context.h>
-#include <opentelemetry/trace/provider.h>
-#include <opentelemetry/trace/scope.h>
-#include <opentelemetry/trace/span_metadata.h>
-#include <opentelemetry/trace/tracer.h>
-#include <opentelemetry/trace/tracer_provider.h>
-
-#include <chrono>
-#include <cstdint>  // for int32_t
-#include <map>      // for _Rb_tree_iterator, operator!=
-#include <string>   // for string, basic_string
-#include <utility>  // for pair
-#include <variant>  // for get, holds_alternative, visi
-
-#include "proteus/core/predict_api.hpp"  // for Parameter, RequestParameters
+#include <opentelemetry/sdk/trace/recordable.h>  // for trace
+#include <opentelemetry/std/utility.h>           // for nostd
+#include <opentelemetry/trace/canonical_code.h>  // for trace
+#include <opentelemetry/trace/tracer.h>          // for Tracer
 
 #ifdef PROTEUS_ENABLE_TRACING
 

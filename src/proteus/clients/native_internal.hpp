@@ -20,7 +20,15 @@
 #ifndef GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL
 #define GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL
 
-#include "proteus/core/interface.hpp"
+#include <cstddef>    // for size_t
+#include <future>     // for promise
+#include <memory>     // for shared_ptr
+#include <stdexcept>  // for invalid_argument
+#include <vector>     // for vector
+
+#include "proteus/core/interface.hpp"        // for Interface
+#include "proteus/core/predict_api.hpp"      // for InferenceRequest, Infere...
+#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
 
 namespace proteus {
 

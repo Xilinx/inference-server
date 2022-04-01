@@ -55,6 +55,13 @@ if(${PROTEUS_ENABLE_GRPC})
     get_target_property(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
     protobuf_generate(TARGET lib_grpc LANGUAGE cpp)
     protobuf_generate(TARGET lib_grpc LANGUAGE grpc GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}")
+
+    # disable iwyu for proto-generated files
+    # set_property(
+    #     TARGET lib_grpc
+    #     PROPERTY CXX_INCLUDE_WHAT_YOU_USE ""
+    # )
+    set_target_properties(lib_grpc PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
 endif()
 
 add_library(core INTERFACE)

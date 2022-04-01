@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/testing/gtest_fixtures.hpp"
+#include <memory>  // for allocator, unique_ptr
+
+#include "proteus/proteus.hpp"                 // for GrpcClient
+#include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
 TEST_F(GrpcFixture, server_live) {
   auto reply = client_->serverLive();

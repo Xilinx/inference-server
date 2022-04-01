@@ -22,16 +22,15 @@
 #include <cstring>                // for memcpy
 #include <filesystem>             // for path, directory...
 #include <functional>             // for ref
-#include <future>                 // for future, async
+#include <future>                 // for future, __force...
 #include <opencv2/core.hpp>       // for Mat, MatSize
 #include <opencv2/imgcodecs.hpp>  // for imread
 #include <queue>                  // for queue
 #include <string>                 // for string, operator==
-#include <system_error>           // for system_error
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "proteus/proteus.hpp"
+#include "proteus/proteus.hpp"  // for load, RequestPa...
 
 namespace fs = std::filesystem;
 
