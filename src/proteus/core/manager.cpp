@@ -36,8 +36,15 @@ Manager::Manager() {
   this->logger_ = getLogger();
 #endif
   update_queue_ = std::make_unique<UpdateCommandQueue>();
-  update_thread_ =
-    std::thread(&Manager::update_manager, this, update_queue_.get());
+  init();
+}
+
+void Manager::init() {
+  // default constructed threads are not joinable
+  if (!update_thread_.joinable()) {
+    update_thread_ =
+      std::thread(&Manager::update_manager, this, update_queue_.get());
+  }
 }
 
 std::string Manager::loadWorker(std::string const& key,
@@ -101,6 +108,8 @@ void Manager::workerAllocate(std::string const& key, int num) {
   }
 }
 
+// TODO(varunsh): if multiple commands sent post-shutdown, they will linger
+// in the queue and may cause problems
 void Manager::shutdown() {
   auto request = std::make_shared<UpdateCommand>(UpdateCommandType::Shutdown);
   this->update_queue_->enqueue(request);

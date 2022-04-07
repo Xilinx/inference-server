@@ -18,7 +18,7 @@
 #include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, ServerLive) {
-  auto reply = client_->serverLive();
+TEST_F(GrpcFixture, ServerReady) {
+  auto reply = client_->serverReady();
   EXPECT_TRUE(reply);
 }

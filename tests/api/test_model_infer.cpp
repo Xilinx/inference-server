@@ -19,7 +19,8 @@
 #include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
 #include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
-TEST_F(GrpcFixture, model_infer) {
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, ModelInfer) {
   auto endpoint = client_->modelLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 

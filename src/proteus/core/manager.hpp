@@ -129,6 +129,13 @@ class Manager {
    * allocation
    */
   void workerAllocate(std::string const& key, int num);
+
+  /**
+   * @brief Initialize the Manager. This is called automatically by the
+   * constructor and may be called again after shutdown() to restart. If already
+   * initialized, this does nothing.
+   */
+  void init();
   /**
    * @brief Stop the Manager. This should be called prior to ending Proteus.
    *

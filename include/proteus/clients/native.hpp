@@ -23,7 +23,7 @@
 #include <cstddef>  // for size_t
 #include <string>   // for string
 
-#include "proteus/core/predict_api.hpp"      // for InferenceRequestInput, Re...
+#include "proteus/core/predict_api.hpp"      // for InferenceRequest (ptr only)
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseFuture
 
 // IWYU pragma: no_forward_declare proteus::RequestParameters
@@ -65,6 +65,13 @@ std::string load(const std::string &worker, RequestParameters *parameters);
  * @param worker name of the worker to unload
  */
 void unload(const std::string &worker);
+
+/**
+ * @brief Check if a worker is ready
+ *
+ * @param worker name of the worker to check if ready
+ */
+bool modelReady(const std::string &worker);
 
 /**
  * @brief Enqueue an inference request to Proteus

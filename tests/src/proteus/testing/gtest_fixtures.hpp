@@ -39,4 +39,15 @@ class GrpcFixture : public BaseFixture {
   std::unique_ptr<proteus::GrpcClient> client_;
 };
 
+#define EXPECT_THROW_CHECK(statement, check, exception) \
+  EXPECT_THROW(                                         \
+    {                                                   \
+      try {                                             \
+        statement                                       \
+      } catch (const exception& e) {                    \
+        check throw;                                    \
+      }                                                 \
+    },                                                  \
+    exception)
+
 #endif  // GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES

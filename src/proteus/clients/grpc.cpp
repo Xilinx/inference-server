@@ -31,6 +31,7 @@
 #include <memory>     // for make_shared, reinter...
 #include <stdexcept>  // for runtime_error
 #include <string>     // for string, operator+
+#include <utility>    // for move
 #include <variant>    // for visit
 #include <vector>     // for vector
 
@@ -50,7 +51,7 @@ using types::DataType;
 
 class GrpcClient::GrpcClientImpl {
  public:
-  explicit GrpcClientImpl(std::shared_ptr<::grpc::Channel> channel) {
+  explicit GrpcClientImpl(const std::shared_ptr<::grpc::Channel>& channel) {
     this->stub_ = inference::GRPCInferenceService::NewStub(channel);
   }
 
@@ -64,7 +65,7 @@ GrpcClient::GrpcClient(const std::string& address)
   : GrpcClient(
       ::grpc::CreateChannel(address, ::grpc::InsecureChannelCredentials())) {}
 
-GrpcClient::GrpcClient(std::shared_ptr<::grpc::Channel> channel) {
+GrpcClient::GrpcClient(const std::shared_ptr<::grpc::Channel>& channel) {
   this->impl_ = std::make_unique<GrpcClient::GrpcClientImpl>(channel);
 }
 
@@ -81,9 +82,8 @@ bool GrpcClient::serverLive() {
 
   if (status.ok()) {
     return reply.live();
-  } else {
-    throw std::runtime_error(status.error_message());
   }
+  throw std::runtime_error(status.error_message());
 }
 
 bool GrpcClient::serverReady() {
@@ -97,9 +97,8 @@ bool GrpcClient::serverReady() {
 
   if (status.ok()) {
     return reply.ready();
-  } else {
-    throw std::runtime_error(status.error_message());
   }
+  throw std::runtime_error(status.error_message());
 }
 
 bool GrpcClient::modelReady(const std::string& model) {
@@ -115,9 +114,8 @@ bool GrpcClient::modelReady(const std::string& model) {
 
   if (status.ok()) {
     return reply.ready();
-  } else {
-    throw std::runtime_error(status.error_message());
   }
+  throw std::invalid_argument(status.error_message());
 }
 
 // refer to cppreference for std::visit
@@ -140,7 +138,7 @@ void mapParametersToProto(
       overloaded{[&](bool arg) { param.set_bool_param(arg); },
                  [&](double arg) { param.set_double_param(arg); },
                  [&](int32_t arg) { param.set_int64_param(arg); },
-                 [&](std::string arg) { param.set_string_param(arg); }},
+                 [&](const std::string& arg) { param.set_string_param(arg); }},
       value);
     grpc_parameters->insert({key, param});
   }
@@ -164,9 +162,8 @@ std::string GrpcClient::modelLoad(const std::string& model,
 
   if (status.ok()) {
     return reply.endpoint();
-  } else {
-    throw std::runtime_error(status.error_message());
   }
+  throw std::runtime_error(status.error_message());
 }
 
 void GrpcClient::modelUnload(const std::string& model) {
@@ -309,7 +306,7 @@ void mapRequestToProto(const InferenceRequest& request,
       case DataType::STRING: {
         auto* data = static_cast<std::string*>(input.getData());
         auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
-        contents->Add((*data).c_str());
+        contents->Add(std::move(*data));
         // for(size_t i = 0; i < output.getSize(); i++){
         //   contents->Add(data->data()[i]);
         // }

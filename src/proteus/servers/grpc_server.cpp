@@ -527,9 +527,7 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelReady, Unary) {
   auto& model = request_.name();
   try {
-    if (!Manager::getInstance().workerReady(model)) {
-      reply_.set_ready(false);
-    }
+    reply_.set_ready(Manager::getInstance().workerReady(model));
     finish();
   } catch (const std::invalid_argument& e) {
     reply_.set_ready(false);

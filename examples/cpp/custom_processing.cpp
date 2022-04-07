@@ -68,7 +68,7 @@ std::vector<std::vector<int8_t>> preprocess(
         for (int h = 0; h < height; h++) {
           for (int w = 0; w < width; w++) {
             output[(c * height * width) + (h * width) + w] =
-              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean[c]) * fix_scale;
+              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean.at(c)) * fix_scale;
           }
         }
       }
@@ -77,7 +77,7 @@ std::vector<std::vector<int8_t>> preprocess(
         for (int w = 0; w < width; w++) {
           for (int c = 0; c < channels; c++) {
             output[h * width * channels + w * channels + c] =
-              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean[c]) * fix_scale;
+              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean.at(c)) * fix_scale;
           }
         }
       }
@@ -160,10 +160,13 @@ std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
 }
 
 #ifdef ENABLE_GRPC
+constexpr auto GRPC_PORT = 50051;
+constexpr auto GRPC_ADDRESS = "localhost:50051";
+
 std::string load(const std::string& path_to_xmodel) {
   // +initialize grpc:
-  proteus::startGrpcServer(50051);
-  proteus::GrpcClient client{"localhost:50051"};
+  proteus::startGrpcServer(GRPC_PORT);
+  proteus::GrpcClient client{GRPC_ADDRESS};
   // -initialize grpc:
 
   // +load grpc:
@@ -175,9 +178,9 @@ std::string load(const std::string& path_to_xmodel) {
   return worker_name;
 }
 
-proteus::InferenceResponse infer(const std::string worker_name,
+proteus::InferenceResponse infer(const std::string& worker_name,
                                  const proteus::InferenceRequest& request) {
-  proteus::GrpcClient client{"localhost:50051"};
+  proteus::GrpcClient client{GRPC_ADDRESS};
 
   // +inference grpc:
   auto results = client.modelInfer(worker_name, request);
@@ -200,7 +203,7 @@ std::string load(const std::string& path_to_xmodel) {
   return worker_name;
 }
 
-proteus::InferenceResponse infer(const std::string worker_name,
+proteus::InferenceResponse infer(const std::string& worker_name,
                                  const proteus::InferenceRequest& request) {
   // +inference native:
   auto future = proteus::enqueue(worker_name, request);
@@ -276,9 +279,9 @@ int main() {
   for (auto& output : outputs) {
     std::vector<int> top_k = postprocess(output, k);
     for (size_t j = 0; j < k; j++) {
-      if (top_k[j] != gold_response_output[j]) {
+      if (top_k[j] != gold_response_output.at(j)) {
         std::cerr << "Output (" << top_k[j] << ") does not match golden ("
-                  << gold_response_output[j] << ")\n";
+                  << gold_response_output.at(j) << ")\n";
         proteus::terminate();
         return 1;
       }

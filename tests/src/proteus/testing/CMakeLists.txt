@@ -12,18 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets
-    test_model_infer
-    test_model_load
-    test_server_live
-    test_server_ready
-)
-
-foreach(target ${targets})
-    add_executable(${target} ${target}.cpp)
-
-    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_link_libraries(${target} PRIVATE proteus gtest gtest_main native_test)
-
-    gtest_discover_tests(${target})
-endforeach()
+add_library(native_test OBJECT native.cpp)
+target_include_directories(native_test PRIVATE ${PROTEUS_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
+target_link_libraries(native_test PRIVATE native)
+enable_ipo_on_target(native_test)

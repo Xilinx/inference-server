@@ -12,43 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @file
- * @brief Defines the methods for interacting with Proteus with gRPC
- */
+#ifndef GUARD_SRC_PROTEUS_TESTING_NATIVE
+#define GUARD_SRC_PROTEUS_TESTING_NATIVE
 
-#ifndef GUARD_PROTEUS_CLIENTS_GRPC
-#define GUARD_PROTEUS_CLIENTS_GRPC
-
-#include <memory>  // for shared_ptr, unique_ptr
 #include <string>  // for string
 
 #include "proteus/clients/client.hpp"    // for Client
 #include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
-namespace grpc {
-class Channel;
-}
-
 namespace proteus {
 
-/**
- * @brief Start the gRPC server. This is a no-op if Proteus is compiled without
- * gRPC support.
- *
- * @param port port to use
- */
-void startGrpcServer(int port);
-
-void stopGrpcServer();
-
-class GrpcClient : public Client {
+class NativeClient : public Client {
  public:
-  GrpcClient() = delete;
-  GrpcClient(const std::string& address);
-  GrpcClient(const std::shared_ptr<::grpc::Channel>& channel);
-  ~GrpcClient();
-
   bool serverLive() override;
   bool serverReady() override;
   bool modelReady(const std::string& model) override;
@@ -58,16 +33,8 @@ class GrpcClient : public Client {
   void modelUnload(const std::string& model) override;
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
-  // int streamModelInferStart(const std::string& model,
-  //                           const InferenceRequest& request,
-  //                           RequestParameters& metadata);
-  // bool streamModelInfer(int index, InferenceResponse& response);
-
- private:
-  class GrpcClientImpl;
-  std::unique_ptr<GrpcClientImpl> impl_;
 };
 
-}  // namespace proteus
+#endif  // GUARD_SRC_PROTEUS_TESTING_NATIVE
 
-#endif  // GUARD_PROTEUS_CLIENTS_GRPC
+}  // namespace proteus

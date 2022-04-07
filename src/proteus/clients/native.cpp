@@ -52,6 +52,8 @@ void initialize() {
   startTracer();
 #endif
 
+  Manager::getInstance().init();
+
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
 
@@ -103,6 +105,10 @@ InferenceResponseFuture enqueue(const std::string& workerName,
 
 void unload(const std::string& worker) {
   Manager::getInstance().unloadWorker(worker);
+}
+
+bool modelReady(const std::string& worker) {
+  return Manager::getInstance().workerReady(worker);
 }
 
 std::string getHardware() {
