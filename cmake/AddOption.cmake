@@ -1,4 +1,4 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2022 Xilinx Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,5 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set noparent
-filter=-legal/copyright,-build/header_guard,-build/c++11,-runtime/references,-readability/nolint,-build/include_order,-build/include_subdir
+macro(add_option option_name description default)
+    option(PROTEUS_${option_name} ${description} ${default})
+    message(STATUS "  PROTEUS_${option_name}: " ${PROTEUS_${option_name}})
+endmacro()
+
+macro(add_derived_option option_name default)
+    set(PROTEUS_${option_name} ${default})
+    message(STATUS "  PROTEUS_${option_name}: " ${PROTEUS_${option_name}})
+endmacro()

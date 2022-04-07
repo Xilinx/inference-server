@@ -44,7 +44,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
-    # set(CMAKE_LINK_WHAT_YOU_USE TRUE)
     set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     set(CMAKE_CXX_LINKER_WRAPPER_FLAG "-Wl,")
@@ -60,14 +59,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
     set(PROTEUS_BUILD_TESTING_DEFAULT ON)
-
-    find_program(IWYU_PATH NAMES include-what-you-use iwyu)
-    if(IWYU_PATH)
-        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH}
-            -Xiwyu --mapping_file=${PROJECT_SOURCE_DIR}/tools/.iwyu.json
-            -Xiwyu --cxx17n
-        )
-    endif()
 else()
     set(PROTEUS_BUILD_TESTING_DEFAULT OFF)
 endif()
@@ -79,6 +70,7 @@ endif()
 include(CMakeDependentOption)
 include(CTest)
 include(EnableIPO)
+include(AddOption)
 
 # check requirements
 find_package(Drogon)
@@ -89,6 +81,8 @@ find_package(Threads REQUIRED)
 find_package(Protobuf)
 find_package(absl CONFIG)
 find_package(gRPC CONFIG)
+find_package(Doxygen)
+find_package(Sphinx)
 
 find_package(xir QUIET)
 find_package(vart QUIET)
@@ -113,41 +107,28 @@ endif()
 
 configure_file(${PROJECT_SOURCE_DIR}/src/proteus/version.hpp.in ${PROJECT_SOURCE_DIR}/src/proteus/version.hpp)
 
-option(PROTEUS_ENABLE_REST "Enable the REST server" ON)
-option(PROTEUS_ENABLE_GRPC "Enable the gRPC server" ${gRPC_FOUND})
-option(PROTEUS_ENABLE_METRICS "Enable Prometheus metrics" ON)
-option(PROTEUS_ENABLE_LOGGING "Enable logging" ${spdlog_FOUND})
-option(PROTEUS_ENABLE_TRACING "Enable Jaeger tracing" ${opentelemetry-cpp_FOUND})
-option(PROTEUS_ENABLE_AKS "Enable AKS dependencies" ${PROTEUS_AKS_FOUND})
-option(PROTEUS_ENABLE_VITIS "Enable Vitis dependencies" ${PROTEUS_VITIS_FOUND})
-option(PROTEUS_BUILD_EXAMPLES "Build examples" ON)
-option(PROTEUS_BUILD_SHARED "Build Proteus as a shared library" ON)
-option(PROTEUS_BUILD_TESTING "Build C++ tests" ${PROTEUS_BUILD_TESTING_DEFAULT})
-option(PROTEUS_ENABLE_IPO "Enable interprocedural optimizations" OFF)
+message(STATUS "Build Options:")
+add_option("ENABLE_REST" "Enable the REST server" ON)
+add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
+add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
+add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
+add_option("ENABLE_TRACING" "Enable Jaeger tracing" ${opentelemetry-cpp_FOUND})
+add_option("ENABLE_AKS" "Enable AKS dependencies" ${PROTEUS_AKS_FOUND})
+add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${PROTEUS_VITIS_FOUND})
+add_option("BUILD_EXAMPLES" "Build examples" ON)
+add_option("BUILD_SHARED" "Build Proteus as a shared library" ON)
+add_option("BUILD_TESTING" "Build C++ tests" ${PROTEUS_BUILD_TESTING_DEFAULT})
+add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
+add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
 
+message(STATUS "Derived Options:")
 if(${PROTEUS_ENABLE_REST} OR ${PROTEUS_ENABLE_METRICS})
-    set(PROTEUS_ENABLE_HTTP ON)
+    add_derived_option("ENABLE_HTTP" ON)
 else()
-    set(PROTEUS_ENABLE_HTTP OFF)
+    add_derived_option("ENABLE_HTTP" OFF)
 endif()
 
-set(PROTEUS_DEFAULT_HTTP_PORT 8998)
-
-message(STATUS "Build Options:")
-message(STATUS "  PROTEUS_ENABLE_REST: " ${PROTEUS_ENABLE_REST})
-message(STATUS "  PROTEUS_ENABLE_GRPC: " ${PROTEUS_ENABLE_GRPC})
-message(STATUS "  PROTEUS_ENABLE_METRICS: " ${PROTEUS_ENABLE_METRICS})
-message(STATUS "  PROTEUS_ENABLE_LOGGING: " ${PROTEUS_ENABLE_LOGGING})
-message(STATUS "  PROTEUS_ENABLE_TRACING: " ${PROTEUS_ENABLE_TRACING})
-message(STATUS "  PROTEUS_ENABLE_AKS: " ${PROTEUS_ENABLE_AKS})
-message(STATUS "  PROTEUS_ENABLE_VITIS: " ${PROTEUS_ENABLE_VITIS})
-message(STATUS "  PROTEUS_BUILD_EXAMPLES: " ${PROTEUS_BUILD_EXAMPLES})
-message(STATUS "  PROTEUS_BUILD_SHARED: " ${PROTEUS_BUILD_SHARED})
-message(STATUS "  PROTEUS_BUILD_TESTING: " ${PROTEUS_BUILD_TESTING})
-message(STATUS "  PROTEUS_ENABLE_IPO: " ${PROTEUS_ENABLE_IPO})
-message(STATUS "Derived Options:")
-message(STATUS "  PROTEUS_ENABLE_HTTP: " ${PROTEUS_ENABLE_HTTP})
-message(STATUS "  PROTEUS_DEFAULT_HTTP_PORT: " ${PROTEUS_DEFAULT_HTTP_PORT})
+add_derived_option("DEFAULT_HTTP_PORT" 8998)
 
 configure_file(src/proteus/build_options.hpp.in ${PROJECT_SOURCE_DIR}/include/proteus/build_options.hpp)
 configure_file(src/gui/src/build_options.ts.in ${PROJECT_SOURCE_DIR}/src/gui/src/build_options.ts)
@@ -164,7 +145,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     setup_target_for_coverage_fastcov(
         NAME coverage # New target name
         EXECUTABLE ${PROJECT_SOURCE_DIR}/tests/test.sh
-        EXECUTABLE_ARGS --mode all --build Coverage -k "not facedetect" --load-before
+        EXECUTABLE_ARGS --mode all --build Coverage --load-before
         DEPENDENCIES proteus-server
         FASTCOV_ARGS "--include" ${PROJECT_SOURCE_DIR} "--exceptional-branch-coverage"
         BASE_DIRECTORY ${PROJECT_SOURCE_DIR}
@@ -177,8 +158,33 @@ endif()
 set(PROTEUS_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/include)
 set(PROTEUS_PUBLIC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 
-find_package(Doxygen)
-find_package(Sphinx)
+if(PROTEUS_ENABLE_LINTING)
+    message(STATUS "Enabling build-time linting")
+
+    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
+
+    find_program(IWYU_PATH NAMES include-what-you-use iwyu)
+    if(IWYU_PATH)
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH}
+            -Xiwyu --mapping_file=${PROJECT_SOURCE_DIR}/tools/.iwyu.json
+            -Xiwyu --cxx17n
+        )
+    endif()
+
+    find_program(CLANG_TIDY_PATH NAMES clang-tidy)
+    if(CLANG_TIDY_PATH)
+        set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_PATH}
+            -format-style=file
+            --extra-arg "-DCV_STATIC_ANALYSIS=0"
+        )
+    endif()
+
+    find_program(CPPLINT_PATH NAMES cpplint)
+    if(CPPLINT_PATH)
+        set(CMAKE_CXX_CPPLINT ${CPPLINT_PATH})
+    endif()
+endif()
+
 if(${Doxygen_FOUND} AND ${Sphinx_FOUND})
     message(STATUS "Doxygen and Sphinx found. Building documentation")
     add_subdirectory(docs)

@@ -16,11 +16,9 @@ include(CheckIPOSupported)
 check_ipo_supported(RESULT IPO_SUPPORTED)
 
 function(enable_ipo_on_target target)
-
-if(IPO_SUPPORTED)
-    set_property(TARGET ${target}
-        PROPERTY INTERPROCEDURAL_OPTIMIZATION ${PROTEUS_ENABLE_IPO}
-    )
-endif()
-
+    if(IPO_SUPPORTED)
+        set_property(TARGET ${target}
+            PROPERTY INTERPROCEDURAL_OPTIMIZATION ${PROTEUS_ENABLE_IPO}
+        )
+    endif()
 endfunction()

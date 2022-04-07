@@ -359,6 +359,8 @@ class Build:
         # build_dir.mkdir(parents=True, exist_ok=True)
 
         build_options = " ".join(unknown_args)
+        if args.lint:
+            build_options += " -DPROTEUS_ENABLE_LINTING=ON"
 
         if args.clean and build_dir.exists():
             command = (
@@ -455,6 +457,12 @@ class Build:
             help="Build additional optional targets",
         )
         command_group.add_argument(
+            "-c",
+            "--clean",
+            action="store_true",
+            help="clean prior to building",
+        )
+        command_group.add_argument(
             "-d",
             "--dir",
             action="store",
@@ -462,10 +470,10 @@ class Build:
             default=str(Path.cwd() / "build"),
         )
         command_group.add_argument(
-            "-c",
-            "--clean",
+            "-l",
+            "--lint",
             action="store_true",
-            help="clean prior to building",
+            help="Enable build-time linting in CMake. Defaults to false",
         )
         command_group.add_argument(
             "-r",
