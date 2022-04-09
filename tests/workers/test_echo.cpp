@@ -130,12 +130,12 @@ TEST_P(EchoParamFixture, EchoNative) {
   const auto params = GetParam();
   auto multiplier = std::get<4>(params);
 
-  proteus::load("echo", nullptr);
+  proteus::NativeClient client;
+  client.modelLoad("echo", nullptr);
 
   auto request = this->construct_request();
 
-  auto future = proteus::enqueue("echo", request);
-  auto response = future.get();
+  auto response = client.modelInfer("echo", request);
 
   if (multiplier == 30) {
     EXPECT_TRUE(response.isError());
@@ -144,7 +144,7 @@ TEST_P(EchoParamFixture, EchoNative) {
     validate(response);
   }
 
-  proteus::unload("echo");
+  client.modelUnload("echo");
 }
 
 TEST_P(EchoParamFixture, EchoGrpc) {

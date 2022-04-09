@@ -178,10 +178,8 @@ std::string Manager::Endpoints::load(const std::string& worker,
 
   // we've seen this worker before but not with these parameters
   if (map.find(*parameters) == map.end()) {
-    int index;
-    if (worker_indices_.find(worker) == worker_indices_.end()) {
-      index = 0;
-    } else {
+    int index = 0;
+    if (worker_indices_.find(worker) != worker_indices_.end()) {
       // technically, this can overflow and cause problems but that's unlikely
       index = worker_indices_.at(worker) + 1;
     }

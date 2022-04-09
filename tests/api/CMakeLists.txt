@@ -23,7 +23,7 @@ foreach(target ${targets})
     add_executable(${target} ${target}.cpp)
 
     target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_link_libraries(${target} PRIVATE proteus gtest gtest_main native_test)
+    target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
 
     gtest_discover_tests(${target})
 endforeach()

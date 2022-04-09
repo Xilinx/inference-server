@@ -224,21 +224,21 @@ class InferenceRequestInputBuilder<
         break;
       }
       case DataType::UINT8: {
-        auto* value = tensor.uint_contents().data();
+        const auto* value = tensor.uint_contents().data();
         for (size_t i = 0; i < size; i++) {
           dest[i] = static_cast<std::byte>(value[i]);
         }
         break;
       }
       case DataType::UINT16: {
-        auto* value = tensor.uint_contents().data();
+        const auto* value = tensor.uint_contents().data();
         for (size_t i = 0; i < size; i++) {
           std::memcpy(dest + i, value + i, sizeof(uint16_t));
         }
         break;
       }
       case DataType::UINT32: {
-        auto value = tensor.uint_contents().data();
+        const auto value = tensor.uint_contents().data();
         std::memcpy(dest, value, size * sizeof(uint32_t));
         break;
       }
@@ -248,14 +248,14 @@ class InferenceRequestInputBuilder<
         break;
       }
       case DataType::INT8: {
-        auto* value = tensor.int_contents().data();
+        const auto* value = tensor.int_contents().data();
         for (size_t i = 0; i < size; i++) {
           dest[i] = static_cast<std::byte>(value[i]);
         }
         break;
       }
       case DataType::INT16: {
-        auto* value = tensor.int_contents().data();
+        const auto* value = tensor.int_contents().data();
         for (size_t i = 0; i < size; i++) {
           std::memcpy(dest + i, value + i, sizeof(int16_t));
         }
@@ -345,7 +345,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     std::vector<size_t>& output_offsets, const size_t& batch_size,
     size_t& batch_offset) {
     auto request = std::make_shared<InferenceRequest>();
-    auto& grpc_request = req->getRequest();
+    const auto& grpc_request = req->getRequest();
 
     request->id_ = grpc_request.id();
 
@@ -359,8 +359,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     for (const auto& input : grpc_request.inputs()) {
       try {
         auto buffers = input_buffers[buffer_index];
-        for (size_t i = 0; i < buffers.size(); i++) {
-          auto& buffer = buffers[i];
+        for (auto& buffer : buffers) {
           auto& offset = input_offsets[buffer_index];
 
           request->inputs_.push_back(
@@ -384,13 +383,12 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     batch_offset = batch_offset_backup;
 
     if (grpc_request.outputs_size() != 0) {
-      for (auto& output : grpc_request.outputs()) {
+      for (const auto& output : grpc_request.outputs()) {
         // TODO(varunsh): we're ignoring incoming output data
         (void)output;
         try {
           auto buffers = output_buffers[buffer_index];
-          for (size_t i = 0; i < buffers.size(); i++) {
-            auto& buffer = buffers[i];
+          for (auto& buffer : buffers) {
             auto& offset = output_offsets[buffer_index];
 
             request->outputs_.emplace_back();
@@ -525,7 +523,7 @@ CALLDATA_IMPL(ServerReady, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelReady, Unary) {
-  auto& model = request_.name();
+  const auto& model = request_.name();
   try {
     reply_.set_ready(Manager::getInstance().workerReady(model));
     finish();
@@ -592,9 +590,9 @@ CALLDATA_IMPL(ModelUnload, Unary) {
 CALLDATA_IMPL_END
 
 void CallDataModelInfer::handleRequest() {
-  auto& model = request_.model_name();
+  const auto& model = request_.model_name();
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(&(__func__[0]));
   trace->setAttribute("model", model);
   trace->startSpan("request_handler");
 #endif
@@ -644,8 +642,8 @@ class GrpcServer final {
     for (auto& cq : cq_) {
       cq->Shutdown();
       // drain the completion queue to prevent assertion errors in grpc
-      void* tag;
-      bool ok;
+      void* tag = nullptr;
+      bool ok = false;
       while (cq->Next(&tag, &ok)) {
       }
     }

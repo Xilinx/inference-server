@@ -54,7 +54,8 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
     request.addInputTensor(static_cast<void*>(imgData.data()), shape,
                            proteus::types::DataType::UINT8);
 
-    auto future = proteus::enqueue(workerName, std::move(request));
+    auto future =
+      proteus::NativeClient::enqueue(workerName, std::move(request));
     my_queue.enqueue(std::move(future));
   }
 }
@@ -80,10 +81,11 @@ std::string load(int workers) {
                  "graph_facedetect_u200_u250_proteus.json");
   parameters.put("share", false);
 
+  proteus::NativeClient client;
   for (int i = 0; i < workers - 1; i++) {
-    proteus::load("AksDetect", &parameters);
+    client.modelLoad("AksDetect", &parameters);
   }
-  return proteus::load("AksDetect", &parameters);
+  return client.modelLoad("AksDetect", &parameters);
 }
 
 std::vector<std::string> getImages(std::string imgDirPath) {

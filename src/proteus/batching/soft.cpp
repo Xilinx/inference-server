@@ -46,6 +46,8 @@
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 
+constexpr auto kDefaultTimeout = milliseconds(100);
+
 namespace proteus {
 
 void SoftBatcher::doRun(WorkerInfo* worker) {
@@ -57,7 +59,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
   size_t count = 0;
   bool run = true;
 
-  auto kTimeout = duration_cast<milliseconds>(milliseconds(100));
+  auto kTimeout = duration_cast<milliseconds>(kDefaultTimeout);
   if (this->parameters_.has("timeout")) {
     kTimeout = duration_cast<milliseconds>(
       milliseconds(this->parameters_.get<int32_t>("timeout")));

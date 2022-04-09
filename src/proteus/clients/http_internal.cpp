@@ -239,8 +239,7 @@ InferenceRequestPtr RequestBuilder::build(
     }
     try {
       auto &buffers = input_buffers[buffer_index];
-      for (size_t j = 0; j < buffers.size(); j++) {
-        auto &buffer = buffers[j];
+      for (auto &buffer : buffers) {
         auto &offset = input_offsets[buffer_index];
 
         auto input =
@@ -269,8 +268,7 @@ InferenceRequestPtr RequestBuilder::build(
     for (auto const &i : outputs) {
       try {
         auto buffers = output_buffers[buffer_index];
-        for (size_t j = 0; j < buffers.size(); j++) {
-          auto &buffer = buffers[j];
+        for (auto &buffer : buffers) {
           auto &offset = output_offsets[buffer_index];
 
           auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));

@@ -36,11 +36,10 @@
 namespace proteus {
 template <typename T>
 class InferenceRequestBuilder;
-}
-namespace proteus {
+
 template <typename T>
 class InferenceRequestInputBuilder;
-}
+}  // namespace proteus
 
 namespace proteus {
 
@@ -56,7 +55,7 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
     input.shape_.reserve(req.shape_.size());
     input.shape_ = req.shape_;
     input.dataType_ = req.dataType_;
-    input.parameters_ = std::move(req.parameters_);
+    input.parameters_ = req.parameters_;
     auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
                                 std::multiplies<>()) *
                 types::getSize(input.dataType_);
@@ -83,17 +82,16 @@ class InferenceRequestBuilder<InferenceRequest> {
     auto request = std::make_shared<InferenceRequest>();
 
     request->id_ = req.id_;
-    request->parameters_ = std::move(req.parameters_);
+    request->parameters_ = req.parameters_;
     request->callback_ = nullptr;
 
     auto buffer_index_backup = buffer_index;
     auto batch_offset_backup = batch_offset;
 
-    for (auto &input : req.inputs_) {
+    for (const auto &input : req.inputs_) {
       try {
         auto buffers = input_buffers[buffer_index];
-        for (size_t i = 0; i < buffers.size(); i++) {
-          auto &buffer = buffers[i];
+        for (auto &buffer : buffers) {
           auto &offset = input_offsets[buffer_index];
 
           request->inputs_.push_back(
@@ -119,8 +117,7 @@ class InferenceRequestBuilder<InferenceRequest> {
       for (auto &output : req.outputs_) {
         try {
           auto buffers = output_buffers[buffer_index];
-          for (size_t i = 0; i < buffers.size(); i++) {
-            auto &buffer = buffers[i];
+          for (auto &buffer : buffers) {
             auto &offset = output_offsets[buffer_index];
 
             request->outputs_.emplace_back(output);
@@ -142,8 +139,7 @@ class InferenceRequestBuilder<InferenceRequest> {
         (void)input;  // suppress unused variable warning
         try {
           auto buffers = output_buffers[buffer_index];
-          for (size_t j = 0; j < buffers.size(); j++) {
-            auto &buffer = buffers[j];
+          for (auto &buffer : buffers) {
             const auto &offset = output_offsets[buffer_index];
 
             request->outputs_.emplace_back();

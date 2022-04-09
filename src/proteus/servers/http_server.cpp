@@ -92,7 +92,7 @@ void v2::ProteusHttpServer::getServerLive(
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__, req->getHeaders());
+  auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #else
   (void)req;  // suppress unused variable warning
 #endif
@@ -213,7 +213,7 @@ void v2::ProteusHttpServer::inferModel(
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) {
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__, req->getHeaders());
+  auto trace = startTrace(&(__func__[0]), req->getHeaders());
   trace->setAttribute("model", model);
 #endif
 
@@ -260,7 +260,7 @@ void v2::ProteusHttpServer::load(
   const std::string &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received load request");
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__, req->getHeaders());
+  auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
   auto json = req->getJsonObject();
@@ -324,7 +324,7 @@ void v2::ProteusHttpServer::unload(
   const std::string &model) {
   SPDLOG_LOGGER_INFO(this->logger_, "Received unload request");
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__, req->getHeaders());
+  auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
   //   auto json = req->getJsonObject();

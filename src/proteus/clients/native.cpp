@@ -74,22 +74,28 @@ void terminate() {
 #endif
 }
 
-std::string load(const std::string& worker, RequestParameters* parameters) {
+NativeClient::~NativeClient() = default;
+
+bool NativeClient::serverLive() { return true; }
+bool NativeClient::serverReady() { return true; }
+
+std::string NativeClient::modelLoad(const std::string& model,
+                                    RequestParameters* parameters) {
   if (parameters == nullptr) {
-    return Manager::getInstance().loadWorker(worker, RequestParameters());
+    return Manager::getInstance().loadWorker(model, RequestParameters());
   }
-  return Manager::getInstance().loadWorker(worker, *parameters);
+  return Manager::getInstance().loadWorker(model, *parameters);
 }
 
-InferenceResponseFuture enqueue(const std::string& workerName,
-                                InferenceRequest request) {
+InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
+                                              InferenceRequest request) {
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
   auto* worker = proteus::Manager::getInstance().getWorker(workerName);
 
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(&(__func__[0]));
   trace->startSpan("C++ enqueue");
 #endif
   auto api = std::make_unique<CppNativeApi>(std::move(request));
@@ -103,12 +109,18 @@ InferenceResponseFuture enqueue(const std::string& workerName,
   return future;
 }
 
-void unload(const std::string& worker) {
-  Manager::getInstance().unloadWorker(worker);
+InferenceResponse NativeClient::modelInfer(const std::string& model,
+                                           const InferenceRequest& request) {
+  auto future = enqueue(model, request);
+  return future.get();
 }
 
-bool modelReady(const std::string& worker) {
-  return Manager::getInstance().workerReady(worker);
+void NativeClient::modelUnload(const std::string& model) {
+  Manager::getInstance().unloadWorker(model);
+}
+
+bool NativeClient::modelReady(const std::string& model) {
+  return Manager::getInstance().workerReady(model);
 }
 
 std::string getHardware() {

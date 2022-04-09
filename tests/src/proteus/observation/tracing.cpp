@@ -27,7 +27,6 @@
 #ifdef PROTEUS_ENABLE_TRACING
 
 namespace trace_api = opentelemetry::trace;
-namespace trace_sdk = opentelemetry::sdk::trace;
 namespace nostd = opentelemetry::nostd;
 
 namespace proteus {
@@ -44,7 +43,7 @@ Trace::Trace(const char* name,
   (void)options;
 }
 
-Trace::~Trace() {}
+Trace::~Trace() = default;
 
 void Trace::startSpan(const char* name) { (void)name; }
 

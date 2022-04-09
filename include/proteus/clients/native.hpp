@@ -23,6 +23,7 @@
 #include <cstddef>  // for size_t
 #include <string>   // for string
 
+#include "proteus/clients/client.hpp"        // for Client
 #include "proteus/core/predict_api.hpp"      // for InferenceRequest (ptr only)
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseFuture
 
@@ -47,41 +48,57 @@ std::string getHardware();
  * @param num minimum number of the kernels that should be present
  * @return bool
  */
-bool hasHardware(const std::string &kernel, size_t num);
+bool hasHardware(const std::string& kernel, size_t num);
 
-/**
- * @brief Load a worker
- *
- * @param worker name of the worker to load
- * @param parameters any load-time parameters to pass to the worker
- * @return std::string the qualified name of the worker to make inference
- * requests
- */
-std::string load(const std::string &worker, RequestParameters *parameters);
+class NativeClient : public Client {
+ public:
+  ~NativeClient();
 
-/**
- * @brief Unload a worker
- *
- * @param worker name of the worker to unload
- */
-void unload(const std::string &worker);
+  bool serverLive() override;
+  bool serverReady() override;
 
-/**
- * @brief Check if a worker is ready
- *
- * @param worker name of the worker to check if ready
- */
-bool modelReady(const std::string &worker);
+  /**
+   * @brief Check if a worker is ready
+   *
+   * @param worker name of the worker to check if ready
+   */
+  bool modelReady(const std::string& model) override;
 
-/**
- * @brief Enqueue an inference request to Proteus
- *
- * @param workerName name of the worker to make the request to
- * @param request the request to make
- * @return InferenceResponseFuture a future to get the results of the request
- */
-InferenceResponseFuture enqueue(const std::string &workerName,
-                                InferenceRequest request);
+  /**
+   * @brief Load a worker
+   *
+   * @param model name of the worker to load
+   * @param parameters any load-time parameters to pass to the worker
+   * @return std::string the qualified name of the worker to make inference
+   * requests
+   */
+  std::string modelLoad(const std::string& model,
+                        RequestParameters* parameters) override;
+  /**
+   * @brief Unload a worker
+   *
+   * @param worker name of the worker to unload
+   */
+  void modelUnload(const std::string& model) override;
+  InferenceResponse modelInfer(const std::string& model,
+                               const InferenceRequest& request) override;
+
+  /**
+   * @brief Enqueue an inference request to Proteus
+   *
+   * @param workerName name of the worker to make the request to
+   * @param request the request to make
+   * @return InferenceResponseFuture a future to get the results of the request
+   */
+  static InferenceResponseFuture enqueue(const std::string& workerName,
+                                         InferenceRequest request);
+};
+
+// std::string load(const std::string &worker, RequestParameters *parameters);
+
+// void unload(const std::string &worker);
+
+// bool modelReady(const std::string &worker);
 
 }  // namespace proteus
 

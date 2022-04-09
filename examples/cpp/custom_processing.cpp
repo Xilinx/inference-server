@@ -197,7 +197,8 @@ std::string load(const std::string& path_to_xmodel) {
   // +load native:
   proteus::RequestParameters parameters;
   parameters.put("xmodel", path_to_xmodel);
-  auto worker_name = proteus::load("Xmodel", &parameters);
+  proteus::NativeClient client;
+  auto worker_name = client.modelLoad("Xmodel", &parameters);
   // -load native:
 
   return worker_name;
@@ -205,12 +206,12 @@ std::string load(const std::string& path_to_xmodel) {
 
 proteus::InferenceResponse infer(const std::string& worker_name,
                                  const proteus::InferenceRequest& request) {
+  proteus::NativeClient client;
   // +inference native:
-  auto future = proteus::enqueue(worker_name, request);
-  auto results = future.get();
+  auto response = client.modelInfer(worker_name, request);
   // -inference native:
 
-  return results;
+  return response;
 }
 
 std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {

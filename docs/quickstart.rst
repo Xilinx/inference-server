@@ -34,10 +34,10 @@ Build or Get the Docker Image
 We can build several types of containers.
 Development (dev) containers are intended for working on Xilinx Inference Server or applications that link to Xilinx Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start.
 Production containers only contain the runtime dependencies of the :program:`proteus-server` executable and automatically run the executable when they start.
-The Docker image can also be built with various
+The Docker image can also be built with various options to disable certain components.
 
 Currently, these images are not pre-built anywhere and so must be built by the user.
-You must enable `BuildKit <https://docs.docker.com/develop/develop-images/build_enhancements/>`__ by setting DOCKER_BUILDKIT in the environment, configuring the Docker daemon or using ``docker buildx install`` before attempting to build the image.
+We recommend enabling `BuildKit <https://docs.docker.com/develop/develop-images/build_enhancements/>`__ by setting DOCKER_BUILDKIT in the environment, configuring the Docker daemon or using ``docker buildx install`` before attempting to build the image.
 Refer to the BuildKit documentation for more information.
 
 .. code-block:: console
@@ -98,7 +98,7 @@ Once the server is built, start the server to begin serving requests.
     # test that the server is ready. The server returns status 200 OK on success
     $ curl -I http://localhost:8998/v2/health/ready
 
-    # the server can now accept requests over REST
+    # the server can now accept requests over REST/gRPC
 
     # shutdown the server
     $ kill -2 $(pidof proteus-server)

@@ -47,7 +47,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                                        const WebSocketMessageType &type) {
   (void)type;  // suppress unused variable warning
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(&(__func__[0]));
   trace->startSpan("websocket_handler");
 #endif
 

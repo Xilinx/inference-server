@@ -152,7 +152,7 @@ using FutureQueue =
 void enqueue(int images, const std::string& workerName,
              proteus::InferenceRequest request, FutureQueue& my_queue) {
   for (int i = 0; i < images; i++) {
-    auto future = proteus::enqueue(workerName, request);
+    auto future = proteus::NativeClient::enqueue(workerName, request);
     my_queue.enqueue(std::move(future));
   }
 }
@@ -173,9 +173,10 @@ int run(std::string xmodel, int images, int threads, int runners) {
   parameters.put("threads", threads_per_worker);
   parameters.put("batchers", 2);
 
-  auto workerName = proteus::load("Xmodel", &parameters);
+  proteus::NativeClient client;
+  auto workerName = client.modelLoad("Xmodel", &parameters);
   for (auto i = 0; i < runners - 1; i++) {
-    proteus::load("Xmodel", &parameters);
+    client.modelLoad("Xmodel", &parameters);
   }
 
   std::vector<uint64_t> shape;

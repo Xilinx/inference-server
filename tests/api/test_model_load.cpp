@@ -16,10 +16,8 @@
 #include <stdexcept>  // for runtime_error
 #include <string>     // for string
 
-#include "proteus/clients/client.hpp"          // for Client
-#include "proteus/proteus.hpp"                 // for GrpcClient
+#include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
-#include "proteus/testing/native.hpp"          // for NativeClient
 
 void test(proteus::Client* client) {
   std::string worker = "echo";
