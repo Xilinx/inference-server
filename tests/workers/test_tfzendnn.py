@@ -14,12 +14,10 @@
 
 import os
 import sys
-import json
 
-import cv2
 import pytest
 import numpy as np
-from proteus.predict_api import Datatype, InferenceRequest, RequestInput, RequestOutput
+from proteus.predict_api import Datatype
 from proteus.exceptions import ConnectionError
 from proteus.predict_api import Datatype, ImageInferenceRequest
 
@@ -49,6 +47,7 @@ def parameters_fixture():
     }
 
 
+@pytest.mark.extensions(["tfzendnn"])
 @pytest.mark.usefixtures("load")
 class TestTfZendnn:
     """

@@ -37,6 +37,8 @@
 #cmakedefine PROTEUS_ENABLE_AKS
 /// Enables Vitis in proteus
 #cmakedefine PROTEUS_ENABLE_VITIS
+/// Enables TF+ZenDNN in proteus
+#cmakedefine PROTEUS_ENABLE_TFZENDNN
 
 /// Port used by Proteus's HTTP server
 constexpr auto kDefaultHttpPort = @PROTEUS_DEFAULT_HTTP_PORT@;

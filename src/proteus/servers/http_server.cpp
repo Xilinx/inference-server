@@ -161,6 +161,9 @@ void v2::ProteusHttpServer::getServerMetadata(
 #ifdef PROTEUS_ENABLE_VITIS
   ret["extensions"].append("vitis");
 #endif
+#ifdef PROTEUS_ENABLE_TFZENDNN
+  ret["extensions"].append("tfzendnn");
+#endif
   auto resp = HttpResponse::newHttpJsonResponse(ret);
   callback(resp);
 }
