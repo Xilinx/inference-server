@@ -671,6 +671,7 @@ class Dockerize:
         labels = f"--label git-branch={git_branch} --label git-commit={git_commit}"
 
         version = get_version()
+        os.environ["DOCKER_BUILDKIT"] = "1"
         command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} ."
         run_command(command, args.dry_run)
 

@@ -731,7 +731,7 @@ COPY $TFZENDNN_PATH /tmp/
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-     zip unzip \
+        zip unzip \
     && cd /tmp/ \
     # Check to verify if package is TF+ZenDNN
     && echo "ff65a75cb513fdfe1323ac70edda25af  $(basename $TFZENDNN_PATH)" | md5sum -c - \
