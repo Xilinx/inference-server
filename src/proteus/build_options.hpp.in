@@ -27,6 +27,8 @@
 #cmakedefine PROTEUS_ENABLE_METRICS
 /// Enables Proteus's HTTP server
 #cmakedefine PROTEUS_ENABLE_HTTP
+/// Enables Proteus's gRPC server
+#cmakedefine PROTEUS_ENABLE_GRPC
 /// Enables Proteus's tracing
 #cmakedefine PROTEUS_ENABLE_TRACING
 /// Enables Proteus's logging
@@ -44,6 +46,9 @@ constexpr auto kDefaultDrogonThreads = 16;
 
 /// Maximum size of a HTTP request body in MiB. Arbitrarily set to 400MiB
 constexpr auto kMaxClientBodySize = 419430400;
+
+/// Maximum size of gRPC messages in bytes. Arbitrarily set to 20MiB
+constexpr auto kMaxGrpcMessageSize = 20971520;
 
 /// Maximum number of characters usable for a model name used in an endpoint.
 constexpr auto kMaxModelNameSize = 64;

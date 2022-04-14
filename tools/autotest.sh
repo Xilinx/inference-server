@@ -91,30 +91,3 @@ print_header "Testing the stable production docker image"
 
 ./proteus --dry-run up --profile autotest
 ./proteus up --profile autotest
-
-print_header "Building the nightly dev docker image"
-
-# use the --dry-run flag to log the "docker build" commands used
-./proteus --dry-run dockerize --vitis-nightly
-./proteus dockerize --vitis-nightly
-
-print_header "Building the nightly production docker image"
-
-./proteus --dry-run dockerize --production --vitis-nightly
-./proteus dockerize --production --vitis-nightly
-
-# These commands add <user>/proteus-dev:<proteus-version>.nightly and
-# <user>/proteus:<proteus-version>.nightly to the local machine. Append
-# "--build-meta <build num>" to the commands above to change the image tags to
-# <user>/proteus[-dev]:<proteus-version>.nightly+<build num>. They also update
-# the latest tags on these images
-
-print_header "Testing the nightly dev docker image"
-
-./proteus --dry-run up --profile autotest-dev
-./proteus up --profile autotest-dev
-
-print_header "Testing the nightly production docker image"
-
-./proteus --dry-run up --profile autotest
-./proteus up --profile autotest

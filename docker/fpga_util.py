@@ -47,7 +47,7 @@ class XRMClient:
             cur_data = self.sock.recv(131072)
             if cur_data:
                 if total_len == 0:
-                    total_len = int.from_bytes(cur_data[0:4], byteorder='little')
+                    total_len = int.from_bytes(cur_data[0:4], byteorder="little")
                     cur_len = len(cur_data) - 4
                     total_data = bytearray(cur_data[4:])
                 else:

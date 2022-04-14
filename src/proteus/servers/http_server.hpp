@@ -20,17 +20,11 @@
 #ifndef GUARD_PROTEUS_SERVERS_HTTP_SERVER
 #define GUARD_PROTEUS_SERVERS_HTTP_SERVER
 
-#include <cstddef>     // for size_t
 #include <functional>  // for function
-#include <memory>      // for allocator, shared_ptr
-#include <stdexcept>   // for invalid_argument
-#include <string>      // for string
-#include <vector>      // for vector
+#include <string>      // for allocator, string
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
-#include "proteus/core/interface.hpp"        // for Interface
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
-#include "proteus/observation/logging.hpp"   // for LoggerPtr
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_HTTP, PROT...
+#include "proteus/observation/logging.hpp"  // for LoggerPtr
 
 #ifdef PROTEUS_ENABLE_HTTP
 #include <drogon/HttpController.h>  // for ADD_METHOD_TO, HttpContro...
@@ -39,52 +33,9 @@
 #include <drogon/HttpTypes.h>       // for Options, Get, Post
 #endif
 
-namespace Json {
-class Value;
-}  // namespace Json
-namespace proteus {
-class InferenceRequest;
-}  // namespace proteus
-
 namespace proteus::http {
 
 #ifdef PROTEUS_ENABLE_HTTP
-
-using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
-
-/**
- * @brief The DrogonHttp Interface class encapsulates incoming requests from
- * Drogon's HTTP interface to the batcher.
- *
- */
-class DrogonHttp : public Interface {
- public:
-  /**
-   * @brief Construct a new DrogonHttp object
-   *
-   * @param req
-   * @param callback
-   */
-  DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback);
-
-  std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) override;
-
-  size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
-
- private:
-  /// parse the request's JSON payload and save it for future use
-  void setJson();
-
-  drogon::HttpRequestPtr req_;
-  DrogonCallback callback_;
-  std::shared_ptr<Json::Value> json_;
-};
 
 namespace v2 {
 

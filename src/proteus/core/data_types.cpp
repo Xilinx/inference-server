@@ -168,6 +168,61 @@ std::string mapTypeToStr(DataType type) {
   }
 }
 
+// taken from https://stackoverflow.com/a/46711735
+// used for hashing strings for switch statements
+constexpr unsigned int hash(const char* s, int off = 0) {
+  // NOLINTNEXTLINE
+  return !s[off] ? 5381 : (hash(s, off + 1) * 33) ^ s[off];
+}
+
+DataType mapStrToType(const std::string& type) {
+  DataType data_type = DataType::BOOL;
+  switch (hash(type.c_str())) {
+    case hash("BOOL"):
+      data_type = DataType::BOOL;
+      break;
+    case hash("UINT8"):
+      data_type = DataType::UINT8;
+      break;
+    case hash("UINT16"):
+      data_type = DataType::UINT16;
+      break;
+    case hash("UINT32"):
+      data_type = DataType::UINT32;
+      break;
+    case hash("UINT64"):
+      data_type = DataType::UINT64;
+      break;
+    case hash("INT8"):
+      data_type = DataType::INT8;
+      break;
+    case hash("INT16"):
+      data_type = DataType::INT16;
+      break;
+    case hash("INT32"):
+      data_type = DataType::INT32;
+      break;
+    case hash("INT64"):
+      data_type = DataType::INT64;
+      break;
+    case hash("FP16"):
+      data_type = DataType::FP16;
+      break;
+    case hash("FP32"):
+      data_type = DataType::FP32;
+      break;
+    case hash("FP64"):
+      data_type = DataType::FP64;
+      break;
+    case hash("STRING"):
+      data_type = DataType::STRING;
+      break;
+    default:
+      throw std::invalid_argument("Unknown datatype: " + type);
+  }
+  return data_type;
+}
+
 std::ostream& operator<<(std::ostream& os, const DataType& bar) {
   return os << mapTypeToStr(bar);
 }

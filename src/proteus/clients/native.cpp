@@ -20,23 +20,23 @@
 
 #include "proteus/clients/native.hpp"
 
-#include <cstdlib>        // for getenv, size_t
+#include <cstdlib>        // for getenv
+#include <future>         // for promise
+#include <memory>         // for unique_ptr, make_unique
 #include <stdexcept>      // for invalid_argument
-#include <string>         // for string, basic_string, all...
-#include <thread>         // for thread
-#include <unordered_map>  // for unordered_map, operator==
-#include <utility>        // for pair, make_pair, move
+#include <string>         // for string, basic_string
+#include <unordered_map>  // for unordered_map, operat...
+#include <utility>        // for move, pair, make_pair
 
-#include "proteus/batching/batcher.hpp"     // for Batcher
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/manager.hpp"         // for Manager
-#include "proteus/core/predict_api.hpp"     // for InferenceRequestInput
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/helpers/exec.hpp"         // for exec
-#include "proteus/observation/logging.hpp"  // for initLogging
-#include "proteus/observation/metrics.hpp"  // for Metrics
-#include "proteus/observation/tracing.hpp"  // for startTracer, stopTracer
-#include "proteus/servers/http_server.hpp"  // for start
+#include "proteus/batching/batcher.hpp"         // for Batcher
+#include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/manager.hpp"             // for Manager
+#include "proteus/core/worker_info.hpp"         // for WorkerInfo
+#include "proteus/helpers/exec.hpp"             // for exec
+#include "proteus/observation/logging.hpp"      // for initLogging
+#include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
+#include "proteus/observation/tracing.hpp"      // for startTrace, startTracer
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
@@ -51,6 +51,8 @@ void initialize() {
 #ifdef PROTEUS_ENABLE_TRACING
   startTracer();
 #endif
+
+  Manager::getInstance().init();
 
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
@@ -72,34 +74,53 @@ void terminate() {
 #endif
 }
 
-void startHttpServer(int port) {
-#ifdef PROTEUS_ENABLE_HTTP
-  std::thread{proteus::http::start, port}.detach();
-#else
-  (void)port;  // suppress unused variable warning
-#endif
-}
+NativeClient::~NativeClient() = default;
 
-void stopHttpServer() {
-#ifdef PROTEUS_ENABLE_HTTP
-  proteus::http::stop();
-#endif
-}
+bool NativeClient::serverLive() { return true; }
+bool NativeClient::serverReady() { return true; }
 
-std::string load(const std::string& worker, RequestParameters* parameters) {
+std::string NativeClient::modelLoad(const std::string& model,
+                                    RequestParameters* parameters) {
   if (parameters == nullptr) {
-    return Manager::getInstance().loadWorker(worker, RequestParameters());
+    return Manager::getInstance().loadWorker(model, RequestParameters());
   }
-  return Manager::getInstance().loadWorker(worker, *parameters);
+  return Manager::getInstance().loadWorker(model, *parameters);
 }
 
-InferenceResponseFuture enqueue(const std::string& workerName,
-                                InferenceRequest request) {
+InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
+                                              InferenceRequest request) {
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
   auto* worker = proteus::Manager::getInstance().getWorker(workerName);
-  return worker->getBatcher()->enqueue(std::move(request));
+
+#ifdef PROTEUS_ENABLE_TRACING
+  auto trace = startTrace(&(__func__[0]));
+  trace->startSpan("C++ enqueue");
+#endif
+  auto api = std::make_unique<CppNativeApi>(std::move(request));
+  auto future = api->getPromise()->get_future();
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->endSpan();
+  api->setTrace(std::move(trace));
+#endif
+  worker->getBatcher()->enqueue(std::move(api));
+  // this->cv_.notify_one();
+  return future;
+}
+
+InferenceResponse NativeClient::modelInfer(const std::string& model,
+                                           const InferenceRequest& request) {
+  auto future = enqueue(model, request);
+  return future.get();
+}
+
+void NativeClient::modelUnload(const std::string& model) {
+  Manager::getInstance().unloadWorker(model);
+}
+
+bool NativeClient::modelReady(const std::string& model) {
+  return Manager::getInstance().workerReady(model);
 }
 
 std::string getHardware() {

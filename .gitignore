@@ -34,7 +34,7 @@ docker-compose.yml
 *.log
 *.out
 *.pyc
-tests/python/*.lua
+tests/workers/*.lua
 tmp.*
 .mailmap
 tests/assets/Physicsworks.ogv
@@ -77,3 +77,4 @@ src/gui/public/sphinx
 
 # python ignores
 *.egg-info/
+*.pytest_cache/

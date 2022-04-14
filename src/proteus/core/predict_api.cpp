@@ -19,17 +19,12 @@
 
 #include "proteus/core/predict_api.hpp"
 
-#include <algorithm>  // for fill, copy
-#include <cstring>    // for memcpy
-#include <iterator>   // for back_insert_iterator, bac...
+#include <algorithm>  // for copy
+#include <iterator>   // for back_insert_iterator, back_inse...
 #include <numeric>    // for accumulate
-#include <stdexcept>  // for invalid_argument
-#include <utility>    // for pair, move, make_pair
+#include <utility>    // for pair, make_pair, move
 
-#include "proteus/buffers/buffer.hpp"  // for Buffer
-#include "proteus/build_options.hpp"   // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api_internal.hpp"
-#include "proteus/observation/logging.hpp"  // for getLogger, SPDLOG_LOGGER_...
+#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_TRACING
 
 namespace proteus {
 
@@ -98,14 +93,23 @@ void InferenceRequest::addInputTensor(void *data, std::vector<uint64_t> shape,
   this->inputs_.emplace_back(data, shape, dataType, name);
 }
 
-std::vector<InferenceRequestInput> InferenceRequest::getInputs() {
+void InferenceRequest::addInputTensor(InferenceRequestInput input) {
+  this->inputs_.push_back(input);
+}
+
+const std::vector<InferenceRequestInput> &InferenceRequest::getInputs() const {
   return this->inputs_;
 }
 
 size_t InferenceRequest::getInputSize() { return this->inputs_.size(); }
 
-std::vector<InferenceRequestOutput> InferenceRequest::getOutputs() {
+const std::vector<InferenceRequestOutput> &InferenceRequest::getOutputs()
+  const {
   return this->outputs_;
+}
+
+void InferenceRequest::addOutputTensor(InferenceRequestOutput output) {
+  this->outputs_.push_back(output);
 }
 
 InferenceRequestInput::InferenceRequestInput(void *data,
@@ -136,7 +140,7 @@ void InferenceRequestInput::setDatatype(types::DataType type) {
   this->dataType_ = type;
 }
 
-size_t InferenceRequestInput::getSize() {
+size_t InferenceRequestInput::getSize() const {
   return std::accumulate(this->shape_.begin(), this->shape_.end(), 1,
                          std::multiplies<>());
 }
@@ -177,9 +181,7 @@ std::string InferenceResponse::getModel() { return this->model_; }
 
 bool InferenceResponse::isError() const { return !this->error_msg_.empty(); }
 
-std::string_view InferenceResponse::getError() const {
-  return this->error_msg_;
-}
+std::string InferenceResponse::getError() const { return this->error_msg_; }
 
 void InferenceResponse::addOutput(const InferenceResponseOutput &output) {
   this->outputs_.push_back(output);

@@ -17,8 +17,8 @@ import json
 import struct
 import websocket
 
-from proteus.predict_api import InferenceRequest
-from proteus.exceptions import BadResponseError, ConnectionError
+from .predict_api import InferenceRequest
+from . import exceptions
 
 
 class WebsocketOpcodes(Enum):
@@ -45,7 +45,7 @@ class Client:
         try:
             self.ws.connect(url)
         except websocket.WebSocketBadStatusException:
-            raise ConnectionError(
+            raise exceptions.ConnectionError(
                 f"Connecting to {url} over WS failed. Bad status returned."
             )
 
@@ -65,9 +65,9 @@ class Client:
             elif resp_opcode == WebsocketOpcodes.text.value:
                 return json.loads(msg)
             else:
-                raise BadResponseError("Unknown response type in websocket.")
+                raise exceptions.BadResponseError("Unknown response type in websocket.")
         else:
-            raise ConnectionError(
+            raise exceptions.ConnectionError(
                 "Recv over websocket failed. Websocket not connected."
             )
 

@@ -20,14 +20,12 @@
 #ifndef GUARD_PROTEUS_OBSERVATION_TRACING
 #define GUARD_PROTEUS_OBSERVATION_TRACING
 
-#include <memory>         // for shared_ptr
-#include <stack>          // for stack
-#include <string>         // for string
-#include <unordered_map>  // for unordered_map
+#include <memory>  // for shared_ptr, uniqu...
+#include <stack>   // for stack
 
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/predict_api.hpp"  // for RequestParameters
-#include "proteus/helpers/declarations.hpp"
+#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TR...
+#include "proteus/core/predict_api.hpp"      // for RequestParameters
+#include "proteus/helpers/declarations.hpp"  // for StringMap
 
 // IWYU pragma: no_forward_declare proteus::RequestParameters
 

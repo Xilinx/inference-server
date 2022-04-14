@@ -42,23 +42,26 @@ class Server:
         self.pid: int = 0
         self.http_port = http_port
 
+        self.executable = None
         if executable is None:
             root = os.getenv("PROTEUS_ROOT")
-            if root is None:
-                if shutil.which("proteus-server") is None:
-                    raise InvalidArgument(
-                        "Path to proteus-server cannot be derived. Specify the path explicitly, add it to the PATH or set PROTEUS_ROOT in the environment"
-                    )
-                else:
-                    # use the proteus-server that exists on the PATH
-                    self.executable = "proteus-server"
-            try:
-                with open(root + "/build/config.txt", "r") as f:
-                    build = f.read().replace("\n", "").split(" ")[0]
-            except FileNotFoundError:
-                print("No config.txt found in build/. Using default value of 'Debug'")
-                build = "Debug"
-            self.executable = f"{root}/build/{build}/src/proteus/proteus-server"
+            if root is not None:
+                try:
+                    with open(root + "/build/config.txt", "r") as f:
+                        build = f.read().replace("\n", "").split(" ")[0]
+                except FileNotFoundError:
+                    build = "Debug"  # try for Debug by default
+                local_server_path = f"{root}/build/{build}/src/proteus/proteus-server"
+                if os.path.exists(local_server_path):
+                    self.executable = local_server_path
+        if self.executable is None:
+            if shutil.which("proteus-server") is None:
+                raise InvalidArgument(
+                    "Path to proteus-server cannot be derived. Specify the path explicitly or add it to the PATH"
+                )
+            else:
+                # use the proteus-server that exists on the PATH
+                self.executable = "proteus-server"
         else:
             self.executable = executable
 

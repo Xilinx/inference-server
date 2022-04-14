@@ -38,7 +38,9 @@ namespace proteus {
 class HardBatcher : public Batcher {
  public:
   using Batcher::Batcher;
-  void run(WorkerInfo* worker) override;
+
+ private:
+  void doRun(WorkerInfo* worker) override;
 };
 
 }  // namespace proteus

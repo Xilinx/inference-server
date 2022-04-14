@@ -15,12 +15,14 @@
 #ifndef GUARD_PROTEUS_PROTEUS
 #define GUARD_PROTEUS_PROTEUS
 
-#include "proteus/build_options.hpp"         // IWYU pragma: export
-#include "proteus/clients/native.hpp"        // IWYU pragma: export
-#include "proteus/core/data_types.hpp"       // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"      // IWYU pragma: export
-#include "proteus/helpers/declarations.hpp"  // IWYU pragma: export
-
-namespace proteus {}  // namespace proteus
+// IWYU pragma: begin_exports
+#include "proteus/build_options.hpp"
+#include "proteus/clients/grpc.hpp"
+#include "proteus/clients/http.hpp"
+#include "proteus/clients/native.hpp"
+#include "proteus/core/data_types.hpp"
+#include "proteus/core/predict_api.hpp"
+#include "proteus/helpers/declarations.hpp"
+// IWYU pragma: end_exports
 
 #endif  // GUARD_PROTEUS_PROTEUS

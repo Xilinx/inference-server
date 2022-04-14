@@ -39,10 +39,6 @@
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
 
 namespace proteus {
-class Buffer;
-}  // namespace proteus
-
-namespace proteus {
 
 /// parameters in Proteus may be one of these types
 using Parameter = std::variant<bool, double, int32_t, std::string>;
@@ -171,12 +167,12 @@ class InferenceRequestInput {
   [[nodiscard]] void *getData() const;
 
   /// Get the input tensor's name
-  std::string getName() { return this->name_; }
+  const std::string &getName() const { return this->name_; }
   /// Set the input tensor's name
   void setName(std::string name);
 
   /// Get the input tensor's shape
-  std::vector<uint64_t> getShape() { return this->shape_; }
+  const std::vector<uint64_t> &getShape() const { return this->shape_; }
   /// Set the tensor's shape
   void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
   /// Set the tensor's shape
@@ -190,15 +186,18 @@ class InferenceRequestInput {
   }
 
   /// Get the input tensor's datatype
-  types::DataType getDatatype() { return this->dataType_; }
+  types::DataType getDatatype() const { return this->dataType_; }
   /// Set the tensor's data type
   void setDatatype(types::DataType type);
 
   /// Get the input tensor's parameters
-  RequestParameters *getParameters() { return this->parameters_.get(); }
+  RequestParameters *getParameters() const { return this->parameters_.get(); }
+  void setParameters(RequestParametersPtr parameters) {
+    parameters_ = parameters;
+  }
 
   /// Set the tensor's size
-  size_t getSize();
+  size_t getSize() const;
 
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
@@ -227,6 +226,7 @@ class InferenceRequestInput {
   void *data_;
   std::shared_ptr<std::byte> shared_data_;
 
+  template <typename U>
   friend class InferenceRequestInputBuilder;
 };
 
@@ -249,11 +249,17 @@ class InferenceRequestOutput {
   std::string getName() { return this->name_; }
   void setName(const std::string &name);
 
+  void setParameters(RequestParametersPtr parameters) {
+    parameters_ = parameters;
+  }
+  RequestParameters *getParameters() { return parameters_.get(); }
+
  private:
   std::string name_;
   RequestParametersPtr parameters_;
   void *data_;
 
+  template <typename U>
   friend class InferenceRequestOutputBuilder;
 };
 
@@ -290,7 +296,7 @@ class InferenceResponse {
   /// Check if this is an error response
   bool isError() const;
   /// Get the error message if it exists. Defaults to an empty string
-  std::string_view getError() const;
+  std::string getError() const;
 
 #ifdef PROTEUS_ENABLE_TRACING
   /**
@@ -376,23 +382,30 @@ class InferenceRequest {
   void addInputTensor(void *data, std::vector<uint64_t> shape,
                       types::DataType dataType, std::string name = "");
 
+  void addInputTensor(InferenceRequestInput input);
+  void addOutputTensor(InferenceRequestOutput output);
+
   /// Get a vector of all the input request objects
-  std::vector<InferenceRequestInput> getInputs();
+  const std::vector<InferenceRequestInput> &getInputs() const;
   /// Get the number of input request objects
   size_t getInputSize();
 
   /// Get a vector of the requested output information
-  std::vector<InferenceRequestOutput> getOutputs();
+  const std::vector<InferenceRequestOutput> &getOutputs() const;
 
   /**
    * @brief Get the ID associated with this request
    *
    * @return std::string
    */
-  std::string getID() { return id_; }
+  const std::string &getID() const { return id_; }
+  void setID(const std::string &id) { id_ = id; }
 
   /// Get a pointer to the request's parameters
-  RequestParameters *getParameters() { return this->parameters_.get(); }
+  RequestParameters *getParameters() const { return this->parameters_.get(); }
+  void setParameters(RequestParametersPtr parameters) {
+    parameters_ = parameters;
+  }
 
  private:
   std::string id_;
@@ -403,6 +416,7 @@ class InferenceRequest {
 
   // TODO(varunsh): do we need this still?
   friend class FakeInferenceRequest;
+  template <typename U>
   friend class InferenceRequestBuilder;
 };
 using InferenceResponsePromisePtr =

@@ -13,41 +13,65 @@
 # limitations under the License.
 
 list(APPEND targets
-  predict_api
-  predict_api_internal
-  fake_predict_api
-  manager
-  worker_info
-  data_types
-  interface
+    predict_api
+    fake_predict_api
+    manager
+    worker_info
+    data_types
+    interface
 )
 
 foreach(target ${targets})
-  add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  enable_ipo_on_target(${target})
+    add_library(${target} OBJECT ${target}.cpp)
+    target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    enable_ipo_on_target(${target})
 
-  list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
+    list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
+# if(${PROTEUS_ENABLE_GRPC})
+#     target_include_directories(predict_api_internal PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+#     target_link_libraries(predict_api_internal INTERFACE lib_grpc)
+# endif()
 target_link_libraries(predict_api INTERFACE jsoncpp)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
-  target_link_libraries(data_types INTERFACE xir)
+    target_link_libraries(data_types INTERFACE xir)
 endif()
 
 add_library(lib_predict_api INTERFACE)
 target_link_libraries(lib_predict_api INTERFACE
-  $<TARGET_OBJECTS:predict_api>
-  predict_api
-  $<TARGET_OBJECTS:predict_api_internal>
-  predict_api_internal
+    $<TARGET_OBJECTS:predict_api>
+    predict_api
+    # $<TARGET_OBJECTS:predict_api_internal>
+    # predict_api_internal
 )
+
+if(${PROTEUS_ENABLE_GRPC})
+    add_library(lib_grpc predict_api.proto)
+    target_include_directories(lib_grpc PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+    target_link_libraries(lib_grpc INTERFACE gRPC::grpc++)
+
+    get_target_property(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
+    protobuf_generate(TARGET lib_grpc LANGUAGE cpp)
+    protobuf_generate(TARGET lib_grpc LANGUAGE grpc GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}")
+
+    # disable iwyu for proto-generated files
+    # set_property(
+    #     TARGET lib_grpc
+    #     PROPERTY CXX_INCLUDE_WHAT_YOU_USE ""
+    # )
+    set_target_properties(lib_grpc PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
 
 add_library(core INTERFACE)
 target_link_libraries(core INTERFACE
-  ${CORE_OBJS}
-  ${targets}
+    ${CORE_OBJS}
+    ${targets}
 )
+
+if(${PROTEUS_ENABLE_GRPC})
+    target_link_libraries(core INTERFACE lib_grpc)
+endif()
 
 set(CORE_OBJS ${CORE_OBJS} PARENT_SCOPE)

@@ -103,7 +103,6 @@ else
            "kernel_src/yolo_postprocess"
            "kernel_src/save_boxes_darknet_format"
            "kernel_src/save_boxes_darknet_facedetect"
-           "kernel_src/optical_flow_fpga"
           )
 fi
 

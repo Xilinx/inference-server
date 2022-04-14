@@ -20,15 +20,17 @@
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
+#include <algorithm>               // for max
 #include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for uint64_t, uint8_t, int32_t
 #include <cstring>                 // for memcpy
-#include <functional>              // for multiplies, function
+#include <ext/alloc_traits.h>      // for __alloc_traits<>::value...
+#include <functional>              // for multiplies
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, shared_ptr
 #include <numeric>                 // for accumulate
-#include <opencv2/core.hpp>        // for Mat, MatSize, Size, MatStep
+#include <opencv2/core.hpp>        // for Mat, MatSize, Size, Mat...
 #include <opencv2/imgcodecs.hpp>   // for imdecode, IMREAD_UNCHANGED
 #include <string>                  // for string, basic_string
 #include <thread>                  // for thread
@@ -38,19 +40,19 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"       // for Batch, BatchPtrQueue
+#include "proteus/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT8
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infer...
+#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "proteus/helpers/base64.hpp"         // for base64_decode
-#include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
-#include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVar...
+#include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
+#include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
-#include "proteus/observation/metrics.hpp"    // for Metrics
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/workers/worker.hpp"         // for Worker
+#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
+#include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
 class AIGraph;

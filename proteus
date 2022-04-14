@@ -22,7 +22,6 @@ import multiprocessing as mp
 import os
 from pathlib import Path
 import pty
-import requests
 import shlex
 import shutil
 import subprocess
@@ -31,7 +30,9 @@ import tarfile
 import textwrap
 import time
 import urllib.error
+import urllib.request
 import zipfile
+
 
 
 def get_version():
@@ -110,15 +111,22 @@ def run_tty_command(command: str, dry_run: bool):
         sys.exit(exit_code)
 
 
-def run_command(command: str, dry_run: bool, exit_on_error=True):
+def run_command(command: str, dry_run: bool, exit_on_error=True, quiet=False):
     if dry_run:
         print(command)
         return
 
     try:
-        subprocess.check_call(
-            shlex.split(command), stdout=sys.stdout, stderr=subprocess.STDOUT
-        )
+        if quiet:
+            subprocess.check_call(
+                shlex.split(command),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        else:
+            subprocess.check_call(
+                shlex.split(command), stdout=sys.stdout, stderr=subprocess.STDOUT
+            )
     except subprocess.CalledProcessError as error:
         if exit_on_error:
             sys.exit(error.returncode)
@@ -353,6 +361,8 @@ class Build:
         # build_dir.mkdir(parents=True, exist_ok=True)
 
         build_options = " ".join(unknown_args)
+        if args.lint:
+            build_options += " -DPROTEUS_ENABLE_LINTING=ON"
 
         if args.clean and build_dir.exists():
             command = (
@@ -398,6 +408,8 @@ class Build:
         shared_libs = " ".join(glob.glob(f"{str(build_dir)}/src/proteus/workers/*.so"))
         command = f"cp -fs {shared_libs} {path}/"
         run_command(command, args.dry_run)
+        command = f"symlinks -rc {path}"
+        run_command(command, args.dry_run, quiet=True)
         if not args.dry_run:
             print("")
             print("======================")
@@ -447,6 +459,12 @@ class Build:
             help="Build additional optional targets",
         )
         command_group.add_argument(
+            "-c",
+            "--clean",
+            action="store_true",
+            help="clean prior to building",
+        )
+        command_group.add_argument(
             "-d",
             "--dir",
             action="store",
@@ -454,10 +472,10 @@ class Build:
             default=str(Path.cwd() / "build"),
         )
         command_group.add_argument(
-            "-c",
-            "--clean",
+            "-l",
+            "--lint",
             action="store_true",
-            help="clean prior to building",
+            help="Enable build-time linting in CMake. Defaults to false",
         )
         command_group.add_argument(
             "-r",
@@ -609,17 +627,19 @@ class Dockerize:
 
         tag_prefix = f"{args.registry}"
         if args.production:
-            tag_prefix += f"/proteus"
+            tag_prefix += f"/proteus" + args.suffix
             target = "proteus"
         else:
-            tag_prefix += f"/proteus-dev"
+            tag_prefix += f"/proteus-dev" + args.suffix
             target = "proteus_dev_final"
 
         latest_tag = f"{tag_prefix}:latest"
 
         build_args = ""
         if not args.vitis:
-            build_args += f"--build-arg ENABLE_VITIS=no"
+            build_args += "--build-arg ENABLE_VITIS=no "
+        if args.dev_base:
+            build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
         if args.tfzendnn_path:
             build_args += f" --build-arg ENABLE_TFZENDNN=yes"
@@ -642,7 +662,9 @@ class Dockerize:
         except subprocess.CalledProcessError:
             git_commit = "unknown"
         else:
-            retval = run_command("git diff-index --quiet HEAD", False, False)
+            retval = run_command(
+                "git diff --quiet -- . ':(exclude)VERSION'", False, False
+            )
             if retval:
                 git_commit += "-dirty"
 
@@ -666,10 +688,11 @@ class Dockerize:
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument(
-            "--build-meta",
+            "--dev-base",
+            dest="dev_base",
             action="store",
-            help=f"Add a build string to the version.",
-            default=None,
+            help=f"Name of the image to use as dev image to build the production image.",
+            default="",
         )
         command_group.add_argument(
             "-h", "--help", action="help", help="show this help message and exit"
@@ -701,6 +724,13 @@ class Dockerize:
             type=str,
             default=None,
             help="TF+ZenDNN C++ package location. If provided, will build with TF+ZenDNN enabled",
+        )
+
+        command_group.add_argument(
+            "--suffix",
+            action="store",
+            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -772,16 +802,16 @@ class Get:
                 if args.dry_run:
                     print(f"Downloading {filename} from {url} to {location}")
                 else:
-                    # need to specify the user-agent for accessing wikimedia
-                    headers = {
-                        "User-Agent": "proteus 0.1.0",
-                    }
                     with open(tmp_dir / filename, "wb") as f:
-                        response = requests.get(url, headers=headers)
-                        f.write(response.content)
+                        req = urllib.request.Request(url)
+                        # need to specify the user-agent for accessing wikimedia
+                        req.add_header("User-Agent", f"proteus {get_version()}")
+                        response = urllib.request.urlopen(req)
+                        f.write(response.read())
 
+                    filepath = str(tmp_dir / filename)
                     if filename.endswith("tar.gz"):
-                        tar_file = tarfile.open(str(tmp_dir / filename), mode="r:gz")
+                        tar_file = tarfile.open(filepath, mode="r:gz")
                         tar_file.extractall(location)
                     elif filename.endswith("zip"):
                         with zipfile.ZipFile(str(tmp_dir / filename), 'r') as zip_ref:
@@ -789,7 +819,8 @@ class Get:
                         if args.tfzendnn:
                             shutil.move(str(tmp_dir / filename.strip(".zip") / "float"), str(location))
                     else:
-                        shutil.move(str(tmp_dir / filename), str(location / filename))
+                        shutil.copy2(filepath, str(location / filename))
+                        os.remove(filepath)
                     if not args.quiet:
                         print(f"Downloaded {url} to {str(location/filename)}")
 
@@ -883,9 +914,9 @@ class List:
     @staticmethod
     def parse(args, unknown_args):
         if args.type == "images":
-            command = 'docker image list -f reference=*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
+            command = 'docker image list -f reference=*/*proteus* -f reference=*/*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
         elif args.type == "labels":
-            command = 'docker image list -f reference=*/*proteus* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
+            command = 'docker image list -f reference=*/*proteus* -f reference=*/*/*proteus* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
         else:
             command = 'docker ps --filter "label=project=proteus" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
 
@@ -1259,19 +1290,26 @@ class Test:
 class Up:
     @staticmethod
     def parse(args, unknown_args: list):
-        unknown_args.sort()
+        if unknown_args:
+            unknown_arguments = " ".join(unknown_args)
+            raise argparse.ArgumentError(
+                None, f"Unknown argument(s) passed: {unknown_arguments}"
+            )
 
         extra_flags = ""
         if args.profile == "dev":
-            args.tag = f"{args.registry}/proteus-dev"
+            args.name = "proteus-dev" + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--detach"
         elif args.profile == "prod":
-            args.tag = f"{args.registry}/proteus"
+            args.name = "proteus"  + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
             extra_flags = "--abort-on-container-exit --exit-code-from proteus-tester"
         elif args.profile == "autotest-dev":
-            args.tag = f"{args.registry}/proteus-dev"
+            args.name = "proteus-dev"  + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--abort-on-container-exit --exit-code-from proteus"
         elif args.profile == "test":
             args.tag = args.registry
@@ -1279,6 +1317,8 @@ class Up:
         else:
             raise argparse.ArgumentError(None, f"Unknown profile: {args.profile}")
 
+        # used by WriteComposeFile
+        args.devices = True
         WriteComposeFile.write(args, args.profile)
 
         image = f"{args.tag}:{args.version}"
@@ -1287,7 +1327,8 @@ class Up:
 
         if args.dry_run:
             print(f"IMAGE: {image}")
-            print(f"TAG: {args.tag}")
+            print(f"SUFFIX: {args.suffix}")
+            print(f"REGISTRY: {args.registry}")
             print(f"VERSION: {args.version}")
             print("AKS_ROOT: $PWD/external/aks")
         else:
@@ -1295,7 +1336,8 @@ class Up:
                 filedata = f.read()
                 filedata = "# " + command + "\n" + filedata
                 filedata = filedata.replace("$IMAGE", image)
-                filedata = filedata.replace("$TAG", args.tag)
+                filedata = filedata.replace("$SUFFIX", args.suffix)
+                filedata = filedata.replace("$REGISTRY", args.registry)
                 filedata = filedata.replace("$VERSION", args.version)
                 filedata = filedata.replace("$AKS_ROOT", "$PWD/external/aks")
             with open("docker-compose.yml", "w") as f:
@@ -1312,14 +1354,6 @@ class Up:
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument(
-            "--devices",
-            "--no-devices",
-            dest="devices",
-            action=NegateAction,
-            help="Pass devices from host to container, if they exist. Defaults to true",
-            default=True,
-        )
-        command_group.add_argument(
             "-h", "--help", action="help", help="show this help message and exit"
         )
         command_group.add_argument(
@@ -1334,6 +1368,12 @@ class Up:
             action="store",
             help=f"Registry to use for the Docker images. Defaults to {getpass.getuser()}",
             default=getpass.getuser(),
+        )
+        command_group.add_argument(
+            "--suffix",
+            action="store",
+            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
         )
         command_group.add_argument(
             "-v",
@@ -1420,5 +1460,5 @@ if __name__ == "__main__":
         sys.exit(-1)
     except KeyboardInterrupt:
         pass
-    except AttributeError:
-        parser.print_help()
+    except AttributeError as ex:
+        print(ex)

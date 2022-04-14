@@ -67,6 +67,7 @@ src/gui/public/sphinx
 
 # python ignores
 **/*.egg-info/
+**/*.pytest_cache/
 
 # additional dockerignores
 **/.git

@@ -18,6 +18,10 @@ if(${PROTEUS_ENABLE_REST})
     set(targets ${targets} http_server websocket_server)
 endif()
 
+if(${PROTEUS_ENABLE_GRPC})
+    set(targets ${targets} grpc_server)
+endif()
+
 foreach(target ${targets})
     add_library(${target} OBJECT ${target}.cpp)
     target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
@@ -32,6 +36,12 @@ if(${PROTEUS_ENABLE_REST})
         drogon trantor jsoncpp
     )
     target_link_libraries(websocket_server INTERFACE observation drogon trantor)
+endif()
+
+if(${PROTEUS_ENABLE_GRPC})
+    target_include_directories(grpc_server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+    target_link_libraries(grpc_server INTERFACE lib_grpc)
+    add_dependencies(grpc_server lib_grpc)
 endif()
 
 add_library(servers INTERFACE)

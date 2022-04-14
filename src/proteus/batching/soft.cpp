@@ -22,10 +22,11 @@
 #include <algorithm>  // for max
 #include <chrono>     // for system_clock::time_point
 #include <cstddef>    // for size_t
-#include <iterator>   // for move_iterator, make_move...
-#include <memory>     // for unique_ptr, shared_ptr
+#include <cstdint>    // for int32_t
+#include <memory>     // for unique_ptr, allocator
+#include <ratio>      // for ratio
 #include <stdexcept>  // for invalid_argument
-#include <string>     // for operator+
+#include <string>     // for operator+, char_traits
 #include <utility>    // for move
 #include <vector>     // for vector
 
@@ -33,25 +34,23 @@
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
 #include "proteus/core/interface.hpp"        // for Interface
 #include "proteus/core/manager.hpp"          // for Manager
+#include "proteus/core/predict_api.hpp"      // for RequestParameters, Infer...
 #include "proteus/core/worker_info.hpp"      // for WorkerInfo
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs, BufferPtrs
+#include "proteus/helpers/declarations.hpp"  // for InterfacePtr, BufferPtrs
 #include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"        // for setThreadName
 #include "proteus/observation/logging.hpp"   // for SPDLOG_DEBUG
 #include "proteus/observation/metrics.hpp"   // for Metrics, MetricCounterIDs
 #include "proteus/observation/tracing.hpp"   // for TracePtr, Trace
 
-namespace proteus {
-class InferenceRequest;
-}  // namespace proteus
-// IWYU pragma: no_forward_declare proteus::Buffer
-
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 
+constexpr auto kDefaultTimeout = milliseconds(100);
+
 namespace proteus {
 
-void SoftBatcher::run(WorkerInfo* worker) {
+void SoftBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
   setThreadName(thread_name);
 
@@ -60,7 +59,7 @@ void SoftBatcher::run(WorkerInfo* worker) {
   size_t count = 0;
   bool run = true;
 
-  auto kTimeout = duration_cast<milliseconds>(milliseconds(100));
+  auto kTimeout = duration_cast<milliseconds>(kDefaultTimeout);
   if (this->parameters_.has("timeout")) {
     kTimeout = duration_cast<milliseconds>(
       milliseconds(this->parameters_.get<int32_t>("timeout")));
@@ -91,8 +90,14 @@ void SoftBatcher::run(WorkerInfo* worker) {
     do {
       if (first_request) {
         // wait for the first request
-        count = this->input_queue_->wait_dequeue_bulk(
-          std::make_move_iterator(reqs.begin()), this->batch_size_);
+        count = 1;
+        this->input_queue_->wait_dequeue(reqs.at(0));
+        // TODO(varunsh): there's a bug where if batch size is 4, and we get
+        // requests of size 4, we pull in 4 of them. In the loop below, more
+        // buffers aren't correctly grabbed so we end up with only using one
+        // buffer for input/output instead of 4
+        // count = this->input_queue_->wait_dequeue_bulk(
+        //   std::make_move_iterator(reqs.begin()), this->batch_size_);
         start_time = std::chrono::high_resolution_clock::now();
         SPDLOG_DEBUG("Got request of a new batch for " + this->model_);
       } else {
@@ -106,9 +111,9 @@ void SoftBatcher::run(WorkerInfo* worker) {
         }
       }
 
-      for (size_t foo = 0; foo < count; foo++) {
+      for (size_t j = 0; j < count; j++) {
         InterfacePtr req;
-        req = std::move(reqs[foo]);
+        req = std::move(reqs[j]);
 
         if (req == nullptr) {
           run = false;
@@ -209,7 +214,7 @@ void SoftBatcher::run(WorkerInfo* worker) {
 #endif
         }
       }
-    } while (batch_size % this->batch_size_ != 0);
+    } while (batch_size % this->batch_size_ != 0 && run);
 
     if (!batch->requests->empty()) {
       SPDLOG_DEBUG("Enqueuing batch for " + this->model_);
@@ -220,6 +225,9 @@ void SoftBatcher::run(WorkerInfo* worker) {
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressBatcher);
 #endif
+    } else {
+      worker->putInputBuffer(std::move(input_buffer));
+      worker->putOutputBuffer(std::move(output_buffer));
     }
   }
 }

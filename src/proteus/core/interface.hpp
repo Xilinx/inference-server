@@ -47,6 +47,7 @@ enum class InterfaceType {
   kDrogonHttp,
   kDrogonWs,
   kCpp,
+  kGrpc,
 };
 
 /**

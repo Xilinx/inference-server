@@ -12,23 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <algorithm>              // for max
 #include <array>                  // for array
 #include <cmath>                  // for exp
 #include <cstdint>                // for int8_t, uint64_t
 #include <cstdlib>                // for getenv, size_t
-#include <future>                 // for future
+#include <future>                 // IWYU pragma: keep
 #include <initializer_list>       // for initializer_list
 #include <iostream>               // for operator<<, basic_ostream::operator<<
+#include <memory>                 // for allocator_traits<>::value_type
 #include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
 #include <opencv2/imgcodecs.hpp>  // for imread
 #include <opencv2/imgproc.hpp>    // for resize
-#include <queue>                  // for priority_queue, queue
+#include <queue>                  // for priority_queue
 #include <string>                 // for string, allocator, operator==, basi...
-#include <utility>                // for pair, move
+#include <utility>                // for pair
 #include <vector>                 // for vector
 
 // +include:
-#include "proteus/proteus.hpp"  // for InferenceResponseFuture, terminate
+#include "proteus/proteus.hpp"
 // -include:
 
 /**
@@ -66,7 +68,7 @@ std::vector<std::vector<int8_t>> preprocess(
         for (int h = 0; h < height; h++) {
           for (int w = 0; w < width; w++) {
             output[(c * height * width) + (h * width) + w] =
-              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean[c]) * fix_scale;
+              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean.at(c)) * fix_scale;
           }
         }
       }
@@ -75,7 +77,7 @@ std::vector<std::vector<int8_t>> preprocess(
         for (int w = 0; w < width; w++) {
           for (int c = 0; c < channels; c++) {
             output[h * width * channels + w * channels + c] =
-              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean[c]) * fix_scale;
+              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean.at(c)) * fix_scale;
           }
         }
       }
@@ -88,11 +90,13 @@ std::vector<std::vector<int8_t>> preprocess(
 /**
  * @brief Calculate softmax of the data
  *
+ * @tparam T the expected type of the data
  * @param data pointer to the raw data
  * @param size number of elements in the raw data
  * @param result pointer to store the computed results
  */
-void calc_softmax(const int8_t* data, size_t size, double* result) {
+template <typename T>
+void calc_softmax(const T* data, size_t size, double* result) {
   double sum = 0;
 
   auto max = data[0];
@@ -138,26 +142,88 @@ std::vector<int> get_top_k(const double* d, int size, int k) {
 /**
  * @brief Perform postprocessing of the data
  *
+ * @tparam T the expected type of the data
  * @param output output from Proteus
  * @param k number of top elements to return
  * @return std::vector<int>
  */
+template <typename T>
 std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  auto* data = static_cast<std::vector<int8_t>*>(output.getData());
+  auto* data = static_cast<std::vector<T>*>(output.getData());
   auto size = output.getSize();
 
   std::vector<double> softmax;
   softmax.resize(size);
 
-  calc_softmax(data->data(), size, softmax.data());
+  calc_softmax<T>(data->data(), size, softmax.data());
   return get_top_k(softmax.data(), size, k);
 }
 
+#ifdef ENABLE_GRPC
+constexpr auto GRPC_PORT = 50051;
+constexpr auto GRPC_ADDRESS = "localhost:50051";
+
+std::string load(const std::string& path_to_xmodel) {
+  // +initialize grpc:
+  proteus::startGrpcServer(GRPC_PORT);
+  proteus::GrpcClient client{GRPC_ADDRESS};
+  // -initialize grpc:
+
+  // +load grpc:
+  proteus::RequestParameters parameters;
+  parameters.put("xmodel", path_to_xmodel);
+  auto worker_name = client.modelLoad("Xmodel", &parameters);
+  // -load grpc:
+
+  return worker_name;
+}
+
+proteus::InferenceResponse infer(const std::string& worker_name,
+                                 const proteus::InferenceRequest& request) {
+  proteus::GrpcClient client{GRPC_ADDRESS};
+
+  // +inference grpc:
+  auto results = client.modelInfer(worker_name, request);
+  // -inference grpc:
+
+  return results;
+}
+
+std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
+  return postprocess<int32_t>(output, k);
+}
+#else
+std::string load(const std::string& path_to_xmodel) {
+  // +load native:
+  proteus::RequestParameters parameters;
+  parameters.put("xmodel", path_to_xmodel);
+  proteus::NativeClient client;
+  auto worker_name = client.modelLoad("Xmodel", &parameters);
+  // -load native:
+
+  return worker_name;
+}
+
+proteus::InferenceResponse infer(const std::string& worker_name,
+                                 const proteus::InferenceRequest& request) {
+  proteus::NativeClient client;
+  // +inference native:
+  auto response = client.modelInfer(worker_name, request);
+  // -inference native:
+
+  return response;
+}
+
+std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
+  return postprocess<int8_t>(output, k);
+}
+#endif
+
 /**
  * @brief The custom processing example demonstrates how to plug in custom pre-
- * and post-processing around a call to Proteus. This example uses Resnet50, a
- * classification model, in the Xmodel worker in Proteus. Pre- and
- * post-processing is done in C++ before and after the call to Proteus.
+ * and post-processing around a call to the inference server. This example uses
+ * Resnet50, a classification model, in the XModel worker. Pre- and post-
+ * processing is done in C++ before and after the call to the server.
  *
  * @return int
  */
@@ -172,7 +238,7 @@ int main() {
   // +user variables: update as needed!
   const auto request_num = 8;
   const auto* path_to_xmodel =
-    "${AKS_XMODEL_ROOT}/artifacts/u200_u250/resnet_v1_50_tf/"
+    "${PROTEUS_ROOT}/external/artifacts/u200_u250/resnet_v1_50_tf/"
     "resnet_v1_50_tf.xmodel";
   const auto path_to_image = root + "/tests/assets/dog-3619020_640.jpg";
   // for this image, we know what we expect to receive with this XModel
@@ -184,11 +250,7 @@ int main() {
   proteus::initialize();
   // -initialize:
 
-  // +load:
-  proteus::RequestParameters parameters;
-  parameters.put("xmodel", path_to_xmodel);
-  auto workerName = proteus::load("Xmodel", &parameters);
-  // -load:
+  auto worker_name = load(path_to_xmodel);
 
   // +prepare images:
   std::vector<std::string> paths;
@@ -201,32 +263,26 @@ int main() {
   auto images = preprocess(paths);
   // -prepare images:
 
-  // +inference:
+  // +construct request:
   const std::initializer_list<uint64_t> shape = {224, 224, 3};
-  std::queue<proteus::InferenceResponseFuture> queue;
 
   proteus::InferenceRequest request;
   for (auto i = 0; i < request_num; i++) {
     request.addInputTensor(static_cast<void*>(images[i].data()), shape,
                            proteus::types::DataType::INT8);
   }
-  queue.push(proteus::enqueue(workerName, request));
-  // -inference:
+  // -construct request:
 
-  // +get output:
-  auto front = std::move(queue.front());
-  queue.pop();
-  auto results = front.get();
-  // -get output:
+  auto results = infer(worker_name, request);
 
   // +validate:
   auto outputs = results.getOutputs();
   for (auto& output : outputs) {
-    auto top_k = postprocess(output, k);
+    std::vector<int> top_k = postprocess(output, k);
     for (size_t j = 0; j < k; j++) {
-      if (top_k[j] != gold_response_output[j]) {
+      if (top_k[j] != gold_response_output.at(j)) {
         std::cerr << "Output (" << top_k[j] << ") does not match golden ("
-                  << gold_response_output[j] << ")\n";
+                  << gold_response_output.at(j) << ")\n";
         proteus::terminate();
         return 1;
       }

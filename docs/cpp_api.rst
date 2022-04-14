@@ -22,3 +22,8 @@ Native
 ..
     for some reason, native.hpp doesn't show up in sphinx
 .. doxygenfile:: proteus/clients/native.cpp
+
+gRPC
+----
+
+.. doxygenfile:: proteus/clients/grpc.cpp

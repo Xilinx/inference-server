@@ -23,25 +23,26 @@
 #include <chrono>              // for system_clock::time_point
 #include <condition_variable>  // for condition_variable
 #include <cstddef>             // for size_t
-#include <memory>              // for unique_ptr
+#include <memory>              // for unique_ptr, shared_ptr
 #include <mutex>               // for mutex
 #include <string>              // for string
 #include <thread>              // for thread
 #include <vector>              // for vector
 
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/interface.hpp"        // IWYU pragma: keep
-#include "proteus/helpers/declarations.hpp"  // for BufferPtr, InferenceRequ...
+#include "proteus/core/predict_api.hpp"      // for RequestParameters
+#include "proteus/helpers/declarations.hpp"  // for BufferPtrs, InferenceReq...
 #include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
 #include "proteus/observation/logging.hpp"   // for LoggerPtr
-#include "proteus/observation/tracing.hpp"   // for SpanPtr
+#include "proteus/observation/tracing.hpp"   // for TracePtr
 
 namespace proteus {
-class InferenceRequestInput;
 class WorkerInfo;
 }  // namespace proteus
 
 namespace proteus {
+
+enum class BatcherStatus { kNew, kRun, kInactive, kDead };
 
 /**
  * @brief The Batch is what the batcher produces and pushes to the workers. It
@@ -115,13 +116,9 @@ class Batcher {
   /// Get the batcher's output queue (used to push batches to the worker group)
   BatchPtrQueue* getOutputQueue();
 
-  /**
-   * @brief The run method defines the exact process by which the batcher
-   * consumes incoming Interface objects and uses them to create batches.
-   *
-   * @param worker pointer to this batcher's worker [group]
-   */
-  virtual void run(WorkerInfo* worker) = 0;
+  void run(WorkerInfo* worker);
+
+  BatcherStatus getStatus();
 
   /**
    * @brief Enqueue a new request to the batcher
@@ -129,13 +126,6 @@ class Batcher {
    * @param request
    */
   void enqueue(InterfacePtr request);
-  /**
-   * @brief Enqueue a new request to the batcher from the C++ API
-   *
-   * @param request the request
-   * @return InferenceResponseFuture a future that returns the response
-   */
-  InferenceResponseFuture enqueue(InferenceRequest request);
 
   /// End the batcher
   void end();
@@ -152,6 +142,17 @@ class Batcher {
 #ifdef PROTEUS_ENABLE_LOGGING
   LoggerPtr logger_;
 #endif
+
+ private:
+  /**
+   * @brief The doRun method defines the exact process by which the batcher
+   * consumes incoming Interface objects and uses them to create batches.
+   *
+   * @param worker pointer to this batcher's worker [group]
+   */
+  virtual void doRun(WorkerInfo* worker) = 0;
+
+  BatcherStatus status_;
 };
 
 }  // namespace proteus

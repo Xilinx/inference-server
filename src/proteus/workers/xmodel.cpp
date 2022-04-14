@@ -17,43 +17,47 @@
  * @brief Implements the XModel worker
  */
 
+#include <cxxabi.h>  // for __forced_unwind
+
+#include <algorithm>                    // for copy, copy_backward
 #include <atomic>                       // for atomic_int32_t
-#include <chrono>                       // for milliseconds
+#include <chrono>                       // for microseconds, dura...
 #include <cstddef>                      // for size_t, byte
-#include <cstdint>                      // for uint64_t, int32_t, int8_t
+#include <cstdint>                      // for uint64_t, uint32_t
 #include <cstdlib>                      // for getenv
 #include <cstring>                      // for memcpy
-#include <functional>                   // for multiplies, function
+#include <ext/alloc_traits.h>           // for __alloc_traits<>::...
+#include <functional>                   // for multiplies
 #include <memory>                       // for unique_ptr, allocator
 #include <numeric>                      // for accumulate
 #include <queue>                        // for queue
-#include <string>                       // for string, operator!=, oper...
-#include <thread>                       // for thread
-#include <utility>                      // for move, pair
+#include <string>                       // for string, operator!=
+#include <thread>                       // for thread, sleep_for
+#include <utility>                      // for pair, move
 #include <vart/runner.hpp>              // for Runner
 #include <vart/runner_ext.hpp>          // for RunnerExt
 #include <vart/tensor_buffer.hpp>       // for TensorBuffer
 #include <vector>                       // for vector
-#include <vitis/ai/target_factory.hpp>  // for create
+#include <vitis/ai/target_factory.hpp>  // for target_factory
 #include <xir/graph/graph.hpp>          // for Graph
 #include <xir/graph/subgraph.hpp>       // for Subgraph
 #include <xir/tensor/tensor.hpp>        // for Tensor
 
-#include "proteus/batching/batcher.hpp"  // for BatchPtr, Batch, BatchPt...
-#include "proteus/buffers/buffer.hpp"    // for Buffer
+#include "proteus/batching/batcher.hpp"            // for BatchPtr, Batch
+#include "proteus/buffers/buffer.hpp"              // for Buffer
 #include "proteus/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
-#include "proteus/build_options.hpp"               // for PROTEUS_ENABLE_TRACING
+#include "proteus/build_options.hpp"               // for PROTEUS_ENABLE_MET...
 #include "proteus/core/data_types.hpp"             // for mapXirType, DataType
-#include "proteus/core/predict_api.hpp"      // for InferenceResponse, Infer...
-#include "proteus/helpers/ctpl.h"            // for thread_pool
-#include "proteus/helpers/declarations.hpp"  // for BufferPtr, InferenceResp...
-#include "proteus/helpers/parse_env.hpp"     // for autoExpandEnvironmentVar...
-#include "proteus/helpers/queue.hpp"         // for BufferPtrsQueue
-#include "proteus/helpers/thread.hpp"        // for setThreadName
-#include "proteus/observation/logging.hpp"   // for SPDLOG_LOGGER_INFO, SPDL...
-#include "proteus/observation/metrics.hpp"   // for Metrics
-#include "proteus/observation/tracing.hpp"   // for startFollowSpan, SpanPtr
-#include "proteus/workers/worker.hpp"        // for Worker
+#include "proteus/core/predict_api.hpp"            // for InferenceResponse
+#include "proteus/helpers/ctpl.h"                  // for thread_pool
+#include "proteus/helpers/declarations.hpp"        // for BufferPtrs, Infere...
+#include "proteus/helpers/parse_env.hpp"           // for autoExpandEnvironm...
+#include "proteus/helpers/queue.hpp"               // for BufferPtrsQueue
+#include "proteus/helpers/thread.hpp"              // for setThreadName
+#include "proteus/observation/logging.hpp"         // for SPDLOG_LOGGER_INFO
+#include "proteus/observation/metrics.hpp"         // for Metrics, MetricCou...
+#include "proteus/observation/tracing.hpp"         // for Trace
+#include "proteus/workers/worker.hpp"              // for Worker, kNumBuffer...
 
 uint64_t reduce_mult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());

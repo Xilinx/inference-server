@@ -27,7 +27,7 @@ import zlib
 
 import aiohttp
 
-from .exceptions import BadResponseError, ConnectionError
+from . import exceptions
 from .predict_api import (
     ErrorResponse,
     InferenceRequest,
@@ -62,13 +62,13 @@ async def _async_get(session, url):
     async with resp:
         content_type = resp.headers.get("content-type")
         if content_type is None:
-            raise BadResponseError("Content type is None")
+            raise exceptions.BadResponseError("Content type is None")
         elif "application/json" in content_type:
             content = await resp.json()
         elif "text/html" in content_type:
             content = await resp.text()
         else:
-            raise BadResponseError(f"Unknown content type: {content_type}")
+            raise exceptions.BadResponseError(f"Unknown content type: {content_type}")
         return _Response(resp, content)
 
 
@@ -112,9 +112,13 @@ class Client:
         try:
             response = requests.get(url, headers=self.headers)
         except requests.ConnectionError:
-            raise ConnectionError(error_str + f"Cannot connect to Proteus at {url}.")
+            raise exceptions.ConnectionError(
+                error_str + f"Cannot connect to Proteus at {url}."
+            ) from None
         except requests.exceptions.MissingSchema:
-            raise ConnectionError(error_str + f"Invalid URL: {url}")
+            raise exceptions.ConnectionError(
+                error_str + f"Invalid URL: {url}"
+            ) from None
 
         return response
 
@@ -142,14 +146,18 @@ class Client:
                     f"{self.http_addr}/{endpoint}", data=body, headers=self.headers
                 )
             except requests.ConnectionError:
-                raise ConnectionError(error_str + "Cannot connect to Proteus.")
+                raise exceptions.ConnectionError(
+                    error_str + "Cannot connect to Proteus."
+                )
         else:
             try:
                 response = requests.post(
                     f"{self.http_addr}/{endpoint}", json=body, headers=self.headers
                 )
             except requests.ConnectionError:
-                raise ConnectionError(error_str + "Cannot connect to Proteus.")
+                raise exceptions.ConnectionError(
+                    error_str + "Cannot connect to Proteus."
+                ) from None
 
         return response
 
@@ -274,7 +282,7 @@ class Client:
         Returns:
             bool: True if live
         """
-        error_str = f"Failed to check if server is live."
+        error_str = f"Failed to check if server is live. "
         endpoint = self.get_endpoint("server_live")
         response = self._get(endpoint, error_str)
         return response.status_code == 200
@@ -287,7 +295,7 @@ class Client:
         while not status:
             try:
                 status = self.server_live()
-            except ConnectionError:
+            except exceptions.ConnectionError:
                 time.sleep(1)
 
     def wait_until_stop(self):
@@ -299,7 +307,7 @@ class Client:
             try:
                 if self.server_live():
                     time.sleep(1)
-            except ConnectionError:
+            except exceptions.ConnectionError:
                 is_up = False
 
     def get_endpoint(self, command, *args):

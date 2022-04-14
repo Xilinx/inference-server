@@ -23,7 +23,6 @@
 #include <opentelemetry/context/propagation/text_map_propagator.h>
 #include <opentelemetry/context/runtime_context.h>
 #include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
-// #include <opentelemetry/exporters/ostream/span_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/exporter.h>
 #include <opentelemetry/sdk/trace/processor.h>
@@ -41,13 +40,15 @@
 #include <opentelemetry/trace/tracer_provider.h>
 
 #include <chrono>
-#include <cstdint>  // for int32_t
-#include <map>      // for _Rb_tree_iterator, operator!=
-#include <string>   // for string, basic_string
-#include <utility>  // for pair
-#include <variant>  // for get, holds_alternative, visi
+#include <cstdint>
+#include <ext/alloc_traits.h>
+#include <map>
+#include <string>
+#include <unordered_map>
+#include <utility>  // for move
+#include <variant>  // for get
 
-#include "proteus/core/predict_api.hpp"  // for Parameter, RequestParameters
+#include "proteus/core/predict_api.hpp"
 
 #ifdef PROTEUS_ENABLE_TRACING
 

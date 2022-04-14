@@ -22,7 +22,8 @@
 #include <string>      // for string, operator+, char_t...
 #include <utility>     // for move
 
-#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/batching/batcher.hpp"  // for Batcher
+#include "proteus/clients/http_internal.hpp"
 #include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
@@ -46,7 +47,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                                        const WebSocketMessageType &type) {
   (void)type;  // suppress unused variable warning
 #ifdef PROTEUS_ENABLE_TRACING
-  auto trace = startTrace(__func__);
+  auto trace = startTrace(&(__func__[0]));
   trace->startSpan("websocket_handler");
 #endif
 
@@ -141,7 +142,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
   size_t &batch_offset) {
   std::shared_ptr<InferenceRequest> request;
   try {
-    auto request = InferenceRequestBuilder::fromJson(
+    auto request = RequestBuilder::build(
       this->json_, buffer_index, input_buffers, input_offset, output_buffers,
       output_offset, batch_size, batch_offset);
     Callback callback =

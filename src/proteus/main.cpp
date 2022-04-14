@@ -25,6 +25,7 @@
 
 #include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_HTTP, PROT...
 #include "proteus/clients/native.hpp"       // for initialize, terminate
+#include "proteus/servers/grpc_server.hpp"  // for start, stop
 #include "proteus/servers/http_server.hpp"  // for start, stop
 
 /**
@@ -77,9 +78,18 @@ int main(int argc, char* argv[]) {
 
   proteus::initialize();
 
+#ifdef PROTEUS_ENABLE_GRPC
+  std::cout << "gRPC server starting at port " << 50051 << "\n";
+  proteus::grpc::start("0.0.0.0:50051");
+#endif
+
 #ifdef PROTEUS_ENABLE_HTTP
-  std::cout << "Server starting at port " << http_port << "\n";
+  std::cout << "HTTP server starting at port " << http_port << "\n";
   proteus::http::start(http_port);
+#else
+  while (1) {
+    std::this_thread::yield();
+  }
 #endif
 
   proteus::terminate();

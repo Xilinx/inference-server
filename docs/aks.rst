@@ -18,7 +18,7 @@
 AKS
 ===
 
-`AKS <https://github.com/Xilinx/Vitis-AI/tree/master/tools/AKS>`__ can be used in Xilinx Inference Server for end-to-end inference.
+':github:`AKS <Xilinx/Vitis-AI/tree/master/tools/AKS>`' can be used in Xilinx Inference Server for end-to-end inference.
 
 Introduction to AKS
 -------------------

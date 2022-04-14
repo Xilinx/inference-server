@@ -20,10 +20,9 @@
 
 #include "proteus/core/manager.hpp"
 
-#include <stdexcept>    // for invalid_argument
-#include <thread>       // for yield, thread
-#include <type_traits>  // for __decay_and_strip<>::__type
-#include <utility>      // for pair, make_pair, move
+#include <stdexcept>  // for invalid_argument
+#include <thread>     // for yield, thread
+#include <utility>    // for pair, make_pair, move
 
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING, kMax...
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
@@ -37,8 +36,15 @@ Manager::Manager() {
   this->logger_ = getLogger();
 #endif
   update_queue_ = std::make_unique<UpdateCommandQueue>();
-  update_thread_ =
-    std::thread(&Manager::update_manager, this, update_queue_.get());
+  init();
+}
+
+void Manager::init() {
+  // default constructed threads are not joinable
+  if (!update_thread_.joinable()) {
+    update_thread_ =
+      std::thread(&Manager::update_manager, this, update_queue_.get());
+  }
 }
 
 std::string Manager::loadWorker(std::string const& key,
@@ -102,6 +108,8 @@ void Manager::workerAllocate(std::string const& key, int num) {
   }
 }
 
+// TODO(varunsh): if multiple commands sent post-shutdown, they will linger
+// in the queue and may cause problems
 void Manager::shutdown() {
   auto request = std::make_shared<UpdateCommand>(UpdateCommandType::Shutdown);
   this->update_queue_->enqueue(request);
@@ -170,10 +178,8 @@ std::string Manager::Endpoints::load(const std::string& worker,
 
   // we've seen this worker before but not with these parameters
   if (map.find(*parameters) == map.end()) {
-    int index;
-    if (worker_indices_.find(worker) == worker_indices_.end()) {
-      index = 0;
-    } else {
+    int index = 0;
+    if (worker_indices_.find(worker) != worker_indices_.end()) {
       // technically, this can overflow and cause problems but that's unlikely
       index = worker_indices_.at(worker) + 1;
     }

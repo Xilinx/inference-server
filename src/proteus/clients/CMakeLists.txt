@@ -14,7 +14,16 @@
 
 list(APPEND TARGETS
     native
+    native_internal
 )
+
+if(${PROTEUS_ENABLE_HTTP})
+    set(TARGETS ${TARGETS} http http_internal)
+endif()
+
+if(${PROTEUS_ENABLE_GRPC})
+    set(TARGETS ${TARGETS} grpc grpc_internal)
+endif()
 
 foreach(target ${TARGETS})
     add_library(${target} OBJECT ${target}.cpp)
@@ -28,8 +37,16 @@ target_link_libraries(native INTERFACE exec observation)
 if(${PROTEUS_ENABLE_AKS})
     target_link_libraries(native INTERFACE aks)
 endif()
+
 if(${PROTEUS_ENABLE_HTTP})
-    target_link_libraries(native INTERFACE drogon)
+    target_link_libraries(http_internal INTERFACE drogon)
+endif()
+
+if(${PROTEUS_ENABLE_GRPC})
+    target_include_directories(grpc PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+    target_link_libraries(grpc INTERFACE lib_grpc)
+    target_include_directories(grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+    target_link_libraries(grpc_internal INTERFACE lib_grpc)
 endif()
 
 add_library(clients INTERFACE)

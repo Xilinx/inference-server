@@ -29,9 +29,8 @@
 #include <unordered_map>  // for unordered_map
 #include <utility>        // for move, pair
 
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api.hpp"  // for RequestParameters
-// #include "proteus/core/worker_info.hpp"     // for WorkerInfo
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/predict_api.hpp"     // for RequestParameters
 #include "proteus/helpers/queue.hpp"        // for BlockingConcurrentQueue
 #include "proteus/observation/logging.hpp"  // for LoggerPtr
 
@@ -100,6 +99,12 @@ class Manager {
     return instance;
   }
 
+  Manager(Manager const&) = delete;             ///< Copy constructor
+  Manager& operator=(const Manager&) = delete;  ///< Copy assignment constructor
+  Manager(Manager&& other) = delete;            ///< Move constructor
+  Manager& operator=(Manager&& other) =
+    delete;  ///< Move assignment constructor
+
   std::string loadWorker(std::string const& key, RequestParameters parameters);
   void unloadWorker(std::string const& key);
 
@@ -124,6 +129,13 @@ class Manager {
    * allocation
    */
   void workerAllocate(std::string const& key, int num);
+
+  /**
+   * @brief Initialize the Manager. This is called automatically by the
+   * constructor and may be called again after shutdown() to restart. If already
+   * initialized, this does nothing.
+   */
+  void init();
   /**
    * @brief Stop the Manager. This should be called prior to ending Proteus.
    *
@@ -183,13 +195,6 @@ class Manager {
    * @param input_queue queue where update requests will arrive
    */
   void update_manager(UpdateCommandQueue* input_queue);
-
- public:
-  Manager(Manager const&) = delete;             ///< Copy constructor
-  Manager& operator=(const Manager&) = delete;  ///< Copy assignment constructor
-  Manager(Manager&& other) = delete;            ///< Move constructor
-  Manager& operator=(Manager&& other) =
-    delete;  ///< Move assignment constructor
 };
 
 }  // namespace proteus

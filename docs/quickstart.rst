@@ -20,11 +20,10 @@ Quickstart
 
 The easiest way to use Xilinx Inference Server is to run it inside a Docker container.
 For these instructions, you'll need Git, Python3, and `Docker <https://docs.docker.com/get-docker/>`__.
-
-Note: the sequence of instructions in the code blocks below is valid only as written.
-If you add or change flags to commands, you may need to change the subsequent commands.
-The helper script used for most of the commands here is :file:`proteus`.
+Also ensure that you set up your host appropriately depending on which platform(s) you are using (e.g. :ref:`Vitis AI <vitis_ai:vitis ai>`).
+The helper script used for most of the commands here is :file:`proteus`: a Python script with many helpful options.
 The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
+You can also use :option:`--dry-run` before any command to see the underlying commands the script is running.
 
 Some options also require `Docker-Compose <https://docs.docker.com/compose/install/>`__.
 Running tests requires using Git LFS when cloning this repository to get testing assets.
@@ -32,13 +31,13 @@ Running tests requires using Git LFS when cloning this repository to get testing
 Build or Get the Docker Image
 -----------------------------
 
-We can build several types of containers:
-
- * stable vs. nightly: stable containers use the latest released versions of the Vitis-AI libraries that are publicly available. Nightly containers use internal versions of these libraries and thus cannot be built by the general public.
- * development vs. production: dev containers are intended for working on Xilinx Inference Server or applications that link to Xilinx Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start. Production containers only contain the runtime dependencies of the :program:`proteus-server` executable and automatically run the executable when they start.
+We can build several types of containers.
+Development (dev) containers are intended for working on Xilinx Inference Server or applications that link to Xilinx Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start.
+Production containers only contain the runtime dependencies of the :program:`proteus-server` executable and automatically run the executable when they start.
+The Docker image can also be built with various options to disable certain components.
 
 Currently, these images are not pre-built anywhere and so must be built by the user.
-You must enable `BuildKit <https://docs.docker.com/develop/develop-images/build_enhancements/>`__ by setting DOCKER_BUILDKIT in the environment, configuring the Docker daemon or using ``docker buildx install`` before attempting to build the image.
+We recommend enabling `BuildKit <https://docs.docker.com/develop/develop-images/build_enhancements/>`__ by setting DOCKER_BUILDKIT in the environment, configuring the Docker daemon or using ``docker buildx install`` before attempting to build the image.
 Refer to the BuildKit documentation for more information.
 
 .. code-block:: console
@@ -62,6 +61,7 @@ Building Xilinx Inference Server
 
 These commands are all run inside the dev container.
 Here, :file:`./proteus` is aliased to :command:`proteus`.
+Note, in general, you should not use ``sudo`` to run ``proteus`` commands.
 
 .. code-block:: console
 
@@ -98,7 +98,7 @@ Once the server is built, start the server to begin serving requests.
     # test that the server is ready. The server returns status 200 OK on success
     $ curl -I http://localhost:8998/v2/health/ready
 
-    # the server can now accept requests over REST
+    # the server can now accept requests over REST/gRPC
 
     # shutdown the server
     $ kill -2 $(pidof proteus-server)
@@ -110,8 +110,5 @@ You may need to get testing artifacts (see above) and have cloned the repository
 
     # this will start the server and test the REST API from Python.
     $ proteus test
-
-Note: the facedetect test may fail due to a known issue with parsing the XModel.
-Ignore any failures with that model at this time.
 
 Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to Xilinx Inference Server using the C++ API.

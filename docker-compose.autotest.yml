@@ -17,7 +17,7 @@ services:
   proteus:
     extra_hosts:
       - "proteus:127.0.1.1"
-    image: $TAG/proteus:$VERSION
+    image: $REGISTRY/proteus$SUFFIX:$VERSION
     ports:
       - 127.0.0.1:8998:8998 # used for proteus server
     volumes:
@@ -30,7 +30,7 @@ services:
     extra_hosts:
       - "proteus-tester:127.0.1.1"
     hostname: proteus-tester
-    image: $TAG/proteus-dev:$VERSION
+    image: $REGISTRY/proteus-dev$SUFFIX:$VERSION
     volumes:
       - $PWD:/workspace/proteus
     working_dir: /workspace/proteus

@@ -14,14 +14,11 @@
 
 add_executable(proteus-server main.cpp)
 target_include_directories(proteus-server PRIVATE ${PROTEUS_INCLUDE_DIRS})
+target_include_directories(proteus-server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
 target_link_options(proteus-server PRIVATE "LINKER:-E")
 enable_ipo_on_target(proteus-server)
 
-target_link_libraries(proteus-server PRIVATE batching buffers clients core)
-
-if(${PROTEUS_ENABLE_HTTP})
-  target_link_libraries(proteus-server PRIVATE http_server websocket_server)
-endif()
+target_link_libraries(proteus-server PRIVATE batching buffers clients core servers)
 
 add_subdirectory(batching)
 add_subdirectory(buffers)
@@ -65,6 +62,9 @@ if(${PROTEUS_ENABLE_METRICS})
 endif()
 if(${PROTEUS_ENABLE_HTTP})
     target_link_libraries(proteus PRIVATE drogon trantor)
+endif()
+if(${PROTEUS_ENABLE_GRPC})
+    target_link_libraries(proteus PRIVATE lib_grpc)
 endif()
 if(${PROTEUS_ENABLE_TRACING})
     get_target_property(TRACING_LINK_LIBS tracing INTERFACE_LINK_LIBRARIES)
