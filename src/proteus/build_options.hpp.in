@@ -33,7 +33,7 @@
 #cmakedefine PROTEUS_ENABLE_LOGGING
 /// Enables AKS in proteus
 #cmakedefine PROTEUS_ENABLE_AKS
-/// Enables AKS in proteus
+/// Enables Vitis in proteus
 #cmakedefine PROTEUS_ENABLE_VITIS
 
 /// Port used by Proteus's HTTP server
@@ -42,8 +42,8 @@ constexpr auto kDefaultHttpPort = @PROTEUS_DEFAULT_HTTP_PORT@;
 /// Number of threads used by Drogon
 constexpr auto kDefaultDrogonThreads = 16;
 
-/// Maximum size of a HTTP request body in MiB. Arbitrarily set to 4MiB
-constexpr auto kMaxClientBodySize = 4194304;
+/// Maximum size of a HTTP request body in MiB. Arbitrarily set to 400MiB
+constexpr auto kMaxClientBodySize = 419430400;
 
 /// Maximum number of characters usable for a model name used in an endpoint.
 constexpr auto kMaxModelNameSize = 64;

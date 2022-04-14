@@ -142,5 +142,17 @@ if [ -f ~/.env ]; then
     . ~/.env
 fi
 
+ldconfig -p | grep libtensorflow_cc >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    source ${PROTEUS_ROOT}/external/zendnn/zendnn_tf_cc_api_env_setup.sh
+fi
+
 clear
 print_banner
+
+ldconfig -p | grep libtensorflow_cc >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    echo "TF+ZenDNN found. Please set below environment variables explicitly as per the platform you are using!!"
+    echo -e "\tOMP_NUM_THREADS, GOMP_CPU_AFFINITY"
+    echo "Please refer to documentation available at developer.amd.com/zendnn for performance"
+fi

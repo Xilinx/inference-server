@@ -19,6 +19,9 @@ ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 ARG UNAME=proteus-user
 
 ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
+ARG ENABLE_TFZENDNN=${ENABLE_TFZENDNN:-no}
+ARG TFZENDNN_PATH
+
 
 FROM ${BASE_IMAGE} AS proteus_base
 ARG UNAME
@@ -694,7 +697,31 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
     cd ${PROTEUS_ROOT}/src/python \
     && python3 setup.py bdist_wheel
 
-FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_dev_final
+FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_install_tfzendnn_no
+
+FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_install_tfzendnn_yes
+ARG TFZENDNN_PATH
+SHELL ["/bin/bash", "-c"]
+
+COPY $TFZENDNN_PATH /tmp/
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+     zip unzip \
+    && cd /tmp/ \
+    # Check to verify if package is TF+ZenDNN
+    && echo "ff65a75cb513fdfe1323ac70edda25af  $(basename $TFZENDNN_PATH)" | md5sum -c - \
+    && unzip $(basename $TFZENDNN_PATH) \
+    && cd $(basename ${TFZENDNN_PATH%.*}) \
+    # To avoid protobuf version issues, create subfolder and copy include files
+    && mkdir -p /usr/include/tfzendnn/ \
+    && cp -r include/* /usr/include/tfzendnn \
+    && cp -r lib/*.so* /usr/lib \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -fr /tmp/*
+
+FROM proteus_install_tfzendnn_${ENABLE_TFZENDNN} as proteus_dev_final
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT

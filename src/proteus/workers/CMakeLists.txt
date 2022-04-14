@@ -25,6 +25,10 @@ if(${PROTEUS_ENABLE_VITIS})
     set(workers ${workers} Xmodel)
 endif()
 
+if(${PROTEUS_ENABLE_TFZENDNN})
+    set(workers ${workers} TfZendnn)
+endif()
+
 foreach( worker ${workers})
     set(worker_name worker${worker})
 
@@ -46,6 +50,11 @@ target_link_libraries(workerInvertImage PRIVATE base64 opencv_core opencv_imgcod
 target_link_libraries(workerInvertVideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio)
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(workerXmodel PRIVATE parse_env vart-runner target-factory xir observation)
+endif()
+
+if(${PROTEUS_ENABLE_TFZENDNN})
+    target_include_directories(workerTfZendnn SYSTEM PRIVATE /usr/include/tfzendnn)
+    target_link_libraries(workerTfZendnn PRIVATE tensorflow_cc)
 endif()
 # target_link_libraries(workerFake PRIVATE observation)
 
