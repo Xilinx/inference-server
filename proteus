@@ -31,6 +31,7 @@ import tarfile
 import textwrap
 import time
 import urllib.error
+import zipfile
 
 
 def get_version():
@@ -620,6 +621,10 @@ class Dockerize:
         if not args.vitis:
             build_args += f"--build-arg ENABLE_VITIS=no"
 
+        if args.tfzendnn_path:
+            build_args += f" --build-arg ENABLE_TFZENDNN=yes"
+            build_args += f" --build-arg TFZENDNN_PATH={args.tfzendnn_path}"
+
         try:
             git_branch = (
                 subprocess.check_output(shlex.split("git rev-parse --abbrev-ref HEAD"))
@@ -691,6 +696,12 @@ class Dockerize:
             help=f"Docker image registry. Defaults to {getpass.getuser()}",
             default=getpass.getuser(),
         )
+        command_group.add_argument(
+            "--tfzendnn_path",
+            type=str,
+            default=None,
+            help="TF+ZenDNN C++ package location. If provided, will build with TF+ZenDNN enabled",
+        )
 
         subparser.set_defaults(func=cls.parse)
 
@@ -721,6 +732,7 @@ class Get:
 
         test_asset_dir = Path.cwd() / "tests/assets"
         artifact_dir = Path.cwd() / "external/artifacts"
+        tensorflow_models = Path.cwd() / "external/tensorflow_models"
         alveo_dir = artifact_dir / "u200_u250"
 
         tmp_dir = Path("/tmp/proteus_get")
@@ -743,6 +755,12 @@ class Get:
                 "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
             ],
         }
+        if(args.tfzendnn):
+            files.update({
+                tensorflow_models: [
+                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.0.zip"
+                ],
+            })
 
         for location, urls in files.items():
             for url in urls:
@@ -765,6 +783,11 @@ class Get:
                     if filename.endswith("tar.gz"):
                         tar_file = tarfile.open(str(tmp_dir / filename), mode="r:gz")
                         tar_file.extractall(location)
+                    elif filename.endswith("zip"):
+                        with zipfile.ZipFile(str(tmp_dir / filename), 'r') as zip_ref:
+                            zip_ref.extractall(str(tmp_dir))
+                        if args.tfzendnn:
+                            shutil.move(str(tmp_dir / filename.strip(".zip") / "float"), str(location))
                     else:
                         shutil.move(str(tmp_dir / filename), str(location / filename))
                     if not args.quiet:
@@ -789,6 +812,10 @@ class Get:
 
         command_group.add_argument(
             "-q", "--quiet", action="store_true", help="suppress prints"
+        )
+
+        command_group.add_argument(
+            "--tfzendnn", action="store_true" ,help="If TF+ZenDNN should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)

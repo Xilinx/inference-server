@@ -21,3 +21,13 @@ if(${PROTEUS_ENABLE_VITIS})
   )
   target_include_directories(custom_processing PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
 endif()
+
+if(${PROTEUS_ENABLE_TFZENDNN})
+  add_executable(tf_zendnn_client tf_zendnn_client.cpp)
+
+  target_link_libraries(tf_zendnn_client PRIVATE
+    proteus
+    opencv_imgcodecs opencv_imgproc opencv_core
+  )
+  target_include_directories(tf_zendnn_client PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+endif()
