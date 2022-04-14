@@ -136,5 +136,15 @@ This use case may be needed if your cluster doesn't have a load-balancer and/or 
 
 Once you can communicate with your service, you can make requests to the Inference Server using REST (e.g. with the Python API).
 The request will be routed to the server and the response will be returned.
+To use the Python API, you can set up a `venv <https://docs.python.org/3/library/venv.html>`__ or `conda env <https://docs.conda.io/en/latest/miniconda.html>`__ with Python 3.6+ and install the package in it.
+In your virtual environment, run:
+
+.. code-block:: console
+
+    $ cd ./src/python
+    $ pip install .
+
+Then, you can import the ``proteus`` package in Python and make requests using the API.
+Refer to the Python examples and the API specification for how to make requests.
 
 .. [#f1] Before building the production container, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).
