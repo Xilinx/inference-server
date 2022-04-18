@@ -20,6 +20,8 @@ ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 ARG UNAME=proteus-user
 
 ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
+ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-yes}
+ARG MIGRAPHX_PATH
 ARG ENABLE_TFZENDNN=${ENABLE_TFZENDNN:-no}
 ARG TFZENDNN_PATH
 ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
@@ -778,6 +780,31 @@ RUN apt-get update \
     && rm -fr /tmp/*
 
 FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_final
+
+
+# Install migraphx which supports GPU targets.  At the time of writing this,
+# it was necessary to build migraphx from source but it should be possible to install from repo
+# instead.
+#
+# Add rocm repository
+RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main > /etc/apt/sources.list.d/rocm.list'
+# Install dependencies for migraphx
+RUN apt-get update &&\
+    apt-get install -y sudo git bash build-essential rocm-dev libpython3.6-dev python3-pip miopen-hip-dev \
+    rocblas-dev half aria2 libnuma-dev rocm-cmake
+# Workaround broken rocm packages
+RUN ln -s /opt/rocm-* /opt/rocm
+RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf
+RUN echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf
+RUN ldconfig
+# Install rbuild
+RUN pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
+# Install MIGraphX from source
+RUN mkdir -p /migraphx
+RUN cd /migraphx && git clone --depth=1 --branch rocm-5.0.0 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
+RUN cd /migraphx && rbuild package -d /migraphx/deps -B /migraphx/build -S /migraphx/src/
+RUN dpkg -i /migraphx/build/*.deb
+RUN rm -rf /migraphx
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT
