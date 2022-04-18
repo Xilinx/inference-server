@@ -54,14 +54,14 @@ class Server:
                 local_server_path = f"{root}/build/{build}/src/proteus/proteus-server"
                 if os.path.exists(local_server_path):
                     self.executable = local_server_path
-        if self.executable is None:
-            if shutil.which("proteus-server") is None:
-                raise InvalidArgument(
-                    "Path to proteus-server cannot be derived. Specify the path explicitly or add it to the PATH"
-                )
-            else:
-                # use the proteus-server that exists on the PATH
-                self.executable = "proteus-server"
+            if self.executable is None:
+                if shutil.which("proteus-server") is None:
+                    raise InvalidArgument(
+                        "Path to proteus-server cannot be derived. Specify the path explicitly or add it to the PATH"
+                    )
+                else:
+                    # use the proteus-server that exists on the PATH
+                    self.executable = "proteus-server"
         else:
             self.executable = executable
 
