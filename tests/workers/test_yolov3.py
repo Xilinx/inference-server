@@ -109,10 +109,9 @@ class TestInferImageYoloV3DPUCADF8H:
                 num_boxes = int(len(output.data) / 6)
                 assert output.shape == [6, num_boxes]
                 assert len(output.data) == len(gold_response_output)
-                assert (
-                    output.data == gold_response_output
-                    or output.data == gold_response_output_2
-                )
+                assert np.allclose(
+                    output.data, gold_response_output, 0.01, 0
+                ) or np.allclose(output.data, gold_response_output_2, 0.01, 0)
         return response
 
     def construct_request(self, asTensor):

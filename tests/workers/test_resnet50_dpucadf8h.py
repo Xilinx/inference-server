@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import pytest
-import json
-import os
+
+import numpy as np
 
 from helper import run_benchmark, root_path
 import proteus
@@ -76,7 +76,7 @@ class TestInferImageResNet50DPUCADF8H:
                 assert output.parameters == {}
                 assert output.shape == [5, 1, 1]
                 assert len(output.data) == len(gold_response_output)
-                assert output.data == gold_response_output
+                np.testing.assert_almost_equal(gold_response_output, output.data, 2)
         return response
 
     def send_requests(self, requests, check_asserts=True):

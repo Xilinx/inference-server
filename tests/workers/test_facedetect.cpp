@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cmath>    // for abs
 #include <cstdlib>  // for getenv
 
 #include "facedetect.hpp"  // IWYU pragma: associated
@@ -59,7 +60,9 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       EXPECT_EQ(shape[1], num_boxes);
       EXPECT_EQ(size, gold_response_size);
       for (size_t i = 0; i < gold_response_size; i++) {
-        EXPECT_FLOAT_EQ((*data)[i], gold_response_output[i]);
+        // expect that the response values are within 1% of the golden
+        const float abs_error = std::abs(gold_response_output[i] * 0.01);
+        EXPECT_NEAR((*data)[i], gold_response_output[i], abs_error);
       }
     }
   }
@@ -72,6 +75,7 @@ TEST(Native, Facedetect) {
 
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
+    proteus::terminate();
     GTEST_SKIP();
   }
 

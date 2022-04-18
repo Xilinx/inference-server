@@ -88,7 +88,7 @@ class TestInferImageFacedetectDPUCADF8H:
                 num_boxes = int(len(output.data) / 6)
                 assert output.shape == [6, num_boxes]
                 assert len(output.data) == len(gold_response_output)
-                assert output.data == gold_response_output
+                np.testing.assert_almost_equal(gold_response_output, output.data, 2)
         return response
 
     def construct_request(self, asTensor):
