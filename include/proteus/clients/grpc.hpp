@@ -49,6 +49,7 @@ class GrpcClient : public Client {
   GrpcClient(const std::shared_ptr<::grpc::Channel>& channel);
   ~GrpcClient();
 
+  ServerMetadata serverMetadata() override;
   bool serverLive() override;
   bool serverReady() override;
   bool modelReady(const std::string& model) override;

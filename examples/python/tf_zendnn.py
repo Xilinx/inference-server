@@ -12,16 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# fmt: off
-import os
-import time
 import argparse
+import os
+import sys
+import time
 
 import numpy as np
 
 import proteus
 from utils.utils import preprocess, postprocess
-# fmt: on
 
 
 def main(args):
@@ -40,6 +39,29 @@ def main(args):
         FileNotFoundError: If graph given in argument is not found
         FileNotFoundError: If image_location is given and the file is not found
     """
+
+    # Create server objects
+    server = proteus.Server()
+    client = proteus.RestClient("0.0.0.0:8998", None)
+
+    # Start server: if it's not already started, start it here
+    try:
+        start_server = not client.server_live()
+        print("Server already up")
+    except proteus.ConnectionError:
+        start_server = True
+    if start_server:
+        print("Starting server")
+        server.start(quiet=True)
+        client.wait_until_live()
+
+    if not client.has_extension("tfzendnn"):
+        print("TFZenDNN support required but not found.")
+        if start_server:
+            print("Closing server")
+            server.stop()
+            client.wait_until_stop()
+        sys.exit(0)
 
     # Argument parsing
     real_data = True if args.image_location else False
@@ -69,21 +91,6 @@ def main(args):
         except FileNotFoundError:
             classes = list(range(1000))
         classes = np.asarray(classes)
-
-    # Create server objects
-    server = proteus.Server()
-    client = proteus.RestClient("0.0.0.0:8998", None)
-
-    # Start server: if it's not already started, start it here
-    try:
-        start_server = not client.server_live()
-        print("Server already up")
-    except proteus.ConnectionError:
-        start_server = True
-    if start_server:
-        print("Starting server")
-        server.start(quiet=True)
-        client.wait_until_live()
 
     # Load the worker with appropriate paramaters
     parameters = {

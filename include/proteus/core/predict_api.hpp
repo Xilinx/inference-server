@@ -28,6 +28,7 @@
 #include <map>               // for map, operator==, map<>::...
 #include <memory>            // for shared_ptr, allocator
 #include <ostream>           // for operator<<, ostream, bas...
+#include <set>               // for set
 #include <string>            // for string, operator<<, char...
 #include <string_view>       // for string_view
 #include <utility>           // for move
@@ -136,6 +137,12 @@ class RequestParameters {
 };
 
 using RequestParametersPtr = std::shared_ptr<RequestParameters>;
+
+struct ServerMetadata {
+  std::string name;
+  std::string version;
+  std::set<std::string> extensions;
+};
 
 /**
  * @brief Holds an inference request's input data

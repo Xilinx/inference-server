@@ -151,19 +151,16 @@ void v2::ProteusHttpServer::getServerMetadata(
 #endif
   (void)req;  // suppress unused variable warning
 
+  NativeClient client;
+  auto metadata = client.serverMetadata();
+
   Json::Value ret;
-  ret["name"] = "proteus";
-  ret["version"] = kProteusVersion;
+  ret["name"] = metadata.name;
+  ret["version"] = metadata.version;
   ret["extensions"] = Json::arrayValue;
-#ifdef PROTEUS_ENABLE_AKS
-  ret["extensions"].append("aks");
-#endif
-#ifdef PROTEUS_ENABLE_VITIS
-  ret["extensions"].append("vitis");
-#endif
-#ifdef PROTEUS_ENABLE_TFZENDNN
-  ret["extensions"].append("tfzendnn");
-#endif
+  for (const auto &extension : metadata.extensions) {
+    ret["extensions"].append(extension);
+  }
   auto resp = HttpResponse::newHttpJsonResponse(ret);
   callback(resp);
 }

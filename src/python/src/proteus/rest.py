@@ -287,6 +287,19 @@ class Client:
         response = self._get(endpoint, error_str)
         return response.status_code == 200
 
+    def server_metadata(self):
+        """
+        Get the server's metadata
+
+        Returns:
+            dict: metadata
+        """
+        error_str = "Failed to get the metadata"
+        endpoint = self.get_endpoint("metadata")
+        response = self._get(endpoint, error_str)
+        assert response.status_code == 200
+        return response.json()
+
     def wait_until_live(self):
         """
         Block until the server is live
@@ -326,6 +339,7 @@ class Client:
             arg_0 = args[0]
 
         commands = {
+            "metadata": "v2",
             "server_live": "v2/health/live",
             "infer": f"v2/models/{arg_0}/infer",
             "model_ready": f"v2/models/{arg_0}/ready",
@@ -347,3 +361,7 @@ class Client:
         """
         url = self.get_endpoint(command, *args)
         return f"{self.http_addr}/{url}"
+
+    def has_extension(self, extension):
+        metadata = self.server_metadata()
+        return extension in metadata["extensions"]

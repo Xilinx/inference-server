@@ -30,6 +30,7 @@ class Client {
  public:
   virtual ~Client() = default;
 
+  virtual ServerMetadata serverMetadata() = 0;
   virtual bool serverLive() = 0;
   virtual bool serverReady() = 0;
   virtual bool modelReady(const std::string& model) = 0;

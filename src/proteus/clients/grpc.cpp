@@ -29,6 +29,7 @@
 #include <iostream>   // for operator<<, cout
 #include <map>        // for map
 #include <memory>     // for make_shared, reinter...
+#include <set>        // for set
 #include <stdexcept>  // for runtime_error
 #include <string>     // for string, operator+
 #include <utility>    // for move
@@ -70,6 +71,24 @@ GrpcClient::GrpcClient(const std::shared_ptr<::grpc::Channel>& channel) {
 }
 
 GrpcClient::~GrpcClient() = default;
+
+ServerMetadata GrpcClient::serverMetadata() {
+  inference::ServerMetadataRequest request;
+  inference::ServerMetadataResponse reply;
+
+  ClientContext context;
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->ServerMetadata(&context, request, &reply);
+
+  if (status.ok()) {
+    auto ext = reply.extensions();
+    std::set<std::string> extensions(ext.begin(), ext.end());
+    ServerMetadata metadata{reply.name(), reply.version(), extensions};
+    return metadata;
+  }
+  throw std::runtime_error(status.error_message());
+}
 
 bool GrpcClient::serverLive() {
   inference::ServerLiveRequest request;

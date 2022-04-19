@@ -42,6 +42,7 @@
 #include "proteus/buffers/buffer.hpp"             // for Buffer
 #include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
+#include "proteus/clients/native.hpp"             // for NativeClient
 #include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
 #include "proteus/core/interface.hpp"             // for Interface, Interfac...
 #include "proteus/core/manager.hpp"               // for Manager
@@ -50,7 +51,6 @@
 #include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
 #include "proteus/observation/logging.hpp"        // for SPDLOG_INFO, SPDLOG...
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
-#include "proteus/version.hpp"                    // for kProteusVersion
 
 namespace proteus {
 class CallDataModelInfer;
@@ -535,14 +535,13 @@ CALLDATA_IMPL(ModelReady, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ServerMetadata, Unary) {
-  reply_.set_name("proteus");
-  reply_.set_version(kProteusVersion);
-#ifdef PROTEUS_ENABLE_AKS
-  reply_.add_extensions("aks");
-#endif
-#ifdef PROTEUS_ENABLE_VITIS
-  reply_.add_extensions("vitis");
-#endif
+  NativeClient client;
+  auto metadata = client.serverMetadata();
+  reply_.set_name(metadata.name);
+  reply_.set_version(metadata.version);
+  for (const auto& extension : metadata.extensions) {
+    reply_.add_extensions(extension);
+  }
   finish();
 }
 CALLDATA_IMPL_END

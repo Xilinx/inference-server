@@ -23,6 +23,7 @@
 #include <cstdlib>        // for getenv
 #include <future>         // for promise
 #include <memory>         // for unique_ptr, make_unique
+#include <set>            // for set
 #include <stdexcept>      // for invalid_argument
 #include <string>         // for string, basic_string
 #include <unordered_map>  // for unordered_map, operat...
@@ -37,6 +38,7 @@
 #include "proteus/observation/logging.hpp"      // for initLogging
 #include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
 #include "proteus/observation/tracing.hpp"      // for startTrace, startTracer
+#include "proteus/version.hpp"                  // for kProteusVersion
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
@@ -76,6 +78,21 @@ void terminate() {
 
 NativeClient::~NativeClient() = default;
 
+ServerMetadata NativeClient::serverMetadata() {
+  std::set<std::string> extensions;
+  ServerMetadata metadata{"proteus", kProteusVersion, extensions};
+
+#ifdef PROTEUS_ENABLE_AKS
+  metadata.extensions.insert("aks");
+#endif
+#ifdef PROTEUS_ENABLE_VITIS
+  metadata.extensions.insert("vitis");
+#endif
+#ifdef PROTEUS_ENABLE_TFZENDNN
+  metadata.extensions.insert("tfzendnn");
+#endif
+  return metadata;
+}
 bool NativeClient::serverLive() { return true; }
 bool NativeClient::serverReady() { return true; }
 

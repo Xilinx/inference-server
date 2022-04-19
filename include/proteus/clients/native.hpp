@@ -54,6 +54,7 @@ class NativeClient : public Client {
  public:
   ~NativeClient();
 
+  ServerMetadata serverMetadata() override;
   bool serverLive() override;
   bool serverReady() override;
 

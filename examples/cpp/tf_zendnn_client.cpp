@@ -248,6 +248,14 @@ int main() {
   // initialize the server
   proteus::initialize();
 
+  auto client = proteus::NativeClient();
+  auto metadata = client.serverMetadata();
+  if (metadata.extensions.find("tfzendnn") == metadata.extensions.end()) {
+    std::cout << "TFZenDNN support required but not found.\n";
+    proteus::terminate();
+    exit(0);
+  }
+
   // load worker with required parameters
   proteus::RequestParameters parameters;
   // parameters.put("max_buffer_num", options.batch_size);
@@ -257,7 +265,7 @@ int main() {
   parameters.put("input_size", options.input_size);
   parameters.put("inter_op", options.inter_op);
   parameters.put("intra_op", options.intra_op);
-  auto workerName = proteus::load("TfZendnn", &parameters);
+  auto workerName = client.modelLoad("TfZendnn", &parameters);
 
   float time_tmp = 0.f;
   // prepare images for inference
@@ -274,11 +282,7 @@ int main() {
     auto start = std::chrono::high_resolution_clock::now();  // Timing the start
     request.addInputTensor(static_cast<void*>(images[0].data()), shape,
                            proteus::types::DataType::FP32);
-    queue.push(proteus::enqueue(workerName, request));
-
-    auto front = std::move(queue.front());
-    queue.pop();
-    auto results = front.get();
+    auto results = client.modelInfer(workerName, request);
     // Timing the prediction
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration =
@@ -323,10 +327,7 @@ int main() {
         request.addInputTensor(static_cast<void*>(images[i].data()), shape,
                                proteus::types::DataType::FP32);
       }
-      queue.push(proteus::enqueue(workerName, request));
-      auto front = std::move(queue.front());
-      queue.pop();
-      auto results = front.get();
+      auto results = client.modelInfer(workerName, request);
     }
 
     // Running for `steps` number of time for proper benchmarking
@@ -338,10 +339,7 @@ int main() {
         request.addInputTensor(static_cast<void*>(images[i].data()), shape,
                                proteus::types::DataType::FP32);
       }
-      queue.push(proteus::enqueue(workerName, request));
-      auto front = std::move(queue.front());
-      queue.pop();
-      auto results = front.get();
+      auto results = client.modelInfer(workerName, request);
     }
     // Timing the prediction
     auto stop = std::chrono::high_resolution_clock::now();
