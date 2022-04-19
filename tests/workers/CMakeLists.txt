@@ -40,7 +40,7 @@ endif()
 
 if(${PROTEUS_ENABLE_AKS})
     target_link_libraries(test_facedetect PRIVATE
-        opencv_core opencv_imgcodecs
+        opencv_core opencv_imgcodecs stdc++fs
     )
 endif()
 

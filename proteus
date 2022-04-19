@@ -1042,7 +1042,6 @@ class Make:
 class Run:
     @staticmethod
     def parse(args, unknown_args: list):
-        print('sdfsdfsadfsgdfhgsdkjfgsadlghjfkjghsdaglksdahkljsadghlksdaghlksdagj')
         unknown_args.sort()
 
         if args.image is None and args.preset is None:

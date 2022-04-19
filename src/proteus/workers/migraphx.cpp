@@ -73,7 +73,7 @@ class MIGraphXWorker : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
-    std::string input_file_;
+  std::string input_file_;
 
 
   // Input / Output nodes
@@ -127,10 +127,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
 #endif
         for (unsigned int j = 0; j < batch->requests->size(); j++) {
             auto& req = batch->requests->at(j);
+            (void)req;  // suppress unused variable warning
 #ifdef PROTEUS_ENABLE_TRACING
             auto& trace = batch->traces.at(j);
             trace->startSpan("echo");
 #endif
+        }
         std::vector<InferenceResponse> responses;
         responses.reserve(batch->requests->size());
 
@@ -157,6 +159,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 proteus::workers::Worker* getWorker() {
-  return new proteus::workers::MIGraphXWorker("MIGraphX", "cpu");
+  return new proteus::workers::MIGraphXWorker("MIGraphX", "gpu");
 }
 }  // extern C
