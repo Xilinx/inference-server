@@ -15,6 +15,7 @@
 import ipaddress
 import os
 import re
+import socket
 import subprocess
 import time
 
@@ -53,7 +54,8 @@ def pytest_sessionstart(session):
     proteus_command.extend(["--http_port", str(http_port)])
 
     http_server_addr = "http://" + get_http_addr(session.config)
-    ip_addr = ipaddress.ip_address(session.config.getoption("hostname"))
+    addr = socket.gethostbyname(session.config.getoption("hostname"))
+    ip_addr = ipaddress.ip_address(addr)
     if not ip_addr.is_loopback:
         if not isUp(http_server_addr):
             pytest.exit(f"No HTTP server found at {http_server_addr}", returncode=1)

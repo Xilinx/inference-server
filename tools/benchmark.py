@@ -23,6 +23,7 @@ import math
 import os
 import pathlib
 import pprint
+import socket
 import statistics
 import subprocess
 import sys
@@ -634,7 +635,8 @@ def combine_wrk_stats(samples):
 
 def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
     client = Client(config.http_address)
-    if not ipaddress.ip_address(config.http_address.split(":")[0]).is_loopback:
+    addr = socket.gethostbyname(config.http_address.split(":")[0])
+    if not ipaddress.ip_address(addr).is_loopback:
         assert client.server_live()
         server = None
     else:
@@ -937,7 +939,8 @@ def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
 def pytest_benchmarks(config: Config, quiet=False):
     hostname, port = config.http_address.split(":")
     client = Client(config.http_address)
-    if not ipaddress.ip_address(hostname).is_loopback or not config.start_server:
+    addr = socket.gethostbyname(hostname)
+    if not ipaddress.ip_address(addr).is_loopback or not config.start_server:
         try:
             assert client.server_live()
         except proteus.exceptions.ConnectionError:

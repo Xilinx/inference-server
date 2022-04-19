@@ -695,8 +695,8 @@ class GrpcServer final {
       // memory address of a CallDataBase instance.
       // The return value of Next should always be checked. This return value
       // tells us whether there is any kind of event or cq_ is shutting down.
-      GPR_ASSERT(my_cq->Next(&tag, &ok));
-      if (GPR_UNLIKELY(!(ok))) {
+      auto event_received = my_cq->Next(&tag, &ok);
+      if (GPR_UNLIKELY(!(ok && event_received))) {
         break;
       }
       static_cast<CallDataBase*>(tag)->proceed();
