@@ -137,6 +137,23 @@ bool GrpcClient::modelReady(const std::string& model) {
   throw std::invalid_argument(status.error_message());
 }
 
+std::vector<std::string> GrpcClient::modelList() {
+  inference::ModelListRequest request;
+  inference::ModelListResponse reply;
+
+  ClientContext context;
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->ModelList(&context, request, &reply);
+
+  if (status.ok()) {
+    auto mods = reply.models();
+    std::vector<std::string> models(mods.begin(), mods.end());
+    return models;
+  }
+  throw std::invalid_argument(status.error_message());
+}
+
 // refer to cppreference for std::visit
 // helper type for the visitor #4
 template <class... Ts>

@@ -140,6 +140,10 @@ bool NativeClient::modelReady(const std::string& model) {
   return Manager::getInstance().workerReady(model);
 }
 
+std::vector<std::string> NativeClient::modelList() {
+  return Manager::getInstance().getWorkerEndpoints();
+}
+
 std::string getHardware() {
   std::string hardware;
 #ifdef PROTEUS_ENABLE_VITIS

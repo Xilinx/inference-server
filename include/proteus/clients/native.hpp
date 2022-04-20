@@ -83,6 +83,7 @@ class NativeClient : public Client {
   void modelUnload(const std::string& model) override;
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
+  std::vector<std::string> modelList() override;
 
   /**
    * @brief Enqueue an inference request to Proteus

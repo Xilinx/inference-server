@@ -21,6 +21,7 @@
 #define GUARD_PROTEUS_CLIENTS_CLIENT
 
 #include <string>
+#include <vector>
 
 #include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
@@ -40,6 +41,7 @@ class Client {
   virtual void modelUnload(const std::string& model) = 0;
   virtual InferenceResponse modelInfer(const std::string& model,
                                        const InferenceRequest& request) = 0;
+  virtual std::vector<std::string> modelList() = 0;
 };
 
 }  // namespace proteus

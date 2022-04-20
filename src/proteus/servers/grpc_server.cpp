@@ -546,6 +546,16 @@ CALLDATA_IMPL(ServerMetadata, Unary) {
 }
 CALLDATA_IMPL_END
 
+CALLDATA_IMPL(ModelList, Unary) {
+  NativeClient client;
+  auto models = client.modelList();
+  for (const auto& model : models) {
+    reply_.add_models(model);
+  }
+  finish();
+}
+CALLDATA_IMPL_END
+
 CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
@@ -682,6 +692,7 @@ class GrpcServer final {
     new CallDataServerLive(&service_, my_cq.get());
     new CallDataServerMetadata(&service_, my_cq.get());
     new CallDataServerReady(&service_, my_cq.get());
+    new CallDataModelList(&service_, my_cq.get());
     new CallDataModelReady(&service_, my_cq.get());
     new CallDataModelLoad(&service_, my_cq.get());
     new CallDataModelUnload(&service_, my_cq.get());

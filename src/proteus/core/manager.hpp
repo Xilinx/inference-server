@@ -117,6 +117,8 @@ class Manager {
    */
   WorkerInfo* getWorker(std::string const& key);
 
+  std::vector<std::string> getWorkerEndpoints();
+
   bool workerReady(std::string const& key);
   ModelMetadata getWorkerMetadata(std::string const& key);
 
@@ -160,6 +162,7 @@ class Manager {
 
     bool exists(const std::string& endpoint);
     WorkerInfo* get(const std::string& endpoint);
+    std::vector<std::string> list();
 
     std::string add(const std::string& worker, RequestParameters parameters);
 

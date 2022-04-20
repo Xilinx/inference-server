@@ -59,6 +59,11 @@ service GRPCInferenceService
   // google.rpc.Status returned for the request. The OK code indicates success
   // and other codes indicate failure.
   rpc ModelUnload(ModelUnloadRequest) returns (ModelUnloadResponse) {}
+
+  // The ModelList API lists the active model(s). Errors are indicated by the
+  // google.rpc.Status returned for the request. The OK code indicates success
+  // and other codes indicate failure.
+  rpc ModelList(ModelListRequest) returns (ModelListResponse) {}
 }
 
 message ServerLiveRequest {}
@@ -87,6 +92,13 @@ message ModelReadyRequest{
 message ModelReadyResponse{
   // True if the model is ready, false if not ready.
   bool ready = 1;
+}
+
+message ModelListRequest{}
+
+message ModelListResponse{
+  // The currently active models
+  repeated string models = 1;
 }
 
 message ServerMetadataRequest {}

@@ -59,6 +59,7 @@ class GrpcClient : public Client {
   void modelUnload(const std::string& model) override;
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
+  std::vector<std::string> modelList() override;
   // int streamModelInferStart(const std::string& model,
   //                           const InferenceRequest& request,
   //                           RequestParameters& metadata);

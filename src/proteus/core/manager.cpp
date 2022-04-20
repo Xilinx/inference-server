@@ -108,6 +108,10 @@ void Manager::workerAllocate(std::string const& key, int num) {
   }
 }
 
+std::vector<std::string> Manager::getWorkerEndpoints() {
+  return this->endpoints_.list();
+}
+
 // TODO(varunsh): if multiple commands sent post-shutdown, they will linger
 // in the queue and may cause problems
 void Manager::shutdown() {
@@ -224,6 +228,15 @@ void Manager::Endpoints::unload(const std::string& endpoint) {
 
 bool Manager::Endpoints::exists(const std::string& endpoint) {
   return workers_.find(endpoint) != workers_.end();
+}
+
+std::vector<std::string> Manager::Endpoints::list() {
+  std::vector<std::string> workers;
+  workers.reserve(this->workers_.size());
+  for (const auto& [worker, _] : workers_) {
+    workers.push_back(worker);
+  }
+  return workers;
 }
 
 WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) {

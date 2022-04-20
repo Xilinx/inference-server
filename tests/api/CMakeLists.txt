@@ -15,6 +15,7 @@
 list(APPEND targets
     test_model_infer
     test_model_load
+    test_model_list
     test_server_live
     test_server_ready
 )
