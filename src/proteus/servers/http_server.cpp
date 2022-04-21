@@ -138,6 +138,7 @@ void v2::ProteusHttpServer::getModelReady(
     }
   } catch (const std::invalid_argument &e) {
     resp->setStatusCode(HttpStatusCode::k400BadRequest);
+    resp->setBody(e.what());
   }
   callback(resp);
 }
@@ -189,6 +190,23 @@ void v2::ProteusHttpServer::getModelMetadata(
   if (error) {
     resp->setStatusCode(HttpStatusCode::k400BadRequest);
   }
+  callback(resp);
+}
+
+void v2::ProteusHttpServer::modelList(
+  const drogon::HttpRequestPtr &req,
+  std::function<void(const drogon::HttpResponsePtr &)> &&callback) {
+  (void)req;  // suppress unused variable warning
+  NativeClient client;
+  const auto models = client.modelList();
+
+  Json::Value json;
+  json["models"] = Json::arrayValue;
+  for (const auto &model : models) {
+    json["models"].append(model);
+  }
+
+  auto resp = HttpResponse::newHttpJsonResponse(json);
   callback(resp);
 }
 
@@ -265,9 +283,9 @@ void v2::ProteusHttpServer::load(
 
   auto json = req->getJsonObject();
   RequestParametersPtr parameters = nullptr;
-  if (json->isMember("parameters")) {
+  if (json != nullptr && json->isMember("parameters")) {
     auto json_parameters = json->get("parameters", "");
-    parameters = addParameters(json_parameters);
+    parameters = mapJsonToParameters(json_parameters);
   } else {
     parameters = std::make_unique<RequestParameters>();
   }
