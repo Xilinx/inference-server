@@ -44,10 +44,7 @@ namespace proteus {
 
 using types::DataType;
 
-RequestParametersPtr addParameters(Json::Value parameters) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  auto logger = getLogger();
-#endif
+RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
   auto parameters_ = std::make_shared<RequestParameters>();
   for (auto const &id : parameters.getMemberNames()) {
     if (parameters[id].isString()) {
@@ -59,13 +56,28 @@ RequestParametersPtr addParameters(Json::Value parameters) {
     } else if (parameters[id].isDouble()) {
       parameters_->put(id, parameters[id].asDouble());
     } else {
-      SPDLOG_LOGGER_WARN(logger, "Unknown parameter type, skipping");
+      SPDLOG_WARN("Unknown parameter type, skipping");
     }
   }
-#ifdef PROTEUS_LOGGING_ACTIVE
-  (void)logger;  // suppress unused variable warning
-#endif
   return parameters_;
+}
+
+InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json) {
+  InferenceResponse response;
+  response.setModel(json->get("model_name", "").asString());
+  response.setID(json->get("id", "").asString());
+
+  // TODO(varunsh): finish implementation
+
+  return response;
+}
+
+Json::Value mapRequestToJson(const InferenceRequest &request) {
+  (void)request;
+
+  // TODO(varunsh): finish implementation
+
+  return Json::Value();
 }
 
 template <>
@@ -102,7 +114,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
     input.dataType_ = types::mapStrToType(data_type_str);
     if (req->isMember("parameters")) {
       auto parameters = req->get("parameters", Json::objectValue);
-      input.parameters_ = addParameters(parameters);
+      input.parameters_ = mapJsonToParameters(parameters);
     } else {
       input.parameters_ = std::make_unique<RequestParameters>();
     }
@@ -188,7 +200,7 @@ class InferenceRequestOutputBuilder<std::shared_ptr<Json::Value>> {
     output.name_ = req->get("name", "").asString();
     if (req->isMember("parameters")) {
       auto parameters = req->get("parameters", Json::objectValue);
-      output.parameters_ = addParameters(parameters);
+      output.parameters_ = mapJsonToParameters(parameters);
     } else {
       output.parameters_ = std::make_unique<RequestParameters>();
     }
@@ -215,7 +227,7 @@ InferenceRequestPtr RequestBuilder::build(
   }
   if (req->isMember("parameters")) {
     auto parameters = req->get("parameters", Json::objectValue);
-    request->parameters_ = addParameters(parameters);
+    request->parameters_ = mapJsonToParameters(parameters);
   } else {
     request->parameters_ = std::make_unique<RequestParameters>();
   }

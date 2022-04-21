@@ -41,3 +41,5 @@ TEST_F(BaseFixture, ModelLoad) {
   proteus::NativeClient client;
   test(&client);
 }
+
+TEST_F(HttpFixture, ModelLoad) { test(client_.get()); }

@@ -48,7 +48,10 @@ namespace proteus {
  * @param parameters
  * @return RequestParametersPtr
  */
-RequestParametersPtr addParameters(Json::Value parameters);
+RequestParametersPtr mapJsonToParameters(Json::Value parameters);
+
+InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json);
+Json::Value mapRequestToJson(const InferenceRequest &request);
 
 // class InferenceRequestOutputBuilder {
 //  public:

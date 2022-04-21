@@ -121,6 +121,10 @@ class RequestParameters {
   /// Get the underlying data structure holding the parameters
   [[nodiscard]] std::map<std::string, Parameter> data() const;
 
+  auto begin() { return parameters_.begin(); }
+
+  auto end() { return parameters_.end(); }
+
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
                                   RequestParameters const &my_class) {

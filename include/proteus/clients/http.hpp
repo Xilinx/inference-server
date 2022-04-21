@@ -20,6 +20,8 @@
 #ifndef GUARD_PROTEUS_CLIENTS_HTTP
 #define GUARD_PROTEUS_CLIENTS_HTTP
 
+#include "proteus/clients/client.hpp"
+
 namespace proteus {
 
 /**
@@ -36,6 +38,29 @@ void startHttpServer(int port);
  *
  */
 void stopHttpServer();
+
+class HttpClient : public Client {
+ public:
+  HttpClient() = delete;
+  explicit HttpClient(const std::string& address);
+  ~HttpClient();
+
+  ServerMetadata serverMetadata() override;
+  bool serverLive() override;
+  bool serverReady() override;
+  bool modelReady(const std::string& model) override;
+
+  std::string modelLoad(const std::string& model,
+                        RequestParameters* parameters) override;
+  void modelUnload(const std::string& model) override;
+  InferenceResponse modelInfer(const std::string& model,
+                               const InferenceRequest& request) override;
+  std::vector<std::string> modelList() override;
+
+ private:
+  class HttpClientImpl;
+  std::unique_ptr<HttpClientImpl> impl_;
+};
 
 }  // namespace proteus
 

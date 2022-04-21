@@ -68,6 +68,9 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   /// Register the getHardware endpoint
   ADD_METHOD_TO(ProteusHttpServer::getHardware, "v2/hardware", drogon::Get,
                 drogon::Options);
+  /// Register the modelList endpoint
+  ADD_METHOD_TO(ProteusHttpServer::modelList, "v2/models", drogon::Get,
+                drogon::Options);
   /// Register the inferModel endpoint
   ADD_METHOD_TO(ProteusHttpServer::inferModel, "v2/models/{model}/infer",
                 drogon::Post, drogon::Options);
@@ -148,6 +151,16 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
    * @param callback the callback function to respond to the client
    */
   void getHardware(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+
+  /**
+   * @brief Returns the active models on the server
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   */
+  void modelList(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback);
 

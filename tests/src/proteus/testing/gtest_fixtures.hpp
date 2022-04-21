@@ -39,6 +39,18 @@ class GrpcFixture : public BaseFixture {
   std::unique_ptr<proteus::GrpcClient> client_;
 };
 
+class HttpFixture : public BaseFixture {
+ protected:
+  void SetUp() override {
+    proteus::startHttpServer(8998);
+    client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
+  }
+
+  void TearDown() override { proteus::stopHttpServer(); }
+
+  std::unique_ptr<proteus::HttpClient> client_;
+};
+
 #define EXPECT_THROW_CHECK(statement, check, exception) \
   EXPECT_THROW(                                         \
     {                                                   \
