@@ -144,31 +144,13 @@ bool HttpClient::modelReady(const std::string& model) {
   return response->statusCode() == drogon::k200OK;
 }
 
-// refer to cppreference for std::visit
-// helper type for the visitor #4
-template <class... Ts>
-struct overloaded : Ts... {
-  using Ts::operator()...;
-};
-// explicit deduction guide (not needed as of C++20)
-template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
-
 std::string HttpClient::modelLoad(const std::string& model,
                                   RequestParameters* parameters) {
   auto client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
   if (parameters != nullptr) {
-    for (const auto& parameter : *parameters) {
-      const auto& key = parameter.first;
-      const auto& value = parameter.second;
-      std::visit(overloaded{[&](bool arg) { json[key] = arg; },
-                            [&](double arg) { json[key] = arg; },
-                            [&](int32_t arg) { json[key] = arg; },
-                            [&](const std::string& arg) { json[key] = arg; }},
-                 value);
-    }
+    json = mapParametersToJson(parameters);
   }
 
   auto req = drogon::HttpRequest::newHttpJsonRequest(json);

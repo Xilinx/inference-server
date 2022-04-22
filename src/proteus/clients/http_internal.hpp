@@ -49,6 +49,7 @@ namespace proteus {
  * @return RequestParametersPtr
  */
 RequestParametersPtr mapJsonToParameters(Json::Value parameters);
+Json::Value mapParametersToJson(RequestParameters *parameters);
 
 InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json);
 Json::Value mapRequestToJson(const InferenceRequest &request);

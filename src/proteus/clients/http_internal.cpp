@@ -62,22 +62,217 @@ RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
   return parameters_;
 }
 
+// refer to cppreference for std::visit
+// helper type for the visitor #4
+template <class... Ts>
+struct overloaded : Ts... {
+  using Ts::operator()...;
+};
+// explicit deduction guide (not needed as of C++20)
+template <class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+
+Json::Value mapParametersToJson(RequestParameters *parameters) {
+  Json::Value json = Json::objectValue;
+
+  for (const auto &parameter : *parameters) {
+    const auto &key = parameter.first;
+    const auto &value = parameter.second;
+    std::visit(overloaded{[&](bool arg) { json[key] = arg; },
+                          [&](double arg) { json[key] = arg; },
+                          [&](int32_t arg) { json[key] = arg; },
+                          [&](const std::string &arg) { json[key] = arg; }},
+               value);
+  }
+
+  return json;
+}
+
+template <typename T, typename Fn>
+void setOutputData(const Json::Value &json, InferenceResponseOutput *output,
+                   Fn f) {
+  auto data = std::make_shared<std::vector<T>>();
+  data->reserve(json.size());
+  for (const auto &datum : json) {
+    data->push_back((datum.*f)());
+  }
+  auto data_cast = std::reinterpret_pointer_cast<std::byte>(data);
+  output->setData(std::move(data_cast));
+}
+
 InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json) {
   InferenceResponse response;
   response.setModel(json->get("model_name", "").asString());
   response.setID(json->get("id", "").asString());
 
-  // TODO(varunsh): finish implementation
+  auto json_outputs = json->get("outputs", Json::arrayValue);
+  for (const auto &json_output : json_outputs) {
+    InferenceResponseOutput output;
+    output.setName(json_output["name"].asString());
+    output.setParameters(mapJsonToParameters(json_output["parameters"]));
+    output.setDatatype(types::mapStrToType(json_output["datatype"].asString()));
+
+    auto json_shape = json_output["shape"];
+    std::vector<uint64_t> shape;
+    shape.reserve(json_shape.size());
+    for (const auto &index : json_shape) {
+      shape.push_back(index.asUInt());
+    }
+    output.setShape(shape);
+    const auto &json_data = json_output["data"];
+    switch (output.getDatatype()) {
+      case DataType::BOOL: {
+        setOutputData<bool>(json_data, &output, &Json::Value::asBool);
+        break;
+      }
+      case DataType::UINT8: {
+        setOutputData<uint8_t>(json_data, &output, &Json::Value::asUInt);
+        break;
+      }
+      case DataType::UINT16: {
+        setOutputData<uint16_t>(json_data, &output, &Json::Value::asUInt);
+        break;
+      }
+      case DataType::UINT32: {
+        setOutputData<uint32_t>(json_data, &output, &Json::Value::asUInt);
+        break;
+      }
+      case DataType::UINT64: {
+        setOutputData<uint64_t>(json_data, &output, &Json::Value::asUInt64);
+        break;
+      }
+      case DataType::INT8: {
+        setOutputData<int8_t>(json_data, &output, &Json::Value::asInt);
+        break;
+      }
+      case DataType::INT16: {
+        setOutputData<int16_t>(json_data, &output, &Json::Value::asInt);
+        break;
+      }
+      case DataType::INT32: {
+        setOutputData<int32_t>(json_data, &output, &Json::Value::asInt);
+        break;
+      }
+      case DataType::INT64: {
+        setOutputData<int64_t>(json_data, &output, &Json::Value::asInt64);
+        break;
+      }
+      case DataType::FP16: {
+        // FIXME(varunsh): this is not handled
+        throw std::runtime_error("Writing FP16 not supported");
+        break;
+      }
+      case DataType::FP32: {
+        setOutputData<float>(json_data, &output, &Json::Value::asFloat);
+        break;
+      }
+      case DataType::FP64: {
+        setOutputData<double>(json_data, &output, &Json::Value::asDouble);
+        break;
+      }
+      case DataType::STRING: {
+        setOutputData<std::string>(json_data, &output, &Json::Value::asString);
+        break;
+      }
+      default:
+        // TODO(varunsh): what should we do here?
+        std::cout << "Unknown datatype\n";
+        break;
+    }
+    response.addOutput(output);
+  }
 
   return response;
 }
 
+template <typename T, typename C = T>
+void setInputData(Json::Value &json, const InferenceRequestInput *input) {
+  auto *data = static_cast<T *>(input->getData());
+  for (size_t i = 0; i < input->getSize(); i++) {
+    json["data"].append(static_cast<C>(data[i]));
+  }
+}
+
 Json::Value mapRequestToJson(const InferenceRequest &request) {
-  (void)request;
+  Json::Value json;
+  json["id"] = request.getID();
+  json["inputs"] = Json::arrayValue;
+  const auto &inputs = request.getInputs();
+  for (const auto &input : inputs) {
+    Json::Value json_input;
+    json_input["name"] = input.getName();
+    json_input["datatype"] = types::mapTypeToStr(input.getDatatype());
+    json_input["shape"] = Json::arrayValue;
+    json_input["parameters"] = mapParametersToJson(request.getParameters());
+    for (const auto &index : input.getShape()) {
+      json_input["shape"].append(static_cast<Json::UInt64>(index));
+    }
+    json_input["data"] = Json::arrayValue;
+    switch (input.getDatatype()) {
+      case DataType::BOOL: {
+        setInputData<bool>(json_input["data"], &input);
+        break;
+      }
+      case DataType::UINT8: {
+        setInputData<uint8_t>(json_input["data"], &input);
+        break;
+      }
+      case DataType::UINT16: {
+        setInputData<uint16_t>(json_input["data"], &input);
+        break;
+      }
+      case DataType::UINT32: {
+        setInputData<uint32_t>(json_input["data"], &input);
+        break;
+      }
+      case DataType::UINT64: {
+        setInputData<uint64_t, Json::UInt64>(json_input["data"], &input);
+        break;
+      }
+      case DataType::INT8: {
+        setInputData<int8_t>(json_input["data"], &input);
+        break;
+      }
+      case DataType::INT16: {
+        setInputData<int16_t>(json_input["data"], &input);
+        break;
+      }
+      case DataType::INT32: {
+        setInputData<int32_t>(json_input["data"], &input);
+        break;
+      }
+      case DataType::INT64: {
+        setInputData<int64_t, Json::Int64>(json_input["data"], &input);
+        break;
+      }
+      case DataType::FP16: {
+        // FIXME(varunsh): this is not handled
+        std::cout << "Writing FP16 not supported\n";
+        break;
+      }
+      case DataType::FP32: {
+        setInputData<float>(json_input["data"], &input);
+        break;
+      }
+      case DataType::FP64: {
+        setInputData<double>(json_input["data"], &input);
+        break;
+      }
+      case DataType::STRING: {
+        auto *data = static_cast<std::string *>(input.getData());
+        json_input["data"].append(*data);
+        break;
+      }
+      default:
+        // TODO(varunsh): what should we do here?
+        std::cout << "Unknown datatype\n";
+        break;
+    }
+  }
 
-  // TODO(varunsh): finish implementation
+  // TODO(varunsh): omitting outputs for now
 
-  return Json::Value();
+  return json;
 }
 
 template <>
