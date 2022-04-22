@@ -806,6 +806,9 @@ RUN cd /migraphx && rbuild package -d /migraphx/deps -B /migraphx/build -S /migr
 RUN dpkg -i /migraphx/build/*.deb
 RUN rm -rf /migraphx
 
+# onnx package for Python, used during dev.
+RUN pip3 install onnx
+
 # reset the compiler version, in case build-essential package overrode it
     # link gcc-9 and g++-9 to gcc and g++
 RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \

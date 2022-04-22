@@ -110,6 +110,24 @@ void MIGraphXWorker::doAcquire(RequestParameters* parameters){
     std::cout << "Acquiring model file " << input_file << std::endl;
     // Using parse_onnx() instead of load() because there's a bug at the time of writing
     this->prog_ = migraphx::parse_onnx(input_file.c_str());
+    std::cout << "Finished parsing ONNX model." << std::endl;
+        prog_.print();    
+    std::cout << "Compiling ONNX model...";
+
+    // Compile the model.  Hard-coded choices of offload_copy and gpu target.
+    migraphx::compile_options comp_opts;
+    comp_opts.set_offload_copy();
+#define GPU 1
+    std::string target_str;
+if(GPU)
+        target_str = "gpu";
+    else
+        target_str = "ref";
+    migraphx::target targ = migraphx::target(target_str.c_str());
+std::cout << "Okay, got this far...\n";
+
+    prog_.compile(migraphx::target("gpu"), comp_opts);    
+    std::cout << "done." << std::endl;
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
@@ -145,9 +163,16 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
         prog_.print();
         std::cout << std::endl;
 
-        // takes an argument of type migraphx::program_parameters ;
+        // construct an argument of type migraphx::program_parameters ;
         // see ...AMDMIGraphX/examples/vision/cpp_mnist/mnist_inference.cpp for example of program_parameters
-        auto result = prog_.eval({});
+
+        migraphx::program_parameters prog_params;
+        auto param_shapes = prog_.get_parameter_shapes();
+        auto input        = param_shapes.names().front();
+        (void)input;
+        // prog_params.add(input, migraphx::argument(param_shapes[input], digit.data()));
+
+        auto result = prog_.eval(prog_params);
 
         // todo: reply like this.
         //       req->runCallbackOnce(resp);
