@@ -42,7 +42,7 @@
 namespace proteus {
 
 /// parameters in Proteus may be one of these types
-using Parameter = std::variant<bool, double, int32_t, std::string>;
+using Parameter = std::variant<bool, int32_t, double, std::string>;
 
 /**
  * @brief Holds any parameters from JSON (defined by KServe spec as one of
@@ -97,7 +97,7 @@ class RequestParameters {
    */
   template <typename T>
   T get(const std::string &key) {
-    auto value = this->parameters_.at(key);
+    auto &value = this->parameters_.at(key);
     return std::get<T>(value);
   }
 
@@ -122,8 +122,10 @@ class RequestParameters {
   [[nodiscard]] std::map<std::string, Parameter> data() const;
 
   auto begin() { return parameters_.begin(); }
+  auto cbegin() const { return parameters_.cbegin(); }
 
   auto end() { return parameters_.end(); }
+  auto cend() const { return parameters_.cend(); }
 
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,

@@ -86,10 +86,9 @@ def get_build_config(dir):
         except FileNotFoundError:
             build_options = None
     else:
-        build_options_file = None
         build_options = None
 
-    return (build_config_file, build_config, build_options_file, build_options)
+    return (build_config_file, build_config, build_options)
 
 
 def run_tty_command(command: str, dry_run: bool):
@@ -332,7 +331,6 @@ class Build:
         (
             build_config_file,
             old_build_config,
-            build_options_file,
             old_build_options,
         ) = get_build_config(args.dir)
         if old_build_options is not None and unknown_args != old_build_options:
@@ -354,8 +352,7 @@ class Build:
         if args.config is None:
             args.config = old_build_config.strip()
 
-        if build_options_file is None:
-            build_options_file = f"{args.dir}/{args.config}/config.txt"
+        build_options_file = f"{args.dir}/{args.config}/config.txt"
 
         build_dir = Path(f"{args.dir}/{args.config}")
         # build_dir.mkdir(parents=True, exist_ok=True)

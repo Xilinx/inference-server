@@ -21,6 +21,7 @@ enable_ipo_on_target(proteus-server)
 target_link_libraries(proteus-server PRIVATE batching buffers clients core servers)
 
 add_subdirectory(batching)
+add_subdirectory(bindings)
 add_subdirectory(buffers)
 add_subdirectory(clients)
 add_subdirectory(core)
