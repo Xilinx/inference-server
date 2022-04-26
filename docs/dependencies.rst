@@ -59,6 +59,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :ubuntupackages:`openssh-client`,1:7.6p1-4ubuntu0.5,OpenSSH + others,Executable used for remote connections
     :ubuntupackages:`pkg-config`,0.29.1-0ubuntu2,GPL-2+,Executable used for configuring unilog
     :ubuntupackages:`python3`,3.6.5-3,PSF License,Executable used for scripting and testing proteus-server
+    :ubuntupackages:`python3-dev`,3.6.7-1~18.04,PSF License,Used to build Python bindings
     :ubuntupackages:`sudo`,1.8.21p2-3ubuntu1.4,ISC license + others,Executable used to grant elevated permissions to the user
     :ubuntupackages:`symlinks`,1.4-3build1,Freely distributable,Executable used to convert absolute symlinks to relative ones
     :ubuntupackages:`tzdata`,2021a-0ubuntu0.18.04,Public Domain,Used for setting the timezone
@@ -97,6 +98,8 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :pypipackages:`numpy`,latest,BSD-3,Scientific computing package for Python
     :pypipackages:`opencv-python-headless`,latest,MIT,Python bindings for OpenCV
     :pypipackages:`pip`,latest,MIT,Python package installer
+    :pypipackages:`pybind11_mkdoc`,latest,MIT,Used to extract function documentation for Python binding
+    :pypipackages:`pybind11-stubgen`,latest,BSD-3,Used to generate type stubs for Python binding
     :pypipackages:`pytest`,latest,MIT,Python testing infrastructure
     :pypipackages:`pytest-benchmark`,latest,BSD-2,Plugin for Pytest to add benchmarking
     :pypipackages:`pytest-cpp`,latest,MIT,Plugin for Pytest to run C++ tests
@@ -137,6 +140,7 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development
     :github:`opencv/opencv`,3.4.4,Apache 2.0,Dynamically linked by proteus-server for image and video processing
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server
+    :github:`pybind/pybind11`,2.9.1,BSD-3,Headers used to build Python bindings
     :github:`jupp0r/prometheus-cpp`,0.12.2,MIT,Dynamically linked by proteus-server for metrics
     :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by proteus-server and Vitis libraries
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging

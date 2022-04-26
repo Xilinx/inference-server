@@ -443,6 +443,20 @@ RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc
     && cd /tmp \
     && rm -fr /tmp/*
 
+# install pybind11 2.9.1
+RUN VERSION=2.9.1 \
+    && wget https://github.com/pybind/pybind11/archive/refs/tags/v${VERSION}.tar.gz \
+    && tar -xzf v${VERSION}.tar.gz \
+    && cd pybind11-${VERSION}/ \
+    && mkdir build \
+    && cd build \
+    && cmake -DPYBIND11_TEST=OFF .. \
+    && make -j$(($(nproc) - 1)) \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cd /tmp \
+    && rm -fr /tmp/*
+
 # Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
 # Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
 # RUN cp -rf ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
@@ -467,11 +481,6 @@ ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update \
-    && if [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
-        DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-            # needed to build some wheels (e.g. typed-ast)
-            python3-dev; \
-    fi; \
     DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         # used for auto-completing bash commands
         bash-completion \
@@ -481,6 +490,7 @@ RUN apt-get update \
         # used for git
         openssh-client \
         python3 \
+        python3-dev \
         # install documentation dependencies
         doxygen \
         graphviz \
@@ -502,6 +512,9 @@ RUN apt-get update \
         libc-ares-dev \
         libssl-dev \
         uuid-dev \
+        # used for Python bindings
+        pybind11_mkdoc
+        pybind11-stubgen
     # symlink the versioned clang-*-10 executables to clang-*
     && ln -s /usr/bin/clang-format-10 /usr/bin/clang-format \
     && ln -s /usr/bin/clang-tidy-10 /usr/bin/clang-tidy \
@@ -596,7 +609,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-# install Vitis AI runtime build dependencies
+# Install Vitis AI runtime and build dependencies
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         git \
@@ -604,22 +617,6 @@ RUN apt-get update \
         libssl-dev \
         pkg-config \
         python3-dev \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && VERSION=2.9.1 \
-    && wget https://github.com/pybind/pybind11/archive/refs/tags/v${VERSION}.tar.gz \
-    && tar -xzf v${VERSION}.tar.gz \
-    && cd pybind11-${VERSION}/ \
-    && mkdir build \
-    && cd build \
-    && cmake -DPYBIND11_TEST=OFF .. \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && rm -fr /tmp/*
-
-# Install Vitis AI runtime
-RUN apt-get update \
     && git clone --recursive --single-branch --branch v2.0 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
     && export VITIS_ROOT=/tmp/Vitis-AI/tools/Vitis-AI-Runtime/VART \
     && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
