@@ -337,7 +337,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
@@ -422,6 +422,10 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -566,7 +570,7 @@ The documentation for the options available in this Python script can be seen he
 <div class="section" id="build">
 <h3>build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
 <p>Build the proteus project</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">build</span> <span class="p">[</span><span class="o">--</span><span class="n">coverage</span> <span class="o">|</span> <span class="o">--</span><span class="n">debug</span> <span class="o">|</span> <span class="o">--</span><span class="n">release</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">THREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">build</span> <span class="p">[</span><span class="o">--</span><span class="n">coverage</span> <span class="o">|</span> <span class="o">--</span><span class="n">debug</span> <span class="o">|</span> <span class="o">--</span><span class="n">release</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">THREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Named Arguments">
@@ -590,12 +594,16 @@ The documentation for the options available in this Python script can be seen he
 <dd><p>Build additional optional targets</p>
 <p>Default: False</p>
 </dd>
+<dt><kbd>-c, --clean</kbd></dt>
+<dd><p>clean prior to building</p>
+<p>Default: False</p>
+</dd>
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to place the build tree. Defaults to ./build</p>
 <p>Default: “/workspace/proteus/build/Debug/docs/build”</p>
 </dd>
-<dt><kbd>-c, --clean</kbd></dt>
-<dd><p>clean prior to building</p>
+<dt><kbd>-l, --lint</kbd></dt>
+<dd><p>Enable build-time linting in CMake. Defaults to false</p>
 <p>Default: False</p>
 </dd>
 <dt><kbd>-r, --regen</kbd></dt>
@@ -663,18 +671,19 @@ The documentation for the options available in this Python script can be seen he
 <div class="section" id="dockerize">
 <h3>dockerize<a class="headerlink" href="#dockerize" title="Permalink to this headline">¶</a></h3>
 <p>Build a docker image</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">dockerize</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span><span class="o">-</span><span class="n">meta</span> <span class="n">BUILD_META</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nightly</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">production</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">push</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">dockerize</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span><span class="o">-</span><span class="n">base</span> <span class="n">DEV_BASE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">production</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">push</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn_path</span> <span class="n">TFZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat5">
 <h4>Options<a class="headerlink" href="#Options_repeat5" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>--build-meta</kbd></dt>
-<dd><p>Add a build string to the version.</p>
+<dt><kbd>--dev-base</kbd></dt>
+<dd><p>Name of the image to use as dev image to build the production image.</p>
+<p>Default: “”</p>
 </dd>
-<dt><kbd>--nightly</kbd></dt>
-<dd><p>Build a nightly tagged image. Defaults to false</p>
-<p>Default: False</p>
+<dt><kbd>--no-vitis</kbd></dt>
+<dd><p>Remove Vitis dependencies from the container</p>
+<p>Default: True</p>
 </dd>
 <dt><kbd>--production</kbd></dt>
 <dd><p>Build the production image. Defaults to false to build the dev image.</p>
@@ -688,13 +697,20 @@ The documentation for the options available in this Python script can be seen he
 <dd><p>Docker image registry. Defaults to proteus-user</p>
 <p>Default: “proteus-user”</p>
 </dd>
+<dt><kbd>--tfzendnn_path</kbd></dt>
+<dd><p>TF+ZenDNN C++ package location. If provided, will build with TF+ZenDNN enabled</p>
+</dd>
+<dt><kbd>--suffix</kbd></dt>
+<dd><p>String to append to the tag of the Docker image to use. Defaults to empty string</p>
+<p>Default: “”</p>
+</dd>
 </dl>
 </div>
 </div>
 <div class="section" id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <p>Get artifacts such as XModels</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">q</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">q</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat6">
@@ -702,6 +718,10 @@ The documentation for the options available in this Python script can be seen he
 <dl class="option-list">
 <dt><kbd>-q, --quiet</kbd></dt>
 <dd><p>suppress prints</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--tfzendnn</kbd></dt>
+<dd><p>If TF+ZenDNN should be enabled</p>
 <p>Default: False</p>
 </dd>
 </dl>
@@ -730,14 +750,15 @@ The documentation for the options available in this Python script can be seen he
 <div class="section" id="list">
 <h3>list<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
 <p>List Proteus containers and images on the host.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="n">images</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="nb">type</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat1">
 <h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>images</kbd></dt>
-<dd><p>Default: False</p>
+<dt><kbd>type</kbd></dt>
+<dd><p>List the active containers (default) or specify ‘images’ or ‘labels’</p>
+<p>Default: False</p>
 </dd>
 </dl>
 </div>
@@ -844,16 +865,12 @@ The documentation for the options available in this Python script can be seen he
 <div class="section" id="up">
 <h3>up<a class="headerlink" href="#up" title="Permalink to this headline">¶</a></h3>
 <p>Start docker-compose services</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">up</span> <span class="p">[</span><span class="o">--</span><span class="n">devices</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PROFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="n">VERSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">only</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">up</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PROFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="n">VERSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">only</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat11">
 <h4>Options<a class="headerlink" href="#Options_repeat11" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>--devices, --no-devices</kbd></dt>
-<dd><p>Pass devices from host to container, if they exist. Defaults to true</p>
-<p>Default: True</p>
-</dd>
 <dt><kbd>-p, --profile</kbd></dt>
 <dd><p>profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev</p>
 <p>Default: “autotest-dev”</p>
@@ -861,6 +878,10 @@ The documentation for the options available in this Python script can be seen he
 <dt><kbd>--registry</kbd></dt>
 <dd><p>Registry to use for the Docker images. Defaults to proteus-user</p>
 <p>Default: “proteus-user”</p>
+</dd>
+<dt><kbd>--suffix</kbd></dt>
+<dd><p>String to append to the tag of the Docker image to use. Defaults to empty string</p>
+<p>Default: “”</p>
 </dd>
 <dt><kbd>-v, --version</kbd></dt>
 <dd><p>Version of the Docker images to run. Defaults to latest</p>
@@ -905,7 +926,7 @@ The documentation for the options available in this Python script can be seen he
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

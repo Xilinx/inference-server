@@ -335,7 +335,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
@@ -357,6 +357,10 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -442,78 +446,16 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#B"><strong>B</strong></a>
- | <a href="#C"><strong>C</strong></a>
- | <a href="#D"><strong>D</strong></a>
- | <a href="#G"><strong>G</strong></a>
- | <a href="#I"><strong>I</strong></a>
- | <a href="#L"><strong>L</strong></a>
+ <a href="#D"><strong>D</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
- | <a href="#R"><strong>R</strong></a>
- | <a href="#S"><strong>S</strong></a>
- | <a href="#U"><strong>U</strong></a>
- | <a href="#W"><strong>W</strong></a>
  
 </div>
-<h2 id="B">B</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.BadResponseError">BadResponseError</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="C">C</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client">Client (class in proteus.rest)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.ConnectionError">ConnectionError</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.Datatype">Datatype (class in proteus)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="G">G</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.get_address">get_address() (proteus.rest.Client method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.get_endpoint">get_endpoint() (proteus.rest.Client method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.infer">infer() (proteus.rest.Client method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.infers">infers() (proteus.rest.Client method)</a>
-</li>
-      <li><a href="python_api.html#proteus.InvalidArgument">InvalidArgument</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="L">L</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.load">load() (proteus.rest.Client method)</a>
+      <li><a href="python_api.html#proteus.DataType">DataType (class in proteus)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -521,7 +463,15 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.model_ready">model_ready() (proteus.rest.Client method)</a>
+      <li><a href="python_api.html#proteus.mapStrToType">mapStrToType() (in module proteus)</a>
+</li>
+      <li><a href="python_api.html#proteus.mapTypeToStr">mapTypeToStr() (in module proteus)</a>
+</li>
+      <li><a href="python_api.html#proteus.mapTypeToXir">mapTypeToXir() (in module proteus)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api.html#proteus.mapXirType">mapXirType() (in module proteus)</a>
 </li>
       <li>
     module
@@ -529,11 +479,15 @@
       <ul>
         <li><a href="python_api.html#module-proteus">proteus</a>
 </li>
-        <li><a href="python_api.html#module-proteus.rest">proteus.rest</a>
-</li>
-        <li><a href="python_api.html#module-proteus.websocket">proteus.websocket</a>
-</li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api.html#proteus.DataType.name">name() (proteus.DataType method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -547,87 +501,41 @@
         <li><a href="python_api.html#module-proteus">module</a>
 </li>
       </ul></li>
-      <li><a href="cpp_api.html#_CPPv47proteus">proteus (C++ type)</a>
+      <li><a href="cpp_api.html#_CPPv47proteus">proteus (C++ type)</a>, <a href="cpp_api.html#_CPPv47proteus">[1]</a>
 </li>
-      <li>
-    proteus.rest
-
-      <ul>
-        <li><a href="python_api.html#module-proteus.rest">module</a>
-</li>
-      </ul></li>
-      <li>
-    proteus.websocket
-
-      <ul>
-        <li><a href="python_api.html#module-proteus.websocket">module</a>
-</li>
-      </ul></li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus7enqueueERKNSt6stringE21InferenceRequestInput">proteus::enqueue (C++ function)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp_api.html#_CPPv4N7proteus11getHardwareEv">proteus::getHardware (C++ function)</a>
+</li>
+      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImplE">proteus::GrpcClient::GrpcClientImpl (C++ class)</a>
+</li>
+      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl7getStubEv">proteus::GrpcClient::GrpcClientImpl::getStub (C++ function)</a>
+</li>
+      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE">proteus::GrpcClient::GrpcClientImpl::GrpcClientImpl (C++ function)</a>
+</li>
+      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl5stub_E">proteus::GrpcClient::GrpcClientImpl::stub_ (C++ member)</a>
 </li>
       <li><a href="cpp_api.html#_CPPv4N7proteus11hasHardwareERKNSt6stringE6size_t">proteus::hasHardware (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp_api.html#_CPPv4N7proteus10initializeEv">proteus::initialize (C++ function)</a>
 </li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus4loadERKNSt6stringEP17RequestParameters">proteus::load (C++ function)</a>
+      <li><a href="cpp_api.html#_CPPv4N7proteus20mapParametersToProtoERKNSt3mapINSt6stringEN7proteus9ParameterEEEPN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">proteus::mapParametersToProto (C++ function)</a>
 </li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus15startHttpServerEi">proteus::startHttpServer (C++ function)</a>
+      <li><a href="cpp_api.html#_CPPv4N7proteus18mapPrototoResponseERKN9inference18ModelInferResponseER17InferenceResponse">proteus::mapPrototoResponse (C++ function)</a>
 </li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus14stopHttpServerEv">proteus::stopHttpServer (C++ function)</a>
+      <li><a href="cpp_api.html#_CPPv4N7proteus17mapRequestToProtoERK16InferenceRequestRN9inference17ModelInferRequestE">proteus::mapRequestToProto (C++ function)</a>
+</li>
+      <li><a href="cpp_api.html#_CPPv4IDpEN7proteus10overloadedE10overloadedIDp2TsEDp2Ts">proteus::overloaded (C++ function)</a>
+
+      <ul>
+        <li><a href="cpp_api.html#_CPPv4IDpEN7proteus10overloadedE">(C++ struct)</a>
+</li>
+      </ul></li>
+      <li><a href="cpp_api.html#_CPPv4N7proteus15startGrpcServerEi">proteus::startGrpcServer (C++ function)</a>
+</li>
+      <li><a href="cpp_api.html#_CPPv4N7proteus14stopGrpcServerEv">proteus::stopGrpcServer (C++ function)</a>
 </li>
       <li><a href="cpp_api.html#_CPPv4N7proteus9terminateEv">proteus::terminate (C++ function)</a>
-</li>
-      <li><a href="python_api.html#proteus.ProteusError">ProteusError</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.RestClient">RestClient (in module proteus)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="S">S</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.Server">Server (class in proteus)</a>
-</li>
-      <li><a href="python_api.html#proteus.rest.Client.server_live">server_live() (proteus.rest.Client method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.Server.start">start() (proteus.Server method)</a>
-</li>
-      <li><a href="python_api.html#proteus.Server.stop">stop() (proteus.Server method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="U">U</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.unload">unload() (proteus.rest.Client method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="W">W</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.wait_until_live">wait_until_live() (proteus.rest.Client method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.rest.Client.wait_until_stop">wait_until_stop() (proteus.rest.Client method)</a>
-</li>
-      <li><a href="python_api.html#proteus.websocket.WebsocketOpcodes">WebsocketOpcodes (class in proteus.websocket)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -653,7 +561,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

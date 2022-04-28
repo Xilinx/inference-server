@@ -337,7 +337,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
@@ -366,6 +366,10 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -470,9 +474,7 @@ These variables are pulled out into a separate block to highlight them.</p>
 <li><p>Image Path: To test this model, we need to use an image. Here, we use a sample image included for testing. The image path is given relative to the Xilinx Inference Server repository.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="n">path_to_xmodel</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;$</span><span class="si">{AKS_XMODEL_ROOT}</span><span class="s2">/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel&quot;</span>
-    <span class="p">)</span>
+    <span class="n">path_to_xmodel</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{PROTEUS_ROOT}</span><span class="s2">/external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel&quot;</span>
     <span class="n">path_to_image</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="s2">&quot;/tests/assets/dog-3619020_640.jpg&quot;</span>
 </pre></div>
 </div>
@@ -577,7 +579,7 @@ The pre- and post-processing functions used in this example can be seen in the s
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

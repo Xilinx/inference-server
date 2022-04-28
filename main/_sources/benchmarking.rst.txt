@@ -29,7 +29,7 @@ The raw data is also saved in JSON format.
 There are multiple kinds of benchmarks that may be run:
 
 *  pytest: use pytest-benchmark to run Python-based benchmarks
-*  wrk: use `wrk <https://github.com/wg/wrk>`__ for efficient benchmarking for HTTP/REST tests. These tests require running pytest for these tests first to generate the information needed by ``wrk``.
+*  wrk: use ':github:`wrk <wg/wrk>`' for efficient benchmarking for HTTP/REST tests. These tests require running pytest for these tests first to generate the information needed by ``wrk``.
 *  cpp: run C++ executables
 
 Refer to ``benchmark.yml`` for more a detailed explanation of the different options for each type of benchmark.

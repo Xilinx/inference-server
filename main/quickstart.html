@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Hello World (Python)" href="hello_world_python.html" />
-    <link rel="prev" title="Xilinx Inference Server" href="index.html" /> 
+    <link rel="prev" title="AMD/Xilinx Inference Server" href="index.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -337,7 +337,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
@@ -365,6 +365,10 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -456,25 +460,21 @@
   <div class="section" id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <p>The easiest way to use Xilinx Inference Server is to run it inside a Docker container.
-For these instructions, you’ll need Git, Python3, and <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>.</p>
-<p>Note: the sequence of instructions in the code blocks below is valid only as written.
-If you add or change flags to commands, you may need to change the subsequent commands.
-The helper script used for most of the commands here is <code class="file docutils literal notranslate"><span class="pre">proteus</span></code>.
-The most up-to-date documentation for this script can be seen with <a class="reference internal" href="cli.html#command-line-interface"><span class="std std-ref">online</span></a> or on the terminal with <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code>.</p>
+For these instructions, you’ll need Git, Python3, and <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>.
+Also ensure that you set up your host appropriately depending on which platform(s) you are using (e.g. <a class="reference internal" href="vitis_ai.html#vitis-ai"><span class="std std-ref">Vitis AI</span></a>).
+The helper script used for most of the commands here is <code class="file docutils literal notranslate"><span class="pre">proteus</span></code>: a Python script with many helpful options.
+The most up-to-date documentation for this script can be seen with <a class="reference internal" href="cli.html#command-line-interface"><span class="std std-ref">online</span></a> or on the terminal with <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code>.
+You can also use <code class="xref std std-option docutils literal notranslate"><span class="pre">--dry-run</span></code> before any command to see the underlying commands the script is running.</p>
 <p>Some options also require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a>.
 Running tests requires using Git LFS when cloning this repository to get testing assets.</p>
 <div class="section" id="build-or-get-the-docker-image">
 <h2>Build or Get the Docker Image<a class="headerlink" href="#build-or-get-the-docker-image" title="Permalink to this headline">¶</a></h2>
-<p>We can build several types of containers:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>stable vs. nightly: stable containers use the latest released versions of the Vitis-AI libraries that are publicly available. Nightly containers use internal versions of these libraries and thus cannot be built by the general public.</p></li>
-<li><p>development vs. production: dev containers are intended for working on Xilinx Inference Server or applications that link to Xilinx Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start. Production containers only contain the runtime dependencies of the <strong class="program">proteus-server</strong> executable and automatically run the executable when they start.</p></li>
-</ul>
-</div></blockquote>
+<p>We can build several types of containers.
+Development (dev) containers are intended for working on Xilinx Inference Server or applications that link to Xilinx Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start.
+Production containers only contain the runtime dependencies of the <strong class="program">proteus-server</strong> executable and automatically run the executable when they start.
+The Docker image can also be built with various options to disable certain components.</p>
 <p>Currently, these images are not pre-built anywhere and so must be built by the user.
-You must enable <a class="reference external" href="https://docs.docker.com/develop/develop-images/build_enhancements/">BuildKit</a> by setting DOCKER_BUILDKIT in the environment, configuring the Docker daemon or using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">buildx</span> <span class="pre">install</span></code> before attempting to build the image.
-Refer to the BuildKit documentation for more information.</p>
+We require <a class="reference external" href="https://docs.docker.com/develop/develop-images/build_enhancements/">BuildKit</a> to build the image so your Docker version should be at least 18.09.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize
 </pre></div>
 </div>
@@ -491,7 +491,8 @@ Some options may be overridden on the command-line (use <code class="xref std st
 <div class="section" id="building-xilinx-inference-server">
 <h2>Building Xilinx Inference Server<a class="headerlink" href="#building-xilinx-inference-server" title="Permalink to this headline">¶</a></h2>
 <p>These commands are all run inside the dev container.
-Here, <code class="file docutils literal notranslate"><span class="pre">./proteus</span></code> is aliased to <strong class="command">proteus</strong>.</p>
+Here, <code class="file docutils literal notranslate"><span class="pre">./proteus</span></code> is aliased to <strong class="command">proteus</strong>.
+Note, in general, you should not use <code class="docutils literal notranslate"><span class="pre">sudo</span></code> to run <code class="docutils literal notranslate"><span class="pre">proteus</span></code> commands.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>proteus build --all
 </pre></div>
 </div>
@@ -518,7 +519,7 @@ $ proteus start <span class="p">&amp;</span>
 <span class="c1"># test that the server is ready. The server returns status 200 OK on success</span>
 $ curl -I http://localhost:8998/v2/health/ready
 
-<span class="c1"># the server can now accept requests over REST</span>
+<span class="c1"># the server can now accept requests over REST/gRPC</span>
 
 <span class="c1"># shutdown the server</span>
 $ <span class="nb">kill</span> -2 <span class="k">$(</span>pidof proteus-server<span class="k">)</span>
@@ -530,8 +531,6 @@ You may need to get testing artifacts (see above) and have cloned the repository
 $ proteus <span class="nb">test</span>
 </pre></div>
 </div>
-<p>Note: the facedetect test may fail due to a known issue with parsing the XModel.
-Ignore any failures with that model at this time.</p>
 <p>Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to Xilinx Inference Server using the C++ API.</p>
 </div>
 </div>
@@ -555,7 +554,7 @@ Ignore any failures with that model at this time.</p>
         <a href="hello_world_python.html" class="btn btn-neutral float-right" title="Hello World (Python)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Xilinx Inference Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="AMD/Xilinx Inference Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -565,7 +564,7 @@ Ignore any failures with that model at this time.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

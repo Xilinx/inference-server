@@ -337,7 +337,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
@@ -350,9 +350,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#initialize">Initialize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#load-a-worker">Load a worker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-images">Get images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#construct-request">Construct request</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#check-the-response">Check the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-grpc">Using gRPC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Initialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Load a worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Inference</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
@@ -369,6 +376,10 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -459,15 +470,17 @@
             
   <div class="section" id="running-an-xmodel-c">
 <h1>Running an XModel (C++)<a class="headerlink" href="#running-an-xmodel-c" title="Permalink to this headline">¶</a></h1>
-<p>This example walks you through the process to make an inference request to a custom XModel in C++.
-This example is similar to the <a class="reference internal" href="xmodel_example_python.html#xmodel-example-python"><span class="std std-ref">Running an XModel (Python)</span></a> one but it uses C++ to create a new executable instead of making requests to a server.
+<p>This example walks you through the process to make an inference request to a custom XModel in C++ using two methods: the native C++ API and the gRPC API.
+This example is similar to the <a class="reference internal" href="xmodel_example_python.html#xmodel-example-python"><span class="std std-ref">Running an XModel (Python)</span></a> one but it uses C++ to create a new executable instead of making requests to a server if using the native C++ API.
+With the gRPC API, our executable instead makes a gRPC request to the inference server.
+We first show the example with the native C++ API and then highlight the differences if you were using the gRPC API instead.
 The complete program used here is available: <code class="file docutils literal notranslate"><span class="pre">examples/cpp/custom_processing.cpp</span></code>.</p>
 <div class="section" id="include-the-library">
 <h2>Include the library<a class="headerlink" href="#include-the-library" title="Permalink to this headline">¶</a></h2>
 <p>Xilinx Inference Server’s C++ API allows you to write your own C++ applications that link against Xilinx Inference Server’s backend.
 This approach bypasses the overheads associated with serialization that occurs with REST-based Python inferencing.
 The public API is defined in <code class="file docutils literal notranslate"><span class="pre">proteus/proteus.hpp</span></code> and we include it here.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;proteus/proteus.hpp&quot;</span><span class="c1">  // for InferenceResponseFuture, terminate</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;proteus/proteus.hpp&quot;</span><span class="cp"></span>
 </pre></div>
 </div>
 </div>
@@ -482,7 +495,7 @@ These variables are pulled out into a separate block to highlight them.</p>
 </ul>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">request_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
 <span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">path_to_xmodel</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;${AKS_XMODEL_ROOT}/artifacts/u200_u250/resnet_v1_50_tf/&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;${PROTEUS_ROOT}/external/artifacts/u200_u250/resnet_v1_50_tf/&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="s">&quot;resnet_v1_50_tf.xmodel&quot;</span><span class="p">;</span><span class="w"></span>
 <span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">path_to_image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;/tests/assets/dog-3619020_640.jpg&quot;</span><span class="p">;</span><span class="w"></span>
 </pre></div>
@@ -505,7 +518,8 @@ The parameter we add is to pass the path to the XModel that we want to use.
 If the worker we’re using doesn’t accept or need load-time parameters, a null pointer can be passed instead.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
 <span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">path_to_xmodel</span><span class="p">);</span><span class="w"></span>
-<span class="k">auto</span><span class="w"> </span><span class="n">workerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">proteus</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;Xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
+<span class="n">proteus</span><span class="o">::</span><span class="n">NativeClient</span><span class="w"> </span><span class="n">client</span><span class="p">;</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">worker_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">modelLoad</span><span class="p">(</span><span class="s">&quot;Xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The return value from the load is the qualified name that should be used for subsequent operations such as inference.</p>
@@ -527,47 +541,44 @@ The implementation of the pre-processing function can be seen in the example’s
 </pre></div>
 </div>
 </div>
-<div class="section" id="inference">
-<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="construct-request">
+<h2>Construct request<a class="headerlink" href="#construct-request" title="Permalink to this headline">¶</a></h2>
 <p>Using our images, we can construct a request to Xilinx Inference Server’s backend.
 We hardcode the shape of the image to the size we know that the pre-processing enforces.
-We also pass the data-type of the data, which we again know to be an signed 8-bit integer from the pre-processing.
-We can then send the request to Xilinx Inference Server by passing in a name from the output of a previous <code class="docutils literal notranslate"><span class="pre">load()</span></code> and the request itself.
-Enqueueing the request returns a Future object that we can later check to get the response.
-For now, we push all these Future objects into a queue to save them for later.</p>
+We also pass the data-type of the data, which we again know to be an signed 8-bit integer from the pre-processing.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">224</span><span class="p">,</span><span class="w"> </span><span class="mi">224</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">proteus</span><span class="o">::</span><span class="n">InferenceResponseFuture</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue</span><span class="p">;</span><span class="w"></span>
 
 <span class="n">proteus</span><span class="o">::</span><span class="n">InferenceRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">request_num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">()),</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span><span class="w"></span>
 <span class="w">                         </span><span class="n">proteus</span><span class="o">::</span><span class="n">types</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">INT8</span><span class="p">);</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
-<span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">proteus</span><span class="o">::</span><span class="n">enqueue</span><span class="p">(</span><span class="n">workerName</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="inference">
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
+<p>We can then send the request to Xilinx Inference Server by passing in a name from the output of a previous <code class="docutils literal notranslate"><span class="pre">load()</span></code> and the request itself.
+With the native C++ API, enqueueing the request returns a Future object that we can later check to get the response.
+For now, since there’s only one, we can call <code class="docutils literal notranslate"><span class="pre">get()</span></code> on a Future object, which will block until the response is available.
+The Future object will return a <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">proteus::InferenceResponse</span></code> object.
+This object can be parsed to analyze the data.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="check-the-response">
 <h2>Check the response<a class="headerlink" href="#check-the-response" title="Permalink to this headline">¶</a></h2>
-<p>At some point later, we can use our queue of Future objects to get the responses for each inference.
-Calling <code class="docutils literal notranslate"><span class="pre">get()</span></code> on a Future object will block until the response is available.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">front</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">front</span><span class="p">());</span><span class="w"></span>
-<span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w"></span>
-<span class="k">auto</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">front</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-</pre></div>
-</div>
-<p>The Future object will return a <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">proteus::InferenceResponse</span></code> object.
-This object can be parsed to analyze the data.
-For this model, we need to post-process the raw output from Xilinx Inference Server to make a useful classification for our image.
+<p>For this model, we need to post-process the raw output to make a useful classification for our image.
 For each output, we post-process the results to extract the top <em>k</em> indices for the classification.
 We can check this against our expected golden output to confirm that the inference is correct.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span><span class="w"></span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">outputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">top_k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">);</span><span class="w"></span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">k</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">top_k</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">gold_response_output</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">top_k</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">gold_response_output</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Output (&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">top_k</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;) does not match golden (&quot;</span><span class="w"></span>
-<span class="w">                </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">gold_response_output</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">gold_response_output</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
 <span class="w">      </span><span class="n">proteus</span><span class="o">::</span><span class="n">terminate</span><span class="p">();</span><span class="w"></span>
 <span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
@@ -583,6 +594,38 @@ During the shutdown, Xilinx Inference Server will stop any workers that haven’
 Note that this function was also called in the validation step above.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">::</span><span class="n">terminate</span><span class="p">();</span><span class="w"></span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="using-grpc">
+<h2>Using gRPC<a class="headerlink" href="#using-grpc" title="Permalink to this headline">¶</a></h2>
+<p>Using the gRPC API instead just requires a few changes in how requests are made to the server.</p>
+<div class="section" id="id1">
+<h3>Initialize<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the regular initialization, using the gRPC API requires creating a gRPC client, which defines how we can interact with the gRPC server.
+We construct it with the address of the gRPC server.
+Here, we’re also starting the gRPC server directly by this application at a known port.
+Of course, if the gRPC server already exists, then we don’t need to start it in the client application.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">::</span><span class="n">startGrpcServer</span><span class="p">(</span><span class="n">GRPC_PORT</span><span class="p">);</span><span class="w"></span>
+<span class="n">proteus</span><span class="o">::</span><span class="n">GrpcClient</span><span class="w"> </span><span class="n">client</span><span class="p">{</span><span class="n">GRPC_ADDRESS</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Load a worker<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>As before, we need to load the appropriate worker.
+The only difference is that we use our gRPC client object to make the request.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">path_to_xmodel</span><span class="p">);</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">worker_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">modelLoad</span><span class="p">(</span><span class="s">&quot;Xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Inference<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>After preparing the request, we can make a synchronous request to the gRPC server using the gRPC API using the worker name returned from the <code class="docutils literal notranslate"><span class="pre">load</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -616,7 +659,7 @@ Note that this function was also called in the validation step above.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

@@ -337,7 +337,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
@@ -359,6 +359,10 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -510,7 +514,7 @@ The only protocol-specific logic applies at the end of the worker when it replie
 This structure also enables easy extension of the Server to add new protocols by extending the <code class="docutils literal notranslate"><span class="pre">Interface</span></code> class.</p>
 <div class="section" id="api">
 <h3>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
-<p>The APIs used for this project are based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a> where possible.
+<p>The APIs used for this project are based on ‘<a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>’ where possible.
 The API defines endpoints in different categories: health, metrics and prediction.
 The health APIs define endpoints to get Server metadata and check server readiness.
 The metrics API defines a single endpoint for exposing the collected metrics using the Prometheus format.
@@ -532,7 +536,7 @@ The format of the request object in HTTP matches KServe’s specification while 
 <h3>HTTP/REST and WebSocket<a class="headerlink" href="#http-rest-and-websocket" title="Permalink to this headline">¶</a></h3>
 <p>The HTTP/REST and WebSocket functionality in the Server is provided using <a class="reference external" href="https://github.com/drogonframework/drogon">Drogon</a>. We chose to use Drogon for our web framework for a few reasons:</p>
 <ul class="simple">
-<li><p>Based on the benchmarks at <a class="reference external" href="https://github.com/TechEmpower/FrameworkBenchmarks/">TechEmpower</a>, Drogon is high-performing (unlike CppCMS and Treefrog)</p></li>
+<li><p>Based on the benchmarks at ‘<a class="reference external" href="https://github.com/TechEmpower/FrameworkBenchmarks/">&lt;TechEmpower</a>’, Drogon is high-performing (unlike CppCMS and Treefrog)</p></li>
 <li><p>It is more stable and active than Lithium, another high-performing framework (Lithium is newer)</p></li>
 <li><p>Active on Github with versioned releases (unlike Pistache and Lithium)</p></li>
 </ul>
@@ -569,7 +573,7 @@ An <code class="docutils literal notranslate"><span class="pre">std::promise</sp
 <p>Batching is a technique used in hardware to improve throughput performance.
 Batching groups multiple smaller requests from the user into one large request to improve the performance of hardware accelerators.
 However, user requests at the software application level are usually not conveniently available as complete batches as they come one at a time.
-The Server incorporates batching as a transparent step in the pipeline that groups all incoming requests, independent of the source of the original request from the client (see <code class="xref std std-numref docutils literal notranslate"><span class="pre">architecture_detailed</span></code>).
+The Server incorporates batching as a transparent step in the pipeline that groups all incoming requests, independent of the source of the original request from the client (see <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>).
 The implementations of the batchers are in <code class="docutils literal notranslate"><span class="pre">src/proteus/batching</span></code>.</p>
 <p>The base batcher class defines a common interface for all batcher implementations and has some basic common properties.
 Each batcher has two thread-safe queues (one for input and one for output), a configured batch size and a string identifying the worker group it’s attached to.
@@ -606,7 +610,7 @@ This class defines the lifecycle methods of the worker that are called by the Se
 This lifecycle is defined as follows:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">init()</span></code>: perform low-cost initialization of the worker</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">allocate()</span></code>: allocate memory buffers that are used to hold input and output data for the worker. Buffering is further discussed <span class="xref std std-ref">Buffering</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">allocate()</span></code>: allocate memory buffers that are used to hold input and output data for the worker. <cite>Buffering</cite> is further discussed below.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">acquire()</span></code>: acquire any hardware accelerators/resources and/or perform any high-cost initialization for the worker</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">run()</span></code>: the main body of the worker performs the chosen computations on incoming batches</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">release()</span></code>: release any hardware accelerators/resources</p></li>
@@ -819,7 +823,7 @@ Tracing data can be disabled at compile-time with a CMake option.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

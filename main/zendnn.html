@@ -61,9 +61,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="AKS" href="aks.html" />
-    <link rel="prev" title="Command-Line Interface" href="cli.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -348,18 +346,8 @@
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Factors</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#hardware">Hardware</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#compile-the-right-version">Compile the right version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#parallelism">Parallelism</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rest-threads">REST threads</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sending-requests">Sending requests</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#duplicating-workers">Duplicating workers</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Using Xilinx Inference Server</span></p>
 <ul>
@@ -396,7 +384,7 @@
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/performance_factors.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/zendnn.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -442,13 +430,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Factors</li>
+      <li>ZenDNN for Inference Server</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/performance_factors.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/zendnn.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -461,133 +449,143 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="factors">
-<h1>Factors<a class="headerlink" href="#factors" title="Permalink to this headline">¶</a></h1>
-<p>Xilinx Inference Server’s performance can be maximized by appropriately controlling the factors described here.</p>
-<div class="section" id="hardware">
-<h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this headline">¶</a></h2>
-<p>The <strong class="program">proteus-server</strong> executable or any application that links to Xilinx Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
-We suggest at least 32GB of RAM and 6 core/12 threads.
-Other processes running on the server should be minimized.</p>
-</div>
-<div class="section" id="compile-the-right-version">
-<h2>Compile the right version<a class="headerlink" href="#compile-the-right-version" title="Permalink to this headline">¶</a></h2>
-<p>Enable compiler optimizations by building with the <code class="xref std std-option docutils literal notranslate"><span class="pre">--release</span></code> flag.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>proteus build --release
+  <div class="section" id="zendnn-for-inference-server">
+<h1>ZenDNN for Inference Server<a class="headerlink" href="#zendnn-for-inference-server" title="Permalink to this headline">¶</a></h1>
+<p>Xilinx inference server is integrated with
+<a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN</a> optimized libraries.
+Currently, the Xilinx Inference Server supports the ZenDNN optimized for
+TensorFlow only.</p>
+<div class="section" id="tensorflow-zendnn">
+<h2>TensorFlow + ZenDNN<a class="headerlink" href="#tensorflow-zendnn" title="Permalink to this headline">¶</a></h2>
+<p>To use Inference Server enabled with TensorFlow+ZenDNN, you’ll need Git
+and Docker installed on your machine.</p>
+<ol class="arabic">
+<li><p>Download C++ package for TensorFlow+ZenDNN</p>
+<ol class="arabic simple">
+<li><p>Go to <a class="reference external" href="https://developer.amd.com/zendnn/">https://developer.amd.com/zendnn/</a></p></li>
+<li><p>Download the file TF_v2.7_ZenDNN_v3.2_C++_API.zip.</p></li>
+<li><p>For download, you will be required to sign a EULA. Please read
+through carefully and click on accept to download the package.</p></li>
+<li><p>Copy the downloaded package within the repository. This package
+will be used for further setup.</p></li>
+</ol>
+</li>
+<li><p>Build the docker with TensorFlow+ZenDNN</p>
+<p>To build docker image with TensorFlow+ZenDNN, use the command below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize --tfzendnn<span class="o">={</span>path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip<span class="o">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="parallelism">
-<h2>Parallelism<a class="headerlink" href="#parallelism" title="Permalink to this headline">¶</a></h2>
-<p>There are several areas in which changing the level of parallelism may improve performance.</p>
-<div class="section" id="rest-threads">
-<h3>REST threads<a class="headerlink" href="#rest-threads" title="Permalink to this headline">¶</a></h3>
-<p>The number of threads that Drogon uses to receive incoming REST requests is defined by the value of <code class="docutils literal notranslate"><span class="pre">kDefaultDrogonThreads</span></code>, which by default is set to 16.
-Depending on your hardware and demand, you may get better performance by changing this value.</p>
-</div>
-<div class="section" id="sending-requests">
-<h3>Sending requests<a class="headerlink" href="#sending-requests" title="Permalink to this headline">¶</a></h3>
-<p>Making requests to Xilinx Inference Server efficiently allows for overlap and batching to take place, which improves throughput.</p>
-<p>For REST requests, make asynchronous requests so sequential requests don’t block each other.
-There are a few ways to do this.
-For benchmarking, use <code class="docutils literal notranslate"><span class="pre">wrk</span></code> or other HTTP benchmarking executables that ensure maximum throughput.
-If making requests from Python, use <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> or similar packages to make asynchronous requests instead of the <code class="docutils literal notranslate"><span class="pre">requests</span></code> package.
-Xilinx Inference Server’s Python API provides <code class="xref py py-meth docutils literal notranslate"><span class="pre">infer()</span></code> for synchronous requests and <code class="xref py py-meth docutils literal notranslate"><span class="pre">infers()</span></code> for asynchronous requests with the <code class="xref py py-class docutils literal notranslate"><span class="pre">RestClient</span></code> class.</p>
-<p>For C++ applications, the same principle holds.
-Using multiple threads to enqueue and dequeue requests to Xilinx Inference Server allows for higher throughput.
-One example of how to do this is in the following snippet:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;concurrentqueue/blockingconcurrentqueue.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;proteus/proteus.hpp&quot;</span><span class="cp"></span>
-
-<span class="k">using</span><span class="w"> </span><span class="n">FutureQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">moodycamel</span><span class="o">::</span><span class="n">BlockingConcurrentQueue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">proteus</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="o">&gt;&gt;</span><span class="p">;</span><span class="w"></span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">enqueue</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">images</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">workerName</span><span class="p">,</span><span class="w"></span>
-<span class="w">             </span><span class="n">proteus</span><span class="o">::</span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">FutureQueue</span><span class="o">&amp;</span><span class="w"> </span><span class="n">my_queue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">images</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">future</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">proteus</span><span class="o">::</span><span class="n">enqueue</span><span class="p">(</span><span class="n">workerName</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">my_queue</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">future</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">dequeue</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">images</span><span class="p">,</span><span class="w"> </span><span class="n">FutureQueue</span><span class="o">&amp;</span><span class="w"> </span><span class="n">my_queue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">proteus</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="n">element</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">images</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">my_queue</span><span class="p">.</span><span class="n">wait_dequeue</span><span class="p">(</span><span class="n">element</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">workerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Xmodel&quot;</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">futures</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">FutureQueue</span><span class="w"> </span><span class="n">my_queue</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">futures</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">threads</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">threads</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">proteus</span><span class="o">::</span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">{</span><span class="n">enqueue</span><span class="p">,</span><span class="w"> </span><span class="n">images</span><span class="o">/</span><span class="n">threads</span><span class="p">,</span><span class="w"> </span><span class="n">workerName</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">my_queue</span><span class="p">)}.</span><span class="n">detach</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">futures</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">async</span><span class="p">,</span><span class="w"> </span><span class="n">dequeue</span><span class="p">,</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                     </span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">my_queue</span><span class="p">)));</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">future</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">futures</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">future</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-
-<span class="p">}</span><span class="w"></span>
+<p>This will build a docker image with all the dependencies required for
+the Xilinx Inference Server and setup TensorFlow+ZenDNN within the
+image for further usage.</p>
+<p>NOTE: The downloaded package must be inside the inference-server
+folder since Docker will not be able to access the file outside of
+the repository.</p>
+</li>
+<li><p>Run the container</p>
+<p>By default, the stable dev docker image is built and to run the
+container, use the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus run --dev
 </pre></div>
 </div>
-<p>Enqueuing and dequeueing in parallel improves performance because it minimizes the number of active requests at any given time.</p>
-</div>
-<div class="section" id="duplicating-workers">
-<h3>Duplicating workers<a class="headerlink" href="#duplicating-workers" title="Permalink to this headline">¶</a></h3>
-<p>Worker duplication is one method of parallelizing a worker.
-By default, requesting to load a worker that has already been loaded does nothing.
-However, workers can be manually duplicated for increased throughput.
-All workers accept the <code class="docutils literal notranslate"><span class="pre">share</span></code> load-time parameter.
-This parameter is assumed to be true if unspecified but it can be set to false to force Xilinx Inference Server to allocate a new worker.
-Each of these workers will share a common batcher, which will push requests to a task queue for the workers in the group.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RestClient</span><span class="p">(</span><span class="s2">&quot;127.0.0.1:8998&quot;</span><span class="p">)</span>
-
-<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;share&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-
-<span class="c1"># this will load three copies of this worker</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Resnet50&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Resnet50&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Resnet50&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</li>
+<li><p>Build Xilinx Inference Server</p>
+<p>Now that the environment is setup within the docker container, we
+need to build the Inference Server. The below command will build the
+stable debug build of the Xilinx Inference Server.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug
 </pre></div>
 </div>
-<p>For example, each Xmodel worker allocates a separate runner which is used to make requests to the FPGA.
-Duplicating this worker may result in using more physical computing units (CUs) on the FPGA or requesting more CUs from other FPGAs on the host machine, if available.
-However, consuming more CUs does not necessarily improve performance if data cannot be funneled to them fast enough.
-Efficient use of these runners requires parallel request submissions.
-The Xmodel worker supports this with the <code class="docutils literal notranslate"><span class="pre">threads</span></code> load-time parameter, which controls how many threads exist to push work to the runner.
-Thus, you may need to load multiple Xmodel workers to allocate sufficient hardware on the machine and then further run each worker with multiple threads to push data to each CU for the best performance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RestClient</span><span class="p">(</span><span class="s2">&quot;127.0.0.1:8998&quot;</span><span class="p">)</span>
-
-<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;threads&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Xmodel&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-
-<span class="c1"># since there&#39;s no &quot;share&quot; parameter, this call will do nothing as it&#39;s value</span>
-<span class="c1"># is assumed true</span>
-<span class="n">client</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Xmodel&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</li>
+<li><p>Get objects</p>
+<p>To run the examples and test cases, we need to download some models.
+Run the command below to download a ResNet50 tensorflow model from
+<a class="reference external" href="https://github.com/Xilinx/Vitis-AI/blob/master/models/AI-Model-Zoo/model-list/tf_resnetv1_50_imagenet_224_224_6.97G_2.0/model.yaml">here</a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus get --tfzendnn
 </pre></div>
+</div>
+<p>Also run the following command to get some
+git lfs assets for examples.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git lfs pull
+</pre></div>
+</div>
+</li>
+<li><p>Run tests</p>
+<p>To verify the working of TensorFlow+ZenDNN in Xilinx Inference
+Server, run a sample test case. This test will load a model and run
+with a sample image and assert the output.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus <span class="nb">test</span> -k tfzendnn
+</pre></div>
+</div>
+</li>
+<li><p>Run examples: There are two examples provided in the repo (Python API
+and C++ API).</p></li>
+</ol>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>There are two examples provided in the repo (Python API and C++ API).</p>
+<div class="section" id="python-api">
+<h4>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h4>
+<p>Both the Python examples below will do the following:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Start the Xilinx Inference Server on HTTP port 8998</p></li>
+<li><p>Load the Xilinx Inference Server with the specified model file</p></li>
+<li><p>Read the image specified / Create dummy data</p></li>
+<li><p>Sends the data to the Xilinx Inference Server over HTTP</p></li>
+<li><p>Get the result back from the Xilinx Inference Server over HTTP</p></li>
+<li><p>Post process if any and display the output</p></li>
+</ol>
+</div></blockquote>
+<p>The python example is available at <code class="docutils literal notranslate"><span class="pre">examples/python/tf_zendnn.py</span></code>.</p>
+<ol class="arabic">
+<li><p>To run the example with a real image:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_inference.pb --image_location ./tests/assets/dog-3619020_640.jpg
+</pre></div>
+</div>
+</li>
+<li><p>To run the example with dummy data:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_inference.pb --batch_size <span class="m">16</span> --steps <span class="m">4</span>
+</pre></div>
+</div>
+<p>The above command will run the example with dummy data (4 requests
+with 16 dummy images each). This can be used as a functional test.</p>
+</li>
+</ol>
+<p>For more options, check the help with:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --help
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="c-api">
+<h4>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h4>
+<p>The C++ API bypasses the HTTP server and connects directly to the
+Inference Server. The flow is as follows</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Load the Xilinx Inference Server with the specified model file</p></li>
+<li><p>Read the image specified / Create dummy data and prepare input</p></li>
+<li><p>The data is packed into an Interface object and pushed to a queue</p></li>
+<li><p>Retrieve the result back from the Xilinx Inference Server</p></li>
+<li><p>Post process if any and display the output</p></li>
+</ol>
+</div></blockquote>
+<p>The C++ example will be built when the server is being built and is
+source is available at <code class="docutils literal notranslate"><span class="pre">examples/cpp/tf_zendnn_client.cpp</span></code></p>
+<ol class="arabic simple">
+<li><p>To run the C++ example with real image, provide <code class="docutils literal notranslate"><span class="pre">image_location</span></code> in
+<code class="docutils literal notranslate"><span class="pre">Option</span></code> struct.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">image_location</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, dummy data will be used. This
+can be used for benchmarking.</p></li>
+</ol>
+<p>To build and run the example:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug <span class="o">&amp;&amp;</span> ./build/Debug/examples/cpp/tf_zendnn_client
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 </div>
 </div>
@@ -606,15 +604,6 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
 
 
 	  <!-- Sphinx Page Footer block -->
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="aks.html" class="btn btn-neutral float-right" title="AKS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="cli.html" class="btn btn-neutral float-left" title="Command-Line Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

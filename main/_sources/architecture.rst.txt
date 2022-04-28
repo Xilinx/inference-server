@@ -53,7 +53,7 @@ This structure also enables easy extension of the Server to add new protocols by
 API
 ^^^
 
-The APIs used for this project are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__ where possible.
+The APIs used for this project are based on ':github:`KServe's v2 specification <kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`' where possible.
 The API defines endpoints in different categories: health, metrics and prediction.
 The health APIs define endpoints to get Server metadata and check server readiness.
 The metrics API defines a single endpoint for exposing the collected metrics using the Prometheus format.
@@ -78,7 +78,7 @@ HTTP/REST and WebSocket
 
 The HTTP/REST and WebSocket functionality in the Server is provided using :github:`Drogon <drogonframework/drogon>`. We chose to use Drogon for our web framework for a few reasons:
 
-* Based on the benchmarks at `TechEmpower <https://github.com/TechEmpower/FrameworkBenchmarks/>`__, Drogon is high-performing (unlike CppCMS and Treefrog)
+* Based on the benchmarks at ':github:`<TechEmpower <TechEmpower/FrameworkBenchmarks/>`', Drogon is high-performing (unlike CppCMS and Treefrog)
 * It is more stable and active than Lithium, another high-performing framework (Lithium is newer)
 * Active on Github with versioned releases (unlike Pistache and Lithium)
 
@@ -123,7 +123,7 @@ Batching
 Batching is a technique used in hardware to improve throughput performance.
 Batching groups multiple smaller requests from the user into one large request to improve the performance of hardware accelerators.
 However, user requests at the software application level are usually not conveniently available as complete batches as they come one at a time.
-The Server incorporates batching as a transparent step in the pipeline that groups all incoming requests, independent of the source of the original request from the client (see :numref:`architecture_detailed`).
+The Server incorporates batching as a transparent step in the pipeline that groups all incoming requests, independent of the source of the original request from the client (see :numref:`architecture_detail`).
 The implementations of the batchers are in ``src/proteus/batching``.
 
 The base batcher class defines a common interface for all batcher implementations and has some basic common properties.
@@ -170,7 +170,7 @@ This class defines the lifecycle methods of the worker that are called by the Se
 This lifecycle is defined as follows:
 
 #.	``init()``: perform low-cost initialization of the worker
-#.	``allocate()``: allocate memory buffers that are used to hold input and output data for the worker. Buffering is further discussed :ref:`Buffering`.
+#.	``allocate()``: allocate memory buffers that are used to hold input and output data for the worker. `Buffering` is further discussed below.
 #.	``acquire()``: acquire any hardware accelerators/resources and/or perform any high-cost initialization for the worker
 #.	``run()``: the main body of the worker performs the chosen computations on incoming batches
 #.	``release()``: release any hardware accelerators/resources

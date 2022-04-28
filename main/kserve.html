@@ -62,7 +62,7 @@
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="REST Endpoints" href="rest.html" />
+    <link rel="next" title="Vitis AI" href="vitis_ai.html" />
     <link rel="prev" title="Tracing" href="tracing.html" /> 
 	</head>
 	<body>
@@ -337,7 +337,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Xilinx Inference Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">AMD/Xilinx Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
@@ -363,8 +363,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#building-the-server">Building the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-the-service">Starting the Service</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#making-requests">Making Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
@@ -555,12 +560,35 @@ As before, we can deploy this using:</p>
 For example, one way to make requests is to get the address of the INGRESS_HOST and INGRESS_PORT, and then make requests to this URL by setting the <code class="docutils literal notranslate"><span class="pre">Host</span></code> header on all requests to your targeted service.
 This use case may be needed if your cluster doesn’t have a load-balancer and/or DNS enabled.</p>
 <p>Once you can communicate with your service, you can make requests to the Inference Server using REST (e.g. with the Python API).
-The request will be routed to the server and the response will be returned.</p>
+The request will be routed to the server and the response will be returned.
+To use the Python API, you can set up a <a class="reference external" href="https://docs.python.org/3/library/venv.html">venv</a> or <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">conda env</a> with Python 3.6+ and install the package in it.
+In your virtual environment, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> ./src/python
+<span class="gp">$ </span>pip install .
+</pre></div>
+</div>
+<p>Then, you can import the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> package in Python and make requests using the API.
+Refer to the Python examples and the API specification for how to make requests.</p>
 <dl class="footnote brackets">
 <dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
 <dd><p>Before building the production container, make sure you have all the xclbins for the FPGAs platforms you’re targeting in <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/</span></code>.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren’t searched).</p>
 </dd>
 </dl>
+</div>
+<div class="section" id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<p>Debugging the inference server with KServe adds some additional complexity.
+You may have issues with your KServe installation itself (in which case you need to debug KServe alone until you can <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">run a basic InferenceService</a>).
+Once the default KServe example works, then you can begin debugging any inference server specific issues.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">logs</span> <span class="pre">&lt;pod_name&gt;</span> <span class="pre">&lt;container&gt;</span></code> to see the logs associated with the failing pod.
+You’ll need to use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pods</span></code> to get the name of the pods corresponding to the InferenceService you’re attempting to debug.
+The <code class="docutils literal notranslate"><span class="pre">logs</span></code> command will list the containers in this pod (if more than one exist) and prompt you to specify the container whose logs you’re interested in.
+These logs may have helpful error messages.</p>
+<p>You can also directly connect to the inference server container that’s running in KServe with Docker.
+The easiest way to do this is with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script in the inference server repository.
+You’ll need to first connect to the node where the container is running.
+On that host:</p>
+<p>Once in the container, you can find the running <code class="docutils literal notranslate"><span class="pre">proteus-server</span></code> executable and then follow the regular debugging guide to debug the inference server.</p>
 </div>
 </div>
 
@@ -580,7 +608,7 @@ The request will be routed to the server and the response will be returned.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rest.html" class="btn btn-neutral float-right" title="REST Endpoints" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="vitis_ai.html" class="btn btn-neutral float-right" title="Vitis AI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="tracing.html" class="btn btn-neutral float-left" title="Tracing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -593,7 +621,7 @@ The request will be routed to the server and the response will be returned.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on February 09, 2022.
+        Last updated on April 27, 2022.
       </span>
 
     </p>

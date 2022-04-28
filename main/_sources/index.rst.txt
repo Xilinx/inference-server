@@ -53,6 +53,13 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
+    :caption: Platforms
+
+    vitis_ai
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
     :caption: User API libraries
 
     rest

@@ -136,5 +136,44 @@ This use case may be needed if your cluster doesn't have a load-balancer and/or 
 
 Once you can communicate with your service, you can make requests to the Inference Server using REST (e.g. with the Python API).
 The request will be routed to the server and the response will be returned.
+To use the Python API, you can set up a `venv <https://docs.python.org/3/library/venv.html>`__ or `conda env <https://docs.conda.io/en/latest/miniconda.html>`__ with Python 3.6+ and install the package in it.
+In your virtual environment, run:
+
+.. code-block:: console
+
+    $ cd ./src/python
+    $ pip install .
+
+Then, you can import the ``proteus`` package in Python and make requests using the API.
+Refer to the Python examples and the API specification for how to make requests.
 
 .. [#f1] Before building the production container, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).
+
+Debugging
+---------
+
+Debugging the inference server with KServe adds some additional complexity.
+You may have issues with your KServe installation itself (in which case you need to debug KServe alone until you can `run a basic InferenceService <https://kserve.github.io/website/get_started/first_isvc/>`__).
+Once the default KServe example works, then you can begin debugging any inference server specific issues.
+
+Use ``kubectl logs <pod_name> <container>`` to see the logs associated with the failing pod.
+You'll need to use ``kubectl get pods`` to get the name of the pods corresponding to the InferenceService you're attempting to debug.
+The ``logs`` command will list the containers in this pod (if more than one exist) and prompt you to specify the container whose logs you're interested in.
+These logs may have helpful error messages.
+
+You can also directly connect to the inference server container that's running in KServe with Docker.
+The easiest way to do this is with the ``proteus`` script in the inference server repository.
+You'll need to first connect to the node where the container is running.
+On that host:
+
+.. code-block:: console
+    # this lists the running Inference Server containers
+    $ proteus list
+
+    # get the container ID of the container you want to connect to
+
+    # provide the ID as an argument to the attach command to open a bash shell
+    # in the container
+    $ proteus attach -n <container ID>
+
+Once in the container, you can find the running ``proteus-server`` executable and then follow the regular debugging guide to debug the inference server.
