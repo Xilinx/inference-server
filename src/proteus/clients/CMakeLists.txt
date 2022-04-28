@@ -39,6 +39,7 @@ if(${PROTEUS_ENABLE_AKS})
 endif()
 
 if(${PROTEUS_ENABLE_HTTP})
+    target_link_libraries(http INTERFACE drogon trantor Threads::Threads)
     target_link_libraries(http_internal INTERFACE drogon)
 endif()
 
