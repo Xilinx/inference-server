@@ -14,30 +14,28 @@
 
 /**
  * @file
- * @brief Implements the Python bindings for the package
+ * @brief Implements the Python bindings for the http.hpp header
  */
+
+#include "proteus/clients/client.hpp"
 
 #include <pybind11/pybind11.h>
 
-#include "proteus/bindings/python/clients/client.hpp"
-#include "proteus/bindings/python/clients/http.hpp"
-#include "proteus/bindings/python/core/data_types.hpp"
-#include "proteus/bindings/python/core/predict_api.hpp"
+#include <sstream>
+
+#include "docstrings.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+using proteus::types::DataType;
 
-PYBIND11_MODULE(proteus, m) {
-  py::module n = m.def_submodule("predict_api", "predict_api documentation");
-  py::module c = m.def_submodule("clients", "client documentation");
-  m.doc() = "pybind11 example plugin";
-  wrapRequestParameters(m);
-  wrapDataType(m);
-  wrapTypeMaps(m);
-  wrapPredictApi(n);
-  wrapClient(c);
-  wrapHttpClient(c);
+void wrapClient(py::module_ &m) {
+  using proteus::Client;
+
+  // auto foo = (py::object)
+  // py::module_::import("proteus").attr("RequestParameters");
+  // py::module_::import("proteus").attr("InferenceRequest");
+  // py::module_::import("proteus").attr("InferenceResponse");
+
+  py::class_<Client>(m, "Client");
 }
-
-}  // namespace proteus

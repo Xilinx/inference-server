@@ -17,13 +17,14 @@
  * @brief Defines the objects for Python bindings
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_PREDICT_API
-#define GUARD_PROTEUS_BINDINGS_PYTHON_PREDICT_API
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_DATA_TYPES
+#define GUARD_PROTEUS_BINDINGS_PYTHON_DATA_TYPES
 
 namespace pybind11 {
 class module_;
 }
 
-void initRequestParameters(pybind11::module_ &);
+void wrapDataType(pybind11::module_ &);
+void wrapTypeMaps(pybind11::module_ &);
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_PREDICT_API
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_DATA_TYPES

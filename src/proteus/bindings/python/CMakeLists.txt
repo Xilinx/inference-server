@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 find_package(Pybind11Mkdoc)
 if(${Pybind11Mkdoc_FOUND})
     file(GLOB_RECURSE ALL_PUBLIC_HEADER_FILES CONFIGURE_DEPENDS
@@ -35,17 +34,13 @@ add_custom_target(
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/docstrings.hpp
 )
 
-add_library(predict_api_py OBJECT predict_api.cpp)
-target_include_directories(predict_api_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${PROTEUS_INCLUDE_DIRS} ${Python_INCLUDE_DIRS})
-target_link_libraries(predict_api_py PRIVATE ${Python_LIBRARIES} $<TARGET_OBJECTS:predict_api>)
-add_dependencies(predict_api_py pybind11Mkdoc)
+add_subdirectory(core) # sets CORE_OBJS
+add_subdirectory(clients) # sets CLIENT_OBJS
 
 pybind11_add_module(proteus_py MODULE proteus.cpp)
 target_include_directories(proteus_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_libraries(proteus_py PRIVATE ${Python_LIBRARIES} predict_api_py)
+target_link_libraries(proteus_py PRIVATE proteus ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS})
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME proteus)
-
-
 
 find_package(Pybind11Stubgen)
 if(${Pybind11Stubgen_FOUND})
