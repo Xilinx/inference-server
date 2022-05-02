@@ -42,10 +42,13 @@ target_include_directories(proteus_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
 target_link_libraries(proteus_py PRIVATE proteus ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS})
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME proteus)
 
+add_custom_command(TARGET proteus_py POST_BUILD
+    COMMENT "Add ${CMAKE_CURRENT_BINARY_DIR} to the PYTHONPATH to use the proteus Python package"
+)
+
 find_package(Pybind11Stubgen)
 if(${Pybind11Stubgen_FOUND})
     add_custom_command(TARGET proteus_py POST_BUILD
-        COMMENT "Generating stubs"
         COMMAND pybind11-stubgen -o ${CMAKE_CURRENT_BINARY_DIR} proteus --no-setup-py
     )
 else()

@@ -71,6 +71,25 @@ HttpClient::HttpClient(const std::string& address) {
 
 HttpClient::~HttpClient() = default;
 
+void check_error(drogon::ReqResult result) {
+  using drogon::ReqResult;
+
+  std::string error_msg;
+  switch (result) {
+    case ReqResult::Ok:
+      break;
+    case ReqResult::BadServerAddress:
+      error_msg = "Cannot connect to the server";
+      break;
+    default:
+      error_msg =
+        "Request error code: " + std::to_string(static_cast<int>(result));
+  }
+  if (!error_msg.empty()) {
+    throw std::runtime_error(error_msg);
+  }
+}
+
 ServerMetadata HttpClient::serverMetadata() {
   auto client = this->impl_->getClient();
 
@@ -79,10 +98,7 @@ ServerMetadata HttpClient::serverMetadata() {
   req->setPath("/v2");
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
+  check_error(result);
   ServerMetadata metadata;
   auto json = response->getJsonObject();
   metadata.name = json->get("name", "").asString();
@@ -104,12 +120,11 @@ bool HttpClient::serverLive() {
 
   auto [result, response] = client->sendRequest(req);
   if (result != drogon::ReqResult::Ok) {
-    // throw std::runtime_error("Request error code: " +
-    // std::to_string(static_cast<int>(result)));
     return false;
   }
   return response->statusCode() == drogon::k200OK;
 }
+
 bool HttpClient::serverReady() {
   auto client = this->impl_->getClient();
 
@@ -119,12 +134,10 @@ bool HttpClient::serverReady() {
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
+  check_error(result);
   return response->statusCode() == drogon::k200OK;
 }
+
 bool HttpClient::modelReady(const std::string& model) {
   auto client = this->impl_->getClient();
 
@@ -134,13 +147,7 @@ bool HttpClient::modelReady(const std::string& model) {
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
-  if (response->statusCode() == drogon::k400BadRequest) {
-    throw std::invalid_argument(std::string(response->body()));
-  }
+  check_error(result);
   return response->statusCode() == drogon::k200OK;
 }
 
@@ -159,10 +166,7 @@ std::string HttpClient::modelLoad(const std::string& model,
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
+  check_error(result);
   if (response->statusCode() == drogon::k400BadRequest) {
     throw std::invalid_argument(std::string(response->body()));
   }
@@ -179,10 +183,7 @@ void HttpClient::modelUnload(const std::string& model) {
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
+  check_error(result);
   auto status = response->statusCode();
   if (status != drogon::k200OK) {
     throw std::runtime_error("Status: " +
@@ -193,6 +194,8 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
                                          const InferenceRequest& request) {
   auto client = this->impl_->getClient();
 
+  assert(!request.getInputs().empty());
+
   auto json = mapRequestToJson(request);
   auto req = drogon::HttpRequest::newHttpJsonRequest(json);
   req->setMethod(drogon::Post);
@@ -200,10 +203,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
+  check_error(result);
   if (response->statusCode() == drogon::k400BadRequest) {
     throw std::invalid_argument(std::string(response->body()));
   }
@@ -221,10 +221,7 @@ std::vector<std::string> HttpClient::modelList() {
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);
-  if (result != drogon::ReqResult::Ok) {
-    throw std::runtime_error("Request error code: " +
-                             std::to_string(static_cast<int>(result)));
-  }
+  check_error(result);
   auto json = response->jsonObject();
 
   auto json_models = json->get("models", Json::arrayValue);

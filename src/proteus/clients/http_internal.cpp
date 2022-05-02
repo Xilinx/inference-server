@@ -189,7 +189,7 @@ template <typename T, typename C = T>
 void setInputData(Json::Value &json, const InferenceRequestInput *input) {
   auto *data = static_cast<T *>(input->getData());
   for (size_t i = 0; i < input->getSize(); i++) {
-    json["data"].append(static_cast<C>(data[i]));
+    json.append(static_cast<C>(data[i]));
   }
 }
 
@@ -203,7 +203,10 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
     json_input["name"] = input.getName();
     json_input["datatype"] = types::mapTypeToStr(input.getDatatype());
     json_input["shape"] = Json::arrayValue;
-    json_input["parameters"] = mapParametersToJson(request.getParameters());
+    auto *parameters = request.getParameters();
+    json_input["parameters"] = parameters != nullptr
+                                 ? mapParametersToJson(parameters)
+                                 : Json::objectValue;
     for (const auto &index : input.getShape()) {
       json_input["shape"].append(static_cast<Json::UInt64>(index));
     }
@@ -268,6 +271,7 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
         std::cout << "Unknown datatype\n";
         break;
     }
+    json["inputs"].append(json_input);
   }
 
   // TODO(varunsh): omitting outputs for now

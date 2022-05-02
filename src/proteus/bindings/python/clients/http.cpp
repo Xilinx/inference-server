@@ -47,7 +47,7 @@ void wrapHttpClient(py::module_ &m) {
     .def("serverReady", &HttpClient::serverReady)
     .def("modelReady", &HttpClient::modelReady, py::arg("model"))
     .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
-         py::arg("parameters"))
+         py::arg("parameters") = proteus::RequestParameters())
     .def("modelUnload", &HttpClient::modelUnload, py::arg("model"))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
          py::arg("request"))

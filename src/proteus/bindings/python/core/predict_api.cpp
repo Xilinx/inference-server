@@ -85,6 +85,88 @@ void wrapRequestParameters(py::module_ &m) {
     });
 }
 
+// refer to cppreference for std::visit
+// helper type for the visitor #4
+template <class... Ts>
+struct overloaded : Ts... {
+  using Ts::operator()...;
+};
+// explicit deduction guide (not needed as of C++20)
+template <class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+
+//? Trying to auto-convert RequestParameters <-> dict but it's not working
+// namespace pybind11 { namespace detail {
+//     template <> struct type_caster<proteus::RequestParameters> {
+//     public:
+//         PYBIND11_TYPE_CASTER(proteus::RequestParameters,
+//         const_name("RequestParameters"));
+
+//         // Conversion part 1 (Python->C++)
+//         bool load(handle src, bool) {
+//           /* Try converting into a Python dictionary */
+//           auto tmp = py::cast<py::dict>(src);
+//           if (!tmp)
+//             return false;
+
+//           for(const auto& [key, param] : tmp){
+//             const auto& key_str = PyUnicode_AsUTF8(key.ptr());
+//             bool foo;
+//             try{
+//               PyArg_ParseTuple(param.ptr(), "p", &foo);
+//             } catch(...){
+//               int foo2;
+//               try{
+
+//                 PyArg_ParseTuple(param.ptr(), "i", &foo);
+//               } catch(...){
+//                 double foo3;
+//                 try{
+//                   PyArg_ParseTuple(param.ptr(), "d", &foo);
+//                 } catch(...){
+//                   const char* foo4;
+//                   PyArg_ParseTuple(param.ptr(), "s", &foo);
+//                   value.put(key_str, foo4);
+//                   continue;
+//                 }
+//                 value.put(key_str, foo3);
+//                 continue;
+//               }
+//               value.put(key_str, foo2);
+//               continue;
+//             }
+//             value.put(key_str, foo);
+//             continue;
+//           }
+
+//           Py_DECREF(tmp.ptr());
+//           // Ensure return code was OK
+//           return !PyErr_Occurred();
+//         }
+
+//         /**
+//          * Conversion part 2 (C++ -> Python). Ignoring policy and handle per
+//          * pybind11 suggestion
+//          */
+//         static handle cast(proteus::RequestParameters src,
+//         return_value_policy, handle) {
+//           py::dict tmp;
+//           for (const auto& pair : src) {
+//             auto& key = pair.first;
+//             const auto& param = pair.second;
+//             std::visit(
+//               overloaded{[&](bool arg) { tmp[pybind11::cast(key)] = arg; },
+//                         [&](double arg) { tmp[pybind11::cast(key)] = arg; },
+//                         [&](int32_t arg) { tmp[pybind11::cast(key)] = arg; },
+//                         [&](const std::string& arg) {
+//                         tmp[pybind11::cast(key)] = arg; }},
+//               param);
+//           }
+//           return tmp;
+//         }
+//     };
+// }} // namespace pybind11::detail
+
 void wrapPredictApi(py::module_ &m) {
   using proteus::InferenceRequest;
   using proteus::InferenceRequestInput;
@@ -116,8 +198,10 @@ void wrapPredictApi(py::module_ &m) {
                   std::string>(),
          DOC(proteus, InferenceRequestInput, 2), py::arg("data"),
          py::arg("shape"), py::arg("dataType"), py::arg("name") = "")
-    .def("setData", py::overload_cast<void *>(&InferenceRequestInput::setData),
-         DOC(proteus, InferenceRequestInput, setData))
+    .def(
+      "setData",
+      [](InferenceRequestInput &self, py::list b) { self.setData(b.ptr()); },
+      py::keep_alive<1, 2>(), DOC(proteus, InferenceRequestInput, setData))
     // .def("setData",
     //      py::overload_cast<std::shared_ptr<std::byte>>(&InferenceRequestInput::setData),
     //      DOC(proteus, InferenceRequestInput, setData, 2))
@@ -133,7 +217,7 @@ void wrapPredictApi(py::module_ &m) {
     .def("__repr__",
          [](const InferenceRequestInput &self) {
            return "InferenceRequestInput(" + std::to_string(self.getSize()) +
-                  ")\n";
+                  ")";
          })
     .def("__str__", [](const proteus::InferenceRequestInput &self) {
       std::ostringstream os;
