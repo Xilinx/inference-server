@@ -31,7 +31,7 @@ namespace proteus {
 PYBIND11_MODULE(proteus, m) {
   py::module n = m.def_submodule("predict_api", "predict_api documentation");
   py::module c = m.def_submodule("clients", "client documentation");
-  m.doc() = "pybind11 example plugin";
+  m.doc() = "proteus inference library";
   wrapRequestParameters(m);
   wrapDataType(m);
   wrapTypeMaps(m);

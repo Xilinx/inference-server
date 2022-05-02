@@ -283,9 +283,8 @@ void v2::ProteusHttpServer::load(
 
   auto json = req->getJsonObject();
   RequestParametersPtr parameters = nullptr;
-  if (json != nullptr && json->isMember("parameters")) {
-    auto json_parameters = json->get("parameters", "");
-    parameters = mapJsonToParameters(json_parameters);
+  if (json != nullptr) {
+    parameters = mapJsonToParameters(*json);
   } else {
     parameters = std::make_unique<RequestParameters>();
   }

@@ -29,6 +29,7 @@
 #include <memory>            // for shared_ptr, allocator
 #include <ostream>           // for operator<<, ostream, bas...
 #include <set>               // for set
+#include <sstream>           // for stringstream
 #include <string>            // for string, operator<<, char...
 #include <string_view>       // for string_view
 #include <utility>           // for move
@@ -129,12 +130,17 @@ class RequestParameters {
 
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
-                                  RequestParameters const &my_class) {
-    for (const auto &[key, value] : my_class.parameters_) {
-      os << key << ": ";
-      std::visit([&os](auto &&c) { os << c; }, value);
-      os << "\n";
+                                  RequestParameters const &self) {
+    std::stringstream ss;
+    ss << "RequestParameters(" << &self << "):\n";
+    for (const auto &[key, value] : self.parameters_) {
+      ss << "  " << key << ": ";
+      std::visit([&](auto &&c) { ss << c; }, value);
+      ss << "\n";
     }
+    auto tmp = ss.str();
+    tmp.pop_back();  // delete trailing newline
+    os << tmp;
     return os;
   }
 

@@ -522,7 +522,7 @@ class ClangFormat:
 class ClangTidy:
     @staticmethod
     def parse(args, unknown_args):
-        _, old_build_config, _, _ = get_build_config(args.dir)
+        _, old_build_config, _ = get_build_config(args.dir)
         if old_build_config is None:
             old_build_config = "Debug"
 
@@ -956,7 +956,7 @@ class List:
 class Make:
     @staticmethod
     def parse(args, unknown_args):
-        _, old_build_config, _, _ = get_build_config(args.dir)
+        _, old_build_config, _ = get_build_config(args.dir)
 
         command = f"make -C {args.dir}/{old_build_config} "
         if args.jobs is None:
@@ -1225,7 +1225,7 @@ class Run:
 class Start:
     @staticmethod
     def parse(args, unknown_args):
-        _, old_build_config, _, _ = get_build_config(args.dir)
+        _, old_build_config, _ = get_build_config(args.dir)
 
         command = ""
         if args.gdb:
