@@ -72,7 +72,8 @@ parameters = {"model": modelname,
 
 response = client.load("Migraphx", parameters)
 
-
+# send the image as a blob, not a path
+# there's a helper that creates a request from an image, see example
 
 # Model source:
 # https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx
