@@ -52,7 +52,7 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
 
     proteus::InferenceRequest request;
     request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                           proteus::types::DataType::UINT8);
+                           proteus::DataType::UINT8);
 
     auto future =
       proteus::NativeClient::enqueue(workerName, std::move(request));

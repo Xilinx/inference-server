@@ -194,14 +194,14 @@ void wrapPredictApi(py::module_ &m) {
 
   py::class_<InferenceRequestInput>(m, "InferenceRequestInput")
     .def(py::init<>(), DOC(proteus, InferenceRequestInput))
-    .def(py::init<void *, std::vector<uint64_t>, proteus::types::DataType,
-                  std::string>(),
-         DOC(proteus, InferenceRequestInput, 2), py::arg("data"),
-         py::arg("shape"), py::arg("dataType"), py::arg("name") = "")
     .def(
-      "setData",
-      [](InferenceRequestInput &self, py::list b) { self.setData(b.ptr()); },
-      py::keep_alive<1, 2>(), DOC(proteus, InferenceRequestInput, setData))
+      py::init<void *, std::vector<uint64_t>, proteus::DataType, std::string>(),
+      DOC(proteus, InferenceRequestInput, 2), py::arg("data"), py::arg("shape"),
+      py::arg("dataType"), py::arg("name") = "")
+    // .def(
+    //   "setData",
+    //   [](InferenceRequestInput &self, py::list b) { self.setData(b.ptr()); },
+    //   py::keep_alive<1, 2>(), DOC(proteus, InferenceRequestInput, setData))
     // .def("setData",
     //      py::overload_cast<std::shared_ptr<std::byte>>(&InferenceRequestInput::setData),
     //      DOC(proteus, InferenceRequestInput, setData, 2))
@@ -308,9 +308,9 @@ void wrapPredictApi(py::module_ &m) {
 
   using proteus::ModelMetadataTensor;
   py::class_<ModelMetadataTensor>(m, "ModelMetadataTensor")
-    .def(py::init<const std::string &, proteus::types::DataType,
-                  std::vector<uint64_t>>(),
-         DOC(proteus, ModelMetadataTensor, ModelMetadataTensor))
+    .def(
+      py::init<const std::string &, proteus::DataType, std::vector<uint64_t>>(),
+      DOC(proteus, ModelMetadataTensor, ModelMetadataTensor))
     .def("getName", &ModelMetadataTensor::getName,
          DOC(proteus, ModelMetadataTensor, getName))
     .def("getDataType", &ModelMetadataTensor::getDataType,
@@ -320,10 +320,10 @@ void wrapPredictApi(py::module_ &m) {
 
   using proteus::ModelMetadata;
   auto addInputTensor2 = static_cast<void (ModelMetadata::*)(
-    const std::string &, proteus::types::DataType, std::vector<int>)>(
+    const std::string &, proteus::DataType, std::vector<int>)>(
     &ModelMetadata::addInputTensor);
   auto addOutputTensor2 = static_cast<void (ModelMetadata::*)(
-    const std::string &, proteus::types::DataType, std::vector<int>)>(
+    const std::string &, proteus::DataType, std::vector<int>)>(
     &ModelMetadata::addOutputTensor);
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),

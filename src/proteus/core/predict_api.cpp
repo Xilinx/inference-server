@@ -28,8 +28,6 @@
 
 namespace proteus {
 
-using types::DataType;
-
 void RequestParameters::put(const std::string &key, bool value) {
   this->parameters_.insert(std::make_pair(key, value));
 }
@@ -88,8 +86,7 @@ void InferenceRequest::runCallbackError(std::string_view error_msg) {
 }
 
 void InferenceRequest::addInputTensor(void *data, std::vector<uint64_t> shape,
-                                      types::DataType dataType,
-                                      std::string name) {
+                                      DataType dataType, std::string name) {
   this->inputs_.emplace_back(data, shape, dataType, name);
 }
 
@@ -114,21 +111,20 @@ void InferenceRequest::addOutputTensor(InferenceRequestOutput output) {
 
 InferenceRequestInput::InferenceRequestInput(void *data,
                                              std::vector<uint64_t> shape,
-                                             types::DataType dataType,
-                                             std::string name) {
+                                             DataType dataType,
+                                             std::string name)
+  : dataType_(dataType) {
   this->data_ = data;
   this->shared_data_ = nullptr;
   this->shape_ = std::move(shape);
-  this->dataType_ = dataType;
   this->name_ = std::move(name);
   this->parameters_ = std::make_unique<RequestParameters>();
 }
 
-InferenceRequestInput::InferenceRequestInput() {
+InferenceRequestInput::InferenceRequestInput() : dataType_(DataType::UINT32) {
   this->data_ = nullptr;
   this->shared_data_ = nullptr;
   this->name_ = "";
-  this->dataType_ = DataType::UINT32;
   this->parameters_ = std::make_unique<RequestParameters>();
 }
 
@@ -136,7 +132,7 @@ void InferenceRequestInput::setName(std::string name) {
   this->name_ = std::move(name);
 }
 
-void InferenceRequestInput::setDatatype(types::DataType type) {
+void InferenceRequestInput::setDatatype(DataType type) {
   this->dataType_ = type;
 }
 
@@ -202,16 +198,16 @@ const StringMap &InferenceResponse::getContext() const {
 #endif
 
 ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
-                                         types::DataType datatype,
-                                         std::vector<uint64_t> shape) {
+                                         DataType datatype,
+                                         std::vector<uint64_t> shape)
+  : datatype_(datatype) {
   this->name_ = name;
-  this->datatype_ = datatype;
   this->shape_ = std::move(shape);
 }
 
 const std::string &ModelMetadataTensor::getName() const { return this->name_; }
 
-const types::DataType &ModelMetadataTensor::getDataType() const {
+const DataType &ModelMetadataTensor::getDataType() const {
   return this->datatype_;
 }
 const std::vector<uint64_t> &ModelMetadataTensor::getShape() const {
@@ -225,28 +221,24 @@ ModelMetadata::ModelMetadata(const std::string &name,
   this->ready_ = false;
 }
 
-void ModelMetadata::addInputTensor(const std::string &name,
-                                   types::DataType datatype,
+void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
                                    std::initializer_list<uint64_t> shape) {
   this->inputs_.emplace_back(name, datatype, shape);
 }
 
-void ModelMetadata::addInputTensor(const std::string &name,
-                                   types::DataType datatype,
+void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
                                    std::vector<int> shape) {
   std::vector<uint64_t> new_shape;
   std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
   this->inputs_.emplace_back(name, datatype, new_shape);
 }
 
-void ModelMetadata::addOutputTensor(const std::string &name,
-                                    types::DataType datatype,
+void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
                                     std::initializer_list<uint64_t> shape) {
   this->outputs_.emplace_back(name, datatype, shape);
 }
 
-void ModelMetadata::addOutputTensor(const std::string &name,
-                                    types::DataType datatype,
+void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
                                     std::vector<int> shape) {
   std::vector<uint64_t> new_shape;
   std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));

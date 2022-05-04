@@ -27,65 +27,63 @@
 
 namespace proteus {
 
-using types::DataType;
-
 size_t Buffer::write(void* data, size_t offset, size_t size) {
   std::memcpy(this->data(offset), data, size);
   return offset + size;
 }
 
 size_t Buffer::write(bool value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::BOOL);
+  constexpr auto bytes = DataType("BOOL").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(uint8_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::UINT8);
+  constexpr auto bytes = DataType("UINT8").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(uint16_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::UINT16);
+  constexpr auto bytes = DataType("UINT16").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(uint32_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::UINT32);
+  constexpr auto bytes = DataType("UINT32").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(uint64_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::UINT64);
+  constexpr auto bytes = DataType("UINT64").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(int8_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::INT8);
+  constexpr auto bytes = DataType("INT8").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(int16_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::INT16);
+  constexpr auto bytes = DataType("INT16").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(int32_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::INT32);
+  constexpr auto bytes = DataType("INT32").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(int64_t value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::INT64);
+  constexpr auto bytes = DataType("INT64").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(float value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::FP32);
+  constexpr auto bytes = DataType("FP32").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }
 size_t Buffer::write(double value, size_t offset) {
-  constexpr auto bytes = types::getSize(DataType::FP64);
+  constexpr auto bytes = DataType("FP64").size();
   std::memcpy(this->data(offset), &value, bytes);
   return offset + bytes;
 }

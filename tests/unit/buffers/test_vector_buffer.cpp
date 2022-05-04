@@ -25,11 +25,11 @@
 namespace proteus {
 
 constexpr auto kBufferSize = 10;
-// constexpr auto kDataType = types::DataType::INT32;
+// constexpr auto kDataType = DataType::INT32;
 // constexpr auto kDataSize = types::getSize(kDataType);
 constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
 
-class UnitVectorBufferFixture : public testing::TestWithParam<types::DataType> {
+class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
  public:
   UnitVectorBufferFixture() : buffer_(kBufferSize, GetParam()){};
 
@@ -38,37 +38,37 @@ class UnitVectorBufferFixture : public testing::TestWithParam<types::DataType> {
     size_t offset = 0;
     for (auto i = 0; i < kBufferSize; i++) {
       switch (GetParam()) {
-        case types::DataType::BOOL:
+        case DataType::BOOL:
           offset = buffer_.write(false, offset);
           break;
-        case types::DataType::UINT8:
+        case DataType::UINT8:
           offset = buffer_.write(static_cast<uint8_t>(0), offset);
           break;
-        case types::DataType::UINT16:
+        case DataType::UINT16:
           offset = buffer_.write(static_cast<uint16_t>(0), offset);
           break;
-        case types::DataType::UINT32:
+        case DataType::UINT32:
           offset = buffer_.write(static_cast<uint32_t>(0), offset);
           break;
-        case types::DataType::UINT64:
+        case DataType::UINT64:
           offset = buffer_.write(static_cast<uint64_t>(0), offset);
           break;
-        case types::DataType::INT8:
+        case DataType::INT8:
           offset = buffer_.write(static_cast<int8_t>(0), offset);
           break;
-        case types::DataType::INT16:
+        case DataType::INT16:
           offset = buffer_.write(static_cast<int16_t>(0), offset);
           break;
-        case types::DataType::INT32:
+        case DataType::INT32:
           offset = buffer_.write(static_cast<int32_t>(0), offset);
           break;
-        case types::DataType::INT64:
+        case DataType::INT64:
           offset = buffer_.write(static_cast<int64_t>(0), offset);
           break;
-        case types::DataType::FP32:
+        case DataType::FP32:
           offset = buffer_.write(static_cast<float>(0), offset);
           break;
-        case types::DataType::FP64:
+        case DataType::FP64:
           offset = buffer_.write(static_cast<double>(0), offset);
           break;
         default:
@@ -84,71 +84,61 @@ class UnitVectorBufferFixture : public testing::TestWithParam<types::DataType> {
 };
 
 TEST_P(UnitVectorBufferFixture, TestFixtureState) {
+  auto datatype = GetParam();
   for (auto i = 0; i < kBufferSize; i++) {
-    switch (GetParam()) {
-      case types::DataType::BOOL: {
-        auto value =
-          static_cast<bool*>(buffer_.data(i * types::getSize(GetParam())));
+    switch (datatype) {
+      case DataType::BOOL: {
+        auto value = static_cast<bool*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, false);
         break;
       }
-      case types::DataType::UINT8: {
-        auto value =
-          static_cast<uint8_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::UINT8: {
+        auto value = static_cast<uint8_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<uint8_t>(0));
         break;
       }
-      case types::DataType::UINT16: {
-        auto value =
-          static_cast<uint16_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::UINT16: {
+        auto value = static_cast<uint16_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<uint16_t>(0));
         break;
       }
-      case types::DataType::UINT32: {
-        auto value =
-          static_cast<uint32_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::UINT32: {
+        auto value = static_cast<uint32_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<uint32_t>(0));
         break;
       }
-      case types::DataType::UINT64: {
-        auto value =
-          static_cast<uint64_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::UINT64: {
+        auto value = static_cast<uint64_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<uint64_t>(0));
         break;
       }
-      case types::DataType::INT8: {
-        auto value =
-          static_cast<int8_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::INT8: {
+        auto value = static_cast<int8_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<int8_t>(0));
         break;
       }
-      case types::DataType::INT16: {
-        auto value =
-          static_cast<int16_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::INT16: {
+        auto value = static_cast<int16_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<int16_t>(0));
         break;
       }
-      case types::DataType::INT32: {
-        auto value =
-          static_cast<int32_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::INT32: {
+        auto value = static_cast<int32_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<int32_t>(0));
         break;
       }
-      case types::DataType::INT64: {
-        auto value =
-          static_cast<uint16_t*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::INT64: {
+        auto value = static_cast<uint16_t*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<uint16_t>(0));
         break;
       }
-      case types::DataType::FP32: {
-        auto value =
-          static_cast<float*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::FP32: {
+        auto value = static_cast<float*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<float>(0));
         break;
       }
-      case types::DataType::FP64: {
-        auto value =
-          static_cast<double*>(buffer_.data(i * types::getSize(GetParam())));
+      case DataType::FP64: {
+        auto value = static_cast<double*>(buffer_.data(i * datatype.size()));
         EXPECT_EQ(*value, static_cast<double>(0));
         break;
       }
@@ -177,13 +167,12 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {
 
 // we exclude FP16 and STRING. FP16 isn't supported and STRING doesn't have
 // a defined size we can pre-allocate
-types::DataType datatypes[] = {
-  proteus::types::DataType::BOOL,   proteus::types::DataType::UINT8,
-  proteus::types::DataType::UINT16, proteus::types::DataType::UINT32,
-  proteus::types::DataType::UINT64, proteus::types::DataType::INT8,
-  proteus::types::DataType::INT16,  proteus::types::DataType::INT32,
-  proteus::types::DataType::INT64,  proteus::types::DataType::FP32,
-  proteus::types::DataType::FP64};
+DataType datatypes[] = {proteus::DataType::BOOL,   proteus::DataType::UINT8,
+                        proteus::DataType::UINT16, proteus::DataType::UINT32,
+                        proteus::DataType::UINT64, proteus::DataType::INT8,
+                        proteus::DataType::INT16,  proteus::DataType::INT32,
+                        proteus::DataType::INT64,  proteus::DataType::FP32,
+                        proteus::DataType::FP64};
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitVectorBufferFixture,
                          testing::ValuesIn(datatypes));
 

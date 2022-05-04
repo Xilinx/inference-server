@@ -78,8 +78,6 @@ using StatusCode = grpc::StatusCode;
 
 namespace proteus {
 
-using types::DataType;
-
 using AsyncService = inference::GRPCInferenceService::AsyncService;
 
 class CallDataBase {
@@ -210,7 +208,7 @@ class InferenceRequestInputBuilder<
     for (const auto& index : req.shape()) {
       input.shape_.push_back(static_cast<size_t>(index));
     }
-    input.dataType_ = types::mapStrToType(req.datatype());
+    input.dataType_ = DataType(req.datatype().c_str());
 
     input.parameters_ = mapProtoToParameters(req.parameters());
 

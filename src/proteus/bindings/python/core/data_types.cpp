@@ -30,10 +30,24 @@
 
 namespace py = pybind11;
 
-using proteus::types::DataType;
+using proteus::DataType;
 
 void wrapDataType(py::module_& m) {
-  py::enum_<DataType>(m, "DataType")
+  auto datatype = py::class_<DataType>(m, "DataType");
+
+  datatype.def("str", &DataType::str)
+    .def("size", &DataType::size)
+    .def("__repr__",
+         [](const DataType& self) {
+           return "DataType(" + std::string(self.str()) + ")\n";
+         })
+    .def("__str__", [](const DataType& self) {
+      std::ostringstream os;
+      os << self;
+      return os.str();
+    });
+
+  py::enum_<DataType::Value>(datatype, "Value")
     .value("BOOL", DataType::BOOL)
     .value("UINT8", DataType::UINT8)
     .value("UINT16", DataType::UINT16)
@@ -46,25 +60,14 @@ void wrapDataType(py::module_& m) {
     .value("FP16", DataType::FP16)
     .value("FP32", DataType::FP32)
     .value("FP64", DataType::FP64)
-    .value("STRING", DataType::STRING)
-    .def("__repr__",
-         [](const DataType& self) {
-           return "DataType(" + proteus::types::mapTypeToStr(self) + ")\n";
-         })
-    .def("__str__", [](const DataType& self) {
-      std::ostringstream os;
-      os << self;
-      return os.str();
-    });
+    .value("STRING", DataType::STRING);
 }
 
 void wrapTypeMaps(py::module_& m) {
-  m.def("mapTypeToStr", proteus::types::mapTypeToStr, py::arg("type"));
-  m.def("mapStrToType", proteus::types::mapStrToType, py::arg("type"));
 #ifdef PROTEUS_ENABLE_VITIS
   py::module_::import("xir").attr("DataType");
 
-  m.def("mapXirType", proteus::types::mapXirType, py::arg("type"));
-  m.def("mapTypeToXir", proteus::types::mapTypeToXir, py::arg("type"));
+  m.def("mapXirType", proteus::mapXirToType, py::arg("type"));
+  m.def("mapTypeToXir", proteus::mapTypeToXir, py::arg("type"));
 #endif
 }

@@ -58,7 +58,7 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
     input.parameters_ = req.parameters_;
     auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
                                 std::multiplies<>()) *
-                types::getSize(input.dataType_);
+                input.dataType_.size();
     auto *dest = static_cast<std::byte *>(input_buffer->data()) + offset;
     memcpy(dest, req.data_, size);
 

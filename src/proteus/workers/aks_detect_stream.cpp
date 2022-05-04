@@ -64,8 +64,6 @@ std::string constructMessage(const std::string& key, const std::string& data,
          R"(", "labels": )" + labels + "}}";
 }
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -141,10 +139,10 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
   this->graph_ = this->sysMan_->getGraph(graph_name);
 
   this->metadata_.addInputTensor(
-    "input", types::DataType::INT8,
+    "input", DataType::INT8,
     {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
   // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {0});
+  this->metadata_.addOutputTensor("output", DataType::UINT32, {0});
   this->metadata_.setName(graph_name);
 }
 
@@ -201,7 +199,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
 
         InferenceResponseOutput output;
         output.setName("key");
-        output.setDatatype(types::DataType::STRING);
+        output.setDatatype(DataType::STRING);
         std::string metadata = "[" + std::to_string(video_width) + "," +
                                std::to_string(video_height) + "]";
         auto message = constructMessage(key, std::to_string(fps), metadata);
@@ -293,7 +291,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
 
               InferenceResponseOutput output;
               output.setName("image");
-              output.setDatatype(types::DataType::STRING);
+              output.setDatatype(DataType::STRING);
               auto message = constructMessage(key, frames.front(), labels[j]);
               output.setData(&message);
               output.setShape({message.size()});
@@ -338,7 +336,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
 
             InferenceResponseOutput output;
             output.setName("image");
-            output.setDatatype(types::DataType::STRING);
+            output.setDatatype(DataType::STRING);
             auto message = constructMessage(key, frames.front(), labels[j]);
             output.setData(&message);
             output.setShape({message.size()});

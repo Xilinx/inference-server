@@ -42,8 +42,6 @@
 
 namespace proteus {
 
-using types::DataType;
-
 RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
   auto parameters_ = std::make_shared<RequestParameters>();
   for (auto const &id : parameters.getMemberNames()) {
@@ -110,7 +108,7 @@ InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json) {
     InferenceResponseOutput output;
     output.setName(json_output["name"].asString());
     output.setParameters(mapJsonToParameters(json_output["parameters"]));
-    output.setDatatype(types::mapStrToType(json_output["datatype"].asString()));
+    output.setDatatype(DataType(json_output["datatype"].asCString()));
 
     auto json_shape = json_output["shape"];
     std::vector<uint64_t> shape;
@@ -201,7 +199,7 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
   for (const auto &input : inputs) {
     Json::Value json_input;
     json_input["name"] = input.getName();
-    json_input["datatype"] = types::mapTypeToStr(input.getDatatype());
+    json_input["datatype"] = input.getDatatype().str();
     json_input["shape"] = Json::arrayValue;
     auto *parameters = request.getParameters();
     json_input["parameters"] = parameters != nullptr
@@ -310,7 +308,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
       throw std::invalid_argument("No 'datatype' key present in request input");
     }
     std::string data_type_str = req->get("datatype", "").asString();
-    input.dataType_ = types::mapStrToType(data_type_str);
+    input.dataType_ = DataType(data_type_str.c_str());
     if (req->isMember("parameters")) {
       auto parameters = req->get("parameters", Json::objectValue);
       input.parameters_ = mapJsonToParameters(parameters);
@@ -586,8 +584,6 @@ size_t DrogonHttp::getInputSize() {
   return inputs.size();
 }
 
-using types::DataType;
-
 Json::Value parseResponse(InferenceResponse response) {
   Json::Value ret;
   ret["model_name"] = response.getModel();
@@ -600,7 +596,7 @@ Json::Value parseResponse(InferenceResponse response) {
     json_output["parameters"] = Json::objectValue;
     json_output["data"] = Json::arrayValue;
     json_output["shape"] = Json::arrayValue;
-    json_output["datatype"] = types::mapTypeToStr(output.getDatatype());
+    json_output["datatype"] = output.getDatatype().str();
     auto shape = output.getShape();
     for (const size_t &index : shape) {
       json_output["shape"].append(static_cast<Json::UInt>(index));
@@ -766,7 +762,7 @@ void DrogonHttp::errorHandler(const std::invalid_argument &e) {
 Json::Value ModelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
-  ret["datatype"] = types::mapTypeToStr(metadata.getDataType());
+  ret["datatype"] = metadata.getDataType().str();
   ret["shape"] = Json::arrayValue;
   for (const auto &index : metadata.getShape()) {
     ret["shape"].append(static_cast<Json::UInt64>(index));

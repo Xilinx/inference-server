@@ -180,7 +180,7 @@ int run(std::string xmodel, int images, int threads, int runners) {
   }
 
   std::vector<uint64_t> shape;
-  proteus::types::DataType type = proteus::types::DataType::INT8;
+  proteus::DataType type = proteus::DataType::INT8;
   {
     std::unique_ptr<xir::Graph> graph = xir::Graph::deserialize(xmodel);
     auto subgraphs = get_dpu_subgraphs(graph.get());
@@ -193,13 +193,13 @@ int run(std::string xmodel, int images, int threads, int runners) {
 
     std::copy(input_shape.begin() + 1, input_shape.end(),
               std::back_inserter(shape));
-    type = proteus::types::mapXirType(input_type);
+    type = proteus::mapXirToType(input_type);
   }
 
   std::vector<char> data;
   auto num_elements =
     std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<>());
-  data.reserve(num_elements * proteus::types::getSize(type));
+  data.reserve(num_elements * type.size());
 
   FutureQueue my_queue;
   proteus::InferenceRequest request;

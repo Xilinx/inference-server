@@ -63,8 +63,6 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -144,10 +142,10 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
   this->graph_ = this->sysMan_->getGraph(this->graphName_);
 
   this->metadata_.addInputTensor(
-    "input", types::DataType::INT8,
+    "input", DataType::INT8,
     {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
   // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {0});
+  this->metadata_.addOutputTensor("output", DataType::UINT32, {0});
   this->metadata_.setName(this->graphName_);
 }
 
@@ -294,7 +292,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 
         output.setShape(new_shape);
 
-        output.setDatatype(types::DataType::UINT32);
+        output.setDatatype(DataType::UINT32);
         resp.addOutput(output);
       }
 

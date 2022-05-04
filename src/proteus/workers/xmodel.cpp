@@ -65,8 +65,6 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -101,9 +99,9 @@ class XModel : public Worker {
   const xir::Subgraph* subgraph_;
   std::string kernel_;
   std::unique_ptr<vart::Runner> runner_;
-  types::DataType input_type_;
+  DataType input_type_;
   uint32_t input_size_;
-  types::DataType output_type_;
+  DataType output_type_;
   uint32_t output_size_;
   ctpl::thread_pool pool_;
 };
@@ -160,7 +158,7 @@ void XModel::doInit(RequestParameters* parameters) {
   auto input_tensors = runner_->get_input_tensors();
   auto input_shape =
     input_tensors[0]->get_shape();  //! assuming only one tensor
-  input_type_ = types::mapXirType(input_tensors[0]->get_data_type());
+  input_type_ = mapXirToType(input_tensors[0]->get_data_type());
   // +1 to skip the batch size
   input_size_ = std::accumulate(input_shape.begin() + 1, input_shape.end(), 1,
                                 std::multiplies<>());
@@ -169,7 +167,7 @@ void XModel::doInit(RequestParameters* parameters) {
   auto output_tensors = runner_->get_output_tensors();
   auto output_shape =
     output_tensors[0]->get_shape();  //! assuming only one tensor
-  output_type_ = types::mapXirType(output_tensors[0]->get_data_type());
+  output_type_ = mapXirToType(output_tensors[0]->get_data_type());
   // +1 to skip the batch size
   output_size_ = std::accumulate(output_shape.begin() + 1, output_shape.end(),
                                  1, std::multiplies<>());

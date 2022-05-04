@@ -34,8 +34,6 @@
 
 namespace proteus {
 
-using types::DataType;
-
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
   RequestParameters* parameters) {
@@ -91,7 +89,7 @@ void mapResponsetoProto(InferenceResponse response,
     auto* tensor = reply.add_outputs();
     tensor->set_name(output.getName());
     // auto* parameters = tensor->mutable_parameters();
-    tensor->set_datatype(types::mapTypeToStr(output.getDatatype()));
+    tensor->set_datatype(output.getDatatype().str());
     auto shape = output.getShape();
     auto size = 1U;
     for (const size_t& index : shape) {

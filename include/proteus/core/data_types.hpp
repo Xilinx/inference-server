@@ -33,84 +33,164 @@ class DataType;
 }  // namespace xir
 #endif
 
-/**
- * @brief The types namespace defines the datatypes that Proteus supports in
- * incoming inference requests
- */
-namespace proteus::types {
+namespace proteus {
+
+namespace detail {
+// taken from https://stackoverflow.com/a/46711735
+// used for hashing strings for switch statements
+constexpr unsigned int hash(const char* s, int off = 0) {
+  // NOLINTNEXTLINE
+  return !s[off] ? 5381 : (hash(s, off + 1) * 33) ^ s[off];
+}
+}  // namespace detail
 
 /**
  * @brief Data types supported in Proteus
  */
-enum class DataType {
-  BOOL,
-  UINT8,
-  UINT16,
-  UINT32,
-  UINT64,
-  INT8,
-  INT16,
-  INT32,
-  INT64,
-  FP16,
-  FP32,
-  FP64,
-  STRING,
-};
+class DataType {
+ public:
+  enum Value : uint8_t {
+    BOOL,
+    UINT8,
+    UINT16,
+    UINT32,
+    UINT64,
+    INT8,
+    INT16,
+    INT32,
+    INT64,
+    FP16,
+    FP32,
+    FP64,
+    STRING,
+    UNKNOWN
+  };
 
-/// size of FP16 in bytes
-constexpr auto kFp16Size = 2U;
+  constexpr DataType() : value_(Value::UNKNOWN) {}
+  constexpr DataType(const char* value) : value_(mapStrToType(value)) {}
+  constexpr DataType(DataType::Value value) : value_(value) {}
 
-/**
- * @brief Get the size in bytes associated with a data type
- *
- * @param type
- * @return constexpr size_t
- */
-constexpr size_t getSize(DataType type) {
-  switch (type) {
-    case DataType::BOOL:
-      return sizeof(bool);
-    case DataType::UINT8:
-      return sizeof(uint8_t);
-    case DataType::UINT16:
-      return sizeof(uint16_t);
-    case DataType::UINT32:
-      return sizeof(uint32_t);
-    case DataType::UINT64:
-      return sizeof(uint64_t);
-    case DataType::INT8:
-      return sizeof(int8_t);
-    case DataType::INT16:
-      return sizeof(int16_t);
-    case DataType::INT32:
-      return sizeof(int32_t);
-    case DataType::INT64:
-      return sizeof(int64_t);
-    case DataType::FP16:
-      return kFp16Size;
-    case DataType::FP32:
-      return sizeof(float);
-    case DataType::FP64:
-      return sizeof(double);
-    case DataType::STRING:
-      return sizeof(std::string);
-    default:
-      return 0;
+  constexpr operator Value() const { return value_; }
+
+  friend std::ostream& operator<<(std::ostream& os, const DataType& value);
+
+  /**
+   * @brief Get the size in bytes associated with a data type
+   *
+   * @return constexpr size_t
+   */
+  constexpr size_t size() const {
+    /// size of FP16 in bytes
+    constexpr auto kFp16Size = 2U;
+
+    switch (value_) {
+      case DataType::BOOL:
+        return sizeof(bool);
+      case DataType::UINT8:
+        return sizeof(uint8_t);
+      case DataType::UINT16:
+        return sizeof(uint16_t);
+      case DataType::UINT32:
+        return sizeof(uint32_t);
+      case DataType::UINT64:
+        return sizeof(uint64_t);
+      case DataType::INT8:
+        return sizeof(int8_t);
+      case DataType::INT16:
+        return sizeof(int16_t);
+      case DataType::INT32:
+        return sizeof(int32_t);
+      case DataType::INT64:
+        return sizeof(int64_t);
+      case DataType::FP16:
+        return kFp16Size;
+      case DataType::FP32:
+        return sizeof(float);
+      case DataType::FP64:
+        return sizeof(double);
+      case DataType::STRING:
+        return sizeof(std::string);
+      default:
+        throw std::invalid_argument("Unsupported type");
+    }
   }
-}
 
-/**
- * @brief Given a Proteus type, return a string corresponding to the type
- *
- * @param type DataType to convert
- * @return std::string
- */
-std::string mapTypeToStr(DataType type);
+  /**
+   * @brief Given a type, return a string corresponding to the type
+   *
+   * @return const char*
+   */
+  constexpr const char* str() const {
+    switch (value_) {
+      case DataType::BOOL:
+        return "BOOL";
+      case DataType::UINT8:
+        return "UINT8";
+      case DataType::UINT16:
+        return "UINT16";
+      case DataType::UINT32:
+        return "UINT32";
+      case DataType::UINT64:
+        return "UINT64";
+      case DataType::INT8:
+        return "INT8";
+      case DataType::INT16:
+        return "INT16";
+      case DataType::INT32:
+        return "INT32";
+      case DataType::INT64:
+        return "INT64";
+      case DataType::FP16:
+        return "FP16";
+      case DataType::FP32:
+        return "FP32";
+      case DataType::FP64:
+        return "FP64";
+      case DataType::STRING:
+        return "STRING";
+      default:
+        throw std::invalid_argument("Unsupported type");
+    }
+  }
 
-DataType mapStrToType(const std::string& type);
+ private:
+  constexpr DataType::Value mapStrToType(const char* value) const {
+    switch (detail::hash(value)) {
+      case detail::hash("BOOL"):
+        return DataType::BOOL;
+      case detail::hash("UINT8"):
+        return DataType::UINT8;
+      case detail::hash("UINT16"):
+        return DataType::UINT16;
+      case detail::hash("UINT32"):
+        return DataType::UINT32;
+      case detail::hash("UINT64"):
+        return DataType::UINT64;
+      case detail::hash("INT8"):
+        return DataType::INT8;
+      case detail::hash("INT16"):
+        return DataType::INT16;
+      case detail::hash("INT32"):
+        return DataType::INT32;
+      case detail::hash("INT64"):
+        return DataType::INT64;
+      case detail::hash("FP16"):
+        return DataType::FP16;
+      case detail::hash("FP32"):
+        return DataType::FP32;
+      case detail::hash("FP64"):
+        return DataType::FP64;
+      case detail::hash("STRING"):
+        return DataType::STRING;
+      case detail::hash("UNKNOWN"):
+        return DataType::UNKNOWN;
+      default:
+        throw std::invalid_argument("Unsupported type construction");
+    }
+  }
 
-std::ostream& operator<<(std::ostream& os, const DataType& bar);
+  Value value_;
+};
 
 #ifdef PROTEUS_ENABLE_VITIS
 /**
@@ -119,16 +199,16 @@ std::ostream& operator<<(std::ostream& os, const DataType& bar);
  * @param type XIR datatype
  * @return DataType
  */
-DataType mapXirType(xir::DataType type);
+DataType mapXirToType(xir::DataType type);
 
 /**
  * @brief Given a Proteus type, return the corresponding XIR type, if it exists
  *
- * @param type Proteus datatype
+ * @param type Datatype
  * @return xir::DataType
  */
 xir::DataType mapTypeToXir(DataType type);
 #endif
 
-}  // namespace proteus::types
+}  // namespace proteus
 #endif  // GUARD_PROTEUS_CORE_DATA_TYPES

@@ -27,8 +27,6 @@
 
 namespace py = pybind11;
 
-using proteus::types::DataType;
-
 void wrapClient(py::module_ &m) {
   using proteus::Client;
 

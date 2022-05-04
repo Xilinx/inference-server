@@ -48,8 +48,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       auto* data = static_cast<std::vector<float>*>(output.getData());
       auto size = output.getSize();
       EXPECT_STREQ(output.getName().c_str(), "");
-      EXPECT_STREQ(proteus::types::mapTypeToStr(output.getDatatype()).c_str(),
-                   "FP32");
+      EXPECT_STREQ(output.getDatatype().str(), "FP32");
       auto* parameters = output.getParameters();
       ASSERT_NE(parameters, nullptr);
       EXPECT_TRUE(parameters->empty());

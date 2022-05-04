@@ -269,7 +269,7 @@ int main() {
   proteus::InferenceRequest request;
   for (auto i = 0; i < request_num; i++) {
     request.addInputTensor(static_cast<void*>(images[i].data()), shape,
-                           proteus::types::DataType::INT8);
+                           proteus::DataType::INT8);
   }
   // -construct request:
 

@@ -281,7 +281,7 @@ int main() {
     proteus::InferenceRequest request;
     auto start = std::chrono::high_resolution_clock::now();  // Timing the start
     request.addInputTensor(static_cast<void*>(images[0].data()), shape,
-                           proteus::types::DataType::FP32);
+                           proteus::DataType::FP32);
     auto results = client.modelInfer(workerName, request);
     // Timing the prediction
     auto stop = std::chrono::high_resolution_clock::now();
@@ -325,7 +325,7 @@ int main() {
       proteus::InferenceRequest request;
       for (auto i = 0; i < options.batch_size; i++) {
         request.addInputTensor(static_cast<void*>(images[i].data()), shape,
-                               proteus::types::DataType::FP32);
+                               proteus::DataType::FP32);
       }
       auto results = client.modelInfer(workerName, request);
     }
@@ -337,7 +337,7 @@ int main() {
       proteus::InferenceRequest request;
       for (auto i = 0; i < options.batch_size; i++) {
         request.addInputTensor(static_cast<void*>(images[i].data()), shape,
-                               proteus::types::DataType::FP32);
+                               proteus::DataType::FP32);
       }
       auto results = client.modelInfer(workerName, request);
     }

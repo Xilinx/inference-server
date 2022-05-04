@@ -26,11 +26,9 @@
 
 namespace proteus {
 
-using types::DataType;
-
-VectorBuffer::VectorBuffer(int elements, DataType data_type) {
-  this->type_ = data_type;
-  std::size_t size = elements * types::getSize(data_type);
+VectorBuffer::VectorBuffer(int elements, DataType data_type)
+  : type_(data_type) {
+  std::size_t size = elements * data_type.size();
   this->data_.reserve(size);
   // this->write_counter_ = 0;
 }
