@@ -4,10 +4,21 @@
 # not in the git repo. and must be fetched with git or with 
 # #  proteus get
 
+# To get root access to the gpu device, invoke this script with
+#  sudo PROTEUS_ROOT=/workspace/proteus python3 examples/python/hello_migraphx.py
+#
 
+import os
+os.getenv("PROTEUS_ROOT")
+
+# workaround:  we don't know why the path isn't right when running this as root
+# import sys
+# sys.path=['/workspace/proteus/src/python/src', \
+#     '/opt/xilinx/xrt/python', '/workspace/proteus', '/usr/lib/python36.zip', '/usr/lib/python3.6', \
+#     '/usr/lib/python3.6/lib-dynload', '/home/proteus-user/.local/lib/python3.6/site-packages', \
+#     '/usr/local/lib/python3.6/dist-packages', '/usr/lib/python3/dist-packages', '/opt/rocm/lib']
 
 import proteus
-
 import onnx
 import cv2
 

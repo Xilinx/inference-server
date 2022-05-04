@@ -681,7 +681,7 @@ class Dockerize:
 
         version = get_version()
         os.environ["DOCKER_BUILDKIT"] = "1"
-        command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} ."
+        command = f"docker build --no-cache {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} ."
         run_command(command, args.dry_run)
 
         if args.push:
@@ -1149,11 +1149,18 @@ class Run:
 
         command += " ".join(unknown_args)
 
+        # Needed for gpu.  group video is used for Ubuntu 18.X; changed to render for Ubuntu 20.04
+        command += " --group-add video --privileged "
+
         command += " " + args.image
 
         if args.command is not None:
             command += " " + args.command.strip('"')
 
+            # Brian
+            with open("~/is-fork/inference-server/DockerCommand.txt", "w") as file:
+                file.write('Your docker command is---------------------------------- ', command)
+                file.close()
         run_tty_command(command, args.dry_run)
 
     @classmethod
@@ -1278,7 +1285,7 @@ class Start:
             command += "gdb --args "
         command += f"{args.dir}/{old_build_config}/src/proteus/proteus-server "
         command += " ".join(unknown_args)
-
+ 
         run_command(command, args.dry_run)
 
     @classmethod

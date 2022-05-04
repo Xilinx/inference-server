@@ -802,7 +802,7 @@ RUN pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.
 # Install MIGraphX from source
 RUN mkdir -p /migraphx
 RUN cd /migraphx && git clone --depth=1 --branch rocm-5.1.1 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
-RUN cd /migraphx && rbuild package -d /migraphx/deps -B /migraphx/build -S /migraphx/src/
+RUN cd /migraphx/src && rbuild package -d /migraphx/deps -B /migraphx/build
 RUN dpkg -i /migraphx/build/*.deb
 RUN rm -rf /migraphx
 
