@@ -99,17 +99,17 @@ size_t MIGraphXWorker::doAllocate(size_t num){
 void MIGraphXWorker::doAcquire(RequestParameters* parameters){
     std::cout << "MIGraphXWorker::doAcquire\n";
     // Load the model
-    std::string input_file;
+    // std::string input_file;
     if (parameters->has("model"))
-        input_file = parameters->get<std::string>("model");
+        input_file_ = parameters->get<std::string>("model");
     else
         SPDLOG_LOGGER_ERROR(
         this->logger_,
         "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");  // Ideally exit since model not provided
     
-    std::cout << "Acquiring model file " << input_file << std::endl;
+    std::cout << "Acquiring model file " << input_file_ << std::endl;
     // Using parse_onnx() instead of load() because there's a bug at the time of writing
-    this->prog_ = migraphx::parse_onnx(input_file.c_str());
+    this->prog_ = migraphx::parse_onnx(input_file_.c_str());
     std::cout << "Finished parsing ONNX model." << std::endl;
         prog_.print();    
     std::cout << "Compiling ONNX model...";
@@ -131,6 +131,8 @@ std::cout << "Okay, got this far...\n";
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
+    std::cout << "MIGraphXWorker::doRun\n";
+(void)(input_queue);
 
     // thread housekeeping, boilerplate code following tf_zendnn example
     std::unique_ptr<Batch> batch;
@@ -150,11 +152,18 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
 #endif
         for (unsigned int j = 0; j < batch->requests->size(); j++) {
             auto& req = batch->requests->at(j);
-            (void)req;  // suppress unused variable warning
+
 #ifdef PROTEUS_ENABLE_TRACING
             auto& trace = batch->traces.at(j);
-            trace->startSpan("echo");
+            trace->startSpan("migraphx");
 #endif
+        // setup following Echo example
+            InferenceResponse resp;
+            resp.setID(req->getID());
+            resp.setModel(input_file_);
+            auto inputs = req->getInputs();
+            auto outputs = req->getOutputs();
+            req->runCallbackOnce(resp);
         }
         std::vector<InferenceResponse> responses;
         responses.reserve(batch->requests->size());
@@ -181,9 +190,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
     }
 }
 
-void MIGraphXWorker::doRelease() {}
-void MIGraphXWorker::doDeallocate() {}
-void MIGraphXWorker::doDestroy() {}
+void MIGraphXWorker::doRelease() {    std::cout << "RELEASE." << std::endl;
+}
+void MIGraphXWorker::doDeallocate() {    std::cout << "DEALLOCATE" << std::endl;
+}
+void MIGraphXWorker::doDestroy() {    std::cout << "DESTROY" << std::endl;
+}
 
 }  // namespace workers
 

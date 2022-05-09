@@ -21,11 +21,13 @@ os.getenv("PROTEUS_ROOT")
 import proteus
 import onnx
 import cv2
+import math
+import numpy as np
 
 modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
 imagename = r"/workspace/proteus/external/artifacts/migraphx/JG-COMP-HERO-UKRAINE-SOILDER.jpg"
 
-#  load the onnx model to find the input shape
+#  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
 shape=[]
 model = onnx.load(modelname)
 for input in model.graph.input:
@@ -58,22 +60,41 @@ input_img = cv2.imread(imagename)
 if len(shape) == 4:
     print('resizing ', input_img.shape, '!', shape[2:4], end="==>")
     img = cv2.resize(input_img, shape[2:4])
-    print(img.shape, '!!')
+
+    # debug: make so small that contents is human readable
+    img = cv2.resize(input_img, [2,2])
+    print('image shape is ', img.shape, '!!')
+    print('image as list is ', img.tolist())
 
 
 server = proteus.Server()
 client = proteus.RestClient("127.0.0.1:8998")
 client.wait_until_live()
 
-# +load worker:
+# +load worker:     DEFINE A SET OF PARAMETERS THAT THE MIGRAPHX WORKER 
+# NEEDS.  
+# ANY KEY-VALUE PAIRS ARE LEGAL
+
 parameters = {"model": modelname,
-              "input": img.tolist()
+              "input": img.tolist() # <== [[[159, 162, 211], [185, 176, 172],...
 			  }
 
 response = client.load("Migraphx", parameters)
+assert not response.error, response.error_msg
+worker_name = response.html  # Migraphx
+print('response is', response.html)
 
-# send the image as a blob, not a path
+print('preprocess images...')
+# images=preprocess([img])
+images=[img]
+print("Done.  Create inference request...")
+request = proteus.ImageInferenceRequest(images, True)
+print("Perform inference...")
+response = client.infer( worker_name, request)
+assert not response.error, response.error_msg
+    # send the image as a blob, not a path
 # there's a helper that creates a request from an image, see example
+print('Done')
 
 # Model source:
 # https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx
