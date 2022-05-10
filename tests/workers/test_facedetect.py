@@ -13,13 +13,10 @@
 # limitations under the License.
 
 import pytest
-import json
-import os
 import numpy as np
 
-from helper import run_benchmark, root_path
+from helper import run_benchmark, root_path, ImageInferenceRequest
 import proteus
-from proteus.predict_api import Datatype, ImageInferenceRequest
 
 
 @pytest.fixture(scope="class")
@@ -57,13 +54,13 @@ class TestInferImageFacedetectDPUCADF8H:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request)
+            response = self.rest_client.modelInfer(self.model, request)
         except proteus.ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        num_inputs = len(request.inputs)
+        num_inputs = len(request.getInputs())
         # for this picture and xmodel combination, we expect the following output
         gold_response_output = [
             -1,
@@ -75,20 +72,22 @@ class TestInferImageFacedetectDPUCADF8H:
         ]
 
         if check_asserts:
-            # print(response.error_msg)
-            assert not response.error, response.error_msg
-            # content = response.json()
+            assert not response.isError(), response.getError()
             assert response.id == ""
-            assert response.model_name == "facedetect"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
+            assert response.model == "facedetect"
+            outputs = response.getOutputs()
+            assert len(outputs) == num_inputs
+            for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == Datatype.FP32
-                assert output.parameters == {}
-                num_boxes = int(len(output.data) / 6)
+                assert output.datatype == proteus.DataType.FP32
+                assert output.parameters.empty()
+                data = output.getFp32Data()
+                num_boxes = int(len(data) / 6)
                 assert output.shape == [6, num_boxes]
-                assert len(output.data) == len(gold_response_output)
-                np.testing.assert_almost_equal(gold_response_output, output.data, 2)
+                assert len(data) == len(
+                    gold_response_output
+                ), f"{len(data)} != {len(gold_response_output)}"
+                np.testing.assert_almost_equal(gold_response_output, data, 2)
         return response
 
     def construct_request(self, asTensor):

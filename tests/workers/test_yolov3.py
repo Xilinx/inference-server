@@ -17,9 +17,8 @@ import json
 import os
 import numpy as np
 
-from helper import run_benchmark, root_path
+from helper import run_benchmark, root_path, ImageInferenceRequest
 import proteus
-from proteus.predict_api import Datatype, ImageInferenceRequest
 
 
 @pytest.fixture(scope="class")
@@ -57,13 +56,13 @@ class TestInferImageYoloV3DPUCADF8H:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request)
+            response = self.rest_client.modelInfer(self.model, request)
         except proteus.ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        num_inputs = len(request.inputs)
+        num_inputs = len(request.getInputs())
         # for this picture and xmodel combination, we expect the following output with Vitis 1.4
         gold_response_output = [
             1,
@@ -97,21 +96,23 @@ class TestInferImageYoloV3DPUCADF8H:
         ]
 
         if check_asserts:
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
             # content = response.json()
             assert response.id == ""
-            assert response.model_name == "yolov3"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
+            assert response.model == "yolov3"
+            outputs = response.getOutputs()
+            assert len(outputs) == num_inputs
+            for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == Datatype.FP32
-                assert output.parameters == {}
-                num_boxes = int(len(output.data) / 6)
+                assert output.datatype == proteus.DataType.FP32
+                assert output.parameters.empty()
+                data = output.getFp32Data()
+                num_boxes = int(len(data) / 6)
                 assert output.shape == [6, num_boxes]
-                assert len(output.data) == len(gold_response_output)
-                assert np.allclose(
-                    output.data, gold_response_output, 0.01, 0
-                ) or np.allclose(output.data, gold_response_output_2, 0.01, 0)
+                assert len(data) == len(gold_response_output)
+                assert np.allclose(data, gold_response_output, 0.01, 0) or np.allclose(
+                    data, gold_response_output_2, 0.01, 0
+                )
         return response
 
     def construct_request(self, asTensor):

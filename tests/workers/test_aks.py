@@ -12,9 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import numpy as np
 import pytest
 
-from proteus.predict_api import RequestInput, Datatype, InferenceRequest
+import proteus
+from proteus.predict_api import (
+    InferenceRequest,
+    InferenceRequestInput,
+    InferenceResponse,
+)
 
 
 @pytest.fixture(scope="class")
@@ -32,32 +38,37 @@ def parameters_fixture():
 class TestAks:
     def test_aks_0(self):
         numbers = [3.0, 5.0]
-        request = InferenceRequest(id="hello_world")
+        request = InferenceRequest()
+        request.id = "hello_world"
 
         for num in numbers:
-            input_0 = RequestInput("aks")
-            input_0.data = [num]
+            input_0 = InferenceRequestInput()
+            input_0.name = "aks"
+            input_0.setFp32Data(np.asarray([num], np.float))
             input_0.shape = [1]
-            input_0.datatype = Datatype.FP32
-            request.inputs.append(input_0)
-
+            input_0.datatype = proteus.DataType.FP32
+            request.addInputTensor(input_0)
         try:
-            response = self.rest_client.infer(self.model, request)
+            response: InferenceResponse = self.rest_client.modelInfer(
+                self.model, request
+            )
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        assert not response.error, response.error_msg
+        assert not response.isError(), response.getError()
 
         assert response.id == "hello_world"
-        assert response.model_name == "aks"
+        assert response.model == "aks"
 
-        assert len(response.outputs) == len(numbers)
+        outputs = response.getOutputs()
+        assert len(outputs) == len(numbers)
         for index, num in enumerate(numbers):
-            reply = response.outputs[index]
-            assert len(reply.data) == 1
+            reply = outputs[index]
+            data = reply.getFp32Data()
+            assert len(data) == 1
             assert reply.name == "aks"
-            assert reply.data[0] == num + 60
-            assert reply.datatype == Datatype.FP32
-            assert reply.parameters == {}
+            assert data[0] == num + 60
+            assert reply.datatype == proteus.DataType.FP32
+            assert reply.parameters.empty()

@@ -17,11 +17,9 @@ import sys
 
 import pytest
 import numpy as np
-from proteus.predict_api import Datatype
-from proteus.exceptions import ConnectionError
-from proteus.predict_api import Datatype, ImageInferenceRequest
+import proteus
 
-from helper import run_benchmark, root_path
+from helper import run_benchmark, root_path, ImageInferenceRequest
 
 sys.path.insert(0, os.path.join(root_path, "examples/python"))
 from utils.utils import preprocess, postprocess
@@ -68,23 +66,24 @@ class TestTfZendnn:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request)
+            response = self.rest_client.modelInfer(self.model, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        num_inputs = len(request.inputs)
+        num_inputs = len(request.getInputs())
 
         if check_asserts:
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
             assert response.id == ""
-            assert response.model_name == "TFModel"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
+            assert response.model == "TFModel"
+            outputs = response.getOutputs()
+            assert len(outputs) == num_inputs
+            for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == Datatype.FP32
-                assert output.parameters == {}
+                assert output.datatype == proteus.DataType.FP32
+                assert output.parameters.empty()
         return response
 
     def test_tfzendnn_0(self):
@@ -136,7 +135,7 @@ class TestTfZendnn:
         assert (k == gold_response_output).all()
 
     @pytest.mark.benchmark(group="TfZendnn")
-    def test_benchmark_xmodel(self, benchmark, model_fixture, parameters_fixture):
+    def test_benchmark_tfzendnn(self, benchmark, model_fixture, parameters_fixture):
 
         batch_size = 16
         input_size = parameters_fixture.get("input_size")

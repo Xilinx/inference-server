@@ -216,7 +216,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
           }
           /// Copy input to AKS Buffers: Find a better way to share buffers
           memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
-                   (tensor_count * input_size),
+                   ((tensor_count % this->batch_size_) * input_size),
                  input_buffer, input_size);
         } else if (input_dtype == DataType::STRING) {
           auto* idata = static_cast<char*>(input_buffer);
@@ -319,7 +319,6 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
       auto context = batch->traces.at(k)->propagate();
       resp.setContext(std::move(context));
 #endif
-
       req->runCallbackOnce(resp);
     }
     this->returnBuffers(std::move(batch->input_buffers),
