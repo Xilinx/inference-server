@@ -19,6 +19,7 @@
 
 #include "proteus/core/predict_api.hpp"
 
+#include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -31,7 +32,8 @@ namespace py = pybind11;
 void wrapRequestParameters(py::module_ &m) {
   using proteus::RequestParameters;
 
-  py::class_<RequestParameters>(m, "RequestParameters")
+  py::class_<RequestParameters, std::shared_ptr<RequestParameters>>(
+    m, "RequestParameters")
     .def(py::init<>(), DOC(proteus, RequestParameters))
     .def("put",
          py::overload_cast<const std::string &, bool>(&RequestParameters::put),
@@ -167,16 +169,24 @@ overloaded(Ts...) -> overloaded<Ts...>;
 //     };
 // }} // namespace pybind11::detail
 
+template <typename T>
+py::array_t<T> getData(const proteus::InferenceRequestInput &self) {
+  auto *data = static_cast<std::vector<T> *>(self.getData());
+  return py::array_t<T>(self.getSize(), data->data());
+  // return py::memoryview::from_memory(data->data(), self.getSize());
+}
+
+template <typename T>
+void setData(proteus::InferenceRequestInput &self, py::array_t<T> &b) {
+  self.setData(static_cast<void *>(const_cast<T *>(b.data())));
+}
+
 void wrapPredictApi(py::module_ &m) {
   using proteus::InferenceRequest;
   using proteus::InferenceRequestInput;
   using proteus::InferenceRequestOutput;
   using proteus::InferenceResponse;
   using proteus::ServerMetadata;
-
-  (void)m;
-
-  // py::module_::import("proteus").attr("RequestParameters");
 
   py::class_<ServerMetadata>(m, "ServerMetadata")
     .def(py::init<>(), DOC(proteus, ServerMetadata))
@@ -187,7 +197,6 @@ void wrapPredictApi(py::module_ &m) {
     .def_readwrite("extensions", &ServerMetadata::extensions,
                    DOC(proteus, ServerMetadata, extensions));
 
-  // py::module_::import("proteus").attr("DataType");
   auto setShape =
     static_cast<void (InferenceRequestInput::*)(const std::vector<uint64_t> &)>(
       &InferenceRequestInput::setShape);
@@ -198,14 +207,26 @@ void wrapPredictApi(py::module_ &m) {
                   std::string>(),
          DOC(proteus, InferenceRequestInput, 2), py::arg("data"),
          py::arg("shape"), py::arg("dataType"), py::arg("name") = "")
-    .def(
-      "setData",
-      [](InferenceRequestInput &self, py::list b) { self.setData(b.ptr()); },
-      py::keep_alive<1, 2>(), DOC(proteus, InferenceRequestInput, setData))
-    // .def("setData",
-    //      py::overload_cast<std::shared_ptr<std::byte>>(&InferenceRequestInput::setData),
-    //      DOC(proteus, InferenceRequestInput, setData, 2))
-    .def("getData", &InferenceRequestInput::getData)
+    .def("setUint8Data", &setData<uint8_t>, py::keep_alive<1, 2>())
+    .def("setUint16Data", &setData<uint16_t>, py::keep_alive<1, 2>())
+    .def("setUint32Data", &setData<uint32_t>, py::keep_alive<1, 2>())
+    .def("setUint64Data", &setData<uint64_t>, py::keep_alive<1, 2>())
+    .def("setInt8Data", &setData<int8_t>, py::keep_alive<1, 2>())
+    .def("setInt16Data", &setData<int16_t>, py::keep_alive<1, 2>())
+    .def("setInt32Data", &setData<int32_t>, py::keep_alive<1, 2>())
+    .def("setInt64Data", &setData<int64_t>, py::keep_alive<1, 2>())
+    .def("setFp32Data", &setData<float>, py::keep_alive<1, 2>())
+    .def("setFp64Data", &setData<double>, py::keep_alive<1, 2>())
+    .def("getUint8Data", &getData<uint8_t>, py::keep_alive<0, 1>())
+    .def("getUint16Data", &getData<uint16_t>, py::keep_alive<0, 1>())
+    .def("getUint32Data", &getData<uint32_t>, py::keep_alive<0, 1>())
+    .def("getUint64Data", &getData<uint64_t>, py::keep_alive<0, 1>())
+    .def("getInt8Data", &getData<int8_t>, py::keep_alive<0, 1>())
+    .def("getInt16Data", &getData<int16_t>, py::keep_alive<0, 1>())
+    .def("getInt32Data", &getData<int32_t>, py::keep_alive<0, 1>())
+    .def("getInt64Data", &getData<int64_t>, py::keep_alive<0, 1>())
+    .def("getFp32Data", &getData<float>, py::keep_alive<0, 1>())
+    .def("getFp64Data", &getData<double>, py::keep_alive<0, 1>())
     .def_property("name", &InferenceRequestInput::getName,
                   &InferenceRequestInput::setName)
     .def_property("shape", &InferenceRequestInput::getShape, setShape)
@@ -258,8 +279,10 @@ void wrapPredictApi(py::module_ &m) {
          })
 #endif
     .def("getParameters", &InferenceResponse::getParameters)
-    .def("getOutputs", &InferenceResponse::getOutputs)
-    .def("addOutput", &InferenceResponse::addOutput, py::arg("output"))
+    .def("getOutputs", &InferenceResponse::getOutputs,
+         py::return_value_policy::reference_internal)
+    .def("addOutput", &InferenceResponse::addOutput, py::arg("output"),
+         py::keep_alive<1, 2>())
     .def("isError", &InferenceResponse::isError)
     .def("getError", &InferenceResponse::getError)
     .def("__repr__",
@@ -281,24 +304,27 @@ void wrapPredictApi(py::module_ &m) {
     .def_property("id", &InferenceRequest::getID, &InferenceRequest::setID)
     .def_property("parameters", &InferenceRequest::getParameters,
                   &InferenceRequest::setParameters)
-    .def("getOutputs", &InferenceRequest::getOutputs)
-    .def("getInputs", &InferenceRequest::getInputs)
+    .def("getOutputs", &InferenceRequest::getOutputs,
+         py::return_value_policy::reference_internal)
+    .def("getInputs", &InferenceRequest::getInputs,
+         py::return_value_policy::reference_internal)
     .def("getInputSize", &InferenceRequest::getInputSize)
-    .def("addInputTensor", addInputTensor, py::arg("input"))
+    .def("addInputTensor", addInputTensor, py::arg("input"),
+         py::keep_alive<1, 2>())
     .def("addOutputTensor", &InferenceRequest::addOutputTensor,
-         py::arg("output"))
+         py::arg("output"), py::keep_alive<1, 2>())
     // .def("setCallback", [](InferenceRequest& self, proteus::Callback
     // callback) {
     //   self.setCallback(std::move(callback));
     // })
-    .def("runCallback", &InferenceRequest::runCallback, py::arg("response"))
-    .def("runCallbackOnce", &InferenceRequest::runCallbackOnce,
-         py::arg("response"))
-    .def("runCallbackError", &InferenceRequest::runCallbackError,
-         py::arg("error_msg"))
+    // .def("runCallback", &InferenceRequest::runCallback, py::arg("response"))
+    // .def("runCallbackOnce", &InferenceRequest::runCallbackOnce,
+    //      py::arg("response"))
+    // .def("runCallbackError", &InferenceRequest::runCallbackError,
+    //      py::arg("error_msg"))
     .def("__repr__", [](const InferenceRequest &self) {
       (void)self;
-      return "InferenceRequest\n";
+      return "InferenceRequest";
     });
   // .def("__str__", [](const InferenceRequest& self) {
   //   std::ostringstream os;
@@ -328,9 +354,9 @@ void wrapPredictApi(py::module_ &m) {
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),
          DOC(proteus, ModelMetadata, ModelMetadata))
-    .def("addInputTensor", addInputTensor2)
+    .def("addInputTensor", addInputTensor2, py::keep_alive<1, 2>())
     .def("addOutputTensor", addOutputTensor2, py::arg("name"),
-         py::arg("datatype"), py::arg("shape"))
+         py::arg("datatype"), py::arg("shape"), py::keep_alive<1, 2>())
     .def_property("name", &ModelMetadata::getName, &ModelMetadata::setName)
     .def("getPlatform", &ModelMetadata::getPlatform)
     .def("setReady", &ModelMetadata::setReady)

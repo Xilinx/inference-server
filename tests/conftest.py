@@ -25,8 +25,6 @@ from xprocess import ProcessStarter
 from pytest_cpp.plugin import CppItem
 
 import proteus
-from proteus.rest import Client as RestClient
-from proteus.websocket import Client as WebsocketClient
 from helper import kDefaultHttpPort, run_path, root_path, build_path
 
 proteus_command = []
@@ -239,36 +237,33 @@ def server(xprocess):
 
 
 @pytest.fixture(scope="class")
-def load(request, rest_client, model_fixture, parameters_fixture, server):
-    try:
-        response = rest_client.load(model_fixture, parameters_fixture)
-    except proteus.ConnectionError:
-        raise
-    assert not response.error, response.error_msg
-    model = response.html
-    request.cls.model = model
+def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
+    parameters = proteus.RequestParameters()
+    if parameters_fixture is not None:
+        for key, value in parameters_fixture.items():
+            parameters.put(key, value)
+
+    response = rest_client.modelLoad(model_fixture, parameters)
+    request.cls.model = response
 
     yield  # perform testing
 
-    try:
-        rest_client.unload(model)
-    except ConnectionError:
-        pass
+    rest_client.modelUnload(response)
 
 
 @pytest.fixture(scope="session")
 def rest_client(request):
     address = get_http_addr(request.config)
-    return RestClient(address)
+    return proteus.clients.HttpClient("http://" + address)
 
 
-@pytest.fixture(scope="session")
-def ws_client(request):
-    address = get_http_addr(request.config)
-    return WebsocketClient(address)
+# @pytest.fixture(scope="session")
+# def ws_client(request):
+#     address = get_http_addr(request.config)
+#     return WebsocketClient(address)
 
 
 @pytest.fixture(autouse=True, scope="class")
-def assign_client(request, rest_client, ws_client):
+def assign_client(request, rest_client):
     request.cls.rest_client = rest_client
-    request.cls.ws_client = ws_client
+    # request.cls.ws_client = ws_client
