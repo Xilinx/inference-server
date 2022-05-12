@@ -217,6 +217,17 @@ void wrapPredictApi(py::module_ &m) {
     .def("setInt64Data", &setData<int64_t>, py::keep_alive<1, 2>())
     .def("setFp32Data", &setData<float>, py::keep_alive<1, 2>())
     .def("setFp64Data", &setData<double>, py::keep_alive<1, 2>())
+    .def(
+      "setStringData",
+      [](proteus::InferenceRequestInput &self, std::string &str) {
+        std::cout << "Setting string data: " << &str << " of size "
+                  << str.size() << std::endl;
+        auto ptr = std::make_shared<std::string>(str);
+        auto ptr_cast = std::reinterpret_pointer_cast<std::byte>(ptr);
+        // self.setData(static_cast<void *>(&str));
+        self.setData(ptr_cast);
+      },
+      py::keep_alive<1, 2>())
     .def("getUint8Data", &getData<uint8_t>, py::keep_alive<0, 1>())
     .def("getUint16Data", &getData<uint16_t>, py::keep_alive<0, 1>())
     .def("getUint32Data", &getData<uint32_t>, py::keep_alive<0, 1>())
@@ -227,6 +238,13 @@ void wrapPredictApi(py::module_ &m) {
     .def("getInt64Data", &getData<int64_t>, py::keep_alive<0, 1>())
     .def("getFp32Data", &getData<float>, py::keep_alive<0, 1>())
     .def("getFp64Data", &getData<double>, py::keep_alive<0, 1>())
+    .def(
+      "getStringData",
+      [](proteus::InferenceRequestInput &self) {
+        auto *data = static_cast<std::string *>(self.getData());
+        return *data;
+      },
+      py::keep_alive<0, 1>())
     .def_property("name", &InferenceRequestInput::getName,
                   &InferenceRequestInput::setName)
     .def_property("shape", &InferenceRequestInput::getShape, setShape)

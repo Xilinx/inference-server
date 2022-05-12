@@ -25,5 +25,7 @@ class module_;
 }
 
 void wrapClient(pybind11::module_ &);
+void wrapHttpClient(pybind11::module_ &);
+void wrapWebSocketClient(pybind11::module_ &);
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENT

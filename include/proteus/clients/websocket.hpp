@@ -20,6 +20,8 @@
 #ifndef GUARD_PROTEUS_CLIENTS_WEBSOCKET
 #define GUARD_PROTEUS_CLIENTS_WEBSOCKET
 
+#include <string>
+
 #include "proteus/clients/client.hpp"
 
 namespace proteus {
@@ -45,7 +47,9 @@ class WebSocketClient : public Client {
 
   void modelInferAsync(const std::string& model,
                        const InferenceRequest& request);
-  InferenceResponse modelRecv();
+  // TODO(varunsh): change to InferenceReponse
+  std::string modelRecv();
+  void close();
 
  private:
   class WebSocketClientImpl;

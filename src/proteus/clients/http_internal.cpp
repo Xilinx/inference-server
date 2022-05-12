@@ -196,6 +196,9 @@ void setInputData(Json::Value &json, const InferenceRequestInput *input) {
 Json::Value mapRequestToJson(const InferenceRequest &request) {
   Json::Value json;
   json["id"] = request.getID();
+  auto *parameters = request.getParameters();
+  json["parameters"] =
+    parameters != nullptr ? mapParametersToJson(parameters) : Json::objectValue;
   json["inputs"] = Json::arrayValue;
   const auto &inputs = request.getInputs();
   for (const auto &input : inputs) {
@@ -203,7 +206,7 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
     json_input["name"] = input.getName();
     json_input["datatype"] = types::mapTypeToStr(input.getDatatype());
     json_input["shape"] = Json::arrayValue;
-    auto *parameters = request.getParameters();
+    parameters = input.getParameters();
     json_input["parameters"] = parameters != nullptr
                                  ? mapParametersToJson(parameters)
                                  : Json::objectValue;
@@ -263,6 +266,9 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
       }
       case DataType::STRING: {
         auto *data = static_cast<std::string *>(input.getData());
+        std::cout << "Reading string data: " << data << " of size "
+                  << data->size() << std::endl;
+
         json_input["data"].append(*data);
         break;
       }

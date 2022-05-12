@@ -50,22 +50,28 @@ class WebSocketClient::WebSocketClientImpl {
         std::string messageType = "Unknown";
         switch (type) {
           case WebSocketMessageType::Text: {
-            Json::CharReaderBuilder builder;
-            Json::CharReader* reader = builder.newCharReader();
+            // Json::CharReaderBuilder builder;
+            // Json::CharReader* reader = builder.newCharReader();
 
-            Json::Value root;
-            std::string errors;
+            // Json::Value root;
+            // std::string errors;
 
-            bool parsingSuccessful =
-              reader->parse(message.c_str(), message.c_str() + message.size(),
-                            &root, &errors);
-            delete reader;
-            if (!parsingSuccessful) {
-              throw std::runtime_error("Unsuccessful?");
-            }
-            auto json_ptr = std::make_shared<Json::Value>(std::move(root));
-            queue_.enqueue(mapJsonToResponse(json_ptr));
+            // bool parsingSuccessful =
+            //   reader->parse(message.c_str(), message.c_str() +
+            //   message.size(),
+            //                 &root, &errors);
+            // delete reader;
+            // if (!parsingSuccessful) {
+            //   throw std::runtime_error("Unsuccessful?");
+            // }
+            // auto json_ptr = std::make_shared<Json::Value>(std::move(root));
+            // queue_.enqueue(mapJsonToResponse(json_ptr));
+            queue_.enqueue(message);
+            break;
           }
+          // case WebSocketMessageType::Close: {
+          //   ws_client_->stop();
+          // }
           default: {
             break;
           }
@@ -73,31 +79,38 @@ class WebSocketClient::WebSocketClientImpl {
       });
   }
 
-  ~WebSocketClientImpl() { loop_.getLoop()->quit(); }
+  ~WebSocketClientImpl() {
+    if (auto connection = ws_client_->getConnection(); connection != nullptr) {
+      connection->shutdown();
+      ws_client_->stop();
+    }
+    loop_.getLoop()->quit();
+  }
 
   void connect() {
     auto connection = ws_client_->getConnection();
-    if (connection->disconnected()) {
-      this->connected_ = false;
+    if (connection == nullptr || connection->disconnected()) {
       auto req = drogon::HttpRequest::newHttpRequest();
       req->setMethod(drogon::Get);
       req->setPath("/models/infer");
-      ws_client_->connectToServer(req, [&](drogon::ReqResult r,
-                                           const drogon::HttpResponsePtr&,
-                                           const drogon::WebSocketClientPtr&) {
-        if (r != drogon::ReqResult::Ok) {
-          throw std::runtime_error("Failed to establish WebSocket connection!");
-        }
-        this->connected_ = true;
-      });
+      ws_client_->connectToServer(
+        req, [](drogon::ReqResult r, const drogon::HttpResponsePtr&,
+                const drogon::WebSocketClientPtr& wsptr) {
+          if (r != drogon::ReqResult::Ok) {
+            wsptr->stop();
+            throw std::runtime_error(
+              "Failed to establish WebSocket connection!");
+          }
+        });
     }
-    while (!connected_) {
-      std::this_thread::yield();
+    while (connection == nullptr || connection->disconnected()) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      connection = ws_client_->getConnection();
     }
   }
 
-  InferenceResponse recv() {
-    InferenceResponse response;
+  std::string recv() {
+    std::string response;
     queue_.wait_dequeue(response);
     return response;
   }
@@ -109,8 +122,7 @@ class WebSocketClient::WebSocketClientImpl {
   trantor::EventLoopThread loop_;
   std::unique_ptr<HttpClient> http_client_;
   drogon::WebSocketClientPtr ws_client_;
-  bool connected_ = false;
-  moodycamel::BlockingConcurrentQueue<InferenceResponse> queue_;
+  moodycamel::BlockingConcurrentQueue<std::string> queue_;
 };
 
 WebSocketClient::WebSocketClient(const std::string& ws_address,
@@ -120,6 +132,14 @@ WebSocketClient::WebSocketClient(const std::string& ws_address,
 }
 
 WebSocketClient::~WebSocketClient() = default;
+
+void WebSocketClient::close() {
+  auto client = this->impl_->getWsClient();
+  if (auto connection = client->getConnection(); connection != nullptr) {
+    connection->shutdown();
+    // client->stop();
+  }
+}
 
 ServerMetadata WebSocketClient::serverMetadata() {
   auto client = this->impl_->getHttpClient();
@@ -166,19 +186,23 @@ std::vector<std::string> WebSocketClient::modelList() {
 void WebSocketClient::modelInferAsync(const std::string& model,
                                       const InferenceRequest& request) {
   auto client = this->impl_->getWsClient();
-  auto connection = client->getConnection();
-
-  if (connection->disconnected()) {
-    impl_->connect();
-  }
 
   auto json = mapRequestToJson(request);
+  json["model"] = model;
+  std::cout << json.toStyledString() << std::endl;
   Json::StreamWriterBuilder builder;
   builder["indentation"] = "";  // remove whitespace
   const std::string message = Json::writeString(builder, json);
+
+  auto connection = client->getConnection();
+  if (connection == nullptr || connection->disconnected()) {
+    impl_->connect();
+    connection = client->getConnection();
+    assert(connection != nullptr);
+  }
   connection->send(message);
 }
 
-InferenceResponse WebSocketClient::modelRecv() { return impl_->recv(); }
+std::string WebSocketClient::modelRecv() { return impl_->recv(); }
 
 }  // namespace proteus
