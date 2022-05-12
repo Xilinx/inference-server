@@ -20,7 +20,6 @@
 #include <pybind11/pybind11.h>
 
 #include "proteus/bindings/python/clients/client.hpp"
-#include "proteus/bindings/python/clients/http.hpp"
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
 
@@ -38,6 +37,7 @@ PYBIND11_MODULE(proteus, m) {
   wrapPredictApi(n);
   wrapClient(c);
   wrapHttpClient(c);
+  wrapWebSocketClient(c);
 }
 
 }  // namespace proteus

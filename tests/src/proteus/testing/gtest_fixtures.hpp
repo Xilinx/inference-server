@@ -30,25 +30,47 @@ class BaseFixture : public testing::Test {
 class GrpcFixture : public BaseFixture {
  protected:
   void SetUp() override {
-    proteus::startGrpcServer(50051);
     client_ = std::make_unique<proteus::GrpcClient>("localhost:50051");
+    if (!client_->serverLive()) {
+      proteus::startGrpcServer(50051);
+      started_ = true;
+      while (!client_->serverLive()) {
+        std::this_thread::yield();
+      }
+    }
   }
 
-  void TearDown() override { proteus::stopGrpcServer(); }
+  void TearDown() override {
+    if (started_) {
+      proteus::stopGrpcServer();
+    }
+  }
 
   std::unique_ptr<proteus::GrpcClient> client_;
+  bool started_ = false;
 };
 
 class HttpFixture : public BaseFixture {
  protected:
   void SetUp() override {
-    proteus::startHttpServer(8998);
     client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
+    if (!client_->serverLive()) {
+      proteus::startHttpServer(8998);
+      started_ = true;
+      while (!client_->serverLive()) {
+        std::this_thread::yield();
+      }
+    }
   }
 
-  void TearDown() override { proteus::stopHttpServer(); }
+  void TearDown() override {
+    if (started_) {
+      proteus::stopHttpServer();
+    }
+  }
 
   std::unique_ptr<proteus::HttpClient> client_;
+  bool started_ = false;
 };
 
 #define EXPECT_THROW_CHECK(statement, check, exception) \

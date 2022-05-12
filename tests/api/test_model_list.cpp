@@ -23,6 +23,9 @@
 void test(proteus::Client* client) {
   const std::string worker = "echo";
 
+  auto models_0 = client->modelList();
+  EXPECT_EQ(models_0.size(), 0);
+
   const auto endpoint = client->modelLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
   EXPECT_TRUE(client->modelReady(endpoint));
@@ -42,6 +45,15 @@ void test(proteus::Client* client) {
               models.end());
   EXPECT_TRUE(std::find(models_2.begin(), models_2.end(), endpoint_2) !=
               models.end());
+
+  client->modelUnload(endpoint);
+  client->modelUnload(endpoint_2);
+
+  auto models_3 = client->modelList();
+  while (models_3.size() > 0) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    models_3 = client->modelList();
+  }
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)

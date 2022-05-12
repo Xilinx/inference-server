@@ -45,11 +45,15 @@ WebsocketServer::WebsocketServer() {
 void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                                        std::string &&message,
                                        const WebSocketMessageType &type) {
-  (void)type;  // suppress unused variable warning
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
   trace->startSpan("websocket_handler");
 #endif
+
+  if (type == WebSocketMessageType::Close) {
+    conn->shutdown(drogon::CloseCode::kNormalClosure, "");
+    return;
+  }
 
   auto json = std::make_shared<Json::Value>();
   std::string errors;
@@ -100,7 +104,8 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 void WebsocketServer::handleConnectionClosed(
   const WebSocketConnectionPtr &conn) {
   SPDLOG_LOGGER_INFO(this->logger_, "Websocket closed");
-  (void)conn;  // suppress unused variable warning
+  // (void)conn;  // suppress unused variable warning
+  conn->shutdown();
 }
 
 void WebsocketServer::handleNewConnection(const HttpRequestPtr &req,

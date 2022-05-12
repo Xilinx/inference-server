@@ -246,6 +246,12 @@ def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
     response = rest_client.modelLoad(model_fixture, parameters)
     request.cls.model = response
 
+    try:
+        while not rest_client.modelReady(response):
+            time.sleep(1)
+    except ValueError:
+        pass
+
     yield  # perform testing
 
     rest_client.modelUnload(response)
@@ -257,13 +263,13 @@ def rest_client(request):
     return proteus.clients.HttpClient("http://" + address)
 
 
-# @pytest.fixture(scope="session")
-# def ws_client(request):
-#     address = get_http_addr(request.config)
-#     return WebsocketClient(address)
+@pytest.fixture(scope="session")
+def ws_client(request):
+    address = get_http_addr(request.config)
+    return proteus.clients.WebSocketClient("ws://" + address, "http://" + address)
 
 
 @pytest.fixture(autouse=True, scope="class")
-def assign_client(request, rest_client):
+def assign_client(request, rest_client, ws_client):
     request.cls.rest_client = rest_client
-    # request.cls.ws_client = ws_client
+    request.cls.ws_client = ws_client
