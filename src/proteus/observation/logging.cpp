@@ -71,6 +71,13 @@ void initLogging() {
   spdlog::set_default_logger(logger);
 }
 
-LoggerPtr getLogger() { return spdlog::get("proteus"); }
+LoggerPtr getLogger() {
+  auto logger = spdlog::get("proteus");
+  if (logger == nullptr) {
+    initLogging();
+    logger = spdlog::get("proteus");
+  }
+  return logger;
+}
 
 }  // namespace proteus

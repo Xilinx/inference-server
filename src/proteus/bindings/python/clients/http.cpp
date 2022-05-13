@@ -40,6 +40,9 @@ void wrapHttpClient(py::module_ &m) {
 
   // auto foo = (py::object) py::module_::import("clients").attr("Client");
 
+  m.def("startHttpServer", &proteus::startHttpServer, py::arg("port"));
+  m.def("stopHttpServer", &proteus::stopHttpServer);
+
   py::class_<HttpClient, proteus::Client>(m, "HttpClient")
     .def(py::init<const std::string &>(), py::arg("address"))
     .def("serverMetadata", &HttpClient::serverMetadata)
