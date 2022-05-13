@@ -25,7 +25,8 @@
 
 #include <sstream>
 
-#include "docstrings.hpp"
+#include "proteus/bindings/python/helpers/docstrings.hpp"
+#include "proteus/bindings/python/helpers/print.hpp"
 
 namespace py = pybind11;
 
@@ -34,42 +35,38 @@ void wrapRequestParameters(py::module_ &m) {
 
   py::class_<RequestParameters, std::shared_ptr<RequestParameters>>(
     m, "RequestParameters")
-    .def(py::init<>(), DOC(proteus, RequestParameters))
+    .def(py::init<>(), DOCS(RequestParameters))
     .def("put",
          py::overload_cast<const std::string &, bool>(&RequestParameters::put),
-         DOC(proteus, RequestParameters, put))
+         DOCS(RequestParameters, put))
     .def(
       "put",
       py::overload_cast<const std::string &, double>(&RequestParameters::put),
-      DOC(proteus, RequestParameters, put, 2))
+      DOCS(RequestParameters, put, 2))
     .def(
       "put",
       py::overload_cast<const std::string &, int32_t>(&RequestParameters::put),
-      DOC(proteus, RequestParameters, put, 3))
+      DOCS(RequestParameters, put, 3))
     .def("put",
          py::overload_cast<const std::string &, const std::string &>(
            &RequestParameters::put),
-         DOC(proteus, RequestParameters, put, 4))
+         DOCS(RequestParameters, put, 4))
     .def("put",
          py::overload_cast<const std::string &, const char *>(
            &RequestParameters::put),
-         DOC(proteus, RequestParameters, put, 5))
-    .def("getBool", &RequestParameters::get<bool>,
-         DOC(proteus, RequestParameters, get))
+         DOCS(RequestParameters, put, 5))
+    .def("getBool", &RequestParameters::get<bool>, DOCS(RequestParameters, get))
     .def("getFloat", &RequestParameters::get<double>,
-         DOC(proteus, RequestParameters, get))
+         DOCS(RequestParameters, get))
     .def("getInt", &RequestParameters::get<int32_t>,
-         DOC(proteus, RequestParameters, get))
+         DOCS(RequestParameters, get))
     .def("getString", &RequestParameters::get<std::string>,
-         DOC(proteus, RequestParameters, get))
-    .def("has", &RequestParameters::has, DOC(proteus, RequestParameters, has),
+         DOCS(RequestParameters, get))
+    .def("has", &RequestParameters::has, DOCS(RequestParameters, has),
          py::arg("key"))
-    .def("erase", &RequestParameters::erase,
-         DOC(proteus, RequestParameters, erase))
-    .def("empty", &RequestParameters::empty,
-         DOC(proteus, RequestParameters, empty))
-    .def("size", &RequestParameters::size,
-         DOC(proteus, RequestParameters, size))
+    .def("erase", &RequestParameters::erase, DOCS(RequestParameters, erase))
+    .def("empty", &RequestParameters::empty, DOCS(RequestParameters, empty))
+    .def("size", &RequestParameters::size, DOCS(RequestParameters, size))
     .def(
       "__iter__",
       [](const RequestParameters &self) {
@@ -80,22 +77,18 @@ void wrapRequestParameters(py::module_ &m) {
          [](const RequestParameters &self) {
            return "RequestParameters(" + std::to_string(self.size()) + ")\n";
          })
-    .def("__str__", [](const RequestParameters &self) {
-      std::ostringstream os;
-      os << self;
-      return os.str();
-    });
+    .def("__str__", &proteus::to_string<RequestParameters>);
 }
 
 // refer to cppreference for std::visit
 // helper type for the visitor #4
-template <class... Ts>
-struct overloaded : Ts... {
-  using Ts::operator()...;
-};
-// explicit deduction guide (not needed as of C++20)
-template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
+// template <class... Ts>
+// struct overloaded : Ts... {
+//   using Ts::operator()...;
+// };
+// // explicit deduction guide (not needed as of C++20)
+// template <class... Ts>
+// overloaded(Ts...) -> overloaded<Ts...>;
 
 //? Trying to auto-convert RequestParameters <-> dict but it's not working
 // namespace pybind11 { namespace detail {
@@ -189,24 +182,23 @@ void wrapPredictApi(py::module_ &m) {
   using proteus::ServerMetadata;
 
   py::class_<ServerMetadata>(m, "ServerMetadata")
-    .def(py::init<>(), DOC(proteus, ServerMetadata))
-    .def_readwrite("name", &ServerMetadata::name,
-                   DOC(proteus, ServerMetadata, name))
+    .def(py::init<>(), DOCS(ServerMetadata))
+    .def_readwrite("name", &ServerMetadata::name, DOCS(ServerMetadata, name))
     .def_readwrite("version", &ServerMetadata::version,
-                   DOC(proteus, ServerMetadata, version))
+                   DOCS(ServerMetadata, version))
     .def_readwrite("extensions", &ServerMetadata::extensions,
-                   DOC(proteus, ServerMetadata, extensions));
+                   DOCS(ServerMetadata, extensions));
 
   auto setShape =
     static_cast<void (InferenceRequestInput::*)(const std::vector<uint64_t> &)>(
       &InferenceRequestInput::setShape);
 
   py::class_<InferenceRequestInput>(m, "InferenceRequestInput")
-    .def(py::init<>(), DOC(proteus, InferenceRequestInput))
+    .def(py::init<>(), DOCS(InferenceRequestInput))
     .def(py::init<void *, std::vector<uint64_t>, proteus::types::DataType,
                   std::string>(),
-         DOC(proteus, InferenceRequestInput, 2), py::arg("data"),
-         py::arg("shape"), py::arg("dataType"), py::arg("name") = "")
+         DOCS(InferenceRequestInput, 2), py::arg("data"), py::arg("shape"),
+         py::arg("dataType"), py::arg("name") = "")
     .def("setUint8Data", &setData<uint8_t>, py::keep_alive<1, 2>())
     .def("setUint16Data", &setData<uint16_t>, py::keep_alive<1, 2>())
     .def("setUint32Data", &setData<uint32_t>, py::keep_alive<1, 2>())
@@ -254,20 +246,17 @@ void wrapPredictApi(py::module_ &m) {
                   &InferenceRequestInput::setDatatype)
     .def_property("parameters", &InferenceRequestInput::getParameters,
                   &InferenceRequestInput::setParameters)
-    .def("getSize", &InferenceRequestInput::getSize)
+    .def("getSize", &InferenceRequestInput::getSize,
+         DOCS(InferenceRequestInput, getSize))
     .def("__repr__",
          [](const InferenceRequestInput &self) {
            return "InferenceRequestInput(" + std::to_string(self.getSize()) +
                   ")";
          })
-    .def("__str__", [](const proteus::InferenceRequestInput &self) {
-      std::ostringstream os;
-      os << self;
-      return os.str();
-    });
+    .def("__str__", &proteus::to_string<InferenceRequestInput>);
 
   py::class_<InferenceRequestOutput>(m, "InferenceRequestOutput")
-    .def(py::init<>(), DOC(proteus, InferenceRequestOutput))
+    .def(py::init<>(), DOCS(InferenceRequestOutput))
     .def_property("name", &InferenceRequestOutput::getName,
                   &InferenceRequestOutput::setName)
     .def_property("data", &InferenceRequestOutput::getData,
@@ -285,9 +274,9 @@ void wrapPredictApi(py::module_ &m) {
   // });
 
   py::class_<InferenceResponse>(m, "InferenceResponse")
-    .def(py::init<>(), DOC(proteus, InferenceResponse, InferenceResponse))
+    .def(py::init<>(), DOCS(InferenceResponse, InferenceResponse))
     .def(py::init<const std::string &>(),
-         DOC(proteus, InferenceResponse, InferenceResponse, 2))
+         DOCS(InferenceResponse, InferenceResponse, 2))
     .def_property("id", &InferenceResponse::getID, &InferenceResponse::setID)
     .def_property("model", &InferenceResponse::getModel,
                   &InferenceResponse::setModel)
@@ -298,41 +287,45 @@ void wrapPredictApi(py::module_ &m) {
            self.setContext(std::move(context));
          })
 #endif
-    .def("getParameters", &InferenceResponse::getParameters)
+    .def("getParameters", &InferenceResponse::getParameters,
+         DOCS(InferenceResponse, getParameters))
     .def("getOutputs", &InferenceResponse::getOutputs,
-         py::return_value_policy::reference_internal)
+         py::return_value_policy::reference_internal,
+         DOCS(InferenceResponse, getOutputs))
     .def("addOutput", &InferenceResponse::addOutput, py::arg("output"),
-         py::keep_alive<1, 2>())
-    .def("isError", &InferenceResponse::isError)
-    .def("getError", &InferenceResponse::getError)
+         py::keep_alive<1, 2>(), DOCS(InferenceResponse, addOutput))
+    .def("isError", &InferenceResponse::isError,
+         DOCS(InferenceResponse, isError))
+    .def("getError", &InferenceResponse::getError,
+         DOCS(InferenceResponse, getError))
     .def("__repr__",
          [](const InferenceResponse &self) {
            (void)self;
            return "InferenceResponse\n";
          })
-    .def("__str__", [](const InferenceResponse &self) {
-      std::ostringstream os;
-      os << self;
-      return os.str();
-    });
+    .def("__str__", &proteus::to_string<InferenceResponse>);
 
   auto addInputTensor =
     static_cast<void (InferenceRequest::*)(InferenceRequestInput)>(
       &InferenceRequest::addInputTensor);
   py::class_<InferenceRequest>(m, "InferenceRequest")
-    .def(py::init<>(), DOC(proteus, InferenceRequest, InferenceRequest))
+    .def(py::init<>(), DOCS(InferenceRequest, InferenceRequest))
     .def_property("id", &InferenceRequest::getID, &InferenceRequest::setID)
     .def_property("parameters", &InferenceRequest::getParameters,
                   &InferenceRequest::setParameters)
     .def("getOutputs", &InferenceRequest::getOutputs,
-         py::return_value_policy::reference_internal)
+         py::return_value_policy::reference_internal,
+         DOCS(InferenceRequest, getOutputs))
     .def("getInputs", &InferenceRequest::getInputs,
-         py::return_value_policy::reference_internal)
-    .def("getInputSize", &InferenceRequest::getInputSize)
+         py::return_value_policy::reference_internal,
+         DOCS(InferenceRequest, getInputs))
+    .def("getInputSize", &InferenceRequest::getInputSize,
+         DOCS(InferenceRequest, getInputSize))
     .def("addInputTensor", addInputTensor, py::arg("input"),
-         py::keep_alive<1, 2>())
+         py::keep_alive<1, 2>(), DOCS(InferenceRequest, addInputTensor))
     .def("addOutputTensor", &InferenceRequest::addOutputTensor,
-         py::arg("output"), py::keep_alive<1, 2>())
+         py::arg("output"), py::keep_alive<1, 2>(),
+         DOCS(InferenceRequest, addOutputTensor))
     // .def("setCallback", [](InferenceRequest& self, proteus::Callback
     // callback) {
     //   self.setCallback(std::move(callback));
@@ -356,13 +349,13 @@ void wrapPredictApi(py::module_ &m) {
   py::class_<ModelMetadataTensor>(m, "ModelMetadataTensor")
     .def(py::init<const std::string &, proteus::types::DataType,
                   std::vector<uint64_t>>(),
-         DOC(proteus, ModelMetadataTensor, ModelMetadataTensor))
+         DOCS(ModelMetadataTensor, ModelMetadataTensor))
     .def("getName", &ModelMetadataTensor::getName,
-         DOC(proteus, ModelMetadataTensor, getName))
+         DOCS(ModelMetadataTensor, getName))
     .def("getDataType", &ModelMetadataTensor::getDataType,
-         DOC(proteus, ModelMetadataTensor, getDataType))
+         DOCS(ModelMetadataTensor, getDataType))
     .def("getShape", &ModelMetadataTensor::getShape,
-         DOC(proteus, ModelMetadataTensor, getShape));
+         DOCS(ModelMetadataTensor, getShape));
 
   using proteus::ModelMetadata;
   auto addInputTensor2 = static_cast<void (ModelMetadata::*)(
@@ -373,12 +366,15 @@ void wrapPredictApi(py::module_ &m) {
     &ModelMetadata::addOutputTensor);
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),
-         DOC(proteus, ModelMetadata, ModelMetadata))
-    .def("addInputTensor", addInputTensor2, py::keep_alive<1, 2>())
+         DOCS(ModelMetadata, ModelMetadata))
+    .def("addInputTensor", addInputTensor2, py::keep_alive<1, 2>(),
+         DOCS(ModelMetadata, addInputTensor))
     .def("addOutputTensor", addOutputTensor2, py::arg("name"),
-         py::arg("datatype"), py::arg("shape"), py::keep_alive<1, 2>())
+         py::arg("datatype"), py::arg("shape"), py::keep_alive<1, 2>(),
+         DOCS(ModelMetadata, addOutputTensor))
     .def_property("name", &ModelMetadata::getName, &ModelMetadata::setName)
-    .def("getPlatform", &ModelMetadata::getPlatform)
-    .def("setReady", &ModelMetadata::setReady)
-    .def("isReady", &ModelMetadata::isReady);
+    .def("getPlatform", &ModelMetadata::getPlatform,
+         DOCS(ModelMetadata, getPlatform))
+    .def("setReady", &ModelMetadata::setReady, DOCS(ModelMetadata, setReady))
+    .def("isReady", &ModelMetadata::isReady, DOCS(ModelMetadata, isReady));
 }

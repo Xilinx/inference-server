@@ -130,14 +130,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-if [[ -n $PROTEUS_ROOT && -d $PROTEUS_ROOT/src/python ]]; then
-    is_root=$(pip show proteus | grep Location | awk '{print $2}' | grep "^/usr/")
-    if [ -n "$is_root" ]; then
-        sudo pip uninstall -y proteus
-        pip install --prefix ~/.local -e $PROTEUS_ROOT/src/python/
-    fi
-fi
-
 if [ -f ~/.env ]; then
     . ~/.env
 fi

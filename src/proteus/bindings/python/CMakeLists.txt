@@ -21,17 +21,17 @@ if(${Pybind11Mkdoc_FOUND})
     # get the "-std=c++xx" flag to pass to pybind11-mkdoc
     set(CXX_STANDARD_FLAG ${CMAKE_CXX${CMAKE_CXX_STANDARD}_STANDARD_COMPILE_OPTION})
 
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/docstrings.hpp
-        COMMAND pybind11-mkdoc -o ${CMAKE_CURRENT_BINARY_DIR}/docstrings.hpp ${ALL_PUBLIC_HEADER_FILES} ${CXX_STANDARD_FLAG}
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
+        COMMAND pybind11-mkdoc -o ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp ${ALL_PUBLIC_HEADER_FILES} ${CXX_STANDARD_FLAG} -I${PROTEUS_PUBLIC_INCLUDE_DIRS}
         DEPENDS ${ALL_PUBLIC_HEADER_FILES}
     )
 else()
-    configure_file(docstrings.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/docstrings.hpp)
+    configure_file(helpers/auto_docstrings.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp)
 endif()
 
 add_custom_target(
     pybind11Mkdoc
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/docstrings.hpp
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
 )
 
 add_subdirectory(core) # sets CORE_OBJS

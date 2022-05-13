@@ -21,12 +21,12 @@
 
 #include <pybind11/pybind11.h>
 
-#include <sstream>
 #ifdef PROTEUS_ENABLE_VITIS
 #include <xir/util/data_type.hpp>
 #endif
 
 #include "docstrings.hpp"
+#include "proteus/bindings/python/helpers/print.hpp"
 
 namespace py = pybind11;
 
@@ -51,11 +51,7 @@ void wrapDataType(py::module_& m) {
          [](const DataType& self) {
            return "DataType(" + proteus::types::mapTypeToStr(self) + ")\n";
          })
-    .def("__str__", [](const DataType& self) {
-      std::ostringstream os;
-      os << self;
-      return os.str();
-    });
+    .def("__str__", &proteus::to_string<DataType>);
 }
 
 void wrapTypeMaps(py::module_& m) {

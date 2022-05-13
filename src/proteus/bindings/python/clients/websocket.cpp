@@ -24,7 +24,7 @@
 
 #include <sstream>
 
-#include "docstrings.hpp"
+#include "proteus/bindings/python/helpers/docstrings.hpp"
 
 namespace py = pybind11;
 
@@ -35,19 +35,28 @@ void wrapWebSocketClient(py::module_ &m) {
 
   py::class_<WebSocketClient, proteus::Client>(m, "WebSocketClient")
     .def(py::init<const std::string &, const std::string &>(),
-         py::arg("ws_address"), py::arg("http_address"))
-    .def("serverMetadata", &WebSocketClient::serverMetadata)
-    .def("serverLive", &WebSocketClient::serverLive)
-    .def("serverReady", &WebSocketClient::serverReady)
-    .def("modelReady", &WebSocketClient::modelReady, py::arg("model"))
+         py::arg("ws_address"), py::arg("http_address"),
+         DOCS(WebSocketClient, WebSocketClient))
+    .def("serverMetadata", &WebSocketClient::serverMetadata,
+         DOCS(WebSocketClient, serverMetadata))
+    .def("serverLive", &WebSocketClient::serverLive,
+         DOCS(WebSocketClient, serverLive))
+    .def("serverReady", &WebSocketClient::serverReady,
+         DOCS(WebSocketClient, serverReady))
+    .def("modelReady", &WebSocketClient::modelReady, py::arg("model"),
+         DOCS(WebSocketClient, modelReady))
     .def("modelLoad", &WebSocketClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = proteus::RequestParameters())
-    .def("modelUnload", &WebSocketClient::modelUnload, py::arg("model"))
+         py::arg("parameters") = proteus::RequestParameters(),
+         DOCS(WebSocketClient, modelLoad))
+    .def("modelUnload", &WebSocketClient::modelUnload, py::arg("model"),
+         DOCS(WebSocketClient, modelUnload))
     .def("modelInfer", &WebSocketClient::modelInfer, py::arg("model"),
-         py::arg("request"))
+         py::arg("request"), DOCS(WebSocketClient, modelInfer))
     .def("modelInferAsync", &WebSocketClient::modelInferAsync, py::arg("model"),
-         py::arg("request"))
-    .def("modelRecv", &WebSocketClient::modelRecv)
-    .def("modelList", &WebSocketClient::modelList)
-    .def("close", &WebSocketClient::close);
+         py::arg("request"), DOCS(WebSocketClient, modelInferAsync))
+    .def("modelRecv", &WebSocketClient::modelRecv,
+         DOCS(WebSocketClient, modelRecv))
+    .def("modelList", &WebSocketClient::modelList,
+         DOCS(WebSocketClient, modelList))
+    .def("close", &WebSocketClient::close, DOCS(WebSocketClient, close));
 }

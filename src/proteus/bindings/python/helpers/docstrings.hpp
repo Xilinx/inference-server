@@ -12,21 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @file
- * @brief Implements the Python bindings for the http.hpp header
- */
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
+#define GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
 
-#include "proteus/clients/client.hpp"
+#include "auto_docstrings.hpp"
 
-#include <pybind11/pybind11.h>
+#define DOCS(...) DOC(proteus, __VA_ARGS__)
 
-namespace py = pybind11;
-
-using proteus::types::DataType;
-
-void wrapClient(py::module_ &m) {
-  using proteus::Client;
-
-  py::class_<Client>(m, "Client");
-}
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
