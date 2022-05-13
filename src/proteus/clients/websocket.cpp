@@ -29,7 +29,6 @@
 #include "proteus/build_options.hpp"
 #include "proteus/clients/http.hpp"
 #include "proteus/clients/http_internal.hpp"
-// #include "proteus/servers/http_server.hpp"
 
 namespace proteus {
 
@@ -69,14 +68,18 @@ class WebSocketClient::WebSocketClientImpl {
             queue_.enqueue(message);
             break;
           }
-          // case WebSocketMessageType::Close: {
-          //   ws_client_->stop();
-          // }
+          case WebSocketMessageType::Close: {
+            ws_client_->stop();
+            break;
+          }
           default: {
             break;
           }
         }
       });
+
+    ws_client_->setConnectionClosedHandler(
+      [&](const drogon::WebSocketClientPtr&) {});
   }
 
   ~WebSocketClientImpl() {

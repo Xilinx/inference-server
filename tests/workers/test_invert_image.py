@@ -94,9 +94,9 @@ class TestInvertImage:
 
         output = outputs[0]
         if output.datatype == proteus.DataType.STRING:
-            assert len(output.data) == 1
-            compare_jpgs(output.data[0], image, shape=output.shape)
-            assert output.parameters == {}
+            data = output.getStringData()
+            compare_jpgs(data, image, shape=output.shape)
+            assert output.parameters.empty()
         else:
             assert output.shape == [*image.shape]
             assert output.datatype == proteus.DataType.UINT8

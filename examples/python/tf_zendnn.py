@@ -20,7 +20,9 @@ import time
 import numpy as np
 
 import proteus
+import proteus.clients
 from utils.utils import preprocess, postprocess
+from utils.helper import ImageInferenceRequest
 
 
 def main(args):
@@ -41,26 +43,23 @@ def main(args):
     """
 
     # Create server objects
-    server = proteus.Server()
-    client = proteus.RestClient("0.0.0.0:8998", None)
+    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
 
     # Start server: if it's not already started, start it here
-    try:
-        start_server = not client.server_live()
-        print("Server already up")
-    except proteus.ConnectionError:
-        start_server = True
+    start_server = not client.serverLive()
     if start_server:
-        print("Starting server")
-        server.start(quiet=True)
-        client.wait_until_live()
+        proteus.initialize()
+        proteus.clients.startHttpServer(8998)
 
-    if not client.has_extension("tfzendnn"):
+    metadata = client.serverMetadata()
+
+    if not "tfzendnn" in metadata.extensions:
         print("TFZenDNN support required but not found.")
         if start_server:
-            print("Closing server")
-            server.stop()
-            client.wait_until_stop()
+            proteus.clients.stopHttpServer()
+            proteus.terminate()
+            while client.serverLive():
+                time.sleep(1)
         sys.exit(0)
 
     # Argument parsing
@@ -93,30 +92,31 @@ def main(args):
         classes = np.asarray(classes)
 
     # Load the worker with appropriate paramaters
-    parameters = {
-        "model": args.graph,
-        "input_node": args.input_node,
-        "output_node": args.output_node,
-        "input_size": input_size,
-        "output_classes": output_classes,
-        "inter_op": args.inter_op,
-        "intra_op": args.intra_op,
-    }
-    response = client.load("TfZendnn", parameters)
-    assert not response.error, response.error_msg
-    worker_name = response.html
+    parameters = proteus.RequestParameters()
+    parameters.put("model", args.graph)
+    parameters.put("input_node", args.input_node)
+    parameters.put("output_node", args.output_node)
+    parameters.put("input_size", input_size)
+    parameters.put("output_classes", output_classes)
+    parameters.put("inter_op", args.inter_op)
+    parameters.put("intra_op", args.intra_op)
+    worker_name = client.modelLoad("TfZendnn", parameters)
 
-    while not client.model_ready(worker_name):
-        pass
+    ready = False
+    while not ready:
+        try:
+            ready = client.modelReady(worker_name)
+        except ValueError:
+            pass
 
     # Inference with images
     # If with real data, do preprocessing, otherwise create dummy data
     if real_data:
         # For tests with single images
         images = [preprocess(args.image_location, input_size, args.resize_method)]
-        request = proteus.ImageInferenceRequest(images)
-        response = client.infer(worker_name, request)
-        assert not response.error, response.error_msg
+        request = ImageInferenceRequest(images)
+        response = client.modelInfer(worker_name, request)
+        assert not response.isError(), response.getError()
 
         # Post process to get top1 and top5 classes
         idx_1 = postprocess(response, 1)
@@ -148,12 +148,12 @@ def main(args):
             images = [image for image in images]
 
             # Send request to the server
-            request = proteus.ImageInferenceRequest(images)
+            request = ImageInferenceRequest(images)
             start = time.time()
-            response = client.infer(worker_name, request)
+            response = client.modelInfer(worker_name, request)
             end = time.time()
             total_time += end - start
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
 
             num_processed_images += batch_size
             num_remaining_images -= batch_size
@@ -176,8 +176,10 @@ def main(args):
 
     # Stop the server if it was started from Python
     if start_server:
-        server.stop()
-        client.wait_until_stop()
+        proteus.clients.stopHttpServer()
+        proteus.terminate()
+        while client.serverLive():
+            sleep(1)
         print("Killed Server")
 
 

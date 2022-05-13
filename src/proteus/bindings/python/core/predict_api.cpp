@@ -238,13 +238,15 @@ void wrapPredictApi(py::module_ &m) {
     .def("getInt64Data", &getData<int64_t>, py::keep_alive<0, 1>())
     .def("getFp32Data", &getData<float>, py::keep_alive<0, 1>())
     .def("getFp64Data", &getData<double>, py::keep_alive<0, 1>())
+
+    // pybind11 complains about weak reference if I add keep_alive<0,1> to this
     .def(
       "getStringData",
       [](proteus::InferenceRequestInput &self) {
         auto *data = static_cast<std::string *>(self.getData());
         return *data;
       },
-      py::keep_alive<0, 1>())
+      py::return_value_policy::reference)
     .def_property("name", &InferenceRequestInput::getName,
                   &InferenceRequestInput::setName)
     .def_property("shape", &InferenceRequestInput::getShape, setShape)

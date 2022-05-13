@@ -171,7 +171,13 @@ InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json) {
         break;
       }
       case DataType::STRING: {
-        setOutputData<std::string>(json_data, &output, &Json::Value::asString);
+        auto data = std::make_shared<std::string>();
+        assert(json_data.size() == 1);
+        auto str = json_data[0].asString();
+        data->reserve(str.size());
+        data->assign(str);
+        auto data_cast = std::reinterpret_pointer_cast<std::byte>(data);
+        output.setData(std::move(data_cast));
         break;
       }
       default:
