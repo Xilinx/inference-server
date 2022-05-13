@@ -257,13 +257,13 @@ def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
     rest_client.modelUnload(response)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="class")
 def rest_client(request):
     address = get_http_addr(request.config)
     return proteus.clients.HttpClient("http://" + address)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="class")
 def ws_client(request):
     address = get_http_addr(request.config)
     return proteus.clients.WebSocketClient("ws://" + address, "http://" + address)

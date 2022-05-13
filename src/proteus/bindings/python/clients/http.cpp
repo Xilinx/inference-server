@@ -22,9 +22,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <sstream>
-
-#include "docstrings.hpp"
+#include "proteus/bindings/python/helpers/docstrings.hpp"
 
 namespace py = pybind11;
 
@@ -33,26 +31,25 @@ using proteus::types::DataType;
 void wrapHttpClient(py::module_ &m) {
   using proteus::HttpClient;
 
-  // auto foo = (py::object)
-  // py::module_::import("proteus").attr("RequestParameters");
-  // py::module_::import("proteus").attr("InferenceRequest");
-  // py::module_::import("proteus").attr("InferenceResponse");
-
-  // auto foo = (py::object) py::module_::import("clients").attr("Client");
-
-  m.def("startHttpServer", &proteus::startHttpServer, py::arg("port"));
-  m.def("stopHttpServer", &proteus::stopHttpServer);
+  m.def("startHttpServer", &proteus::startHttpServer, py::arg("port"),
+        DOCS(startHttpServer));
+  m.def("stopHttpServer", &proteus::stopHttpServer, DOCS(stopHttpServer));
 
   py::class_<HttpClient, proteus::Client>(m, "HttpClient")
-    .def(py::init<const std::string &>(), py::arg("address"))
-    .def("serverMetadata", &HttpClient::serverMetadata)
-    .def("serverLive", &HttpClient::serverLive)
-    .def("serverReady", &HttpClient::serverReady)
-    .def("modelReady", &HttpClient::modelReady, py::arg("model"))
+    .def(py::init<const std::string &>(), py::arg("address"),
+         DOCS(HttpClient, HttpClient))
+    .def("serverMetadata", &HttpClient::serverMetadata,
+         DOCS(HttpClient, serverMetadata))
+    .def("serverLive", &HttpClient::serverLive, DOCS(HttpClient, serverLive))
+    .def("serverReady", &HttpClient::serverReady, DOCS(HttpClient, serverReady))
+    .def("modelReady", &HttpClient::modelReady, py::arg("model"),
+         DOCS(HttpClient, modelReady))
     .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = proteus::RequestParameters())
-    .def("modelUnload", &HttpClient::modelUnload, py::arg("model"))
+         py::arg("parameters") = proteus::RequestParameters(),
+         DOCS(HttpClient, modelLoad))
+    .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
+         DOCS(HttpClient, modelUnload))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
-         py::arg("request"))
-    .def("modelList", &HttpClient::modelList);
+         py::arg("request"), DOCS(HttpClient, modelInfer))
+    .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList));
 }
