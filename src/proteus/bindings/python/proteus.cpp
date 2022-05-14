@@ -28,7 +28,7 @@ namespace py = pybind11;
 
 namespace proteus {
 
-PYBIND11_MODULE(proteus, m) {
+PYBIND11_MODULE(_proteus, m) {
   py::module n = m.def_submodule("predict_api", "predict_api documentation");
   py::module c = m.def_submodule("clients", "client documentation");
   m.doc() = "proteus inference library";

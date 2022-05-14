@@ -29,7 +29,6 @@ import numpy as np
 
 import proteus
 import proteus.clients
-from utils.helper import ImageInferenceRequest
 
 
 def preprocess(images):
@@ -125,7 +124,7 @@ def main():
     # +inference:
     images = preprocess(images)
     # Construct the request and send it
-    request = ImageInferenceRequest(images, True)
+    request = proteus.ImageInferenceRequest(images, True)
     response = client.modelInfer(worker_name, request)
     assert not response.isError(), response.getError()
     outputs = response.getOutputs()

@@ -19,7 +19,7 @@ import pytest
 import numpy as np
 import proteus
 
-from helper import run_benchmark, root_path, ImageInferenceRequest
+from helper import run_benchmark, root_path
 
 sys.path.insert(0, os.path.join(root_path, "examples/python"))
 from utils.utils import preprocess, postprocess
@@ -104,7 +104,7 @@ class TestTfZendnn:
                     resize_method=preprocessing["resize_method"],
                 )
             )
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
         k = postprocess(response, 5)
         gold_response_output = [259, 261, 154, 260, 263]
@@ -128,7 +128,7 @@ class TestTfZendnn:
                     resize_method=preprocessing["resize_method"],
                 )
             )
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
         k = postprocess(response, 5)
         gold_response_output = [259, 261, 154, 260, 263]
@@ -144,7 +144,7 @@ class TestTfZendnn:
         ).astype(np.float32)
         images = [image for image in images]
 
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
 
         options = {
             "model": model_fixture,

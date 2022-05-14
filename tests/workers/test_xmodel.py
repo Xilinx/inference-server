@@ -18,7 +18,7 @@ import math
 import cv2
 import numpy as np
 
-from helper import run_benchmark, root_path, ImageInferenceRequest
+from helper import run_benchmark, root_path
 import proteus
 
 
@@ -156,7 +156,7 @@ class TestXmodel:
             images.append(image)
 
         images = self.preprocess(images, preprocessing)
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
         outputs = response.getOutputs()
         assert len(outputs) == batch
@@ -189,7 +189,7 @@ class TestXmodel:
             images.append(image)
 
         images = self.preprocess(images, preprocessing)
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
 
         options = {
             "model": model_fixture,
