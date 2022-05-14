@@ -22,7 +22,6 @@ import numpy as np
 import proteus
 import proteus.clients
 from utils.utils import preprocess, postprocess
-from utils.helper import ImageInferenceRequest
 
 
 def main(args):
@@ -114,7 +113,7 @@ def main(args):
     if real_data:
         # For tests with single images
         images = [preprocess(args.image_location, input_size, args.resize_method)]
-        request = ImageInferenceRequest(images)
+        request = proteus.ImageInferenceRequest(images)
         response = client.modelInfer(worker_name, request)
         assert not response.isError(), response.getError()
 
@@ -148,7 +147,7 @@ def main(args):
             images = [image for image in images]
 
             # Send request to the server
-            request = ImageInferenceRequest(images)
+            request = proteus.ImageInferenceRequest(images)
             start = time.time()
             response = client.modelInfer(worker_name, request)
             end = time.time()

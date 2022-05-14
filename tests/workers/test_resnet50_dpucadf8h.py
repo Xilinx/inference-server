@@ -16,7 +16,7 @@ import pytest
 
 import numpy as np
 
-from helper import run_benchmark, root_path, ImageInferenceRequest
+from helper import run_benchmark, root_path
 import proteus
 
 
@@ -86,7 +86,7 @@ class TestInferImageResNet50DPUCADF8H:
         # TODO(vishalk): AKS gives a segfault if batch != 4
         images = [image_path] * batches
 
-        return ImageInferenceRequest(images, asTensor)
+        return proteus.ImageInferenceRequest(images, asTensor)
 
     def test_resnet50_dpucadf8h_0(self):
         """

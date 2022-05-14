@@ -15,7 +15,7 @@
 import pytest
 import numpy as np
 
-from helper import run_benchmark, root_path, ImageInferenceRequest
+from helper import run_benchmark, root_path
 import proteus
 
 
@@ -95,7 +95,7 @@ class TestInferImageFacedetectDPUCADF8H:
         # TODO(vishalk): AKS gives a segfault if batch != 4
         batch = 4
         images = [image_path] * batch
-        request = ImageInferenceRequest(images, asTensor)
+        request = proteus.ImageInferenceRequest(images, asTensor)
 
         return request
 

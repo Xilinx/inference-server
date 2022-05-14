@@ -27,14 +27,19 @@ setuptools.setup(
     name="Proteus",
     version=version,
     license="Apache 2.0",
-    packages=["proteus"],
+    packages=setuptools.find_packages("src"),
     install_requires=[
-        "aiohttp",
         "numpy",
         "opencv-python-headless",
-        "requests",
-        "websocket-client",
     ],
     python_requires=">=3.6",
     package_dir={"": "src"},
+    package_data={
+        "": [
+            "_proteus.cpython-36m-x86_64-linux-gnu.so",
+            "proteus-stubs/*.pyi",
+            "_proteus-stubs/*.pyi",
+        ]
+    },
+    zip_safe=False,  # required for mypy
 )

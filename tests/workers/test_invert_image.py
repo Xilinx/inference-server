@@ -21,7 +21,7 @@ import cv2
 import numpy as np
 import pytest
 
-from helper import run_benchmark, run_benchmark_func, root_path, ImageInferenceRequest
+from helper import run_benchmark, run_benchmark_func, root_path
 import proteus
 
 
@@ -110,7 +110,7 @@ class TestInvertImage:
     def construct_request(self, asTensor):
         image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
 
-        request = ImageInferenceRequest(image_path, asTensor)
+        request = proteus.ImageInferenceRequest(image_path, asTensor)
 
         image = cv2.imread(image_path)
         image = cv2.bitwise_not(image)
