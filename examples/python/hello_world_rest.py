@@ -20,54 +20,74 @@ detailed commentary on this example.
 
 # fmt: off
 # +imports:
+from time import sleep
 import proteus
 # -imports:
 # fmt: on
 
+import numpy as np
+
+
+def NumericalInferenceRequest(data, datatype=proteus.DataType.UINT32):
+    if not isinstance(data, list):
+        data = [data]
+    request = proteus.predict_api.InferenceRequest()
+    for index, datum in enumerate(data):
+        input_0 = proteus.predict_api.InferenceRequestInput()
+        input_0.name = f"input{index}"
+        input_0.setUint32Data(np.array([datum], np.uint32))
+        input_0.datatype = datatype
+        input_0.shape = [1]
+        request.addInputTensor(input_0)
+    return request
+
+
 # +main:
 def main():
     # +create objects:
-    server = proteus.Server()
-    client = proteus.RestClient("127.0.0.1:8998")
+    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
     # -create objects:
 
     # +start server: if it's not already started, start it from Python
-    try:
-        start_server = not client.server_live()
-    except proteus.ConnectionError:
-        start_server = True
+    start_server = not client.serverLive()
     if start_server:
-        server.start(quiet=True)
-        client.wait_until_live()
+        proteus.initialize()
+        proteus.clients.startHttpServer(8998)
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
-    response = client.load("Echo")
-    assert not response.error, response.error_msg
-    worker_name = response.html
+    worker_name = client.modelLoad("Echo")
 
-    while not client.model_ready(worker_name):
-        pass
+    ready = False
+    while not ready:
+        try:
+            ready = client.modelReady(worker_name)
+        except ValueError:
+            pass
     # -load worker:
 
     # +inference: construct the request and make the inference
     data = [3, 1, 4, 1, 5]
-    request = proteus.NumericalInferenceRequest(data)
-    response = client.infer(worker_name, request)
+    request = NumericalInferenceRequest(data)
+    response = client.modelInfer(worker_name, request)
     # -inference:
 
     # +validate: check whether the inference succeeded by checking the response
-    assert not response.error, response.error_msg
-    assert len(response.outputs) == len(data)
-    for index, output in enumerate(response.outputs):
-        assert len(output.data) == 1
-        assert output.data[0] == data[index] + 1
+    assert not response.isError(), response.getError()
+    outputs = response.getOutputs()
+    assert len(outputs) == len(data)
+    for index, output in enumerate(outputs):
+        recv_data = output.getUint32Data()
+        assert len(recv_data) == 1
+        assert recv_data[0] == data[index] + 1
     # -validate:
 
     # +clean up: stop the server if it was started from Python
     if start_server:
-        server.stop()
-        client.wait_until_stop()
+        proteus.clients.stopHttpServer()
+        proteus.terminate()
+        while client.serverLive():
+            sleep(1)
     # -clean up:
 
     print("hello_world_rest.py: Passed")

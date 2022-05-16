@@ -169,7 +169,13 @@ InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json) {
         break;
       }
       case DataType::STRING: {
-        setOutputData<std::string>(json_data, &output, &Json::Value::asString);
+        auto data = std::make_shared<std::string>();
+        assert(json_data.size() == 1);
+        auto str = json_data[0].asString();
+        data->reserve(str.size());
+        data->assign(str);
+        auto data_cast = std::reinterpret_pointer_cast<std::byte>(data);
+        output.setData(std::move(data_cast));
         break;
       }
       default:
@@ -194,6 +200,9 @@ void setInputData(Json::Value &json, const InferenceRequestInput *input) {
 Json::Value mapRequestToJson(const InferenceRequest &request) {
   Json::Value json;
   json["id"] = request.getID();
+  auto *parameters = request.getParameters();
+  json["parameters"] =
+    parameters != nullptr ? mapParametersToJson(parameters) : Json::objectValue;
   json["inputs"] = Json::arrayValue;
   const auto &inputs = request.getInputs();
   for (const auto &input : inputs) {
@@ -201,7 +210,7 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
     json_input["name"] = input.getName();
     json_input["datatype"] = input.getDatatype().str();
     json_input["shape"] = Json::arrayValue;
-    auto *parameters = request.getParameters();
+    parameters = request.getParameters();
     json_input["parameters"] = parameters != nullptr
                                  ? mapParametersToJson(parameters)
                                  : Json::objectValue;

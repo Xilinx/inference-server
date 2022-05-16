@@ -22,11 +22,12 @@
 #include <pybind11/pybind11.h>
 
 #include <sstream>
+
 #ifdef PROTEUS_ENABLE_VITIS
 #include <xir/util/data_type.hpp>
 #endif
 
-#include "docstrings.hpp"
+#include "proteus/bindings/python/helpers/docstrings.hpp"
 
 namespace py = pybind11;
 

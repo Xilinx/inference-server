@@ -14,6 +14,7 @@
 
 list(APPEND TARGETS
     http
+    websocket
 )
 
 list(APPEND LINK_TARGETS client_py)

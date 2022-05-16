@@ -91,7 +91,7 @@ void InferenceRequest::addInputTensor(void *data, std::vector<uint64_t> shape,
 }
 
 void InferenceRequest::addInputTensor(InferenceRequestInput input) {
-  this->inputs_.push_back(input);
+  this->inputs_.push_back(std::move(input));
 }
 
 const std::vector<InferenceRequestInput> &InferenceRequest::getInputs() const {

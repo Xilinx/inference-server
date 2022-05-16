@@ -18,7 +18,7 @@ list(APPEND TARGETS
 )
 
 if(${PROTEUS_ENABLE_HTTP})
-    set(TARGETS ${TARGETS} http http_internal)
+    set(TARGETS ${TARGETS} http http_internal websocket)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})

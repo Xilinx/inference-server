@@ -1,4 +1,4 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2022 Xilinx Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .exceptions import *
-from .predict_api import (
-    Datatype,
-    RequestInput,
-    RequestOutput,
-    InferenceRequest,
-    NumericalInferenceRequest,
-    ImageInferenceRequest,
-    WebsocketInferenceRequest,
-    InferenceResponse,
-    ResponseOutput,
-    ErrorResponse,
-    HtmlResponse,
-)
-from .server import *
-from .rest import Client as RestClient
-from .websocket import Client as WebsocketClient
+from _proteus.predict_api import *

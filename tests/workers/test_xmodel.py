@@ -19,7 +19,7 @@ import cv2
 import numpy as np
 
 from helper import run_benchmark, root_path
-from proteus.predict_api import Datatype, ImageInferenceRequest
+import proteus
 
 
 @pytest.fixture(scope="class")
@@ -54,25 +54,26 @@ class TestXmodel:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request)
+            response = self.rest_client.modelInfer(self.model, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        num_inputs = len(request.inputs)
+        num_inputs = len(request.getInputs())
 
         if check_asserts:
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
             assert response.id == ""
-            assert response.model_name == "xmodel"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
+            assert response.model == "xmodel"
+            outputs = response.getOutputs()
+            assert len(outputs) == num_inputs
+            for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
                 # the default type out of tensors is int64 but doesn't look right...
                 # assert output.datatype == Datatype.INT64
-                assert output.datatype == Datatype.INT8
-                assert output.parameters == {}
+                assert output.datatype == proteus.DataType.INT8
+                assert output.parameters.empty()
         return response
 
     @staticmethod
@@ -155,57 +156,16 @@ class TestXmodel:
             images.append(image)
 
         images = self.preprocess(images, preprocessing)
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
-        output = response.outputs[0].data
-        k = self.postprocess(output, 5)
+        outputs = response.getOutputs()
+        assert len(outputs) == batch
+        output = outputs[0]
+        assert output.datatype == proteus.DataType.INT8
+        data = output.getInt8Data()
+        k = self.postprocess(data, 5)
         gold_response_output = [259, 261, 260, 154, 230]
         assert k == gold_response_output
-
-    def test_xmodel_1(self):
-        """
-        Send a request to resnet50 as tensor data
-        """
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
-
-        preprocessing = {
-            "net_w": 224,
-            "net_h": 224,
-            "net_c": 3,
-            "mean": [123, 107, 104],
-            "fix_scale": 1,
-            "output_layout": "NHWC",
-            "type": "uint8",
-        }
-
-        batch = 1
-        images = []
-        for _ in range(batch):
-            image = cv2.imread(image_path)
-            images.append(image)
-
-        images = self.preprocess(images, preprocessing)
-        request = ImageInferenceRequest(images, True)
-        requests = [request] * 4
-        models = [self.model] * 4
-        responses = self.rest_client.infers(models, requests)
-        assert len(responses) == 4
-        for index, response in enumerate(responses):
-            num_inputs = len(requests[index].inputs)
-
-            assert not response.error, response.error_msg
-            assert response.id == ""
-            assert response.model_name == "xmodel"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
-                assert output.name == "input" + str(index)
-                assert output.datatype == Datatype.INT8
-                assert output.parameters == {}
-            # response = self.send_request(request)
-            output = response.outputs[0].data
-            k = self.postprocess(output, 5)
-            gold_response_output = [259, 261, 260, 154, 230]
-            assert k == gold_response_output
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark, model_fixture, parameters_fixture):
@@ -229,7 +189,7 @@ class TestXmodel:
             images.append(image)
 
         images = self.preprocess(images, preprocessing)
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
 
         options = {
             "model": model_fixture,

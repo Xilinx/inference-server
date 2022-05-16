@@ -13,8 +13,11 @@
 # limitations under the License.
 
 import pytest
-from proteus.exceptions import ConnectionError
-from proteus.predict_api import Datatype, InferenceRequest, RequestInput, RequestOutput
+from proteus.predict_api import (
+    InferenceRequest,
+    InferenceRequestInput,
+    InferenceRequestOutput,
+)
 
 from helper import run_benchmark
 

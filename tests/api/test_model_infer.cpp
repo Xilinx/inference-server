@@ -24,15 +24,15 @@ TEST_F(GrpcFixture, ModelInfer) {
   auto endpoint = client_->modelLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
-  std::vector<uint8_t> imgData;
+  std::vector<uint32_t> imgData;
   auto shape = {1UL};
-  auto size = 1 * sizeof(uint8_t);
+  auto size = 1;
   imgData.reserve(size);
   imgData.push_back(1);
 
   proteus::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         proteus::DataType::UINT8);
+                         proteus::DataType::UINT32);
 
   auto response = client_->modelInfer(endpoint, request);
 
@@ -47,4 +47,6 @@ TEST_F(GrpcFixture, ModelInfer) {
     EXPECT_EQ(data->size(), 1);
     EXPECT_EQ((*data)[0], 2);
   }
+
+  client_->modelUnload(endpoint);
 }

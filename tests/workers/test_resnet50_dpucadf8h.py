@@ -18,7 +18,6 @@ import numpy as np
 
 from helper import run_benchmark, root_path
 import proteus
-from proteus.predict_api import Datatype, ImageInferenceRequest
 
 
 @pytest.fixture(scope="class")
@@ -56,56 +55,29 @@ class TestInferImageResNet50DPUCADF8H:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request)
+            response = self.rest_client.modelInfer(self.model, request)
         except proteus.ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        num_inputs = len(request.inputs)
+        num_inputs = len(request.getInputs())
         gold_response_output = [259, 261, 154, 260, 204]
 
         if check_asserts:
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
             assert response.id == ""
-            assert response.model_name == "resnet50"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
+            assert response.model == "resnet50"
+            outputs = response.getOutputs()
+            assert len(outputs) == num_inputs
+            for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == Datatype.UINT32
-                assert output.parameters == {}
+                assert output.datatype == proteus.DataType.UINT32
+                assert output.parameters.empty()
                 assert output.shape == [5, 1, 1]
-                assert len(output.data) == len(gold_response_output)
-                np.testing.assert_almost_equal(gold_response_output, output.data, 2)
-        return response
-
-    def send_requests(self, requests, check_asserts=True):
-        models = [self.model] * len(requests)
-        try:
-            responses = self.rest_client.infers(models, requests)
-        except proteus.ConnectionError:
-            pytest.fail(
-                "Connection to the proteus server ended without response!", False
-            )
-
-        gold_response_output = [259, 261, 154, 260, 204]
-
-        if check_asserts:
-            assert len(responses) == len(requests)
-            for index, response in enumerate(responses):
-                num_inputs = len(requests[index].inputs)
-
-                assert not response.error, response.error_msg
-                assert response.id == ""
-                assert response.model_name == "resnet50"
-                assert len(response.outputs) == num_inputs
-                for index, output in enumerate(response.outputs):
-                    assert output.name == "input" + str(index)
-                    assert output.datatype == Datatype.UINT32
-                    assert output.parameters == {}
-                    assert output.shape == [5, 1, 1]
-                    assert len(output.data) == len(gold_response_output)
-                    assert output.data == gold_response_output
+                data = output.getUint32Data()
+                assert len(data) == len(gold_response_output)
+                np.testing.assert_almost_equal(gold_response_output, data, 2)
         return response
 
     def construct_request(self, asTensor, batches=4):
@@ -114,7 +86,7 @@ class TestInferImageResNet50DPUCADF8H:
         # TODO(vishalk): AKS gives a segfault if batch != 4
         images = [image_path] * batches
 
-        return ImageInferenceRequest(images, asTensor)
+        return proteus.ImageInferenceRequest(images, asTensor)
 
     def test_resnet50_dpucadf8h_0(self):
         """
@@ -129,15 +101,6 @@ class TestInferImageResNet50DPUCADF8H:
         """
         request = self.construct_request(False)
         self.send_request(request)
-
-    def test_resnet50_dpucadf8h_2(self):
-        """
-        Send a request to resnet50 as base64-encoded data with 4 requests, each
-        with one image so the batcher can batch them into one
-        """
-        request = self.construct_request(False, 1)
-        requests = [request] * 4
-        self.send_requests(requests)
 
     @pytest.mark.benchmark(group="resnet50_dpucadf8h")
     def test_benchmark_resnet50_dpucadf8h_0(

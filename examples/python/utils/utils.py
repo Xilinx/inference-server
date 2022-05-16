@@ -126,6 +126,7 @@ def postprocess(response, k=5):
     Returns:
         [numpy.ndarray]: topK values
     """
-    response_data = response.outputs[0].data
+    outputs = response.getOutputs()
+    response_data = outputs[0].getFp32Data()
     response_data = np.argsort(response_data)
     return response_data[-k:][::-1]

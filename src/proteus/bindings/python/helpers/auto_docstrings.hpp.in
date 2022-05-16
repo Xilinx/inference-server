@@ -14,17 +14,13 @@
 
 /**
  * @file
- * @brief Implements the Python bindings for the http.hpp header
+ * @brief If PybindMkdocs is not installed, this header is used to create empty
+ * docstrings for Python bindings
  */
 
-#include "proteus/clients/client.hpp"
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_DOCSTRINGS
+#define GUARD_PROTEUS_BINDINGS_PYTHON_DOCSTRINGS
 
-#include <pybind11/pybind11.h>
+#define DOC(...) ""
 
-namespace py = pybind11;
-
-void wrapClient(py::module_ &m) {
-  using proteus::Client;
-
-  py::class_<Client>(m, "Client");
-}
+#endif // GUARD_PROTEUS_BINDINGS_PYTHON_DOCSTRINGS

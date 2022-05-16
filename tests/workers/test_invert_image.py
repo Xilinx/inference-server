@@ -22,7 +22,7 @@ import numpy as np
 import pytest
 
 from helper import run_benchmark, run_benchmark_func, root_path
-from proteus.predict_api import Datatype, ImageInferenceRequest
+import proteus
 
 
 @pytest.fixture(scope="class")
@@ -79,36 +79,38 @@ class TestInvertImage:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request, True)
+            response = self.rest_client.modelInfer(self.model, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
             )
 
-        assert not response.error, response.error_msg
+        assert not response.isError(), response.getError()
 
-        assert response.model_name == "invert_image"
+        assert response.model == "invert_image"
 
-        assert len(response.outputs) == 1
+        outputs = response.getOutputs()
+        assert len(outputs) == 1
 
-        output = response.outputs[0]
-        if output.datatype == Datatype.STRING:
-            assert len(output.data) == 1
-            compare_jpgs(output.data[0], image, shape=output.shape)
-            assert output.parameters == {}
+        output = outputs[0]
+        if output.datatype == proteus.DataType.STRING:
+            data = output.getStringData()
+            compare_jpgs(data, image, shape=output.shape)
+            assert output.parameters.empty()
         else:
             assert output.shape == [*image.shape]
-            assert len(output.data) == image.size
-            assert output.data == image.flatten().tolist()
-            assert output.datatype.value == str(image.dtype).upper()
-            assert output.parameters == {}
+            assert output.datatype == proteus.DataType.UINT8
+            data = output.getUint8Data()
+            assert len(data) == image.size
+            assert (data == image.flatten().tolist()).all()
+            assert output.parameters.empty()
 
         return response
 
     def construct_request(self, asTensor):
         image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
 
-        request = ImageInferenceRequest(image_path, asTensor)
+        request = proteus.ImageInferenceRequest(image_path, asTensor)
 
         image = cv2.imread(image_path)
         image = cv2.bitwise_not(image)

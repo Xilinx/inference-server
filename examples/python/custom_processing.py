@@ -20,12 +20,15 @@ process the results. Look at the documentation for more detailed commentary on
 this example.
 """
 
-import os
-import cv2
 import math
+import os
+from time import sleep
+
+import cv2
 import numpy as np
 
 import proteus
+import proteus.clients
 
 
 def preprocess(images):
@@ -91,25 +94,24 @@ def main():
     gold_response_output = [259, 261, 260, 154, 230]
     # -user variables
 
-    server = proteus.Server()
-    client = proteus.RestClient("127.0.0.1:8998")
+    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
 
-    try:
-        start_server = not client.server_live()
-    except proteus.ConnectionError:
-        start_server = True
+    start_server = not client.serverLive()
     if start_server:
-        server.start()
-        client.wait_until_live()
+        proteus.initialize()
+        proteus.clients.startHttpServer(8998)
 
     # +load worker:
-    parameters = {"xmodel": path_to_xmodel}
-    response = client.load("Xmodel", parameters)
-    assert not response.error, response.error_msg
-    worker_name = response.html
+    parameters = proteus.RequestParameters()
+    parameters.put("xmodel", path_to_xmodel)
+    worker_name = client.modelLoad("Xmodel", parameters)
 
-    while not client.model_ready(worker_name):
-        pass
+    ready = False
+    while not ready:
+        try:
+            ready = client.modelReady(worker_name)
+        except ValueError:
+            pass
     # -load worker:
 
     # +get images:
@@ -123,18 +125,22 @@ def main():
     images = preprocess(images)
     # Construct the request and send it
     request = proteus.ImageInferenceRequest(images, True)
-    response = client.infer(worker_name, request)
-    assert not response.error, response.error_msg
-    for output in response.outputs:
-        data = output.data
+    response = client.modelInfer(worker_name, request)
+    assert not response.isError(), response.getError()
+    outputs = response.getOutputs()
+    for output in outputs:
+        assert output.datatype == proteus.DataType.INT8
+        recv_data = output.getInt8Data()
         # Can optionally post-process the result
-        k = postprocess(data, 5)
+        k = postprocess(recv_data, 5)
         assert k == gold_response_output
     # -inference:
 
     if start_server:
-        server.stop()
-        client.wait_until_stop()
+        proteus.clients.stopHttpServer()
+        proteus.terminate()
+        while client.serverLive():
+            sleep(1)
 
     print("custom_processing.py: Passed")
 

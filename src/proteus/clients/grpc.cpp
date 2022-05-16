@@ -100,6 +100,9 @@ bool GrpcClient::serverLive() {
   if (status.ok()) {
     return reply.live();
   }
+  if (status.error_code() == ::grpc::StatusCode::UNAVAILABLE) {
+    return false;
+  }
   throw std::runtime_error(status.error_message());
 }
 

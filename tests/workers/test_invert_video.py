@@ -12,14 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
+import json
 
 import cv2
 import pytest
 
 from helper import root_path
 from test_invert_image import compare_jpgs
-from proteus.predict_api import Datatype, RequestInput, WebsocketInferenceRequest
+import proteus
+from proteus.predict_api import InferenceRequestInput, InferenceRequest
 
 
 @pytest.fixture(scope="class")
@@ -39,17 +40,25 @@ class TestInvertVideo:
     """
 
     def construct_request(self, video_path, requested_frames_count):
-        input_0 = RequestInput("input0")
-        input_0.datatype = Datatype.STRING
-        input_0.data.append(video_path)
-        input_0.shape.append(len(video_path))
-        input_0.parameters["count"] = requested_frames_count
+        input_0 = InferenceRequestInput()
+        input_0.name = "input0"
+        input_0.datatype = proteus.DataType.STRING
+        input_0.setStringData(video_path)
+        input_0.shape = [len(video_path)]
+        parameters = proteus.RequestParameters()
+        parameters.put("count", requested_frames_count)
+        input_0.parameters = parameters
 
-        request = WebsocketInferenceRequest(self.model, input_0)
-        request.parameters["key"] = "0"
+        # request = WebsocketInferenceRequest(self.model, input_0)
+        request = InferenceRequest()
+        request.addInputTensor(input_0)
+        parameters_2 = proteus.RequestParameters()
+        parameters_2.put("key", "0")
+        request.parameters = parameters_2
 
-        self.ws_client.infer(request)
-        response = self.ws_client.recv()
+        self.ws_client.modelInferAsync(self.model, request)
+        response_str = self.ws_client.modelRecv()
+        response = json.loads(response_str)
 
         assert response["key"] == "0"
         assert float(response["data"]["img"]) == 15.0
@@ -58,7 +67,8 @@ class TestInvertVideo:
 
         cap = cv2.VideoCapture(video_path)
         for _ in range(count):
-            resp = self.ws_client.recv()
+            resp_str = self.ws_client.modelRecv()
+            resp = json.loads(resp_str)
             resp_data = resp["data"]["img"].split(",")[1]
             _, frame = cap.read()
             frame = cv2.bitwise_not(frame)
@@ -81,3 +91,23 @@ class TestInvertVideo:
     #     video_path = str(root_path / "tests/assets/Physicsworks.ogv")
     #     self.construct_request(video_path, requested_frames_count)
     #     benchmark.pedantic(self.recv_frames, args=(video_path, requested_frames_count), iterations=1, rounds=1)
+
+
+# if __name__ == "__main__":
+#     from argparse import Namespace
+
+#     client = proteus.clients.HttpClient("http://localhost:8998")
+#     models = client.modelList()
+#     if "InvertVideo" not in models:
+#         worker_name = client.modelLoad("InvertVideo")
+#     else:
+#         worker_name = "InvertVideo"
+
+#     mod = Namespace()
+#     mod.ws_client = proteus.clients.WebSocketClient("ws://localhost:8998", "http://localhost:8998")
+#     mod.model = "InvertVideo"
+
+#     runner = TestInvertVideo()
+#     runner.ws_client = proteus.clients.WebSocketClient("ws://localhost:8998", "http://localhost:8998")
+#     runner.model = "InvertVideo"
+#     runner.test_invert_video_0()

@@ -481,7 +481,7 @@ ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         # used for auto-completing bash commands
         bash-completion \
         curl \
@@ -557,6 +557,9 @@ RUN apt-get update \
         # install benchmarking dependencies
         pytest-benchmark \
         rich \
+        # used for Python bindings
+        pybind11_mkdoc \
+        pybind11-stubgen \
     # clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*

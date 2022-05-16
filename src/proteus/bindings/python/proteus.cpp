@@ -20,24 +20,29 @@
 #include <pybind11/pybind11.h>
 
 #include "proteus/bindings/python/clients/client.hpp"
-#include "proteus/bindings/python/clients/http.hpp"
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
+#include "proteus/clients/native.hpp"
 
 namespace py = pybind11;
 
 namespace proteus {
 
-PYBIND11_MODULE(proteus, m) {
+PYBIND11_MODULE(_proteus, m) {
   py::module n = m.def_submodule("predict_api", "predict_api documentation");
   py::module c = m.def_submodule("clients", "client documentation");
   m.doc() = "proteus inference library";
+
+  m.def("initialize", &initialize);
+  m.def("terminate", &terminate);
+
   wrapRequestParameters(m);
   wrapDataType(m);
   wrapTypeMaps(m);
   wrapPredictApi(n);
   wrapClient(c);
   wrapHttpClient(c);
+  wrapWebSocketClient(c);
 }
 
 }  // namespace proteus
