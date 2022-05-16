@@ -19,6 +19,7 @@
 
 #include "proteus/core/data_types.hpp"
 
+#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 
 #include <sstream>
@@ -35,9 +36,40 @@ using proteus::DataType;
 
 void wrapDataType(py::module_& m) {
   auto datatype = py::class_<DataType>(m, "DataType");
+  auto value = py::enum_<DataType::Value>(datatype, "Value");
 
-  datatype.def("str", &DataType::str)
+  datatype.def(py::init<>())
+    .def(py::init<const char*>())
+    .def(py::init<DataType::Value>())
+    .def_property_readonly_static("BOOL",
+                                  [](py::object) { return DataType("BOOL"); })
+    .def_property_readonly_static("UINT8",
+                                  [](py::object) { return DataType("UINT8"); })
+    .def_property_readonly_static("UINT16",
+                                  [](py::object) { return DataType("UINT16"); })
+    .def_property_readonly_static("UINT32",
+                                  [](py::object) { return DataType("UINT32"); })
+    .def_property_readonly_static("UINT64",
+                                  [](py::object) { return DataType("UINT64"); })
+    .def_property_readonly_static("INT8",
+                                  [](py::object) { return DataType("INT8"); })
+    .def_property_readonly_static("INT16",
+                                  [](py::object) { return DataType("INT16"); })
+    .def_property_readonly_static("INT32",
+                                  [](py::object) { return DataType("INT32"); })
+    .def_property_readonly_static("INT64",
+                                  [](py::object) { return DataType("INT64"); })
+    .def_property_readonly_static("FP16",
+                                  [](py::object) { return DataType("FP16"); })
+    .def_property_readonly_static("FP32",
+                                  [](py::object) { return DataType("FP32"); })
+    .def_property_readonly_static("FP64",
+                                  [](py::object) { return DataType("FP64"); })
+    .def_property_readonly_static("STRING",
+                                  [](py::object) { return DataType("STRING"); })
     .def("size", &DataType::size)
+    .def("str", &DataType::str)
+    .def(py::self == py::self)
     .def("__repr__",
          [](const DataType& self) {
            return "DataType(" + std::string(self.str()) + ")\n";
@@ -48,8 +80,7 @@ void wrapDataType(py::module_& m) {
       return os.str();
     });
 
-  py::enum_<DataType::Value>(datatype, "Value")
-    .value("BOOL", DataType::BOOL)
+  value.value("BOOL", DataType::BOOL)
     .value("UINT8", DataType::UINT8)
     .value("UINT16", DataType::UINT16)
     .value("UINT32", DataType::UINT32)
@@ -62,6 +93,8 @@ void wrapDataType(py::module_& m) {
     .value("FP32", DataType::FP32)
     .value("FP64", DataType::FP64)
     .value("STRING", DataType::STRING);
+
+  py::implicitly_convertible<DataType::Value, DataType>();
 }
 
 void wrapTypeMaps(py::module_& m) {
