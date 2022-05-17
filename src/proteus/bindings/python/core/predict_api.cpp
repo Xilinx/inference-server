@@ -212,8 +212,6 @@ void wrapPredictApi(py::module_ &m) {
     .def(
       "setStringData",
       [](proteus::InferenceRequestInput &self, std::string &str) {
-        std::cout << "Setting string data: " << &str << " of size "
-                  << str.size() << std::endl;
         auto ptr = std::make_shared<std::string>(str);
         auto ptr_cast = std::reinterpret_pointer_cast<std::byte>(ptr);
         // self.setData(static_cast<void *>(&str));

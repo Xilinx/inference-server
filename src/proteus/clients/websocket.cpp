@@ -101,8 +101,6 @@ class WebSocketClient::WebSocketClientImpl {
                 const drogon::WebSocketClientPtr& wsptr) {
           if (r != drogon::ReqResult::Ok) {
             wsptr->stop();
-            throw std::runtime_error(
-              "Failed to establish WebSocket connection!");
           }
         });
     }
@@ -192,7 +190,6 @@ void WebSocketClient::modelInferAsync(const std::string& model,
 
   auto json = mapRequestToJson(request);
   json["model"] = model;
-  std::cout << json.toStyledString() << std::endl;
   Json::StreamWriterBuilder builder;
   builder["indentation"] = "";  // remove whitespace
   const std::string message = Json::writeString(builder, json);
