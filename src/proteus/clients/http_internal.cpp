@@ -27,11 +27,13 @@
 #include <json/value.h>           // for Value, arrayValue
 
 #include <algorithm>    // for fill
+#include <cassert>      // for assert
 #include <cstddef>      // for size_t, byte
 #include <cstdint>      // for uint64_t, int32_t
 #include <iostream>     // for operator<<, cout
 #include <string_view>  // for basic_string_view
 #include <utility>      // for move
+#include <variant>      // for visit
 
 #include "proteus/buffers/buffer.hpp"             // for Buffer
 #include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr

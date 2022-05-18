@@ -20,7 +20,12 @@
 #ifndef GUARD_PROTEUS_CLIENTS_HTTP
 #define GUARD_PROTEUS_CLIENTS_HTTP
 
-#include "proteus/clients/client.hpp"
+#include <memory>                        // for unique_ptr
+#include <string>                        // for string
+#include <vector>                        // for vector
+
+#include "proteus/clients/client.hpp"    // for Client
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
 namespace proteus {
 

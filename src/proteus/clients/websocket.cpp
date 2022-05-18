@@ -19,16 +19,23 @@
 
 #include "proteus/clients/websocket.hpp"
 
-#include <concurrentqueue/blockingconcurrentqueue.h>
-#include <drogon/HttpClient.h>
-#include <drogon/WebSocketClient.h>
-#include <trantor/net/EventLoopThread.h>
+#include <concurrentqueue/blockingconcurrentqueue.h>  // for BlockingConcurr...
+#include <drogon/HttpRequest.h>                       // for HttpRequest
+#include <drogon/HttpTypes.h>                         // for WebSocketMessag...
+#include <drogon/WebSocketClient.h>                   // for WebSocketClientPtr
+#include <drogon/WebSocketConnection.h>               // for WebSocketConnec...
+#include <drogon/HttpResponse.h>                      // for HttpResponsePtr
+#include <json/value.h>                               // for Value
+#include <json/writer.h>                              // for StreamWriterBui...
+#include <trantor/net/EventLoop.h>                    // for EventLoop
+#include <trantor/net/EventLoopThread.h>              // for EventLoopThread
 
-#include <thread>
+#include <cassert>                                    // for assert
+#include <chrono>                                     // for milliseconds
+#include <thread>                                     // for sleep_for
 
-#include "proteus/build_options.hpp"
-#include "proteus/clients/http.hpp"
-#include "proteus/clients/http_internal.hpp"
+#include "proteus/clients/http.hpp"                   // for HttpClient
+#include "proteus/clients/http_internal.hpp"          // for mapRequestToJson
 
 namespace proteus {
 
@@ -44,8 +51,9 @@ class WebSocketClient::WebSocketClientImpl {
     http_client_ = std::make_unique<HttpClient>(http_address);
 
     ws_client_->setMessageHandler(
-      [&](const std::string& message, const drogon::WebSocketClientPtr&,
+      [&](const std::string& message, const drogon::WebSocketClientPtr& client,
           const drogon::WebSocketMessageType& type) {
+        (void) client;
         std::string messageType = "Unknown";
         switch (type) {
           case WebSocketMessageType::Text: {
@@ -89,6 +97,16 @@ class WebSocketClient::WebSocketClientImpl {
     }
     loop_.getLoop()->quit();
   }
+
+  /// Copy constructor
+  WebSocketClientImpl(WebSocketClientImpl const&) = delete;
+  /// Copy assignment constructor
+  WebSocketClientImpl& operator=(const WebSocketClientImpl&) = delete;
+  /// Move constructor
+  WebSocketClientImpl(WebSocketClientImpl&& other) = delete;
+  /// Move assignment constructor
+  WebSocketClientImpl& operator=(WebSocketClientImpl&& other) =
+    delete;
 
   void connect() {
     auto connection = ws_client_->getConnection();
@@ -135,7 +153,7 @@ WebSocketClient::WebSocketClient(const std::string& ws_address,
 WebSocketClient::~WebSocketClient() = default;
 
 void WebSocketClient::close() {
-  auto client = this->impl_->getWsClient();
+  auto* client = this->impl_->getWsClient();
   if (auto connection = client->getConnection(); connection != nullptr) {
     connection->shutdown();
     // client->stop();
@@ -143,50 +161,50 @@ void WebSocketClient::close() {
 }
 
 ServerMetadata WebSocketClient::serverMetadata() {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->serverMetadata();
 }
 
 bool WebSocketClient::serverLive() {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->serverLive();
 }
 
 bool WebSocketClient::serverReady() {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->serverReady();
 }
 
 bool WebSocketClient::modelReady(const std::string& model) {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->modelReady(model);
 }
 
 std::string WebSocketClient::modelLoad(const std::string& model,
                                        RequestParameters* parameters) {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->modelLoad(model, parameters);
 }
 
 void WebSocketClient::modelUnload(const std::string& model) {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   client->modelUnload(model);
 }
 
 InferenceResponse WebSocketClient::modelInfer(const std::string& model,
                                               const InferenceRequest& request) {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->modelInfer(model, request);
 }
 
 std::vector<std::string> WebSocketClient::modelList() {
-  auto client = this->impl_->getHttpClient();
+  auto* client = this->impl_->getHttpClient();
   return client->modelList();
 }
 
 void WebSocketClient::modelInferAsync(const std::string& model,
                                       const InferenceRequest& request) {
-  auto client = this->impl_->getWsClient();
+  auto* client = this->impl_->getWsClient();
 
   auto json = mapRequestToJson(request);
   json["model"] = model;

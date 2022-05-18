@@ -20,12 +20,13 @@
 #ifndef GUARD_PROTEUS_CORE_DATA_TYPES
 #define GUARD_PROTEUS_CORE_DATA_TYPES
 
-#include <cstddef>   // for size_t
-#include <cstdint>   // for int16_t, int32_t, int64_t, int8_t, uint16_t, uin...
-#include <iostream>  // for ostream
-#include <string>    // for string
+#include <cstddef>                    // for size_t
+#include <cstdint>                    // for uint8_t, int16_t, int32_t, int64_t
+#include <iostream>                   // for ostream
+#include <stdexcept>                  // for invalid_argument
+#include <string>                     // for string
 
-#include "proteus/build_options.hpp"
+#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_VITIS
 
 #ifdef PROTEUS_ENABLE_VITIS
 namespace xir {

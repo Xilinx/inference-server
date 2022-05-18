@@ -49,7 +49,7 @@ class VectorBuffer : public Buffer {
    *
    * @return void*
    */
-  void* data(size_t offset = 0) override;
+  void* data(size_t offset) override;
 
   /**
    * @brief Reset the internal write_counter_ prior to returning the buffer to

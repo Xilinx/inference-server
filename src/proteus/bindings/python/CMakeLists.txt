@@ -46,7 +46,6 @@ find_package(Pybind11Stubgen)
 if(${Pybind11Stubgen_FOUND})
     add_custom_command(TARGET proteus_py POST_BUILD
         COMMAND pybind11-stubgen -o ${CMAKE_CURRENT_BINARY_DIR} _proteus --no-setup-py
-        COMMAND pybind11-stubgen -o ${CMAKE_CURRENT_BINARY_DIR} proteus --no-setup-py
     )
 else()
     message(STATUS "Pybind11Stubgen executable not found, not generating Python stubs")
@@ -62,4 +61,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/py.typed ${CMAKE_CURRENT_BINARY_D
 add_custom_command(TARGET proteus_py POST_BUILD
     COMMAND pip install --prefix ~/.local .
     COMMENT "Add ${CMAKE_CURRENT_BINARY_DIR} to the PYTHONPATH to use the proteus Python package"
+
 )
+
+# we need to run this after the pip install above
+if(${Pybind11Stubgen_FOUND})
+    add_custom_command(TARGET proteus_py POST_BUILD
+        COMMAND pybind11-stubgen -o ${CMAKE_CURRENT_BINARY_DIR} proteus --no-setup-py
+    )
+endif()

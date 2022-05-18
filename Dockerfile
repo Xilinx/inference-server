@@ -194,7 +194,7 @@ RUN wget --progress=dot:mega https://github.com/cameron314/concurrentqueue/archi
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install drogon 1.3.0 for a http server
+# install drogon 1.7.5 for a http server
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         libbrotli-dev \
@@ -209,7 +209,7 @@ RUN apt-get update \
     # symlink libjsoncpp to json to maintain include compatibility with Drogon
     && cp -rfs /usr/include/jsoncpp/json/ /usr/include/ \
     # install drogon
-    && cd /tmp && git clone -b v1.3.0 https://github.com/an-tao/drogon \
+    && cd /tmp && git clone -b v1.7.5 https://github.com/an-tao/drogon \
     && cd drogon \
     && git submodule update --init --recursive \
     && mkdir -p build && cd build \
@@ -512,9 +512,6 @@ RUN apt-get update \
         libc-ares-dev \
         libssl-dev \
         uuid-dev \
-        # used for Python bindings
-        pybind11_mkdoc
-        pybind11-stubgen
     # symlink the versioned clang-*-10 executables to clang-*
     && ln -s /usr/bin/clang-format-10 /usr/bin/clang-format \
     && ln -s /usr/bin/clang-tidy-10 /usr/bin/clang-tidy \
@@ -716,10 +713,7 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
         && chmod a+x dist/fpga_util \
         && mkdir -p ${COPY_DIR}/usr/local/bin/ \
         && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
-    fi; \
-    # create package for the Proteus python library
-    cd ${PROTEUS_ROOT}/src/python \
-    && python3 setup.py bdist_wheel
+    fi
 
 FROM proteus_install_vitis_${ENABLE_VITIS} as proteus_install_tfzendnn_no
 
@@ -756,14 +750,10 @@ COPY --from=proteus_builder ${COPY_DIR} /
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/.bash* /home/${UNAME}/
 COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/${UNAME}/
-COPY --from=proteus_builder ${PROTEUS_ROOT}/src/python/dist/*.whl /tmp/
 
 # run any final commands before finishing the dev image
 RUN git lfs install \
     && npm install -g gh-pages \
-    && proteus_wheel=$(find /tmp/ -name *.whl 2>/dev/null) \
-    && pip install "$proteus_wheel" \
-    && rm "$proteus_wheel" \
     # install any debians that may exist at the root. Use true to pass even if
     # there's nothing to install
     && apt-get update \

@@ -19,14 +19,24 @@
 
 #include "proteus/clients/http.hpp"
 
-#include <drogon/HttpClient.h>
-#include <trantor/net/EventLoopThread.h>
+#include <drogon/HttpClient.h>                // for HttpClient, HttpClientPtr
+#include <drogon/HttpRequest.h>               // for HttpRequest
+#include <drogon/HttpResponse.h>              // for HttpResponse
+#include <drogon/HttpTypes.h>                 // for Get, ReqResult, k200OK
+#include <json/value.h>                       // for Value, arrayValue, obje...
+#include <trantor/net/EventLoop.h>            // for EventLoop
+#include <trantor/net/EventLoopThread.h>      // for EventLoopThread
 
-#include <thread>
+#include <cassert>                            // for assert
+#include <set>                                // for set
+#include <stdexcept>                          // for invalid_argument, runti...
+#include <string_view>                        // for string_view
+#include <thread>                             // for thread
+#include <utility>                            // for tuple_element<>::type
 
-#include "proteus/build_options.hpp"
-#include "proteus/clients/http_internal.hpp"
-#include "proteus/servers/http_server.hpp"
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "proteus/clients/http_internal.hpp"  // for mapJsonToResponse, mapP...
+#include "proteus/servers/http_server.hpp"    // for stop, start
 
 namespace proteus {
 

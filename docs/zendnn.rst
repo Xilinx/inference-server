@@ -42,7 +42,7 @@ and Docker installed on your machine.
 
    .. code-block:: console
 
-      $ ./proteus dockerize --tfzendnn={path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip}
+      $ ./proteus dockerize --tfzendnn={relative/path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip}
 
    This will build a docker image with all the dependencies required for
    the Xilinx Inference Server and setup TensorFlow+ZenDNN within the
@@ -145,7 +145,7 @@ C++ API
 ^^^^^^^
 
 The C++ API bypasses the HTTP server and connects directly to the
-Inference Server. The flow is as follows 
+Inference Server. The flow is as follows
 
    1. Load the Xilinx Inference Server with the specified model file
    2. Read the image specified / Create dummy data and prepare input

@@ -114,11 +114,11 @@ class InferenceRequestBuilder<InferenceRequest> {
     buffer_index = buffer_index_backup;
     batch_offset = batch_offset_backup;
     if (!req.outputs_.empty()) {
-      for (auto &output : req.outputs_) {
+      for (const auto &output : req.outputs_) {
         try {
-          auto buffers = output_buffers[buffer_index];
+          const auto& buffers = output_buffers[buffer_index];
           for (auto &buffer : buffers) {
-            auto &offset = output_offsets[buffer_index];
+            const auto &offset = output_offsets[buffer_index];
 
             request->outputs_.emplace_back(output);
             request->outputs_.back().setData(
@@ -164,12 +164,7 @@ class InferenceRequestBuilder<InferenceRequest> {
 
 using RequestBuilder = InferenceRequestBuilder<InferenceRequest>;
 
-CppNativeApi::CppNativeApi(const InferenceRequest &request)
-  : request_(request) {
-  this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
-}
-
-CppNativeApi::CppNativeApi(InferenceRequest &&request)
+CppNativeApi::CppNativeApi(InferenceRequest request)
   : request_(std::move(request)) {
   this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
 }
@@ -180,10 +175,10 @@ std::promise<proteus::InferenceResponse> *CppNativeApi::getPromise() {
   return this->promise_.get();
 }
 
-void cppCallback(const InferenceResponsePromisePtr &promise,
-                 const InferenceResponse &response) {
-  promise->set_value(response);
-}
+// void cppCallback(const InferenceResponsePromisePtr &promise,
+//                  const InferenceResponse &response) {
+//   promise->set_value(response);
+// }
 
 std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
@@ -194,8 +189,9 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   auto request = RequestBuilder::build(
     this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
     output_offsets, batch_size, batch_offset);
-  Callback callback =
-    std::bind(cppCallback, this->promise_, std::placeholders::_1);
+  Callback callback = [this](const InferenceResponse& response){
+    this->promise_->set_value(response);
+  };
   request->setCallback(std::move(callback));
   return request;
 }
