@@ -98,8 +98,6 @@ xir::DataType mapTypeToXir(DataType type) {
       retval.type = xir::DataType::INT;
       break;
     case DataType::FP32:
-      retval.type = xir::DataType::FLOAT;
-      break;
     case DataType::FP64:
       retval.type = xir::DataType::FLOAT;
       break;
@@ -112,8 +110,8 @@ xir::DataType mapTypeToXir(DataType type) {
 
 #endif
 
-std::ostream& operator<<(std::ostream& os, const DataType& bar) {
-  return os << bar.str();
+std::ostream& operator<<(std::ostream& os, const DataType& value) {
+  return os << value.str();
 }
 
 }  // namespace proteus

@@ -1,5 +1,7 @@
 [
   { "include": ["@<grpcpp/.*>", "private", "<grpcpp/grpcpp.h>", "public"] },
+  { "include": ["@<pybind11/detail/.*>", "private", "<pybind11/pybind11.h>", "public"] },
+  { "include": ["@<pybind11/pytypes.h>", "private", "<pybind11/pybind11.h>", "public"] },
   { "include": ["@<opencv2/core/.*>", "private", "<opencv2/core.hpp>", "public"] },
   { "include": ["@<opencv2/videoio/.*>", "private", "<opencv2/videoio.hpp>", "public"] },
   { "include": ["<b64/cdecode.h>", "private", "<b64/decode.h>", "public"] },

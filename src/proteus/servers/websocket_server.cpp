@@ -130,15 +130,6 @@ size_t DrogonWs::getInputSize() {
   return inputs.size();
 }
 
-void drogonCallback(const drogon::WebSocketConnectionPtr &conn,
-                    const InferenceResponse &response) {
-  auto outputs = response.getOutputs();
-  auto *msg = static_cast<std::string *>(outputs[0].getData());
-  if (conn->connected()) {
-    conn->send(*msg);
-  }
-}
-
 std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
   size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
   std::vector<size_t> &input_offset,
@@ -150,8 +141,13 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
     auto request = RequestBuilder::build(
       this->json_, buffer_index, input_buffers, input_offset, output_buffers,
       output_offset, batch_size, batch_offset);
-    Callback callback =
-      std::bind(drogonCallback, this->conn_, std::placeholders::_1);
+    Callback callback = [conn = std::move(this->conn_)](const InferenceResponse& response){
+      auto outputs = response.getOutputs();
+      auto *msg = static_cast<std::string *>(outputs[0].getData());
+      if (conn->connected()) {
+        conn->send(*msg);
+      }
+    };
     request->setCallback(std::move(callback));
     return request;
   } catch (const std::invalid_argument &e) {

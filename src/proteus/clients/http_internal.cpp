@@ -100,7 +100,7 @@ void setOutputData(const Json::Value &json, InferenceResponseOutput *output,
   output->setData(std::move(data_cast));
 }
 
-InferenceResponse mapJsonToResponse(std::shared_ptr<Json::Value> json) {
+InferenceResponse mapJsonToResponse(Json::Value* json) {
   InferenceResponse response;
   response.setModel(json->get("model_name", "").asString());
   response.setID(json->get("id", "").asString());
@@ -458,8 +458,8 @@ InferenceRequestPtr RequestBuilder::build(
         "At least one element in 'inputs' is not an obj");
     }
     try {
-      auto &buffers = input_buffers[buffer_index];
-      for (auto &buffer : buffers) {
+      const auto &buffers = input_buffers[buffer_index];
+      for (const auto &buffer : buffers) {
         auto &offset = input_offsets[buffer_index];
 
         auto input =
@@ -504,9 +504,8 @@ InferenceRequestPtr RequestBuilder::build(
     for (auto const &i : inputs) {
       (void)i;  // suppress unused variable warning
       try {
-        auto buffers = output_buffers[buffer_index];
-        for (size_t j = 0; j < buffers.size(); j++) {
-          auto &buffer = buffers[j];
+        const auto& buffers = output_buffers[buffer_index];
+        for (const auto &buffer : buffers) {
           const auto &offset = output_offsets[buffer_index];
 
           request->outputs_.emplace_back();
@@ -722,27 +721,6 @@ void propagate(drogon::HttpResponse *resp, const StringMap &context) {
 }
 #endif
 
-void drogonCallback(const DrogonCallback &callback,
-                    const InferenceResponse &response) {
-  drogon::HttpResponsePtr resp;
-  if (response.isError()) {
-    resp =
-      errorHttpResponse(response.getError(), HttpStatusCode::k400BadRequest);
-  } else {
-    try {
-      Json::Value ret = parseResponse(response);
-      resp = drogon::HttpResponse::newHttpJsonResponse(ret);
-    } catch (const std::invalid_argument &e) {
-      resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
-    }
-  }
-#ifdef PROTEUS_ENABLE_TRACING
-  const auto &context = response.getContext();
-  propagate(resp.get(), context);
-#endif
-  callback(resp);
-}
-
 std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
   size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
   std::vector<size_t> &input_offsets,
@@ -753,8 +731,25 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
     auto request = RequestBuilder::build(
       this->json_, buffer_index, input_buffers, input_offsets, output_buffers,
       output_offsets, batch_size, batch_offset);
-    Callback callback =
-      std::bind(drogonCallback, this->callback_, std::placeholders::_1);
+    Callback callback = [callback = std::move(this->callback_)](const InferenceResponse& response){
+      drogon::HttpResponsePtr resp;
+      if (response.isError()) {
+        resp =
+          errorHttpResponse(response.getError(), HttpStatusCode::k400BadRequest);
+      } else {
+        try {
+          Json::Value ret = parseResponse(response);
+          resp = drogon::HttpResponse::newHttpJsonResponse(ret);
+        } catch (const std::invalid_argument &e) {
+          resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
+        }
+      }
+    #ifdef PROTEUS_ENABLE_TRACING
+      const auto &context = response.getContext();
+      propagate(resp.get(), context);
+    #endif
+      callback(resp);
+    };
     request->setCallback(std::move(callback));
     return request;
   } catch (const std::invalid_argument &e) {

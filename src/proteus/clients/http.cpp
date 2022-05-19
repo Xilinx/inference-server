@@ -66,8 +66,6 @@ class HttpClient::HttpClientImpl {
     client_ = drogon::HttpClient::newHttpClient(address, loop_.getLoop());
   }
 
-  ~HttpClientImpl() { loop_.getLoop()->quit(); }
-
   drogon::HttpClient* getClient() { return client_.get(); }
 
  private:
@@ -101,7 +99,7 @@ void check_error(drogon::ReqResult result) {
 }
 
 ServerMetadata HttpClient::serverMetadata() {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
@@ -121,7 +119,7 @@ ServerMetadata HttpClient::serverMetadata() {
 }
 
 bool HttpClient::serverLive() {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
@@ -136,7 +134,7 @@ bool HttpClient::serverLive() {
 }
 
 bool HttpClient::serverReady() {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
@@ -149,7 +147,7 @@ bool HttpClient::serverReady() {
 }
 
 bool HttpClient::modelReady(const std::string& model) {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
@@ -166,7 +164,7 @@ bool HttpClient::modelReady(const std::string& model) {
 
 std::string HttpClient::modelLoad(const std::string& model,
                                   RequestParameters* parameters) {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
   if (parameters != nullptr) {
@@ -187,7 +185,7 @@ std::string HttpClient::modelLoad(const std::string& model,
 }
 
 void HttpClient::modelUnload(const std::string& model) {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   Json::Value json;
   auto req = drogon::HttpRequest::newHttpJsonRequest(json);
@@ -205,7 +203,7 @@ void HttpClient::modelUnload(const std::string& model) {
 }
 InferenceResponse HttpClient::modelInfer(const std::string& model,
                                          const InferenceRequest& request) {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   assert(!request.getInputs().empty());
 
@@ -222,15 +220,15 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   }
 
   auto resp = response->jsonObject();
-  return mapJsonToResponse(resp);
+  return mapJsonToResponse(resp.get());
 }
 
 std::vector<std::string> HttpClient::modelList() {
-  auto client = this->impl_->getClient();
+  auto* client = this->impl_->getClient();
 
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
-  auto path = "/v2/models";
+  const std::string path = "/v2/models";
   req->setPath(path);
 
   auto [result, response] = client->sendRequest(req);

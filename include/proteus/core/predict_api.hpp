@@ -152,7 +152,7 @@ using RequestParametersPtr = std::shared_ptr<RequestParameters>;
 struct ServerMetadata {
   std::string name;
   std::string version;
-  std::set<std::string> extensions;
+  std::set<std::string, std::less<>> extensions;
 };
 
 /**
@@ -397,11 +397,11 @@ class InferenceRequest {
    */
   void runCallbackError(std::string_view error_msg);
 
-  void addInputTensor(void *data, std::vector<uint64_t> shape,
-                      DataType dataType, std::string name = "");
+  void addInputTensor(void *data, const std::vector<uint64_t>& shape,
+                      DataType dataType, const std::string& name = "");
 
   void addInputTensor(InferenceRequestInput input);
-  void addOutputTensor(InferenceRequestOutput output);
+  void addOutputTensor(const InferenceRequestOutput& output);
 
   /// Get a vector of all the input request objects
   const std::vector<InferenceRequestInput> &getInputs() const;
@@ -573,11 +573,11 @@ struct less<proteus::RequestParameters> {
     auto lhs_map = lhs.data();
     auto rhs_map = rhs.data();
     if (lhs_size == rhs_size) {
-      for (auto &[key, lhs_value] : lhs_map) {
+      for (const auto &[key, lhs_value] : lhs_map) {
         if (rhs_map.find(key) == rhs_map.end()) {
           return true;
         }
-        auto rhs_value = rhs_map.at(key);
+        const auto& rhs_value = rhs_map.at(key);
         if (lhs_value != rhs_value) {
           return lhs_value < rhs_value;
         }

@@ -67,3 +67,39 @@ if(IWYU_EXECUTABLE AND IWYU_SCRIPT_EXECUTABLE)
 else()
   message(STATUS "iwyu not found. Skipping iwyu make target")
 endif()
+
+function(enable_cxx_linting)
+    message(STATUS "Enabling build-time linting")
+
+    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
+
+    find_program(IWYU_PATH NAMES include-what-you-use iwyu)
+    if(IWYU_PATH)
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH}
+            -Xiwyu --mapping_file=${PROJECT_SOURCE_DIR}/tools/.iwyu.json
+            -Xiwyu --cxx17n
+        )
+    endif()
+
+    find_program(CLANG_TIDY_PATH NAMES clang-tidy)
+    if(CLANG_TIDY_PATH)
+        set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_PATH}
+            -format-style=file
+            --extra-arg "-DCV_STATIC_ANALYSIS=0"
+        )
+    endif()
+
+    find_program(CPPLINT_PATH NAMES cpplint)
+    if(CPPLINT_PATH)
+        set(CMAKE_CXX_CPPLINT ${CPPLINT_PATH})
+    endif()
+endfunction()
+
+function(disable_target_linting target)
+    set_target_properties(${target} PROPERTIES
+        CXX_INCLUDE_WHAT_YOU_USE ""
+        CMAKE_CXX_CLANG_TIDY ""
+        CPPLINT_PATH ""
+        CMAKE_LINK_WHAT_YOU_USE FALSE
+    )
+endfunction()

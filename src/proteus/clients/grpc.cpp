@@ -81,7 +81,7 @@ ServerMetadata GrpcClient::serverMetadata() {
 
   if (status.ok()) {
     auto ext = reply.extensions();
-    std::set<std::string> extensions(ext.begin(), ext.end());
+    std::set<std::string, std::less<>> extensions(ext.begin(), ext.end());
     ServerMetadata metadata{reply.name(), reply.version(), extensions};
     return metadata;
   }

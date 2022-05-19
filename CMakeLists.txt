@@ -161,30 +161,7 @@ set(PROTEUS_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/include
 set(PROTEUS_PUBLIC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 
 if(PROTEUS_ENABLE_LINTING)
-    message(STATUS "Enabling build-time linting")
-
-    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
-
-    find_program(IWYU_PATH NAMES include-what-you-use iwyu)
-    if(IWYU_PATH)
-        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PATH}
-            -Xiwyu --mapping_file=${PROJECT_SOURCE_DIR}/tools/.iwyu.json
-            -Xiwyu --cxx17n
-        )
-    endif()
-
-    find_program(CLANG_TIDY_PATH NAMES clang-tidy)
-    if(CLANG_TIDY_PATH)
-        set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_PATH}
-            -format-style=file
-            --extra-arg "-DCV_STATIC_ANALYSIS=0"
-        )
-    endif()
-
-    find_program(CPPLINT_PATH NAMES cpplint)
-    if(CPPLINT_PATH)
-        set(CMAKE_CXX_CPPLINT ${CPPLINT_PATH})
-    endif()
+    enable_cxx_linting()
 endif()
 
 if(${Doxygen_FOUND} AND ${Sphinx_FOUND})

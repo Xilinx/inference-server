@@ -79,17 +79,17 @@ void terminate() {
 NativeClient::~NativeClient() = default;
 
 ServerMetadata NativeClient::serverMetadata() {
-  std::set<std::string> extensions;
+  std::set<std::string, std::less<>> extensions;
   ServerMetadata metadata{"proteus", kProteusVersion, extensions};
 
 #ifdef PROTEUS_ENABLE_AKS
-  metadata.extensions.insert("aks");
+  metadata.extensions.emplace("aks");
 #endif
 #ifdef PROTEUS_ENABLE_VITIS
-  metadata.extensions.insert("vitis");
+  metadata.extensions.emplace("vitis");
 #endif
 #ifdef PROTEUS_ENABLE_TFZENDNN
-  metadata.extensions.insert("tfzendnn");
+  metadata.extensions.emplace("tfzendnn");
 #endif
   return metadata;
 }
@@ -166,15 +166,14 @@ bool hasHardware(const std::string& kernel, size_t num) {
   do {
     pos = hw.find(delimiter);
     auto token = hw.substr(0, pos);
-    size_t found = std::string::npos;
-    if ((found = token.find(':')) != std::string::npos) {
+    if (size_t found = token.find(':'); found != std::string::npos) {
       auto found_kernel = token.substr(0, found);
       size_t found_num = 0;
       size_t idx = 0;
       auto substr = token.substr(found + 1, std::string::npos);
       try {
         found_num = std::stoi(substr, &idx);
-      } catch (const std::invalid_argument& e) {
+      } catch (const std::invalid_argument&) {
         // if the substring can't be converted to an integer
         found_num = 0;
       }
@@ -182,7 +181,7 @@ bool hasHardware(const std::string& kernel, size_t num) {
         // if there are non-numeric characters in the "number"
         found_num = 0;
       }
-      kernels.insert(std::make_pair(found_kernel, found_num));
+      kernels.try_emplace(found_kernel, found_num);
       if (found_num > max_kernel_num) {
         max_kernel_num = found_num;
       }

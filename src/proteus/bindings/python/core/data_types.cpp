@@ -63,7 +63,11 @@ void wrapDataType(py::module_& m) {
                                   [](py::object) { return DataType("FP16"); })
     .def_property_readonly_static("FP32",
                                   [](py::object) { return DataType("FP32"); })
+    .def_property_readonly_static("FLOAT32",
+                                  [](py::object) { return DataType("FP32"); })
     .def_property_readonly_static("FP64",
+                                  [](py::object) { return DataType("FP64"); })
+    .def_property_readonly_static("FLOAT64",
                                   [](py::object) { return DataType("FP64"); })
     .def_property_readonly_static("STRING",
                                   [](py::object) { return DataType("STRING"); })
@@ -91,7 +95,9 @@ void wrapDataType(py::module_& m) {
     .value("INT64", DataType::INT64)
     .value("FP16", DataType::FP16)
     .value("FP32", DataType::FP32)
+    .value("FLOAT32", DataType::FP32)
     .value("FP64", DataType::FP64)
+    .value("FLOAT64", DataType::FP64)
     .value("STRING", DataType::STRING);
 
   py::implicitly_convertible<DataType::Value, DataType>();

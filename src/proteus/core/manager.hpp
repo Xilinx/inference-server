@@ -28,6 +28,7 @@
 #include <thread>         // for thread
 #include <unordered_map>  // for unordered_map
 #include <utility>        // for move, pair
+#include <vector>         // for vector
 
 #include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/predict_api.hpp"     // for RequestParameters
@@ -64,22 +65,21 @@ struct UpdateCommand {
     : cmd(cmd_),
       key(std::move(key_)),
       object(object_),
-      retval(retval_),
-      eptr(nullptr) {}
+      retval(retval_) {}
   /// the command ID
   UpdateCommandType cmd;
   /// a string key that a command can make use of. Usually identifies the worker
   std::string key;
-  /// pointer to an abitrary object
+  /// pointer to an arbitrary object
   void* object;
   /// pointer to a caller-allocated variable to hold the return value
-  void* retval;
+  void* retval = nullptr;
   /**
    * @brief The caller making a request through the update mechanism should
    * catch this exception which is thrown if the requested update fails so the
    * caller is not waiting endlessly.
    */
-  std::exception_ptr eptr;
+  std::exception_ptr eptr = nullptr;
 };
 using UpdateCommandQueue = BlockingQueue<std::shared_ptr<UpdateCommand>>;
 

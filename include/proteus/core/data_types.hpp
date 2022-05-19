@@ -62,7 +62,9 @@ class DataType {
     INT64,
     FP16,
     FP32,
+    FLOAT32 = FP32,
     FP64,
+    FLOAT64 = FP64,
     STRING,
     UNKNOWN
   };

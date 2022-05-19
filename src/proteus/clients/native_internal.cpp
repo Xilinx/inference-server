@@ -90,7 +90,7 @@ class InferenceRequestBuilder<InferenceRequest> {
 
     for (const auto &input : req.inputs_) {
       try {
-        auto buffers = input_buffers[buffer_index];
+        const auto& buffers = input_buffers[buffer_index];
         for (auto &buffer : buffers) {
           auto &offset = input_offsets[buffer_index];
 
@@ -138,7 +138,7 @@ class InferenceRequestBuilder<InferenceRequest> {
       for (const auto &input : req.inputs_) {
         (void)input;  // suppress unused variable warning
         try {
-          auto buffers = output_buffers[buffer_index];
+          const auto& buffers = output_buffers[buffer_index];
           for (auto &buffer : buffers) {
             const auto &offset = output_offsets[buffer_index];
 
@@ -189,8 +189,8 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   auto request = RequestBuilder::build(
     this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
     output_offsets, batch_size, batch_offset);
-  Callback callback = [this](const InferenceResponse& response){
-    this->promise_->set_value(response);
+  Callback callback = [promise = std::move(this->promise_)](const InferenceResponse& response){
+    promise->set_value(response);
   };
   request->setCallback(std::move(callback));
   return request;

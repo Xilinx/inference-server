@@ -105,8 +105,7 @@ class WebSocketClient::WebSocketClientImpl {
   /// Move constructor
   WebSocketClientImpl(WebSocketClientImpl&& other) = delete;
   /// Move assignment constructor
-  WebSocketClientImpl& operator=(WebSocketClientImpl&& other) =
-    delete;
+  WebSocketClientImpl& operator=(WebSocketClientImpl&& other) = delete;
 
   void connect() {
     auto connection = ws_client_->getConnection();

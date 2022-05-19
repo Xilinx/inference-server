@@ -194,7 +194,7 @@ void mapResponsetoProto(InferenceResponse response,
       case DataType::STRING: {
         auto* data = static_cast<std::string*>(output.getData());
         auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
-        contents->Add((*data).c_str());
+        contents->Add(data->c_str());
         // for(size_t i = 0; i < output.getSize(); i++){
         //   contents->Add(data->data()[i]);
         // }
