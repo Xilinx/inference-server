@@ -91,6 +91,9 @@ ServerMetadata NativeClient::serverMetadata() {
 #ifdef PROTEUS_ENABLE_TFZENDNN
   metadata.extensions.insert("tfzendnn");
 #endif
+#ifdef PROTEUS_ENABLE_PTZENDNN
+  metadata.extensions.insert("ptzendnn");
+#endif
   return metadata;
 }
 bool NativeClient::serverLive() { return true; }

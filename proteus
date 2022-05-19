@@ -642,6 +642,11 @@ class Dockerize:
             build_args += f" --build-arg ENABLE_TFZENDNN=yes"
             build_args += f" --build-arg TFZENDNN_PATH={args.tfzendnn_path}"
 
+        if args.ptzendnn_path:
+            raise NotImplementedError("PT+ZenDNN will be available soon.")
+            # build_args += f" --build-arg ENABLE_PTZENDNN=yes"
+            # build_args += f" --build-arg PTZENDNN_PATH={args.ptzendnn_path}"
+
         try:
             git_branch = (
                 subprocess.check_output(shlex.split("git rev-parse --abbrev-ref HEAD"))
@@ -725,6 +730,13 @@ class Dockerize:
         )
 
         command_group.add_argument(
+            "--ptzendnn_path",
+            type=str,
+            default=None,
+            help="PT+ZenDNN C++ package location. If provided, will build with PT+ZenDNN enabled",
+        )
+
+        command_group.add_argument(
             "--suffix",
             action="store",
             help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
@@ -761,6 +773,7 @@ class Get:
         test_asset_dir = Path.cwd() / "tests/assets"
         artifact_dir = Path.cwd() / "external/artifacts"
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
+        pytorch_models = Path.cwd() / "external/pytorch_models"
         alveo_dir = artifact_dir / "u200_u250"
 
         tmp_dir = Path("/tmp/proteus_get")
@@ -783,11 +796,18 @@ class Get:
                 "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
             ],
         }
-        if(args.tfzendnn):
+        if args.tfzendnn:
             files.update({
                 tensorflow_models: [
                     "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.0.zip"
                 ],
+            })
+
+        if args.ptzendnn:
+            files.update({
+                pytorch_models:[
+                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_4.1G_2.0.zip"
+                ]
             })
 
         for location, urls in files.items():
@@ -814,8 +834,8 @@ class Get:
                     elif filename.endswith("zip"):
                         with zipfile.ZipFile(str(tmp_dir / filename), 'r') as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
-                        if args.tfzendnn:
-                            shutil.move(str(tmp_dir / filename.strip(".zip") / "float"), str(location))
+                        if args.tfzendnn or args.ptzendnn:
+                            shutil.move(str(tmp_dir / filename.split(".zip")[0] / "float/"), str(location))
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)
@@ -845,6 +865,10 @@ class Get:
 
         command_group.add_argument(
             "--tfzendnn", action="store_true" ,help="If TF+ZenDNN should be enabled",
+        )
+
+        command_group.add_argument(
+            "--ptzendnn", action="store_true" ,help="If PT+ZenDNN should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)
