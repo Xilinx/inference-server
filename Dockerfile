@@ -22,7 +22,8 @@ ARG UNAME=proteus-user
 ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
 ARG ENABLE_TFZENDNN=${ENABLE_TFZENDNN:-no}
 ARG TFZENDNN_PATH
-
+ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
+ARG PTZENDNN_PATH
 
 FROM ${BASE_IMAGE} AS proteus_base
 ARG UNAME
@@ -738,11 +739,48 @@ RUN apt-get update \
     && mkdir -p /usr/include/tfzendnn/ \
     && cp -r include/* /usr/include/tfzendnn \
     && cp -r lib/*.so* /usr/lib \
+    && sudo apt remove zip unzip -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-FROM proteus_install_tfzendnn_${ENABLE_TFZENDNN} as proteus_dev_final
+FROM proteus_install_tfzendnn_${ENABLE_TFZENDNN} as proteus_install_ptzendnn_no
+
+FROM proteus_install_tfzendnn_${ENABLE_TFZENDNN} as proteus_install_ptzendnn_yes
+ARG PTZENDNN_PATH
+SHELL ["/bin/bash", "-c"]
+
+COPY $PTZENDNN_PATH /tmp/
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        zip unzip \
+    && cd /tmp/ \
+    # Check to verify if package is TF+ZenDNN
+    # && echo "ff65a75cb513fdfe1323ac70edda25af  $(basename $PTZENDNN_PATH)" | md5sum -c - \
+    && unzip $(basename $PTZENDNN_PATH) \
+    && cd $(basename ${PTZENDNN_PATH%.*}) \
+    # To avoid protobuf version issues, create subfolder and copy include files
+    && mkdir -p /usr/include/ptzendnn/ \
+    && cp -r include/* /usr/include/ptzendnn \
+    && cp -r lib/*.so* /usr/lib \
+    && sudo apt remove zip unzip -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -fr /tmp/*
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+     autoconf git checkinstall \
+    && cd /tmp/ && git clone https://github.com/jemalloc/jemalloc.git \
+    && cd jemalloc && ./autogen.sh \
+    && make -j \
+    && make install \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -fr /tmp/*
+
+FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_final
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT

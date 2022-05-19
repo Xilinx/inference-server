@@ -29,6 +29,10 @@ if(${PROTEUS_ENABLE_TFZENDNN})
     set(workers ${workers} TfZendnn)
 endif()
 
+if(${PROTEUS_ENABLE_PTZENDNN})
+    set(workers ${workers} PtZendnn)
+endif()
+
 foreach( worker ${workers})
     set(worker_name worker${worker})
 
@@ -56,6 +60,12 @@ if(${PROTEUS_ENABLE_TFZENDNN})
     target_include_directories(workerTfZendnn SYSTEM PRIVATE /usr/include/tfzendnn)
     target_link_libraries(workerTfZendnn PRIVATE tensorflow_cc)
 endif()
+
+if(${PROTEUS_ENABLE_PTZENDNN})
+    target_include_directories(workerPtZendnn SYSTEM PRIVATE /usr/include/ptzendnn)
+    target_link_libraries(workerPtZendnn PRIVATE torch torch_cpu c10)
+endif()
+
 # target_link_libraries(workerFake PRIVATE observation)
 
 if(${PROTEUS_ENABLE_AKS})

@@ -15,9 +15,9 @@
 
 
 #-----------------------------------------------------------------------------
-#   zendnn_tf_cc_api_env_setup.sh
+#   zendnn_tf_pt_cc_api_env_setup.sh
 #   Prerequisite: This script needs to run first to setup environment variables
-#                 before before using the tf-zendnn c++ api library
+#                 before before using the tf-zendnn or pt-zendnn c++ api library
 #
 #   This script does following:
 #   -Checks if important env variables are declared
@@ -127,3 +127,16 @@ echo "ZENDNN_PRIMITIVE_CACHE_CAPACITY: $ZENDNN_PRIMITIVE_CACHE_CAPACITY"
 export ZENDNN_PRIMITIVE_LOG_ENABLE=0
 echo "ZENDNN_PRIMITIVE_LOG_ENABLE: $ZENDNN_PRIMITIVE_LOG_ENABLE"
 
+# Check if pt-zendnn is enabled, and if so, preload jemalloc and libomp
+ldconfig -p | grep torch_cpu >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    ldconfig -p | grep libjemalloc.so >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        export LD_PRELOAD=/usr/local/lib/libjemalloc.so:$LD_PRELOAD
+        export MALLOC_CONF="oversize_threshold:1,background_thread:true,metadata_thp:auto,dirty_decay_ms:-1,muzzy_decay_ms:-1"
+        echo "PRELOADED JMALLOC"
+    fi
+    export LD_PRELOAD=/usr/lib/libomp.so:$LD_PRELOAD
+fi
+
+sleep 1

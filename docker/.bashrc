@@ -134,17 +134,40 @@ if [ -f ~/.env ]; then
     . ~/.env
 fi
 
+# Check for PT/TF in Inference Server to set environment
+# variables accordingly
+
+TFZENDNN_FOUND=0
+PTZENDNN_FOUND=0
+
 ldconfig -p | grep libtensorflow_cc >/dev/null 2>&1
 if [ $? -eq 0 ]; then
-    source ${PROTEUS_ROOT}/external/zendnn/zendnn_tf_cc_api_env_setup.sh
+    TFZENDNN_FOUND=1
+fi
+
+ldconfig -p | grep torch_cpu >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    PTZENDNN_FOUND=1
+fi
+
+if [ $TFZENDNN_FOUND -eq 1 ] || [ $PTZENDNN_FOUND -eq 1 ]; then
+    source ${PROTEUS_ROOT}/external/zendnn/zendnn_tf_pt_cc_api_env_setup.sh
 fi
 
 clear
 print_banner
 
-ldconfig -p | grep libtensorflow_cc >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "TF+ZenDNN found. Please set below environment variables explicitly as per the platform you are using!!"
+if [ $TFZENDNN_FOUND -eq 1 ]; then
+    echo "TF+ZenDNN found."
+    ZENDNN_FOUND=1
+fi
+
+if [ $PTZENDNN_FOUND -eq 1 ]; then
+    echo "PT+ZenDNN found."
+fi
+
+if [ $TFZENDNN_FOUND -eq 1 ] || [ $PTZENDNN_FOUND -eq 1 ]; then
+    echo "Please set below environment variables explicitly as per the platform you are using!!"
     echo -e "\tOMP_NUM_THREADS, GOMP_CPU_AFFINITY"
     echo "Please refer to documentation available at developer.amd.com/zendnn for performance"
 fi

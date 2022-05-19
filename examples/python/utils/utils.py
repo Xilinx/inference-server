@@ -130,3 +130,31 @@ def postprocess(response, k=5):
     response_data = outputs[0].getFp32Data()
     response_data = np.argsort(response_data)
     return response_data[-k:][::-1]
+
+
+def preprocess_pt(image_location, input_size):
+    """
+    This image will load and preprocess the data according to
+    the input arguments
+
+    Args:
+        image_location (str): The location of the image to be loaded
+        input_size (int): The input height/width of the image
+
+    Returns:
+        [numpy.ndarray]: The preprocessed image as a numpy array
+    """
+
+    image = cv2.imread(image_location)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image = cv2.resize(image, (256, 256), cv2.INTER_LINEAR)
+    image = center_crop(image, (input_size, input_size))
+
+    image = np.rollaxis(image, axis=2, start=0)  # reshape to CHW for pytorch
+    mean = (0.485, 0.456, 0.406)
+    std = (0.229, 0.224, 0.225)
+    image = image.astype(np.float32) / 255.0
+    for channel in range(image.shape[0]):
+        image[channel] = (image[channel] - mean[channel]) / std[channel]
+
+    return image
