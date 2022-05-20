@@ -102,13 +102,13 @@ class PerfSoftBatcherFixture
     for (size_t i = 0; i < kBufferNum; i++) {
       BufferPtrs vec;
       vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
-                                                      types::DataType::UINT8));
+                                                      DataType::UINT8));
       this->worker_->putInputBuffer(std::move(vec));
     }
     for (size_t i = 0; i < kBufferNum; i++) {
       BufferPtrs vec;
       vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
-                                                      types::DataType::UINT8));
+                                                      DataType::UINT8));
       this->worker_->putOutputBuffer(std::move(vec));
     }
 
@@ -121,7 +121,7 @@ class PerfSoftBatcherFixture
 
     this->request_ = InferenceRequest();
     this->request_.addInputTensor(static_cast<void*>(data_.data()), kDataShape,
-                                  types::DataType::UINT8);
+                                  DataType::UINT8);
   }
 
   void TearDown() override {

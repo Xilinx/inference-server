@@ -128,7 +128,7 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`cameron314/concurrentqueue`,1.0.3,Dual BSD-2/Boost + others,Statically linked by proteus-server for an efficient multi-producer queue
     :github:`jarro2783/cxxopts`,2.2.1,MIT,Statically linked by proteus-server for command-line argument parsing
     :github:`gdraheim/docker-systemctl-replacement`,1.5.4505,EUPL,Executable created by pyinstaller for starting XRM
-    :github:`drogonframework/drogon`,1.3.0,MIT,Dynamically linked by proteus-server for an HTTP and websocket server
+    :github:`drogonframework/drogon`,1.7.5,MIT,Dynamically linked by proteus-server for an HTTP and websocket server
     :github:`tschaub/gh-pages`,latest,MIT,Executable used to publish documentation to gh-pages branch
     :github:`git-lfs/git-lfs`,2.13.3,MIT + others,Executable used to manage large files in git
     :github:`tianon/gosu`,1.12,Apache 2.0,Executable used to drop down to user when starting container

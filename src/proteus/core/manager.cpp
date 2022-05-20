@@ -214,9 +214,10 @@ void Manager::Endpoints::unload(const std::string& endpoint) {
 
     if (worker_endpoints_.find(worker) != worker_endpoints_.end()) {
       auto& map = worker_endpoints_.at(worker);
-      auto& parameters = worker_parameters_.at(endpoint);
-
-      map.erase(parameters);
+      if(worker_parameters_.find(endpoint) != worker_parameters_.end()){
+        const auto& parameters = worker_parameters_.at(endpoint);
+        map.erase(parameters);
+      }
       if (map.empty()) {
         worker_endpoints_.erase(worker);
         worker_indices_.erase(worker);

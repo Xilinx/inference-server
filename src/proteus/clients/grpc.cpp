@@ -48,8 +48,6 @@ using grpc::Status;
 
 namespace proteus {
 
-using types::DataType;
-
 class GrpcClient::GrpcClientImpl {
  public:
   explicit GrpcClientImpl(const std::shared_ptr<::grpc::Channel>& channel) {
@@ -83,7 +81,7 @@ ServerMetadata GrpcClient::serverMetadata() {
 
   if (status.ok()) {
     auto ext = reply.extensions();
-    std::set<std::string> extensions(ext.begin(), ext.end());
+    std::set<std::string, std::less<>> extensions(ext.begin(), ext.end());
     ServerMetadata metadata{reply.name(), reply.version(), extensions};
     return metadata;
   }
@@ -244,7 +242,7 @@ void mapRequestToProto(const InferenceRequest& request,
       size *= index;
     }
     auto datatype = input.getDatatype();
-    tensor->set_datatype(types::mapTypeToStr(datatype));
+    tensor->set_datatype(datatype.str());
     mapParametersToProto(input.getParameters()->data(),
                          tensor->mutable_parameters());
 
@@ -369,7 +367,7 @@ void mapPrototoResponse(const inference::ModelInferResponse& reply,
   for (const auto& tensor : reply.outputs()) {
     InferenceResponseOutput output;
     output.setName(tensor.name());
-    output.setDatatype(types::mapStrToType(tensor.datatype()));
+    output.setDatatype(DataType(tensor.datatype().c_str()));
     std::vector<uint64_t> shape;
     shape.reserve(tensor.shape_size());
     auto size = 1U;

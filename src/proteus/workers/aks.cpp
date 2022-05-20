@@ -54,8 +54,6 @@ class AIGraph;
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -128,9 +126,9 @@ void Aks::doAcquire(RequestParameters* parameters) {
     throw std::runtime_error("AKS graph " + graph_name + " not found");
   }
 
-  this->metadata_.addInputTensor("input", types::DataType::FP32,
+  this->metadata_.addInputTensor("input", DataType::FP32,
                                  {this->batch_size_, 1});
-  this->metadata_.addOutputTensor("output", types::DataType::FP32,
+  this->metadata_.addOutputTensor("output", DataType::FP32,
                                   {this->batch_size_, 1});
   this->metadata_.setName(graph_name);
 }
@@ -182,7 +180,7 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
         value = (reinterpret_cast<float*>(outDD[0]->data().first))[0];
 
         InferenceResponseOutput output;
-        output.setDatatype(types::DataType::FP32);
+        output.setDatatype(DataType::FP32);
         output.setName("aks");
         output.setShape({1});
         auto buffer = std::make_shared<std::vector<float>>();

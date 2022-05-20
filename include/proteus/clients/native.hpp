@@ -22,6 +22,7 @@
 
 #include <cstddef>  // for size_t
 #include <string>   // for string
+#include <vector>   // for vector
 
 #include "proteus/clients/client.hpp"        // for Client
 #include "proteus/core/predict_api.hpp"      // for InferenceRequest (ptr only)

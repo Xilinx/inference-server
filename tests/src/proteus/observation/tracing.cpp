@@ -19,7 +19,6 @@
 
 #include "proteus/observation/tracing.hpp"
 
-#include <opentelemetry/sdk/trace/recordable.h>  // for trace
 #include <opentelemetry/std/utility.h>           // for nostd
 #include <opentelemetry/trace/canonical_code.h>  // for trace
 #include <opentelemetry/trace/tracer.h>          // for Tracer

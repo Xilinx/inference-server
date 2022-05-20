@@ -34,8 +34,7 @@ namespace proteus {
 
 class CppNativeApi : public Interface {
  public:
-  explicit CppNativeApi(const InferenceRequest &request);
-  explicit CppNativeApi(InferenceRequest &&request);
+  explicit CppNativeApi(InferenceRequest request);
 
   std::shared_ptr<InferenceRequest> getRequest(
     size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,

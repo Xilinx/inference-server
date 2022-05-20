@@ -47,8 +47,6 @@ using namespace std::chrono_literals;
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -116,8 +114,8 @@ void Fake::doAcquire(RequestParameters* parameters) {
   }
   this->pool_.resize(threads);
 
-  this->metadata_.addInputTensor("input", types::DataType::UINT32, {1});
-  this->metadata_.addOutputTensor("output", types::DataType::UINT32, {1});
+  this->metadata_.addInputTensor("input", DataType::UINT32, {1});
+  this->metadata_.addOutputTensor("output", DataType::UINT32, {1});
 }
 
 void Fake::doRun(BatchPtrQueue* input_queue) {

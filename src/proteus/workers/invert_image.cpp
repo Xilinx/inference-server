@@ -78,8 +78,6 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -139,9 +137,9 @@ size_t InvertImage::doAllocate(size_t num) {
 void InvertImage::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", types::DataType::UINT8,
+  this->metadata_.addInputTensor("input", DataType::UINT8,
                                  {this->batch_size_, 1080, 1920, 3});
-  this->metadata_.addOutputTensor("output", types::DataType::UINT32,
+  this->metadata_.addOutputTensor("output", DataType::UINT32,
                                   {this->batch_size_, 1080, 1920, 3});
 }
 
@@ -196,7 +194,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           memcpy(buffer->data(), output_data, input_size);
           auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
           output.setData(std::move(my_data_cast));
-          output.setDatatype(types::DataType::UINT8);
+          output.setDatatype(DataType::UINT8);
         } else if (input_dtype == DataType::STRING) {
           auto* idata = static_cast<char*>(input_buffer);
           auto decoded_str = base64_decode(idata, input_size);
@@ -224,7 +222,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
             std::make_shared<std::string>(base64_encode(enc_msg, buf.size()));
           auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(encoded);
           output.setData(std::move(my_data_cast));
-          output.setDatatype(types::DataType::STRING);
+          output.setDatatype(DataType::STRING);
           output.setShape({buf.size()});
         }
 

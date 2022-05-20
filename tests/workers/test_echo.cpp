@@ -33,7 +33,7 @@ class EchoParamFixture
 
     InferenceRequestInput input_0;
     input_0.setName("echo");
-    input_0.setDatatype(types::DataType::UINT32);
+    input_0.setDatatype(DataType::UINT32);
     input_0.setShape({1});
     input_0.setData((void*)(&(inputs_[0])));
     if (add_input_parameters) {
@@ -44,7 +44,7 @@ class EchoParamFixture
 
     InferenceRequestInput input_1;
     input_1.setName("echo");
-    input_1.setDatatype(types::DataType::UINT32);
+    input_1.setDatatype(DataType::UINT32);
     input_1.setShape({1});
     input_1.setData((void*)(&(inputs_[1])));
     if (add_input_parameters) {
@@ -103,7 +103,7 @@ class EchoParamFixture
         auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
         EXPECT_EQ(data->size(), 1);
         EXPECT_EQ((*data)[0], golden_outputs_[j]);
-        EXPECT_EQ(output.getDatatype(), types::DataType::UINT32);
+        EXPECT_EQ(output.getDatatype(), DataType::UINT32);
         EXPECT_EQ(output.getName(), "echo");
         EXPECT_TRUE(output.getParameters()->empty());
         auto shape = output.getShape();

@@ -27,9 +27,11 @@
 #include <chrono>     // for high_resolution_clock
 #include <exception>  // for exception
 #include <memory>     // for allocator, shared_ptr
+#include <set>        // for set
 #include <stdexcept>  // for invalid_argument
 #include <string>     // for operator+, string
 #include <utility>    // for move
+#include <vector>     // for vector
 
 #include "proteus/batching/batcher.hpp"           // for Batcher
 #include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
@@ -41,7 +43,6 @@
 #include "proteus/observation/logging.hpp"        // for SPDLOG_LOGGER_INFO
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
-#include "proteus/version.hpp"                    // for kProteusVersion
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;

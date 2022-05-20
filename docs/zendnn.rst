@@ -27,7 +27,7 @@ PyTorch + ZenDNN User Guide available at `ZenDNN AMD Developer <https://develope
 Setup and Build
 ---------------
 
-To use Inference Server enabled with TensorFlow/PyTorch+ZenDNN, you'll need Git 
+To use Inference Server enabled with TensorFlow/PyTorch+ZenDNN, you'll need Git
 and Docker installed on your machine.
 
 1. Download C++ package for TensorFlow/PyTorch+ZenDNN
@@ -56,13 +56,13 @@ and Docker installed on your machine.
 
       .. code-block:: console
 
-         $ ./proteus dockerize --tfzendnn={path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip}
+         $ ./proteus dockerize --tfzendnn={relative/path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip}
 
    2. For PyTorch
 
       .. code-block:: console
 
-         $./proteus dockerize --ptzendnn={path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip}
+         $./proteus dockerize --ptzendnn={relative/path/to/TF_v2.7_ZenDNN_v3.2_C++_API.zip}
 
    This will build a docker image with all the dependencies required for
    the Xilinx Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
@@ -128,7 +128,7 @@ Run the command below to download a ResNet50 tensorflow model from
    $ ./proteus get --ptzendnn
 
 The model downloaded will be available at :code:`./external/pytorch_models`.
-We need to convert the downloaded PyTorch eager model to TorchScript 
+We need to convert the downloaded PyTorch eager model to TorchScript
 Model (`Exporting to TorchScript docs <https://pytorch.org/tutorials/advanced/cpp_export.html#converting-to-torch-script-via-tracing>`_).
 
 To convert the model to TorchScript model, follow the steps.
@@ -136,7 +136,7 @@ To convert the model to TorchScript model, follow the steps.
 1. We will need to use the PyTorch python API. Install requirements with:
 
    .. code-block:: console
-      
+
       $ pip3 install -r tools/zendnn/requirements.txt
 
 2. To convert the model to TorchScript Model do:
@@ -230,7 +230,7 @@ C++ API
 ^^^^^^^
 
 The C++ API bypasses the HTTP server and connects directly to the
-Inference Server. The flow is as follows 
+Inference Server. The flow is as follows
 
    1. Load the Xilinx Inference Server with the specified model file
    2. Read the image specified / Create dummy data and prepare input

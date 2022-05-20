@@ -41,7 +41,7 @@ class VectorBuffer : public Buffer {
    * @param elements number of elements to store
    * @param data_type type of element to store
    */
-  VectorBuffer(int elements, types::DataType data_type);
+  VectorBuffer(int elements, DataType data_type);
 
   /**
    * @brief Returns a pointer to the underlying data. Vectors guarantee that it
@@ -49,7 +49,7 @@ class VectorBuffer : public Buffer {
    *
    * @return void*
    */
-  void* data(size_t offset = 0) override;
+  void* data(size_t offset) override;
 
   /**
    * @brief Reset the internal write_counter_ prior to returning the buffer to
@@ -66,11 +66,11 @@ class VectorBuffer : public Buffer {
    * @param data_type data type of the VectorBuffer (used for sizing)
    */
   static void allocate(BufferPtrsQueue* my_buffer, size_t num, size_t elements,
-                       types::DataType data_type);
+                       DataType data_type);
 
  private:
   /// The type of the data is used to size the vector appropriately
-  types::DataType type_;
+  DataType type_;
   /// Our actual data is allocated as bytes to support different types
   std::vector<std::byte> data_;
   /// Counter to track the next index to write at

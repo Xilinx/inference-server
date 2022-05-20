@@ -27,9 +27,8 @@
 #include <initializer_list>  // for initializer_list
 #include <map>               // for map, operator==, map<>::...
 #include <memory>            // for shared_ptr, allocator
-#include <ostream>           // for operator<<, ostream, bas...
 #include <set>               // for set
-#include <sstream>           // for stringstream
+#include <sstream>           // for operator<<, ostream, bas...
 #include <string>            // for string, operator<<, char...
 #include <string_view>       // for string_view
 #include <utility>           // for move
@@ -153,7 +152,7 @@ using RequestParametersPtr = std::shared_ptr<RequestParameters>;
 struct ServerMetadata {
   std::string name;
   std::string version;
-  std::set<std::string> extensions;
+  std::set<std::string, std::less<>> extensions;
 };
 
 /**
@@ -173,7 +172,7 @@ class InferenceRequestInput {
    * @param name name to assign
    */
   InferenceRequestInput(void *data, std::vector<uint64_t> shape,
-                        types::DataType dataType, std::string name = "");
+                        DataType dataType, std::string name = "");
 
   /// Set the request's data
   void setData(void *buffer) { this->data_ = buffer; }
@@ -205,9 +204,9 @@ class InferenceRequestInput {
   }
 
   /// Get the input tensor's datatype
-  types::DataType getDatatype() const { return this->dataType_; }
+  DataType getDatatype() const { return this->dataType_; }
   /// Set the tensor's data type
-  void setDatatype(types::DataType type);
+  void setDatatype(DataType type);
 
   /// Get the input tensor's parameters
   RequestParameters *getParameters() const { return this->parameters_.get(); }
@@ -228,7 +227,7 @@ class InferenceRequestInput {
       os << index << ",";
     }
     os << "\n";
-    os << "  Datatype: " << types::mapTypeToStr(my_class.dataType_) << "\n";
+    os << "  Datatype: " << my_class.dataType_.str() << "\n";
     os << "  Parameters:\n";
     if (my_class.parameters_ != nullptr) {
       os << *(my_class.parameters_.get()) << "\n";
@@ -240,7 +239,7 @@ class InferenceRequestInput {
  private:
   std::string name_;
   std::vector<uint64_t> shape_;
-  types::DataType dataType_;
+  DataType dataType_;
   RequestParametersPtr parameters_;
   void *data_;
   std::shared_ptr<std::byte> shared_data_;
@@ -398,11 +397,11 @@ class InferenceRequest {
    */
   void runCallbackError(std::string_view error_msg);
 
-  void addInputTensor(void *data, std::vector<uint64_t> shape,
-                      types::DataType dataType, std::string name = "");
+  void addInputTensor(void *data, const std::vector<uint64_t>& shape,
+                      DataType dataType, const std::string& name = "");
 
   void addInputTensor(InferenceRequestInput input);
-  void addOutputTensor(InferenceRequestOutput output);
+  void addOutputTensor(const InferenceRequestOutput& output);
 
   /// Get a vector of all the input request objects
   const std::vector<InferenceRequestInput> &getInputs() const;
@@ -454,16 +453,16 @@ class ModelMetadataTensor final {
    * @param datatype the datatype this tensor accepts
    * @param shape the expected shape of the data
    */
-  ModelMetadataTensor(const std::string &name, types::DataType datatype,
+  ModelMetadataTensor(const std::string &name, DataType datatype,
                       std::vector<uint64_t> shape);
 
   const std::string &getName() const;
-  const types::DataType &getDataType() const;
+  const DataType &getDataType() const;
   const std::vector<uint64_t> &getShape() const;
 
  private:
   std::string name_;
-  types::DataType datatype_;
+  DataType datatype_;
   std::vector<uint64_t> shape_;
 };
 
@@ -489,7 +488,7 @@ class ModelMetadata final {
    * @param datatype datatype of the tensor
    * @param shape shape of the tensor
    */
-  void addInputTensor(const std::string &name, types::DataType datatype,
+  void addInputTensor(const std::string &name, DataType datatype,
                       std::initializer_list<uint64_t> shape);
   /**
    * @brief Add an input tensor to this model
@@ -498,7 +497,7 @@ class ModelMetadata final {
    * @param datatype datatype of the tensor
    * @param shape shape of the tensor
    */
-  void addInputTensor(const std::string &name, types::DataType datatype,
+  void addInputTensor(const std::string &name, DataType datatype,
                       std::vector<int> shape);
 
   const std::vector<ModelMetadataTensor> &getInputs() const;
@@ -510,7 +509,7 @@ class ModelMetadata final {
    * @param datatype datatype of the tensor
    * @param shape shape of the tensor
    */
-  void addOutputTensor(const std::string &name, types::DataType datatype,
+  void addOutputTensor(const std::string &name, DataType datatype,
                        std::initializer_list<uint64_t> shape);
   /**
    * @brief Add an output tensor to this model
@@ -519,7 +518,7 @@ class ModelMetadata final {
    * @param datatype datatype of the tensor
    * @param shape shape of the tensor
    */
-  void addOutputTensor(const std::string &name, types::DataType datatype,
+  void addOutputTensor(const std::string &name, DataType datatype,
                        std::vector<int> shape);
 
   const std::vector<ModelMetadataTensor> &getOutputs() const;
@@ -574,11 +573,11 @@ struct less<proteus::RequestParameters> {
     auto lhs_map = lhs.data();
     auto rhs_map = rhs.data();
     if (lhs_size == rhs_size) {
-      for (auto &[key, lhs_value] : lhs_map) {
+      for (const auto &[key, lhs_value] : lhs_map) {
         if (rhs_map.find(key) == rhs_map.end()) {
           return true;
         }
-        auto rhs_value = rhs_map.at(key);
+        const auto& rhs_value = rhs_map.at(key);
         if (lhs_value != rhs_value) {
           return lhs_value < rhs_value;
         }

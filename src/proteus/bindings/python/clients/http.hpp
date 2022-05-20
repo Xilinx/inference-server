@@ -14,17 +14,16 @@
 
 /**
  * @file
- * @brief Implements the Python bindings for the http.hpp header
+ * @brief Defines the objects for Python bindings
  */
 
-#include "proteus/clients/client.hpp"
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_HTTP
+#define GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_HTTP
 
-#include <pybind11/pybind11.h>
-
-namespace py = pybind11;
-
-void wrapClient(py::module_ &m) {
-  using proteus::Client;
-
-  py::class_<Client>(m, "Client");
+namespace pybind11 {
+class module_;
 }
+
+void wrapHttpClient(pybind11::module_ &);
+
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_HTTP

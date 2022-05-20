@@ -28,7 +28,7 @@
 
 namespace py = pybind11;
 
-using proteus::types::DataType;
+using proteus::DataType;
 
 void wrapWebSocketClient(py::module_ &m) {
   using proteus::WebSocketClient;

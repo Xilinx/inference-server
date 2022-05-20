@@ -28,203 +28,90 @@
 #include <xir/util/data_type.hpp>  // for DataType, DataType::FLOAT, DataTyp...
 #endif
 
-namespace proteus::types {
+namespace proteus {
 
 #ifdef PROTEUS_ENABLE_VITIS
-DataType mapXirType(xir::DataType type) {
+DataType mapXirToType(xir::DataType type) {
   auto data_type = type.type;
   size_t width = type.bit_width >> 3;  // bit -> byte
   if (data_type == xir::DataType::FLOAT) {
-    if (width == getSize(DataType::FP32)) {
+    if (width == DataType("FP32").size()) {
       return DataType::FP32;
     }
-    if (width == getSize(DataType::FP64)) {
+    if (width == DataType("FP64").size()) {
       return DataType::FP64;
     }
-    throw std::invalid_argument("Unsupported float width: " +
+    throw std::invalid_argument("Unsupported XIR float width: " +
                                 std::to_string(width));
   }
   if (data_type == xir::DataType::INT || data_type == xir::DataType::XINT) {
-    if (width == getSize(DataType::INT8)) {
+    if (width == DataType("INT8").size()) {
       return DataType::INT8;
     }
-    if (width == getSize(DataType::INT16)) {
+    if (width == DataType("INT16").size()) {
       return DataType::INT16;
     }
-    if (width == getSize(DataType::INT32)) {
+    if (width == DataType("INT32").size()) {
       return DataType::INT32;
     }
-    if (width == getSize(DataType::INT64)) {
+    if (width == DataType("INT64").size()) {
       return DataType::INT64;
     }
-    throw std::invalid_argument("Unsupported int width: " +
+    throw std::invalid_argument("Unsupported XIR int width: " +
                                 std::to_string(width));
   }
   if (data_type == xir::DataType::UINT || data_type == xir::DataType::XUINT) {
-    if (width == getSize(DataType::UINT8)) {
+    if (width == DataType("UINT8").size()) {
       return DataType::UINT8;
     }
-    if (width == getSize(DataType::UINT16)) {
+    if (width == DataType("UINT16").size()) {
       return DataType::UINT16;
     }
-    if (width == getSize(DataType::UINT32)) {
+    if (width == DataType("UINT32").size()) {
       return DataType::UINT32;
     }
-    if (width == getSize(DataType::UINT64)) {
+    if (width == DataType("UINT64").size()) {
       return DataType::UINT64;
-      throw std::invalid_argument("Unsupported uint width: " +
-                                  std::to_string(width));
     }
+    throw std::invalid_argument("Unsupported XIR uint width: " +
+                                std::to_string(width));
   }
-  throw std::invalid_argument("Unsupported type: " + std::to_string(data_type));
+  throw std::invalid_argument("Unsupported XIR type: " +
+                              std::to_string(data_type));
 }
 
 xir::DataType mapTypeToXir(DataType type) {
   xir::DataType retval;
+  auto bit_width = static_cast<int32_t>(type.size()) * 8;
   switch (type) {
     case DataType::BOOL:
-      retval.type = xir::DataType::UINT;
-      retval.bit_width = getSize(DataType::BOOL) * 8;
-      break;
     case DataType::UINT8:
-      retval.type = xir::DataType::UINT;
-      retval.bit_width = getSize(DataType::UINT8) * 8;
-      break;
     case DataType::UINT16:
-      retval.type = xir::DataType::UINT;
-      retval.bit_width = getSize(DataType::UINT16) * 8;
-      break;
     case DataType::UINT32:
-      retval.type = xir::DataType::UINT;
-      retval.bit_width = getSize(DataType::UINT32) * 8;
-      break;
     case DataType::UINT64:
       retval.type = xir::DataType::UINT;
-      retval.bit_width = getSize(DataType::UINT64) * 8;
       break;
     case DataType::INT8:
-      retval.type = xir::DataType::INT;
-      retval.bit_width = getSize(DataType::INT8) * 8;
-      break;
     case DataType::INT16:
-      retval.type = xir::DataType::INT;
-      retval.bit_width = getSize(DataType::INT16) * 8;
-      break;
     case DataType::INT32:
-      retval.type = xir::DataType::INT;
-      retval.bit_width = getSize(DataType::INT32) * 8;
-      break;
     case DataType::INT64:
       retval.type = xir::DataType::INT;
-      retval.bit_width = getSize(DataType::INT64) * 8;
       break;
     case DataType::FP32:
-      retval.type = xir::DataType::FLOAT;
-      retval.bit_width = getSize(DataType::FP32) * 8;
-      break;
     case DataType::FP64:
       retval.type = xir::DataType::FLOAT;
-      retval.bit_width = getSize(DataType::FP64) * 8;
       break;
     default:
-      throw std::invalid_argument("Unsupported type conversion");
-      break;
+      throw std::invalid_argument("Unsupported type conversion to XIR");
   }
+  retval.bit_width = bit_width;
   return retval;
 }
 
 #endif
 
-std::string mapTypeToStr(DataType type) {
-  switch (type) {
-    case DataType::BOOL:
-      return "BOOL";
-    case DataType::UINT8:
-      return "UINT8";
-    case DataType::UINT16:
-      return "UINT16";
-    case DataType::UINT32:
-      return "UINT32";
-    case DataType::UINT64:
-      return "UINT64";
-    case DataType::INT8:
-      return "INT8";
-    case DataType::INT16:
-      return "INT16";
-    case DataType::INT32:
-      return "INT32";
-    case DataType::INT64:
-      return "INT64";
-    case DataType::FP16:
-      return "FP16";
-    case DataType::FP32:
-      return "FP32";
-    case DataType::FP64:
-      return "FP64";
-    case DataType::STRING:
-      return "STRING";
-    default:
-      return "";
-  }
+std::ostream& operator<<(std::ostream& os, const DataType& value) {
+  return os << value.str();
 }
 
-// taken from https://stackoverflow.com/a/46711735
-// used for hashing strings for switch statements
-constexpr unsigned int hash(const char* s, int off = 0) {
-  // NOLINTNEXTLINE
-  return !s[off] ? 5381 : (hash(s, off + 1) * 33) ^ s[off];
-}
-
-DataType mapStrToType(const std::string& type) {
-  DataType data_type = DataType::BOOL;
-  switch (hash(type.c_str())) {
-    case hash("BOOL"):
-      data_type = DataType::BOOL;
-      break;
-    case hash("UINT8"):
-      data_type = DataType::UINT8;
-      break;
-    case hash("UINT16"):
-      data_type = DataType::UINT16;
-      break;
-    case hash("UINT32"):
-      data_type = DataType::UINT32;
-      break;
-    case hash("UINT64"):
-      data_type = DataType::UINT64;
-      break;
-    case hash("INT8"):
-      data_type = DataType::INT8;
-      break;
-    case hash("INT16"):
-      data_type = DataType::INT16;
-      break;
-    case hash("INT32"):
-      data_type = DataType::INT32;
-      break;
-    case hash("INT64"):
-      data_type = DataType::INT64;
-      break;
-    case hash("FP16"):
-      data_type = DataType::FP16;
-      break;
-    case hash("FP32"):
-      data_type = DataType::FP32;
-      break;
-    case hash("FP64"):
-      data_type = DataType::FP64;
-      break;
-    case hash("STRING"):
-      data_type = DataType::STRING;
-      break;
-    default:
-      throw std::invalid_argument("Unknown datatype: " + type);
-  }
-  return data_type;
-}
-
-std::ostream& operator<<(std::ostream& os, const DataType& bar) {
-  return os << mapTypeToStr(bar);
-}
-
-}  // namespace proteus::types
+}  // namespace proteus

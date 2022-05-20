@@ -48,8 +48,6 @@ std::string constructMessage(const std::string& key, const std::string& data) {
          R"(", "labels": )" + labels + "}}";
 }
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -104,10 +102,9 @@ size_t InvertVideo::doAllocate(size_t num) {
 void InvertVideo::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", types::DataType::STRING, {128});
+  this->metadata_.addInputTensor("input", DataType::STRING, {128});
   // TODO(varunsh): output is variable
-  this->metadata_.addOutputTensor("output", types::DataType::INT8,
-                                  {1080, 1920, 3});
+  this->metadata_.addOutputTensor("output", DataType::INT8, {1080, 1920, 3});
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
@@ -158,7 +155,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
 
         InferenceResponseOutput output;
         output.setName("key");
-        output.setDatatype(types::DataType::STRING);
+        output.setDatatype(DataType::STRING);
         auto message = constructMessage(key, std::to_string(fps));
         output.setData(&message);
         output.setShape({message.size()});
@@ -184,7 +181,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
 
           InferenceResponseOutput output;
           output.setName("image");
-          output.setDatatype(types::DataType::STRING);
+          output.setDatatype(DataType::STRING);
           auto message = constructMessage(key, encoded);
           output.setData(&message);
           output.setShape({message.size()});

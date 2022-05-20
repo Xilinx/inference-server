@@ -32,7 +32,7 @@ TEST_F(GrpcFixture, ModelInfer) {
 
   proteus::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         proteus::types::DataType::UINT32);
+                         proteus::DataType::UINT32);
 
   auto response = client_->modelInfer(endpoint, request);
 
