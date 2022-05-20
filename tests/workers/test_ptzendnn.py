@@ -17,9 +17,7 @@ import sys
 
 import pytest
 import numpy as np
-from proteus.predict_api import Datatype
-from proteus.exceptions import ConnectionError
-from proteus.predict_api import Datatype, ImageInferenceRequest
+import proteus
 
 from helper import run_benchmark, root_path
 
@@ -61,7 +59,7 @@ class TestPtZendnn:
         """
 
         try:
-            response = self.rest_client.infer(self.model, request)
+            response = self.rest_client.modelInfer(self.model, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -70,14 +68,15 @@ class TestPtZendnn:
         num_inputs = len(request.inputs)
 
         if check_asserts:
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
             assert response.id == ""
-            assert response.model_name == "PTModel"
-            assert len(response.outputs) == num_inputs
-            for index, output in enumerate(response.outputs):
+            assert response.model == "PTModel"
+            outputs = response.getOutputs()
+            assert len(outputs) == num_inputs
+            for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == Datatype.FP32
-                assert output.parameters == {}
+                assert output.datatype == proteus.DataType.FP32
+                assert output.parameters.empty()
         return response
 
     def test_ptzendnn_0(self):

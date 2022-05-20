@@ -41,26 +41,23 @@ def main(args):
     """
 
     # Create server objects
-    server = proteus.Server()
-    client = proteus.RestClient("0.0.0.0:8998", None)
+    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
 
     # Start server: if it's not already started, start it here
-    try:
-        start_server = not client.server_live()
-        print("Server already up")
-    except proteus.ConnectionError:
-        start_server = True
+    start_server = not client.serverLive()
     if start_server:
-        print("Starting server")
-        server.start(quiet=True)
-        client.wait_until_live()
+        proteus.initialize()
+        proteus.clients.startHttpServer(8998)
 
-    if not client.has_extension("ptzendnn"):
+    metadata = client.serverMetadata()
+
+    if not "ptzendnn" in metadata.extensions:
         print("PTZenDNN support required but not found.")
         if start_server:
-            print("Closing server")
-            server.stop()
-            client.wait_until_stop()
+            proteus.clients.stopHttpServer()
+            proteus.terminate()
+            while client.serverLive():
+                time.sleep(1)
         sys.exit(0)
 
     # Argument parsing
@@ -91,13 +88,17 @@ def main(args):
             classes = list(range(1000))
         classes = np.asarray(classes)
 
-    parameters = {"model": args.graph, "input_size": input_size}
-    response = client.load("PtZendnn", parameters)
-    assert not response.error, response.error_msg
-    worker_name = response.html
+    parameters = proteus.RequestParameters()
+    parameters.put("model", args.graph)
+    parameters.put("input_size", input_size)
+    worker_name = client.modelLoad("PtZendnn", parameters)
 
-    while not client.model_ready(worker_name):
-        pass
+    ready = False
+    while not ready:
+        try:
+            ready = client.modelReady(worker_name)
+        except ValueError:
+            pass
 
     # Inference with images
     # If with real data, do preprocessing, otherwise create dummy data
@@ -106,8 +107,8 @@ def main(args):
         images = [preprocess_pt(args.image_location, input_size)]
         images.append(preprocess_pt(args.image_location, input_size))
         request = proteus.ImageInferenceRequest(images)
-        response = client.infer(worker_name, request)
-        assert not response.error, response.error_msg
+        response = client.modelInfer(worker_name, request)
+        assert not response.isError(), response.getError()
 
         # Post process to get top1 and top5 classes
         idx_1 = postprocess(response, 1)
@@ -141,10 +142,10 @@ def main(args):
             # Send request to the server
             request = proteus.ImageInferenceRequest(images)
             start = time.time()
-            response = client.infer(worker_name, request)
+            response = client.modelInfer(worker_name, request)
             end = time.time()
             total_time += end - start
-            assert not response.error, response.error_msg
+            assert not response.isError(), response.getError()
 
             num_processed_images += batch_size
             num_remaining_images -= batch_size
@@ -167,8 +168,10 @@ def main(args):
 
     # Stop the server if it was started from Python
     if start_server:
-        server.stop()
-        client.wait_until_stop()
+        proteus.clients.stopHttpServer()
+        proteus.terminate()
+        while client.serverLive():
+            sleep(1)
         print("Killed Server")
 
 

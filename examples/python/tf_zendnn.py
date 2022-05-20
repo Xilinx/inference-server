@@ -90,7 +90,7 @@ def main(args):
             classes = list(range(1000))
         classes = np.asarray(classes)
 
-    # Load the worker with appropriate paramaters
+    # Load the worker with appropriate parameters
     parameters = proteus.RequestParameters()
     parameters.put("model", args.graph)
     parameters.put("input_node", args.input_node)
