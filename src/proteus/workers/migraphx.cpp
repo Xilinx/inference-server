@@ -38,6 +38,11 @@
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
 
+// opencv for debugging only -- 
+#include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
+#include <opencv2/imgcodecs.hpp>  // for imread
+#include <opencv2/imgproc.hpp>    // for resize
+
 #include <migraphx/migraphx.hpp>              // MIGraphX C++ API
 
 
@@ -91,6 +96,9 @@ std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
 void MIGraphXWorker::doInit(RequestParameters* parameters){
     (void)parameters;  // suppress unused variable warning
     std::cout << "MIGraphXWorker::doInit\n";
+
+    // trial and error: set this to the number of bytes in an image (specified for this model)
+    this->batch_size_ = 3*224*224;
 }
 
 /**
@@ -103,14 +111,13 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
  */
 size_t MIGraphXWorker::doAllocate(size_t num){
   std::cout << "MIGraphXWorker::doAllocate\n";
-    // the following is copied from echo.cpp
-  constexpr auto kBufferNum = 10U;
+  constexpr auto kBufferNum = 1U;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
                          1 * this->batch_size_, DataType::UINT32);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::FP32);
   SPDLOG_LOGGER_INFO(this->logger_, std::string("MIGraphXWorker::doAllocate added ") + std::to_string(buffer_num) + " buffers");
   return buffer_num;
 }
@@ -130,8 +137,7 @@ void MIGraphXWorker::doAcquire(RequestParameters* parameters){
     // Using parse_onnx() instead of load() because there's a bug at the time of writing
     this->prog_ = migraphx::parse_onnx(input_file_.c_str());
     std::cout << "Finished parsing ONNX model." << std::endl;
-        prog_.print();    
-    std::cout << "Compiling ONNX model...";
+        // prog_.print();    
 
     // Compile the model.  Hard-coded choices of offload_copy and gpu target.
     migraphx::compile_options comp_opts;
@@ -178,18 +184,24 @@ std::shared_ptr<InferenceRequest> req;
       auto outputs = req->getOutputs();
       for (unsigned int i = 0; i < inputs.size(); i++) {
         auto* input_buffer = inputs[i].getData();
-        // std::byte* output_buffer = outputs[i].getData();
+        // std::byte* output_buffer = outputs[i].getData(); //brian:  is this right?
         // auto* input_buffer = dynamic_cast<VectorBuffer*>(input_ptr);
         // auto* output_buffer = dynamic_cast<VectorBuffer*>(output_ptr);
 
         // uint32_t value = *static_cast<uint32_t*>(input_buffer);
+        int rows = inputs[i].getShape()[0];
+        int cols = inputs[i].getShape()[1];
+        SPDLOG_LOGGER_INFO(this->logger_, std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) );
 
+        // Output image version of the data for visual inspection--debugging only
+        cv::Mat sample_img = cv::Mat(rows, cols, CV_8UC3, input_buffer);
+bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c_str(), sample_img);
+(void)check;
         std::cout <<"################## input is " << inputs[i] ;
 
         // this is my operation: run the migraphx eval() method.
         // If exceptions can happen, they should be handled
         try {
-          SPDLOG_LOGGER_INFO(this->logger_, "beginning migraphx eval");
           migraphx::program_parameters params;
 
           // populate the migraphx parameters with shape read from the onnx model.
@@ -198,19 +210,17 @@ std::shared_ptr<InferenceRequest> req;
           auto input        = param_shapes.names().front();  // "data"
           params.add(input, migraphx::argument(param_shapes[input], (void *)input_buffer));
 
-
-
           // Run the inference
+          SPDLOG_LOGGER_INFO(this->logger_, "beginning migraphx eval");
           migraphx::api::arguments  migraphx_output =      this->prog_.eval(params);
-          std::cout << "...inference complete.\n";
-
-
+          SPDLOG_LOGGER_INFO(this->logger_, "finishing migraphx eval");
 
           // parsing of results is copied from examples/vision/cpp_mnist/mnist_inference.cpp
           // not sure if relevant
           auto shape   = migraphx_output[0].get_shape();
+            std::cout << "the shape of the output returned by migraphx is " ;
           for(int i: shape.lengths())
-            std::cout << "the shape returned by migraphx is " << i << std::endl;
+            std::cout << i << " x " << std::endl;
           // recast the output from a blob to an array of float
           auto lengths = shape.lengths();
           auto num_results =
@@ -219,9 +229,9 @@ std::shared_ptr<InferenceRequest> req;
           // get the index of best matching result
           float* max     = std::max_element(results, results + num_results);
           int answer     = max - results;
-          std::cout <<"The answer is " << answer << ".\n";
+          std::cout << "================ best match is " << std::to_string(*max) << std::endl;
 
-          // to do: move the result from migraphx output to REST output
+          // Move the result from migraphx output to REST output
 
         InferenceResponseOutput output;
         output.setDatatype(types::DataType::UINT32);

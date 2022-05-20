@@ -79,7 +79,7 @@ find_package(opentelemetry-cpp CONFIG)
 find_package(spdlog)
 find_package(Threads REQUIRED)
 # rocm, the toolkit used by migraphx
-list (APPEND CMAKE_PREFIX_PATH /opt/rocm/hip /opt/rocm)
+list (APPEND CMAKE_PREFIX_PATH /opt/rocm/hip /opt/rocm /workspace/proteus/AMDMIGraphX/build/lib)
 find_package (migraphx)
 find_package(tfzendnn)
 find_package(ptzendnn)

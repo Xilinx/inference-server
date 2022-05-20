@@ -88,8 +88,8 @@ def main():
 
     # +user variables: update as needed!
     batch_size = 4
-    path_to_xmodel = "/workspace/proteus/external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
-    path_to_image = root + "/external/artifacts/migraphx/JG-COMP-HERO-UKRAINE-SOILDER.jpg"
+    path_to_xmodel = "${PROTEUS_ROOT}/external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel"
+    path_to_image = root + "/tests/assets/dog-3619020_640.jpg"
     # for this image, we know what we expect to receive with this XModel
     gold_response_output = [259, 261, 260, 154, 230]
     # -user variables

@@ -642,6 +642,7 @@ class Dockerize:
             build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
         if args.migraphx_path:
+            print('migraphx path is ', {args.migraphx_path})
             build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
             build_args += f" --build-arg MIGRAPHX_PATH={args.migraphx_path}"
 

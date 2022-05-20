@@ -24,8 +24,10 @@ import cv2
 import math
 import numpy as np
 
-modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
-imagename = r"/workspace/proteus/external/artifacts/migraphx/JG-COMP-HERO-UKRAINE-SOILDER.jpg"
+# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
+modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
+# imagename = r"/workspace/proteus/external/artifacts/migraphx/JG-COMP-HERO-UKRAINE-SOILDER.jpg"
+imagename = r"/workspace/proteus/external/artifacts/migraphx/yflower.jpg"
 
 #  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
 shape=[]
@@ -35,6 +37,7 @@ for input in model.graph.input:
         print (input.name, end=": ")
         # get type of input tensor
         tensor_type = input.type.tensor_type
+
         # check if it has a shape:
         if (tensor_type.HasField("shape")):
             # iterate through dimensions of the shape:
@@ -50,16 +53,16 @@ for input in model.graph.input:
 print('shape of input image is ', shape)    
 
 # Read in the input, and resize it to fit the onnx model
-# we expect a dim_value of 4, and this script just fails if not
+# we expect a dim_value of 4
 input_img = cv2.imread(imagename)
+
 if len(shape) == 4:
     print('resizing ', input_img.shape, '!', shape[2:4], end="==>")
     img = cv2.resize(input_img, shape[2:4])
-
     # debug: make so small that contents is human readable
-    img = cv2.resize(input_img, [2,7])
+    # img = cv2.resize(input_img, [20,70])
     print('image shape is ', img.shape, '!!')
-    print('image as list is ', img.tolist())
+    # print('image as list is ', img.tolist())   # this can be very long
 else:
     print('Unable to read the image dimensions from ', modelname, '.  Expecting a 4-value shape tensor.')
     exit(-1)
@@ -67,15 +70,15 @@ else:
 
 server = proteus.Server()
 client = proteus.RestClient("127.0.0.1:8998")
+print('waiting for server...',end='')
 client.wait_until_live()
-
+print('ok.')
 # +load worker:     DEFINE A SET OF PARAMETERS THAT THE MIGRAPHX WORKER 
 # NEEDS.  
 # ANY KEY-VALUE PAIRS ARE LEGAL
 
-# todo: input should be a bare array, currently assuming int.
 parameters = {"model": modelname,
-              "input": img.tolist() # <== [[[159, 162, 211], [185, 176, 172],...
+                # any other migraphx-specific parameters here
 			  }
 
 response = client.load("Migraphx", parameters)
@@ -84,8 +87,15 @@ worker_name = response.html  # Migraphx
 print('response is', response.html)
 
 print('preprocess images...')
-# images=preprocess([img])
-images=[img]
+# synthetic second image is first image, rotated
+print('image shape after resizing is ', img.shape)
+rows,cols = img.shape[1:3]
+M = cv2.getRotationMatrix2D(((cols-1)/2.0,(rows-1)/2.0),90,1)
+img2 = cv2.flip(img, 0)
+cv2.imwrite('sample1.jpg', img)
+cv2.imwrite('sample2.jpg', img2)
+images=[img, img2]
+
 print("Done.  Create inference request...")
 request = proteus.ImageInferenceRequest(images, True)
 print("Perform inference...")
@@ -93,6 +103,7 @@ response = client.infer( worker_name, request)
 assert not response.error, response.error_msg
 for output in response.outputs:
     data = output.data
+    print('contents of output is ', dir(output))   # 'data', 'datatype', 'name', 'parameters', 'shape'
     print('result returned by server is ', output.name)
     print('answer is ', data)
 print('Done')
