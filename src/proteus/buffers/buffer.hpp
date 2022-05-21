@@ -39,11 +39,7 @@ enum class Status;
 class Buffer {
  public:
   /// Construct a new Proteus Buffer object
-  Buffer() {
-#ifdef PROTEUS_ENABLE_LOGGING
-    this->logger_ = getLogger();
-#endif
-  }
+  Buffer() {}
   /// Destroy the Proteus Buffer object
   virtual ~Buffer() = default;
 
@@ -256,13 +252,6 @@ class Buffer {
   //  * @return Status::kOK if successful
   //  */
   // virtual Status read(int index, double& value) = 0;
-
-#ifdef PROTEUS_ENABLE_LOGGING
-
- protected:
-  /// Base logger inherited by all buffers
-  LoggerPtr logger_;
-#endif
 };
 
 }  // namespace proteus

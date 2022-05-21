@@ -37,7 +37,7 @@
 #include "proteus/core/worker_info.hpp"       // for WorkerInfo
 #include "proteus/helpers/queue.hpp"          // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_DEBUG
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 
 // IWYU pragma: no_forward_declare proteus::Buffer
@@ -101,7 +101,10 @@ std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
 }
 
 void FakeInterface::errorHandler(const std::invalid_argument &e) {
-  SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto &logger = this->getLogger();
+  logger.error(e.what());
+#endif
   (void)e;  // suppress unused variable warning
 }
 
@@ -136,8 +139,8 @@ void Batcher::run(WorkerInfo *worker) {
       output_buffers.back().push_back(buffer.get());
     }
     this->input_queue_->wait_dequeue(req);
-    SPDLOG_LOGGER_DEBUG(
-      this->logger_, "Got initial request of a new batch for " + this->model_);
+    PROTEUS_IF_LOGGING(
+      logger_.debug("Got initial request of a new batch for " + this->model_));
 
     if (req == nullptr) {
       break;
@@ -171,7 +174,7 @@ void Batcher::run(WorkerInfo *worker) {
     // batch_size += 1;
 
     if (!batch->requests->empty()) {
-      SPDLOG_LOGGER_DEBUG(this->logger_, "Enqueuing batch for " + this->model_);
+      PROTEUS_IF_LOGGING(logger_.debug("Enqueuing batch for " + this->model_));
       batch->input_buffers->push_back(std::move(input_buffer));
       batch->output_buffers->push_back(std::move(output_buffer));
       this->output_queue_->enqueue(std::move(batch));

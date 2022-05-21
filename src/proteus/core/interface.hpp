@@ -61,7 +61,7 @@ class Interface {
   Interface();                     ///< Constructor
   virtual ~Interface() = default;  ///< Destructor
   /// Get the type of the interface
-  InterfaceType getType();
+  InterfaceType getType() const;
 #ifdef PROTEUS_ENABLE_TRACING
   /// Store the active trace into the Interface for propagation
   void setTrace(TracePtr &&trace);
@@ -73,7 +73,7 @@ class Interface {
   void set_time(
     const std::chrono::high_resolution_clock::time_point &start_time);
   /// Get the stored time
-  std::chrono::high_resolution_clock::time_point get_time();
+  std::chrono::high_resolution_clock::time_point get_time() const;
 #endif
   /// Get the number of input tensors in the request
   virtual size_t getInputSize() = 0;
@@ -105,14 +105,18 @@ class Interface {
 
  protected:
   InterfaceType type_;
-#ifdef PROTEUS_ENABLE_LOGGING
-  LoggerPtr logger_;
-#endif
 #ifdef PROTEUS_ENABLE_TRACING
   TracePtr trace_;
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
   std::chrono::_V2::system_clock::time_point start_time_;
+#endif
+#ifdef PROTEUS_ENABLE_LOGGING
+  const Logger &getLogger() const;
+#endif
+ private:
+#ifdef PROTEUS_ENABLE_LOGGING
+  Logger logger_{Loggers::kServer};
 #endif
 };
 

@@ -30,11 +30,7 @@
 
 namespace proteus {
 
-Manager::Manager() {
-#ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
-#endif
-}
+Manager::Manager() {}
 
 std::string Manager::loadWorker(std::string const& key,
                                 RequestParameters parameters) {
@@ -70,8 +66,8 @@ ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
 void Manager::workerAllocate(std::string const& key, int num) {
   auto* worker_info = this->endpoints_.get(key);
   if (!worker_info->inputSizeValid(num)) {
-    SPDLOG_LOGGER_DEBUG(this->logger_,
-                        "Allocating more buffers for worker " + key);
+    PROTEUS_IF_LOGGING(
+      logger_.debug("Allocating more buffers for worker " + key));
     worker_info->allocate(num);
   }
 }

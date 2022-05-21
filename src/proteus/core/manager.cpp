@@ -32,9 +32,6 @@
 namespace proteus {
 
 Manager::Manager() {
-#ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
-#endif
   update_queue_ = std::make_unique<UpdateCommandQueue>();
   init();
 }
@@ -123,13 +120,13 @@ void Manager::shutdown() {
 }
 
 void Manager::update_manager(UpdateCommandQueue* input_queue) {
-  SPDLOG_LOGGER_DEBUG(this->logger_, "Starting the Manager update thread");
+  PROTEUS_IF_LOGGING(logger_.debug("Starting the Manager update thread"));
   setThreadName("manager");
   std::shared_ptr<UpdateCommand> request;
   bool run = true;
   while (run) {
     input_queue->wait_dequeue(request);
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Got request in Manager update thread");
+    PROTEUS_IF_LOGGING(logger_.debug("Got request in Manager update thread"));
     switch (request->cmd) {
       case UpdateCommandType::Shutdown:
         this->endpoints_.shutdown();
@@ -143,9 +140,9 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
           auto* worker_info = this->endpoints_.get(request->key);
           auto num = *static_cast<int*>(request->object);
           if (!worker_info->inputSizeValid(num)) {
-            SPDLOG_LOGGER_DEBUG(
-              this->logger_,
-              "Allocating more buffers for worker " + request->key);
+            PROTEUS_IF_LOGGING(logger_.debug(
+
+              "Allocating more buffers for worker " + request->key));
             worker_info->allocate(num);
           }
         } catch (...) {
@@ -164,7 +161,7 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
         break;
     }
   }
-  SPDLOG_LOGGER_DEBUG(this->logger_, "Ending update_thread");
+  PROTEUS_IF_LOGGING(logger_.debug("Ending update_thread"));
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,
@@ -214,7 +211,7 @@ void Manager::Endpoints::unload(const std::string& endpoint) {
 
     if (worker_endpoints_.find(worker) != worker_endpoints_.end()) {
       auto& map = worker_endpoints_.at(worker);
-      if(worker_parameters_.find(endpoint) != worker_parameters_.end()){
+      if (worker_parameters_.find(endpoint) != worker_parameters_.end()) {
         const auto& parameters = worker_parameters_.at(endpoint);
         map.erase(parameters);
       }

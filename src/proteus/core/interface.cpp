@@ -27,14 +27,9 @@
 
 namespace proteus {
 
-Interface::Interface() {
-#ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
-#endif
-  this->type_ = InterfaceType::kUnknown;
-}
+Interface::Interface() { this->type_ = InterfaceType::kUnknown; }
 
-InterfaceType Interface::getType() { return this->type_; }
+InterfaceType Interface::getType() const { return this->type_; }
 
 #ifdef PROTEUS_ENABLE_TRACING
 void Interface::setTrace(TracePtr&& trace) { this->trace_ = std::move(trace); }
@@ -47,9 +42,13 @@ void Interface::set_time(
   this->start_time_ = start_time;
 }
 
-std::chrono::high_resolution_clock::time_point Interface::get_time() {
+std::chrono::high_resolution_clock::time_point Interface::get_time() const {
   return this->start_time_;
 }
+#endif
+
+#ifdef PROTEUS_ENABLE_LOGGING
+const Logger& Interface::getLogger() const { return this->logger_; }
 #endif
 
 }  // namespace proteus

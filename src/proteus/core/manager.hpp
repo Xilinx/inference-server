@@ -62,10 +62,7 @@ struct UpdateCommand {
   /// Constructor for UpdateCommand
   explicit UpdateCommand(UpdateCommandType cmd_, std::string key_ = "",
                          void* object_ = nullptr, void* retval_ = nullptr)
-    : cmd(cmd_),
-      key(std::move(key_)),
-      object(object_),
-      retval(retval_) {}
+    : cmd(cmd_), key(std::move(key_)), object(object_), retval(retval_) {}
   /// the command ID
   UpdateCommandType cmd;
   /// a string key that a command can make use of. Usually identifies the worker
@@ -186,7 +183,7 @@ class Manager {
   std::unique_ptr<UpdateCommandQueue> update_queue_;
   std::thread update_thread_;
 #ifdef PROTEUS_ENABLE_LOGGING
-  LoggerPtr logger_;
+  Logger logger_{Loggers::kServer};
 #endif
 
   /**

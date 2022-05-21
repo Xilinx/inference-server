@@ -40,12 +40,15 @@
 #include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "proteus/helpers/compression.hpp"        // for z_decompress
-#include "proteus/observation/logging.hpp"        // for getLogger, SPDLOG_L...
+#include "proteus/observation/logging.hpp"        // for Logger
 
 namespace proteus {
 
 RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
   auto parameters_ = std::make_shared<RequestParameters>();
+#ifdef PROTEUS_ENABLE_LOGGING
+  Logger logger{Loggers::kClient};
+#endif
   for (auto const &id : parameters.getMemberNames()) {
     if (parameters[id].isString()) {
       parameters_->put(id, parameters[id].asString());
@@ -56,7 +59,7 @@ RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
     } else if (parameters[id].isDouble()) {
       parameters_->put(id, parameters[id].asDouble());
     } else {
-      SPDLOG_WARN("Unknown parameter type, skipping");
+      PROTEUS_IF_LOGGING(logger.warn("Unknown parameter type, skipping"));
     }
   }
   return parameters_;
@@ -100,7 +103,7 @@ void setOutputData(const Json::Value &json, InferenceResponseOutput *output,
   output->setData(std::move(data_cast));
 }
 
-InferenceResponse mapJsonToResponse(Json::Value* json) {
+InferenceResponse mapJsonToResponse(Json::Value *json) {
   InferenceResponse response;
   response.setModel(json->get("model_name", "").asString());
   response.setID(json->get("id", "").asString());
@@ -295,7 +298,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
                                      Buffer *input_buffer, size_t offset) {
     InferenceRequestInput input;
 #ifdef PROTEUS_ENABLE_LOGGING
-    auto logger = getLogger();
+    Logger logger{Loggers::kServer};
 #endif
     input.data_ = input_buffer->data();
 
@@ -370,7 +373,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
           case DataType::FP16:
             // FIXME(varunsh): this is not handled
-            SPDLOG_LOGGER_WARN(logger, "Writing FP16 not supported");
+            PROTEUS_IF_LOGGING(logger.warn("Writing FP16 not supported"));
             break;
           case DataType::FP32:
             offset =
@@ -385,7 +388,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
           default:
             // TODO(varunsh): what should we do here?
-            SPDLOG_LOGGER_WARN(logger, "Unknown datatype");
+            PROTEUS_IF_LOGGING(logger.warn("Unknown datatype"));
             break;
         }
       }
@@ -504,7 +507,7 @@ InferenceRequestPtr RequestBuilder::build(
     for (auto const &i : inputs) {
       (void)i;  // suppress unused variable warning
       try {
-        const auto& buffers = output_buffers[buffer_index];
+        const auto &buffers = output_buffers[buffer_index];
         for (const auto &buffer : buffers) {
           const auto &offset = output_offsets[buffer_index];
 
@@ -549,6 +552,9 @@ DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
 }
 
 void DrogonHttp::setJson() {
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto &logger = this->getLogger();
+#endif
   const auto &json_raw = this->req_->getJsonObject();
 
   // if we fail to get the JSON object, return
@@ -572,7 +578,7 @@ void DrogonHttp::setJson() {
                                         HttpStatusCode::k400BadRequest));
       return;
     }
-    SPDLOG_LOGGER_INFO(this->logger_, "Successfully inflated request");
+    PROTEUS_IF_LOGGING(logger.info("Successfully inflated request"));
     this->json_ = std::move(root);
   } else {
     this->json_ = json_raw;
@@ -727,15 +733,19 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
   const std::vector<BufferRawPtrs> &output_buffers,
   std::vector<size_t> &output_offsets, const size_t &batch_size,
   size_t &batch_offset) {
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto &logger = this->getLogger();
+#endif
   try {
     auto request = RequestBuilder::build(
       this->json_, buffer_index, input_buffers, input_offsets, output_buffers,
       output_offsets, batch_size, batch_offset);
-    Callback callback = [callback = std::move(this->callback_)](const InferenceResponse& response){
+    Callback callback = [callback = std::move(this->callback_)](
+                          const InferenceResponse &response) {
       drogon::HttpResponsePtr resp;
       if (response.isError()) {
-        resp =
-          errorHttpResponse(response.getError(), HttpStatusCode::k400BadRequest);
+        resp = errorHttpResponse(response.getError(),
+                                 HttpStatusCode::k400BadRequest);
       } else {
         try {
           Json::Value ret = parseResponse(response);
@@ -744,16 +754,16 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
           resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
         }
       }
-    #ifdef PROTEUS_ENABLE_TRACING
+#ifdef PROTEUS_ENABLE_TRACING
       const auto &context = response.getContext();
       propagate(resp.get(), context);
-    #endif
+#endif
       callback(resp);
     };
     request->setCallback(std::move(callback));
     return request;
   } catch (const std::invalid_argument &e) {
-    SPDLOG_LOGGER_INFO(this->logger_, e.what());
+    PROTEUS_IF_LOGGING(logger.info(e.what()));
     this->callback_(
       errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
     return nullptr;
@@ -761,7 +771,10 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
 }
 
 void DrogonHttp::errorHandler(const std::invalid_argument &e) {
-  SPDLOG_LOGGER_DEBUG(this->logger_, e.what());
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto &logger = this->getLogger();
+  logger.debug(e.what());
+#endif
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
 }
 

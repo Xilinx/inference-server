@@ -62,13 +62,6 @@ class Worker {
   Worker(const std::string& name, const std::string& platform)
     : metadata_(name, platform) {
     this->status_ = WorkerStatus::kNew;
-#ifdef PROTEUS_ENABLE_LOGGING
-    this->logger_ = getLogger();
-    if (this->logger_ == nullptr) {
-      initLogging();
-      this->logger_ = getLogger();
-    }
-#endif
     this->input_buffers_ = nullptr;
     this->output_buffers_ = nullptr;
     this->max_buffer_num_ = UINT_MAX;
@@ -180,12 +173,13 @@ class Worker {
   ModelMetadata getMetadata() { return this->metadata_; }
 
  protected:
+#ifdef PROTEUS_ENABLE_LOGGING
+  const Logger& getLogger() const { return logger_; };
+#endif
+
   BufferPtrsQueue* input_buffers_;
   BufferPtrsQueue* output_buffers_;
   uint32_t max_buffer_num_;
-#ifdef PROTEUS_ENABLE_LOGGING
-  LoggerPtr logger_;
-#endif
   size_t batch_size_;
   ModelMetadata metadata_;
 
@@ -208,6 +202,10 @@ class Worker {
   virtual void doDeallocate() = 0;
   /// Perform any final operations before the worker's run thread is joined
   virtual void doDestroy() = 0;
+
+#ifdef PROTEUS_ENABLE_LOGGING
+  Logger logger_{Loggers::kServer};
+#endif
 
   WorkerStatus status_;
 };

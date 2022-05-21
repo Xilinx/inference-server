@@ -34,6 +34,7 @@ PYBIND11_MODULE(_proteus, m) {
   m.doc() = "proteus inference library";
 
   m.def("initialize", &initialize);
+  m.def("initializeLogging", &initializeLogging);
   m.def("terminate", &terminate);
 
   wrapRequestParameters(m);

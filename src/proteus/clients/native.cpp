@@ -46,10 +46,38 @@
 
 namespace proteus {
 
-void initialize() {
+std::string getLogDirectory() {
+  auto* home = std::getenv("HOME");
+  std::string dir;
+  if (home != nullptr) {
+    dir = home;
+    dir += "/.proteus";
+  } else {
+    dir = ".";
+  }
+  dir += "/logs";
+  return dir;
+}
+
+void initializeLogging() {
 #ifdef PROTEUS_ENABLE_LOGGING
-  initLogging();
+  LogOptions options{
+    "server",  // logger_name
+    getLogDirectory(),
+    true,              // enable file logging
+    LogLevel::kDebug,  // file log level
+    true,              // enable console logging
+    LogLevel::kWarn    // console log level
+  };
+  initLogger(options);
+
+  options.logger_name = "client";
+  initLogger(options);
 #endif
+}
+
+void initialize() {
+  initializeLogging();
 #ifdef PROTEUS_ENABLE_TRACING
   startTracer();
 #endif

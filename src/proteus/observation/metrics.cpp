@@ -101,11 +101,7 @@ void SummaryFamily::observe(MetricSummaryIDs id, double value) {
 }
 
 Metrics::Metrics()
-  :
-#ifdef PROTEUS_ENABLE_LOGGING
-    logger_(getLogger()),
-#endif
-    registry_(std::make_shared<prometheus::Registry>()),
+  : registry_(std::make_shared<prometheus::Registry>()),
 
     ingress_requests_total_(
       "proteus_requests_ingress_total",

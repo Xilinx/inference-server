@@ -28,10 +28,8 @@
 #include <thread>   // for thread, thread::id
 #include <vector>   // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
 #include "proteus/helpers/declarations.hpp"  // for BufferPtr
 #include "proteus/helpers/queue.hpp"         // for BufferPtrsQueuePtr
-#include "proteus/observation/logging.hpp"   // for LoggerPtr
 
 namespace proteus {
 class Batcher;
@@ -157,9 +155,6 @@ class WorkerInfo {
   size_t buffer_num_;
   size_t max_buffer_num_;
   size_t batch_size_;
-#ifdef PROTEUS_ENABLE_LOGGING
-  LoggerPtr logger_;
-#endif
 
   friend class Manager;
 };

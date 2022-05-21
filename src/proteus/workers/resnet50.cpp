@@ -48,7 +48,7 @@
 #include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
 #include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
 #include "proteus/observation/tracing.hpp"    // for Trace
 #include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
@@ -152,6 +152,9 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
 void ResNet50::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   setThreadName("ResNet50");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -159,7 +162,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    SPDLOG_LOGGER_INFO(this->logger_, "Got request in Resnet50");
+    PROTEUS_IF_LOGGING(logger.info("Got request in Resnet50"));
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->requests->size());
 
@@ -219,7 +222,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            SPDLOG_LOGGER_ERROR(this->logger_, error);
+            PROTEUS_IF_LOGGING(logger.error(error));
             req->runCallbackError(error);
             continue;
           }
@@ -310,9 +313,9 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "ResNet50 ending");
+  PROTEUS_IF_LOGGING(logger.info("ResNet50 ending"));
 }
 
 void ResNet50::doRelease() {}

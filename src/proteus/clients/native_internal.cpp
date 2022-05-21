@@ -19,8 +19,6 @@
 
 #include "proteus/clients/native_internal.hpp"
 
-#include <spdlog/spdlog.h>  // for SPDLOG_LOGGER_ERROR
-
 #include <algorithm>   // for fill
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for uint64_t
@@ -30,8 +28,9 @@
 #include <string>      // for string
 #include <utility>     // for move
 
-#include "proteus/buffers/buffer.hpp"   // for Buffer
-#include "proteus/core/data_types.hpp"  // for getSize
+#include "proteus/buffers/buffer.hpp"       // for Buffer
+#include "proteus/core/data_types.hpp"      // for getSize
+#include "proteus/observation/logging.hpp"  // for Logger
 
 namespace proteus {
 template <typename T>
@@ -90,7 +89,7 @@ class InferenceRequestBuilder<InferenceRequest> {
 
     for (const auto &input : req.inputs_) {
       try {
-        const auto& buffers = input_buffers[buffer_index];
+        const auto &buffers = input_buffers[buffer_index];
         for (auto &buffer : buffers) {
           auto &offset = input_offsets[buffer_index];
 
@@ -116,7 +115,7 @@ class InferenceRequestBuilder<InferenceRequest> {
     if (!req.outputs_.empty()) {
       for (const auto &output : req.outputs_) {
         try {
-          const auto& buffers = output_buffers[buffer_index];
+          const auto &buffers = output_buffers[buffer_index];
           for (auto &buffer : buffers) {
             const auto &offset = output_offsets[buffer_index];
 
@@ -138,7 +137,7 @@ class InferenceRequestBuilder<InferenceRequest> {
       for (const auto &input : req.inputs_) {
         (void)input;  // suppress unused variable warning
         try {
-          const auto& buffers = output_buffers[buffer_index];
+          const auto &buffers = output_buffers[buffer_index];
           for (auto &buffer : buffers) {
             const auto &offset = output_offsets[buffer_index];
 
@@ -189,15 +188,19 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   auto request = RequestBuilder::build(
     this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
     output_offsets, batch_size, batch_offset);
-  Callback callback = [promise = std::move(this->promise_)](const InferenceResponse& response){
-    promise->set_value(response);
-  };
+  Callback callback =
+    [promise = std::move(this->promise_)](const InferenceResponse &response) {
+      promise->set_value(response);
+    };
   request->setCallback(std::move(callback));
   return request;
 }
 
 void CppNativeApi::errorHandler(const std::invalid_argument &e) {
-  SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto &logger = this->getLogger();
+  logger.error(e.what());
+#endif
   this->getPromise()->set_value(InferenceResponse(e.what()));
 }
 

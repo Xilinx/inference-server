@@ -20,57 +20,65 @@
 #ifndef GUARD_PROTEUS_OBSERVATION_LOGGING
 #define GUARD_PROTEUS_OBSERVATION_LOGGING
 
-#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_LOGGING
-
-// NDEBUG is defined by Cmake for release builds but could be defined manually
-// The log levels are defined in spdlog/common.h. As a quick guide, 0 allows
-// all logging statements while 6 removes all. We need to define this macro
-// before including the spdlog header.
-#ifndef PROTEUS_ENABLE_LOGGING
-#define SPDLOG_ACTIVE_LEVEL 6
-#endif
-
-#ifndef NDEBUG
-#ifndef SPDLOG_ACTIVE_LEVEL
-// used for debug builds
-// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL 1
-#endif
-#else
-#ifndef SPDLOG_ACTIVE_LEVEL
-// used for release builds
-// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL 2
-#endif
-#endif
-
 #include <memory>  // for shared_ptr
 #include <string>  // for string
 
+#include "proteus/build_options.hpp"
+
+namespace spdlog {
+class logger;
+}
+
 #ifdef PROTEUS_ENABLE_LOGGING
-
-#include <spdlog/spdlog.h>  // IWYU pragma: export
-
-#if SPDLOG_ACTIVE_LEVEL < SPDLOG_LEVEL_OFF
-#define PROTEUS_LOGGING_ACTIVE
+#define PROTEUS_IF_LOGGING(...) __VA_ARGS__
+#else
+#define PROTEUS_IF_LOGGING(...)
 #endif
 
 namespace proteus {
 
-/// get the path to the directory to store logs
-std::string getLogDirectory();
+enum class Loggers { kServer, kClient };
 
-/// Create and register the loggers used throughout Proteus
-void initLogging();
+enum class LogLevel {
+  kTrace,
+  kDebug,
+  kInfo,
+  kWarn,
+  kError,
+  kOff,
+};
 
-using LoggerPtr = std::shared_ptr<spdlog::logger>;
+struct LogOptions {
+  // global options
+  std::string logger_name;
+  std::string log_directory;
 
-/// get a pointer to the global logger
-LoggerPtr getLogger();
+  // file logging
+  bool file_enable;
+  LogLevel file_level;
+
+  // console logging
+  bool console_enable;
+  LogLevel console_level;
+};
+
+class Logger {
+ public:
+  explicit Logger(Loggers name);
+
+  void trace(std::string_view message) const;
+  void debug(std::string_view message) const;
+  void info(std::string_view message) const;
+  void warn(std::string_view message) const;
+  void error(std::string_view message) const;
+
+ private:
+  std::shared_ptr<spdlog::logger> logger_;
+};
+
+/// Initialize logging for the inference server
+void initLogger(const LogOptions& options);
 
 }  // namespace proteus
-#else
-#undef PROTEUS_LOGGING_ACTIVE
-#endif
 
 #endif  // GUARD_PROTEUS_OBSERVATION_LOGGING

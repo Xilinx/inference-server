@@ -32,10 +32,16 @@
 
 namespace proteus {
 
-/// Initialize proteus
+/// Initialize proteus - calls initializeLogging internally
 void initialize();
+/// Initialize logging
+void initializeLogging();
+
 /// Shut down proteus
 void terminate();
+
+/// get log directory
+std::string getLogDirectory();
 
 /// Get a string that lists the available kernels ("<name>:i,<name>:j...")
 std::string getHardware();
@@ -96,12 +102,6 @@ class NativeClient : public Client {
   static InferenceResponseFuture enqueue(const std::string& workerName,
                                          InferenceRequest request);
 };
-
-// std::string load(const std::string &worker, RequestParameters *parameters);
-
-// void unload(const std::string &worker);
-
-// bool modelReady(const std::string &worker);
 
 }  // namespace proteus
 

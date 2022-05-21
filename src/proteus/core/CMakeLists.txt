@@ -14,7 +14,6 @@
 
 list(APPEND targets
     predict_api
-    fake_predict_api
     manager
     worker_info
     data_types

@@ -38,18 +38,6 @@
 
 namespace proteus {
 
-#ifdef PROTEUS_ENABLE_LOGGING
-/**
- * @brief Find the named function in a *.so file
- *
- * @param func name of the symbol  to find
- * @param soPath path to the *.so file to search
- * @param logger the logger object for logging errors
- * @return void* pointer to the function
- */
-void* findFunc(const std::string& func, const std::string& soPath,
-               const LoggerPtr& logger) {
-#else
 /**
  * @brief Find the named function in a *.so file
  *
@@ -58,7 +46,6 @@ void* findFunc(const std::string& func, const std::string& soPath,
  * @return void* pointer to the function
  */
 void* findFunc(const std::string& func, const std::string& soPath) {
-#endif
   if (func.empty() || soPath.empty()) {
     throw std::invalid_argument("Function or .so path empty");
   }
@@ -79,16 +66,10 @@ void* findFunc(const std::string& func, const std::string& soPath) {
     char* error_str = dlerror();
     throw std::invalid_argument(error_str);
   }
-#ifdef PROTEUS_LOGGING_ACTIVE
-  (void)logger;  // suppress unused variable warning
-#endif
   return fptr;
 }
 
 WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
-#endif
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->buffer_num_ = 0;
@@ -117,11 +98,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   std::string library =
     std::string("libworker") + lib_name + std::string(".so");
 
-#ifdef PROTEUS_ENABLE_LOGGING
-  void* funcPtr = findFunc("getWorker", library, this->logger_);
-#else
   void* funcPtr = findFunc("getWorker", library);
-#endif
 
   // cast the void pointer from dlsym to a function pointer. This assumes that
   // void* is same size as function pointer, which should be true on POSIX

@@ -21,21 +21,21 @@
 
 #include <concurrentqueue/blockingconcurrentqueue.h>  // for BlockingConcurr...
 #include <drogon/HttpRequest.h>                       // for HttpRequest
+#include <drogon/HttpResponse.h>                      // for HttpResponsePtr
 #include <drogon/HttpTypes.h>                         // for WebSocketMessag...
 #include <drogon/WebSocketClient.h>                   // for WebSocketClientPtr
 #include <drogon/WebSocketConnection.h>               // for WebSocketConnec...
-#include <drogon/HttpResponse.h>                      // for HttpResponsePtr
 #include <json/value.h>                               // for Value
 #include <json/writer.h>                              // for StreamWriterBui...
 #include <trantor/net/EventLoop.h>                    // for EventLoop
 #include <trantor/net/EventLoopThread.h>              // for EventLoopThread
 
-#include <cassert>                                    // for assert
-#include <chrono>                                     // for milliseconds
-#include <thread>                                     // for sleep_for
+#include <cassert>  // for assert
+#include <chrono>   // for milliseconds
+#include <thread>   // for sleep_for
 
-#include "proteus/clients/http.hpp"                   // for HttpClient
-#include "proteus/clients/http_internal.hpp"          // for mapRequestToJson
+#include "proteus/clients/http.hpp"           // for HttpClient
+#include "proteus/clients/http_internal.hpp"  // for mapRequestToJson
 
 namespace proteus {
 
@@ -53,7 +53,7 @@ class WebSocketClient::WebSocketClientImpl {
     ws_client_->setMessageHandler(
       [&](const std::string& message, const drogon::WebSocketClientPtr& client,
           const drogon::WebSocketMessageType& type) {
-        (void) client;
+        (void)client;
         std::string messageType = "Unknown";
         switch (type) {
           case WebSocketMessageType::Text: {

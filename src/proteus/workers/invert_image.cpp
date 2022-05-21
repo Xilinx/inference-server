@@ -41,7 +41,7 @@
 #include "proteus/helpers/base64.hpp"         // for base64_decode, base64_en...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
@@ -146,6 +146,9 @@ void InvertImage::doAcquire(RequestParameters* parameters) {
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   setThreadName("InvertImage");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -154,7 +157,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    SPDLOG_LOGGER_INFO(this->logger_, "Got request in InvertImage");
+    PROTEUS_IF_LOGGING(logger.info("Got request in InvertImage"));
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -203,14 +206,14 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           try {
             img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           } catch (const cv::Exception& e) {
-            SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+            PROTEUS_IF_LOGGING(logger.error(e.what()));
             req->runCallbackError("Failed to decode base64 image data");
             continue;
           }
 
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            SPDLOG_LOGGER_ERROR(this->logger_, error);
+            PROTEUS_IF_LOGGING(logger.error(error));
             req->runCallbackError(error);
             continue;
           }
@@ -251,9 +254,9 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "InvertImage ending");
+  PROTEUS_IF_LOGGING(logger.info("InvertImage ending"));
 }
 
 void InvertImage::doRelease() {}

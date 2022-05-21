@@ -31,16 +31,12 @@
 #include "proteus/core/worker_info.hpp"      // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"  // for BufferPtrs
 #include "proteus/helpers/queue.hpp"         // for BufferPtrsQueue, BufferP...
-#include "proteus/observation/logging.hpp"   // for getLogger, LoggerPtr
 
 namespace proteus {
 
 constexpr auto kDefaultBufferNum = 10;
 
 WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
-#endif
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->buffer_num_ = kDefaultBufferNum;

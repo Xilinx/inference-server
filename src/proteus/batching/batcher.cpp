@@ -40,7 +40,7 @@ Batcher::Batcher() {
   this->batch_size_ = 1;
   this->status_ = BatcherStatus::kNew;
 #ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
+  this->logger_ = Logger(Loggers::kServer);
 #endif
 }
 
@@ -56,7 +56,7 @@ Batcher::Batcher(const Batcher &batcher) {
   this->batch_size_ = batcher.batch_size_;
   this->status_ = BatcherStatus::kNew;
 #ifdef PROTEUS_ENABLE_LOGGING
-  this->logger_ = getLogger();
+  this->logger_ = Logger(Loggers::kServer);
 #endif
   this->model_ = batcher.model_;
 }
@@ -96,5 +96,9 @@ void Batcher::end() {
   this->thread_.join();
   this->status_ = BatcherStatus::kDead;
 }
+
+#ifdef PROTEUS_ENABLE_LOGGING
+const Logger &Batcher::getLogger() const { return logger_; }
+#endif
 
 }  // namespace proteus

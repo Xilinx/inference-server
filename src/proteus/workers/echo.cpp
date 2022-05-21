@@ -34,7 +34,7 @@
 #include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
@@ -114,6 +114,9 @@ void Echo::doAcquire(RequestParameters* parameters) {
 void Echo::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   setThreadName("Echo");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -121,7 +124,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    SPDLOG_LOGGER_INFO(this->logger_, "Got request in echo");
+    PROTEUS_IF_LOGGING(logger.info("Got request in echo"));
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -150,7 +153,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         try {
           value++;
         } catch (const std::exception& e) {
-          SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+          PROTEUS_IF_LOGGING(logger.error(e.what()));
           req->runCallbackError("Something went wrong");
           continue;
         }
@@ -192,9 +195,9 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "Echo ending");
+  PROTEUS_IF_LOGGING(logger.info("Echo ending"));
 }
 
 void Echo::doRelease() {}

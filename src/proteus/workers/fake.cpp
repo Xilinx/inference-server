@@ -34,7 +34,7 @@
 #include "proteus/helpers/ctpl.h"             // for thread_pool
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceRes...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
 
@@ -121,6 +121,9 @@ void Fake::doAcquire(RequestParameters* parameters) {
 void Fake::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   setThreadName("Fake");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -128,7 +131,7 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    SPDLOG_LOGGER_INFO(this->logger_, "Got request in fake");
+    PROTEUS_IF_LOGGING(logger.info("Got request in fake"));
     this->pool_.push([this, batch = std::move(batch)](int id) {
       (void)id;  // suppress unused variable warning
 
@@ -177,10 +180,10 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
       }
       this->returnBuffers(std::move(batch->input_buffers),
                           std::move(batch->output_buffers));
-      SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+      PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
     });
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "Fake ending");
+  PROTEUS_IF_LOGGING(logger.info("Fake ending"));
 }
 
 void Fake::doRelease() {}

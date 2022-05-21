@@ -48,7 +48,7 @@
 #include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
 #include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/tracing.hpp"    // for Trace
 #include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
@@ -149,6 +149,9 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
 void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   setThreadName("AksDetectStream");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -157,7 +160,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    SPDLOG_LOGGER_INFO(this->logger_, "Got request in AksDetectStream");
+    PROTEUS_IF_LOGGING(logger.info("Got request in AksDetectStream"));
     for (unsigned int k = 0; k < batch->requests->size(); k++) {
       auto& req = batch->requests->at(k);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -175,7 +178,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
           const char* error = "Cannot open video file";
-          SPDLOG_LOGGER_ERROR(this->logger_, error);
+          PROTEUS_IF_LOGGING(logger.error(error));
           req->runCallbackError(error);
           continue;
         }
@@ -250,7 +253,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             std::string encoded = base64_encode(enc_msg, buf.size());
             frames.push("data:image/jpg;base64," + encoded);
           }
-          SPDLOG_LOGGER_INFO(this->logger_, "Enqueuing in " + key);
+          PROTEUS_IF_LOGGING(logger.info("Enqueuing in " + key));
           futures.push(
             this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr));
 #ifdef PROTEUS_ENABLE_TRACING
@@ -304,7 +307,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         while (!futures.empty()) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
             futures.front().get();
-          SPDLOG_LOGGER_INFO(this->logger_, "Got future with key " + key);
+          PROTEUS_IF_LOGGING(logger.info("Got future with key " + key));
           futures.pop();
           auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
           auto shape = outDD[0]->get_tensor()->get_shape();
@@ -349,9 +352,9 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "AksDetectStream ending");
+  PROTEUS_IF_LOGGING(logger.info("AksDetectStream ending"));
 }
 
 void AksDetectStream::doRelease() {}

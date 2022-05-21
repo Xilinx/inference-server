@@ -23,6 +23,7 @@
 #include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
 #include "proteus/buffers/buffer.hpp"           // for Buffer
 #include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
+#include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_LOGGING
 #include "proteus/clients/native_internal.hpp"  // for CppNativeApi
 #include "proteus/core/data_types.hpp"          // for DataType, DataType::U...
 #include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
@@ -39,6 +40,18 @@ class UnitSoftBatcherFixture
   : public testing::TestWithParam<std::pair<int, int>> {
  protected:
   void SetUp() override {
+#ifdef PROTEUS_ENABLE_LOGGING
+    LogOptions options{
+      "server",          // logger_name
+      "",                // log directory
+      false,             // enable file logging
+      LogLevel::kDebug,  // file log level
+      true,              // enable console logging
+      LogLevel::kWarn    // console log level
+    };
+    initLogger(options);
+#endif
+
     auto [batch_size, requests] = GetParam();
 
     const auto kBufferNum = 10;

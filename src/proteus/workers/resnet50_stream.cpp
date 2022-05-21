@@ -48,7 +48,7 @@
 #include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
 #include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
@@ -154,6 +154,9 @@ void ResNet50Stream::doAcquire(RequestParameters* parameters) {
 void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   setThreadName("ResNet50Stream");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -162,7 +165,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    SPDLOG_LOGGER_INFO(this->logger_, "Got request in ResNet50Stream");
+    PROTEUS_IF_LOGGING(logger.info("Got request in ResNet50Stream"));
     for (auto& req : *(batch->requests)) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -175,7 +178,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
           const char* error = "Cannot open video file";
-          SPDLOG_LOGGER_ERROR(this->logger_, error);
+          PROTEUS_IF_LOGGING(logger.error(error));
           req->runCallbackError(error);
           continue;
         }
@@ -311,9 +314,9 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "ResNet50Stream ending");
+  PROTEUS_IF_LOGGING(logger.info("ResNet50Stream ending"));
 }
 
 void ResNet50Stream::doRelease() {}

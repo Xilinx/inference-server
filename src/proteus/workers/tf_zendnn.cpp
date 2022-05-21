@@ -32,7 +32,7 @@
 #include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
+#include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
@@ -140,7 +140,10 @@ void TfZendnn::doInit(RequestParameters* parameters) {
 
   std::string logmsg =
     "TensorFlow C/C++ library version: " + std::string(TF_Version());
-  SPDLOG_LOGGER_INFO(this->logger_, logmsg);
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+  logger.info(logmsg);
+#endif
 }
 
 size_t TfZendnn::doAllocate(size_t num) {
@@ -156,6 +159,10 @@ size_t TfZendnn::doAllocate(size_t num) {
 }
 
 void TfZendnn::doAcquire(RequestParameters* parameters) {
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
+
   // TensorFlow session options
   tf::SessionOptions options;
   tf::ConfigProto& config = options.config;
@@ -170,35 +177,35 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
 
   // Start a new session
   status_ = tf::NewSession(options, &(this->session_));
-  if (!status_.ok())
-    SPDLOG_LOGGER_ERROR(
-      this->logger_,
-      status_.ToString());  // Should exit if not able to initiate session
-  SPDLOG_LOGGER_INFO(this->logger_, "New TF Session Initiated");
+  if (!status_.ok()) {
+    PROTEUS_IF_LOGGING(logger.error(
+      status_.ToString()));  // Should exit if not able to initiate session
+  }
+  PROTEUS_IF_LOGGING(logger.info("New TF Session Initiated"));
 
   // Load the model
   std::string path;
   if (parameters->has("model"))
     path = parameters->get<std::string>("model");
-  else
-    SPDLOG_LOGGER_ERROR(
-      this->logger_,
-      "Model not provided");  // Ideally exit since model not provided
+  else {
+    PROTEUS_IF_LOGGING(logger.error(
+      "Model not provided"));  // Ideally exit since model not provided
+  }
 
   status_ = tf::ReadBinaryProto(tf::Env::Default(), path, &graph_def_);
-  if (!status_.ok())
-    SPDLOG_LOGGER_ERROR(
-      this->logger_,
-      status_.ToString());  // Ideally exit if not able to read the model
-  SPDLOG_LOGGER_INFO(this->logger_, "Reading Model");
+  if (!status_.ok()) {
+    PROTEUS_IF_LOGGING(logger.error(
+      status_.ToString()));  // Ideally exit if not able to read the model
+  }
+  PROTEUS_IF_LOGGING(logger.info("Reading Model"));
 
   // Add the graph to the session
   status_ = this->session_->Create(graph_def_);
-  if (!status_.ok())
-    SPDLOG_LOGGER_ERROR(
-      this->logger_,
-      status_.ToString());  // Ideally exit if not able to create session
-  SPDLOG_LOGGER_INFO(this->logger_, "TF Session Created, Ready for prediction");
+  if (!status_.ok()) {
+    PROTEUS_IF_LOGGING(logger.error(
+      status_.ToString()));  // Ideally exit if not able to create session
+  }
+  PROTEUS_IF_LOGGING(logger.info("TF Session Created, Ready for prediction"));
 
   // Adding metadata for input and output
   this->metadata_.addInputTensor(
@@ -212,15 +219,17 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   std::unique_ptr<Batch> batch;
   setThreadName("TfZendnn");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
     }
-    SPDLOG_LOGGER_DEBUG(this->logger_,
-                        "Got request in TfZendnn. Size: " +
-                          std::to_string(batch->requests->size()));
+    PROTEUS_IF_LOGGING(logger.debug("Got request in TfZendnn. Size: " +
+                                    std::to_string(batch->requests->size())));
 
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->requests->size());
@@ -260,8 +269,8 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      SPDLOG_LOGGER_DEBUG(this->logger_,
-                          "Size of input: " + std::to_string(inputs.size()));
+      PROTEUS_IF_LOGGING(
+        logger.debug("Size of input: " + std::to_string(inputs.size())));
 
       // Get all the inputs from the requests and copy to the TensorFlow tensor
       for (auto& input : inputs) {
@@ -273,7 +282,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       }
     }
 
-    SPDLOG_LOGGER_DEBUG(this->logger_, input_tensor.DebugString());
+    PROTEUS_IF_LOGGING(logger.debug(input_tensor.DebugString()));
 
     // Create the inputs and output tensor
     std::vector<std::pair<std::string, tf::Tensor>> input_pair = {
@@ -287,16 +296,17 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration =
       std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    float time_tmp = duration.count();
-    SPDLOG_LOGGER_INFO(this->logger_, "Time taken for " +
-                                        std::to_string(tensor_count) +
-                                        " images: " + std::to_string(time_tmp));
+#ifdef PROTEUS_ENABLE_LOGGING
+    float time_tmp = duration.count());
+    logger.info("Time taken for " + std::to_string(tensor_count) +
+                " images: " + std::to_string(time_tmp));
+#endif
 
     if (!status_.ok()) {
-      SPDLOG_LOGGER_ERROR(this->logger_, status_.ToString());
+      PROTEUS_IF_LOGGING(logger.error(status_.ToString()));
       req->runCallbackError("Issue with prediction w");
     }
-    SPDLOG_LOGGER_DEBUG(this->logger_, output_tensor[0].DebugString());
+    PROTEUS_IF_LOGGING(logger.debug(output_tensor[0].DebugString()));
 
     // Copy the output from the model to the response object
     size_t response_size = output_classes_;
@@ -338,9 +348,10 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       auto TotalStop = std::chrono::high_resolution_clock::now();
       auto d = std::chrono::duration_cast<std::chrono::milliseconds>(
         TotalStop - TotalStart);
+#ifdef PROTEUS_ENABLE_LOGGING
       float tt = d.count();
-      SPDLOG_LOGGER_DEBUG(this->logger_,
-                          "Total time taken: " + std::to_string(tt));
+      logger.debug("Total time taken: " + std::to_string(tt));
+#endif
 
       req->runCallbackOnce(resp);
 
@@ -353,9 +364,9 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "TfZendnn ending");
+  PROTEUS_IF_LOGGING(logger.info("TfZendnn ending"));
 }
 
 void TfZendnn::doRelease() { this->session_->Close(); }

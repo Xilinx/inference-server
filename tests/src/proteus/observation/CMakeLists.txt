@@ -15,14 +15,14 @@
 add_library(fake_observation INTERFACE)
 
 if(${PROTEUS_ENABLE_LOGGING})
-    add_library(fake_logging OBJECT logging.cpp)
-    # target_link_libraries(logging INTERFACE spdlog)
-    target_include_directories(fake_logging BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_include_directories(fake_logging AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
-    enable_ipo_on_target(fake_logging)
+    # add_library(fake_logging OBJECT logging.cpp)
+    # # target_link_libraries(logging INTERFACE spdlog)
+    # target_include_directories(fake_logging BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS})
+    # target_include_directories(fake_logging AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    # enable_ipo_on_target(fake_logging)
 
     target_link_libraries(fake_observation INTERFACE
-        $<TARGET_OBJECTS:fake_logging> fake_logging
+        $<TARGET_OBJECTS:logging> logging
     )
 endif()
 

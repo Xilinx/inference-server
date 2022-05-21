@@ -51,7 +51,7 @@ namespace proteus {
 RequestParametersPtr mapJsonToParameters(Json::Value parameters);
 Json::Value mapParametersToJson(RequestParameters *parameters);
 
-InferenceResponse mapJsonToResponse(Json::Value* json);
+InferenceResponse mapJsonToResponse(Json::Value *json);
 Json::Value mapRequestToJson(const InferenceRequest &request);
 
 // class InferenceRequestOutputBuilder {

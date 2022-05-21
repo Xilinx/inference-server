@@ -397,11 +397,11 @@ class InferenceRequest {
    */
   void runCallbackError(std::string_view error_msg);
 
-  void addInputTensor(void *data, const std::vector<uint64_t>& shape,
-                      DataType dataType, const std::string& name = "");
+  void addInputTensor(void *data, const std::vector<uint64_t> &shape,
+                      DataType dataType, const std::string &name = "");
 
   void addInputTensor(InferenceRequestInput input);
-  void addOutputTensor(const InferenceRequestOutput& output);
+  void addOutputTensor(const InferenceRequestOutput &output);
 
   /// Get a vector of all the input request objects
   const std::vector<InferenceRequestInput> &getInputs() const;
@@ -577,7 +577,7 @@ struct less<proteus::RequestParameters> {
         if (rhs_map.find(key) == rhs_map.end()) {
           return true;
         }
-        const auto& rhs_value = rhs_map.at(key);
+        const auto &rhs_value = rhs_map.at(key);
         if (lhs_value != rhs_value) {
           return lhs_value < rhs_value;
         }

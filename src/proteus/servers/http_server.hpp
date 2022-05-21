@@ -210,9 +210,8 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
                std::function<void(const drogon::HttpResponsePtr &)> &&callback);
 #endif
 #ifdef PROTEUS_ENABLE_LOGGING
-
  private:
-  LoggerPtr logger_;
+  Logger logger_{Loggers::kServer};
 #endif
 };
 

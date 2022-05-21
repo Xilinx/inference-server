@@ -131,6 +131,10 @@ class Batcher {
   void end();
 
  protected:
+#ifdef PROTEUS_ENABLE_LOGGING
+  const Logger& getLogger() const;
+#endif
+
   size_t batch_size_;
   std::shared_ptr<BlockingQueue<InterfacePtr>> input_queue_;
   std::shared_ptr<BatchPtrQueue> output_queue_;
@@ -139,9 +143,6 @@ class Batcher {
   std::mutex cv_m_;
   std::string model_;
   RequestParameters parameters_;
-#ifdef PROTEUS_ENABLE_LOGGING
-  LoggerPtr logger_;
-#endif
 
  private:
   /**
@@ -153,6 +154,10 @@ class Batcher {
   virtual void doRun(WorkerInfo* worker) = 0;
 
   BatcherStatus status_;
+
+#ifdef PROTEUS_ENABLE_LOGGING
+  Logger logger_{Loggers::kServer};
+#endif
 };
 
 }  // namespace proteus

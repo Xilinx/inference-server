@@ -54,7 +54,7 @@
 #include "proteus/helpers/parse_env.hpp"           // for autoExpandEnvironm...
 #include "proteus/helpers/queue.hpp"               // for BufferPtrsQueue
 #include "proteus/helpers/thread.hpp"              // for setThreadName
-#include "proteus/observation/logging.hpp"         // for SPDLOG_LOGGER_INFO
+#include "proteus/observation/logging.hpp"         // for Logger
 #include "proteus/observation/metrics.hpp"         // for Metrics, MetricCou...
 #include "proteus/observation/tracing.hpp"         // for Trace
 #include "proteus/workers/worker.hpp"              // for Worker, kNumBuffer...
@@ -222,6 +222,9 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
   std::atomic_int32_t pool_size = 0;
   const int max_pool_size = this->pool_.size() * 4;  // 4 is arbitrary
   setThreadName("XModel");
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
   while (true) {
     BatchPtr batch;
@@ -229,9 +232,8 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    SPDLOG_LOGGER_INFO(
-      this->logger_,
-      "Got request in xmodel: " + std::to_string(batch->requests->size()));
+    PROTEUS_IF_LOGGING(logger.info("Got request in xmodel: " +
+                                   std::to_string(batch->requests->size())));
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -242,6 +244,9 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     }
     this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
       (void)id;  // suppress unused variable warning
+#ifdef PROTEUS_ENABLE_LOGGING
+      const auto& logger = this->getLogger();
+#endif
 #ifdef PROTEUS_ENABLE_TRACING
       for (unsigned int j = 0; j < batch->requests->size(); j++) {
         auto& trace = batch->traces.at(j);
@@ -377,11 +382,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       }
       this->returnBuffers(std::move(batch->input_buffers),
                           std::move(batch->output_buffers));
-      SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+      PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
       pool_size--;
     });
   }
-  SPDLOG_LOGGER_INFO(this->logger_, "XModel ending");
+  PROTEUS_IF_LOGGING(logger.info("XModel ending"));
 }
 
 void XModel::doRelease() {}

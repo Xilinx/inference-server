@@ -14,7 +14,7 @@
 
 list(APPEND targets
     # predict_api
-    # fake_predict_api
+    predict_api
     manager
     worker_info_buffers_infinite
     worker_info_buffers_finite

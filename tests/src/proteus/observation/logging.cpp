@@ -21,6 +21,7 @@
 
 #include <spdlog/sinks/basic_file_sink.h>     // for basic_file_sink_mt, bas...
 #include <spdlog/sinks/stdout_color_sinks.h>  // for ansicolor_stdout_sink
+#include <spdlog/spdlog.h>
 
 #include <iterator>  // for begin, end
 #include <memory>    // for allocator, make_shared
@@ -31,7 +32,7 @@ namespace proteus {
 
 std::string getLogDirectory() { return "."; }
 
-void initLogging() {
+void initLogger() {
   // if already initialized, return early to prevent duplicating logger
   auto logger = spdlog::get("proteus");
   if (logger != nullptr) {
@@ -58,7 +59,5 @@ void initLogging() {
   spdlog::register_logger(logger);
   spdlog::set_default_logger(logger);
 }
-
-LoggerPtr getLogger() { return spdlog::get("proteus"); }
 
 }  // namespace proteus

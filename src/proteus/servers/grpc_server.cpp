@@ -49,7 +49,7 @@
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
-#include "proteus/observation/logging.hpp"        // for SPDLOG_INFO, SPDLOG...
+#include "proteus/observation/logging.hpp"        // for Logger
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
 
 namespace proteus {
@@ -300,6 +300,28 @@ class InferenceRequestInputBuilder<
 using InputBuilder =
   InferenceRequestInputBuilder<inference::ModelInferRequest_InferInputTensor>;
 
+#ifdef PROTEUS_ENABLE_LOGGING
+#define CALLDATA_IMPL(endpoint, type)                                         \
+  class CallData##endpoint                                                    \
+    : public CallData##type<inference::endpoint##Request,                     \
+                            inference::endpoint##Response> {                  \
+   public:                                                                    \
+    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \
+      : CallData##type(service, cq) {                                         \
+      proceed();                                                              \
+    }                                                                         \
+                                                                              \
+   private:                                                                   \
+    Logger logger_{Loggers::kServer};                                         \
+                                                                              \
+   protected:                                                                 \
+    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
+    void waitForRequest() override {                                          \
+      service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
+                                  this);                                      \
+    }                                                                         \
+    void handleRequest() override
+#else
 #define CALLDATA_IMPL(endpoint, type)                                         \
   class CallData##endpoint                                                    \
     : public CallData##type<inference::endpoint##Request,                     \
@@ -317,6 +339,7 @@ using InputBuilder =
                                   this);                                      \
     }                                                                         \
     void handleRequest() override
+#endif
 
 #define CALLDATA_IMPL_END \
   }                       \
@@ -480,6 +503,9 @@ class GrpcApiUnary : public Interface {
     const std::vector<BufferRawPtrs>& output_buffers,
     std::vector<size_t>& output_offsets, const size_t& batch_size,
     size_t& batch_offset) override {
+#ifdef PROTEUS_ENABLE_LOGGING
+    const auto& logger = this->getLogger();
+#endif
     try {
       auto request = RequestBuilder::build(
         this->calldata_, buffer_index, input_buffers, input_offsets,
@@ -489,7 +515,7 @@ class GrpcApiUnary : public Interface {
       request->setCallback(std::move(callback));
       return request;
     } catch (const std::invalid_argument& e) {
-      SPDLOG_LOGGER_INFO(this->logger_, e.what());
+      PROTEUS_IF_LOGGING(logger.info(e.what()));
       errorHandler(e);
       return nullptr;
     }
@@ -500,7 +526,10 @@ class GrpcApiUnary : public Interface {
   }
 
   void errorHandler(const std::invalid_argument& e) override {
-    SPDLOG_INFO(e.what());
+#ifdef PROTEUS_ENABLE_LOGGING
+    const auto& logger = this->getLogger();
+    logger.info(e.what());
+#endif
     calldata_->finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   }
 
@@ -578,7 +607,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   try {
     endpoint = Manager::getInstance().loadWorker(name, *parameters);
   } catch (const std::exception& e) {
-    SPDLOG_ERROR(e.what());
+    PROTEUS_IF_LOGGING(logger_.error(e.what()));
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
   }
@@ -608,7 +637,7 @@ void CallDataModelInfer::handleRequest() {
   try {
     worker = Manager::getInstance().getWorker(model);
   } catch (const std::invalid_argument& e) {
-    SPDLOG_INFO(e.what());
+    PROTEUS_IF_LOGGING(logger_.info(e.what()));
     finish(
       ::grpc::Status(StatusCode::NOT_FOUND, "Worker " + model + " not found"));
     return;

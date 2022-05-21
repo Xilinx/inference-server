@@ -16,12 +16,25 @@
 
 #include "gtest/gtest.h"                 // for Test, SuiteApiResolver, TEST
 #include "proteus/batching/soft.hpp"     // for SoftBatcher
+#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/interface.hpp"    // IWYU pragma: keep
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
 
 namespace proteus {
 
 TEST(UnitSoftBatcher, ConstructAndStart) {
+#ifdef PROTEUS_ENABLE_LOGGING
+  LogOptions options{
+    "server",          // logger_name
+    "",                // log directory
+    false,             // enable file logging
+    LogLevel::kDebug,  // file log level
+    true,              // enable console logging
+    LogLevel::kWarn    // console log level
+  };
+  initLogger(options);
+#endif
+
   SoftBatcher batcher;
   batcher.setName("test");
 

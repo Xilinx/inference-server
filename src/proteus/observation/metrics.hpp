@@ -31,8 +31,7 @@
 #include <unordered_map>  // for unordered_map
 #include <vector>         // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
-#include "proteus/observation/logging.hpp"  // for LoggerPtr
+#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_METRICS
 
 #ifdef PROTEUS_ENABLE_METRICS
 
@@ -216,10 +215,6 @@ class Metrics {
   Metrics();
   /// Destroy the Metrics object
   ~Metrics() = default;
-
-#ifdef PROTEUS_ENABLE_LOGGING
-  LoggerPtr logger_;
-#endif
 
   std::shared_ptr<prometheus::Registry> registry_;
   std::unique_ptr<prometheus::Serializer> serializer_;
