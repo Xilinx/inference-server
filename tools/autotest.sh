@@ -20,7 +20,7 @@
 
 # print an easily searchable header so we can navigate the output. Search for
 # "+++---" in the output text
-function print_header(){
+print_header(){
   len=$(echo -n $1 | wc -m)
   len="$((len-3))" # leave room for the +++
 
