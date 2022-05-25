@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the Migraphx worker
+ * @brief Implements the Migraphx worker.  
  */
 
 #include <cstddef>  // for size_t, byte
@@ -25,6 +25,7 @@
 #include <thread>   // for thread
 #include <utility>  // for move
 #include <vector>   // for vector
+#include <stdio.h>  // debug only
 
 #include "proteus/batching/hard.hpp"          // for HardBatcher
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
@@ -79,12 +80,17 @@ class MIGraphXWorker : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
+  // the model file to be loaded
   std::string input_file_;
 
+  // Image properties are contained in the model
+  unsigned output_classes_;
+  unsigned image_width_, image_height_, image_channels_, image_size_;
 
   // Input / Output nodes
   std::string input_node_, output_node_;
   DataType input_dt_ = DataType::FP32;
+  DataType output_dt_ = DataType::FP32;
 };
 
 
@@ -97,8 +103,12 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
     (void)parameters;  // suppress unused variable warning
     std::cout << "MIGraphXWorker::doInit\n";
 
-    // trial and error: set this to the number of bytes in an image (specified for this model)
-    this->batch_size_ = 3*224*224;
+    // trial and error: set this 
+    this->batch_size_ = 10;
+
+    // These values are set in the onnx model we're using.
+    image_width_ = 224, image_height_ = 224, image_channels_ = 3;
+    output_classes_ = 1000;
 }
 
 /**
@@ -111,21 +121,22 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
  */
 size_t MIGraphXWorker::doAllocate(size_t num){
   std::cout << "MIGraphXWorker::doAllocate\n";
-  constexpr auto kBufferNum = 1U;
+  constexpr auto kBufferNum = 2U;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_ * image_height_ * image_width_ * image_channels_, this->input_dt_);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::FP32);
+                         1 * this->batch_size_ * output_classes_, output_dt_);
   SPDLOG_LOGGER_INFO(this->logger_, std::string("MIGraphXWorker::doAllocate added ") + std::to_string(buffer_num) + " buffers");
   return buffer_num;
 }
 
 void MIGraphXWorker::doAcquire(RequestParameters* parameters){
     std::cout << "MIGraphXWorker::doAcquire\n";
+
     // Load the model
-    // std::string input_file;
+
     if (parameters->has("model"))
         input_file_ = parameters->get<std::string>("model");
     else
@@ -180,8 +191,21 @@ std::shared_ptr<InferenceRequest> req;
       InferenceResponse resp;
       resp.setID(req->getID());
       resp.setModel("migraphx");
+
+      // The initial implementation of migraphx worker assumes that the model has only one input tensor
+      // (for Resnet models, an image) and identifying it by name is superfluous.
       auto inputs = req->getInputs();   // const std::vector<InferenceRequestInput>
+
+      // We don't use the outputs portion of the request currently.  It is part of the kserve format
+      // specification, which the Inference Server is intended to follow.  
+      // "The $request_output JSON is used to request which output tensors should be returned from the model."
+      // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md
+      //
+      // Selecting the request output is only relevant to models that have more than one output tensor.
+      //
       auto outputs = req->getOutputs();
+
+      // for each input tensor.  This 
       for (unsigned int i = 0; i < inputs.size(); i++) {
         auto* input_buffer = inputs[i].getData();
         // std::byte* output_buffer = outputs[i].getData(); //brian:  is this right?
@@ -194,7 +218,7 @@ std::shared_ptr<InferenceRequest> req;
         SPDLOG_LOGGER_INFO(this->logger_, std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) );
 
         // Output image version of the data for visual inspection--debugging only
-        cv::Mat sample_img = cv::Mat(rows, cols, CV_8UC3, input_buffer);
+        cv::Mat sample_img = cv::Mat(rows, cols, CV_32FC3, input_buffer)*255;
 bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c_str(), sample_img);
 (void)check;
         std::cout <<"################## input is " << inputs[i] ;
@@ -215,39 +239,55 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           migraphx::api::arguments  migraphx_output =      this->prog_.eval(params);
           SPDLOG_LOGGER_INFO(this->logger_, "finishing migraphx eval");
 
-          // parsing of results is copied from examples/vision/cpp_mnist/mnist_inference.cpp
-          // not sure if relevant
+          // Transfer the migraphx results to output
+
+          size_t result_size = migraphx_output.size();  // should be 1 item with 1000 (for resnet) categories
+          if(result_size != 1)
+            throw std::length_error("result count from migraphx call was not 1");
+
+          // move from migraphx_output to outputs
           auto shape   = migraphx_output[0].get_shape();
-            std::cout << "the shape of the output returned by migraphx is " ;
-          for(int i: shape.lengths())
-            std::cout << i << " x " << std::endl;
+
           // recast the output from a blob to an array of float
           auto lengths = shape.lengths();
-          auto num_results =
+          size_t num_results =
               std::accumulate(lengths.begin(), lengths.end(), 1, std::multiplies<size_t>());
           float* results = reinterpret_cast<float*>(migraphx_output[0].data());
-          // get the index of best matching result
-          float* max     = std::max_element(results, results + num_results);
-          int answer     = max - results;
-          std::cout << "================ best match is " << std::to_string(*max) << std::endl;
+for(size_t ii = 0; ii < num_results; ii++)
+  printf("result %lu is %f\n",ii, results[ii]);
 
-          // Move the result from migraphx output to REST output
+          // todo: verify this is not used and delete this line
+          std::memcpy(outputs.data()->getData(), results, size_t(num_results) * getSize(output_dt_));
+          // outputs[i].setData(results);
 
-        InferenceResponseOutput output;
-        output.setDatatype(types::DataType::UINT32);
-        std::string output_name = outputs[i].getName();
-        if (output_name.empty()) {
-          output.setName(inputs[i].getName());
-        } else {
-          output.setName(output_name);
-        }
-        output.setShape({1});
-        auto buffer = std::make_shared<std::vector<uint32_t>>();
-        buffer->resize(1);
-        (*buffer)[0] = answer;
-        auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
-        output.setData(std::move(my_data_cast));
-        resp.addOutput(output);
+    // for debug only.  We return all results.  The worker does not interpret results.  Compare these with 
+    //    values seen by client.
+    float* myMax     = std::max_element(results, results + num_results);
+    int answer     = myMax - results;
+
+          std::cout << "sthe best index is " << answer << " val. " << *myMax << std::endl;
+
+          // the kserve specification for response output is at 
+          // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
+          InferenceResponseOutput output;
+          output.setDatatype(output_dt_);
+          std::string output_name = outputs[i].getName();
+          if (output_name.empty()) {
+            output.setName(inputs[i].getName());
+          } else {
+            output.setName(output_name);
+          }
+          output.setShape({num_results});
+          auto buffer = std::make_shared<std::vector<_Float32>>();
+          buffer->resize(num_results);
+          memcpy(&((*buffer)[0]), results, num_results * getSize(output_dt_));  //    <== extra copy from results to buffer to output?  output.setData(results)?
+          auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
+          output.setData(std::move(my_data_cast));
+
+          void * asdf = output.getData();
+          uint32_t* asdfg = static_cast<uint32_t*>( asdf);
+          printf(" $$$ buffer[0] is %f and output starts with %X and type is %d\n", (*buffer)[0], *asdfg, (int)output.getDatatype());
+          resp.addOutput(output);
 
         } catch (const std::exception& e) {
           SPDLOG_LOGGER_ERROR(this->logger_, e.what());
@@ -255,8 +295,6 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           continue;
         }
         SPDLOG_LOGGER_INFO(this->logger_, "finished migraphx eval");
-
-        // output_buffer->write(value);
       }
 
 #ifdef PROTEUS_ENABLE_TRACING

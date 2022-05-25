@@ -24,10 +24,11 @@ import cv2
 import math
 import numpy as np
 
-# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
-modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
+modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
+# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
 # imagename = r"/workspace/proteus/external/artifacts/migraphx/JG-COMP-HERO-UKRAINE-SOILDER.jpg"
 imagename = r"/workspace/proteus/external/artifacts/migraphx/yflower.jpg"
+imagename=r"/workspace/proteus/external/artifacts/migraphx/classification.jpg"
 
 #  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
 shape=[]
@@ -55,6 +56,11 @@ print('shape of input image is ', shape)
 # Read in the input, and resize it to fit the onnx model
 # we expect a dim_value of 4
 input_img = cv2.imread(imagename)
+
+# Resnet50 model requires inputs of data type float32, range 0-1.0
+input_img = input_img.astype("float32")/255.
+
+print('type of image is now ', input_img.dtype)
 
 if len(shape) == 4:
     print('resizing ', input_img.shape, '!', shape[2:4], end="==>")
@@ -90,22 +96,30 @@ print('preprocess images...')
 # synthetic second image is first image, rotated
 print('image shape after resizing is ', img.shape)
 rows,cols = img.shape[1:3]
-M = cv2.getRotationMatrix2D(((cols-1)/2.0,(rows-1)/2.0),90,1)
 img2 = cv2.flip(img, 0)
-cv2.imwrite('sample1.jpg', img)
-cv2.imwrite('sample2.jpg', img2)
+
+# for debug: rewrite the images
+cv2.imwrite('sample1.jpg', (img*255).astype(np.uint8))
+cv2.imwrite('sample2.jpg',  (img2*255).astype(np.uint8))
+print('   shapes are ', (img*255).astype(np.uint8).shape, (img2*255).astype(np.uint8).shape)
+
 images=[img, img2]
 
 print("Done.  Create inference request...")
 request = proteus.ImageInferenceRequest(images, True)
-print("Perform inference...")
+print("Perform inference...outputs is ", type(request.outputs))
 response = client.infer( worker_name, request)
 assert not response.error, response.error_msg
 for output in response.outputs:
     data = output.data
-    print('contents of output is ', dir(output))   # 'data', 'datatype', 'name', 'parameters', 'shape'
+    print('contents of output is ', type(output))   # proteus.predict_api.ResponseOutput  'data', 'datatype', 'name', 'parameters', 'shape'
     print('result returned by server is ', output.name)
-    print('answer is ', data)
+    print('answer is ', data[904], np.array(data).dtype)  # data is a list  dtype is int64
+
+    # In numpy, this is how to convert an array to a raw byte field and then to desired type
+    
+    zap = np.frombuffer(np.array(data).tobytes(), dtype='float32')
+    print('zap is ', zap[:12],   'unconverted values is ', data[:12])
 print('Done')
 
 # Model source:
