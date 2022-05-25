@@ -20,9 +20,10 @@
 #ifndef GUARD_PROTEUS_CLIENTS_HTTP
 #define GUARD_PROTEUS_CLIENTS_HTTP
 
-#include <memory>  // for unique_ptr
-#include <string>  // for string
-#include <vector>  // for vector
+#include <memory>         // for unique_ptr
+#include <string>         // for string
+#include <unordered_map>  // for unordered_map
+#include <vector>         // for vector
 
 #include "proteus/clients/client.hpp"    // for Client
 #include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
@@ -47,7 +48,7 @@ void stopHttpServer();
 class HttpClient : public Client {
  public:
   HttpClient() = delete;
-  explicit HttpClient(const std::string& address);
+  HttpClient(const std::string& address, const StringMap& headers = {});
   ~HttpClient();
 
   ServerMetadata serverMetadata() override;

@@ -22,7 +22,7 @@
 void test(proteus::Client* client) {
   std::string worker = "echo";
 
-  EXPECT_EQ(client->modelList().size(), 0);
+  EXPECT_TRUE(client->modelList().empty());
 
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK({ client->modelReady(worker); },
@@ -36,13 +36,14 @@ void test(proteus::Client* client) {
 
   client->modelUnload(endpoint);
 
-  try {
-    while (client->modelReady(worker)) {
-      std::this_thread::yield();
-    }
-  } catch (const std::invalid_argument& e) {
-    EXPECT_STREQ("worker echo not found", e.what());
+  while(!client->modelList().empty()){
+    std::this_thread::yield();
   }
+
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
+  EXPECT_THROW_CHECK({ client->modelReady(worker); },
+                     { EXPECT_STREQ("worker echo not found", e.what()); },
+                     std::invalid_argument);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)

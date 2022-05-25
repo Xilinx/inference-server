@@ -297,7 +297,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     auto duration =
       std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
 #ifdef PROTEUS_ENABLE_LOGGING
-    float time_tmp = duration.count());
+    float time_tmp = duration.count();
     logger.info("Time taken for " + std::to_string(tensor_count) +
                 " images: " + std::to_string(time_tmp));
 #endif

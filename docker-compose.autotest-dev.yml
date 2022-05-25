@@ -15,7 +15,7 @@
 version: '3.7'
 services:
   proteus:
-    command: [./tools/coverage.sh, "-t", "50", "--get-artifacts"]
+    command: [ ./tools/coverage.sh, "-t", "50" ]
     extra_hosts:
       - "proteus-dev:127.0.1.1"
     hostname: proteus-dev

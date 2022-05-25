@@ -61,22 +61,32 @@ void stopHttpServer() {
 
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address) {
+  explicit HttpClientImpl(const std::string& address, const StringMap& headers) {
     loop_.run();
     client_ = drogon::HttpClient::newHttpClient(address, loop_.getLoop());
+    headers_ = headers;
   }
 
   drogon::HttpClient* getClient() { return client_.get(); }
 
+  void addHeaders(drogon::HttpRequestPtr req) const {
+    for(const auto& [field, value] : headers_ ){
+      req->addHeader(field, value);
+    }
+  }
+
  private:
   trantor::EventLoopThread loop_;
   drogon::HttpClientPtr client_;
+  StringMap headers_;
 };
 
-HttpClient::HttpClient(const std::string& address) {
-  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address);
+HttpClient::HttpClient(const std::string& address, const StringMap& headers) {
+  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address, headers);
+
 }
 
+// needed for HttpClientImpl forward declaration in WebSocket client
 HttpClient::~HttpClient() = default;
 
 void check_error(drogon::ReqResult result) {
@@ -104,6 +114,7 @@ ServerMetadata HttpClient::serverMetadata() {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
   req->setPath("/v2");
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -125,6 +136,7 @@ bool HttpClient::serverLive() {
   req->setMethod(drogon::Get);
   auto path = "/v2/health/live";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   if (result != drogon::ReqResult::Ok) {
@@ -140,6 +152,7 @@ bool HttpClient::serverReady() {
   req->setMethod(drogon::Get);
   auto path = "/v2/health/ready";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -153,6 +166,7 @@ bool HttpClient::modelReady(const std::string& model) {
   req->setMethod(drogon::Get);
   auto path = "/v2/models/" + model + "/ready";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -175,6 +189,7 @@ std::string HttpClient::modelLoad(const std::string& model,
   req->setMethod(drogon::Post);
   auto path = "/v2/repository/models/" + model + "/load";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -192,6 +207,7 @@ void HttpClient::modelUnload(const std::string& model) {
   req->setMethod(drogon::Post);
   auto path = "/v2/repository/models/" + model + "/unload";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -212,6 +228,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   req->setMethod(drogon::Post);
   auto path = "/v2/models/" + model + "/infer";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -230,6 +247,7 @@ std::vector<std::string> HttpClient::modelList() {
   req->setMethod(drogon::Get);
   const std::string path = "/v2/models";
   req->setPath(path);
+  impl_->addHeaders(req);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
