@@ -61,7 +61,8 @@ void stopHttpServer() {
 
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address, const StringMap& headers) {
+  explicit HttpClientImpl(const std::string& address,
+                          const StringMap& headers) {
     loop_.run();
     client_ = drogon::HttpClient::newHttpClient(address, loop_.getLoop());
     headers_ = headers;
@@ -70,7 +71,7 @@ class HttpClient::HttpClientImpl {
   drogon::HttpClient* getClient() { return client_.get(); }
 
   void addHeaders(drogon::HttpRequestPtr req) const {
-    for(const auto& [field, value] : headers_ ){
+    for (const auto& [field, value] : headers_) {
       req->addHeader(field, value);
     }
   }
@@ -83,7 +84,6 @@ class HttpClient::HttpClientImpl {
 
 HttpClient::HttpClient(const std::string& address, const StringMap& headers) {
   this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address, headers);
-
 }
 
 // needed for HttpClientImpl forward declaration in WebSocket client
@@ -118,6 +118,9 @@ ServerMetadata HttpClient::serverMetadata() {
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
+  if (response->getStatusCode() != drogon::k200OK) {
+    throw std::invalid_argument(response->getJsonError());
+  }
   ServerMetadata metadata;
   auto json = response->getJsonObject();
   metadata.name = json->get("name", "").asString();
@@ -213,8 +216,8 @@ void HttpClient::modelUnload(const std::string& model) {
   check_error(result);
   auto status = response->statusCode();
   if (status != drogon::k200OK) {
-    throw std::runtime_error("Status: " +
-                             std::to_string(static_cast<int>(status)));
+    throw std::invalid_argument("Status: " +
+                                std::to_string(static_cast<int>(status)));
   }
 }
 InferenceResponse HttpClient::modelInfer(const std::string& model,
@@ -251,6 +254,9 @@ std::vector<std::string> HttpClient::modelList() {
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
+  if (response->getStatusCode() != drogon::k200OK) {
+    throw std::invalid_argument(response->getJsonError());
+  }
   auto json = response->jsonObject();
 
   auto json_models = json->get("models", Json::arrayValue);

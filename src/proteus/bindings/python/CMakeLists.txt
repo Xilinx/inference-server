@@ -58,10 +58,18 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/clients/__init__.py ${CMAKE_CURRE
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/predict_api/__init__.py ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/predict_api/__init__.py COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/py.typed ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/py.typed COPYONLY)
 
+execute_process(
+    COMMAND ${Python_EXECUTABLE} -m site --user-site
+    OUTPUT_VARIABLE PY_USER_SITE_PACKAGES
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    # COMMAND_ECHO STDOUT
+    COMMAND_ERROR_IS_FATAL ANY
+)
+
 add_custom_command(TARGET proteus_py POST_BUILD
     COMMAND pip install --prefix ~/.local .
-    COMMENT "Add ${CMAKE_CURRENT_BINARY_DIR} to the PYTHONPATH to use the proteus Python package"
-
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
+    # COMMENT "Add ${CMAKE_CURRENT_BINARY_DIR} to the PYTHONPATH to use the proteus Python package"
 )
 
 # we need to run this after the pip install above

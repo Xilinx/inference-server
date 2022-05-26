@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import math
-import time
 import argparse
+import os
+import sys
+import time
 
 import numpy as np
 
@@ -171,18 +171,26 @@ def main(args):
         proteus.clients.stopHttpServer()
         proteus.terminate()
         while client.serverLive():
-            sleep(1)
+            time.sleep(1)
         print("Killed Server")
 
 
 if __name__ == "__main__":
+
+    root = os.getenv("PROTEUS_ROOT")
+    assert root is not None
 
     # Get the arguments required from the user
     parser = argparse.ArgumentParser(
         description="Validation (working) for Proteus TF+ZenDNN worker"
     )
     parser.add_argument(
-        "--graph", "-g", type=str, required=True, help="Full path to the input graph"
+        "--graph",
+        "-g",
+        type=str,
+        required=False,
+        help="Full path to the input graph",
+        default=os.path.join(root, "external/pytorch_models/resnet50_pretrained.pth"),
     )
     parser.add_argument(
         "--image_location",

@@ -178,7 +178,7 @@ def main(args):
         proteus.clients.stopHttpServer()
         proteus.terminate()
         while client.serverLive():
-            sleep(1)
+            time.sleep(1)
         print("Killed Server")
 
 
