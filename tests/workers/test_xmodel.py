@@ -197,4 +197,6 @@ class TestXmodel:
             "type": "rest (pytest)",
             "config": "N/A",
         }
-        run_benchmark(benchmark, "xmodel", self.rest_client._infer, request, **options)
+        run_benchmark(
+            benchmark, "xmodel", self.rest_client.modelInfer, request, **options
+        )

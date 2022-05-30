@@ -156,7 +156,7 @@ class TestInvertImage:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "invert_image_0", self.rest_client._infer, request, **options
+            benchmark, "invert_image_0", self.rest_client.modelInfer, request, **options
         )
 
     @pytest.mark.benchmark(group="invert_image")
@@ -183,5 +183,5 @@ class TestInvertImage:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "invert_image_1", self.rest_client._infer, request, **options
+            benchmark, "invert_image_1", self.rest_client.modelInfer, request, **options
         )

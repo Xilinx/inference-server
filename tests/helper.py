@@ -17,6 +17,8 @@ import pathlib
 import os
 import re
 
+from proteus.predict_api import to_dict
+
 root = os.getenv("PROTEUS_ROOT")
 if root is None:
     raise RuntimeError("PROTEUS_ROOT not defined in the environment")
@@ -66,7 +68,7 @@ def run_benchmark_func(benchmark, func, **kwargs):
 
 
 def run_benchmark(benchmark, benchmark_name, func, request, **kwargs):
-    write_lua(benchmark_name, json.dumps(request.asdict()))
+    write_lua(benchmark_name, json.dumps(to_dict(request)))
     benchmark.extra_info["lua"] = benchmark_name
     benchmark.extra_info["model"] = kwargs["model"]
     for key, value in kwargs.items():

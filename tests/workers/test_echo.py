@@ -249,7 +249,9 @@ class TestEcho:
             "type": "rest (pytest)",
             "config": "N/A",
         }
-        run_benchmark(benchmark, "echo_4", self.rest_client._infer, request, **options)
+        run_benchmark(
+            benchmark, "echo_4", self.rest_client.modelInfer, request, **options
+        )
 
 
 # TODO(varunsh): these tests cannot run now with the new Pybind11 API as it

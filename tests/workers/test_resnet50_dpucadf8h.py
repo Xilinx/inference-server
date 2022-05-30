@@ -114,7 +114,7 @@ class TestInferImageResNet50DPUCADF8H:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "resnet50_0", self.rest_client._infer, request, **options
+            benchmark, "resnet50_0", self.rest_client.modelInfer, request, **options
         )
 
     @pytest.mark.benchmark(group="resnet50_dpucadf8h")
@@ -129,5 +129,5 @@ class TestInferImageResNet50DPUCADF8H:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "resnet50_1", self.rest_client._infer, request, **options
+            benchmark, "resnet50_1", self.rest_client.modelInfer, request, **options
         )

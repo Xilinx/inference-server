@@ -144,5 +144,5 @@ class TestPtZendnn:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "PtZendnn", self.rest_client._infer, request, **options
+            benchmark, "PtZendnn", self.rest_client.modelInfer, request, **options
         )

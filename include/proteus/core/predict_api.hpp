@@ -175,11 +175,11 @@ class InferenceRequestInput {
                         DataType dataType, std::string name = "");
 
   /// Set the request's data
-  void setData(void *buffer) { this->data_ = buffer; }
+  void setData(void *buffer);
   /// Set the request's shared data
-  void setData(std::shared_ptr<std::byte> buffer) {
-    this->shared_data_ = std::move(buffer);
-  }
+  void setData(std::shared_ptr<std::byte> buffer);
+  /// check if the stored data is shared
+  bool sharedData() const;
 
   /// Get a pointer to the request's data
   [[nodiscard]] void *getData() const;

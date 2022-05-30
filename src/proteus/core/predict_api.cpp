@@ -138,6 +138,16 @@ void InferenceRequestInput::setDatatype(DataType type) {
   this->dataType_ = type;
 }
 
+void InferenceRequestInput::setData(void *buffer) { this->data_ = buffer; }
+
+void InferenceRequestInput::setData(std::shared_ptr<std::byte> buffer) {
+  this->shared_data_ = std::move(buffer);
+}
+
+bool InferenceRequestInput::sharedData() const {
+  return this->shared_data_ != nullptr;
+}
+
 size_t InferenceRequestInput::getSize() const {
   return std::accumulate(this->shape_.begin(), this->shape_.end(), 1,
                          std::multiplies<>());

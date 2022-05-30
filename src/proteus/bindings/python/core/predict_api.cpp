@@ -67,6 +67,9 @@ void wrapRequestParameters(py::module_ &m) {
     .def("erase", &RequestParameters::erase, DOCS(RequestParameters, erase))
     .def("empty", &RequestParameters::empty, DOCS(RequestParameters, empty))
     .def("size", &RequestParameters::size, DOCS(RequestParameters, size))
+    .def("__len__", &RequestParameters::size)
+    .def("__bool__",
+         [](const RequestParameters &self) { return !self.empty(); })
     .def(
       "__iter__",
       [](const RequestParameters &self) {
@@ -164,8 +167,14 @@ void wrapRequestParameters(py::module_ &m) {
 
 template <typename T>
 py::array_t<T> getData(const proteus::InferenceRequestInput &self) {
-  auto *data = static_cast<std::vector<T> *>(self.getData());
-  return py::array_t<T>(self.getSize(), data->data());
+  if (self.sharedData()) {
+    auto *data = static_cast<std::vector<T> *>(self.getData());
+    return py::array_t<T>(self.getSize(), data->data());
+  } else {
+    auto *data = static_cast<T *>(self.getData());
+    return py::array_t<T>(self.getSize(), data);
+  }
+
   // return py::memoryview::from_memory(data->data(), self.getSize());
 }
 

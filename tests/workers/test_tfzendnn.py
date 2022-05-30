@@ -153,5 +153,5 @@ class TestTfZendnn:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "TfZendnn", self.rest_client._infer, request, **options
+            benchmark, "TfZendnn", self.rest_client.modelInfer, request, **options
         )

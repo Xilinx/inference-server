@@ -144,5 +144,5 @@ class TestInferImageYoloV3DPUCADF8H:
             "config": "N/A",
         }
         run_benchmark(
-            benchmark, "yolov3_1", self.rest_client._infer, request, **options
+            benchmark, "yolov3_1", self.rest_client.modelInfer, request, **options
         )
