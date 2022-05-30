@@ -35,7 +35,7 @@ CPP args:
 EOF
 }
 
-MODE="python"
+MODE="tests"
 LOAD=""
 
 FPGAS=""
@@ -77,8 +77,14 @@ do
   esac
 done
 
+# if the python package doesn't exist, do a build first for the BUILD variable
+if ! pip list | grep Proteus &> /dev/null; then
+  # use the lowercase value of BUILD as the flag to the build command
+  ${root_path}/proteus build --"${BUILD,,}"
+fi
+
 retval=0
-if [[ $MODE == "python" || $MODE == "all" ]]; then
+if [[ $MODE == "tests" || $MODE == "all" ]]; then
 
   if [[ $PORT != "" ]]; then
     PORT="--http_port $PORT"
