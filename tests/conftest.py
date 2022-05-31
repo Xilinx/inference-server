@@ -232,6 +232,9 @@ def server(xprocess):
         yield
 
         xprocess.getinfo("server").terminate()
+
+        while isUp(http_server_addr):
+            time.sleep(1)
     else:
         yield
 

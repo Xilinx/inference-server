@@ -29,6 +29,9 @@ class TestLoad:
         Test loading multiple times
         """
 
+        models = self.rest_client.modelList()
+        assert len(models) == 0
+
         endpoint_0 = self.rest_client.modelLoad("echo")  # this loads the model
         assert endpoint_0 == "echo"
         response = self.rest_client.modelLoad(

@@ -19,9 +19,8 @@
 #include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
 #include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, ModelInfer) {
-  auto endpoint = client_->modelLoad("echo", nullptr);
+void test(proteus::Client* client) {
+  auto endpoint = client->modelLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
   std::vector<uint32_t> imgData;
@@ -34,7 +33,7 @@ TEST_F(GrpcFixture, ModelInfer) {
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
                          proteus::DataType::UINT32);
 
-  auto response = client_->modelInfer(endpoint, request);
+  auto response = client->modelInfer(endpoint, request);
 
   EXPECT_FALSE(response.isError());
   EXPECT_EQ(response.getID(), "");
@@ -48,5 +47,16 @@ TEST_F(GrpcFixture, ModelInfer) {
     EXPECT_EQ((*data)[0], 2);
   }
 
-  client_->modelUnload(endpoint);
+  client->modelUnload(endpoint);
 }
+
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, ModelInfer) { test(client_.get()); }
+
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, ModelInfer) {
+  proteus::NativeClient client;
+  test(&client);
+}
+
+TEST_F(HttpFixture, ModelInfer) { test(client_.get()); }

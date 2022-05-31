@@ -12,20 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets
-    test_model_infer
-    test_model_load
-    test_model_list
-    test_model_ready
-    test_server_live
-    test_server_ready
-)
+import pytest
 
-foreach(target ${targets})
-    add_executable(${target} ${target}.cpp)
 
-    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
+@pytest.mark.usefixtures("server")
+class TestServerReady:
+    """
+    Base class for serverReady tests using the Python bindings
+    """
 
-    gtest_discover_tests(${target})
-endforeach()
+    def test_server_ready(self):
+        """
+        Test serverReady
+        """
+
+        assert self.rest_client.serverReady()

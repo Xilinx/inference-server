@@ -17,8 +17,15 @@
 #include "proteus/proteus.hpp"                 // for GrpcClient
 #include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
+void test(proteus::Client* client) { EXPECT_TRUE(client->serverLive()); }
+
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, ServerLive) {
-  auto reply = client_->serverLive();
-  EXPECT_TRUE(reply);
+TEST_F(GrpcFixture, ServerLive) { test(client_.get()); }
+
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, ServerLive) {
+  proteus::NativeClient client;
+  test(&client);
 }
+
+TEST_F(HttpFixture, ServerLive) { test(client_.get()); }

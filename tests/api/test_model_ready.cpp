@@ -20,49 +20,53 @@
 #include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
+bool isReady(proteus::Client* client, const std::string& endpoint) {
+  try {
+    return client->modelReady(endpoint);
+  } catch (const std::invalid_argument& e) {
+    return false;
+  }
+}
+
 void test(proteus::Client* client) {
   const std::string worker = "echo";
 
   auto models_0 = client->modelList();
-  EXPECT_EQ(models_0.size(), 0);
+  EXPECT_TRUE(models_0.empty());
+
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
+  EXPECT_THROW_CHECK({ client->modelReady(worker); },
+                     { EXPECT_STREQ("worker echo not found", e.what()); },
+                     std::invalid_argument);
 
   const auto endpoint = client->modelLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
-  EXPECT_TRUE(client->modelReady(endpoint));
+
+  while (!isReady(client, endpoint)) {
+    std::this_thread::yield();
+  }
 
   auto models = client->modelList();
   EXPECT_EQ(models.size(), 1);
-  EXPECT_EQ(models.at(0), endpoint);
-
-  const std::string worker_2 = "InvertImage";
-  const auto endpoint_2 = client->modelLoad(worker_2, nullptr);
-  EXPECT_EQ(endpoint_2, worker_2);
-  EXPECT_TRUE(client->modelReady(endpoint_2));
-
-  auto models_2 = client->modelList();
-  EXPECT_EQ(models_2.size(), 2);
-  EXPECT_TRUE(std::find(models_2.begin(), models_2.end(), endpoint) !=
-              models.end());
-  EXPECT_TRUE(std::find(models_2.begin(), models_2.end(), endpoint_2) !=
-              models.end());
 
   client->modelUnload(endpoint);
-  client->modelUnload(endpoint_2);
 
-  auto models_3 = client->modelList();
-  while (models_3.size() > 0) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    models_3 = client->modelList();
+  while (isReady(client, endpoint)) {
+    std::this_thread::yield();
+  }
+
+  while (!client->modelList().empty()) {
+    std::this_thread::yield();
   }
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, ModelList) { test(client_.get()); }
+TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, ModelList) {
+TEST_F(BaseFixture, ModelReady) {
   proteus::NativeClient client;
   test(&client);
 }
 
-TEST_F(HttpFixture, ModelList) { test(client_.get()); }
+TEST_F(HttpFixture, ModelReady) { test(client_.get()); }

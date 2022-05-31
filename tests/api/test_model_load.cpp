@@ -24,26 +24,34 @@ void test(proteus::Client* client) {
 
   EXPECT_TRUE(client->modelList().empty());
 
-  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
-  EXPECT_THROW_CHECK({ client->modelReady(worker); },
-                     { EXPECT_STREQ("worker echo not found", e.what()); },
-                     std::invalid_argument);
-
+  // load one worker
   auto endpoint = client->modelLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
+  // do a redundant load
+  endpoint = client->modelLoad(worker, nullptr);
+  EXPECT_EQ(endpoint, worker);
+
+  // load the same worker with a different config
+  proteus::RequestParameters parameters;
+  parameters.put("max_buffer_num", 100);
+  auto endpoint_1 = client->modelLoad(worker, &parameters);
+  EXPECT_EQ(endpoint_1, "echo-0");
+
+  parameters.put("share", false);
+  endpoint_1 = client->modelLoad(worker, &parameters);
+  EXPECT_EQ(endpoint_1, "echo-0");
 
   EXPECT_TRUE(client->modelReady(endpoint));
+  EXPECT_TRUE(client->modelReady(endpoint_1));
 
-  client->modelUnload(endpoint);
+  client->modelUnload(endpoint);    // unload the first
+  client->modelUnload(endpoint);    // this will do nothing
+  client->modelUnload(endpoint_1);  // unload first echo-0 worker
+  client->modelUnload(endpoint_1);  // unload second echo-0 worker
 
-  while(!client->modelList().empty()){
+  while (!client->modelList().empty()) {
     std::this_thread::yield();
   }
-
-  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
-  EXPECT_THROW_CHECK({ client->modelReady(worker); },
-                     { EXPECT_STREQ("worker echo not found", e.what()); },
-                     std::invalid_argument);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
