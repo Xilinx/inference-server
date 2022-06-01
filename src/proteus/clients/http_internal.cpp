@@ -467,7 +467,7 @@ InferenceRequestPtr RequestBuilder::build(
 
         auto input =
           InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
-        offset += input.getSize();
+        offset += (input.getSize() * input.getDatatype().size());
 
         request->inputs_.push_back(std::move(input));
       }

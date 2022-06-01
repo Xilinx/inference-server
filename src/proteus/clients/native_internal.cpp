@@ -95,7 +95,8 @@ class InferenceRequestBuilder<InferenceRequest> {
 
           request->inputs_.push_back(
             InputBuilder::build(input, buffer, offset));
-          offset += request->inputs_.back().getSize();
+          const auto &last_input = request->inputs_.back();
+          offset += (last_input.getSize() * last_input.getDatatype().size());
         }
       } catch (const std::invalid_argument &e) {
         throw;

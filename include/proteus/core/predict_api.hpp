@@ -214,7 +214,7 @@ class InferenceRequestInput {
     parameters_ = parameters;
   }
 
-  /// Set the tensor's size
+  /// Get the tensor's size (number of elements)
   size_t getSize() const;
 
   /// Provide an implementation to print the class with std::cout to an ostream
