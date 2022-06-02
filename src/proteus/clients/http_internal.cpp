@@ -59,7 +59,7 @@ RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
     } else if (parameters[id].isDouble()) {
       parameters_->put(id, parameters[id].asDouble());
     } else {
-      PROTEUS_IF_LOGGING(logger.warn("Unknown parameter type, skipping"));
+      PROTEUS_LOG_WARN(logger, "Unknown parameter type, skipping");
     }
   }
   return parameters_;
@@ -373,7 +373,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
           case DataType::FP16:
             // FIXME(varunsh): this is not handled
-            PROTEUS_IF_LOGGING(logger.warn("Writing FP16 not supported"));
+            PROTEUS_LOG_WARN(logger, "Writing FP16 not supported");
             break;
           case DataType::FP32:
             offset =
@@ -388,7 +388,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
           default:
             // TODO(varunsh): what should we do here?
-            PROTEUS_IF_LOGGING(logger.warn("Unknown datatype"));
+            PROTEUS_LOG_WARN(logger, "Unknown datatype");
             break;
         }
       }
@@ -578,7 +578,7 @@ void DrogonHttp::setJson() {
                                         HttpStatusCode::k400BadRequest));
       return;
     }
-    PROTEUS_IF_LOGGING(logger.info("Successfully inflated request"));
+    PROTEUS_LOG_INFO(logger, "Successfully inflated request");
     this->json_ = std::move(root);
   } else {
     this->json_ = json_raw;
@@ -763,7 +763,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
     request->setCallback(std::move(callback));
     return request;
   } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger.info(e.what()));
+    PROTEUS_LOG_INFO(logger, e.what());
     this->callback_(
       errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
     return nullptr;
@@ -773,7 +773,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
 void DrogonHttp::errorHandler(const std::invalid_argument &e) {
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto &logger = this->getLogger();
-  logger.debug(e.what());
+  PROTEUS_LOG_DEBUG(logger, e.what());
 #endif
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
 }

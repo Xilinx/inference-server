@@ -127,8 +127,8 @@ void XModel::doInit(RequestParameters* parameters) {
   this->max_buffer_num_ = max_buffer_num;
 
   auto path = kPath;
-  if (parameters->has("xmodel")) {
-    path = parameters->get<std::string>("xmodel");
+  if (parameters->has("model")) {
+    path = parameters->get<std::string>("model");
   }
   autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);
@@ -232,8 +232,8 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in xmodel: " +
-                                   std::to_string(batch->requests->size())));
+    PROTEUS_LOG_INFO(logger, "Got request in xmodel: " +
+                               std::to_string(batch->requests->size()));
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -382,11 +382,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       }
       this->returnBuffers(std::move(batch->input_buffers),
                           std::move(batch->output_buffers));
-      PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+      PROTEUS_LOG_DEBUG(logger, "Returned buffers");
       pool_size--;
     });
   }
-  PROTEUS_IF_LOGGING(logger.info("XModel ending"));
+  PROTEUS_LOG_INFO(logger, "XModel ending");
 }
 
 void XModel::doRelease() {}

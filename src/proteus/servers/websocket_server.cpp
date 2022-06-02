@@ -36,7 +36,7 @@ using drogon::WebSocketMessageType;
 namespace proteus::http {
 
 WebsocketServer::WebsocketServer() {
-  PROTEUS_IF_LOGGING(logger_.info("Constructed WebsocketServer"));
+  PROTEUS_LOG_INFO(logger_, "Constructed WebsocketServer");
 }
 
 void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
@@ -62,8 +62,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
   // if we fail to get the JSON object, return
   if (!parsingSuccessful) {
-    PROTEUS_IF_LOGGING(
-      logger_.info("Failed to parse JSON request to websocket"));
+    PROTEUS_LOG_INFO(logger_, "Failed to parse JSON request to websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No JSON could be parsed in the request");
     return;
@@ -73,7 +72,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   if (json->isMember("model")) {
     model = json->get("model", "").asString();
   } else {
-    PROTEUS_IF_LOGGING(logger_.info("No model request found in websocket"));
+    PROTEUS_LOG_INFO(logger_, "No model request found in websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No model found in request");
     return;
@@ -85,7 +84,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   try {
     worker = Manager::getInstance().getWorker(model);
   } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger_.info(e.what()));
+    PROTEUS_LOG_INFO(logger_, e.what());
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "Model " + model + " not loaded");
     return;
@@ -100,14 +99,14 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
 void WebsocketServer::handleConnectionClosed(
   const WebSocketConnectionPtr &conn) {
-  PROTEUS_IF_LOGGING(logger_.info("Websocket closed"));
+  PROTEUS_LOG_INFO(logger_, "Websocket closed");
   // (void)conn;  // suppress unused variable warning
   conn->shutdown();
 }
 
 void WebsocketServer::handleNewConnection(const HttpRequestPtr &req,
                                           const WebSocketConnectionPtr &conn) {
-  PROTEUS_IF_LOGGING(logger_.info("New websocket connection"));
+  PROTEUS_LOG_INFO(logger_, "New websocket connection");
   (void)conn;  // suppress unused variable warning
   (void)req;   // suppress unused variable warning
 }
@@ -152,7 +151,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
     request->setCallback(std::move(callback));
     return request;
   } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger.info(e.what()));
+    PROTEUS_LOG_INFO(logger, e.what());
     this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition,
                           "Failed to create request");
     return nullptr;
@@ -160,10 +159,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
 }
 
 void DrogonWs::errorHandler(const std::invalid_argument &e) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-  logger.debug(e.what());
-#endif
+  PROTEUS_LOG_INFO(this->getLogger(), e.what());
   this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
 }
 

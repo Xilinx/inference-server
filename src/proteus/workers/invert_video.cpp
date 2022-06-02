@@ -121,7 +121,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_IF_LOGGING(logger.info("Got request in InvertVideo"));
+    PROTEUS_LOG_INFO(logger, "Got request in InvertVideo");
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -139,7 +139,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
           const char* error = "Cannot open video file";
-          PROTEUS_IF_LOGGING(logger.error(error));
+          PROTEUS_LOG_ERROR(logger, error);
           req->runCallbackError(error);
           continue;
         }
@@ -195,12 +195,12 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   // if (req != nullptr && req->getWsConn()->connected()) {
   //   req->getWsConn()->shutdown(drogon::CloseCode::kNormalClosure);
   // }
-  PROTEUS_IF_LOGGING(logger.info("InvertVideo ending"));
+  PROTEUS_LOG_INFO(logger, "InvertVideo ending");
 }
 
 void InvertVideo::doRelease() {}

@@ -164,7 +164,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in AksDetect"));
+    PROTEUS_LOG_INFO(logger, "Got request in AksDetect");
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->requests->size());
 
@@ -226,7 +226,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            PROTEUS_IF_LOGGING(logger.error(error));
+            PROTEUS_LOG_ERROR(logger, error);
             req->runCallbackError(error);
             continue;
           }
@@ -324,9 +324,9 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("AksDetect ending"));
+  PROTEUS_LOG_INFO(logger, "AksDetect ending");
 }
 
 void AksDetect::doRelease() {}

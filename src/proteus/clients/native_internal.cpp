@@ -198,10 +198,7 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
 }
 
 void CppNativeApi::errorHandler(const std::invalid_argument &e) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-  logger.error(e.what());
-#endif
+  PROTEUS_LOG_ERROR(this->getLogger(), e.what());
   this->getPromise()->set_value(InferenceResponse(e.what()));
 }
 

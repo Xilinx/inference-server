@@ -162,7 +162,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in Resnet50"));
+    PROTEUS_LOG_INFO(logger, "Got request in Resnet50");
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->requests->size());
 
@@ -222,7 +222,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            PROTEUS_IF_LOGGING(logger.error(error));
+            PROTEUS_LOG_ERROR(logger, error);
             req->runCallbackError(error);
             continue;
           }
@@ -313,9 +313,9 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("ResNet50 ending"));
+  PROTEUS_LOG_INFO(logger, "ResNet50 ending");
 }
 
 void ResNet50::doRelease() {}

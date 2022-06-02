@@ -19,16 +19,6 @@
 
 #include "proteus/observation/logging.hpp"
 
-#ifndef NDEBUG
-// used for debug builds
-// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
-#else
-// used for release builds
-// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
-#endif
-
 #include <spdlog/sinks/basic_file_sink.h>     // for basic_file_sink_mt, bas...
 #include <spdlog/sinks/stdout_color_sinks.h>  // for ansicolor_stdout_sink
 #include <spdlog/spdlog.h>
@@ -100,26 +90,6 @@ Logger::Logger(Loggers name) {
     logger_ = spdlog::get("server");
   }
   assert(logger_ != nullptr);
-}
-
-void Logger::trace([[maybe_unused]] std::string_view message) const {
-  SPDLOG_LOGGER_TRACE(logger_, message);
-}
-
-void Logger::debug([[maybe_unused]] std::string_view message) const {
-  SPDLOG_LOGGER_DEBUG(logger_, message);
-}
-
-void Logger::info([[maybe_unused]] std::string_view message) const {
-  SPDLOG_LOGGER_INFO(logger_, message);
-}
-
-void Logger::warn([[maybe_unused]] std::string_view message) const {
-  SPDLOG_LOGGER_WARN(logger_, message);
-}
-
-void Logger::error([[maybe_unused]] std::string_view message) const {
-  SPDLOG_LOGGER_ERROR(logger_, message);
 }
 
 }  // namespace proteus

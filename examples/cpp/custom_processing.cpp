@@ -171,7 +171,7 @@ std::string load(const std::string& path_to_xmodel) {
 
   // +load grpc:
   proteus::RequestParameters parameters;
-  parameters.put("xmodel", path_to_xmodel);
+  parameters.put("model", path_to_xmodel);
   auto worker_name = client.modelLoad("Xmodel", &parameters);
   // -load grpc:
 
@@ -196,7 +196,7 @@ std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
 std::string load(const std::string& path_to_xmodel) {
   // +load native:
   proteus::RequestParameters parameters;
-  parameters.put("xmodel", path_to_xmodel);
+  parameters.put("model", path_to_xmodel);
   proteus::NativeClient client;
   auto worker_name = client.modelLoad("Xmodel", &parameters);
   // -load native:

@@ -146,7 +146,7 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in aks"));
+    PROTEUS_LOG_INFO(logger, "Got request in aks");
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -208,9 +208,9 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("Aks ending"));
+  PROTEUS_LOG_INFO(logger, "Aks ending");
 }
 
 void Aks::doRelease() {}

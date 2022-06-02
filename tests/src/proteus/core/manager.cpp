@@ -66,8 +66,7 @@ ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
 void Manager::workerAllocate(std::string const& key, int num) {
   auto* worker_info = this->endpoints_.get(key);
   if (!worker_info->inputSizeValid(num)) {
-    PROTEUS_IF_LOGGING(
-      logger_.debug("Allocating more buffers for worker " + key));
+    PROTEUS_LOG_DEBUG(logger_, "Allocating more buffers for worker " + key);
     worker_info->allocate(num);
   }
 }

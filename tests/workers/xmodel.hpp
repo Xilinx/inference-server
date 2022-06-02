@@ -167,7 +167,7 @@ void dequeue(int images, FutureQueue& my_queue) {
 
 int run(std::string xmodel, int images, int threads, int runners) {
   proteus::RequestParameters parameters;
-  parameters.put("xmodel", xmodel);
+  parameters.put("model", xmodel);
   parameters.put("share", false);
   auto threads_per_worker = std::max(threads / runners, 1);
   parameters.put("threads", threads_per_worker);

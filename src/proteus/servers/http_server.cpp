@@ -77,7 +77,7 @@ void start(int port) {
 void stop() { drogon::app().quit(); }
 
 v2::ProteusHttpServer::ProteusHttpServer() {
-  PROTEUS_IF_LOGGING(logger_.debug("Constructed v2::ProteusHttpServer"));
+  PROTEUS_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
 }
 
 #ifdef PROTEUS_ENABLE_REST
@@ -85,7 +85,7 @@ v2::ProteusHttpServer::ProteusHttpServer() {
 void v2::ProteusHttpServer::getServerLive(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) {
-  PROTEUS_IF_LOGGING(logger_.info("Received getServerLive request"));
+  PROTEUS_LOG_INFO(logger_, "Received getServerLive request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
@@ -106,7 +106,7 @@ void v2::ProteusHttpServer::getServerLive(
 void v2::ProteusHttpServer::getServerReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) {
-  PROTEUS_IF_LOGGING(logger_.info("Received getServerReady request"));
+  PROTEUS_LOG_INFO(logger_, "Received getServerReady request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
@@ -123,7 +123,7 @@ void v2::ProteusHttpServer::getModelReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) {
-  PROTEUS_IF_LOGGING(logger_.info("Received getModelReady request"));
+  PROTEUS_LOG_INFO(logger_, "Received getModelReady request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
@@ -144,7 +144,7 @@ void v2::ProteusHttpServer::getModelReady(
 void v2::ProteusHttpServer::getServerMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) {
-  PROTEUS_IF_LOGGING(logger_.info("Received getServerMetadata request"));
+  PROTEUS_LOG_INFO(logger_, "Received getServerMetadata request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
@@ -168,7 +168,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) {
-  PROTEUS_IF_LOGGING(logger_.info("Received getModelMetadata request"));
+  PROTEUS_LOG_INFO(logger_, "Received getModelMetadata request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
@@ -211,7 +211,7 @@ void v2::ProteusHttpServer::modelList(
 void v2::ProteusHttpServer::getHardware(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) {
-  PROTEUS_IF_LOGGING(logger_.info("Received getHardware request"));
+  PROTEUS_LOG_INFO(logger_, "Received getHardware request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
@@ -233,7 +233,7 @@ void v2::ProteusHttpServer::inferModel(
   trace->setAttribute("model", model);
 #endif
 
-  PROTEUS_IF_LOGGING(logger_.info("Received inferModel request for " + model));
+  PROTEUS_LOG_INFO(logger_, "Received inferModel request for " + model);
 #ifdef PROTEUS_ENABLE_METRICS
   auto now = std::chrono::high_resolution_clock::now();
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestPost);
@@ -247,7 +247,7 @@ void v2::ProteusHttpServer::inferModel(
   try {
     worker = Manager::getInstance().getWorker(model);
   } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger_.info(e.what()));
+    PROTEUS_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse("Worker " + model + " not found",
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -274,7 +274,7 @@ void v2::ProteusHttpServer::load(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) {
-  PROTEUS_IF_LOGGING(logger_.info("Received load request"));
+  PROTEUS_LOG_INFO(logger_, "Received load request");
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
@@ -296,8 +296,7 @@ void v2::ProteusHttpServer::load(
   if (hyphen_pos != std::string::npos) {
     name = model.substr(0, hyphen_pos);
     auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
-    parameters->put("xmodel",
-                    "/mnt/models/" + model + "/" + xmodel + ".xmodel");
+    parameters->put("model", "/mnt/models/" + model + "/" + xmodel + ".xmodel");
   } else {
     name = model;
   }
@@ -305,7 +304,7 @@ void v2::ProteusHttpServer::load(
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", name);
 #endif
-  PROTEUS_IF_LOGGING(logger_.info("Received load request is for " + name));
+  PROTEUS_LOG_INFO(logger_, "Received load request is for " + name);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());
@@ -314,7 +313,7 @@ void v2::ProteusHttpServer::load(
   try {
     endpoint = Manager::getInstance().loadWorker(name, *parameters);
   } catch (const std::exception &e) {
-    PROTEUS_IF_LOGGING(logger_.error(e.what()));
+    PROTEUS_LOG_ERROR(logger_, e.what());
     auto resp = errorHttpResponse("Error loading worker " + name,
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -337,7 +336,7 @@ void v2::ProteusHttpServer::unload(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) {
-  PROTEUS_IF_LOGGING(logger_.info("Received unload request"));
+  PROTEUS_LOG_INFO(logger_, "Received unload request");
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
@@ -380,7 +379,7 @@ void v2::ProteusHttpServer::metrics(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) {
   (void)req;  // suppress unused variable warning
-  PROTEUS_IF_LOGGING(logger_.info("Received metrics request"));
+  PROTEUS_LOG_INFO(logger_, "Received metrics request");
   std::string body = Metrics::getInstance().getMetrics();
   auto resp = drogon::HttpResponse::newHttpResponse();
   resp->setBody(body);

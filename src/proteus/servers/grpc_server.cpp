@@ -516,7 +516,7 @@ class GrpcApiUnary : public Interface {
       request->setCallback(std::move(callback));
       return request;
     } catch (const std::invalid_argument& e) {
-      PROTEUS_IF_LOGGING(logger.info(e.what()));
+      PROTEUS_LOG_INFO(logger, e.what());
       errorHandler(e);
       return nullptr;
     }
@@ -527,10 +527,7 @@ class GrpcApiUnary : public Interface {
   }
 
   void errorHandler(const std::invalid_argument& e) override {
-#ifdef PROTEUS_ENABLE_LOGGING
-    const auto& logger = this->getLogger();
-    logger.info(e.what());
-#endif
+    PROTEUS_LOG_INFO(this->getLogger(), e.what());
     calldata_->finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   }
 
@@ -598,8 +595,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   if (hyphen_pos != std::string::npos) {
     name = model.substr(0, hyphen_pos);
     auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
-    parameters->put("xmodel",
-                    "/mnt/models/" + model + "/" + xmodel + ".xmodel");
+    parameters->put("model", "/mnt/models/" + model + "/" + xmodel + ".xmodel");
   } else {
     name = model;
   }
@@ -608,7 +604,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   try {
     endpoint = Manager::getInstance().loadWorker(name, *parameters);
   } catch (const std::exception& e) {
-    PROTEUS_IF_LOGGING(logger_.error(e.what()));
+    PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
   }
@@ -638,7 +634,7 @@ void CallDataModelInfer::handleRequest() {
   try {
     worker = Manager::getInstance().getWorker(model);
   } catch (const std::invalid_argument& e) {
-    PROTEUS_IF_LOGGING(logger_.info(e.what()));
+    PROTEUS_LOG_INFO(logger_, e.what());
     finish(
       ::grpc::Status(StatusCode::NOT_FOUND, "Worker " + model + " not found"));
     return;
