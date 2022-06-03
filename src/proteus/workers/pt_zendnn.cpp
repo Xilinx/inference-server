@@ -46,8 +46,6 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**

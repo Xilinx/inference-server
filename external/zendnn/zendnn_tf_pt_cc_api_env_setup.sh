@@ -136,7 +136,6 @@ if [ $? -eq 0 ]; then
         export MALLOC_CONF="oversize_threshold:1,background_thread:true,metadata_thp:auto,dirty_decay_ms:-1,muzzy_decay_ms:-1"
         echo "PRELOADED JMALLOC"
     fi
-    export LD_PRELOAD=/usr/lib/libomp.so:$LD_PRELOAD
 fi
 
 sleep 1
