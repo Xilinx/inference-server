@@ -258,7 +258,18 @@ void v2::ProteusHttpServer::inferModel(
     return;
   }
 
-  auto request = std::make_unique<DrogonHttp>(req, std::move(callback));
+  std::unique_ptr<DrogonHttp> request;
+  try {
+    request = std::make_unique<DrogonHttp>(req, std::move(callback));
+  } catch (const std::invalid_argument &e) {
+    PROTEUS_LOG_INFO(logger_, e.what());
+    auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
+#ifdef PROTEUS_ENABLE_TRACING
+    auto context = trace->propagate();
+    propagate(resp.get(), context);
+#endif
+    callback(resp);
+  }
 #ifdef PROTEUS_ENABLE_METRICS
   request->set_time(now);
 #endif
