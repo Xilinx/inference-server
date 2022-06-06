@@ -111,14 +111,14 @@ copy_files() {
 }
 
 parse_path() {
-  path=$(realpath $1)
+  path=$(realpath "$1")
 
-  if [[ ! -e $path ]]; then
+  if ! compgen -G "$path" &> /dev/null; then
     echo "$path does not exist, skipping"
     return
   fi
 
-  dynamic_files=$(file $path | awk -F: '$2 ~ "dynamically linked" {print $1}')
+  dynamic_files=( $(file $path | awk -F: '$2 ~ "dynamically linked" {print $1}') )
   for dynamic_file in "${dynamic_files[@]}"; do
     if [[ ! -z $dynamic_file ]]; then
       get_dependencies $dynamic_file
@@ -157,7 +157,7 @@ if [[ $VITIS == "yes" ]]; then
 fi
 
 for path in "${paths[@]}"; do
-  parse_path $path
+  parse_path "$path"
 done
 
 if [[ $VITIS == "yes" ]]; then

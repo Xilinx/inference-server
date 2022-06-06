@@ -34,7 +34,6 @@ import urllib.request
 import zipfile
 
 
-
 def get_version():
     version_file = Path(__file__).parent.resolve() / "VERSION"
     with open(version_file, "r") as f:
@@ -797,18 +796,22 @@ class Get:
             ],
         }
         if args.tfzendnn:
-            files.update({
-                tensorflow_models: [
-                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.0.zip"
-                ],
-            })
+            files.update(
+                {
+                    tensorflow_models: [
+                        "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.0.zip"
+                    ],
+                }
+            )
 
         if args.ptzendnn:
-            files.update({
-                pytorch_models:[
-                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_4.1G_2.0.zip"
-                ]
-            })
+            files.update(
+                {
+                    pytorch_models: [
+                        "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_4.1G_2.0.zip"
+                    ]
+                }
+            )
 
         for location, urls in files.items():
             for url in urls:
@@ -832,10 +835,13 @@ class Get:
                         tar_file = tarfile.open(filepath, mode="r:gz")
                         tar_file.extractall(location)
                     elif filename.endswith("zip"):
-                        with zipfile.ZipFile(str(tmp_dir / filename), 'r') as zip_ref:
+                        with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
                         if args.tfzendnn or args.ptzendnn:
-                            shutil.move(str(tmp_dir / filename.split(".zip")[0] / "float/"), str(location))
+                            shutil.move(
+                                str(tmp_dir / filename.split(".zip")[0] / "float/"),
+                                str(location),
+                            )
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)
@@ -864,11 +870,15 @@ class Get:
         )
 
         command_group.add_argument(
-            "--tfzendnn", action="store_true" ,help="If TF+ZenDNN should be enabled",
+            "--tfzendnn",
+            action="store_true",
+            help="If TF+ZenDNN should be enabled",
         )
 
         command_group.add_argument(
-            "--ptzendnn", action="store_true" ,help="If PT+ZenDNN should be enabled",
+            "--ptzendnn",
+            action="store_true",
+            help="If PT+ZenDNN should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -879,7 +889,7 @@ class Install:
     def parse(args, unknown_args):
         if args.get_manifest:
             try:
-                with open(f"{args.dir}/Release/install_manifest.txt") as f:
+                with open(f"{args.dir}/Debug/install_manifest.txt") as f:
                     print(f.read())
                 sys.exit(0)
             except FileNotFoundError:
@@ -887,7 +897,7 @@ class Install:
                     None, "No manifest found. Install Proteus first."
                 )
 
-        build_args = f"--dir {args.dir} --release --regen -DPROTEUS_BUILD_TESTING=OFF "
+        build_args = f"--dir {args.dir} --debug --regen -DPROTEUS_BUILD_TESTING=OFF "
         if unknown_args:
             build_args += " ".join(unknown_args)
 
@@ -895,7 +905,7 @@ class Install:
 
         run_command(command, args.dry_run)
 
-        command = f"sudo make -C {args.dir}/Release install"
+        command = f"sudo make -C {args.dir}/Debug install"
         run_command(command, args.dry_run)
 
     @classmethod
@@ -1024,8 +1034,6 @@ class Make:
 class Run:
     @staticmethod
     def parse(args, unknown_args: list):
-        unknown_args.sort()
-
         if args.image is None and args.preset is None:
             raise argparse.ArgumentError(
                 None, "Image must be specified if no preset is used. See --help."
@@ -1324,13 +1332,13 @@ class Up:
             args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--detach"
         elif args.profile == "prod":
-            args.name = "proteus"  + args.suffix
+            args.name = "proteus" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
             extra_flags = "--abort-on-container-exit --exit-code-from proteus-tester"
         elif args.profile == "autotest-dev":
-            args.name = "proteus-dev"  + args.suffix
+            args.name = "proteus-dev" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--abort-on-container-exit --exit-code-from proteus"
         elif args.profile == "test":
