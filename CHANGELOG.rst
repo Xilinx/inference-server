@@ -32,6 +32,7 @@ Added
 - TensorFlow/Pytorch + ZenDNN backend (:pr:`17` and :pr:`21`)
 - 'ServerMetadata' endpoint to the API (:commit:`7747911`)
 - 'modelList' endpoint to the API (:commit:`7477b7d`)
+- Parse JSON data as string in HTTP body (:commit:`694800e`)
 
 Changed
 ^^^^^^^
@@ -39,6 +40,7 @@ Changed
 - Use Pybind11 to create Python API (:pr:`20`)
 - Two logs are created now: server and client
 - Logging macro is now ``PROTEUS_LOG_*``
+- Loading workers is now case-insensitive (:commit:`14ed4ef`)
 
 Fixed
 ^^^^^

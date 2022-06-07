@@ -897,7 +897,7 @@ class Install:
                     None, "No manifest found. Install Proteus first."
                 )
 
-        build_args = f"--dir {args.dir} --debug --regen -DPROTEUS_BUILD_TESTING=OFF "
+        build_args = f"--dir {args.dir} --release --regen -DPROTEUS_BUILD_TESTING=OFF "
         if unknown_args:
             build_args += " ".join(unknown_args)
 
@@ -905,7 +905,7 @@ class Install:
 
         run_command(command, args.dry_run)
 
-        command = f"sudo make -C {args.dir}/Debug install"
+        command = f"sudo make -C {args.dir}/Release install"
         run_command(command, args.dry_run)
 
     @classmethod

@@ -299,33 +299,28 @@ void v2::ProteusHttpServer::load(
   }
 
   auto hyphen_pos = model.find('-');
-  std::string name;
-  // if there's a hyphen in the name, currently assuming it's for xmodel. So,
-  // extract the first part as the worker and the second part as the xmodel file
-  // name. Put that information into the parameters with the default path for
-  // KServe (/mnt/models)
+  // if there's a hyphen in the name, currently assuming it's from KServe. So,
+  // put that information into the parameters with the default path for KServe
+  // (/mnt/models)
   if (hyphen_pos != std::string::npos) {
-    name = model.substr(0, hyphen_pos);
-    auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
-    parameters->put("model", "/mnt/models/" + model + "/" + xmodel + ".xmodel");
-  } else {
-    name = model;
+    auto model_name = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
+    parameters->put("model", "/mnt/models/" + model + "/1/saved_model");
   }
 
 #ifdef PROTEUS_ENABLE_TRACING
-  trace->setAttribute("model", name);
+  trace->setAttribute("model", model);
 #endif
-  PROTEUS_LOG_INFO(logger_, "Received load request is for " + name);
+  PROTEUS_LOG_INFO(logger_, "Received load request is for " + model);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(name, *parameters);
+    endpoint = Manager::getInstance().loadWorker(model, *parameters);
   } catch (const std::exception &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading worker " + name,
+    auto resp = errorHttpResponse("Error loading worker " + model,
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
     auto context = trace->propagate();
