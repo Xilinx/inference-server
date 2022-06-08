@@ -80,8 +80,8 @@ class NativeClient : public Client {
    * @return std::string the qualified name of the worker to make inference
    * requests
    */
-  std::string modelLoad(const std::string& model,
-                        RequestParameters* parameters) override;
+  void modelLoad(const std::string& model,
+                 RequestParameters* parameters) override;
   /**
    * @brief Unload a worker
    *

@@ -179,8 +179,8 @@ bool HttpClient::modelReady(const std::string& model) {
   return response->statusCode() == drogon::k200OK;
 }
 
-std::string HttpClient::modelLoad(const std::string& model,
-                                  RequestParameters* parameters) {
+void HttpClient::modelLoad(const std::string& model,
+                           RequestParameters* parameters) {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
@@ -196,10 +196,9 @@ std::string HttpClient::modelLoad(const std::string& model,
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
-  if (response->statusCode() == drogon::k400BadRequest) {
+  if (response->statusCode() != drogon::k200OK) {
     throw std::invalid_argument(std::string(response->body()));
   }
-  return std::string(response->body());
 }
 
 void HttpClient::modelUnload(const std::string& model) {

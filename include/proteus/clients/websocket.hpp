@@ -41,8 +41,8 @@ class WebSocketClient : public Client {
   bool serverReady() override;
   bool modelReady(const std::string& model) override;
 
-  std::string modelLoad(const std::string& model,
-                        RequestParameters* parameters) override;
+  void modelLoad(const std::string& model,
+                 RequestParameters* parameters) override;
   void modelUnload(const std::string& model) override;
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;

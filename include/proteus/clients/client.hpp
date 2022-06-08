@@ -36,8 +36,8 @@ class Client {
   virtual bool serverReady() = 0;
   virtual bool modelReady(const std::string& model) = 0;
 
-  virtual std::string modelLoad(const std::string& model,
-                                RequestParameters* parameters) = 0;
+  virtual void modelLoad(const std::string& model,
+                         RequestParameters* parameters) = 0;
   virtual void modelUnload(const std::string& model) = 0;
   virtual InferenceResponse modelInfer(const std::string& model,
                                        const InferenceRequest& request) = 0;

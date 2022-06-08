@@ -181,8 +181,8 @@ void mapParametersToProto(
   }
 }
 
-std::string GrpcClient::modelLoad(const std::string& model,
-                                  RequestParameters* parameters) {
+void GrpcClient::modelLoad(const std::string& model,
+                           RequestParameters* parameters) {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -198,9 +198,8 @@ std::string GrpcClient::modelLoad(const std::string& model,
   Status status = stub->ModelLoad(&context, request, &reply);
 
   if (status.ok()) {
-    return reply.endpoint();
+    throw std::runtime_error(status.error_message());
   }
-  throw std::runtime_error(status.error_message());
 }
 
 void GrpcClient::modelUnload(const std::string& model) {

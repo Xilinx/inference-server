@@ -179,10 +179,10 @@ bool WebSocketClient::modelReady(const std::string& model) {
   return client->modelReady(model);
 }
 
-std::string WebSocketClient::modelLoad(const std::string& model,
-                                       RequestParameters* parameters) {
+void WebSocketClient::modelLoad(const std::string& model,
+                                RequestParameters* parameters) {
   auto* client = this->impl_->getHttpClient();
-  return client->modelLoad(model, parameters);
+  client->modelLoad(model, parameters);
 }
 
 void WebSocketClient::modelUnload(const std::string& model) {

@@ -127,12 +127,13 @@ ServerMetadata NativeClient::serverMetadata() {
 bool NativeClient::serverLive() { return true; }
 bool NativeClient::serverReady() { return true; }
 
-std::string NativeClient::modelLoad(const std::string& model,
-                                    RequestParameters* parameters) {
+void NativeClient::modelLoad(const std::string& model,
+                             RequestParameters* parameters) {
   if (parameters == nullptr) {
-    return Manager::getInstance().loadWorker(model, RequestParameters());
+    Manager::getInstance().loadWorker(model, RequestParameters());
+  } else {
+    Manager::getInstance().loadWorker(model, *parameters);
   }
-  return Manager::getInstance().loadWorker(model, *parameters);
 }
 
 std::string NativeClient::workerLoad(const std::string& model,
