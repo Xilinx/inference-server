@@ -48,6 +48,10 @@ class WebSocketClient : public Client {
                                const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
 
+  std::string workerLoad(const std::string& worker,
+                         RequestParameters* parameters) override;
+  void workerUnload(const std::string& worker) override;
+
   void modelInferAsync(const std::string& model,
                        const InferenceRequest& request);
   // TODO(varunsh): change to InferenceReponse

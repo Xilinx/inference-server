@@ -220,6 +220,49 @@ void HttpClient::modelUnload(const std::string& model) {
                                 std::to_string(static_cast<int>(status)));
   }
 }
+
+std::string HttpClient::workerLoad(const std::string& model,
+                                   RequestParameters* parameters) {
+  auto* client = this->impl_->getClient();
+
+  Json::Value json = Json::objectValue;
+  if (parameters != nullptr) {
+    json = mapParametersToJson(parameters);
+  }
+
+  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
+  req->setMethod(drogon::Post);
+  auto path = "/v2/repository/models/" + model + "/load";
+  req->setPath(path);
+  impl_->addHeaders(req);
+
+  auto [result, response] = client->sendRequest(req);
+  check_error(result);
+  if (response->statusCode() == drogon::k400BadRequest) {
+    throw std::invalid_argument(std::string(response->body()));
+  }
+  return std::string(response->body());
+}
+
+void HttpClient::workerUnload(const std::string& model) {
+  auto* client = this->impl_->getClient();
+
+  Json::Value json;
+  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
+  req->setMethod(drogon::Post);
+  auto path = "/v2/repository/models/" + model + "/unload";
+  req->setPath(path);
+  impl_->addHeaders(req);
+
+  auto [result, response] = client->sendRequest(req);
+  check_error(result);
+  auto status = response->statusCode();
+  if (status != drogon::k200OK) {
+    throw std::invalid_argument("Status: " +
+                                std::to_string(static_cast<int>(status)));
+  }
+}
+
 InferenceResponse HttpClient::modelInfer(const std::string& model,
                                          const InferenceRequest& request) {
   auto* client = this->impl_->getClient();

@@ -135,6 +135,14 @@ std::string NativeClient::modelLoad(const std::string& model,
   return Manager::getInstance().loadWorker(model, *parameters);
 }
 
+std::string NativeClient::workerLoad(const std::string& model,
+                                     RequestParameters* parameters) {
+  if (parameters == nullptr) {
+    return Manager::getInstance().loadWorker(model, RequestParameters());
+  }
+  return Manager::getInstance().loadWorker(model, *parameters);
+}
+
 InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
                                               InferenceRequest request) {
 #ifdef PROTEUS_ENABLE_METRICS
@@ -164,6 +172,10 @@ InferenceResponse NativeClient::modelInfer(const std::string& model,
 }
 
 void NativeClient::modelUnload(const std::string& model) {
+  Manager::getInstance().unloadWorker(model);
+}
+
+void NativeClient::workerUnload(const std::string& model) {
   Manager::getInstance().unloadWorker(model);
 }
 

@@ -66,6 +66,10 @@ class GrpcClient : public Client {
   //                           RequestParameters& metadata);
   // bool streamModelInfer(int index, InferenceResponse& response);
 
+  std::string workerLoad(const std::string& worker,
+                         RequestParameters* parameters) override;
+  void workerUnload(const std::string& worker) override;
+
  private:
   class GrpcClientImpl;
   std::unique_ptr<GrpcClientImpl> impl_;

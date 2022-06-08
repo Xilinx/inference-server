@@ -55,8 +55,10 @@
 namespace proteus {
 class CallDataModelInfer;
 class CallDataModelLoad;
+class CallDataWorkerLoad;
 class CallDataModelReady;
 class CallDataModelUnload;
+class CallDataWorkerUnload;
 class CallDataServerLive;
 class CallDataServerMetadata;
 class CallDataServerReady;
@@ -615,6 +617,47 @@ CALLDATA_IMPL(ModelLoad, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelUnload, Unary) {
+  const auto& name = request_.name();
+
+  Manager::getInstance().unloadWorker(name);
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(WorkerLoad, Unary) {
+  auto parameters = mapProtoToParameters(request_.parameters());
+
+  const std::string& model = request_.name();
+
+  auto hyphen_pos = model.find('-');
+  std::string name;
+  // if there's a hyphen in the name, currently assuming it's for xmodel. So,
+  // extract the first part as the worker and the second part as the xmodel file
+  // name. Put that information into the parameters with the default path for
+  // KServe (/mnt/models)
+  if (hyphen_pos != std::string::npos) {
+    name = model.substr(0, hyphen_pos);
+    auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
+    parameters->put("model", "/mnt/models/" + model + "/" + xmodel + ".xmodel");
+  } else {
+    name = model;
+  }
+
+  std::string endpoint;
+  try {
+    endpoint = Manager::getInstance().loadWorker(name, *parameters);
+  } catch (const std::exception& e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+    return;
+  }
+
+  reply_.set_endpoint(endpoint);
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(WorkerUnload, Unary) {
   const auto& name = request_.name();
 
   Manager::getInstance().unloadWorker(name);

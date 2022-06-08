@@ -60,7 +60,18 @@ service GRPCInferenceService
   // and other codes indicate failure.
   rpc ModelUnload(ModelUnloadRequest) returns (ModelUnloadResponse) {}
 
-  // The ModelList API lists the active model(s). Errors are indicated by the
+  // The WorkerLoad API loads a named worker. Models must be loaded prior to
+  // making inferences. Errors are indicated by the google.rpc.Status returned
+  // for the request. The OK code indicates success and other codes indicate
+  // failure.
+  rpc WorkerLoad(WorkerLoadRequest) returns (WorkerLoadResponse) {}
+
+  // The WorkerUnload API unloads a named worker. Errors are indicated by the
+  // google.rpc.Status returned for the request. The OK code indicates success
+  // and other codes indicate failure.
+  rpc WorkerUnload(WorkerUnloadRequest) returns (WorkerUnloadResponse) {}
+
+  // The ModelList API lists the active endpoints. Errors are indicated by the
   // google.rpc.Status returned for the request. The OK code indicates success
   // and other codes indicate failure.
   rpc ModelList(ModelListRequest) returns (ModelListResponse) {}
@@ -297,6 +308,26 @@ message ModelUnloadRequest{
 }
 
 message ModelUnloadResponse{}
+
+message WorkerLoadRequest{
+  // Worker name.
+  string name = 1;
+
+  // Optional load-time parameters.
+  map<string, InferParameter> parameters = 2;
+}
+
+message WorkerLoadResponse{
+  // Endpoint to use for further interactions with this model.
+  string endpoint = 1;
+}
+
+message WorkerUnloadRequest{
+  // Worker name.
+  string name = 1;
+}
+
+message WorkerUnloadResponse{}
 
 // An inference parameter value. The Parameters message describes a
 // "name"/"value" pair, where the "name" is the name of the parameter

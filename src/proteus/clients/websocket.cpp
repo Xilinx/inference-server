@@ -190,6 +190,17 @@ void WebSocketClient::modelUnload(const std::string& model) {
   client->modelUnload(model);
 }
 
+std::string WebSocketClient::workerLoad(const std::string& model,
+                                        RequestParameters* parameters) {
+  auto* client = this->impl_->getHttpClient();
+  return client->workerLoad(model, parameters);
+}
+
+void WebSocketClient::workerUnload(const std::string& model) {
+  auto* client = this->impl_->getHttpClient();
+  client->workerUnload(model);
+}
+
 InferenceResponse WebSocketClient::modelInfer(const std::string& model,
                                               const InferenceRequest& request) {
   auto* client = this->impl_->getHttpClient();

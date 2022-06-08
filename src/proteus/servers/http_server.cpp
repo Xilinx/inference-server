@@ -378,6 +378,104 @@ void v2::ProteusHttpServer::unload(
   callback(resp);
 }
 
+void v2::ProteusHttpServer::workerLoad(
+  const HttpRequestPtr &req,
+  std::function<void(const HttpResponsePtr &)> &&callback,
+  const std::string &worker) {
+  PROTEUS_LOG_INFO(logger_, "Received load request");
+#ifdef PROTEUS_ENABLE_TRACING
+  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+#endif
+
+  auto json = req->getJsonObject();
+  RequestParametersPtr parameters = nullptr;
+  if (json != nullptr) {
+    parameters = mapJsonToParameters(*json);
+  } else {
+    parameters = std::make_unique<RequestParameters>();
+  }
+
+  auto hyphen_pos = worker.find('-');
+  // if there's a hyphen in the name, currently assuming it's from KServe. So,
+  // put that information into the parameters with the default path for KServe
+  // (/mnt/models)
+  if (hyphen_pos != std::string::npos) {
+    auto model_name =
+      worker.substr(hyphen_pos + 1, worker.length() - hyphen_pos);
+    parameters->put("model", "/mnt/models/" + worker + "/1/saved_model");
+  }
+
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->setAttribute("model", worker);
+#endif
+  PROTEUS_LOG_INFO(logger_, "Received load request is for " + worker);
+
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->setAttributes(parameters.get());
+#endif
+  std::string endpoint;
+  try {
+    endpoint = Manager::getInstance().loadWorker(worker, *parameters);
+  } catch (const std::exception &e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    auto resp = errorHttpResponse("Error loading worker " + worker,
+                                  HttpStatusCode::k400BadRequest);
+#ifdef PROTEUS_ENABLE_TRACING
+    auto context = trace->propagate();
+    propagate(resp.get(), context);
+#endif
+    callback(resp);
+  }
+
+  auto resp = HttpResponse::newHttpResponse();
+  resp->setBody(endpoint);
+#ifdef PROTEUS_ENABLE_TRACING
+  auto context = trace->propagate();
+  propagate(resp.get(), context);
+#endif
+  callback(resp);
+}
+
+void v2::ProteusHttpServer::workerUnload(
+  const HttpRequestPtr &req,
+  std::function<void(const HttpResponsePtr &)> &&callback,
+  const std::string &worker) {
+  PROTEUS_LOG_INFO(logger_, "Received unload request");
+#ifdef PROTEUS_ENABLE_TRACING
+  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+#endif
+
+  //   auto json = req->getJsonObject();
+  //   std::string name;
+  //   if (json->isMember("model_name")) {
+  //     name = json->get("model_name", "").asString();
+  //   } else {
+  //     auto resp = errorHttpResponse("No model name specifed in unload
+  //     request",
+  //                                   HttpStatusCode::k400BadRequest);
+  // #ifdef PROTEUS_ENABLE_TRACING
+  //     auto context = trace->propagate();
+  //     propagate(resp.get(), context);
+  // #endif
+  //     callback(resp);
+  //     return;
+  //   }
+  std::string name = worker;
+
+#ifdef PROTEUS_ENABLE_TRACING
+  trace->setAttribute("model", name);
+#endif
+
+  Manager::getInstance().unloadWorker(name);
+
+  auto resp = HttpResponse::newHttpResponse();
+#ifdef PROTEUS_ENABLE_TRACING
+  auto context = trace->propagate();
+  propagate(resp.get(), context);
+#endif
+  callback(resp);
+}
+
 #endif  // PROTEUS_ENABLE_REST
 
 #ifdef PROTEUS_ENABLE_METRICS

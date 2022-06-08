@@ -63,6 +63,10 @@ class HttpClient : public Client {
                                const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
 
+  std::string workerLoad(const std::string& worker,
+                         RequestParameters* parameters) override;
+  void workerUnload(const std::string& worker) override;
+
  private:
   class HttpClientImpl;
   std::unique_ptr<HttpClientImpl> impl_;

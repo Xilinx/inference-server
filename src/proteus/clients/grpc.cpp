@@ -219,6 +219,44 @@ void GrpcClient::modelUnload(const std::string& model) {
   }
 }
 
+std::string GrpcClient::workerLoad(const std::string& worker,
+                                   RequestParameters* parameters) {
+  inference::WorkerLoadRequest request;
+  inference::WorkerLoadResponse reply;
+
+  ClientContext context;
+
+  request.set_name(worker);
+  auto* params = request.mutable_parameters();
+  if (parameters != nullptr) {
+    mapParametersToProto(parameters->data(), params);
+  }
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->WorkerLoad(&context, request, &reply);
+
+  if (status.ok()) {
+    return reply.endpoint();
+  }
+  throw std::runtime_error(status.error_message());
+}
+
+void GrpcClient::workerUnload(const std::string& worker) {
+  inference::WorkerUnloadRequest request;
+  inference::WorkerUnloadResponse reply;
+
+  ClientContext context;
+
+  request.set_name(worker);
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->WorkerUnload(&context, request, &reply);
+
+  if (!status.ok()) {
+    throw std::runtime_error(status.error_message());
+  }
+}
+
 void mapRequestToProto(const InferenceRequest& request,
                        inference::ModelInferRequest& grpc_request) {
   grpc_request.set_id(request.getID());
