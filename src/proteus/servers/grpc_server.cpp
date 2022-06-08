@@ -611,7 +611,6 @@ CALLDATA_IMPL(ModelLoad, Unary) {
     return;
   }
 
-  reply_.set_endpoint(endpoint);
   finish();
 }
 CALLDATA_IMPL_END
@@ -789,7 +788,10 @@ class GrpcServer final {
 
 namespace grpc {
 
-void start(const std::string& address) { GrpcServer::create(address, 1); }
+void start(int port) {
+  const std::string address = "0.0.0.0:" + std::to_string(port);
+  GrpcServer::create(address, 1);
+}
 
 void stop() {
   // the GrpcServer's destructor is called automatically

@@ -40,9 +40,9 @@
 
 namespace proteus {
 
-void startHttpServer(int port) {
+void startHttpServer(int port, const std::string& model_repository) {
 #ifdef PROTEUS_ENABLE_HTTP
-  std::thread{http::start, port}.detach();
+  std::thread{http::start, port, model_repository}.detach();
 #else
   (void)port;  // suppress unused variable warning
 #endif

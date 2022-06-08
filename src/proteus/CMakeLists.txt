@@ -14,7 +14,9 @@
 
 add_executable(proteus-server main.cpp)
 target_include_directories(proteus-server PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_include_directories(proteus-server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+if(${PROTEUS_ENABLE_GRPC})
+    target_include_directories(proteus-server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+endif()
 target_link_options(proteus-server PRIVATE "LINKER:-E")
 enable_ipo_on_target(proteus-server)
 

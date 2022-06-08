@@ -132,8 +132,6 @@ else()
     add_derived_option("ENABLE_HTTP" OFF)
 endif()
 
-add_derived_option("DEFAULT_HTTP_PORT" 8998)
-
 configure_file(src/proteus/build_options.hpp.in ${PROJECT_SOURCE_DIR}/include/proteus/build_options.hpp)
 configure_file(src/gui/src/build_options.ts.in ${PROJECT_SOURCE_DIR}/src/gui/src/build_options.ts)
 if(NOT EXISTS ${PROJECT_SOURCE_DIR}/tools/benchmark.yml)

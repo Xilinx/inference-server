@@ -297,10 +297,7 @@ message ModelLoadRequest{
   map<string, InferParameter> parameters = 2;
 }
 
-message ModelLoadResponse{
-  // Endpoint to use for further interactions with this model.
-  string endpoint = 1;
-}
+message ModelLoadResponse{}
 
 message ModelUnloadRequest{
   // Model name.

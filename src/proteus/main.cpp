@@ -54,16 +54,25 @@ int main(int argc, char* argv[]) {
 #ifdef PROTEUS_ENABLE_HTTP
   int http_port = kDefaultHttpPort;
 #endif
+#ifdef PROTEUS_ENABLE_GRPC
+  int grpc_port = kDefaultGrpcPort;
+#endif
+  std::string model_repository = "/mnt/models";
 
   try {
-    cxxopts::Options options("Proteus Server",
-                             "Inference in the cloud with Xilinx FPGAs");
-    options.allow_unrecognised_options().add_options()
+    cxxopts::Options options("proteus-server", "Inference in the cloud");
+    // clang-format off
+    options.add_options()
+    ("model-repository", "Path to the model repository",
+      cxxopts::value<std::string>(model_repository))
 #ifdef PROTEUS_ENABLE_HTTP
-      ("http_port", "Port to use for HTTP server",
-       cxxopts::value<int>(http_port))
+    ("http-port", "Port to use for HTTP server", cxxopts::value<int>(http_port))
 #endif
-        ("help", "Print help");
+#ifdef PROTEUS_ENABLE_GRPC
+    ("grpc-port", "Port to use for gRPC server", cxxopts::value<int>(grpc_port))
+#endif
+    ("help", "Print help");
+    // clang-format on
 
     auto result = options.parse(argc, argv);
 
@@ -79,13 +88,13 @@ int main(int argc, char* argv[]) {
   proteus::initialize();
 
 #ifdef PROTEUS_ENABLE_GRPC
-  std::cout << "gRPC server starting at port " << 50051 << "\n";
-  proteus::grpc::start("0.0.0.0:50051");
+  std::cout << "gRPC server starting at port " << grpc_port << "\n";
+  proteus::grpc::start(grpc_port);
 #endif
 
 #ifdef PROTEUS_ENABLE_HTTP
   std::cout << "HTTP server starting at port " << http_port << "\n";
-  proteus::http::start(http_port);
+  proteus::http::start(http_port, model_repository);
 #else
   while (1) {
     std::this_thread::yield();

@@ -30,11 +30,14 @@ void wrapHttpClient(py::module_ &m) {
   using proteus::HttpClient;
 
   m.def("startHttpServer", &proteus::startHttpServer, py::arg("port"),
-        DOCS(startHttpServer));
+        py::arg("model_repository") = "", DOCS(startHttpServer));
   m.def("stopHttpServer", &proteus::stopHttpServer, DOCS(stopHttpServer));
 
   py::class_<HttpClient, proteus::Client>(m, "HttpClient")
-    .def(py::init<const std::string &, const std::unordered_map<std::string, std::string>>(), py::arg("address"), py::arg("headers") = std::unordered_map<std::string, std::string>(),
+    .def(py::init<const std::string &,
+                  const std::unordered_map<std::string, std::string>>(),
+         py::arg("address"),
+         py::arg("headers") = std::unordered_map<std::string, std::string>(),
          DOCS(HttpClient, HttpClient))
     .def("serverMetadata", &HttpClient::serverMetadata,
          DOCS(HttpClient, serverMetadata))

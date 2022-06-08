@@ -42,8 +42,11 @@
 /// Enables PT+ZenDNN in proteus
 #cmakedefine PROTEUS_ENABLE_PTZENDNN
 
-/// Port used by Proteus's HTTP server
-constexpr auto kDefaultHttpPort = @PROTEUS_DEFAULT_HTTP_PORT@;
+/// Port used by the HTTP server by default
+constexpr auto kDefaultHttpPort = 8998;
+
+/// Port used by the gRPC server by default
+constexpr auto kDefaultGrpcPort = 50051;
 
 /// Number of threads used by Drogon
 constexpr auto kDefaultDrogonThreads = 16;

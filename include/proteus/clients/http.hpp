@@ -36,7 +36,7 @@ namespace proteus {
  *
  * @param port port to use
  */
-void startHttpServer(int port);
+void startHttpServer(int port, const std::string& model_repository = "");
 
 /**
  * @brief Stop the HTTP server. This is a no-op if Proteus is compiled without

@@ -51,9 +51,11 @@ using drogon::HttpStatusCode;
 
 namespace proteus::http {
 
-void start(int port) {
-  auto &app = drogon::app();
+void start(int port, const std::string &model_repository) {
+  auto controller = std::make_shared<v2::ProteusHttpServer>(model_repository);
 
+  auto &app = drogon::app();
+  app.registerController(controller);
 #ifdef PROTEUS_ENABLE_LOGGING
   auto dir = getLogDirectory();
   app.setLogLevel(trantor::Logger::kWarn).setLogPath(dir);
@@ -76,7 +78,8 @@ void start(int port) {
 
 void stop() { drogon::app().quit(); }
 
-v2::ProteusHttpServer::ProteusHttpServer() {
+v2::ProteusHttpServer::ProteusHttpServer(const std::string &model_repository)
+  : model_repository_(model_repository) {
   PROTEUS_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
 }
 

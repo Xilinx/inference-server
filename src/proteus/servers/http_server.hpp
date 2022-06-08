@@ -44,9 +44,11 @@ namespace v2 {
  * HttpController in Drogon and adds the endpoints of interest.
  *
  */
-class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
+class ProteusHttpServer
+  : public drogon::HttpController<ProteusHttpServer, false> {
  public:
-  ProteusHttpServer();  ///< Constructs the ProteusHttpServer object
+  /// Constructor
+  explicit ProteusHttpServer(const std::string &model_repository);
 
   METHOD_LIST_BEGIN
 #ifdef PROTEUS_ENABLE_REST
@@ -239,8 +241,9 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   void metrics(const drogon::HttpRequestPtr &req,
                std::function<void(const drogon::HttpResponsePtr &)> &&callback);
 #endif
-#ifdef PROTEUS_ENABLE_LOGGING
  private:
+  std::string model_repository_;
+#ifdef PROTEUS_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};
 #endif
 };
@@ -254,7 +257,7 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
  *
  * @param port the port to use for the server
  */
-void start(int port);
+void start(int port, const std::string &model_repository);
 
 /// Stop the REST server
 void stop();
