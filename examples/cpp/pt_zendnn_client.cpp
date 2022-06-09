@@ -248,7 +248,7 @@ int main() {
   parameters.put("max_buffer_num", options.batch_size);
   parameters.put("model", options.graph);
   parameters.put("input_size", options.input_size);
-  auto workerName = client.modelLoad("PtZendnn", &parameters);
+  auto workerName = client.workerLoad("PtZendnn", &parameters);
 
   float time_tmp = 0.f;
   // prepare images for inference

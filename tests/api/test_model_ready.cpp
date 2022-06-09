@@ -39,7 +39,7 @@ void test(proteus::Client* client) {
                      { EXPECT_STREQ("worker echo not found", e.what()); },
                      std::invalid_argument);
 
-  const auto endpoint = client->modelLoad(worker, nullptr);
+  const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
 
   while (!isReady(client, endpoint)) {
@@ -60,8 +60,10 @@ void test(proteus::Client* client) {
   }
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
+#endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelReady) {
@@ -69,4 +71,6 @@ TEST_F(BaseFixture, ModelReady) {
   test(&client);
 }
 
+#ifdef PROTEUS_ENABLE_HTTP
 TEST_F(HttpFixture, ModelReady) { test(client_.get()); }
+#endif

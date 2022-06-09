@@ -246,7 +246,7 @@ def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
         for key, value in parameters_fixture.items():
             parameters.put(key, value)
 
-    response = rest_client.modelLoad(model_fixture, parameters)
+    response = rest_client.workerLoad(model_fixture, parameters)
     request.cls.model = response
 
     try:

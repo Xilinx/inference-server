@@ -13,10 +13,10 @@
 # limitations under the License.
 
 if(${PROTEUS_ENABLE_VITIS})
-    list(APPEND apps
-        custom_processing_native
-        custom_processing_grpc
-    )
+    list(APPEND apps custom_processing_native)
+    if(${PROTEUS_ENABLE_GRPC})
+      list(APPEND apps custom_processing_grpc)
+    endif()
     foreach(app ${apps})
         add_executable(${app} custom_processing.cpp)
 
@@ -26,7 +26,9 @@ if(${PROTEUS_ENABLE_VITIS})
         )
         target_include_directories(${app} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
     endforeach()
-    target_compile_definitions(custom_processing_grpc PRIVATE ENABLE_GRPC)
+    if(${PROTEUS_ENABLE_GRPC})
+      target_compile_definitions(custom_processing_grpc PRIVATE ENABLE_GRPC)
+    endif()
 endif()
 
 if(${PROTEUS_ENABLE_TFZENDNN})

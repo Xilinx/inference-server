@@ -22,8 +22,10 @@ void test(proteus::Client* client) {
   EXPECT_TRUE(reply);
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ServerReady) { test(client_.get()); }
+#endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ServerReady) {
@@ -31,4 +33,6 @@ TEST_F(BaseFixture, ServerReady) {
   test(&client);
 }
 
+#ifdef PROTEUS_ENABLE_HTTP
 TEST_F(HttpFixture, ServerReady) { test(client_.get()); }
+#endif

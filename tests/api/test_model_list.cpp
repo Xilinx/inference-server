@@ -26,7 +26,7 @@ void test(proteus::Client* client) {
   auto models_0 = client->modelList();
   EXPECT_EQ(models_0.size(), 0);
 
-  const auto endpoint = client->modelLoad(worker, nullptr);
+  const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
   EXPECT_TRUE(client->modelReady(endpoint));
 
@@ -35,7 +35,7 @@ void test(proteus::Client* client) {
   EXPECT_EQ(models.at(0), endpoint);
 
   const std::string worker_2 = "InvertImage";
-  const auto endpoint_2 = client->modelLoad(worker_2, nullptr);
+  const auto endpoint_2 = client->workerLoad(worker_2, nullptr);
   EXPECT_EQ(endpoint_2, worker_2);
   EXPECT_TRUE(client->modelReady(endpoint_2));
 
@@ -56,8 +56,10 @@ void test(proteus::Client* client) {
   }
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelList) { test(client_.get()); }
+#endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelList) {
@@ -65,4 +67,6 @@ TEST_F(BaseFixture, ModelList) {
   test(&client);
 }
 
+#ifdef PROTEUS_ENABLE_HTTP
 TEST_F(HttpFixture, ModelList) { test(client_.get()); }
+#endif

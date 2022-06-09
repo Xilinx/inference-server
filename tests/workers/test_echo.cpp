@@ -131,7 +131,7 @@ TEST_P(EchoParamFixture, EchoNative) {
   auto multiplier = std::get<4>(params);
 
   proteus::NativeClient client;
-  client.modelLoad("echo", nullptr);
+  client.workerLoad("echo", nullptr);
 
   auto request = this->construct_request();
 
@@ -147,6 +147,7 @@ TEST_P(EchoParamFixture, EchoNative) {
   client.modelUnload("echo");
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 TEST_P(EchoParamFixture, EchoGrpc) {
   const auto params = GetParam();
   auto multiplier = std::get<4>(params);
@@ -154,7 +155,7 @@ TEST_P(EchoParamFixture, EchoGrpc) {
   proteus::startGrpcServer(50051);
   auto client = proteus::GrpcClient("localhost:50051");
 
-  client.modelLoad("echo", nullptr);
+  client.workerLoad("echo", nullptr);
 
   auto request = this->construct_request();
 
@@ -173,6 +174,7 @@ TEST_P(EchoParamFixture, EchoGrpc) {
   client.modelUnload("echo");
   proteus::stopGrpcServer();
 }
+#endif
 
 // add_id, add_input_parameters, add_request_parameters, add_outputs, multiplier
 std::tuple<bool, bool, bool, bool, int> configs[] = {

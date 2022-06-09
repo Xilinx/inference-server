@@ -25,20 +25,20 @@ void test(proteus::Client* client) {
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  auto endpoint = client->modelLoad(worker, nullptr);
+  auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
   // do a redundant load
-  endpoint = client->modelLoad(worker, nullptr);
+  endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
 
   // load the same worker with a different config
   proteus::RequestParameters parameters;
   parameters.put("max_buffer_num", 100);
-  auto endpoint_1 = client->modelLoad(worker, &parameters);
+  auto endpoint_1 = client->workerLoad(worker, &parameters);
   EXPECT_EQ(endpoint_1, "echo-0");
 
   parameters.put("share", false);
-  endpoint_1 = client->modelLoad(worker, &parameters);
+  endpoint_1 = client->workerLoad(worker, &parameters);
   EXPECT_EQ(endpoint_1, "echo-0");
 
   EXPECT_TRUE(client->modelReady(endpoint));
@@ -54,13 +54,17 @@ void test(proteus::Client* client) {
   }
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, ModelLoad) { test(client_.get()); }
+TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
+#endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, ModelLoad) {
+TEST_F(BaseFixture, workerLoad) {
   proteus::NativeClient client;
   test(&client);
 }
 
-TEST_F(HttpFixture, ModelLoad) { test(client_.get()); }
+#ifdef PROTEUS_ENABLE_HTTP
+TEST_F(HttpFixture, workerLoad) { test(client_.get()); }
+#endif

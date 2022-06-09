@@ -32,23 +32,23 @@ class TestLoad:
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        endpoint_0 = self.rest_client.modelLoad("echo")  # this loads the model
+        endpoint_0 = self.rest_client.workerLoad("echo")  # this loads the model
         assert endpoint_0 == "echo"
-        response = self.rest_client.modelLoad(
+        response = self.rest_client.workerLoad(
             "echo"
         )  # this will do nothing and return 200
         assert response == "echo"
 
         parameters = proteus.RequestParameters()
         parameters.put("max_buffer_num", 100)
-        endpoint_1 = self.rest_client.modelLoad(
+        endpoint_1 = self.rest_client.workerLoad(
             "echo", parameters
         )  # load echo with a different config
         assert endpoint_1 == "echo-0"
 
         # load echo with the same config as earlier but force allocation of a new worker
         parameters.put("share", False)
-        response = self.rest_client.modelLoad("echo", parameters)
+        response = self.rest_client.workerLoad("echo", parameters)
         assert response == "echo-0"
 
         assert self.rest_client.modelReady(endpoint_0)

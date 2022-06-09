@@ -99,7 +99,7 @@ def main(args):
     parameters.put("output_classes", output_classes)
     parameters.put("inter_op", args.inter_op)
     parameters.put("intra_op", args.intra_op)
-    worker_name = client.modelLoad("TfZendnn", parameters)
+    worker_name = client.workerLoad("TfZendnn", parameters)
 
     ready = False
     while not ready:
