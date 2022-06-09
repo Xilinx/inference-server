@@ -33,6 +33,10 @@
 #include <drogon/HttpTypes.h>       // for Options, Get, Post
 #endif
 
+namespace proteus {
+class ModelRepository;
+}
+
 namespace proteus::http {
 
 #ifdef PROTEUS_ENABLE_HTTP
@@ -48,7 +52,7 @@ class ProteusHttpServer
   : public drogon::HttpController<ProteusHttpServer, false> {
  public:
   /// Constructor
-  explicit ProteusHttpServer(const std::string &model_repository);
+  explicit ProteusHttpServer(ModelRepository *repository);
 
   METHOD_LIST_BEGIN
 #ifdef PROTEUS_ENABLE_REST
@@ -242,7 +246,7 @@ class ProteusHttpServer
                std::function<void(const drogon::HttpResponsePtr &)> &&callback);
 #endif
  private:
-  std::string model_repository_;
+  ModelRepository *model_repository_;
 #ifdef PROTEUS_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};
 #endif
@@ -257,7 +261,7 @@ class ProteusHttpServer
  *
  * @param port the port to use for the server
  */
-void start(int port, const std::string &model_repository);
+void start(int port, ModelRepository *model_repository);
 
 /// Stop the REST server
 void stop();

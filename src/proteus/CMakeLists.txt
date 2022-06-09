@@ -52,8 +52,7 @@ add_library(proteus ${TYPE}
     ${SERVER_OBJS}
 )
 enable_ipo_on_target(proteus)
-target_link_libraries(proteus PRIVATE helpers)
-target_link_libraries(proteus PRIVATE Threads::Threads jsoncpp ${CMAKE_DL_LIBS})
+target_link_libraries(proteus PRIVATE helpers Threads::Threads jsoncpp ${CMAKE_DL_LIBS} lib_config)
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(proteus PRIVATE xir)
 endif()

@@ -257,15 +257,20 @@ std::string Manager::Endpoints::add(const std::string& worker,
   auto endpoint = this->load(worker, &parameters);
   auto* worker_info = this->get(endpoint);
 
+  std::string worker_name = endpoint;
+  if (parameters.has("worker")) {
+    worker_name = parameters.get<std::string>("worker");
+  }
+
   // if the worker doesn't exist yet, we need to create it
   try {
     if (worker_info == nullptr) {
-      auto new_worker = std::make_unique<WorkerInfo>(endpoint, &parameters);
+      auto new_worker = std::make_unique<WorkerInfo>(worker_name, &parameters);
       this->workers_.insert(std::make_pair(endpoint, std::move(new_worker)));
       // if the worker exists but the share parameter is false, we need to add
       // one
     } else if (!share) {
-      worker_info->addAndStartWorker(endpoint, &parameters);
+      worker_info->addAndStartWorker(worker_name, &parameters);
     }
   } catch (...) {
     // undo the load if the worker creation fails

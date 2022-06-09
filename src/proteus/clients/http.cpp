@@ -36,11 +36,12 @@
 
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
 #include "proteus/clients/http_internal.hpp"  // for mapJsonToResponse, mapP...
+#include "proteus/core/model_repository.hpp"  // for ModelRepository
 #include "proteus/servers/http_server.hpp"    // for stop, start
 
 namespace proteus {
 
-void startHttpServer(int port, const std::string& model_repository) {
+void startHttpServer(int port, ModelRepository* model_repository) {
 #ifdef PROTEUS_ENABLE_HTTP
   std::thread{http::start, port, model_repository}.detach();
 #else

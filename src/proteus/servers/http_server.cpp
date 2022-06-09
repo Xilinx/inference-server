@@ -38,6 +38,7 @@
 #include "proteus/clients/http_internal.hpp"      // for propagate, DrogonHttp
 #include "proteus/clients/native.hpp"             // for getHardware
 #include "proteus/core/manager.hpp"               // for Manager
+#include "proteus/core/model_repository.hpp"      // for loadModel
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/observation/logging.hpp"        // for Logger
@@ -51,8 +52,8 @@ using drogon::HttpStatusCode;
 
 namespace proteus::http {
 
-void start(int port, const std::string &model_repository) {
-  auto controller = std::make_shared<v2::ProteusHttpServer>(model_repository);
+void start(int port, ModelRepository *repository) {
+  auto controller = std::make_shared<v2::ProteusHttpServer>(repository);
 
   auto &app = drogon::app();
   app.registerController(controller);
@@ -78,8 +79,8 @@ void start(int port, const std::string &model_repository) {
 
 void stop() { drogon::app().quit(); }
 
-v2::ProteusHttpServer::ProteusHttpServer(const std::string &model_repository)
-  : model_repository_(model_repository) {
+v2::ProteusHttpServer::ProteusHttpServer(ModelRepository *repository)
+  : model_repository_(repository) {
   PROTEUS_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
 }
 
@@ -301,14 +302,8 @@ void v2::ProteusHttpServer::load(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  auto hyphen_pos = model.find('-');
-  // if there's a hyphen in the name, currently assuming it's from KServe. So,
-  // put that information into the parameters with the default path for KServe
-  // (/mnt/models)
-  if (hyphen_pos != std::string::npos) {
-    auto model_name = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
-    parameters->put("model", "/mnt/models/" + model + "/1/saved_model");
-  }
+  assert(model_repository_ != nullptr);
+  model_repository_->modelLoad(model, parameters.get());
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", model);
@@ -318,9 +313,8 @@ void v2::ProteusHttpServer::load(
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
-  std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(model, *parameters);
+    Manager::getInstance().loadWorker(model, *parameters);
   } catch (const std::exception &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     auto resp = errorHttpResponse("Error loading worker " + model,
@@ -333,7 +327,6 @@ void v2::ProteusHttpServer::load(
   }
 
   auto resp = HttpResponse::newHttpResponse();
-  resp->setBody(endpoint);
 #ifdef PROTEUS_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
