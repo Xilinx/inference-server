@@ -29,6 +29,39 @@ namespace fs = std::filesystem;
 
 namespace proteus {
 
+// TODO(varunsh): get rid of this duplicate code with the one in grpc_internal
+void mapProtoToParameters(
+  const google::protobuf::Map<std::string, inference::InferParameter>& params,
+  RequestParameters* parameters) {
+  using ParameterType = inference::InferParameter::ParameterChoiceCase;
+  for (const auto& [key, value] : params) {
+    auto type = value.parameter_choice_case();
+    switch (type) {
+      case ParameterType::kBoolParam: {
+        parameters->put(key, value.bool_param());
+        break;
+      }
+      case ParameterType::kInt64Param: {
+        // TODO(varunsh): parameters should switch to uint64?
+        parameters->put(key, static_cast<int>(value.int64_param()));
+        break;
+      }
+      case ParameterType::kDoubleParam: {
+        parameters->put(key, value.double_param());
+        break;
+      }
+      case ParameterType::kStringParam: {
+        parameters->put(key, value.string_param());
+        break;
+      }
+      default: {
+        // if not set
+        break;
+      }
+    }
+  }
+}
+
 ModelRepository::ModelRepository(const std::string& repository_path)
   : repository_(repository_path) {}
 
@@ -63,6 +96,8 @@ void ModelRepository::modelLoad(const std::string& model,
   } else {
     throw std::runtime_error("Unknown platform");
   }
+
+  mapProtoToParameters(config.parameters(), parameters);
 }
 
 }  // namespace proteus

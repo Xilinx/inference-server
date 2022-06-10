@@ -12,11 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROTEUS_TEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+list(APPEND targets)
 
-add_subdirectory(api)
-add_subdirectory(models)
-add_subdirectory(performance)
-add_subdirectory(src/proteus)
-add_subdirectory(unit)
-add_subdirectory(workers)
+if(${PROTEUS_ENABLE_TFZENDNN})
+    list(APPEND targets mnist)
+endif()
+
+foreach(target ${targets})
+    add_executable(test_${target} test_${target}.cpp)
+    target_link_libraries(test_${target} PRIVATE proteus Threads::Threads gtest gtest_main)
+    target_include_directories(test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
+
+    gtest_discover_tests(test_${target})
+endforeach()
+
+if(${PROTEUS_ENABLE_TFZENDNN})
+    target_link_libraries(test_mnist PRIVATE
+        opencv_core opencv_imgcodecs
+    )
+endif()

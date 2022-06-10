@@ -55,7 +55,7 @@ class HttpFixture : public BaseFixture {
   void SetUp() override {
     client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
-      proteus::startHttpServer(8998);
+      proteus::startHttpServer(8998, "/workspace/proteus/external/repository");
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();

@@ -20,51 +20,33 @@
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
 void test(proteus::Client* client) {
-  std::string worker = "echo";
+  const std::string model = "mnist";
 
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  auto endpoint = client->workerLoad(worker, nullptr);
-  EXPECT_EQ(endpoint, worker);
-  // do a redundant load
-  endpoint = client->workerLoad(worker, nullptr);
-  EXPECT_EQ(endpoint, worker);
+  client->modelLoad(model, nullptr);
 
-  // load the same worker with a different config
-  proteus::RequestParameters parameters;
-  parameters.put("max_buffer_num", 100);
-  auto endpoint_1 = client->workerLoad(worker, &parameters);
-  EXPECT_EQ(endpoint_1, "echo-0");
+  EXPECT_TRUE(client->modelReady(model));
 
-  parameters.put("share", false);
-  endpoint_1 = client->workerLoad(worker, &parameters);
-  EXPECT_EQ(endpoint_1, "echo-0");
-
-  EXPECT_TRUE(client->modelReady(endpoint));
-  EXPECT_TRUE(client->modelReady(endpoint_1));
-
-  client->modelUnload(endpoint);    // unload the first
-  client->modelUnload(endpoint);    // this will do nothing
-  client->modelUnload(endpoint_1);  // unload first echo-0 worker
-  client->modelUnload(endpoint_1);  // unload second echo-0 worker
+  client->modelUnload(model);  // unload the model
 
   while (!client->modelList().empty()) {
     std::this_thread::yield();
   }
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
-#endif
+// #ifdef PROTEUS_ENABLE_GRPC
+// // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+// TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
+// #endif
 
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, workerLoad) {
-  proteus::NativeClient client;
-  test(&client);
-}
+// // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+// TEST_F(BaseFixture, workerLoad) {
+//   proteus::NativeClient client;
+//   test(&client);
+// }
 
 #ifdef PROTEUS_ENABLE_HTTP
-TEST_F(HttpFixture, workerLoad) { test(client_.get()); }
+TEST_F(HttpFixture, modelLoad) { test(client_.get()); }
 #endif

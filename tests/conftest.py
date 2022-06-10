@@ -49,7 +49,8 @@ def pytest_sessionstart(session):
 
     proteus_command = [str(run_path)]
     http_port = session.config.getoption("--http_port")
-    proteus_command.extend(["--http_port", str(http_port)])
+    proteus_command.extend(["--http-port", str(http_port)])
+    proteus_command.extend(["--model-repository", root_path/"external/repository"])
 
     http_server_addr = "http://" + get_http_addr(session.config)
     addr = socket.gethostbyname(session.config.getoption("hostname"))
