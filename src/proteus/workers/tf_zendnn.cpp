@@ -326,7 +326,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int i = 0; i < inputs.size(); i++) {
         InferenceResponseOutput output;
         auto buffer = std::make_shared<std::vector<float>>();
-        buffer->reserve(response_size);
+        buffer->resize(response_size);
 
         memcpy(buffer->data(),
                output_tensor[0].flat<float>().data() + (i * response_size),

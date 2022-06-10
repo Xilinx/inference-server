@@ -51,6 +51,7 @@ void test(proteus::Client* client) {
   EXPECT_EQ(output.getSize(), 10);
   EXPECT_EQ(output.getDatatype(), DataType::FP32);
   const auto data = *static_cast<std::vector<float>*>(output.getData());
+  EXPECT_EQ(data.size(), 10);
 
   float max = 0;
   int index = -1;
@@ -70,10 +71,18 @@ void test(proteus::Client* client) {
 }
 
 #ifdef PROTEUS_ENABLE_GRPC
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, mnist) { test(client_.get()); }
 #endif
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, mnist) {
+  NativeClient client;
+  test(&client);
+}
+
 #ifdef PROTEUS_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, mnist) { test(client_.get()); }
 #endif
 

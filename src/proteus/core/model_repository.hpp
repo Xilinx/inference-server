@@ -24,12 +24,24 @@ class RequestParameters;
 
 class ModelRepository {
  public:
-  explicit ModelRepository(const std::string& repository_path);
+  static void modelLoad(const std::string& model,
+                        RequestParameters* parameters);
 
-  void modelLoad(const std::string& model, RequestParameters* parameters) const;
+  static void setRepository(const std::string& repository);
 
  private:
-  std::filesystem::path repository_;
+  class ModelRepositoryImpl {
+   public:
+    void modelLoad(const std::string& model,
+                   RequestParameters* parameters) const;
+
+    void setRepository(const std::string& repository);
+
+   private:
+    std::filesystem::path repository_;
+  };
+
+  inline static ModelRepositoryImpl repo_;
 };
 
 }  // namespace proteus

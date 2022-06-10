@@ -52,8 +52,8 @@ using drogon::HttpStatusCode;
 
 namespace proteus::http {
 
-void start(int port, const std::string &repository) {
-  auto controller = std::make_shared<v2::ProteusHttpServer>(repository);
+void start(int port) {
+  auto controller = std::make_shared<v2::ProteusHttpServer>();
 
   auto &app = drogon::app();
   app.registerController(controller);
@@ -79,8 +79,7 @@ void start(int port, const std::string &repository) {
 
 void stop() { drogon::app().quit(); }
 
-v2::ProteusHttpServer::ProteusHttpServer(const std::string &repository)
-  : model_repository_(repository) {
+v2::ProteusHttpServer::ProteusHttpServer() {
   PROTEUS_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
 }
 
@@ -302,7 +301,7 @@ void v2::ProteusHttpServer::load(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  model_repository_.modelLoad(model, parameters.get());
+  ModelRepository::modelLoad(model, parameters.get());
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", model);

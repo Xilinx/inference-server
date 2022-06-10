@@ -344,7 +344,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           output.setDatatype(this->output_type_);
 
           auto buffer = std::make_shared<std::vector<int8_t>>();
-          buffer->reserve(this->output_size_);
+          buffer->resize(this->output_size_);
           memcpy(buffer->data(),
                  reinterpret_cast<int8_t*>(output_index) +
                    (tensor_count * this->output_size_),

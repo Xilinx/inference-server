@@ -23,8 +23,7 @@
 #include <functional>  // for function
 #include <string>      // for allocator, string
 
-#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_HTTP, PROT...
-#include "proteus/core/model_repository.hpp"
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_HTTP, PROT...
 #include "proteus/observation/logging.hpp"  // for LoggerPtr
 
 #ifdef PROTEUS_ENABLE_HTTP
@@ -49,7 +48,7 @@ class ProteusHttpServer
   : public drogon::HttpController<ProteusHttpServer, false> {
  public:
   /// Constructor
-  explicit ProteusHttpServer(const std::string &repository);
+  explicit ProteusHttpServer();
 
   METHOD_LIST_BEGIN
 #ifdef PROTEUS_ENABLE_REST
@@ -242,9 +241,8 @@ class ProteusHttpServer
   void metrics(const drogon::HttpRequestPtr &req,
                std::function<void(const drogon::HttpResponsePtr &)> &&callback);
 #endif
- private:
-  ModelRepository model_repository_;
 #ifdef PROTEUS_ENABLE_LOGGING
+ private:
   Logger logger_{Loggers::kServer};
 #endif
 };
@@ -258,7 +256,7 @@ class ProteusHttpServer
  *
  * @param port the port to use for the server
  */
-void start(int port, const std::string &repository);
+void start(int port);
 
 /// Stop the REST server
 void stop();

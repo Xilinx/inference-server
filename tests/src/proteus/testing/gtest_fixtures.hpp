@@ -32,7 +32,7 @@ class GrpcFixture : public BaseFixture {
   void SetUp() override {
     client_ = std::make_unique<proteus::GrpcClient>("localhost:50051");
     if (!client_->serverLive()) {
-      proteus::startGrpcServer(50051, "/workspace/proteus/external/repository");
+      proteus::startGrpcServer(50051);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
@@ -55,7 +55,7 @@ class HttpFixture : public BaseFixture {
   void SetUp() override {
     client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
-      proteus::startHttpServer(8998, "/workspace/proteus/external/repository");
+      proteus::startHttpServer(8998);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();

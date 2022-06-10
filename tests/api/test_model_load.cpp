@@ -41,12 +41,13 @@ void test(proteus::Client* client) {
 TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
 #endif
 
-// // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-// TEST_F(BaseFixture, workerLoad) {
-//   proteus::NativeClient client;
-//   test(&client);
-// }
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, workerLoad) {
+  proteus::NativeClient client;
+  test(&client);
+}
 
 #ifdef PROTEUS_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, modelLoad) { test(client_.get()); }
 #endif

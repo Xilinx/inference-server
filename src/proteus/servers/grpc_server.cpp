@@ -94,9 +94,8 @@ class CallData : public CallDataBase {
   // Take in the "service" instance (in this case representing an asynchronous
   // server) and the completion queue "cq" used for asynchronous communication
   // with the gRPC runtime.
-  CallData(AsyncService* service, ::grpc::ServerCompletionQueue* cq,
-           ModelRepository* repository)
-    : service_(service), cq_(cq), repository_(repository), status_(CREATE) {}
+  CallData(AsyncService* service, ::grpc::ServerCompletionQueue* cq)
+    : service_(service), cq_(cq), status_(CREATE) {}
 
   virtual ~CallData() = default;
 
@@ -142,8 +141,6 @@ class CallData : public CallDataBase {
   // client.
   ::grpc::ServerContext ctx_;
 
-  ModelRepository* repository_;
-
   // What we get from the client.
   RequestType request_;
   // What we send back to the client.
@@ -160,10 +157,8 @@ class CallDataUnary : public CallData<RequestType, ReplyType> {
   // Take in the "service" instance (in this case representing an asynchronous
   // server) and the completion queue "cq" used for asynchronous communication
   // with the gRPC runtime.
-  CallDataUnary(AsyncService* service, ::grpc::ServerCompletionQueue* cq,
-                ModelRepository* repository)
-    : CallData<RequestType, ReplyType>(service, cq, repository),
-      responder_(&this->ctx_) {}
+  CallDataUnary(AsyncService* service, ::grpc::ServerCompletionQueue* cq)
+    : CallData<RequestType, ReplyType>(service, cq), responder_(&this->ctx_) {}
 
   void finish(const ::grpc::Status& status = ::grpc::Status::OK) override {
     // And we are done! Let the gRPC runtime know we've finished, using the
@@ -184,10 +179,8 @@ class CallDataServerStream : public CallData<RequestType, ReplyType> {
   // Take in the "service" instance (in this case representing an asynchronous
   // server) and the completion queue "cq" used for asynchronous communication
   // with the gRPC runtime.
-  CallDataServerStream(AsyncService* service, ::grpc::ServerCompletionQueue* cq,
-                       ModelRepository* repository)
-    : CallData<RequestType, ReplyType>(service, cq, repository),
-      responder_(&this->ctx_) {}
+  CallDataServerStream(AsyncService* service, ::grpc::ServerCompletionQueue* cq)
+    : CallData<RequestType, ReplyType>(service, cq), responder_(&this->ctx_) {}
 
   void write(const ReplyType& response) { responder_->Write(response, this); }
 
@@ -311,49 +304,43 @@ using InputBuilder =
   InferenceRequestInputBuilder<inference::ModelInferRequest_InferInputTensor>;
 
 #ifdef PROTEUS_ENABLE_LOGGING
-#define CALLDATA_IMPL(endpoint, type)                                      \
-  class CallData##endpoint                                                 \
-    : public CallData##type<inference::endpoint##Request,                  \
-                            inference::endpoint##Response> {               \
-   public:                                                                 \
-    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq,   \
-                       ModelRepository* repository)                        \
-      : CallData##type(service, cq, repository) {                          \
-      proceed();                                                           \
-    }                                                                      \
-                                                                           \
-   private:                                                                \
-    Logger logger_{Loggers::kServer};                                      \
-                                                                           \
-   protected:                                                              \
-    void addNewCallData() override {                                       \
-      new CallData##endpoint(service_, cq_, repository_);                  \
-    }                                                                      \
-    void waitForRequest() override {                                       \
-      service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_, \
-                                  this);                                   \
-    }                                                                      \
+#define CALLDATA_IMPL(endpoint, type)                                         \
+  class CallData##endpoint                                                    \
+    : public CallData##type<inference::endpoint##Request,                     \
+                            inference::endpoint##Response> {                  \
+   public:                                                                    \
+    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \
+      : CallData##type(service, cq) {                                         \
+      proceed();                                                              \
+    }                                                                         \
+                                                                              \
+   private:                                                                   \
+    Logger logger_{Loggers::kServer};                                         \
+                                                                              \
+   protected:                                                                 \
+    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
+    void waitForRequest() override {                                          \
+      service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
+                                  this);                                      \
+    }                                                                         \
     void handleRequest() override
 #else
-#define CALLDATA_IMPL(endpoint, type)                                      \
-  class CallData##endpoint                                                 \
-    : public CallData##type<inference::endpoint##Request,                  \
-                            inference::endpoint##Response> {               \
-   public:                                                                 \
-    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq,   \
-                       ModelRepository* repository)                        \
-      : CallData##type(service, cq, repository) {                          \
-      proceed();                                                           \
-    }                                                                      \
-                                                                           \
-   protected:                                                              \
-    void addNewCallData() override {                                       \
-      new CallData##endpoint(service_, cq_, repository);                   \
-    }                                                                      \
-    void waitForRequest() override {                                       \
-      service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_, \
-                                  this);                                   \
-    }                                                                      \
+#define CALLDATA_IMPL(endpoint, type)                                         \
+  class CallData##endpoint                                                    \
+    : public CallData##type<inference::endpoint##Request,                     \
+                            inference::endpoint##Response> {                  \
+   public:                                                                    \
+    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \
+      : CallData##type(service, cq) {                                         \
+      proceed();                                                              \
+    }                                                                         \
+                                                                              \
+   protected:                                                                 \
+    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
+    void waitForRequest() override {                                          \
+      service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
+                                  this);                                      \
+    }                                                                         \
     void handleRequest() override
 #endif
 
@@ -602,7 +589,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
 
   const std::string& model = request_.name();
 
-  repository_->modelLoad(model, parameters.get());
+  ModelRepository::modelLoad(model, parameters.get());
 
   std::string endpoint;
   try {
@@ -687,11 +674,10 @@ void CallDataModelInfer::handleRequest() {
 class GrpcServer final {
  public:
   /// Get the singleton GrpcServer instance
-  static GrpcServer& getInstance() { return create("", -1, ""); }
+  static GrpcServer& getInstance() { return create("", -1); }
 
-  static GrpcServer& create(const std::string& address, const int cq_count,
-                            const std::string& model_repository) {
-    static GrpcServer server(address, cq_count, model_repository);
+  static GrpcServer& create(const std::string& address, const int cq_count) {
+    static GrpcServer server(address, cq_count);
     return server;
   }
 
@@ -716,9 +702,7 @@ class GrpcServer final {
   }
 
  private:
-  GrpcServer(const std::string& address, const int cq_count,
-             const std::string& model_repository)
-    : repository_(model_repository) {
+  GrpcServer(const std::string& address, const int cq_count) {
     ServerBuilder builder;
     builder.SetMaxReceiveMessageSize(kMaxGrpcMessageSize);
     builder.SetMaxSendMessageSize(kMaxGrpcMessageSize);
@@ -748,16 +732,16 @@ class GrpcServer final {
     auto& my_cq = cq_.at(index);
 
     // Spawn a new CallData instance to serve new clients.
-    new CallDataServerLive(&service_, my_cq.get(), nullptr);
-    new CallDataServerMetadata(&service_, my_cq.get(), nullptr);
-    new CallDataServerReady(&service_, my_cq.get(), nullptr);
-    new CallDataModelList(&service_, my_cq.get(), nullptr);
-    new CallDataModelReady(&service_, my_cq.get(), nullptr);
-    new CallDataModelLoad(&service_, my_cq.get(), &repository_);
-    new CallDataModelUnload(&service_, my_cq.get(), &repository_);
-    new CallDataWorkerLoad(&service_, my_cq.get(), &repository_);
-    new CallDataWorkerUnload(&service_, my_cq.get(), &repository_);
-    new CallDataModelInfer(&service_, my_cq.get(), nullptr);
+    new CallDataServerLive(&service_, my_cq.get());
+    new CallDataServerMetadata(&service_, my_cq.get());
+    new CallDataServerReady(&service_, my_cq.get());
+    new CallDataModelList(&service_, my_cq.get());
+    new CallDataModelReady(&service_, my_cq.get());
+    new CallDataModelLoad(&service_, my_cq.get());
+    new CallDataModelUnload(&service_, my_cq.get());
+    new CallDataWorkerLoad(&service_, my_cq.get());
+    new CallDataWorkerUnload(&service_, my_cq.get());
+    new CallDataModelInfer(&service_, my_cq.get());
     // new CallDataStreamModelInfer(&service_, my_cq.get());
     void* tag;  // uniquely identifies a request.
     bool ok;
@@ -784,9 +768,9 @@ class GrpcServer final {
 
 namespace grpc {
 
-void start(int port, const std::string& model_repository) {
+void start(int port) {
   const std::string address = "0.0.0.0:" + std::to_string(port);
-  GrpcServer::create(address, 1, model_repository);
+  GrpcServer::create(address, 1);
 }
 
 void stop() {

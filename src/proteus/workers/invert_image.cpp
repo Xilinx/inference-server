@@ -193,7 +193,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           auto* output_data = static_cast<uint8_t*>(output_buffer);
 
           auto buffer = std::make_shared<std::vector<uint8_t>>();
-          buffer->reserve(input_size);
+          buffer->resize(input_size);
           memcpy(buffer->data(), output_data, input_size);
           auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
           output.setData(std::move(my_data_cast));

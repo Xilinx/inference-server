@@ -530,12 +530,11 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   return response;
 }
 
-void startGrpcServer(int port, const std::string& model_repository) {
+void startGrpcServer(int port) {
 #ifdef PROTEUS_ENABLE_GRPC
-  grpc::start(port, model_repository);
+  grpc::start(port);
 #else
   (void)port;  // suppress unused variable warning
-  (void)model_repository;
 #endif
 }
 

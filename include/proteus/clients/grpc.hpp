@@ -39,7 +39,7 @@ namespace proteus {
  *
  * @param port port to use
  */
-void startGrpcServer(int port, const std::string& model_repository = "");
+void startGrpcServer(int port);
 
 void stopGrpcServer();
 

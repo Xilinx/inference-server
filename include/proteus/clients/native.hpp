@@ -59,8 +59,6 @@ bool hasHardware(const std::string& kernel, size_t num);
 
 class NativeClient : public Client {
  public:
-  ~NativeClient();
-
   ServerMetadata serverMetadata() override;
   bool serverLive() override;
   bool serverReady() override;

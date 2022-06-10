@@ -62,11 +62,22 @@ void mapProtoToParameters2(
   }
 }
 
-ModelRepository::ModelRepository(const std::string& repository_path)
-  : repository_(repository_path) {}
-
 void ModelRepository::modelLoad(const std::string& model,
-                                RequestParameters* parameters) const {
+                                RequestParameters* parameters) {
+  repo_.modelLoad(model, parameters);
+}
+
+void ModelRepository::setRepository(const std::string& repository) {
+  repo_.setRepository(repository);
+}
+
+void ModelRepository::ModelRepositoryImpl::setRepository(
+  const std::string& repository_path) {
+  repository_ = repository_path;
+}
+
+void ModelRepository::ModelRepositoryImpl::modelLoad(
+  const std::string& model, RequestParameters* parameters) const {
   const auto model_path = repository_ / model;
   const auto config_path = model_path / "config.pbtxt";
 

@@ -33,6 +33,7 @@
 #include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/native_internal.hpp"  // for CppNativeApi
 #include "proteus/core/manager.hpp"             // for Manager
+#include "proteus/core/model_repository.hpp"    // for ModelRepository
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
 #include "proteus/helpers/exec.hpp"             // for exec
 #include "proteus/observation/logging.hpp"      // for initLogging
@@ -84,6 +85,8 @@ void initialize() {
 
   Manager::getInstance().init();
 
+  ModelRepository::setRepository("/workspace/proteus/external/repository");
+
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
 
@@ -103,8 +106,6 @@ void terminate() {
   AKS::SysManagerExt::deleteGlobal();
 #endif
 }
-
-NativeClient::~NativeClient() = default;
 
 ServerMetadata NativeClient::serverMetadata() {
   std::set<std::string, std::less<>> extensions;
@@ -130,8 +131,11 @@ bool NativeClient::serverReady() { return true; }
 void NativeClient::modelLoad(const std::string& model,
                              RequestParameters* parameters) {
   if (parameters == nullptr) {
-    Manager::getInstance().loadWorker(model, RequestParameters());
+    RequestParameters params;
+    ModelRepository::modelLoad(model, &params);
+    Manager::getInstance().loadWorker(model, params);
   } else {
+    ModelRepository::modelLoad(model, parameters);
     Manager::getInstance().loadWorker(model, *parameters);
   }
 }
