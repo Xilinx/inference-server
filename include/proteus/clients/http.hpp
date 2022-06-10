@@ -30,15 +30,13 @@
 
 namespace proteus {
 
-class ModelRepository;
-
 /**
  * @brief Start the HTTP server for collecting metrics. This is a no-op if
  * Proteus is compiled without HTTP support.
  *
  * @param port port to use
  */
-void startHttpServer(int port, ModelRepository* repository = nullptr);
+void startHttpServer(int port, const std::string& model_repository = "");
 
 /**
  * @brief Stop the HTTP server. This is a no-op if Proteus is compiled without

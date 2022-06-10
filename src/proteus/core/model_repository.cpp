@@ -60,8 +60,9 @@ void ModelRepository::modelLoad(const std::string& model,
     parameters->put("worker", "tfzendnn");
   } else if (platform == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
+  } else {
+    throw std::runtime_error("Unknown platform");
   }
-  throw std::runtime_error("Unknown platform");
 }
 
 }  // namespace proteus

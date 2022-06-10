@@ -19,6 +19,7 @@ private/
 uploads/
 docs/_build/
 external/artifacts/
+external/repository/
 external/aks/*
 !external/aks/reference
 !external/aks/README.rst

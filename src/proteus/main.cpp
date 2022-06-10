@@ -88,8 +88,6 @@ int main(int argc, char* argv[]) {
 
   proteus::initialize();
 
-  proteus::ModelRepository repository(model_repository);
-
 #ifdef PROTEUS_ENABLE_GRPC
   std::cout << "gRPC server starting at port " << grpc_port << "\n";
   proteus::grpc::start(grpc_port);
@@ -97,7 +95,7 @@ int main(int argc, char* argv[]) {
 
 #ifdef PROTEUS_ENABLE_HTTP
   std::cout << "HTTP server starting at port " << http_port << "\n";
-  proteus::http::start(http_port, &repository);
+  proteus::http::start(http_port, model_repository);
 #else
   while (1) {
     std::this_thread::yield();

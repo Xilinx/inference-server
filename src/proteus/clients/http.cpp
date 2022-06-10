@@ -41,7 +41,7 @@
 
 namespace proteus {
 
-void startHttpServer(int port, ModelRepository* model_repository) {
+void startHttpServer(int port, const std::string& model_repository) {
 #ifdef PROTEUS_ENABLE_HTTP
   std::thread{http::start, port, model_repository}.detach();
 #else
@@ -232,7 +232,7 @@ std::string HttpClient::workerLoad(const std::string& model,
 
   auto req = drogon::HttpRequest::newHttpJsonRequest(json);
   req->setMethod(drogon::Post);
-  auto path = "/v2/repository/models/" + model + "/load";
+  auto path = "/v2/workers/" + model + "/load";
   req->setPath(path);
   impl_->addHeaders(req);
 
@@ -250,7 +250,7 @@ void HttpClient::workerUnload(const std::string& model) {
   Json::Value json;
   auto req = drogon::HttpRequest::newHttpJsonRequest(json);
   req->setMethod(drogon::Post);
-  auto path = "/v2/repository/models/" + model + "/unload";
+  auto path = "/v2/workers/" + model + "/unload";
   req->setPath(path);
   impl_->addHeaders(req);
 

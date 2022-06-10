@@ -19,6 +19,7 @@
 docs/_build
 external/aks/libs
 external/artifacts
+external/repository
 private/
 
 # files

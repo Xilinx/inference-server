@@ -52,7 +52,7 @@ using drogon::HttpStatusCode;
 
 namespace proteus::http {
 
-void start(int port, ModelRepository *repository) {
+void start(int port, const std::string &repository) {
   auto controller = std::make_shared<v2::ProteusHttpServer>(repository);
 
   auto &app = drogon::app();
@@ -79,7 +79,7 @@ void start(int port, ModelRepository *repository) {
 
 void stop() { drogon::app().quit(); }
 
-v2::ProteusHttpServer::ProteusHttpServer(ModelRepository *repository)
+v2::ProteusHttpServer::ProteusHttpServer(const std::string &repository)
   : model_repository_(repository) {
   PROTEUS_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
 }
@@ -302,8 +302,7 @@ void v2::ProteusHttpServer::load(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  assert(model_repository_ != nullptr);
-  model_repository_->modelLoad(model, parameters.get());
+  model_repository_.modelLoad(model, parameters.get());
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", model);
@@ -391,15 +390,7 @@ void v2::ProteusHttpServer::workerLoad(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  auto hyphen_pos = worker.find('-');
-  // if there's a hyphen in the name, currently assuming it's from KServe. So,
-  // put that information into the parameters with the default path for KServe
-  // (/mnt/models)
-  if (hyphen_pos != std::string::npos) {
-    auto model_name =
-      worker.substr(hyphen_pos + 1, worker.length() - hyphen_pos);
-    parameters->put("model", "/mnt/models/" + worker + "/1/saved_model");
-  }
+  parameters->put("worker", worker);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", worker);
