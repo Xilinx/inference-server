@@ -45,14 +45,14 @@ message Config {
   repeated TensorMetadata outputs = 5;
 
   // Optional inference input tensor parameters.
-  map<string, InferParameter> parameters = 6;
+  map<string, InferParameter2> parameters = 6;
 }
 
 // An inference parameter value. The Parameters message describes a
 // "name"/"value" pair, where the "name" is the name of the parameter
 // and the "value" is a boolean, integer, or string corresponding to
 // the parameter.
-message InferParameter{
+message InferParameter2{
   // The parameter value can be a string, an int64, a boolean
   // or a message specific to a predefined parameter.
   oneof parameter_choice

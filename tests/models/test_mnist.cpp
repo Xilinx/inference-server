@@ -69,6 +69,10 @@ void test(proteus::Client* client) {
   }
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
+TEST_F(GrpcFixture, mnist) { test(client_.get()); }
+#endif
+
 #ifdef PROTEUS_ENABLE_HTTP
 TEST_F(HttpFixture, mnist) { test(client_.get()); }
 #endif

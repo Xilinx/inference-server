@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
 
 #ifdef PROTEUS_ENABLE_GRPC
   std::cout << "gRPC server starting at port " << grpc_port << "\n";
-  proteus::grpc::start(grpc_port);
+  proteus::grpc::start(grpc_port, model_repository);
 #endif
 
 #ifdef PROTEUS_ENABLE_HTTP

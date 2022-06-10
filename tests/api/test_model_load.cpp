@@ -36,10 +36,10 @@ void test(proteus::Client* client) {
   }
 }
 
-// #ifdef PROTEUS_ENABLE_GRPC
-// // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-// TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
-// #endif
+#ifdef PROTEUS_ENABLE_GRPC
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
+#endif
 
 // // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 // TEST_F(BaseFixture, workerLoad) {

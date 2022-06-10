@@ -30,10 +30,10 @@ namespace fs = std::filesystem;
 namespace proteus {
 
 // TODO(varunsh): get rid of this duplicate code with the one in grpc_internal
-void mapProtoToParameters(
-  const google::protobuf::Map<std::string, inference::InferParameter>& params,
+void mapProtoToParameters2(
+  const google::protobuf::Map<std::string, inference::InferParameter2>& params,
   RequestParameters* parameters) {
-  using ParameterType = inference::InferParameter::ParameterChoiceCase;
+  using ParameterType = inference::InferParameter2::ParameterChoiceCase;
   for (const auto& [key, value] : params) {
     auto type = value.parameter_choice_case();
     switch (type) {
@@ -97,7 +97,7 @@ void ModelRepository::modelLoad(const std::string& model,
     throw std::runtime_error("Unknown platform");
   }
 
-  mapProtoToParameters(config.parameters(), parameters);
+  mapProtoToParameters2(config.parameters(), parameters);
 }
 
 }  // namespace proteus

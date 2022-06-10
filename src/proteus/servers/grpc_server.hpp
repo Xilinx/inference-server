@@ -28,7 +28,7 @@
 
 namespace proteus::grpc {
 
-void start(int port);
+void start(int port, const std::string& model_repository);
 void stop();
 
 }  // namespace proteus::grpc

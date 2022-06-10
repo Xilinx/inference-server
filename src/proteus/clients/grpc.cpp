@@ -197,7 +197,7 @@ void GrpcClient::modelLoad(const std::string& model,
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelLoad(&context, request, &reply);
 
-  if (status.ok()) {
+  if (!status.ok()) {
     throw std::runtime_error(status.error_message());
   }
 }
@@ -530,12 +530,12 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   return response;
 }
 
-void startGrpcServer(int port) {
+void startGrpcServer(int port, const std::string& model_repository) {
 #ifdef PROTEUS_ENABLE_GRPC
-  std::string address = "localhost:" + std::to_string(port);
-  grpc::start(address);
+  grpc::start(port, model_repository);
 #else
   (void)port;  // suppress unused variable warning
+  (void)model_repository;
 #endif
 }
 
