@@ -124,6 +124,7 @@ add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
 add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
 add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
 add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
+add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
 
 message(STATUS "Derived Options:")
 if(${PROTEUS_ENABLE_REST} OR ${PROTEUS_ENABLE_METRICS})

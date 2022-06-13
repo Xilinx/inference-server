@@ -30,7 +30,7 @@ void wrapHttpClient(py::module_ &m) {
   using proteus::HttpClient;
 
   m.def("startHttpServer", &proteus::startHttpServer, py::arg("port"),
-        py::arg("model_repository") = "", DOCS(startHttpServer));
+        DOCS(startHttpServer));
   m.def("stopHttpServer", &proteus::stopHttpServer, DOCS(stopHttpServer));
 
   py::class_<HttpClient, proteus::Client>(m, "HttpClient")
@@ -50,6 +50,11 @@ void wrapHttpClient(py::module_ &m) {
          DOCS(HttpClient, modelLoad))
     .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
          DOCS(HttpClient, modelUnload))
+    .def("workerLoad", &HttpClient::workerLoad, py::arg("model"),
+         py::arg("parameters") = proteus::RequestParameters(),
+         DOCS(HttpClient, workerLoad))
+    .def("workerUnload", &HttpClient::workerUnload, py::arg("model"),
+         DOCS(HttpClient, workerUnload))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
          py::arg("request"), DOCS(HttpClient, modelInfer))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList));
