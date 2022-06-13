@@ -23,7 +23,10 @@
 #include <fstream>
 
 #include "model_config.pb.h"
+#include "proteus/core/manager.hpp"
 #include "proteus/core/predict_api.hpp"
+#include "proteus/core/worker_info.hpp"
+#include "proteus/observation/logging.hpp"
 
 namespace fs = std::filesystem;
 
@@ -109,6 +112,57 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   }
 
   mapProtoToParameters2(config.parameters(), parameters);
+}
+
+void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
+                                      const std::string& dir,
+                                      const std::string& filename,
+                                      efsw::Action action,
+                                      std::string oldFilename) {
+  Logger logger{Loggers::kServer};
+  if (filename == "config.pbtxt") {
+    if (action == efsw::Actions::Add) {
+      // arbitrary delay to make sure filesystem has settled
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      auto model = fs::path(dir).parent_path().filename();
+      // TODO(varunsh): replace with native client
+      RequestParameters params;
+      try {
+        ModelRepository::modelLoad(model, &params);
+        Manager::getInstance().loadWorker(model, params);
+      } catch (const std::runtime_error& e) {
+        PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
+      }
+    } else if (action == efsw::Actions::Delete) {
+      // arbitrary delay to make sure filesystem has settled
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      auto model = fs::path(dir).parent_path().filename();
+      // TODO(varunsh): replace with native client
+      Manager::getInstance().unloadWorker(model);
+    }
+  }
+
+  switch (action) {
+    case efsw::Actions::Add:
+      PROTEUS_LOG_DEBUG(
+        logger, "DIR (" + dir + ") FILE (" + filename + ") has event Added");
+      break;
+    case efsw::Actions::Delete:
+      PROTEUS_LOG_DEBUG(
+        logger, "DIR (" + dir + ") FILE (" + filename + ") has event Delete");
+      break;
+    case efsw::Actions::Modified:
+      PROTEUS_LOG_DEBUG(
+        logger, "DIR (" + dir + ") FILE (" + filename + ") has event Modified");
+      break;
+    case efsw::Actions::Moved:
+      PROTEUS_LOG_DEBUG(logger, "DIR (" + dir + ") FILE (" + filename +
+                                  ") has event Moved from (" + oldFilename +
+                                  ")");
+      break;
+    default:
+      PROTEUS_LOG_ERROR(logger, "Should never happen");
+  }
 }
 
 }  // namespace proteus

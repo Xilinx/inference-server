@@ -15,12 +15,20 @@
 #ifndef GUARD_PROTEUS_CORE_MODEL_REPOSITORY
 #define GUARD_PROTEUS_CORE_MODEL_REPOSITORY
 
+#include <efsw/efsw.hpp>
 #include <filesystem>
 #include <string>
 
 namespace proteus {
 
 class RequestParameters;
+
+class UpdateListener : public efsw::FileWatchListener {
+ public:
+  void handleFileAction(efsw::WatchID watchid, const std::string& dir,
+                        const std::string& filename, efsw::Action action,
+                        std::string oldFilename) override;
+};
 
 class ModelRepository {
  public:

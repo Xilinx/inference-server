@@ -20,7 +20,7 @@ endif()
 target_link_options(proteus-server PRIVATE "LINKER:-E")
 enable_ipo_on_target(proteus-server)
 
-target_link_libraries(proteus-server PRIVATE batching buffers clients core servers)
+target_link_libraries(proteus-server PRIVATE batching buffers clients core servers efsw)
 
 add_subdirectory(batching)
 add_subdirectory(bindings)
@@ -52,7 +52,7 @@ add_library(proteus ${TYPE}
     ${SERVER_OBJS}
 )
 enable_ipo_on_target(proteus)
-target_link_libraries(proteus PRIVATE helpers Threads::Threads jsoncpp ${CMAKE_DL_LIBS} lib_config)
+target_link_libraries(proteus PRIVATE helpers Threads::Threads jsoncpp ${CMAKE_DL_LIBS} lib_config efsw)
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(proteus PRIVATE xir)
 endif()

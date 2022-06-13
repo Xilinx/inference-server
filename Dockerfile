@@ -458,6 +458,15 @@ RUN VERSION=2.9.1 \
     && cd /tmp \
     && rm -fr /tmp/*
 
+# install efsw for directory monitoring
+RUN git clone https://github.com/SpartanJ/efsw.git \
+    && cd efsw && mkdir build && cd build \
+    && cmake .. \
+    && make -j \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cd /tmp && rm -fr /tmp/*
+
 # Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
 # Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
 # RUN cp -rf ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
