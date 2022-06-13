@@ -349,20 +349,17 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           // move from migraphx_output to outputs
           auto shape   = migraphx_output[0].get_shape();
 
-          // recast the output from a blob to an array of float
+          // recast the migraphx output from a blob to an array of float
           auto lengths = shape.lengths();
           size_t num_results =
               std::accumulate(lengths.begin(), lengths.end(), 1, std::multiplies<size_t>());
           float* results = reinterpret_cast<float*>(migraphx_output[0].data());
-for(size_t ii = 0; ii < 3; ii++)
-  printf("result %lu is %f\n",ii, results[ii]);
 
-    // for debug only.  We return all results.  The worker does not interpret results.  Compare these with 
-    //    values seen by client.
-    float* myMax     = std::max_element(results, results + num_results);
-    int answer     = myMax - results;
-
-    std::cout << "the top-ranked index is " << answer << " val. " << *myMax << std::endl;
+          // for debug  Compare this result with 
+          //    values seen by client to verify packet is correct.
+          float* myMax     = std::max_element(results, results + num_results);
+          int answer     = myMax - results;
+          std::cout << "the top-ranked index is " << answer << " val. " << *myMax << std::endl;
 
           // the kserve specification for response output is at 
           // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
@@ -375,15 +372,15 @@ for(size_t ii = 0; ii < 3; ii++)
             output.setName(output_name);
           }
           output.setShape({num_results});
+          // output.setData(results);
+
+          // Copy migraphx results to a buffer and add to output
           auto buffer = std::make_shared<std::vector<_Float32>>();
           buffer->resize(num_results);
-          memcpy(&((*buffer)[0]), results, num_results * getSize(output_dt_));  //    <== extra copy from results to buffer to output?  output.setData(results)?
+          memcpy(&((*buffer)[0]), results, num_results * getSize(output_dt_));  
           auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
           output.setData(std::move(my_data_cast));
 
-          void * asdf = output.getData();
-          uint32_t* asdfg = static_cast<uint32_t*>( asdf);
-          printf(" $$$ buffer[0] is %f and output starts with %X and type is %d\n", (*buffer)[0], *asdfg, (int)output.getDatatype());
           resp.addOutput(output);
 
         } catch (const std::exception& e) {
