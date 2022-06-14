@@ -102,6 +102,7 @@ int main(int argc, char* argv[]) {
   proteus::Logger logger{proteus::Loggers::kServer};
 
   proteus::ModelRepository::setRepository(model_repository);
+  PROTEUS_LOG_INFO(logger, "Using model repository: " + model_repository);
 
   std::unique_ptr<efsw::FileWatcher> file_watcher;
   std::unique_ptr<proteus::UpdateListener> listener;

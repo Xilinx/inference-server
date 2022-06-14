@@ -288,10 +288,11 @@ void v2::ProteusHttpServer::load(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) {
-  PROTEUS_LOG_INFO(logger_, "Received load request");
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  trace->setAttribute("model", model);
 #endif
+  PROTEUS_LOG_INFO(logger_, "Received load request for " + model);
 
   auto json = req->getJsonObject();
   RequestParametersPtr parameters = nullptr;
@@ -301,12 +302,13 @@ void v2::ProteusHttpServer::load(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  ModelRepository::modelLoad(model, parameters.get());
-
-#ifdef PROTEUS_ENABLE_TRACING
-  trace->setAttribute("model", model);
-#endif
-  PROTEUS_LOG_INFO(logger_, "Received load request is for " + model);
+  try {
+    ModelRepository::modelLoad(model, parameters.get());
+  } catch (const std::exception &e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    auto resp = errorHttpResponse("Error loading model " + model,
+                                  HttpStatusCode::k400BadRequest);
+  }
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());

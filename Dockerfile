@@ -828,7 +828,7 @@ RUN ldconfig \
     && ./proteus install --all \
     && ./proteus install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     # build the static GUI files
-    && cd src/gui && npm install && npm run build \
+    # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
@@ -881,7 +881,7 @@ WORKDIR /home/${UNAME}
 COPY --from=proteus_builder_2 ${COPY_DIR} /
 
 # get the static gui files
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
+# COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
 # get the entrypoint script
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the systemctl executable - pulled in by get_dynamic_dependencies.sh

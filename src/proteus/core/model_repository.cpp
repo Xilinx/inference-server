@@ -81,8 +81,18 @@ void ModelRepository::ModelRepositoryImpl::setRepository(
 
 void ModelRepository::ModelRepositoryImpl::modelLoad(
   const std::string& model, RequestParameters* parameters) const {
-  const auto model_path = repository_ / model;
-  const auto config_path = model_path / "config.pbtxt";
+  const fs::path config_file = "config.pbtxt";
+
+  auto model_path = repository_ / model;
+  auto config_path = model_path / config_file;
+
+  // KServe can sometimes create directories like model/model/config_file
+  // so if model/config_file doesn't exist, try searching a directory lower too
+  if (!fs::exists(config_path) &&
+      fs::exists(model_path / model / config_file)) {
+    model_path /= model;
+    config_path = model_path / config_file;
+  }
 
   // TODO(varunsh): support other versions than 1/
   parameters->put("model", model_path / "1/saved_model");
