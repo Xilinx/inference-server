@@ -18,7 +18,6 @@ list(APPEND targets
     worker_info
     data_types
     interface
-    model_repository
 )
 
 foreach(target ${targets})
@@ -58,6 +57,9 @@ target_link_libraries(lib_config INTERFACE protobuf::libprotobuf)
 protobuf_generate(TARGET lib_config LANGUAGE cpp)
 disable_target_linting(lib_config)
 
+add_library(model_repository OBJECT model_repository.cpp)
+target_include_directories(model_repository PRIVATE ${PROTEUS_INCLUDE_DIRS})
+enable_ipo_on_target(model_repository)
 target_include_directories(model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>)
 target_link_libraries(model_repository INTERFACE lib_config)
 
