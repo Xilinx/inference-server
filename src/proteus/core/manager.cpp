@@ -86,6 +86,7 @@ bool Manager::workerReady(const std::string& key) {
   return metadata.isReady();
 }
 
+// FIXME(varunsh): potential race condition if the worker is being deleted
 ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   auto* worker = this->getWorker(key);
   auto* foo = worker->workers_.begin()->second;

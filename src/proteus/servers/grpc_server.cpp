@@ -23,7 +23,7 @@
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
 #include <grpcpp/grpcpp.h>                       // for Status, InsecureSer...
 
-#include <algorithm>   // for fill, max
+#include <algorithm>   // for fill, max, transform
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for uint64_t, int16_t
 #include <cstring>     // for memcpy
@@ -588,12 +588,15 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   const std::string& model = request_.name();
+  auto model_lower = model;
+  std::transform(model_lower.begin(), model_lower.end(), model_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  ModelRepository::modelLoad(model, parameters.get());
+  ModelRepository::modelLoad(model_lower, parameters.get());
 
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(model, *parameters);
+    endpoint = Manager::getInstance().loadWorker(model_lower, *parameters);
   } catch (const std::exception& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -606,8 +609,11 @@ CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelUnload, Unary) {
   const auto& name = request_.name();
+  auto worker_lower = name;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  Manager::getInstance().unloadWorker(name);
+  Manager::getInstance().unloadWorker(worker_lower);
   finish();
 }
 CALLDATA_IMPL_END
@@ -616,12 +622,15 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   const std::string& worker = request_.name();
+  auto worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  parameters->put("worker", worker);
+  parameters->put("worker", worker_lower);
 
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(worker, *parameters);
+    endpoint = Manager::getInstance().loadWorker(worker_lower, *parameters);
   } catch (const std::exception& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -634,9 +643,12 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(WorkerUnload, Unary) {
-  const auto& name = request_.name();
+  const auto& worker = request_.name();
+  auto worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  Manager::getInstance().unloadWorker(name);
+  Manager::getInstance().unloadWorker(worker_lower);
   finish();
 }
 CALLDATA_IMPL_END

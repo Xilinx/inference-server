@@ -24,6 +24,7 @@
 #include <json/value.h>               // for Value, arrayValue
 #include <trantor/utils/Logger.h>     // for Logger, Logger::kWarn
 
+#include <algorithm>  // for transform
 #include <chrono>     // for high_resolution_clock
 #include <exception>  // for exception
 #include <memory>     // for allocator, shared_ptr
@@ -288,11 +289,14 @@ void v2::ProteusHttpServer::load(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) {
+  std::string model_lower = model;
+  std::transform(model_lower.begin(), model_lower.end(), model_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
-  trace->setAttribute("model", model);
+  trace->setAttribute("model", model_lower);
 #endif
-  PROTEUS_LOG_INFO(logger_, "Received load request for " + model);
+  PROTEUS_LOG_INFO(logger_, "Received load request for " + model_lower);
 
   auto json = req->getJsonObject();
   RequestParametersPtr parameters = nullptr;
@@ -303,10 +307,10 @@ void v2::ProteusHttpServer::load(
   }
 
   try {
-    ModelRepository::modelLoad(model, parameters.get());
+    ModelRepository::modelLoad(model_lower, parameters.get());
   } catch (const std::exception &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading model " + model,
+    auto resp = errorHttpResponse("Error loading model " + model_lower,
                                   HttpStatusCode::k400BadRequest);
   }
 
@@ -314,10 +318,10 @@ void v2::ProteusHttpServer::load(
   trace->setAttributes(parameters.get());
 #endif
   try {
-    Manager::getInstance().loadWorker(model, *parameters);
+    Manager::getInstance().loadWorker(model_lower, *parameters);
   } catch (const std::exception &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading worker " + model,
+    auto resp = errorHttpResponse("Error loading worker " + model_lower,
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
     auto context = trace->propagate();
@@ -343,22 +347,9 @@ void v2::ProteusHttpServer::unload(
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
-  //   auto json = req->getJsonObject();
-  //   std::string name;
-  //   if (json->isMember("model_name")) {
-  //     name = json->get("model_name", "").asString();
-  //   } else {
-  //     auto resp = errorHttpResponse("No model name specifed in unload
-  //     request",
-  //                                   HttpStatusCode::k400BadRequest);
-  // #ifdef PROTEUS_ENABLE_TRACING
-  //     auto context = trace->propagate();
-  //     propagate(resp.get(), context);
-  // #endif
-  //     callback(resp);
-  //     return;
-  //   }
   std::string name = model;
+  std::transform(name.begin(), name.end(), name.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", name);
@@ -391,22 +382,25 @@ void v2::ProteusHttpServer::workerLoad(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  parameters->put("worker", worker);
+  std::string worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  parameters->put("worker", worker_lower);
 
 #ifdef PROTEUS_ENABLE_TRACING
-  trace->setAttribute("model", worker);
+  trace->setAttribute("model", worker_lower);
 #endif
-  PROTEUS_LOG_INFO(logger_, "Received load request is for " + worker);
+  PROTEUS_LOG_INFO(logger_, "Received load request is for " + worker_lower);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(worker, *parameters);
+    endpoint = Manager::getInstance().loadWorker(worker_lower, *parameters);
   } catch (const std::exception &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading worker " + worker,
+    auto resp = errorHttpResponse("Error loading worker " + worker_lower,
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
     auto context = trace->propagate();
@@ -449,6 +443,8 @@ void v2::ProteusHttpServer::workerUnload(
   //     return;
   //   }
   std::string name = worker;
+  std::transform(name.begin(), name.end(), name.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", name);

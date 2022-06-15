@@ -17,6 +17,7 @@
 #include <json/reader.h>  // for CharReader, CharReaderBui...
 #include <json/value.h>   // for Value, arrayValue
 
+#include <algorithm>   // for transform
 #include <functional>  // for _Bind_helper<>::type, _Pl...
 #include <memory>      // for allocator, shared_ptr
 #include <string>      // for string, operator+, char_t...
@@ -77,6 +78,8 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                    "No model found in request");
     return;
   }
+  std::transform(model.begin(), model.end(), model.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
   auto request = std::make_unique<DrogonWs>(conn, std::move(json));
 

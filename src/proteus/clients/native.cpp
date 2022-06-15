@@ -130,22 +130,28 @@ bool NativeClient::serverReady() { return true; }
 
 void NativeClient::modelLoad(const std::string& model,
                              RequestParameters* parameters) {
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
   if (parameters == nullptr) {
     RequestParameters params;
-    ModelRepository::modelLoad(model, &params);
-    Manager::getInstance().loadWorker(model, params);
+    ModelRepository::modelLoad(worker_lower, &params);
+    Manager::getInstance().loadWorker(worker_lower, params);
   } else {
-    ModelRepository::modelLoad(model, parameters);
-    Manager::getInstance().loadWorker(model, *parameters);
+    ModelRepository::modelLoad(worker_lower, parameters);
+    Manager::getInstance().loadWorker(worker_lower, *parameters);
   }
 }
 
 std::string NativeClient::workerLoad(const std::string& model,
                                      RequestParameters* parameters) {
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
   if (parameters == nullptr) {
-    return Manager::getInstance().loadWorker(model, RequestParameters());
+    return Manager::getInstance().loadWorker(worker_lower, RequestParameters());
   }
-  return Manager::getInstance().loadWorker(model, *parameters);
+  return Manager::getInstance().loadWorker(worker_lower, *parameters);
 }
 
 InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
@@ -177,11 +183,17 @@ InferenceResponse NativeClient::modelInfer(const std::string& model,
 }
 
 void NativeClient::modelUnload(const std::string& model) {
-  Manager::getInstance().unloadWorker(model);
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  Manager::getInstance().unloadWorker(worker_lower);
 }
 
 void NativeClient::workerUnload(const std::string& model) {
-  Manager::getInstance().unloadWorker(model);
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  Manager::getInstance().unloadWorker(worker_lower);
 }
 
 bool NativeClient::modelReady(const std::string& model) {

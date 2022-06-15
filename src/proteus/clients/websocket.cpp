@@ -93,8 +93,8 @@ class WebSocketClient::WebSocketClientImpl {
   ~WebSocketClientImpl() {
     if (auto connection = ws_client_->getConnection(); connection != nullptr) {
       connection->shutdown();
-      ws_client_->stop();
     }
+    ws_client_->stop();
     loop_.getLoop()->quit();
   }
 

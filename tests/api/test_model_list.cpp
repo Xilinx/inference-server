@@ -34,7 +34,7 @@ void test(proteus::Client* client) {
   EXPECT_EQ(models.size(), 1);
   EXPECT_EQ(models.at(0), endpoint);
 
-  const std::string worker_2 = "InvertImage";
+  const std::string worker_2 = "invertimage";
   const auto endpoint_2 = client->workerLoad(worker_2, nullptr);
   EXPECT_EQ(endpoint_2, worker_2);
   EXPECT_TRUE(client->modelReady(endpoint_2));
