@@ -48,8 +48,14 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :ubuntupackages:`gdb`,8.1-0ubuntu3,LGPL-2.1+ + others,Executable used for debugging
     :ubuntupackages:`git`,1:2.17.1-1ubuntu0.8,GPL-2 + others,Executable used for source control
     :ubuntupackages:`graphviz`,2.40.1-2,EPL-1.0 + others,Executable used to draw graphs in documentation
+    :ubuntupackages:`libboost1.65-dev`,1.65.1+dfsg-0ubuntu5,Boost,Used to build AKS kernels
+    :ubuntupackages:`libboost-filesystem1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
+    :ubuntupackages:`libboost-serialization1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
+    :ubuntupackages:`libboost-system1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
+    :ubuntupackages:`libboost-thread1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
     :ubuntupackages:`libbrotli-dev`,1.0.3-1ubuntu1.3,MIT,Dynamically linked by Drogon
     :ubuntupackages:`libc-ares-dev`,1.14.0-1ubuntu0.1,MIT + others,Dynamically linked by Drogon
+    :ubuntupackages:`libgoogle-glog-dev`,0.3.5-1,BSD-3,Dynamically linked by VART
     :ubuntupackages:`libjson-c-dev`,0.12.1-1.3ubuntu0.3,MIT,Dynamically linked by rt-engine
     :ubuntupackages:`libjsoncpp-dev`,1.7.4-3,MIT + others,Dynamically linked by proteus-server and Drogon
     :ubuntupackages:`libssl-dev`,1.1.1-1ubuntu2.1~18.04.13,Dual OpenSSL/SSLeay,Dynamically linked by Drogon
@@ -130,21 +136,24 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`gdraheim/docker-systemctl-replacement`,1.5.4505,EUPL,Executable created by pyinstaller for starting XRM
     :github:`drogonframework/drogon`,1.7.5,MIT,Dynamically linked by proteus-server for an HTTP and websocket server
     :github:`SpartanJ/efsw`,latest,MIT,Dynamically linked by proteus-server for directory monitoring
+    :github:`FFmpeg/FFmpeg`,3.4.8,LGPL-2.1+ + others,Dynamically linked by proteus-server for video processing
     :github:`tschaub/gh-pages`,latest,MIT,Executable used to publish documentation to gh-pages branch
     :github:`git-lfs/git-lfs`,2.13.3,MIT + others,Executable used to manage large files in git
     :github:`tianon/gosu`,1.12,Apache 2.0,Executable used to drop down to user when starting container
     :github:`google/googletest`,1.11.0,BSD-3,Statically linked by proteus's test executables
+    :github:`grpc/grpc`,1.44,Apache 2.0,Dynamically linked by proteus-server for gRPC support
     :github:`include-what-you-use/include-what-you-use`,0.14,LLVM License,Executable used to check C++ header inclusions
     :github:`json-c/json-c`,0.15,MIT,Dynamically linked by Vitis libraries
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by proteus-server for base64 codec
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development
-    :github:`opencv/opencv`,3.4.4,Apache 2.0,Dynamically linked by proteus-server for image and video processing
+    :github:`opencv/opencv`,3.4.3,Apache 2.0,Dynamically linked by proteus-server for image and video processing
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server
     :github:`pybind/pybind11`,2.9.1,BSD-3,Headers used to build Python bindings
     :github:`jupp0r/prometheus-cpp`,0.12.2,MIT,Dynamically linked by proteus-server for metrics
     :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by proteus-server and Vitis libraries
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging
+    :github:`Xilinx/Vitis-AI`,latest,Apache 2.0,VART is dynamically linked by proteus-server
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking proteus-server
 
 Xilinx
@@ -156,13 +165,6 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :header: Name,Version,Link,License
     :widths: auto
 
-    aks,1.4.0-r73,:xilinxdownload:`Debian package <aks_1.4.0-r73_amd64.deb>`,Apache 2.0
-    rt-engine,1.4.0-r178,:xilinxdownload:`Debian package <librt-engine_1.4.0-r178_amd64.deb>`,Apache 2.0
-    target-factory,1.4.0-r77,:xilinxdownload:`Debian package <libtarget-factory_1.4.0-r77_amd64.deb>`,Apache 2.0
-    unilog,1.4.0-r75,:xilinxdownload:`Debian package <libunilog_1.4.0-r75_amd64.deb>`,Apache 2.0
-    vart,1.4.0-r117,:xilinxdownload:`Debian package <libvart_1.4.0-r117_amd64.deb>`,Apache 2.0
-    vitis-ai-library,1.4.0-r105,:xilinxdownload:`Debian package <libvitis_ai_library_1.4.0-r105_amd64.deb>`,Apache 2.0
-    xir,1.4.0-r80,:xilinxdownload:`Debian package <libxir_1.4.0-r80_amd64.deb>`,Apache 2.0
     xrm,1.3.29,:xilinxdownload:`Debian package <xrm_202120.1.3.29_18.04-x86_64.deb>`,Apache 2.0
     xrt,2.12.427,:xilinxdownload:`Debian package <xrt_202120.2.12.427_18.04-amd64-xrt.deb>`,Apache 2.0
 
