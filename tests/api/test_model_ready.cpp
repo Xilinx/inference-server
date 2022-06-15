@@ -43,7 +43,7 @@ void test(proteus::Client* client) {
   EXPECT_EQ(endpoint, worker);
 
   while (!isReady(client, endpoint)) {
-    std::this_thread::yield();
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   auto models = client->modelList();
@@ -52,7 +52,7 @@ void test(proteus::Client* client) {
   client->modelUnload(endpoint);
 
   while (isReady(client, endpoint)) {
-    std::this_thread::yield();
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   while (!client->modelList().empty()) {

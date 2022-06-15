@@ -82,8 +82,18 @@ WorkerInfo* Manager::getWorker(const std::string& key) {
 }
 
 bool Manager::workerReady(const std::string& key) {
-  auto metadata = this->getWorkerMetadata(key);
-  return metadata.isReady();
+  std::shared_ptr<proteus::UpdateCommand> request;
+  int ready = -1;
+  request = std::make_shared<UpdateCommand>(UpdateCommandType::Ready, key,
+                                            nullptr, &ready);
+  update_queue_->enqueue(request);
+  while (ready == -1 && request->eptr == nullptr) {
+    std::this_thread::yield();
+  }
+  if (request->eptr != nullptr) {
+    std::rethrow_exception(request->eptr);
+  }
+  return ready;
 }
 
 // FIXME(varunsh): potential race condition if the worker is being deleted
@@ -94,7 +104,7 @@ ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
 }
 
 void Manager::workerAllocate(std::string const& key, int num) {
-  auto* worker = this->getWorker(key);
+  const auto* worker = this->getWorker(key);
   auto request =
     std::make_shared<UpdateCommand>(UpdateCommandType::Allocate, key, &num);
   update_queue_->enqueue(request);
@@ -152,11 +162,21 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
         }
         break;
       case UpdateCommandType::Add:
-        auto* parameters = static_cast<RequestParameters*>(request->object);
         try {
+          auto* parameters = static_cast<RequestParameters*>(request->object);
           auto endpoint = this->endpoints_.add(request->key, *parameters);
           static_cast<std::string*>(request->retval)
             ->assign(std::string{endpoint});
+        } catch (...) {
+          request->eptr = std::current_exception();
+        }
+        break;
+      case UpdateCommandType::Ready:
+        try {
+          auto* workerInfo = this->getWorker(request->key);
+          auto* worker = workerInfo->workers_.begin()->second;
+          auto metadata = worker->getMetadata();
+          *static_cast<int*>(request->retval) = metadata.isReady();
         } catch (...) {
           request->eptr = std::current_exception();
         }
