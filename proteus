@@ -643,9 +643,8 @@ class Dockerize:
             build_args += f" --build-arg TFZENDNN_PATH={args.tfzendnn_path}"
 
         if args.ptzendnn_path:
-            raise NotImplementedError("PT+ZenDNN will be available soon.")
-            # build_args += f" --build-arg ENABLE_PTZENDNN=yes"
-            # build_args += f" --build-arg PTZENDNN_PATH={args.ptzendnn_path}"
+            build_args += f" --build-arg ENABLE_PTZENDNN=yes"
+            build_args += f" --build-arg PTZENDNN_PATH={args.ptzendnn_path}"
 
         try:
             git_branch = (
@@ -799,14 +798,14 @@ class Get:
         if args.tfzendnn:
             files.update({
                 tensorflow_models: [
-                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.0.zip"
+                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip"
                 ],
             })
 
         if args.ptzendnn:
             files.update({
                 pytorch_models:[
-                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_4.1G_2.0.zip"
+                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip"
                 ]
             })
 
@@ -835,7 +834,11 @@ class Get:
                         with zipfile.ZipFile(str(tmp_dir / filename), 'r') as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
                         if args.tfzendnn or args.ptzendnn:
-                            shutil.move(str(tmp_dir / filename.split(".zip")[0] / "float/"), str(location))
+                            modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
+                            modelname = os.listdir(modelpath)[0]
+                            if not os.path.exists(location): os.makedirs(location)
+                            shutil.move(os.path.join(modelpath, modelname),
+                                        os.path.join(location, modelname))
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)

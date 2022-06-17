@@ -31,6 +31,7 @@ Features
 * Batching: incoming requests are batched based on the model's specifications transparently
 * Integrated with Vitis AI: The AMD/Xilinx Inference Server can serve most xmodels generated from Vitis AI
 * End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/master/tools/AKS>`__
+* Integrated with ZenDNN: The AMD/Xilinx Inference Server can serve `ZenDNN <https://developer.amd.com/zendnn/>`_ Optimized TensorFlow/PyTorch models on AMD EPYC CPUs.
 
 
 Learn more

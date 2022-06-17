@@ -729,7 +729,7 @@ RUN apt-get update \
         zip unzip \
     && cd /tmp/ \
     # Check to verify if package is TF+ZenDNN
-    && echo "ff65a75cb513fdfe1323ac70edda25af  $(basename $TFZENDNN_PATH)" | md5sum -c - \
+    && echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \
     && unzip $(basename $TFZENDNN_PATH) \
     && cd $(basename ${TFZENDNN_PATH%.*}) \
     # To avoid protobuf version issues, create subfolder and copy include files
@@ -753,8 +753,8 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         zip unzip \
     && cd /tmp/ \
-    # Check to verify if package is TF+ZenDNN
-    # && echo "ff65a75cb513fdfe1323ac70edda25af  $(basename $PTZENDNN_PATH)" | md5sum -c - \
+    # Check to verify if package is PT+ZenDNN
+    && echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \
     && unzip $(basename $PTZENDNN_PATH) \
     && cd $(basename ${PTZENDNN_PATH%.*}) \
     # To avoid protobuf version issues, create subfolder and copy include files
