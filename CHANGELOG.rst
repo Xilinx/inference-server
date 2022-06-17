@@ -41,7 +41,8 @@ Changed
 - Use Pybind11 to create Python API (:pr:`20`)
 - Two logs are created now: server and client
 - Logging macro is now ``PROTEUS_LOG_*``
-- Loading workers is now case-insensitive (:commit:`14ed4ef`)
+- Loading workers is now case-insensitive (:commit:`14ed4ef` and :commit:`90a51ae`)
+- Build AKS from source (:commit:`e04890f`)
 
 Fixed
 ^^^^^

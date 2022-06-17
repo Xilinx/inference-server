@@ -772,6 +772,7 @@ class Get:
         test_asset_dir = Path.cwd() / "tests/assets"
         artifact_dir = Path.cwd() / "external/artifacts"
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
+        repository = Path.cwd() / "external/repository"
         pytorch_models = Path.cwd() / "external/pytorch_models"
         alveo_dir = artifact_dir / "u200_u250"
 
@@ -779,6 +780,7 @@ class Get:
 
         alveo_dir.mkdir(exist_ok=True, parents=True)
         tmp_dir.mkdir(exist_ok=True, parents=True)
+        repository.mkdir(exist_ok=True, parents=True)
 
         files = {
             test_asset_dir: [
@@ -853,6 +855,9 @@ class Get:
             if adas_webm.exists():
                 shutil.move(str(adas_webm), str(test_asset_dir / "adas.webm"))
             shutil.rmtree(str(tmp_dir))
+
+            with zipfile.ZipFile(str(test_asset_dir / "mnist.zip"), "r") as zip_ref:
+                zip_ref.extractall(str(repository))
 
     @classmethod
     def add(cls, parser):
