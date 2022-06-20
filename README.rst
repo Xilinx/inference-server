@@ -30,7 +30,7 @@ Features
 * User-defined model parallelism: users can define how many models, and how many instances of each, to run simultaneously
 * Batching: incoming requests are batched based on the model's specifications transparently
 * Integrated with Vitis AI: The AMD/Xilinx Inference Server can serve most xmodels generated from Vitis AI
-* End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/master/tools/AKS>`__
+* End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__
 
 
 Learn more
