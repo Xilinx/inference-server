@@ -16,7 +16,7 @@
 .benchmarks/
 **/build
 **/uploads
-docs/_build
+docs/_*
 external/aks/libs
 external/artifacts
 external/repository

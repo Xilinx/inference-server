@@ -51,6 +51,7 @@ Fixed
 - Construct responses correctly in the XModel worker if there are multiple input buffers (:commit:`d1ad81d`)
 - Populate the right number of offsets in the hard batcher (:commit:`6666142`)
 - Calculate offset values correctly during batching (:commit:`8c7534b`)
+- Get correct library dependencies for production container (:commit:`14ed4ef`)
 
 
 :github:`0.1.0 <Xilinx/inference-server/releases/tag/v0.1.0>` - 2022-02-08
