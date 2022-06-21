@@ -366,6 +366,12 @@ class Build:
             )
             run_command(command, args.dry_run)
 
+        # if the package isn't importable, then we need to delete the CMake cache so the package can be installed by the build
+        try:
+            import proteus
+        except ImportError:
+            args.regen = True
+
         cmake_cache = build_dir / "CMakeCache.txt"
         if args.regen or (not build_dir.exists()) or (not cmake_cache.exists()):
             file = f"{str(build_dir)}/CMakeCache.txt"
@@ -617,9 +623,6 @@ class Dockerize:
 
         if unknown_args:
             unknown_arguments = " ".join(unknown_args)
-            raise argparse.ArgumentError(
-                None, f"Unknown argument(s) passed: {unknown_arguments}"
-            )
 
         tag_prefix = f"{args.registry}"
         if args.production:
@@ -673,7 +676,7 @@ class Dockerize:
 
         version = get_version()
         os.environ["DOCKER_BUILDKIT"] = "1"
-        command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} ."
+        command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} {unknown_arguments} ."
         run_command(command, args.dry_run)
 
         if args.push:

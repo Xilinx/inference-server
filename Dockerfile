@@ -627,7 +627,7 @@ RUN apt-get update \
         libssl-dev \
         pkg-config \
         python3-dev \
-    && git clone --recursive --single-branch --branch master --depth 1 https://github.com/Xilinx/Vitis-AI.git \
+    && git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
     && export VITIS_ROOT=/tmp/Vitis-AI/src/Vitis-AI-Runtime/VART \
     && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
     cd ${VITIS_ROOT}/unilog \
