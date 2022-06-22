@@ -17,7 +17,7 @@ import time
 
 import proteus
 
-# TODO(varunsh): update test to use modelLoad like C++ variant
+
 @pytest.mark.usefixtures("server")
 class TestLoad:
     """

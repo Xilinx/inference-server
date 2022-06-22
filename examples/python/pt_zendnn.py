@@ -91,7 +91,7 @@ def main(args):
     parameters = proteus.RequestParameters()
     parameters.put("model", args.graph)
     parameters.put("input_size", input_size)
-    worker_name = client.modelLoad("PtZendnn", parameters)
+    worker_name = client.workerLoad("PtZendnn", parameters)
 
     ready = False
     while not ready:

@@ -34,7 +34,6 @@ import urllib.request
 import zipfile
 
 
-
 def get_version():
     version_file = Path(__file__).parent.resolve() / "VERSION"
     with open(version_file, "r") as f:
@@ -367,6 +366,12 @@ class Build:
             )
             run_command(command, args.dry_run)
 
+        # if the package isn't importable, then we need to delete the CMake cache so the package can be installed by the build
+        try:
+            import proteus
+        except ImportError:
+            args.regen = True
+
         cmake_cache = build_dir / "CMakeCache.txt"
         if args.regen or (not build_dir.exists()) or (not cmake_cache.exists()):
             file = f"{str(build_dir)}/CMakeCache.txt"
@@ -618,9 +623,6 @@ class Dockerize:
 
         if unknown_args:
             unknown_arguments = " ".join(unknown_args)
-            raise argparse.ArgumentError(
-                None, f"Unknown argument(s) passed: {unknown_arguments}"
-            )
 
         tag_prefix = f"{args.registry}"
         if args.production:
@@ -673,7 +675,7 @@ class Dockerize:
 
         version = get_version()
         os.environ["DOCKER_BUILDKIT"] = "1"
-        command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} ."
+        command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} {unknown_arguments} ."
         run_command(command, args.dry_run)
 
         if args.push:
@@ -772,6 +774,7 @@ class Get:
         test_asset_dir = Path.cwd() / "tests/assets"
         artifact_dir = Path.cwd() / "external/artifacts"
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
+        repository = Path.cwd() / "external/repository"
         pytorch_models = Path.cwd() / "external/pytorch_models"
         alveo_dir = artifact_dir / "u200_u250"
 
@@ -779,6 +782,7 @@ class Get:
 
         alveo_dir.mkdir(exist_ok=True, parents=True)
         tmp_dir.mkdir(exist_ok=True, parents=True)
+        repository.mkdir(exist_ok=True, parents=True)
 
         files = {
             test_asset_dir: [
@@ -831,14 +835,21 @@ class Get:
                         tar_file = tarfile.open(filepath, mode="r:gz")
                         tar_file.extractall(location)
                     elif filename.endswith("zip"):
-                        with zipfile.ZipFile(str(tmp_dir / filename), 'r') as zip_ref:
+                        with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
                         if args.tfzendnn or args.ptzendnn:
+<<<<<<< HEAD
+                            shutil.move(
+                                str(tmp_dir / filename.split(".zip")[0] / "float/"),
+                                str(location),
+                            )
+=======
                             modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
                             modelname = os.listdir(modelpath)[0]
                             if not os.path.exists(location): os.makedirs(location)
                             shutil.move(os.path.join(modelpath, modelname),
                                         os.path.join(location, modelname))
+>>>>>>> dev
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)
@@ -850,6 +861,9 @@ class Get:
             if adas_webm.exists():
                 shutil.move(str(adas_webm), str(test_asset_dir / "adas.webm"))
             shutil.rmtree(str(tmp_dir))
+
+            with zipfile.ZipFile(str(test_asset_dir / "mnist.zip"), "r") as zip_ref:
+                zip_ref.extractall(str(repository))
 
     @classmethod
     def add(cls, parser):
@@ -867,11 +881,15 @@ class Get:
         )
 
         command_group.add_argument(
-            "--tfzendnn", action="store_true" ,help="If TF+ZenDNN should be enabled",
+            "--tfzendnn",
+            action="store_true",
+            help="If TF+ZenDNN should be enabled",
         )
 
         command_group.add_argument(
-            "--ptzendnn", action="store_true" ,help="If PT+ZenDNN should be enabled",
+            "--ptzendnn",
+            action="store_true",
+            help="If PT+ZenDNN should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -1027,8 +1045,6 @@ class Make:
 class Run:
     @staticmethod
     def parse(args, unknown_args: list):
-        unknown_args.sort()
-
         if args.image is None and args.preset is None:
             raise argparse.ArgumentError(
                 None, "Image must be specified if no preset is used. See --help."
@@ -1327,13 +1343,13 @@ class Up:
             args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--detach"
         elif args.profile == "prod":
-            args.name = "proteus"  + args.suffix
+            args.name = "proteus" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
             extra_flags = "--abort-on-container-exit --exit-code-from proteus-tester"
         elif args.profile == "autotest-dev":
-            args.name = "proteus-dev"  + args.suffix
+            args.name = "proteus-dev" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--abort-on-container-exit --exit-code-from proteus"
         elif args.profile == "test":

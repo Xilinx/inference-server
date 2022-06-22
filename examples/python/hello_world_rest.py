@@ -56,7 +56,7 @@ def main():
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
-    worker_name = client.modelLoad("Echo")
+    worker_name = client.workerLoad("Echo")
 
     ready = False
     while not ready:

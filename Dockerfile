@@ -458,6 +458,15 @@ RUN VERSION=2.9.1 \
     && cd /tmp \
     && rm -fr /tmp/*
 
+# install efsw for directory monitoring
+RUN git clone https://github.com/SpartanJ/efsw.git \
+    && cd efsw && mkdir build && cd build \
+    && cmake .. \
+    && make -j \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cd /tmp && rm -fr /tmp/*
+
 # Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
 # Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
 # RUN cp -rf ${COPY_DIR}/usr/local/man/ ${COPY_DIR}/usr/local/share/man/ \
@@ -618,35 +627,31 @@ RUN apt-get update \
         libssl-dev \
         pkg-config \
         python3-dev \
-    && git clone --recursive --single-branch --branch v2.0 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
-    && export VITIS_ROOT=/tmp/Vitis-AI/tools/Vitis-AI-Runtime/VART \
+    && git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
+    && export VITIS_ROOT=/tmp/Vitis-AI/src/Vitis-AI-Runtime/VART \
     && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
-    # build unilog
     cd ${VITIS_ROOT}/unilog \
-    && ./cmake.sh --clean --type=release --build-only --pack=deb --build-dir ./build \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libunilog_2.0.0_amd64.deb \
-    # build xir
+    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
+    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd ${VITIS_ROOT}/xir \
-    && ./cmake.sh --clean --type=release --build-only --pack=deb --build-dir ./build --build-python \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libxir_2.0.0_amd64.deb \
-    # build target-factory
+    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build --build-python \
+    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd ${VITIS_ROOT}/target_factory \
-    && ./cmake.sh --clean --type=release --build-only --pack=deb --build-dir ./build \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libtarget-factory_2.0.0_amd64.deb \
-    # build vart
+    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
+    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd ${VITIS_ROOT}/vart \
-    && ./cmake.sh --clean --type=release --build-only --cmake-options="-DBUILD_TEST=OFF" --build-python --pack=deb --build-dir ./build \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install ./build/libvart_2.0.0_amd64.deb \
-    # build rt-engine
+    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --cmake-options="-DBUILD_TEST=OFF" --build-python --build-dir ./build \
+    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd ${VITIS_ROOT}/rt-engine \
-    && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --build-only --pack=deb \
+    && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --install-prefix /usr/local/ \
+    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cd /tmp/Vitis-AI/src/AKS \
+    # fix bug in AKS
+    && sed -i '46i _global = nullptr;' ./src/AksTopContainer.cpp \
+    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
+    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     # copy over debians to COPY_DIR so we can install them as debians in
     # the final image for easy removal later if needed
-    && cp ${VITIS_ROOT}/unilog/build/libunilog_2.0.0_amd64.deb ${COPY_DIR} \
-    && cp ${VITIS_ROOT}/xir/build/libxir_2.0.0_amd64.deb ${COPY_DIR} \
-    && cp ${VITIS_ROOT}/target_factory/build/libtarget-factory_2.0.0_amd64.deb ${COPY_DIR} \
-    && cp ${VITIS_ROOT}/vart/build/libvart_2.0.0_amd64.deb ${COPY_DIR} \
-    && cp ${VITIS_ROOT}/rt-engine/build/librt-engine_2.0.0_amd64.deb ${COPY_DIR} \
     # clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
@@ -707,10 +712,8 @@ RUN pip install --no-cache-dir "pyinstaller!=4.6" \
 COPY . $PROTEUS_ROOT
 
 RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
-        # move AKS for easier copying in final image
-        cp ${PROTEUS_ROOT}/external/aks/reference/aks_2.0.0_proteus_amd64.deb ${COPY_DIR}/aks.deb \
         # make binary for custom script to get FPGAs
-        && pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
+        pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
         && chmod a+x dist/fpga_util \
         && mkdir -p ${COPY_DIR}/usr/local/bin/ \
         && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
@@ -792,13 +795,6 @@ COPY --from=proteus_builder $PROTEUS_ROOT/docker/.env /home/${UNAME}/
 # run any final commands before finishing the dev image
 RUN git lfs install \
     && npm install -g gh-pages \
-    # install any debians that may exist at the root. Use true to pass even if
-    # there's nothing to install
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        /*.deb || true \
-    && apt-get clean -y \
-    && rm -f /*.deb \
     && ldconfig
 
 ENTRYPOINT [ "/root/entrypoint.sh", "user"]
@@ -819,7 +815,7 @@ RUN ldconfig \
     && ./proteus install --all \
     && ./proteus install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     # build the static GUI files
-    && cd src/gui && npm install && npm run build \
+    # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
@@ -872,7 +868,7 @@ WORKDIR /home/${UNAME}
 COPY --from=proteus_builder_2 ${COPY_DIR} /
 
 # get the static gui files
-COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
+# COPY --from=proteus_builder_2 $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
 # get the entrypoint script
 COPY --from=proteus_builder_2 $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the systemctl executable - pulled in by get_dynamic_dependencies.sh

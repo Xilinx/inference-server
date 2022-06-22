@@ -265,7 +265,7 @@ int main() {
   parameters.put("input_size", options.input_size);
   parameters.put("inter_op", options.inter_op);
   parameters.put("intra_op", options.intra_op);
-  auto workerName = client.modelLoad("TfZendnn", &parameters);
+  auto workerName = client.workerLoad("TfZendnn", &parameters);
 
   float time_tmp = 0.f;
   // prepare images for inference

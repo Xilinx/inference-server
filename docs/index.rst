@@ -56,6 +56,7 @@
     :caption: Platforms
 
     vitis_ai
+    zendnn
 
 .. toctree::
     :maxdepth: 2

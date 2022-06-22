@@ -51,6 +51,7 @@ enum class UpdateCommandType {
   Allocate,
   Add,
   Delete,
+  Ready,
 };
 
 /**

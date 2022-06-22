@@ -106,9 +106,6 @@ class DrogonHttp : public Interface {
   void errorHandler(const std::invalid_argument &e) override;
 
  private:
-  /// parse the request's JSON payload and save it for future use
-  void setJson();
-
   drogon::HttpRequestPtr req_;
   DrogonCallback callback_;
   std::shared_ptr<Json::Value> json_;

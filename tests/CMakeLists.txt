@@ -15,6 +15,7 @@
 set(PROTEUS_TEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_subdirectory(api)
+add_subdirectory(models)
 add_subdirectory(performance)
 add_subdirectory(src/proteus)
 add_subdirectory(unit)

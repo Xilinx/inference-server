@@ -34,7 +34,10 @@ void wrapHttpClient(py::module_ &m) {
   m.def("stopHttpServer", &proteus::stopHttpServer, DOCS(stopHttpServer));
 
   py::class_<HttpClient, proteus::Client>(m, "HttpClient")
-    .def(py::init<const std::string &, const std::unordered_map<std::string, std::string>>(), py::arg("address"), py::arg("headers") = std::unordered_map<std::string, std::string>(),
+    .def(py::init<const std::string &,
+                  const std::unordered_map<std::string, std::string>>(),
+         py::arg("address"),
+         py::arg("headers") = std::unordered_map<std::string, std::string>(),
          DOCS(HttpClient, HttpClient))
     .def("serverMetadata", &HttpClient::serverMetadata,
          DOCS(HttpClient, serverMetadata))
@@ -47,6 +50,11 @@ void wrapHttpClient(py::module_ &m) {
          DOCS(HttpClient, modelLoad))
     .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
          DOCS(HttpClient, modelUnload))
+    .def("workerLoad", &HttpClient::workerLoad, py::arg("model"),
+         py::arg("parameters") = proteus::RequestParameters(),
+         DOCS(HttpClient, workerLoad))
+    .def("workerUnload", &HttpClient::workerUnload, py::arg("model"),
+         DOCS(HttpClient, workerUnload))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
          py::arg("request"), DOCS(HttpClient, modelInfer))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList));

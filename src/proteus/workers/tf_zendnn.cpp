@@ -31,6 +31,7 @@
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
+#include "proteus/helpers/string.hpp"         // for endsWith
 #include "proteus/helpers/thread.hpp"         // for setThreadName
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
@@ -185,14 +186,16 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
 
   // Load the model
   std::string path;
-  if (parameters->has("model"))
+  if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-  else {
+    if (!endsWith(path, ".pb")) {
+      path += ".pb";
+    }
+  } else {
     PROTEUS_LOG_ERROR(
       logger,
       "Model not provided");  // Ideally exit since model not provided
   }
-
   status_ = tf::ReadBinaryProto(tf::Env::Default(), path, &graph_def_);
   if (!status_.ok()) {
     PROTEUS_LOG_ERROR(
@@ -307,7 +310,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
     if (!status_.ok()) {
       PROTEUS_LOG_ERROR(logger, status_.ToString());
-      req->runCallbackError("Issue with prediction w");
+      req->runCallbackError("Issue with prediction");
     }
     PROTEUS_LOG_DEBUG(logger, output_tensor[0].DebugString());
 
@@ -323,7 +326,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int i = 0; i < inputs.size(); i++) {
         InferenceResponseOutput output;
         auto buffer = std::make_shared<std::vector<float>>();
-        buffer->reserve(response_size);
+        buffer->resize(response_size);
 
         memcpy(buffer->data(),
                output_tensor[0].flat<float>().data() + (i * response_size),

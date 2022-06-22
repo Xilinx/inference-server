@@ -19,13 +19,12 @@ private/
 uploads/
 docs/_build/
 external/artifacts/
+external/repository/
 external/aks/*
 !external/aks/reference
 !external/aks/README.rst
 external/overlaybins
-docs/_ext/
-docs/_templates/
-docs/_themes/
+docs/_*/
 
 # files
 callgrind.out.*

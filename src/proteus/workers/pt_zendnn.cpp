@@ -148,12 +148,16 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
 
   // Load the model
   std::string path;
-  if (parameters->has("model"))
+  if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-  else
+    if (!endsWith(path, ".pt")) {
+      path += ".pt";
+    }
+  } else {
     PROTEUS_LOG_ERROR(
       logger,
       "Model not provided");  // Ideally exit since model not provided
+  }
 
   auto module = torch::jit::load(
     path, torch::kCPU);  // Ideally exit if not able to read the model
@@ -290,7 +294,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int i = 0; i < inputs.size(); i++) {
         InferenceResponseOutput output;
         auto buffer = std::make_shared<std::vector<float>>();
-        buffer->reserve(response_size);
+        buffer->resize(response_size);
 
         memcpy(buffer->data(), output_tensor[i].data_ptr<float>(),
                response_size * sizeof(float));

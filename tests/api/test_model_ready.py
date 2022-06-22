@@ -42,7 +42,7 @@ class TestModelReady:
             self.rest_client.modelReady(worker)
             assert str(e_info.value) == f"worker {worker} not found"
 
-        endpoint_0 = self.rest_client.modelLoad(worker)
+        endpoint_0 = self.rest_client.workerLoad(worker)
         assert endpoint_0 == "echo"
         while not self.is_ready(worker):
             time.sleep(1)

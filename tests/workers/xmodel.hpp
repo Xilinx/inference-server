@@ -174,9 +174,9 @@ int run(std::string xmodel, int images, int threads, int runners) {
   parameters.put("batchers", 2);
 
   proteus::NativeClient client;
-  auto workerName = client.modelLoad("Xmodel", &parameters);
+  auto workerName = client.workerLoad("Xmodel", &parameters);
   for (auto i = 0; i < runners - 1; i++) {
-    client.modelLoad("Xmodel", &parameters);
+    client.workerLoad("Xmodel", &parameters);
   }
 
   std::vector<uint64_t> shape;

@@ -99,7 +99,7 @@ class TestInvertVideo:
 #     client = proteus.clients.HttpClient("http://localhost:8998")
 #     models = client.modelList()
 #     if "InvertVideo" not in models:
-#         worker_name = client.modelLoad("InvertVideo")
+#         worker_name = client.workerLoad("InvertVideo")
 #     else:
 #         worker_name = "InvertVideo"
 

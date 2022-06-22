@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <algorithm>  // for find
 #include <memory>     // for allocator, unique_ptr
 #include <stdexcept>  // for runtime_error
 #include <string>     // for string
@@ -20,40 +19,35 @@
 #include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-bool isReady(proteus::Client* client, const std::string& endpoint) {
-  try {
-    return client->modelReady(endpoint);
-  } catch (const std::invalid_argument& e) {
-    return false;
-  }
-}
-
 void test(proteus::Client* client) {
-  const std::string worker = "echo";
+  std::string worker = "echo";
 
-  auto models_0 = client->modelList();
-  EXPECT_TRUE(models_0.empty());
+  EXPECT_TRUE(client->modelList().empty());
 
-  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
-  EXPECT_THROW_CHECK({ client->modelReady(worker); },
-                     { EXPECT_STREQ("worker echo not found", e.what()); },
-                     std::invalid_argument);
-
-  const auto endpoint = client->workerLoad(worker, nullptr);
+  // load one worker
+  auto endpoint = client->workerLoad(worker, nullptr);
+  EXPECT_EQ(endpoint, worker);
+  // do a redundant load
+  endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
 
-  while (!isReady(client, endpoint)) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  }
+  // load the same worker with a different config
+  proteus::RequestParameters parameters;
+  parameters.put("max_buffer_num", 100);
+  auto endpoint_1 = client->workerLoad(worker, &parameters);
+  EXPECT_EQ(endpoint_1, "echo-0");
 
-  auto models = client->modelList();
-  EXPECT_EQ(models.size(), 1);
+  parameters.put("share", false);
+  endpoint_1 = client->workerLoad(worker, &parameters);
+  EXPECT_EQ(endpoint_1, "echo-0");
 
-  client->modelUnload(endpoint);
+  EXPECT_TRUE(client->modelReady(endpoint));
+  EXPECT_TRUE(client->modelReady(endpoint_1));
 
-  while (isReady(client, endpoint)) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  }
+  client->modelUnload(endpoint);    // unload the first
+  client->modelUnload(endpoint);    // this will do nothing
+  client->modelUnload(endpoint_1);  // unload first echo-0 worker
+  client->modelUnload(endpoint_1);  // unload second echo-0 worker
 
   while (!client->modelList().empty()) {
     std::this_thread::yield();
@@ -62,15 +56,15 @@ void test(proteus::Client* client) {
 
 #ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
+TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
 #endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, ModelReady) {
+TEST_F(BaseFixture, workerLoad) {
   proteus::NativeClient client;
   test(&client);
 }
 
 #ifdef PROTEUS_ENABLE_HTTP
-TEST_F(HttpFixture, ModelReady) { test(client_.get()); }
+TEST_F(HttpFixture, workerLoad) { test(client_.get()); }
 #endif

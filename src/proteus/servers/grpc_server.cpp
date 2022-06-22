@@ -23,7 +23,7 @@
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
 #include <grpcpp/grpcpp.h>                       // for Status, InsecureSer...
 
-#include <algorithm>   // for fill, max
+#include <algorithm>   // for fill, max, transform
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for uint64_t, int16_t
 #include <cstring>     // for memcpy
@@ -36,16 +36,17 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "predict_api.grpc.pb.h"                  // for GRPCInferenceServic...
-#include "predict_api.pb.h"                       // for InferTensorContents
-#include "proteus/batching/batcher.hpp"           // for Batcher
-#include "proteus/buffers/buffer.hpp"             // for Buffer
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
-#include "proteus/clients/native.hpp"             // for NativeClient
-#include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
-#include "proteus/core/interface.hpp"             // for Interface, Interfac...
-#include "proteus/core/manager.hpp"               // for Manager
+#include "predict_api.grpc.pb.h"              // for GRPCInferenceServic...
+#include "predict_api.pb.h"                   // for InferTensorContents
+#include "proteus/batching/batcher.hpp"       // for Batcher
+#include "proteus/buffers/buffer.hpp"         // for Buffer
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/grpc_internal.hpp"  // for mapProtoToParameters
+#include "proteus/clients/native.hpp"         // for NativeClient
+#include "proteus/core/data_types.hpp"        // for DataType, mapStrToType
+#include "proteus/core/interface.hpp"         // for Interface, Interfac...
+#include "proteus/core/manager.hpp"           // for Manager
+#include "proteus/core/model_repository.hpp"
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
@@ -55,8 +56,10 @@
 namespace proteus {
 class CallDataModelInfer;
 class CallDataModelLoad;
+class CallDataWorkerLoad;
 class CallDataModelReady;
 class CallDataModelUnload;
+class CallDataWorkerUnload;
 class CallDataServerLive;
 class CallDataServerMetadata;
 class CallDataServerReady;
@@ -399,8 +402,8 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
       }
     }
 
-    // TODO(varunsh): output_offset is currently ignored! The size of the output
-    // needs to come from the worker but we have no such information.
+    // TODO(varunsh): output_offset is currently ignored! The size of the
+    // output needs to come from the worker but we have no such information.
     buffer_index = buffer_index_backup;
     batch_offset = batch_offset_backup;
 
@@ -585,24 +588,49 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   const std::string& model = request_.name();
+  auto model_lower = model;
+  std::transform(model_lower.begin(), model_lower.end(), model_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  auto hyphen_pos = model.find('-');
-  std::string name;
-  // if there's a hyphen in the name, currently assuming it's for xmodel. So,
-  // extract the first part as the worker and the second part as the xmodel file
-  // name. Put that information into the parameters with the default path for
-  // KServe (/mnt/models)
-  if (hyphen_pos != std::string::npos) {
-    name = model.substr(0, hyphen_pos);
-    auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
-    parameters->put("model", "/mnt/models/" + model + "/" + xmodel + ".xmodel");
-  } else {
-    name = model;
-  }
+  ModelRepository::modelLoad(model_lower, parameters.get());
 
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(name, *parameters);
+    endpoint = Manager::getInstance().loadWorker(model_lower, *parameters);
+  } catch (const std::exception& e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+    return;
+  }
+
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(ModelUnload, Unary) {
+  const auto& name = request_.name();
+  auto worker_lower = name;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+
+  Manager::getInstance().unloadWorker(worker_lower);
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(WorkerLoad, Unary) {
+  auto parameters = mapProtoToParameters(request_.parameters());
+
+  const std::string& worker = request_.name();
+  auto worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+
+  parameters->put("worker", worker_lower);
+
+  std::string endpoint;
+  try {
+    endpoint = Manager::getInstance().loadWorker(worker_lower, *parameters);
   } catch (const std::exception& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -614,10 +642,13 @@ CALLDATA_IMPL(ModelLoad, Unary) {
 }
 CALLDATA_IMPL_END
 
-CALLDATA_IMPL(ModelUnload, Unary) {
-  const auto& name = request_.name();
+CALLDATA_IMPL(WorkerUnload, Unary) {
+  const auto& worker = request_.name();
+  auto worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  Manager::getInstance().unloadWorker(name);
+  Manager::getInstance().unloadWorker(worker_lower);
   finish();
 }
 CALLDATA_IMPL_END
@@ -689,11 +720,11 @@ class GrpcServer final {
     builder.SetMaxSendMessageSize(kMaxGrpcMessageSize);
     // Listen on the given address without any authentication mechanism.
     builder.AddListeningPort(address, ::grpc::InsecureServerCredentials());
-    // Register "service_" as the instance through which we'll communicate with
-    // clients. In this case it corresponds to an *asynchronous* service.
+    // Register "service_" as the instance through which we'll communicate
+    // with clients. In this case it corresponds to an *asynchronous* service.
     builder.RegisterService(&service_);
-    // Get hold of the completion queue used for the asynchronous communication
-    // with the gRPC runtime.
+    // Get hold of the completion queue used for the asynchronous
+    // communication with the gRPC runtime.
     for (auto i = 0; i < cq_count; i++) {
       cq_.push_back(builder.AddCompletionQueue());
     }
@@ -720,6 +751,8 @@ class GrpcServer final {
     new CallDataModelReady(&service_, my_cq.get());
     new CallDataModelLoad(&service_, my_cq.get());
     new CallDataModelUnload(&service_, my_cq.get());
+    new CallDataWorkerLoad(&service_, my_cq.get());
+    new CallDataWorkerUnload(&service_, my_cq.get());
     new CallDataModelInfer(&service_, my_cq.get());
     // new CallDataStreamModelInfer(&service_, my_cq.get());
     void* tag;  // uniquely identifies a request.
@@ -742,11 +775,15 @@ class GrpcServer final {
   inference::GRPCInferenceService::AsyncService service_;
   std::unique_ptr<::grpc::Server> server_;
   std::vector<std::thread> threads_;
+  ModelRepository repository_;
 };
 
 namespace grpc {
 
-void start(const std::string& address) { GrpcServer::create(address, 1); }
+void start(int port) {
+  const std::string address = "0.0.0.0:" + std::to_string(port);
+  GrpcServer::create(address, 1);
+}
 
 void stop() {
   // the GrpcServer's destructor is called automatically

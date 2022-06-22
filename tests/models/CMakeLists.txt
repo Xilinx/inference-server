@@ -1,4 +1,4 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2021 Xilinx Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,23 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets
-    test_model_infer
-    test_model_list
-    test_model_ready
-    test_server_live
-    test_server_ready
-)
+list(APPEND targets)
 
 if(${PROTEUS_ENABLE_TFZENDNN})
-    list(APPEND targets test_model_load)
+    list(APPEND targets mnist)
 endif()
 
 foreach(target ${targets})
-    add_executable(${target} ${target}.cpp)
+    add_executable(test_${target} test_${target}.cpp)
+    target_link_libraries(test_${target} PRIVATE proteus Threads::Threads gtest gtest_main)
+    target_include_directories(test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
 
-    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
-
-    gtest_discover_tests(${target})
+    gtest_discover_tests(test_${target})
 endforeach()
+
+if(${PROTEUS_ENABLE_TFZENDNN})
+    target_link_libraries(test_mnist PRIVATE
+        opencv_core opencv_imgcodecs
+    )
+endif()
