@@ -621,8 +621,7 @@ class Dockerize:
     @staticmethod
     def parse(args, unknown_args):
 
-        if unknown_args:
-            unknown_arguments = " ".join(unknown_args)
+        unknown_arguments = " ".join(unknown_args)
 
         tag_prefix = f"{args.registry}"
         if args.production:
