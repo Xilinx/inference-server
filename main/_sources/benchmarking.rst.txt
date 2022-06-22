@@ -16,7 +16,7 @@
 Benchmarking
 ============
 
-Xilinx Inference Server can be benchmarked from the command-line using the benchmarking utility.
+AMD Inference Server can be benchmarked from the command-line using the benchmarking utility.
 
 .. code-block:: bash
 
@@ -37,9 +37,9 @@ Refer to ``benchmark.yml`` for more a detailed explanation of the different opti
 XModel Benchmarking
 -------------------
 
-The XModel test in ``tests/cpp/native/xmodel.cpp`` is the easiest way to benchmark an arbitrary XModel that you may want to serve with Xilinx Inference Server.
-It gets built as part of the regular Xilinx Inference Server build flow (for benchmarking, use the :option:`--release` flag to build optimized executables).
-This test accepts a number of arguments (use :option:`--help` to see all the options) and makes requests to Xilinx Inference Server's backend using C++.
+The XModel test in ``tests/cpp/native/xmodel.cpp`` is the easiest way to benchmark an arbitrary XModel that you may want to serve with AMD Inference Server.
+It gets built as part of the regular AMD Inference Server build flow (for benchmarking, use the :option:`--release` flag to build optimized executables).
+This test accepts a number of arguments (use :option:`--help` to see all the options) and makes requests to AMD Inference Server's backend using C++.
 It will print out the :abbr:`QPS (queries per second)` of the requested configuration.
 
 .. code-block:: console

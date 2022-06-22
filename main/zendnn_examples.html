@@ -80,13 +80,8 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
- 
-
-    <script>
-      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
-    </script>
-
-
+    <link rel="next" title="Command-Line Interface" href="cli.html" />
+    <link rel="prev" title="Running a Vitis AI XModel (C++)" href="xmodel_example_cpp.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -266,12 +261,24 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="index.html">AMD Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hello_world_python.html">Hello World (Python)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="xmodel_example_python.html">Running a Vitis AI XModel (Python)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="xmodel_example_cpp.html">Running a Vitis AI XModel (C++)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn_examples.html">ZenDNN Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ZenDNN Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-api">Python API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tensorflow-zendnn">TensorFlow + ZenDNN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pytorch-zendnn">PyTorch + ZenDNN</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#c-api">C++ API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">TensorFlow + ZenDNN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">PyTorch + ZenDNN</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
@@ -312,6 +319,11 @@ function OptanonWrapper() { }
 
             
 			
+			<p class="caption"><span class="caption-text">This Page</span></p>
+				<ul class="current">
+				  <li class="toctree-l1"><a href="_sources/zendnn_examples.rst.txt"
+						rel="nofollow">Show Source</a></li>
+				</ul>
           
         </div>
         
@@ -355,10 +367,14 @@ function OptanonWrapper() { }
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Python Module Index</li>
+      <li>ZenDNN Examples</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/zendnn_examples.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -370,23 +386,105 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-p"><strong>p</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-p"><td></td><td>
-       <strong>p</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="python_api.html#module-proteus"><code class="xref">proteus</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="zendnn-examples">
+<span id="id1"></span><h1>ZenDNN Examples<a class="headerlink" href="#zendnn-examples" title="Permalink to this headline">¶</a></h1>
+<p>There are two examples provided in the repo (Python API and C++ API) for both TensorFlow and PyTorch.</p>
+<div class="section" id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<p>Python examples below will do the following:</p>
+<ol class="arabic simple">
+<li><p>Start the AMD Inference Server on HTTP port 8998</p></li>
+<li><p>Load the AMD Inference Server with the specified model file</p></li>
+<li><p>Read the image specified / Create dummy data</p></li>
+<li><p>Sends the data to the AMD Inference Server over HTTP</p></li>
+<li><p>Get the result back from the AMD Inference Server over HTTP</p></li>
+<li><p>Post process if any and display the output</p></li>
+</ol>
+<div class="section" id="tensorflow-zendnn">
+<h3>TensorFlow + ZenDNN<a class="headerlink" href="#tensorflow-zendnn" title="Permalink to this headline">¶</a></h3>
+<p>The python example is available at <code class="code docutils literal notranslate"><span class="pre">examples/python/tf_zendnn.py</span></code>.</p>
+<ol class="arabic">
+<li><p>To run the example with a real image:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb --image_location ./tests/assets/dog-3619020_640.jpg
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>To run the example with dummy data:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb --batch_size <span class="m">16</span> --steps <span class="m">4</span>
+</pre></div>
+</div>
+<p>The above command will run the example with dummy data (4 requests with 16 dummy images each). This can be used as a functional test.</p>
+</div></blockquote>
+</li>
+</ol>
+<p>For more options, check the help with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --help
+</pre></div>
+</div>
+</div>
+<div class="section" id="pytorch-zendnn">
+<h3>PyTorch + ZenDNN<a class="headerlink" href="#pytorch-zendnn" title="Permalink to this headline">¶</a></h3>
+<p>The python example is available at <code class="code docutils literal notranslate"><span class="pre">examples/python/pt_zendnn.py</span></code>.</p>
+<ol class="arabic">
+<li><p>To run the example with a real image:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/pt_zendnn.py --graph ./external/pytorch_models/resnet50_pretrained.pt --image_location ./tests/assets/dog-3619020_640.jpg
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>To run the example with dummy data:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/pt_zendnn.py --graph ./external/pytorch_models/resnet50_pretrained.pt --batch_size <span class="m">16</span> --steps <span class="m">4</span>
+</pre></div>
+</div>
+<p>The above command will run the example with dummy data (4 requests with 16 dummy images each). This can be used as a functional test.</p>
+</div></blockquote>
+</li>
+</ol>
+<p>For more options, check the help with:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/pt_zendnn.py --help
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="c-api">
+<h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h2>
+<p>The C++ API bypasses the HTTP server and connects directly to the Inference Server.
+The flow is as follows:</p>
+<ol class="arabic simple">
+<li><p>Load the AMD Inference Server with the specified model file</p></li>
+<li><p>Read the image specified / Create dummy data and prepare input</p></li>
+<li><p>The data is packed into an Interface object and pushed to a queue</p></li>
+<li><p>Retrieve the result back from the AMD Inference Server</p></li>
+<li><p>Post process if any and display the output</p></li>
+</ol>
+<p>The C++ example will be built when the server is being built according to the packages available.</p>
+<ul class="simple">
+<li><p>To run the C++ example with real image, provide <code class="code docutils literal notranslate"><span class="pre">image_location</span></code> in <code class="code docutils literal notranslate"><span class="pre">Option</span></code> struct in source code.</p></li>
+<li><p>If <code class="code docutils literal notranslate"><span class="pre">image_location</span></code> is set to <code class="code docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> in <code class="code docutils literal notranslate"><span class="pre">Option</span></code>, dummy data will be used. This can be used for benchmarking.</p></li>
+</ul>
+<div class="section" id="id2">
+<h3>TensorFlow + ZenDNN<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Source is available at <code class="code docutils literal notranslate"><span class="pre">examples/cpp/tf_zendnn_client.cpp</span></code>. To build and run the example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug <span class="o">&amp;&amp;</span> ./build/Debug/examples/cpp/tf_zendnn_client
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>PyTorch + ZenDNN<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Source is available at <code class="code docutils literal notranslate"><span class="pre">examples/cpp/pt_zendnn_client.cpp</span></code>. To build and run the example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug <span class="o">&amp;&amp;</span> ./build/Debug/examples/cpp/pt_zendnn_client
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -401,6 +499,15 @@ function OptanonWrapper() { }
 
 
 	  <!-- Sphinx Page Footer block -->
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cli.html" class="btn btn-neutral float-right" title="Command-Line Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="xmodel_example_cpp.html" class="btn btn-neutral float-left" title="Running a Vitis AI XModel (C++)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

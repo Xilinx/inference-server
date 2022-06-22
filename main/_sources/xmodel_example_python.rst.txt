@@ -15,8 +15,8 @@
 
 .. _xmodel_example_python:
 
-Running an XModel (Python)
-==========================
+Running a Vitis AI XModel (Python)
+==================================
 
 This example walks you through the process to make an inference request to a custom XModel in Python.
 If you haven't already, make sure to go through the :ref:`hello_world_python` example first!
@@ -31,7 +31,7 @@ These variables are pulled out into a separate block to highlight them.
 
 * Batch size: The DPU your XModel targets may have a preferred batch size and so we can use this value to create the optimally-sized request.
 * XModel Path: The XModel you want to run should exist on a path where the server runs. Here, we use a ResNet50 model trained on the ImageNet dataset, which is an image classification model.
-* Image Path: To test this model, we need to use an image. Here, we use a sample image included for testing. The image path is given relative to the Xilinx Inference Server repository.
+* Image Path: To test this model, we need to use an image. Here, we use a sample image included for testing. The image path is given relative to the AMD Inference Server repository.
 
 .. literalinclude:: ../examples/python/custom_processing.py
     :start-after: +user variables:
@@ -65,7 +65,7 @@ In this example, we use one image and duplicate it *batch_size* times so we can 
 Inference
 ---------
 
-Using our images, we can construct a request to Xilinx Inference Server.
+Using our images, we can construct a request to AMD Inference Server.
 The ``ImageInferenceRequest`` class is a helper class that simplifies creating a request in the right format.
 It accepts an image or a list of images and an optional boolean parameter that indicates whether the request should store the images directly as a tensor of RGB values.
 By default, images are saved as base64-encoded strings however the Xmodel worker requires that the data is a tensor so we add *True*.

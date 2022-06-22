@@ -18,8 +18,8 @@
 Dependencies
 ============
 
-This document catalogues the tools, libraries and packages that Xilinx Inference Server depends on and are installed in the Xilinx Inference Server Docker containers.
-The information here is derived from the Dockerfile and source files used in Xilinx Inference Server.
+This document catalogues the tools, libraries and packages that AMD Inference Server depends on and are installed in the AMD Inference Server Docker containers.
+The information here is derived from the Dockerfile and source files used in AMD Inference Server.
 If there is a conflict, the source takes precedence.
 
 Docker Image
@@ -28,12 +28,12 @@ Docker Image
 Base Image
 ^^^^^^^^^^
 
-The base image for Xilinx Inference Server containers is `Ubuntu 18.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
+The base image for AMD Inference Server containers is `Ubuntu 18.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
 
 Ubuntu Bionic Repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following packages (and any dependencies) are installed in the Xilinx Inference Server dev container from Ubuntu's repositories using Ubuntu's package manager ``apt``.
+The following packages (and any dependencies) are installed in the AMD Inference Server dev container from Ubuntu's repositories using Ubuntu's package manager ``apt``.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -48,8 +48,14 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :ubuntupackages:`gdb`,8.1-0ubuntu3,LGPL-2.1+ + others,Executable used for debugging
     :ubuntupackages:`git`,1:2.17.1-1ubuntu0.8,GPL-2 + others,Executable used for source control
     :ubuntupackages:`graphviz`,2.40.1-2,EPL-1.0 + others,Executable used to draw graphs in documentation
+    :ubuntupackages:`libboost1.65-dev`,1.65.1+dfsg-0ubuntu5,Boost,Used to build AKS kernels
+    :ubuntupackages:`libboost-filesystem1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
+    :ubuntupackages:`libboost-serialization1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
+    :ubuntupackages:`libboost-system1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
+    :ubuntupackages:`libboost-thread1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS
     :ubuntupackages:`libbrotli-dev`,1.0.3-1ubuntu1.3,MIT,Dynamically linked by Drogon
     :ubuntupackages:`libc-ares-dev`,1.14.0-1ubuntu0.1,MIT + others,Dynamically linked by Drogon
+    :ubuntupackages:`libgoogle-glog-dev`,0.3.5-1,BSD-3,Dynamically linked by VART
     :ubuntupackages:`libjson-c-dev`,0.12.1-1.3ubuntu0.3,MIT,Dynamically linked by rt-engine
     :ubuntupackages:`libjsoncpp-dev`,1.7.4-3,MIT + others,Dynamically linked by proteus-server and Drogon
     :ubuntupackages:`libssl-dev`,1.1.1-1ubuntu2.1~18.04.13,Dual OpenSSL/SSLeay,Dynamically linked by Drogon
@@ -59,6 +65,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :ubuntupackages:`openssh-client`,1:7.6p1-4ubuntu0.5,OpenSSH + others,Executable used for remote connections
     :ubuntupackages:`pkg-config`,0.29.1-0ubuntu2,GPL-2+,Executable used for configuring unilog
     :ubuntupackages:`python3`,3.6.5-3,PSF License,Executable used for scripting and testing proteus-server
+    :ubuntupackages:`python3-dev`,3.6.7-1~18.04,PSF License,Used to build Python bindings
     :ubuntupackages:`sudo`,1.8.21p2-3ubuntu1.4,ISC license + others,Executable used to grant elevated permissions to the user
     :ubuntupackages:`symlinks`,1.4-3build1,Freely distributable,Executable used to convert absolute symlinks to relative ones
     :ubuntupackages:`tzdata`,2021a-0ubuntu0.18.04,Public Domain,Used for setting the timezone
@@ -71,7 +78,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
 Ubuntu PPAs
 ^^^^^^^^^^^
 
-The following packages (and any dependencies) are installed in the Xilinx Inference Server dev container from a Personal Package Archive (PPA) using Ubuntu's package manager ``apt``.
+The following packages (and any dependencies) are installed in the AMD Inference Server dev container from a Personal Package Archive (PPA) using Ubuntu's package manager ``apt``.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -83,7 +90,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
 PyPI
 ^^^^
 
-The following packages (and any dependencies) are installed in the Xilinx Inference Server dev container from the Python Package Index (PyPI) using ``pip``.
+The following packages (and any dependencies) are installed in the AMD Inference Server dev container from the Python Package Index (PyPI) using ``pip``.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -97,6 +104,8 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
     :pypipackages:`numpy`,latest,BSD-3,Scientific computing package for Python
     :pypipackages:`opencv-python-headless`,latest,MIT,Python bindings for OpenCV
     :pypipackages:`pip`,latest,MIT,Python package installer
+    :pypipackages:`pybind11_mkdoc`,latest,MIT,Used to extract function documentation for Python binding
+    :pypipackages:`pybind11-stubgen`,latest,BSD-3,Used to generate type stubs for Python binding
     :pypipackages:`pytest`,latest,MIT,Python testing infrastructure
     :pypipackages:`pytest-benchmark`,latest,BSD-2,Plugin for Pytest to add benchmarking
     :pypipackages:`pytest-cpp`,latest,MIT,Plugin for Pytest to run C++ tests
@@ -115,7 +124,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
 Github
 ^^^^^^
 
-The following packages are installed in the Xilinx Inference Server dev container from the Github.
+The following packages are installed in the AMD Inference Server dev container from the Github.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -125,46 +134,44 @@ The following packages are installed in the Xilinx Inference Server dev containe
     :github:`cameron314/concurrentqueue`,1.0.3,Dual BSD-2/Boost + others,Statically linked by proteus-server for an efficient multi-producer queue
     :github:`jarro2783/cxxopts`,2.2.1,MIT,Statically linked by proteus-server for command-line argument parsing
     :github:`gdraheim/docker-systemctl-replacement`,1.5.4505,EUPL,Executable created by pyinstaller for starting XRM
-    :github:`drogonframework/drogon`,1.3.0,MIT,Dynamically linked by proteus-server for an HTTP and websocket server
+    :github:`drogonframework/drogon`,1.7.5,MIT,Dynamically linked by proteus-server for an HTTP and websocket server
+    :github:`SpartanJ/efsw`,latest,MIT,Dynamically linked by proteus-server for directory monitoring
+    :github:`FFmpeg/FFmpeg`,3.4.8,LGPL-2.1+ + others,Dynamically linked by proteus-server for video processing
     :github:`tschaub/gh-pages`,latest,MIT,Executable used to publish documentation to gh-pages branch
     :github:`git-lfs/git-lfs`,2.13.3,MIT + others,Executable used to manage large files in git
     :github:`tianon/gosu`,1.12,Apache 2.0,Executable used to drop down to user when starting container
     :github:`google/googletest`,1.11.0,BSD-3,Statically linked by proteus's test executables
+    :github:`grpc/grpc`,1.44,Apache 2.0,Dynamically linked by proteus-server for gRPC support
     :github:`include-what-you-use/include-what-you-use`,0.14,LLVM License,Executable used to check C++ header inclusions
     :github:`json-c/json-c`,0.15,MIT,Dynamically linked by Vitis libraries
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by proteus-server for base64 codec
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development
-    :github:`opencv/opencv`,3.4.4,Apache 2.0,Dynamically linked by proteus-server for image and video processing
+    :github:`opencv/opencv`,3.4.3,Apache 2.0,Dynamically linked by proteus-server for image and video processing
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server
+    :github:`pybind/pybind11`,2.9.1,BSD-3,Headers used to build Python bindings
     :github:`jupp0r/prometheus-cpp`,0.12.2,MIT,Dynamically linked by proteus-server for metrics
     :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by proteus-server and Vitis libraries
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging
+    :github:`Xilinx/Vitis-AI`,latest,Apache 2.0,VART is dynamically linked by proteus-server
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking proteus-server
 
 Xilinx
 ^^^^^^
 
-The following packages are installed in the Xilinx Inference Server dev container from Xilinx using Ubuntu's package manager ``apt``.
+The following packages are installed in the AMD Inference Server dev container from Xilinx using Ubuntu's package manager ``apt``.
 
 .. csv-table::
     :header: Name,Version,Link,License
     :widths: auto
 
-    aks,1.4.0-r73,:xilinxdownload:`Debian package <aks_1.4.0-r73_amd64.deb>`,Apache 2.0
-    rt-engine,1.4.0-r178,:xilinxdownload:`Debian package <librt-engine_1.4.0-r178_amd64.deb>`,Apache 2.0
-    target-factory,1.4.0-r77,:xilinxdownload:`Debian package <libtarget-factory_1.4.0-r77_amd64.deb>`,Apache 2.0
-    unilog,1.4.0-r75,:xilinxdownload:`Debian package <libunilog_1.4.0-r75_amd64.deb>`,Apache 2.0
-    vart,1.4.0-r117,:xilinxdownload:`Debian package <libvart_1.4.0-r117_amd64.deb>`,Apache 2.0
-    vitis-ai-library,1.4.0-r105,:xilinxdownload:`Debian package <libvitis_ai_library_1.4.0-r105_amd64.deb>`,Apache 2.0
-    xir,1.4.0-r80,:xilinxdownload:`Debian package <libxir_1.4.0-r80_amd64.deb>`,Apache 2.0
     xrm,1.3.29,:xilinxdownload:`Debian package <xrm_202120.1.3.29_18.04-x86_64.deb>`,Apache 2.0
     xrt,2.12.427,:xilinxdownload:`Debian package <xrt_202120.2.12.427_18.04-amd64-xrt.deb>`,Apache 2.0
 
 Included
 --------
 
-The following files are included in the Xilinx Inference Server repository under the terms of their original licensing. This information is duplicated in the LICENSE.
+The following files are included in the AMD Inference Server repository under the terms of their original licensing. This information is duplicated in the LICENSE.
 
 .. csv-table::
     :header: Name,Source,Original File,License,Usage
@@ -174,6 +181,7 @@ The following files are included in the Xilinx Inference Server repository under
     CodeCoverage.cmake,:github:`bilke/cmake-modules`,`CodeCoverage.cmake <https://www.github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake>`__,BSD-3,Cmake module for test coverage measurement
     ctpl.h,:github:`vit-vit/CTPL`,`ctpl.h <https://www.github.com/vit-vit/CTPL/blob/master/ctpl.h>`__,Apache 2.0,C++ Thread pool library
     dog-3619020_640.jpg,`Pixabay <https://pixabay.com/photos/dog-spitz-smile-ginger-home-pet-3619020/>`__,`dog-3619020_640.jpg <https://cdn.pixabay.com/photo/2018/08/20/14/08/dog-3619020_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing
+    nine_9273.jpg,`Keras MNIST dataset <https://keras.io/api/datasets/mnist/>`__,?,`CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/legalcode>`__,Used for testing
     proteusConfig.cmake,:github:`alexreinking/SharedStaticStarter`,`SomeLibConfig.cmake <https://www.github.com/alexreinking/SharedStaticStarter/blob/master/packaging/SomeLibConfig.cmake>`__,MIT,CMake module for installing libraries
     Queue.js,`Kate Rose Morley <https://code.iamkate.com/javascript/queues/>`__,`Queue.src.js <https://code.iamkate.com/javascript/queues/Queue.src.js>`__,`CC0 1.0 Universal <https://creativecommons.org/publicdomain/zero/1.0/legalcode>`__,JavaScript class for a queue
     sport-1284275_640.jpg,`Pixabay <https://pixabay.com/photos/sport-skateboard-skateboarding-fun-1284275/>`__,`sport-1284275_640.jpg <https://cdn.pixabay.com/photo/2016/03/27/21/05/sport-1284275_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing
