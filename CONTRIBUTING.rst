@@ -3,7 +3,7 @@
 Contributing
 ============
 
-Xilinx Inference Server is in active development and many things need to be done so thanks for helping!
+AMD Inference Server is in active development and many things need to be done so thanks for helping!
 You can contribute in a variety of ways.
 
 Ways to Contribute

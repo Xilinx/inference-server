@@ -18,8 +18,8 @@
 Dependencies
 ============
 
-This document catalogues the tools, libraries and packages that Xilinx Inference Server depends on and are installed in the Xilinx Inference Server Docker containers.
-The information here is derived from the Dockerfile and source files used in Xilinx Inference Server.
+This document catalogues the tools, libraries and packages that AMD Inference Server depends on and are installed in the AMD Inference Server Docker containers.
+The information here is derived from the Dockerfile and source files used in AMD Inference Server.
 If there is a conflict, the source takes precedence.
 
 Docker Image
@@ -28,12 +28,12 @@ Docker Image
 Base Image
 ^^^^^^^^^^
 
-The base image for Xilinx Inference Server containers is `Ubuntu 18.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
+The base image for AMD Inference Server containers is `Ubuntu 18.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
 
 Ubuntu Bionic Repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following packages (and any dependencies) are installed in the Xilinx Inference Server dev container from Ubuntu's repositories using Ubuntu's package manager ``apt``.
+The following packages (and any dependencies) are installed in the AMD Inference Server dev container from Ubuntu's repositories using Ubuntu's package manager ``apt``.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -78,7 +78,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
 Ubuntu PPAs
 ^^^^^^^^^^^
 
-The following packages (and any dependencies) are installed in the Xilinx Inference Server dev container from a Personal Package Archive (PPA) using Ubuntu's package manager ``apt``.
+The following packages (and any dependencies) are installed in the AMD Inference Server dev container from a Personal Package Archive (PPA) using Ubuntu's package manager ``apt``.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -90,7 +90,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
 PyPI
 ^^^^
 
-The following packages (and any dependencies) are installed in the Xilinx Inference Server dev container from the Python Package Index (PyPI) using ``pip``.
+The following packages (and any dependencies) are installed in the AMD Inference Server dev container from the Python Package Index (PyPI) using ``pip``.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -124,7 +124,7 @@ The following packages (and any dependencies) are installed in the Xilinx Infere
 Github
 ^^^^^^
 
-The following packages are installed in the Xilinx Inference Server dev container from the Github.
+The following packages are installed in the AMD Inference Server dev container from the Github.
 
 .. csv-table::
     :header: Name,Version,License,Usage
@@ -159,7 +159,7 @@ The following packages are installed in the Xilinx Inference Server dev containe
 Xilinx
 ^^^^^^
 
-The following packages are installed in the Xilinx Inference Server dev container from Xilinx using Ubuntu's package manager ``apt``.
+The following packages are installed in the AMD Inference Server dev container from Xilinx using Ubuntu's package manager ``apt``.
 
 .. csv-table::
     :header: Name,Version,Link,License
@@ -171,7 +171,7 @@ The following packages are installed in the Xilinx Inference Server dev containe
 Included
 --------
 
-The following files are included in the Xilinx Inference Server repository under the terms of their original licensing. This information is duplicated in the LICENSE.
+The following files are included in the AMD Inference Server repository under the terms of their original licensing. This information is duplicated in the LICENSE.
 
 .. csv-table::
     :header: Name,Source,Original File,License,Usage

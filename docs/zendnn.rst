@@ -13,16 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-ZenDNN for Inference Server
-===============================
+ZenDNN
+======
 
-Xilinx inference server is integrated with
+AMD Inference Server is integrated with
 `ZenDNN <https://developer.amd.com/zendnn/>`__ optimized libraries.
-Currently, the Xilinx Inference Server supports the ZenDNN optimized for
+Currently, the AMD Inference Server supports the ZenDNN optimized for
 TensorFlow and PyTorch.
+Check the :ref:`examples <zendnn_examples>` to see how to use ZenDNN with the Inference Server.
 
-For ZenDNN performance, plese refer to TensorFlow + ZenDNN and
-PyTorch + ZenDNN User Guide available at `ZenDNN AMD Developer <https://developer.amd.com/zendnn/>`_ site.
+For ZenDNN performance, please refer to TensorFlow + ZenDNN and
+PyTorch + ZenDNN User Guide available at the `ZenDNN AMD Developer <https://developer.amd.com/zendnn/>`_ site.
 
 Setup and Build
 ---------------
@@ -43,6 +44,9 @@ and Docker installed on your machine.
    4. Copy the downloaded package within the repository. This package
       will be used for further setup.
 
+      .. note:: The package will be needed by the Docker build process so it must be in a location that is not excluded in the ``.dockerignore`` file such as the root of the repository.
+      
+
 2. Build the docker with TensorFlow/PyTorch+ZenDNN
 
    To build docker image with TensorFlow/PyTorch+ZenDNN, use the command below:
@@ -51,29 +55,24 @@ and Docker installed on your machine.
 
       .. code-block:: console
 
-         $ ./proteus dockerize --no-vitis --tfzendnn=TF_v2.9_ZenDNN_v3.3_C++_API.zip
+         $ ./proteus dockerize --no-vitis --tfzendnn=./local/path/to/TF_v2.9_ZenDNN_v3.3_C++_API.zip
 
    2. For PyTorch
 
       .. code-block:: console
 
-         $ ./proteus dockerize --no-vitis --ptzendnn=PT_v1.11.0_ZenDNN_v3.3_C++_API.zip
+         $ ./proteus dockerize --no-vitis --ptzendnn=./local/path/to/PT_v1.11.0_ZenDNN_v3.3_C++_API.zip
 
-   :code:`--no-vitis` flag is provided to build the docker without VITIS components.
+   You can add the :code:`--no-vitis` flag to build the docker without Vitis AI components if needed.
 
    This will build a docker image with all the dependencies required for
-   the Xilinx Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
+   the AMD Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
    image for further usage.
-
-   NOTE: The downloaded package must be inside the inference-server
-   folder since Docker will not be able to access the file outside of
-   the repository.
-
 
 Get objects (models/images)
 ---------------------------
 
-Run the following command to get some git lfs assets for examples/tests.
+Run the following command to get some ``git lfs`` assets for examples/tests.
 
 .. code-block:: console
 
@@ -84,8 +83,8 @@ To run the examples and test cases, we need to download some models.
 
 * TensorFlow + ZenDNN
 
-   Run the command below to download a ResNet50 tensorflow model from
-   `VitisAI repository <https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/tf_resnetv1_50_imagenet_224_224_6.97G_2.5/model.yaml>`__
+   Run the command below to download a ResNet50 tensorflow model from the
+   `Vitis AI model zoo <https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/tf_resnetv1_50_imagenet_224_224_6.97G_2.5/model.yaml>`__
 
    .. code-block:: console
 
@@ -97,7 +96,7 @@ To run the examples and test cases, we need to download some models.
 * PyTorch + ZenDNN
 
    Run the command below to download a ResNet50 tensorflow model from
-   `VitisAI repository <https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/pt_resnet50_imagenet_224_224_8.2G_2.5/model.yaml>`__
+   `Vitis AI model zoo <https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/pt_resnet50_imagenet_224_224_8.2G_2.5/model.yaml>`__
 
    .. code-block:: console
 
@@ -106,8 +105,8 @@ To run the examples and test cases, we need to download some models.
    The model downloaded will be available at :code:`./external/pytorch_models`.
 
 
-Setup Docker Container
-----------------------
+Set Up Docker Container
+-----------------------
 
 1. Run the container
 
@@ -118,11 +117,11 @@ Setup Docker Container
 
       $ ./proteus run --dev
 
-2. Build Xilinx Inference Server
+2. Build AMD Inference Server
 
    Now that the environment is setup within the docker container, we
    need to build the Inference Server. The below command will build the
-   stable debug build of the Xilinx Inference Server.
+   stable debug build of the AMD Inference Server.
 
    .. code-block:: console
 
@@ -160,119 +159,10 @@ Setup Docker Container
    The converted TorchScript model will be used by the examples and tests.
    For more info on TorchScript models, please visit `PyTorch docs <https://pytorch.org/tutorials/advanced/cpp_export.html>`_.
 
-Examples
---------
-
-There are two examples provided in the repo (Python API and C++ API) for both TensorFlow and PyTorch.
-
-Python API
-^^^^^^^^^^
-
-Python examples below will do the following:
-
-1. Start the Xilinx Inference Server on HTTP port 8998
-2. Load the Xilinx Inference Server with the specified model file
-3. Read the image specified / Create dummy data
-4. Sends the data to the Xilinx Inference Server over HTTP
-5. Get the result back from the Xilinx Inference Server over HTTP
-6. Post process if any and display the output
-
-TensorFlow + ZenDNN
-~~~~~~~~~~~~~~~~~~~
-
-The python example is available at :code:`examples/python/tf_zendnn.py`.
-
-1. To run the example with a real image:
-
-   .. code-block:: console
-
-      $ python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb --image_location ./tests/assets/dog-3619020_640.jpg
-
-2. To run the example with dummy data:
-
-   .. code-block:: console
-
-      $ python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb --batch_size 16 --steps 4
-
-   The above command will run the example with dummy data (4 requests
-   with 16 dummy images each). This can be used as a functional test.
-
-For more options, check the help with:
-
-   .. code-block:: console
-
-      $ python examples/python/tf_zendnn.py --help
-
-
-PyTorch + ZenDNN
-~~~~~~~~~~~~~~~~
-
-The python example is available at :code:`examples/python/pt_zendnn.py`.
-
-1. To run the example with a real image:
-
-   .. code-block:: console
-
-      $ python examples/python/pt_zendnn.py --graph ./external/pytorch_models/resnet50_pretrained.pt --image_location ./tests/assets/dog-3619020_640.jpg
-
-2. To run the example with dummy data:
-
-   .. code-block:: console
-
-      $ python examples/python/pt_zendnn.py --graph ./external/pytorch_models/resnet50_pretrained.pt --batch_size 16 --steps 4
-
-   The above command will run the example with dummy data (4 requests
-   with 16 dummy images each). This can be used as a functional test.
-
-For more options, check the help with:
-
-   .. code-block:: console
-
-      $ python examples/python/pt_zendnn.py --help
-
-
-C++ API
-^^^^^^^
-
-The C++ API bypasses the HTTP server and connects directly to the
-Inference Server. The flow is as follows
-
-   1. Load the Xilinx Inference Server with the specified model file
-   2. Read the image specified / Create dummy data and prepare input
-   3. The data is packed into an Interface object and pushed to a queue
-   4. Retrieve the result back from the Xilinx Inference Server
-   5. Post process if any and display the output
-
-The C++ example will be built when the server is being built according to the packages available.
-
-* To run the C++ example with real image, provide :code:`image_location` in :code:`Option` struct in source code.
-* If :code:`image_location` is set to :code:`""` in :code:`Option`, dummy data will be used. This can be used for benchmarking.
-
-TensorFlow + ZenDNN
-~~~~~~~~~~~~~~~~~~~
-
-Source is available at :code:`examples/cpp/tf_zendnn_client.cpp`. To build and run the example:
-
-.. code-block:: console
-
-   $ ./proteus build --debug && ./build/Debug/examples/cpp/tf_zendnn_client
-
-PyTorch + ZenDNN
-~~~~~~~~~~~~~~~~
-
-Source is available at :code:`examples/cpp/pt_zendnn_client.cpp`. To build and run the example:
-
-.. code-block:: console
-
-   $ ./proteus build --debug && ./build/Debug/examples/cpp/pt_zendnn_client
-
-
 Run Tests
 ---------
 
-To verify the working of TensorFlow+ZenDNN in Xilinx Inference
-Server, run a sample test case. This test will load a model and run
-with a sample image and assert the output.
+To verify the working of TensorFlow+ZenDNN in the AMD Inference Server, run a sample test case. This test will load a model and run with a sample image and assert the output.
 
 1. For TensorFlow + ZenDNN
 

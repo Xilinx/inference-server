@@ -18,7 +18,7 @@ Architecture
 
 .. _architecture_overview:
 .. figure:: assets/architecture.png
-    :alt: Diagram showing Xilinx Inference Server's architecture
+    :alt: Diagram showing AMD Inference Server's architecture
     :height: 400px
     :align: left
 
@@ -112,7 +112,7 @@ Batching
 
 .. _architecture_detail:
 .. figure:: assets/architecture_detailed.png
-    :alt: Diagram showing more detail in to the Xilinx Inference Server's architecture
+    :alt: Diagram showing more detail in to the AMD Inference Server's architecture
     :height: 400px
     :align: left
 
@@ -140,7 +140,7 @@ The worker group that the batcher is attached to provides a set of input/output 
 These buffers are available in a queue for that batcher to pull from when it has incoming requests to batch together.
 Most commonly, each buffer can be used to represent one batch-size worth of contiguous memory but its exact nature depends on the buffer implementation that the worker is using.
 In this case, the batcher's job is to take individual requests and move its data into one slot of this buffer and construct the corresponding ``InferenceRequest`` object.
-Batchers have some flexibility with how these batches are constructed, which is why multiple batcher implementations are possible and supported in the Xilinx Inference Server.
+Batchers have some flexibility with how these batches are constructed, which is why multiple batcher implementations are possible and supported in the AMD Inference Server.
 For example, one batcher may allow partial batches to be pushed on after enough time whereas this may not be allowed by another batcher.
 
 Batchers use the ``Interface`` object's ``getRequest()`` method to help create batches.
@@ -210,7 +210,7 @@ External Processing
 ^^^^^^^^^^^^^^^^^^^
 
 Workers, by virtue of their generic structure, may be highly complex and call entirely external applications for processing data.
-The Xilinx Inference Server supports this use case and suggests the following for organizing code:
+The AMD Inference Server supports this use case and suggests the following for organizing code:
 
 * The external application can be brought in similarly to how existing external applications are brought in already with CMake
 * The general worker structure should follow the existing model for native workers as defined above

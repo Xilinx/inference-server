@@ -18,14 +18,14 @@
 Hello World (Python)
 ====================
 
-Xilinx Inference Server's Python API allows you to start the server and send requests to it from Python.
+AMD Inference Server's Python API allows you to start the server and send requests to it from Python.
 This example walks you through how to start the server and use Python to send requests to a simple model.
 The complete script used here is available: :file:`examples/python/hello_world_rest.py`.
 
 Import the library
 ------------------
 
-We need to bring in the Xilinx Inference Server Python library.
+We need to bring in the AMD Inference Server Python library.
 The library's source code is in :file:`src/python` and it gets installed in the dev container on startup.
 
 .. literalinclude:: ../examples/python/hello_world_rest.py
@@ -43,7 +43,7 @@ In this example, we'll be using REST to communicate to the server so we create a
     :end-before: -create objects:
     :dedent: 4
 
-Is Xilinx Inference Server already running?
+Is AMD Inference Server already running?
 -------------------------------------------
 
 If the server is already started externally, we don't want to start it again.
@@ -59,8 +59,8 @@ Either way, the client will attempt to communicate to the server at ``http://loc
 Load a worker
 -------------
 
-Inference requests in Xilinx Inference Server are made to workers.
-Workers are started as threads in Xilinx Inference Server and have a defined lifecycle.
+Inference requests in AMD Inference Server are made to workers.
+Workers are started as threads in AMD Inference Server and have a defined lifecycle.
 Before making an inference request to a worker, it must first be loaded.
 Loading a worker returns an identifier that the client should use for future operations.
 
@@ -76,7 +76,7 @@ Inference
 ---------
 
 Once the worker is ready, we can make an inference request to it.
-We construct a request that contains five integers and send it to Xilinx Inference Server.
+We construct a request that contains five integers and send it to AMD Inference Server.
 The ``NumericalInferenceRequest`` class is a helper class that simplifies creating a request in the right format.
 
 .. literalinclude:: ../examples/python/hello_world_rest.py
@@ -100,7 +100,7 @@ We also check that each output only has one index and is one more than the corre
 Clean up
 --------
 
-Workers that are loaded in Xilinx Inference Server will persist until the server shuts down or they're explicitly unloaded.
+Workers that are loaded in AMD Inference Server will persist until the server shuts down or they're explicitly unloaded.
 While it's not shown here, the Python API provides an ``unload()`` method for this purpose.
 Finally, if we started the server from Python, we shut it down before finishing.
 If there are any loaded workers at this time, they will be cleaned up before shutdown.

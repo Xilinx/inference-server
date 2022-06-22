@@ -29,15 +29,18 @@ Health
 Metadata
 --------
 
-*  GET ``v2``: Get Xilinx Inference Server's metadata
+*  GET ``v2``: Get AMD Inference Server's metadata
 *  GET ``v2/hardware``: Get a string describing the number and type of kernels that are available
+*  GET ``v2/models``: Get a list of active models
 *  GET ``v2/models/{model}``: Get model metadata
 
 Inference
 ---------
 
-*  POST ``v2/repository/models/{model}/load``: Load a model. The HTML body in the response contains the endpoint to use for this model
+*  POST ``v2/repository/models/{model}/load``: Load a model
+*  POST ``v2/workers/{worker}/load``: Load a worker. The HTML body in the response contains the endpoint to use for subsequent requests
 *  POST ``v2/repository/models/{model}/unload``: Unload a model
+*  POST ``v2/workers/{worker}/unload``: Unload a worker
 *  POST ``v2/models/{model}/infer``: Make an inference request to a particular model
 
 Observation

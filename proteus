@@ -838,18 +838,11 @@ class Get:
                         with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
                         if args.tfzendnn or args.ptzendnn:
-<<<<<<< HEAD
-                            shutil.move(
-                                str(tmp_dir / filename.split(".zip")[0] / "float/"),
-                                str(location),
-                            )
-=======
                             modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
                             modelname = os.listdir(modelpath)[0]
                             if not os.path.exists(location): os.makedirs(location)
                             shutil.move(os.path.join(modelpath, modelname),
                                         os.path.join(location, modelname))
->>>>>>> dev
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)

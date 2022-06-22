@@ -16,7 +16,7 @@
 Vitis AI
 ========
 
-Using the Xilinx Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
+Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
 These instructions assume an Alveo card.
 If using a different card, follow the appropriate instructions for your card.
 

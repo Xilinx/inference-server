@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Running an XModel (C++)
-=======================
+Running a Vitis AI XModel (C++)
+===============================
 
 This example walks you through the process to make an inference request to a custom XModel in C++ using two methods: the native C++ API and the gRPC API.
 This example is similar to the :ref:`xmodel_example_python` one but it uses C++ to create a new executable instead of making requests to a server if using the native C++ API.
@@ -25,7 +25,7 @@ The complete program used here is available: :file:`examples/cpp/custom_processi
 Include the library
 -------------------
 
-Xilinx Inference Server's C++ API allows you to write your own C++ applications that link against Xilinx Inference Server's backend.
+AMD Inference Server's C++ API allows you to write your own C++ applications that link against AMD Inference Server's backend.
 This approach bypasses the overheads associated with serialization that occurs with REST-based Python inferencing.
 The public API is defined in :file:`proteus/proteus.hpp` and we include it here.
 
@@ -53,7 +53,7 @@ These variables are pulled out into a separate block to highlight them.
 Initialize
 ----------
 
-Before calling any of other methods in the API, we need to first initialize Xilinx Inference Server.
+Before calling any of other methods in the API, we need to first initialize AMD Inference Server.
 
 .. literalinclude:: ../examples/cpp/custom_processing.cpp
     :start-after: +initialize:
@@ -96,7 +96,7 @@ The implementation of the pre-processing function can be seen in the example's s
 Construct request
 -----------------
 
-Using our images, we can construct a request to Xilinx Inference Server's backend.
+Using our images, we can construct a request to AMD Inference Server's backend.
 We hardcode the shape of the image to the size we know that the pre-processing enforces.
 We also pass the data-type of the data, which we again know to be an signed 8-bit integer from the pre-processing.
 
@@ -109,7 +109,7 @@ We also pass the data-type of the data, which we again know to be an signed 8-bi
 Inference
 ---------
 
-We can then send the request to Xilinx Inference Server by passing in a name from the output of a previous ``load()`` and the request itself.
+We can then send the request to AMD Inference Server by passing in a name from the output of a previous ``load()`` and the request itself.
 With the native C++ API, enqueueing the request returns a Future object that we can later check to get the response.
 For now, since there's only one, we can call ``get()`` on a Future object, which will block until the response is available.
 The Future object will return a :cpp:class:`proteus::InferenceResponse` object.
@@ -137,8 +137,8 @@ We can check this against our expected golden output to confirm that the inferen
 Clean up
 --------
 
-To safely end the program, we should signal the Xilinx Inference Server backend to shutdown.
-During the shutdown, Xilinx Inference Server will stop any workers that haven't been unloaded yet and shut down management threads safely.
+To safely end the program, we should signal the AMD Inference Server backend to shutdown.
+During the shutdown, AMD Inference Server will stop any workers that haven't been unloaded yet and shut down management threads safely.
 Note that this function was also called in the validation step above.
 
 .. literalinclude:: ../examples/cpp/custom_processing.cpp

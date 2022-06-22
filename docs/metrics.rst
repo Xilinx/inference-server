@@ -16,7 +16,7 @@
 Metrics
 =======
 
-Xilinx Inference Server exposes metrics using `Prometheus <https://prometheus.io/>`__ and they allow users to check Xilinx Inference Server's state in real-time.
+AMD Inference Server exposes metrics using `Prometheus <https://prometheus.io/>`__ and they allow users to check AMD Inference Server's state in real-time.
 
 Quickstart
 ----------
@@ -34,7 +34,7 @@ In the container:
     $ ./prometheus
 
 By default, Prometheus will use a configuration file named ``prometheus.yml`` in the local directory.
-A sample ``prometheus.yml`` is provided in Xilinx Inference Server that can be used as-is or changed as needed.
+A sample ``prometheus.yml`` is provided in AMD Inference Server that can be used as-is or changed as needed.
 Documentation about the additional options for this file is available `online <https://prometheus.io/docs/prometheus/latest/configuration/configuration/>`__.
 
 Once the prometheus executable is running, start your instrumented application.
