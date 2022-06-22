@@ -37,7 +37,18 @@ add_custom_target(
 add_subdirectory(core) # sets CORE_OBJS
 add_subdirectory(clients) # sets CLIENT_OBJS
 
-pybind11_add_module(proteus_py MODULE proteus.cpp)
+# add this dummy file to add a dependency on the Pybind11 target so it runs if the Proteus package isn't installed in pip
+set(dummy_new_file ${CMAKE_CURRENT_BINARY_DIR}/src/main.cpp)
+if(NOT EXISTS ${dummy_new_file})
+    file(WRITE ${dummy_new_file} "")
+endif()
+execute_process(COMMAND sh -c "pip list | grep Proteus > /dev/null" RESULT_VARIABLE Result)
+if(${Result})
+    # touch the file to modify it if pip fails to find the package
+    file(TOUCH ${dummy_new_file})
+endif()
+
+pybind11_add_module(proteus_py MODULE proteus.cpp ${dummy_new_file})
 target_include_directories(proteus_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
 target_link_libraries(proteus_py PRIVATE proteus ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS})
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME _proteus)

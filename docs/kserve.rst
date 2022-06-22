@@ -18,7 +18,7 @@
 KServe
 ======
 
-The Xilinx Inference Server can be used with `KServe <https://github.com/kserve/kserve>`__ to deploy the server on a Kubernetes cluster.
+The AMD Inference Server can be used with `KServe <https://github.com/kserve/kserve>`__ to deploy the server on a Kubernetes cluster.
 
 Setting up KServe
 -----------------

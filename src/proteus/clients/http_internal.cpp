@@ -543,53 +543,54 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
   return resp;
 }
 
-DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
-                       DrogonCallback callback) {
-  this->req_ = req;
-  this->callback_ = std::move(callback);
-  this->type_ = InterfaceType::kDrogonHttp;
-  this->json_ = nullptr;
+std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
+#ifdef PROTEUS_ENABLE_LOGGING
+  Logger logger{Loggers::kServer};
+#endif
+
+  // attempt to get the JSON object directly first
+  const auto &json_obj = req->getJsonObject();
+  if (json_obj != nullptr) {
+    return json_obj;
+  }
+
+  PROTEUS_LOG_DEBUG(logger, "Failed to get JSON data directly");
+
+  // if it's not valid, then we need to attempt to parse the body
+  auto root = std::make_shared<Json::Value>();
+
+  std::string errors;
+  Json::CharReaderBuilder builder;
+  Json::CharReader *reader = builder.newCharReader();
+  auto body = req->getBody();
+  bool success =
+    reader->parse(body.data(), body.data() + body.size(), root.get(), &errors);
+  if (success) {
+    return root;
+  }
+
+  PROTEUS_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
+
+  // if it's still not valid, attempt to uncompress the body and convert to JSON
+  auto body_decompress = z_decompress(body.data(), body.length());
+  success = reader->parse(body_decompress.data(),
+                          body_decompress.data() + body_decompress.size(),
+                          root.get(), &errors);
+  if (success) {
+    return root;
+  }
+
+  throw std::invalid_argument("Failed to interpret request body as JSON");
 }
 
-void DrogonHttp::setJson() {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-#endif
-  const auto &json_raw = this->req_->getJsonObject();
-
-  // if we fail to get the JSON object, return
-  if (json_raw == nullptr) {
-    auto root = std::make_shared<Json::Value>();
-    std::string errors;
-    Json::CharReaderBuilder builder;
-    Json::CharReader *reader = builder.newCharReader();
-    auto body = this->req_->getBody();
-    auto body_parsed = z_decompress(body.data(), body.length());
-    if (body_parsed.empty()) {
-      this->callback_(errorHttpResponse("Failed attempt to inflate request",
-                                        HttpStatusCode::k400BadRequest));
-      return;
-    }
-    bool parsingSuccessful =
-      reader->parse(body_parsed.data(), body_parsed.data() + body_parsed.size(),
-                    root.get(), &errors);
-    if (!parsingSuccessful) {
-      this->callback_(errorHttpResponse("Failed to parse JSON request",
-                                        HttpStatusCode::k400BadRequest));
-      return;
-    }
-    PROTEUS_LOG_INFO(logger, "Successfully inflated request");
-    this->json_ = std::move(root);
-  } else {
-    this->json_ = json_raw;
-  }
+DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
+                       DrogonCallback callback)
+  : req_(req), callback_(std::move(callback)) {
+  this->type_ = InterfaceType::kDrogonHttp;
+  this->json_ = parseJson(req.get());
 }
 
 size_t DrogonHttp::getInputSize() {
-  if (this->json_ == nullptr) {
-    this->setJson();
-  }
-
   if (!this->json_->isMember("inputs")) {
     throw std::invalid_argument("No 'inputs' key present in request");
   }

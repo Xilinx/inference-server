@@ -65,7 +65,7 @@ class TestPtZendnn:
                 "Connection to the proteus server ended without response!", False
             )
 
-        num_inputs = len(request.inputs)
+        num_inputs = len(request.getInputs())
 
         if check_asserts:
             assert not response.isError(), response.getError()
@@ -96,7 +96,7 @@ class TestPtZendnn:
                     input_size=preprocessing["input_size"],
                 )
             )
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
         k = postprocess(response, 5)
         gold_response_output = [259, 157, 152, 261, 154]
@@ -119,7 +119,7 @@ class TestPtZendnn:
                     input_size=preprocessing["input_size"],
                 )
             )
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
         k = postprocess(response, 5)
         gold_response_output = [259, 157, 152, 261, 154]
@@ -135,7 +135,7 @@ class TestPtZendnn:
         ).astype(np.float32)
         images = [image for image in images]
 
-        request = ImageInferenceRequest(images, True)
+        request = proteus.ImageInferenceRequest(images, True)
 
         options = {
             "model": model_fixture,

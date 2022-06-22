@@ -181,8 +181,8 @@ void mapParametersToProto(
   }
 }
 
-std::string GrpcClient::modelLoad(const std::string& model,
-                                  RequestParameters* parameters) {
+void GrpcClient::modelLoad(const std::string& model,
+                           RequestParameters* parameters) {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -197,10 +197,9 @@ std::string GrpcClient::modelLoad(const std::string& model,
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelLoad(&context, request, &reply);
 
-  if (status.ok()) {
-    return reply.endpoint();
+  if (!status.ok()) {
+    throw std::runtime_error(status.error_message());
   }
-  throw std::runtime_error(status.error_message());
 }
 
 void GrpcClient::modelUnload(const std::string& model) {
@@ -213,6 +212,44 @@ void GrpcClient::modelUnload(const std::string& model) {
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelUnload(&context, request, &reply);
+
+  if (!status.ok()) {
+    throw std::runtime_error(status.error_message());
+  }
+}
+
+std::string GrpcClient::workerLoad(const std::string& worker,
+                                   RequestParameters* parameters) {
+  inference::WorkerLoadRequest request;
+  inference::WorkerLoadResponse reply;
+
+  ClientContext context;
+
+  request.set_name(worker);
+  auto* params = request.mutable_parameters();
+  if (parameters != nullptr) {
+    mapParametersToProto(parameters->data(), params);
+  }
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->WorkerLoad(&context, request, &reply);
+
+  if (status.ok()) {
+    return reply.endpoint();
+  }
+  throw std::runtime_error(status.error_message());
+}
+
+void GrpcClient::workerUnload(const std::string& worker) {
+  inference::WorkerUnloadRequest request;
+  inference::WorkerUnloadResponse reply;
+
+  ClientContext context;
+
+  request.set_name(worker);
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->WorkerUnload(&context, request, &reply);
 
   if (!status.ok()) {
     throw std::runtime_error(status.error_message());
@@ -495,8 +532,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
 
 void startGrpcServer(int port) {
 #ifdef PROTEUS_ENABLE_GRPC
-  std::string address = "localhost:" + std::to_string(port);
-  grpc::start(address);
+  grpc::start(port);
 #else
   (void)port;  // suppress unused variable warning
 #endif

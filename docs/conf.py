@@ -31,7 +31,7 @@ imp.load_source("proteus_cli", os.path.abspath("../proteus"))
 
 # -- Project information -----------------------------------------------------
 
-project = "Xilinx Inference Server"
+project = "AMD Inference Server"
 copyright = "2021, Xilinx Inc."
 author = "Xilinx Inc."
 

@@ -213,7 +213,7 @@ struct Option {
   std::string root = std::getenv("PROTEUS_ROOT");
 
   std::string graph =
-    root + "/external/tensorflow_models/resnet_v1_50_inference.pb";
+    root + "/external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb";
   std::string image_location = root + "/tests/assets/dog-3619020_640.jpg";
   // std::string image_location = "";
   std::string input_node = "input";
@@ -265,7 +265,7 @@ int main() {
   parameters.put("input_size", options.input_size);
   parameters.put("inter_op", options.inter_op);
   parameters.put("intra_op", options.intra_op);
-  auto workerName = client.modelLoad("TfZendnn", &parameters);
+  auto workerName = client.workerLoad("TfZendnn", &parameters);
 
   float time_tmp = 0.f;
   // prepare images for inference

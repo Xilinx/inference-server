@@ -20,13 +20,19 @@
 #include <csignal>              // for signal, SIGINT
 #include <cstdlib>              // for exit
 #include <cxxopts/cxxopts.hpp>  // for Options, value, OptionAdder
-#include <iostream>             // for operator<<, endl, basic_o...
-#include <string>               // for string, allocator, operat...
+#include <efsw/efsw.hpp>        // for FileWatcher
+#include <filesystem>
+#include <iostream>  // for operator<<, endl, basic_o...
+#include <string>    // for string, allocator, operat...
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_HTTP, PROT...
-#include "proteus/clients/native.hpp"       // for initialize, terminate
-#include "proteus/servers/grpc_server.hpp"  // for start, stop
-#include "proteus/servers/http_server.hpp"  // for start, stop
+#include "proteus/build_options.hpp"   // for PROTEUS_ENABLE_HTTP, PROT...
+#include "proteus/clients/native.hpp"  // for initialize, terminate
+#include "proteus/core/model_repository.hpp"  // for ModelRepository
+#include "proteus/observation/logging.hpp"    // for logger
+#include "proteus/servers/grpc_server.hpp"    // for start, stop
+#include "proteus/servers/http_server.hpp"    // for start, stop
+
+namespace fs = std::filesystem;
 
 /**
  * @brief Handler for incoming interrupt signals
@@ -54,16 +60,32 @@ int main(int argc, char* argv[]) {
 #ifdef PROTEUS_ENABLE_HTTP
   int http_port = kDefaultHttpPort;
 #endif
+#ifdef PROTEUS_ENABLE_GRPC
+  int grpc_port = kDefaultGrpcPort;
+#endif
+  std::string model_repository = "/mnt/models";
+  bool enable_repository_watcher = false;
+  bool use_polling_watcher = false;
 
   try {
-    cxxopts::Options options("Proteus Server",
-                             "Inference in the cloud with Xilinx FPGAs");
-    options.allow_unrecognised_options().add_options()
+    cxxopts::Options options("proteus-server", "Inference in the cloud");
+    // clang-format off
+    options.add_options()
+    ("model-repository", "Path to the model repository",
+      cxxopts::value<std::string>(model_repository))
+    ("enable-repository-watcher",
+      "Actively monitor the model-repository directory for new models",
+      cxxopts::value<bool>(enable_repository_watcher))
+    ("use-polling-watcher", "Use polling to monitor model-repository directory",
+      cxxopts::value<bool>(use_polling_watcher))
 #ifdef PROTEUS_ENABLE_HTTP
-      ("http_port", "Port to use for HTTP server",
-       cxxopts::value<int>(http_port))
+    ("http-port", "Port to use for HTTP server", cxxopts::value<int>(http_port))
 #endif
-        ("help", "Print help");
+#ifdef PROTEUS_ENABLE_GRPC
+    ("grpc-port", "Port to use for gRPC server", cxxopts::value<int>(grpc_port))
+#endif
+    ("help", "Print help");
+    // clang-format on
 
     auto result = options.parse(argc, argv);
 
@@ -77,10 +99,36 @@ int main(int argc, char* argv[]) {
   }
 
   proteus::initialize();
+  proteus::Logger logger{proteus::Loggers::kServer};
+
+  proteus::ModelRepository::setRepository(model_repository);
+  PROTEUS_LOG_INFO(logger, "Using model repository: " + model_repository);
+
+  std::unique_ptr<efsw::FileWatcher> file_watcher;
+  std::unique_ptr<proteus::UpdateListener> listener;
+  if (enable_repository_watcher) {
+    file_watcher = std::make_unique<efsw::FileWatcher>(use_polling_watcher);
+    listener = std::make_unique<proteus::UpdateListener>();
+
+    file_watcher->addWatch(model_repository, listener.get(), true);
+    file_watcher->watch();
+
+    proteus::NativeClient client;
+    for (const auto& path : fs::directory_iterator(model_repository)) {
+      if (path.is_directory()) {
+        auto model = path.path().filename();
+        try {
+          client.modelLoad(model, nullptr);
+        } catch (const std::runtime_error& e) {
+          PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
+        }
+      }
+    }
+  }
 
 #ifdef PROTEUS_ENABLE_GRPC
-  std::cout << "gRPC server starting at port " << 50051 << "\n";
-  proteus::grpc::start("0.0.0.0:50051");
+  std::cout << "gRPC server starting at port " << grpc_port << "\n";
+  proteus::grpc::start(grpc_port);
 #endif
 
 #ifdef PROTEUS_ENABLE_HTTP

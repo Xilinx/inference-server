@@ -1,0 +1,72 @@
+// Copyright 2020 kubeflow.org.
+// Copyright 2022 Xilinx Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+package inference;
+
+message Config {
+  // Metadata for a tensor
+  message TensorMetadata {
+    // The tensor name
+    string name = 1;
+
+    // The tensor data type
+    string datatype = 2;
+
+    // The tensor shape. A variable-size dimension is represented by a -1 value
+    repeated int64 shape = 3;
+  }
+
+  // The model name
+  string name = 1;
+
+  // The versions of the model available on the server.
+  repeated string versions = 2;
+
+  // The model's platform
+  string platform = 3;
+
+  // The model's inputs
+  repeated TensorMetadata inputs = 4;
+
+  // The model's outputs
+  repeated TensorMetadata outputs = 5;
+
+  // Optional inference input tensor parameters.
+  map<string, InferParameter2> parameters = 6;
+}
+
+// An inference parameter value. The Parameters message describes a
+// "name"/"value" pair, where the "name" is the name of the parameter
+// and the "value" is a boolean, integer, or string corresponding to
+// the parameter.
+message InferParameter2{
+  // The parameter value can be a string, an int64, a boolean
+  // or a message specific to a predefined parameter.
+  oneof parameter_choice
+  {
+    // A boolean parameter value.
+    bool bool_param = 1;
+
+    // An int64 parameter value.
+    int64 int64_param = 2;
+
+    // A string parameter value.
+    string string_param = 3;
+
+    // A double parameter value
+    double double_param = 4;
+  }
+}

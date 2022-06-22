@@ -82,10 +82,21 @@ WorkerInfo* Manager::getWorker(const std::string& key) {
 }
 
 bool Manager::workerReady(const std::string& key) {
-  auto metadata = this->getWorkerMetadata(key);
-  return metadata.isReady();
+  std::shared_ptr<proteus::UpdateCommand> request;
+  int ready = -1;
+  request = std::make_shared<UpdateCommand>(UpdateCommandType::Ready, key,
+                                            nullptr, &ready);
+  update_queue_->enqueue(request);
+  while (ready == -1 && request->eptr == nullptr) {
+    std::this_thread::yield();
+  }
+  if (request->eptr != nullptr) {
+    std::rethrow_exception(request->eptr);
+  }
+  return ready;
 }
 
+// FIXME(varunsh): potential race condition if the worker is being deleted
 ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   auto* worker = this->getWorker(key);
   auto* foo = worker->workers_.begin()->second;
@@ -93,7 +104,7 @@ ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
 }
 
 void Manager::workerAllocate(std::string const& key, int num) {
-  auto* worker = this->getWorker(key);
+  const auto* worker = this->getWorker(key);
   auto request =
     std::make_shared<UpdateCommand>(UpdateCommandType::Allocate, key, &num);
   update_queue_->enqueue(request);
@@ -151,11 +162,21 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
         }
         break;
       case UpdateCommandType::Add:
-        auto* parameters = static_cast<RequestParameters*>(request->object);
         try {
+          auto* parameters = static_cast<RequestParameters*>(request->object);
           auto endpoint = this->endpoints_.add(request->key, *parameters);
           static_cast<std::string*>(request->retval)
             ->assign(std::string{endpoint});
+        } catch (...) {
+          request->eptr = std::current_exception();
+        }
+        break;
+      case UpdateCommandType::Ready:
+        try {
+          auto* workerInfo = this->getWorker(request->key);
+          auto* worker = workerInfo->workers_.begin()->second;
+          auto metadata = worker->getMetadata();
+          *static_cast<int*>(request->retval) = metadata.isReady();
         } catch (...) {
           request->eptr = std::current_exception();
         }
@@ -257,15 +278,20 @@ std::string Manager::Endpoints::add(const std::string& worker,
   auto endpoint = this->load(worker, &parameters);
   auto* worker_info = this->get(endpoint);
 
+  std::string worker_name = endpoint;
+  if (parameters.has("worker")) {
+    worker_name = parameters.get<std::string>("worker");
+  }
+
   // if the worker doesn't exist yet, we need to create it
   try {
     if (worker_info == nullptr) {
-      auto new_worker = std::make_unique<WorkerInfo>(endpoint, &parameters);
+      auto new_worker = std::make_unique<WorkerInfo>(worker_name, &parameters);
       this->workers_.insert(std::make_pair(endpoint, std::move(new_worker)));
       // if the worker exists but the share parameter is false, we need to add
       // one
     } else if (!share) {
-      worker_info->addAndStartWorker(endpoint, &parameters);
+      worker_info->addAndStartWorker(worker_name, &parameters);
     }
   } catch (...) {
     // undo the load if the worker creation fails

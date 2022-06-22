@@ -280,7 +280,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int i = 0; i < inputs.size(); i++) {
         InferenceResponseOutput output;
         auto buffer = std::make_shared<std::vector<int>>();
-        buffer->reserve(response_size);
+        buffer->resize(response_size);
         memcpy(buffer->data(), topKData + (i * response_size),
                response_size * sizeof(int));
         auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);

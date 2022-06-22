@@ -20,7 +20,7 @@
 #include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
 void test(proteus::Client* client) {
-  auto endpoint = client->modelLoad("echo", nullptr);
+  auto endpoint = client->workerLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
   std::vector<uint32_t> imgData;
@@ -50,8 +50,10 @@ void test(proteus::Client* client) {
   client->modelUnload(endpoint);
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelInfer) { test(client_.get()); }
+#endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelInfer) {
@@ -59,4 +61,6 @@ TEST_F(BaseFixture, ModelInfer) {
   test(&client);
 }
 
+#ifdef PROTEUS_ENABLE_HTTP
 TEST_F(HttpFixture, ModelInfer) { test(client_.get()); }
+#endif

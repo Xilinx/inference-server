@@ -53,6 +53,7 @@
 #include "proteus/helpers/declarations.hpp"        // for BufferPtrs, Infere...
 #include "proteus/helpers/parse_env.hpp"           // for autoExpandEnvironm...
 #include "proteus/helpers/queue.hpp"               // for BufferPtrsQueue
+#include "proteus/helpers/string.hpp"              // for endsWith
 #include "proteus/helpers/thread.hpp"              // for setThreadName
 #include "proteus/observation/logging.hpp"         // for Logger
 #include "proteus/observation/metrics.hpp"         // for Metrics, MetricCou...
@@ -129,6 +130,9 @@ void XModel::doInit(RequestParameters* parameters) {
   auto path = kPath;
   if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
+    if (!endsWith(path, ".xmodel")) {
+      path += ".xmodel";
+    }
   }
   autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);
@@ -340,7 +344,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           output.setDatatype(this->output_type_);
 
           auto buffer = std::make_shared<std::vector<int8_t>>();
-          buffer->reserve(this->output_size_);
+          buffer->resize(this->output_size_);
           memcpy(buffer->data(),
                  reinterpret_cast<int8_t*>(output_index) +
                    (tensor_count * this->output_size_),

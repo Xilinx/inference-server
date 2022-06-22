@@ -30,7 +30,7 @@ class TestModelList:
         models_0 = self.rest_client.modelList()
         assert len(models_0) == 0
 
-        endpoint = self.rest_client.modelLoad("echo")
+        endpoint = self.rest_client.workerLoad("echo")
         assert endpoint == "echo"
         assert self.rest_client.modelReady(endpoint)
 
@@ -38,8 +38,8 @@ class TestModelList:
         assert len(models) == 1
         assert models[0] == endpoint
 
-        endpoint_2 = self.rest_client.modelLoad("InvertImage")
-        assert endpoint_2 == "InvertImage"
+        endpoint_2 = self.rest_client.workerLoad("invertimage")
+        assert endpoint_2 == "invertimage"
         assert self.rest_client.modelReady(endpoint_2)
 
         models = self.rest_client.modelList()

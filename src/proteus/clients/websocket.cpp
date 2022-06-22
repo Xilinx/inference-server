@@ -93,8 +93,8 @@ class WebSocketClient::WebSocketClientImpl {
   ~WebSocketClientImpl() {
     if (auto connection = ws_client_->getConnection(); connection != nullptr) {
       connection->shutdown();
-      ws_client_->stop();
     }
+    ws_client_->stop();
     loop_.getLoop()->quit();
   }
 
@@ -179,15 +179,26 @@ bool WebSocketClient::modelReady(const std::string& model) {
   return client->modelReady(model);
 }
 
-std::string WebSocketClient::modelLoad(const std::string& model,
-                                       RequestParameters* parameters) {
+void WebSocketClient::modelLoad(const std::string& model,
+                                RequestParameters* parameters) {
   auto* client = this->impl_->getHttpClient();
-  return client->modelLoad(model, parameters);
+  client->modelLoad(model, parameters);
 }
 
 void WebSocketClient::modelUnload(const std::string& model) {
   auto* client = this->impl_->getHttpClient();
   client->modelUnload(model);
+}
+
+std::string WebSocketClient::workerLoad(const std::string& model,
+                                        RequestParameters* parameters) {
+  auto* client = this->impl_->getHttpClient();
+  return client->workerLoad(model, parameters);
+}
+
+void WebSocketClient::workerUnload(const std::string& model) {
+  auto* client = this->impl_->getHttpClient();
+  client->workerUnload(model);
 }
 
 InferenceResponse WebSocketClient::modelInfer(const std::string& model,

@@ -44,9 +44,11 @@ namespace v2 {
  * HttpController in Drogon and adds the endpoints of interest.
  *
  */
-class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
+class ProteusHttpServer
+  : public drogon::HttpController<ProteusHttpServer, false> {
  public:
-  ProteusHttpServer();  ///< Constructs the ProteusHttpServer object
+  /// Constructor
+  explicit ProteusHttpServer();
 
   METHOD_LIST_BEGIN
 #ifdef PROTEUS_ENABLE_REST
@@ -81,6 +83,12 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   ADD_METHOD_TO(ProteusHttpServer::unload,
                 "v2/repository/models/{model}/unload", drogon::Post,
                 drogon::Options);
+  /// Register the workerLoad endpoint
+  ADD_METHOD_TO(ProteusHttpServer::workerLoad, "v2/workers/{worker}/load",
+                drogon::Post, drogon::Options);
+  /// Register the workerUnload endpoint
+  ADD_METHOD_TO(ProteusHttpServer::workerUnload, "v2/workers/{worker}/unload",
+                drogon::Post, drogon::Options);
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
   /// Register the metrics endpoint
@@ -197,6 +205,30 @@ class ProteusHttpServer : public drogon::HttpController<ProteusHttpServer> {
   void unload(const drogon::HttpRequestPtr &req,
               std::function<void(const drogon::HttpResponsePtr &)> &&callback,
               std::string const &model);
+
+  /**
+   * @brief Loads and starts a worker
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param worker name of the worker to load
+   */
+  void workerLoad(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    std::string const &worker);
+
+  /**
+   * @brief Unloads a worker
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param worker name of the worker to unload
+   */
+  void workerUnload(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    std::string const &worker);
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS

@@ -16,7 +16,7 @@
 GUI
 ===
 
-The Xilinx Inference Server GUI is currently experimental to test a browser-based client with the server.
+The AMD Inference Server GUI is currently experimental to test a browser-based client with the server.
 
 To build:
 

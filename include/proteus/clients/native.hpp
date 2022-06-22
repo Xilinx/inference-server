@@ -59,8 +59,6 @@ bool hasHardware(const std::string& kernel, size_t num);
 
 class NativeClient : public Client {
  public:
-  ~NativeClient();
-
   ServerMetadata serverMetadata() override;
   bool serverLive() override;
   bool serverReady() override;
@@ -80,8 +78,8 @@ class NativeClient : public Client {
    * @return std::string the qualified name of the worker to make inference
    * requests
    */
-  std::string modelLoad(const std::string& model,
-                        RequestParameters* parameters) override;
+  void modelLoad(const std::string& model,
+                 RequestParameters* parameters) override;
   /**
    * @brief Unload a worker
    *
@@ -91,6 +89,10 @@ class NativeClient : public Client {
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
+
+  std::string workerLoad(const std::string& worker,
+                         RequestParameters* parameters) override;
+  void workerUnload(const std::string& worker) override;
 
   /**
    * @brief Enqueue an inference request to Proteus

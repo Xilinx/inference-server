@@ -29,6 +29,7 @@
     hello_world_python
     xmodel_example_python
     xmodel_example_cpp
+    zendnn_examples
     cli
 
 .. toctree::
@@ -41,7 +42,7 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Using Xilinx Inference Server
+    :caption: Using AMD Inference Server
 
     aks
     logging
@@ -56,6 +57,7 @@
     :caption: Platforms
 
     vitis_ai
+    zendnn
 
 .. toctree::
     :maxdepth: 2
