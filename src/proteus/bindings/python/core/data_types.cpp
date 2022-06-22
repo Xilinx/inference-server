@@ -103,7 +103,7 @@ void wrapDataType(py::module_& m) {
   py::implicitly_convertible<DataType::Value, DataType>();
 }
 
-void wrapTypeMaps(py::module_& m) {
+void wrapTypeMaps([[maybe_unused]] py::module_& m) {
 #ifdef PROTEUS_ENABLE_VITIS
   py::module_::import("xir").attr("DataType");
 

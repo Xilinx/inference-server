@@ -46,8 +46,6 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
 
 namespace proteus {
 
-using types::DataType;
-
 namespace workers {
 
 /**
@@ -180,7 +178,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   this->metadata_.addInputTensor(
     "input", input_dt_,
     {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", types::DataType::FP32, {0});
+  this->metadata_.addOutputTensor("output", DataType::FP32, {0});
   this->metadata_.setName("PtZendnn");
 }
 
@@ -311,7 +309,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
         }
 
         output.setShape(new_shape);
-        output.setDatatype(types::DataType::FP32);
+        output.setDatatype(DataType::FP32);
         resp.addOutput(output);
       }
 
