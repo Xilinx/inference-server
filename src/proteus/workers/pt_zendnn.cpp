@@ -31,6 +31,7 @@
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
+#include "proteus/helpers/string.hpp"         // for endswith
 #include "proteus/helpers/thread.hpp"         // for setThreadName
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
