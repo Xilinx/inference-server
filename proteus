@@ -742,7 +742,7 @@ class Dockerize:
             default=None,
             help="PT+ZenDNN C++ package location. If provided, will build with PT+ZenDNN enabled",
         )
-        
+
         command_group.add_argument(
             "--migraphx_path",
             type=str,
@@ -788,6 +788,7 @@ class Get:
         artifact_dir = Path.cwd() / "external/artifacts"
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
         pytorch_models = Path.cwd() / "external/pytorch_models"
+        migraphx_models = Path.cwd() / "external/artifacts/migraphx/resnet50v2"
         alveo_dir = artifact_dir / "u200_u250"
 
         tmp_dir = Path("/tmp/proteus_get")
@@ -808,6 +809,9 @@ class Get:
             ],
             tmp_dir: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
+            ],
+            migraphx_models: [
+                "https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
             ],
         }
         if args.tfzendnn:

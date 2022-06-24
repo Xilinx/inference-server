@@ -801,10 +801,18 @@ RUN ldconfig
 RUN pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
 # Install MIGraphX from source
 RUN mkdir -p /migraphx
-RUN cd /migraphx && git clone --depth=1 --branch rocm-5.0.0 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
+RUN cd /migraphx && git clone --depth=1 --branch rocm-5.1.1 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
 RUN cd /migraphx && rbuild package -d /migraphx/deps -B /migraphx/build -S /migraphx/src/
 RUN dpkg -i /migraphx/build/*.deb
 RUN rm -rf /migraphx
+
+# reset the compiler version, in case build-essential package overrode it
+    # link gcc-9 and g++-9 to gcc and g++
+RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
+        --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
+        --slave /usr/bin/gcov gcov /usr/bin/gcov-9 
+
+    ### end rocm install
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT

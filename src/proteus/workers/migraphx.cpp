@@ -83,11 +83,13 @@ class MIGraphXWorker : public Worker {
 
 
 std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
+    std::cout << "MIGraphXWorker::spawn creating thread\n";
   return std::thread(&MIGraphXWorker::run, this, input_queue);
 }
 
 void MIGraphXWorker::doInit(RequestParameters* parameters){
     (void)parameters;  // suppress unused variable warning
+    std::cout << "MIGraphXWorker::doInit\n";
 }
 
 size_t MIGraphXWorker::doAllocate(size_t num){
@@ -95,6 +97,7 @@ size_t MIGraphXWorker::doAllocate(size_t num){
 }
 
 void MIGraphXWorker::doAcquire(RequestParameters* parameters){
+    std::cout << "MIGraphXWorker::doAcquire\n";
     // Load the model
     std::string input_file;
     if (parameters->has("model"))
@@ -102,14 +105,16 @@ void MIGraphXWorker::doAcquire(RequestParameters* parameters){
     else
         SPDLOG_LOGGER_ERROR(
         this->logger_,
-        "Model not provided");  // Ideally exit since model not provided
+        "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");  // Ideally exit since model not provided
     
-    this->prog_ = migraphx::load(input_file.c_str());        
+    std::cout << "Acquiring model file " << input_file << std::endl;
+    // Using parse_onnx() instead of load() because there's a bug at the time of writing
+    this->prog_ = migraphx::parse_onnx(input_file.c_str());
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
 
-    // thread housekeeping, following tf_zendnn example
+    // thread housekeeping, boilerplate code following tf_zendnn example
     std::unique_ptr<Batch> batch;
     setThreadName("Migraphx");
 
@@ -141,8 +146,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
         std::cout << std::endl;
 
         // takes an argument of type migraphx::program_parameters ;
-        // see /home/bpickrel/AMDMIGraphX/examples/vision/cpp_mnist/mnist_inference.cpp for example of program_parameters
+        // see ...AMDMIGraphX/examples/vision/cpp_mnist/mnist_inference.cpp for example of program_parameters
         auto result = prog_.eval({});
+
+        // todo: reply like this.
+        //       req->runCallbackOnce(resp);
+        // Copy the output from the model to the response object
 
     }
 }
