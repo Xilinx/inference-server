@@ -19,6 +19,7 @@
 
 #include <cstddef>  // for size_t, byte
 #include <cstdint>  // for uint32_t, int32_t
+#include <fstream>
 #include <memory>   // for unique_ptr, allocator
 #include <numeric>  // for accumulate
 #include <string>   // for string
@@ -89,9 +90,43 @@ class MIGraphXWorker : public Worker {
 
   // Input / Output nodes
   std::string input_node_, output_node_;
-  DataType input_dt_ = DataType::FP32;
-  DataType output_dt_ = DataType::FP32;
+  DataType input_dt_;
+  DataType output_dt_;
 
+  // Enum-to-enum conversion to let us read data type from migraphx model.
+  // The definitions are taken from the MIGraphX macro MIGRAPHX_SHAPE_VISIT_TYPES
+
+  DataType toDataType(migraphx_shape_datatype_t in){
+    switch(in){
+      // case 0 is tuple_type which we don't support here
+      case migraphx_shape_bool_type:
+        return DataType::BOOL;
+      case migraphx_shape_half_type:
+        return DataType::FP16;
+      case migraphx_shape_float_type:
+        return DataType::FP32;
+      case migraphx_shape_double_type:
+        return DataType::FP64;
+      case migraphx_shape_uint8_type:
+        return DataType::UINT8;
+      case migraphx_shape_int8_type:
+        return DataType::INT8; 
+      case migraphx_shape_uint16_type:
+        return DataType::UINT16;
+      case migraphx_shape_int16_type:
+        return DataType::INT16; 
+      case migraphx_shape_int32_type:
+        return DataType::INT32;
+      case migraphx_shape_int64_type:
+        return DataType::INT64;
+      case migraphx_shape_uint32_type:
+        return DataType::UINT32;
+      case migraphx_shape_uint64_type:
+        return DataType::UINT64;
+      default:
+        return DataType::UNKNOWN;
+    }
+  }
 };
 
 
@@ -101,16 +136,16 @@ std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
 }
 
 void MIGraphXWorker::doInit(RequestParameters* parameters){
-    (void)parameters;  // suppress unused variable warning
     std::cout << "MIGraphXWorker::doInit\n";
-  // debug: print the key-value pairs in parameters
+    // debug: print the key-value pairs in parameters
     for (const auto& [k, v] : parameters->data()){
-        std::cout << k << " :-----------------------------------------++++++++++++++++++++ -------------- ";
+        std::cout << k << " :- ";
         std::visit([](const auto& x){ std::cout << x; }, v);
         std::cout << '\n';
     }
     if (parameters->has("model"))
         input_file_ = parameters->get<std::string>("model");
+<<<<<<< HEAD
     else
         SPDLOG_LOGGER_ERROR(
         this->logger_,
@@ -124,6 +159,15 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
     output_classes_ = 1000;
     std::cout << "end MIGraphXWorker::doInit\n";
 
+=======
+    else{
+        PROTEUS_IF_LOGGING(logger_.error(
+        "MIGraphXWorker parameters required:  \"model\": \"<filepath>\""));  
+        // Throwing an exception causes server to delete this worker instance.  Client must try again.
+        throw std::invalid_argument("model file argument missing from model load request");
+    }
+    std::cout << "end MIGraphXWorker::doInit\n";
+>>>>>>> 855208d (Added load/save of compiled *.mxr mode files, mxr load temporarily disabled as it seems to be broken in ROCm.  Runtime reading of input/output buffer data types from model, replaces hard-coded types.  New conversoin function between ROCm and Inf Server's data type enums.)
 }
 
 /**
@@ -157,11 +201,15 @@ size_t MIGraphXWorker::doAllocate(size_t num){
 >>>>>>> 121ae00 (work in progress on loading *.mxr, also added to client side test)
 
   // Load the model (Acquire)
-  // std::filesystem::path filestem(this->input_file_);
-  // filestem = filestem.stem();
-  
-  // std::cout << "Acquiring model file " << filestem.c_str() << std::endl;
+  std::filesystem::path filepath(this->input_file_);
+  std::filesystem::path compiled_path(this->input_file_);
+  std::filesystem::path onnx_path(this->input_file_);
+  // Take the root of the given model file name and look for either an *.mxr or *.onnx extension
+  // (after loading and compiling an *.onnx file, this worker saves it as an *.mxr file for future use)
+  compiled_path.replace_extension(".mxr");
+  onnx_path.replace_extension(".onnx");
 
+<<<<<<< HEAD
   // // Is there an mxr file?
   // std::ifstream f((filestem/".mxr").c_str());
   // if(f.good()){
@@ -259,29 +307,66 @@ if(GPU)
     // todo: unless there's already one there.
     std::filesystem::path compiled_file(input_file_);
     compiled_file.replace_extension(".mxr");
+=======
+  std::cout << "Acquiring model file " << filepath.c_str() << std::endl;
+>>>>>>> 855208d (Added load/save of compiled *.mxr mode files, mxr load temporarily disabled as it seems to be broken in ROCm.  Runtime reading of input/output buffer data types from model, replaces hard-coded types.  New conversoin function between ROCm and Inf Server's data type enums.)
 
+  // Is there an mxr file?  MXR loading temporarily disabled
+  std::ifstream f(compiled_path.c_str());
+  if(false && f.good()){
 
+    // Load the compiled MessagePack (*.mxr) file
+    PROTEUS_IF_LOGGING(logger_.info( std::string("migraphx worker loading compiled model file ") + compiled_path.c_str()));
     migraphx::file_options options;
     options.set_file_format("msgpack");
 
-    std::cout << "Saving compiled..........................." << compiled_file.c_str() << std::endl;
-    migraphx::save(this->prog_, compiled_file.c_str(), options);  
-  
-  
-  
-  
-  
-  
-  
-  
+    this->prog_ = migraphx::load(compiled_path.c_str(), options);
+    // prog_ does not need to be compiled.
   }
-  else if (input_file_.extension() == ".mxr"){
+  else{
+    // Look for onnx file.  ifstream tests that the file can be opened
+    f = std::ifstream(onnx_path.c_str());
+    if(f.good()){
+      // Load the onnx file
+      // Using parse_onnx() instead of load() because there's a bug at the time of writing
+      this->prog_ = migraphx::parse_onnx(onnx_path.c_str());
+      std::cout << "Finished parsing ONNX model." << std::endl;
+    
+      // Compile the model.  Hard-coded choices of offload_copy and gpu target.
+      migraphx::compile_options comp_opts;
+      comp_opts.set_offload_copy();
 
+      // migraphx can support a reference (cpu) target as a fallback if GPU is not found; not implemented here
+#define GPU 1
+      std::string target_str;
+if(GPU)
+          target_str = "gpu";
+      else
+          target_str = "ref";
+      migraphx::target targ = migraphx::target(target_str.c_str());
+      std::cout << "compiling model...\n";
 
+      prog_.compile(migraphx::target("gpu"), comp_opts);     
+      std::cout << "done." << std::endl;
 
-  }
-  else
-    std::cout << "extension is " << input_file_.extension().c_str() << std::endl;
+      // Save the compiled program as a MessagePack (*.mxr) file
+      f = std::ifstream(compiled_path.c_str());
+      if(!f.good())  {    
+        migraphx::file_options options;
+        options.set_file_format("msgpack");
+
+        std::cout << "Saving compiled model as " << compiled_path.c_str() << std::endl;
+        migraphx::save(this->prog_, compiled_path.c_str(), options);  
+      }
+
+    }
+    else  {
+        // Not finding the model file makes it impossible to finish initializing this worker
+        PROTEUS_IF_LOGGING(logger_.info( std::string("migraphx worker cannot open the model file ") + onnx_path.c_str()\
+        + " or " + compiled_path.c_str() + ".  Does this path exist?"));
+        throw std::invalid_argument(std::string ("model file ") + onnx_path.c_str() +  " not found or can't be opened");
+    }
+  }  //finished loading and compiling model
 
   //
   // Fetch the expected dimensions of the input from the parsed model
@@ -292,7 +377,6 @@ if(GPU)
     return size_t(0);
   }
 
-
   migraphx::shape sh = input_shapes["data"];
   auto lenth = sh.lengths();    // vector of dimensions 1, 3, 224, 224
   if(lenth.size() != 4){
@@ -300,9 +384,12 @@ if(GPU)
       return size_t(0);
   }
 
-  // todo:  convert migraphx enum for data types to inf. server's enum values so we can read data type from the model.
-  // For now, hard-code to FP32
-  // this->input_dt_ = this->input_dtype_map[sh.type()];
+  // Fetch the data types for input and output from the parsed model
+  migraphx_shape_datatype_t input_type = sh.type(); // an enum
+  this->input_dt_ = toDataType(input_type);
+  migraphx::api::shapes output_shapes = prog_.get_output_shapes();
+  migraphx_shape_datatype_t output_type = output_shapes[0].type();
+  this->output_dt_ = toDataType(output_type);
 
   // Compile step needs to annotate with batch size when saving compiled model (a new reqt.)
   // migraphx should be able to handle smaller batch, too.
@@ -313,7 +400,7 @@ if(GPU)
   image_width_ = lenth[2], image_height_ = lenth[3], image_channels_ = lenth[1];
   // Fetch the expected output size (num of categories) from the parsed model.
   // For an output of 1000 label values, output_lengths should be a vector of {1, 1000}
-  std::vector<size_t> output_lengths = this->prog_.get_output_shapes()[0].lengths();
+  std::vector<size_t> output_lengths = output_shapes[0].lengths();
   output_classes_ =
             std::accumulate(output_lengths.begin(), output_lengths.end(), 1, std::multiplies<size_t>()); 
 
@@ -335,42 +422,24 @@ if(GPU)
 void MIGraphXWorker::doAcquire(RequestParameters* parameters){
     std::cout << "MIGraphXWorker::doAcquire\n";
     (void) parameters;
-
-//     // Load the model
-
-//     if (parameters->has("model"))
-//         input_file_ = parameters->get<std::string>("model");
-//     else
-//         SPDLOG_LOGGER_ERROR(
-//         this->logger_,
-//         "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");  // Ideally exit since model not provided
-    
-//     std::cout << "Acquiring model file " << input_file_ << std::endl;
-//     // Using parse_onnx() instead of load() because there's a bug at the time of writing
-//     this->prog_ = migraphx::parse_onnx(input_file_.c_str());
-//     std::cout << "Finished parsing ONNX model." << std::endl;
-//         // prog_.print();    
-
-//     // Compile the model.  Hard-coded choices of offload_copy and gpu target.
-//     migraphx::compile_options comp_opts;
-//     comp_opts.set_offload_copy();
-// #define GPU 1
-//     std::string target_str;
-// if(GPU)
-//         target_str = "gpu";
-//     else
-//         target_str = "ref";
-//     migraphx::target targ = migraphx::target(target_str.c_str());
-//     std::cout << "compiling model...\n";
-
-//     prog_.compile(migraphx::target("gpu"), comp_opts);    
-//     std::cout << "done." << std::endl;
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
+<<<<<<< HEAD
       SPDLOG_LOGGER_INFO(this->logger_, "beginning of doRun migraphx");
 std::shared_ptr<InferenceRequest> req;
+=======
+  PROTEUS_IF_LOGGING(logger_.info("beginning of doRun migraphx"));
+  std::cout << "MIGraphXWorker::doRun\n";
+  
+  std::shared_ptr<InferenceRequest> req;
+>>>>>>> 855208d (Added load/save of compiled *.mxr mode files, mxr load temporarily disabled as it seems to be broken in ROCm.  Runtime reading of input/output buffer data types from model, replaces hard-coded types.  New conversoin function between ROCm and Inf Server's data type enums.)
   setThreadName("Migraphx");
+
+  //
+  //  Wait for requests from the batcher in an infinite loop.  This thread will
+  // run, waiting for more input, until the server kills it or it throws an exception.
+  //
 
   while (true) {
     BatchPtr batch;
@@ -467,8 +536,7 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           // populate the migraphx parameters with shape read from the onnx model.
           auto param_shapes = prog_.get_parameter_shapes();  // program_parameter_shapes struct
 
-          // todo:  validate that param_shapes contains a names()
-
+          // No validation; it should not be possible to receive an empty param_shapes or names
           auto input        = param_shapes.names().front();  // "data"
           params.add(input, migraphx::argument(param_shapes[input], (void *)input_buffer));
 
@@ -511,18 +579,31 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           output.setShape({num_results});
           output.setData(results);
 
+<<<<<<< HEAD
           // Copy migraphx results to a buffer and add to output (todo:  change to this->output_dt_)
           auto buffer = std::make_shared<std::vector<_Float32>>();
           buffer->resize(num_results);
           memcpy(&((*buffer)[0]), results, num_results * getSize(output_dt_));  
+=======
+          // Copy migraphx results to a buffer and add to output
+          auto buffer = std::make_shared<std::vector<std::byte>>();
+          buffer->resize(num_results * output_dt_.size());
+          memcpy(&((*buffer)[0]), results, num_results * output_dt_.size());  
+>>>>>>> 855208d (Added load/save of compiled *.mxr mode files, mxr load temporarily disabled as it seems to be broken in ROCm.  Runtime reading of input/output buffer data types from model, replaces hard-coded types.  New conversoin function between ROCm and Inf Server's data type enums.)
           auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
           output.setData(std::move(my_data_cast));
 
           resp.addOutput(output);
 
         } catch (const std::exception& e) {
+<<<<<<< HEAD
           SPDLOG_LOGGER_ERROR(this->logger_, e.what());
           req->runCallbackError("Something went wrong");
+=======
+          PROTEUS_IF_LOGGING(logger_.error( e.what()));
+          // Pass error message back as reply to request; continue processing more inference requests 
+          req->runCallbackError(std::string("Migraphx inference error: ") + e.what());
+>>>>>>> 855208d (Added load/save of compiled *.mxr mode files, mxr load temporarily disabled as it seems to be broken in ROCm.  Runtime reading of input/output buffer data types from model, replaces hard-coded types.  New conversoin function between ROCm and Inf Server's data type enums.)
           continue;
         }
         SPDLOG_LOGGER_INFO(this->logger_, "finished migraphx eval");
@@ -545,12 +626,17 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
 #endif
     }
 
-    // todo:  verify the size of input/output buffers and whether we allocated the right size
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
     SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
   }
+<<<<<<< HEAD
   SPDLOG_LOGGER_INFO(this->logger_, "Migraphx ending");
+=======
+  std::cout << "exiting MIGraphXWorker::doInit\n";
+
+  PROTEUS_IF_LOGGING(logger_.info("Migraphx ending"));
+>>>>>>> 855208d (Added load/save of compiled *.mxr mode files, mxr load temporarily disabled as it seems to be broken in ROCm.  Runtime reading of input/output buffer data types from model, replaces hard-coded types.  New conversoin function between ROCm and Inf Server's data type enums.)
 }
 
 void MIGraphXWorker::doRelease() {    std::cout << "MIGraphXWorker::doRelease\n";
