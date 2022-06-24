@@ -284,7 +284,9 @@ std::shared_ptr<InferenceRequest> req;
 
       // The initial implementation of migraphx worker assumes that the model has only one input tensor
       // (for Resnet models, an image) and identifying it by name is superfluous.
+      printf("Get inputs...");
       auto inputs = req->getInputs();   // const std::vector<InferenceRequestInput>
+      printf("OK.\n");
 
       // We don't use the outputs portion of the request currently.  It is part of the kserve format
       // specification, which the Inference Server is intended to follow.  
@@ -297,10 +299,7 @@ std::shared_ptr<InferenceRequest> req;
 
       // for each input tensor (image).  This 
       for (unsigned int i = 0; i < inputs.size(); i++) {
-
-          // bug: with multiple input requests, the different inputs all point to the same data buffer,
-          // and the image is corrupted so that the bottom 3/4 of the image is flipped upside down.
-
+        printf("Input image...");
         auto* input_buffer = inputs[i].getData();
         // void *pasdf = &(inputs[i]);
         // (void) pasdf;
@@ -384,12 +383,11 @@ std::shared_ptr<InferenceRequest> req;
 for(size_t ii = 0; ii < 3; ii++)
   printf("result %lu is %f\n",ii, results[ii]);
 
-    // for debug only.  We return all results.  The worker does not interpret results.  Compare these with 
-    //    values seen by client.
-    float* myMax     = std::max_element(results, results + num_results);
-    int answer     = myMax - results;
-
-    std::cout << "the top-ranked index is " << answer << " val. " << *myMax << std::endl;
+          // for debug  Compare this result with 
+          //    values seen by client to verify output packet is correct.
+          float* myMax     = std::max_element(results, results + num_results);
+          int answer     = myMax - results;
+          std::cout << "Ok.  the top-ranked index is " << answer << " val. " << *myMax << std::endl;
 
           // the kserve specification for response output is at 
           // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
