@@ -22,6 +22,7 @@ import multiprocessing as mp
 import os
 from pathlib import Path
 import pty
+import requests
 import shlex
 import shutil
 import subprocess
@@ -149,7 +150,9 @@ class WriteComposeFile:
         files = glob.glob("/dev/xclmgmt*")
         for file in files:
             devices.append(f"{file}:{file}")
-
+        # migraphx devices
+        devices.append ('/dev/kfd')
+        devices.append ('/dev/dri')
         files = glob.glob("/dev/dri/render*")
         for file in files:
             devices.append(f"{file}:{file}")
@@ -638,6 +641,10 @@ class Dockerize:
         if args.dev_base:
             build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
+        if args.migraphx_path:
+            build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
+            build_args += f" --build-arg MIGRAPHX_PATH={args.migraphx_path}"
+
         if args.tfzendnn_path:
             build_args += f" --build-arg ENABLE_TFZENDNN=yes"
             build_args += f" --build-arg TFZENDNN_PATH={args.tfzendnn_path}"
@@ -734,6 +741,13 @@ class Dockerize:
             type=str,
             default=None,
             help="PT+ZenDNN C++ package location. If provided, will build with PT+ZenDNN enabled",
+        )
+        
+        command_group.add_argument(
+            "--migraphx_path",
+            type=str,
+            default=None,
+            help="MIGraphX/rocm/hip C++ package location. If provided, will build with rocm enabled",
         )
 
         command_group.add_argument(
@@ -869,6 +883,10 @@ class Get:
 
         command_group.add_argument(
             "--ptzendnn", action="store_true" ,help="If PT+ZenDNN should be enabled",
+        )
+
+        command_group.add_argument(
+            "--migraphx", action="store_true" ,help="If MIGraphX/rocm should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -1024,6 +1042,7 @@ class Make:
 class Run:
     @staticmethod
     def parse(args, unknown_args: list):
+        print('sdfsdfsadfsgdfhgsdkjfgsadlghjfkjghsdaglksdahkljsadghlksdaghlksdagj')
         unknown_args.sort()
 
         if args.image is None and args.preset is None:

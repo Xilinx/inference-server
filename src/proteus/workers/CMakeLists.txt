@@ -18,6 +18,7 @@ list(APPEND workers
     Echo
     InvertImage
     InvertVideo
+    Migraphx
     # Fake
 )
 
@@ -36,7 +37,7 @@ endif()
 foreach( worker ${workers})
     set(worker_name worker${worker})
 
-    # convert name to file name: separate by capital letters, add underscores and lowercase
+    # convert name to file name: separate by capital letters, add underscores and shift to lowercase
     string(REGEX MATCHALL "[A-Z][a-z0-9]+" worker_list "${worker}")
     string (REPLACE ";" "_" worker_list_str "${worker_list}")
     string(TOLOWER ${worker_list_str} file_name)
@@ -54,6 +55,10 @@ target_link_libraries(workerInvertImage PRIVATE base64 opencv_core opencv_imgcod
 target_link_libraries(workerInvertVideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio)
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(workerXmodel PRIVATE parse_env vart-runner target-factory xir observation)
+endif()
+
+if(${PROTEUS_ENABLE_MIGRAPHX})
+    target_link_libraries(workerMigraphx PRIVATE migraphx::c)
 endif()
 
 if(${PROTEUS_ENABLE_TFZENDNN})
