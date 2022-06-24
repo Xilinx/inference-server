@@ -31,22 +31,19 @@ import migraphx   # migraphx for validation (do the same inference directly)
 # Note that since there is no standardized implementation of resize, etc., results and therefore
 # preprocessing is not deterministic, validation set scores cannot be guaranteed to be replicated exactly.
 
-# crop an image to square and then resize to desired dimension
+# crop an image to square and then resize to desired dimension n x n
 def make_nxn(image, n):
-    print('shape in nxn ', image.shape)
     width  = image.shape[1]
     height  = image.shape[0]
     if height > width:
         dif = height - width
         bar = dif // 2 
         square = image[(bar + (dif % 2)):(height - bar),:]
-        print('square is--+ ', square.shape)
         return cv2.resize(square, (n, n))
     elif width > height:
         dif = width - height
         bar = dif // 2
         square = image[:,(bar + (dif % 2)):(width - bar)]
-        print('square is--- ', square.shape)
         return cv2.resize(square, (n, n))
     else:
         return cv2.resize(image, (n, n))
@@ -54,13 +51,12 @@ def make_nxn(image, n):
 # Normalize array values to the data type, mean and std. dev. required by Resnet50
 # img_data: numpy array in 3 dimensions [channels, rows, cols] with value range 0-255
 def preprocess(img_data):
-    print('start preprocess with shape ', img_data.shape)
+    # todo: are these vectors based on RGB images or BGR?
     mean_vec = np.array([0.485, 0.456, 0.406])
     stddev_vec = np.array([0.229, 0.224, 0.225])
     norm_img_data = np.zeros(img_data.shape).astype('float32')
     for i in range(img_data.shape[0]):  
         norm_img_data[i,:,:] = (img_data[i,:,:]/255 - mean_vec[i]) / stddev_vec[i]
-    print('end preprocess with shape ', norm_img_data.shape)
     return norm_img_data
 
 modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
@@ -97,10 +93,8 @@ print('needed shape of input image is ', shape)
 input_img = cv2.imread(imagename)
 
 # Resnet50 model requires inputs of data type float32, range 0-1.0
-# input_img = input_img.astype("float32")/255.
 input_img = input_img.astype("float32")
 img = input_img
-print('shape of input image is ', img.shape)    
 
 if len(shape) == 4:
     img = make_nxn(img, shape[2])
@@ -138,7 +132,6 @@ rows,cols = img.shape[1:3]
 
 # Load a picture of a dog
 img2  = cv2.imread(imagename2).astype("float32")
-# img2 = cv2.resize(img2, shape[2:4])
 img2 = make_nxn(img2, shape[2])
 #  Normalize values with values specific to Resnet50
 img2 = img2.transpose(2, 0, 1)
@@ -189,17 +182,12 @@ model.compile(migraphx.get_target("gpu"))
 cropped_img = make_nxn(input_img, shape[2])
 # put the last dimension (channels) first, expected by migraphx
 new_img = cropped_img.transpose(2, 0, 1)
-# normalize
+# normalize and convert type astype('float32')
 test_img = preprocess(new_img)
 # add a 4th tensor dimension in first dimension, expected by migraphx
-test_img = np.expand_dims(test_img.astype('float32'),0)
+test_img = np.expand_dims(test_img, 0)
 
-# let's make sure the image wasn't corrupted by all this reshaping
-# Put the channels dimension last again to view; value renormalization by 255. is approximate
-tx = test_img[0].transpose(1,2,0)* 255.
-print('tx=', type(tx), tx.shape)
-
-# Run the model
+# Run the inference
 results = model.run({'data': test_img})
 # Extract the index of the top prediction
 res_npa = np.array(results[0])

@@ -91,6 +91,7 @@ class MIGraphXWorker : public Worker {
   std::string input_node_, output_node_;
   DataType input_dt_ = DataType::FP32;
   DataType output_dt_ = DataType::FP32;
+
 };
 
 
@@ -102,6 +103,18 @@ std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
 void MIGraphXWorker::doInit(RequestParameters* parameters){
     (void)parameters;  // suppress unused variable warning
     std::cout << "MIGraphXWorker::doInit\n";
+  // debug: print the key-value pairs in parameters
+    for (const auto& [k, v] : parameters->data()){
+        std::cout << k << " :-----------------------------------------++++++++++++++++++++ -------------- ";
+        std::visit([](const auto& x){ std::cout << x; }, v);
+        std::cout << '\n';
+    }
+    if (parameters->has("model"))
+        input_file_ = parameters->get<std::string>("model");
+    else
+        SPDLOG_LOGGER_ERROR(
+        this->logger_,
+        "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");  // Ideally exit since model not provided
 
     // trial and error: set this 
     this->batch_size_ = 10;
@@ -109,6 +122,8 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
     // These values are set in the onnx model we're using.
     image_width_ = 224, image_height_ = 224, image_channels_ = 3;
     output_classes_ = 1000;
+    std::cout << "end MIGraphXWorker::doInit\n";
+
 }
 
 /**
@@ -121,6 +136,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
  */
 size_t MIGraphXWorker::doAllocate(size_t num){
   std::cout << "MIGraphXWorker::doAllocate\n";
+<<<<<<< HEAD
   constexpr auto kBufferNum = 2U;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
@@ -131,24 +147,66 @@ size_t MIGraphXWorker::doAllocate(size_t num){
   SPDLOG_LOGGER_INFO(this->logger_, std::string("MIGraphXWorker::doAllocate added ") + std::to_string(buffer_num) + " buffers");
   return buffer_num;
 }
+=======
+ 
+    // Read the model here and get parameter shapes lens()[0]
+>>>>>>> d6830a3 (refactored migraphx worker initialization; moved model compile and buffer allocation to doAcquire.  Image size etc. parameters are now read from model instead of hard-coded.)
 
-void MIGraphXWorker::doAcquire(RequestParameters* parameters){
-    std::cout << "MIGraphXWorker::doAcquire\n";
+    // Load the model (Acquire)
 
-    // Load the model
-
-    if (parameters->has("model"))
-        input_file_ = parameters->get<std::string>("model");
-    else
-        SPDLOG_LOGGER_ERROR(
-        this->logger_,
-        "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");  // Ideally exit since model not provided
     
     std::cout << "Acquiring model file " << input_file_ << std::endl;
     // Using parse_onnx() instead of load() because there's a bug at the time of writing
     this->prog_ = migraphx::parse_onnx(input_file_.c_str());
     std::cout << "Finished parsing ONNX model." << std::endl;
-        // prog_.print();    
+ 
+    //
+    // Fetch the expected dimensions of the input from the parsed model
+    //
+    migraphx::program_parameter_shapes input_shapes = this->prog_.get_parameter_shapes();
+    if(input_shapes.size() != 1){
+      SPDLOG_LOGGER_ERROR(
+        this->logger_, std::string("migraphx worker was passed a model with unexpected number of input shapes=") + std::to_string(2));
+      return size_t(0);
+    }
+
+
+    migraphx::shape sh = input_shapes["data"];
+    auto lenth = sh.lengths();    // vector of dimensions 1, 3, 224, 224
+    if(lenth.size() != 4){
+      SPDLOG_LOGGER_ERROR(
+        this->logger_, std::string("migraphx worker was passed a model with unexpected number of input dimensions"));
+        return size_t(0);
+    }
+
+    // todo:  convert migraphx enum for data types to inf. server's enum values so we can read data type from the model.
+    // For now, hard-code to FP32
+    // this->input_dt_ = this->input_dtype_map[sh.type()];
+
+    // Compile step needs to annotate with batch size when saving compiled model (a new reqt.)
+    // migraphx should be able to handle smaller batch, too.
+    this->batch_size_ = 64;    // should match the migraphx batch size, fetched from the program.
+                               // current workaround: first dimension of input tensor is batch size.
+
+    // These values are set in the onnx model we're using.
+    image_width_ = lenth[2], image_height_ = lenth[3], image_channels_ = lenth[1];
+    // Fetch the expected output size (num of categories) from the parsed model.
+    // For an output of 1000 label values, output_lengths should be a vector of {1, 1000}
+	  std::vector<size_t> output_lengths = this->prog_.get_output_shapes()[0].lengths();
+    output_classes_ =
+              std::accumulate(output_lengths.begin(), output_lengths.end(), 1, std::multiplies<size_t>()); 
+
+    // Allocate 
+ 
+    constexpr auto kBufferNum = 2U;
+    size_t buffer_num =
+      static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
+    // Allocate enough to hold 1 batch worth of images.  
+    VectorBuffer::allocate(this->input_buffers_, buffer_num,
+                          1 * this->batch_size_ * image_height_ * image_width_ * image_channels_, this->input_dt_);
+    VectorBuffer::allocate(this->output_buffers_, buffer_num,
+                          1 * this->batch_size_ * output_classes_, output_dt_);
+    SPDLOG_LOGGER_INFO(this->logger_, std::string("MIGraphXWorker   init  Allocate added ") + std::to_string(buffer_num) + " buffers");
 
     // Compile the model.  Hard-coded choices of offload_copy and gpu target.
     migraphx::compile_options comp_opts;
@@ -164,6 +222,43 @@ if(GPU)
 
     prog_.compile(migraphx::target("gpu"), comp_opts);    
     std::cout << "done." << std::endl;
+
+  return buffer_num;
+}
+
+void MIGraphXWorker::doAcquire(RequestParameters* parameters){
+    std::cout << "MIGraphXWorker::doAcquire\n";
+    (void) parameters;
+
+//     // Load the model
+
+//     if (parameters->has("model"))
+//         input_file_ = parameters->get<std::string>("model");
+//     else
+//         SPDLOG_LOGGER_ERROR(
+//         this->logger_,
+//         "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");  // Ideally exit since model not provided
+    
+//     std::cout << "Acquiring model file " << input_file_ << std::endl;
+//     // Using parse_onnx() instead of load() because there's a bug at the time of writing
+//     this->prog_ = migraphx::parse_onnx(input_file_.c_str());
+//     std::cout << "Finished parsing ONNX model." << std::endl;
+//         // prog_.print();    
+
+//     // Compile the model.  Hard-coded choices of offload_copy and gpu target.
+//     migraphx::compile_options comp_opts;
+//     comp_opts.set_offload_copy();
+// #define GPU 1
+//     std::string target_str;
+// if(GPU)
+//         target_str = "gpu";
+//     else
+//         target_str = "ref";
+//     migraphx::target targ = migraphx::target(target_str.c_str());
+//     std::cout << "compiling model...\n";
+
+//     prog_.compile(migraphx::target("gpu"), comp_opts);    
+//     std::cout << "done." << std::endl;
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){

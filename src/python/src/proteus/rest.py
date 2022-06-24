@@ -151,9 +151,6 @@ class Client:
                 )
         else:
             try:
-                print('debug point in _post.\n  http_addr: \n')
-                print(self.http_addr,"\nendpoint:\n", endpoint, '\n\nbody has keys:\n', body.keys(),'\nheaders:\n', self.headers, '\n\n')
-                
                 response = requests.post(
                     f"{self.http_addr}/{endpoint}", json=body, headers=self.headers
                 )
