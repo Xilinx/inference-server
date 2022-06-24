@@ -205,14 +205,20 @@ std::shared_ptr<InferenceRequest> req;
       //
       auto outputs = req->getOutputs();
 
-      // for each input tensor.  This 
+      // for each input tensor (image).  This 
       for (unsigned int i = 0; i < inputs.size(); i++) {
-        auto* input_buffer = inputs[i].getData();
-        // std::byte* output_buffer = outputs[i].getData(); //brian:  is this right?
-        // auto* input_buffer = dynamic_cast<VectorBuffer*>(input_ptr);
-        // auto* output_buffer = dynamic_cast<VectorBuffer*>(output_ptr);
 
-        // uint32_t value = *static_cast<uint32_t*>(input_buffer);
+          // bug: with multiple input requests, the different inputs all point to the same data buffer,
+          // and the image is corrupted so that the bottom 3/4 of the image is flipped upside down.
+
+        auto* input_buffer = inputs[i].getData();
+        // void *pasdf = &(inputs[i]);
+        // (void) pasdf;
+        // comment out line 221 in predict_api.pp to make these values public:
+        // void *iasdf = &(inputs[i].data_);
+        // void *fasdf =  &(inputs[i].name_);
+        // (void)iasdf ; (void) fasdf;
+
         int rows = inputs[i].getShape()[0];
         int cols = inputs[i].getShape()[1];
         SPDLOG_LOGGER_INFO(this->logger_, std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) );
@@ -253,19 +259,15 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           size_t num_results =
               std::accumulate(lengths.begin(), lengths.end(), 1, std::multiplies<size_t>());
           float* results = reinterpret_cast<float*>(migraphx_output[0].data());
-for(size_t ii = 0; ii < num_results; ii++)
+for(size_t ii = 0; ii < 3; ii++)
   printf("result %lu is %f\n",ii, results[ii]);
-
-          // todo: verify this is not used and delete this line
-          std::memcpy(outputs.data()->getData(), results, size_t(num_results) * getSize(output_dt_));
-          // outputs[i].setData(results);
 
     // for debug only.  We return all results.  The worker does not interpret results.  Compare these with 
     //    values seen by client.
     float* myMax     = std::max_element(results, results + num_results);
     int answer     = myMax - results;
 
-          std::cout << "sthe best index is " << answer << " val. " << *myMax << std::endl;
+    std::cout << "the top-ranked index is " << answer << " val. " << *myMax << std::endl;
 
           // the kserve specification for response output is at 
           // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
@@ -322,11 +324,11 @@ for(size_t ii = 0; ii < num_results; ii++)
   SPDLOG_LOGGER_INFO(this->logger_, "Migraphx ending");
 }
 
-void MIGraphXWorker::doRelease() {    std::cout << "RELEASE." << std::endl;
+void MIGraphXWorker::doRelease() {    std::cout << "MIGraphXWorker::doRelease\n";
 }
-void MIGraphXWorker::doDeallocate() {    std::cout << "DEALLOCATE" << std::endl;
+void MIGraphXWorker::doDeallocate() {    std::cout << "MIGraphXWorker::doDeallocate\n";
 }
-void MIGraphXWorker::doDestroy() {    std::cout << "DESTROY" << std::endl;
+void MIGraphXWorker::doDestroy() {    std::cout << "MIGraphXWorker::doDestroy\n";
 }
 
 }  // namespace workers

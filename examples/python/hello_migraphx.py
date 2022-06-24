@@ -9,6 +9,8 @@
 #
 
 import os
+
+from attr import asdict
 os.getenv("PROTEUS_ROOT")
 
 # workaround:  we don't know why the path isn't right when running this as root
@@ -28,7 +30,7 @@ modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resne
 # modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
 # imagename = r"/workspace/proteus/external/artifacts/migraphx/JG-COMP-HERO-UKRAINE-SOILDER.jpg"
 imagename = r"/workspace/proteus/external/artifacts/migraphx/yflower.jpg"
-imagename=r"/workspace/proteus/external/artifacts/migraphx/classification.jpg"
+imagename2 =r"/workspace/proteus/external/artifacts/migraphx/classification.jpg" # a dog
 
 #  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
 shape=[]
@@ -38,7 +40,6 @@ for input in model.graph.input:
         print (input.name, end=": ")
         # get type of input tensor
         tensor_type = input.type.tensor_type
-
         # check if it has a shape:
         if (tensor_type.HasField("shape")):
             # iterate through dimensions of the shape:
@@ -90,37 +91,44 @@ parameters = {"model": modelname,
 response = client.load("Migraphx", parameters)
 assert not response.error, response.error_msg
 worker_name = response.html  # Migraphx
-print('response is', response.html)
+print('response from load is', response.html)
 
-print('preprocess images...')
-# synthetic second image is first image, rotated
 print('image shape after resizing is ', img.shape)
 rows,cols = img.shape[1:3]
-img2 = cv2.flip(img, 0)
+
+# Load a picture of a dog
+img2  = cv2.imread(imagename2).astype("float32")/255.
+img2 = cv2.resize(img2, shape[2:4])
 
 # for debug: rewrite the images
 cv2.imwrite('sample1.jpg', (img*255).astype(np.uint8))
 cv2.imwrite('sample2.jpg',  (img2*255).astype(np.uint8))
-print('   shapes are ', (img*255).astype(np.uint8).shape, (img2*255).astype(np.uint8).shape)
 
+# todo: creating an inference request with 2 images does not work correctly.  Both requests end up
+# with the second image buffer address when read by the migraphx worker.
 images=[img, img2]
 
-print("Done.  Create inference request...")
-request = proteus.ImageInferenceRequest(images, True)
-print("Perform inference...outputs is ", type(request.outputs))
-response = client.infer( worker_name, request)
-assert not response.error, response.error_msg
-for output in response.outputs:
-    data = output.data
-    print('contents of output is ', type(output))   # proteus.predict_api.ResponseOutput  'data', 'datatype', 'name', 'parameters', 'shape'
-    print('result returned by server is ', output.name)
-    print('answer is ', data[904], np.array(data).dtype)  # data is a list  dtype is int64
+print("Creating inference request...")
+request = proteus.ImageInferenceRequest(images, False)
 
-    # In numpy, this is how to convert an array to a raw byte field and then to desired type
-    
-    zap = np.frombuffer(np.array(data).tobytes(), dtype='float32')
-    print('zap is ', zap[:12],   'unconverted values is ', data[:12])
+response = client.infer(worker_name, request)
+assert not response.error, response.error_msg
+
+print('Client received inference reply.')
+for output in response.outputs:
+    # output.data is a list of floats.  output also has a datatype member.
+    data = output.data
+    print('name of result returned by server is ', output.name)  # resnet model has only 1 output which doesn't have a name
+    # the predicted category is the one with the highest match value
+    answer = np.argmax(data)
+    print('client\'s analysis of result: best match category is ', answer,'  match value is ', data[answer])
+
+    # todo: match this index with a category name for resnet50
+
 print('Done')
+
+# If this line is commented out, client persists and the entire script can be run again without any reloading taking place
+# client.unload('Migraphx')
 
 # Model source:
 # https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx
