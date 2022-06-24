@@ -790,7 +790,7 @@ FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_final
 RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main > /etc/apt/sources.list.d/rocm.list'
 # Install dependencies for migraphx
 RUN apt-get update &&\
-    apt-get install -y sudo git bash build-essential rocm-dev libpython3.6-dev python3-pip miopen-hip-dev \
+    apt-get install -y sudo git bash build-essential rocm-dev libpython3.6-dev python3-dev python3-pip miopen-hip-dev \
     rocblas-dev half aria2 libnuma-dev rocm-cmake
 # Workaround broken rocm packages
 RUN ln -s /opt/rocm-* /opt/rocm
