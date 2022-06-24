@@ -309,18 +309,50 @@ std::shared_ptr<InferenceRequest> req;
         // void *fasdf =  &(inputs[i].name_);
         // (void)iasdf ; (void) fasdf;
 
-        int rows = inputs[i].getShape()[0];
-        int cols = inputs[i].getShape()[1];
-        SPDLOG_LOGGER_INFO(this->logger_, std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) );
+        // In the input buffer, the 0'th dimension is color channels (3)
+        int rows = inputs[i].getShape()[1];
+        int cols = inputs[i].getShape()[2];
 
-        // Output image version of the data for visual inspection--debugging only
-        cv::Mat sample_img = cv::Mat(rows, cols, CV_32FC3, input_buffer)*255;
-bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c_str(), sample_img);
-(void)check;
-        std::cout <<"################## input is " << inputs[i] ;
+        DataType dtype = inputs[i].getDatatype();
+        PROTEUS_IF_LOGGING(logger_.info(std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) \
+           + ", dtype: " + std::to_string(size_t(dtype))  + ", should be " + std::to_string(size_t(input_dt_)) ));
+        
+        //
+        //    *******  debug section  *******
+        //
+        // Output image version of the data for visual inspection
 
-        // this is my operation: run the migraphx eval() method.
-        // If exceptions can happen, they should be handled
+        // Note:  this image test no longer works since the shape tensor of the input was changed to put
+        // the channel dimension first.  Now the channels are out of sync and we see nine little copies of the original image.
+        // todo:  reorder the sample_img to OpenCV specifications before writing the image.
+        //
+        // cv::Mat sample_img = cv::Mat(rows, cols, CV_32FC3, input_buffer);
+        // cv::Mat display_sample = sample_img.reshape(1, 224*3);
+        // // cv::Mat display_sample = sample_img.clone();
+        // // display_sample = display_sample.reshape(1, 224*3);
+        // double minVal; 
+        // double maxVal; 
+        // cv::Point minLoc; 
+        // cv::Point maxLoc;
+        // cv::minMaxLoc( display_sample, &minVal, &maxVal, &minLoc, &maxLoc );
+
+        // // Using the min, max pixel values for renormalization
+        // double x = maxVal - minVal;
+        // display_sample = (sample_img - minVal)*255./x;
+
+        // std::cout << std::string("min, max of image are  ") << minVal << ",  " << maxVal << std::endl;
+
+
+        // // Write the renormalized image to a file, compare with original
+        // bool check = imwrite((std::string("sampleImage") + std::to_string(i+1) + ".jpg").c_str(), display_sample);
+        // (void)check;
+        // std::cout <<"input is " << inputs[i] ;
+        //
+        //    *******  End debug section  *******
+        //
+
+        // The MIGraphX operation: run the migraphx eval() method.
+        // If migraphx exceptions happen, they should be handled
         try {
           migraphx::program_parameters params;
 
