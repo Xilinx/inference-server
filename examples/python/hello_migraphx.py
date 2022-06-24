@@ -86,29 +86,21 @@ for input in model.graph.input:
         print()
         break
 
-print('needed shape of input image is ', shape)    
-
-# Read in the input, and resize it to fit the onnx model
-# we expect a dim_value of 4
-input_img = cv2.imread(imagename)
-input_img = cv2.cvtColor(input_img, cv2.COLOR_BGR2RGB)
-
-# Resnet50 model requires inputs of data type float32, range 0-1.0
-input_img = input_img.astype("float32")
-img = input_img
-
-if len(shape) == 4:
-    img = make_nxn(img, shape[2])
-    #  Normalize values with values specific to Resnet50.  It's necessary to reorder axes
-    # with transpose() because the preprocess fcn. is written to expect the color channels
-    # in the first (0th) tensor axis which is the migraphx convention.
-    img = img.transpose(2, 0, 1)
-    img = preprocess(img)
-    img = img.transpose(1,2,0)
-else:
+print('This model\'s shape of input image is ', shape)    
+if len(shape) != 4:
     print('Unable to read the image dimensions from ', modelname, '.  Expecting a 4-value shape tensor.')
     exit(-1)
 
+# Load a picture of a flower
+img  = cv2.imread(imagename).astype("float32")
+# Crop to a square, resize
+img = make_nxn(img, shape[2])
+#  Normalize values with values specific to Resnet50
+img = img.transpose(2, 0, 1)
+img = preprocess(img)
+# expected dimensions at this point are (3, 224, 224).  Note that the Resnet model expects 
+# the channel dimension (3) to come before the rows and columns, but OpenCV requires channels
+# to be the last dimension.
 
 server = proteus.Server()
 client = proteus.RestClient("127.0.0.1:8998")
@@ -137,19 +129,26 @@ img2 = make_nxn(img2, shape[2])
 #  Normalize values with values specific to Resnet50
 img2 = img2.transpose(2, 0, 1)
 img2 = preprocess(img2)
-img2 = img2.transpose(1, 2, 0)
+# img2 = img2.transpose(1, 2, 0)
+
 
 # for debug: redisplay the processed images
-x = np.max(img) - np.min(img)
-renormalized_img = (img - np.min(img))*255/x
+display_img = img
+display_img = display_img.transpose(1, 2, 0)
+
+x = np.max(display_img) - np.min(display_img)
+renormalized_img = (display_img - np.min(display_img))*255/x
 cv2.imwrite('sample1.jpg', renormalized_img.astype(np.uint8))
-x2 = np.max(img2) - np.min(img2)
-renormalized_img2 = (img2 - np.min(img2))*255/x2
+
+display_img2 = img2
+display_img2 = display_img2.transpose(1, 2, 0)
+x2 = np.max(display_img2) - np.min(display_img2)
+renormalized_img2 = (display_img2 - np.min(display_img2))*255/x2
 cv2.imwrite('sample2.jpg',  renormalized_img2.astype(np.uint8))
 
 # create a multi-image inference request
 images=[img2, img, img, img2]
-images=[img2]
+# images=[img]
 print("Creating inference request...")
 request = proteus.ImageInferenceRequest(images, False)
 
@@ -178,15 +177,13 @@ model = migraphx.parse_onnx(modelname)
 model.compile(migraphx.get_target("gpu"))
 # model.print()     # Printed in terminal.  Verbose; 351 lines of output.
 
-# Reprocess the image to meet the shape requirements of migraphx
-# cropped_img = make_nxn(input_img, shape[2])
-cropped_img = make_nxn(img2, shape[2])
-# put the last dimension (channels) first, expected by migraphx
-new_img = cropped_img.transpose(2, 0, 1)
-# normalize and convert type astype('float32')
-test_img = preprocess(new_img)
+# Reshape the image for migraphx
+
+# # put the last dimension (channels) first, expected by migraphx
+# new_img = img.transpose(2, 0, 1)
+new_img = img2
 # add a 4th tensor dimension in first dimension, expected by migraphx
-test_img = np.expand_dims(test_img, 0)
+test_img = np.expand_dims(new_img, 0)
 
 # Run the inference
 results = model.run({'data': test_img})
@@ -195,6 +192,13 @@ res_npa = np.array(results[0])  # shape of res_npa is (1, 1000)
 max_index = np.argmax(res_npa)
 print ('category reported by migraphx is ', max_index, '.  Match value ', res_npa[0][max_index], '  This is a picture of a ', labels[max_index])
 
+# Debug: reshape the image to memory order, and look at the first 3 pixels of values
+test_img.shape = 3*224*224
+print('test img is ', test_img.shape)
+print( test_img[:9])
+
+# If we called proteus.initialize() earlier, a terminate() call is needed now or else we'll get an exception.
+# proteus.terminate()
 print('Done')
 
 # If this line is commented out, client persists and the entire script can be run again without any reloading taking place
