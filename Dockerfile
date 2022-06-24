@@ -547,7 +547,6 @@ RUN apt-get update \
         pytest-cpp \
         pytest-xprocess \
         requests \
-        websocket-client \
         # install documentation dependencies
         breathe \
         fastcov \
@@ -764,18 +763,20 @@ RUN apt-get update \
     && mkdir -p /usr/include/ptzendnn/ \
     && cp -r include/* /usr/include/ptzendnn \
     && cp -r lib/*.so* /usr/lib \
-    && sudo apt remove zip unzip -y \
+    && apt remove zip unzip -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-     autoconf git checkinstall \
-    && cd /tmp/ && git clone https://github.com/jemalloc/jemalloc.git \
-    && cd jemalloc && ./autogen.sh \
+     autoconf \
+    && cd /tmp/ && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/5.3.0.tar.gz \
+    && tar -xzf 5.3.0.tar.gz \
+    && cd jemalloc-5.3.0 && ./autogen.sh \
     && make -j \
     && make install \
+    && apt-get remove autoconf -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
