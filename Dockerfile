@@ -815,6 +815,20 @@ RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
         --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
         --slave /usr/bin/gcov gcov /usr/bin/gcov-9 
 
+# permissions workarounds for difficulties when running an Ubuntu 18.04 container on a
+# Ubuntu 20.04 host.  The container needs permissions for group "video" to access
+# the GPU driver file, but that group has been renamed to "render" for 20.04.
+
+# needed since this doesn’t already exist in /etc/groups in 18.04
+# The hard-coded group ID 109 is a temporary workaround since it's not guaranteed to have
+# that gid in every case.  Todo: determine gid at runtime (time of docker container startup)
+RUN groupadd -g 109 render      
+# user needs to be in video group in case the docker image is invoked from ubuntu 18.04 based host
+RUN  usermod -aG video $UNAME
+ # user needs to be in render group in case the docker image is invoked from ubuntu 20.04 based host
+RUN  usermod -aG render $UNAME
+
+
     ### end rocm install
 
 ARG COPY_DIR

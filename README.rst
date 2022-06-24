@@ -13,42 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-AMD/Xilinx Inference Server
-===========================
+The AMD/Xilinx Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, FPGAs and :github:`Vitis AI <Xilinx/Vitis-AI>`..
 
-<<<<<<< HEAD
-The AMD/Xilinx Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, and FPGAs.
-=======
-* enter docker container as proteus-user
-./proteus run --dev
-
-* give root a password, so we can do su
-
-sudo passwd root # (enter something easy, like asdf, as password)
-
-* become root
-su  # (use the password)
-
-
-*      start server as root
-
-export LD_LIBRARY_PATH=/workspace/proteus/build/workers:$LD_LIBRARY_PATH
-./proteus start &
-
-* now become proteus-user again
-su proteus-user
-
-* run the script with the API calls
-python3 examples/python/hello_migraphx.py
-
-
-
-
-Xilinx Inference Server
-=======================
-
-Xilinx Inference Server is an easy-to-use inferencing solution designed for Xilinx FPGAs and :github:`Vitis AI <Xilinx/Vitis-AI>`.
->>>>>>> 5d6e637 (Update README.rst)
 It can be deployed as a server or through custom applications using its C++ API.
 The AMD/Xilinx Inference Server can also be extended to support other hardware accelerators and machine learning frameworks.
 
@@ -63,7 +29,6 @@ Features
 * Batching: incoming requests are batched based on the model's specifications transparently
 * Integrated with Vitis AI: The AMD/Xilinx Inference Server can serve most xmodels generated from Vitis AI
 * End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/master/tools/AKS>`__
-
 
 Learn more
 ----------

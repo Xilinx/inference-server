@@ -1148,19 +1148,11 @@ class Run:
                 command += f"--{key} {value} "
 
         command += " ".join(unknown_args)
-
-        # Needed for gpu.  group video is used for Ubuntu 18.X; changed to render for Ubuntu 20.04
-        command += " --group-add video --privileged "
-
         command += " " + args.image
 
         if args.command is not None:
             command += " " + args.command.strip('"')
 
-            # Brian
-            with open("~/is-fork/inference-server/DockerCommand.txt", "w") as file:
-                file.write('Your docker command is---------------------------------- ', command)
-                file.close()
         run_tty_command(command, args.dry_run)
 
     @classmethod
