@@ -91,6 +91,7 @@ print('needed shape of input image is ', shape)
 # Read in the input, and resize it to fit the onnx model
 # we expect a dim_value of 4
 input_img = cv2.imread(imagename)
+input_img = cv2.cvtColor(input_img, cv2.COLOR_BGR2RGB)
 
 # Resnet50 model requires inputs of data type float32, range 0-1.0
 input_img = input_img.astype("float32")
@@ -146,10 +147,9 @@ x2 = np.max(img2) - np.min(img2)
 renormalized_img2 = (img2 - np.min(img2))*255/x2
 cv2.imwrite('sample2.jpg',  renormalized_img2.astype(np.uint8))
 
-# todo: creating an inference request with 2 images does not work correctly.  Both requests end up
-# with the second image buffer address when read by the migraphx worker.
-images=[img, img2]
-
+# create a multi-image inference request
+images=[img2, img, img, img2]
+images=[img2]
 print("Creating inference request...")
 request = proteus.ImageInferenceRequest(images, False)
 
@@ -179,7 +179,8 @@ model.compile(migraphx.get_target("gpu"))
 # model.print()     # Printed in terminal.  Verbose; 351 lines of output.
 
 # Reprocess the image to meet the shape requirements of migraphx
-cropped_img = make_nxn(input_img, shape[2])
+# cropped_img = make_nxn(input_img, shape[2])
+cropped_img = make_nxn(img2, shape[2])
 # put the last dimension (channels) first, expected by migraphx
 new_img = cropped_img.transpose(2, 0, 1)
 # normalize and convert type astype('float32')
@@ -190,8 +191,9 @@ test_img = np.expand_dims(test_img, 0)
 # Run the inference
 results = model.run({'data': test_img})
 # Extract the index of the top prediction
-res_npa = np.array(results[0])
-print ('category reported by migraphx is ', np.argmax(res_npa),'. This is a picture of a ', labels[np.argmax(res_npa)])
+res_npa = np.array(results[0])  # shape of res_npa is (1, 1000)
+max_index = np.argmax(res_npa)
+print ('category reported by migraphx is ', max_index, '.  Match value ', res_npa[0][max_index], '  This is a picture of a ', labels[max_index])
 
 print('Done')
 

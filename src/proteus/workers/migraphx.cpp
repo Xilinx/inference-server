@@ -45,7 +45,7 @@
 #include <opencv2/imgproc.hpp>    // for resize
 
 #include <migraphx/migraphx.hpp>              // MIGraphX C++ API
-
+#include <migraphx/filesystem.hpp>
 
 /**
  * @brief The Migraphx worker accepts the name of an migraphx model file as an
@@ -80,8 +80,8 @@ class MIGraphXWorker : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
-  // the model file to be loaded
-  std::string input_file_;
+  // the model file to be loaded.  Supported types are *.onnx and *.mxr
+  std::filesystem::path input_file_;
 
   // Image properties are contained in the model
   unsigned output_classes_;
@@ -149,16 +149,45 @@ size_t MIGraphXWorker::doAllocate(size_t num){
 }
 =======
  
+<<<<<<< HEAD
     // Read the model here and get parameter shapes lens()[0]
 >>>>>>> d6830a3 (refactored migraphx worker initialization; moved model compile and buffer allocation to doAcquire.  Image size etc. parameters are now read from model instead of hard-coded.)
+=======
+  // Read the model here and get parameter shapes lens()[0]
+>>>>>>> 121ae00 (work in progress on loading *.mxr, also added to client side test)
 
-    // Load the model (Acquire)
+  // Load the model (Acquire)
+  // std::filesystem::path filestem(this->input_file_);
+  // filestem = filestem.stem();
+  
+  // std::cout << "Acquiring model file " << filestem.c_str() << std::endl;
 
-    
-    std::cout << "Acquiring model file " << input_file_ << std::endl;
-    // Using parse_onnx() instead of load() because there's a bug at the time of writing
+  // // Is there an mxr file?
+  // std::ifstream f((filestem/".mxr").c_str());
+  // if(f.good()){
+
+  //   // Load the compiled mxr file
+  // }
+  // else{
+  //   f = std::ifstream((filestem/".onnx").c_str());
+  //   if(f.good()){
+  //     // Load the onnx file
+
+  //     // Compile the onnx file
+
+  //     // Save a compiled mxr file
+
+  //   }
+  // }
+
+
+  // Using parse_onnx() instead of load() because there's a bug at the time of writing
+  if(input_file_.extension() == ".onnx"){
+
+      // todo: check if there's already a compiled mxr file
     this->prog_ = migraphx::parse_onnx(input_file_.c_str());
     std::cout << "Finished parsing ONNX model." << std::endl;
+<<<<<<< HEAD
  
     //
     // Fetch the expected dimensions of the input from the parsed model
@@ -208,6 +237,9 @@ size_t MIGraphXWorker::doAllocate(size_t num){
                           1 * this->batch_size_ * output_classes_, output_dt_);
     SPDLOG_LOGGER_INFO(this->logger_, std::string("MIGraphXWorker   init  Allocate added ") + std::to_string(buffer_num) + " buffers");
 
+=======
+    
+>>>>>>> 121ae00 (work in progress on loading *.mxr, also added to client side test)
     // Compile the model.  Hard-coded choices of offload_copy and gpu target.
     migraphx::compile_options comp_opts;
     comp_opts.set_offload_copy();
@@ -220,8 +252,82 @@ if(GPU)
     migraphx::target targ = migraphx::target(target_str.c_str());
     std::cout << "compiling model...\n";
 
-    prog_.compile(migraphx::target("gpu"), comp_opts);    
+    prog_.compile(migraphx::target("gpu"), comp_opts);     
     std::cout << "done." << std::endl;
+
+    // Save the compiled program as a MessagePack (*.mxr) file
+    // todo: unless there's already one there.
+    std::filesystem::path compiled_file(input_file_);
+    compiled_file.replace_extension(".mxr");
+
+
+    migraphx::file_options options;
+    options.set_file_format("msgpack");
+
+    std::cout << "Saving compiled..........................." << compiled_file.c_str() << std::endl;
+    migraphx::save(this->prog_, compiled_file.c_str(), options);  
+  
+  
+  
+  
+  
+  
+  
+  
+  }
+  else if (input_file_.extension() == ".mxr"){
+
+
+
+  }
+  else
+    std::cout << "extension is " << input_file_.extension().c_str() << std::endl;
+
+  //
+  // Fetch the expected dimensions of the input from the parsed model
+  //
+  migraphx::program_parameter_shapes input_shapes = this->prog_.get_parameter_shapes();
+  if(input_shapes.size() != 1){
+    PROTEUS_IF_LOGGING(logger_.error( std::string("migraphx worker was passed a model with unexpected number of input shapes=") + std::to_string(2)));
+    return size_t(0);
+  }
+
+
+  migraphx::shape sh = input_shapes["data"];
+  auto lenth = sh.lengths();    // vector of dimensions 1, 3, 224, 224
+  if(lenth.size() != 4){
+    PROTEUS_IF_LOGGING(logger_.error(std::string("migraphx worker was passed a model with unexpected number of input dimensions")));
+      return size_t(0);
+  }
+
+  // todo:  convert migraphx enum for data types to inf. server's enum values so we can read data type from the model.
+  // For now, hard-code to FP32
+  // this->input_dt_ = this->input_dtype_map[sh.type()];
+
+  // Compile step needs to annotate with batch size when saving compiled model (a new reqt.)
+  // migraphx should be able to handle smaller batch, too.
+  this->batch_size_ = 64;    // should match the migraphx batch size, fetched from the program.
+                              // current workaround: first dimension of input tensor is batch size.
+
+  // These values are set in the onnx model we're using.
+  image_width_ = lenth[2], image_height_ = lenth[3], image_channels_ = lenth[1];
+  // Fetch the expected output size (num of categories) from the parsed model.
+  // For an output of 1000 label values, output_lengths should be a vector of {1, 1000}
+  std::vector<size_t> output_lengths = this->prog_.get_output_shapes()[0].lengths();
+  output_classes_ =
+            std::accumulate(output_lengths.begin(), output_lengths.end(), 1, std::multiplies<size_t>()); 
+
+  // Allocate 
+
+  constexpr auto kBufferNum = 2U;
+  size_t buffer_num =
+    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
+  // Allocate enough to hold 1 batch worth of images.  
+  VectorBuffer::allocate(this->input_buffers_, buffer_num,
+                        1 * this->batch_size_ * image_height_ * image_width_ * image_channels_, this->input_dt_);
+  VectorBuffer::allocate(this->output_buffers_, buffer_num,
+                        1 * this->batch_size_ * output_classes_, output_dt_);
+  PROTEUS_IF_LOGGING(logger_.info( std::string("MIGraphXWorker   init  Allocate added ") + std::to_string(buffer_num) + " buffers"));
 
   return buffer_num;
 }
@@ -302,10 +408,6 @@ std::shared_ptr<InferenceRequest> req;
 
       // for each input tensor (image).  This 
       for (unsigned int i = 0; i < inputs.size(); i++) {
-
-          // bug: with multiple input requests, the different inputs all point to the same data buffer,
-          // and the image is corrupted so that the bottom 3/4 of the image is flipped upside down.
-
         auto* input_buffer = inputs[i].getData();
         // void *pasdf = &(inputs[i]);
         // (void) pasdf;
@@ -318,11 +420,44 @@ std::shared_ptr<InferenceRequest> req;
         int cols = inputs[i].getShape()[1];
         SPDLOG_LOGGER_INFO(this->logger_, std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) );
 
+<<<<<<< HEAD
         // Output image version of the data for visual inspection--debugging only
         cv::Mat sample_img = cv::Mat(rows, cols, CV_32FC3, input_buffer)*255;
 bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c_str(), sample_img);
 (void)check;
         std::cout <<"################## input is " << inputs[i] ;
+=======
+        DataType dtype = inputs[i].getDatatype();
+        PROTEUS_IF_LOGGING(logger_.info(std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) \
+           + ", dtype: " + std::to_string(size_t(dtype))  + ", should be " + std::to_string(size_t(input_dt_)) ));
+        
+        //
+        //    *******  debug section  *******
+        // Output image version of the data for visual inspection
+        //
+        cv::Mat sample_img = cv::Mat(rows, cols, CV_32FC3, input_buffer);
+        cv::Mat display_sample = sample_img.reshape(1, 224*3);
+        double minVal; 
+        double maxVal; 
+        cv::Point minLoc; 
+        cv::Point maxLoc;
+        cv::minMaxLoc( display_sample, &minVal, &maxVal, &minLoc, &maxLoc );
+
+        // Using the min, max pixel values for renormalization
+        double x = maxVal - minVal;
+        display_sample = (sample_img - minVal)*255./x;
+
+        std::cout << std::string("min, max of image are  ") << minVal << ",  " << maxVal << std::endl;
+
+
+        // Write the renormalized image to a file, compare with original
+        bool check = imwrite((std::string("sampleImage") + std::to_string(i+1) + ".jpg").c_str(), display_sample);
+        (void)check;
+        std::cout <<"input is " << inputs[i] ;
+        //
+        //    *******  End debug section  *******
+        //
+>>>>>>> 121ae00 (work in progress on loading *.mxr, also added to client side test)
 
         // this is my operation: run the migraphx eval() method.
         // If exceptions can happen, they should be handled
@@ -332,6 +467,8 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           // populate the migraphx parameters with shape read from the onnx model.
           auto param_shapes = prog_.get_parameter_shapes();  // program_parameter_shapes struct
 
+          // todo:  validate that param_shapes contains a names()
+
           auto input        = param_shapes.names().front();  // "data"
           params.add(input, migraphx::argument(param_shapes[input], (void *)input_buffer));
 
@@ -340,23 +477,23 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
           migraphx::api::arguments  migraphx_output =      this->prog_.eval(params);
           SPDLOG_LOGGER_INFO(this->logger_, "finishing migraphx eval");
 
+          //
           // Transfer the migraphx results to output
-
+          //
           size_t result_size = migraphx_output.size();  // should be 1 item with 1000 (for resnet) categories
           if(result_size != 1)
             throw std::length_error("result count from migraphx call was not 1");
-
-          // move from migraphx_output to outputs
           auto shape   = migraphx_output[0].get_shape();
 
-          // recast the migraphx output from a blob to an array of float
+          // recast the migraphx output from a blob to an array of float (todo:  change to this->output_dt_)
+          // This casting is really just for readability, since we're going to use memcpy to pass a blob
           auto lengths = shape.lengths();
           size_t num_results =
               std::accumulate(lengths.begin(), lengths.end(), 1, std::multiplies<size_t>());
           float* results = reinterpret_cast<float*>(migraphx_output[0].data());
 
           // for debug  Compare this result with 
-          //    values seen by client to verify packet is correct.
+          //    values seen by client to verify output packet is correct.
           float* myMax     = std::max_element(results, results + num_results);
           int answer     = myMax - results;
           std::cout << "the top-ranked index is " << answer << " val. " << *myMax << std::endl;
@@ -372,9 +509,9 @@ bool check = imwrite((std::string("sampleImage") + std::to_string(i) + ".jpg").c
             output.setName(output_name);
           }
           output.setShape({num_results});
-          // output.setData(results);
+          output.setData(results);
 
-          // Copy migraphx results to a buffer and add to output
+          // Copy migraphx results to a buffer and add to output (todo:  change to this->output_dt_)
           auto buffer = std::make_shared<std::vector<_Float32>>();
           buffer->resize(num_results);
           memcpy(&((*buffer)[0]), results, num_results * getSize(output_dt_));  
