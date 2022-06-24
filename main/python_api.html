@@ -381,8 +381,56 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="python-api">
-<h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-proteus">
+<span id="python-api"></span><h1>Python API<a class="headerlink" href="#module-proteus" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.ImageInferenceRequest">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a request from an image or list of images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> (<em>image</em>) – Images may be numpy arrays or filepaths or a list of these</p></li>
+<li><p><strong>asTensor</strong> (<em>bool</em><em>, </em><em>optional</em>) – Send data as a tensor or as base64-encoded string. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – Raised if an unknown image format is passed</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Request object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>InferenceRequest</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.initialize">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.initializeLogging">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">initializeLogging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.initializeLogging" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.mapTypeToXir">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapTypeToXir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_proteus.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xir.DataType</span></span></span><a class="headerlink" href="#proteus.mapTypeToXir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.mapXirType">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapXirType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xir.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_proteus.DataType</span></span></span><a class="headerlink" href="#proteus.mapXirType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.terminate">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.terminate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <div class="section" id="clients">
 <h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="rest">
@@ -423,7 +471,7 @@ function OptanonWrapper() { }
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 23, 2022.
+        Last updated on June 24, 2022.
       </span>
 
     </p>

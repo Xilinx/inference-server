@@ -476,6 +476,13 @@ This use case takes advantage of the multi-model serving feature of KServe.</p>
 It will be used as the endpoint to make requests.
 The string passed to <code class="docutils literal notranslate"><span class="pre">inferenceService</span></code> should match the name used in the InferenceServer YAML.
 The model should be stored in a cloud storage location compatible with KServe and it should have the following structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/
+├─ model_a/
+│  ├─ 1/
+│  │  ├─ saved_model.x
+│  ├─ config.pbtxt
+</pre></div>
+</div>
 <p>The names for the files (<code class="docutils literal notranslate"><span class="pre">saved_model.x</span></code> and <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code>) must match as above.
 The file extension for <code class="docutils literal notranslate"><span class="pre">tfzendnn_graphdef</span></code> and <code class="docutils literal notranslate"><span class="pre">vitis_xmodel</span></code> models should be <code class="docutils literal notranslate"><span class="pre">.pb</span></code> and <code class="docutils literal notranslate"><span class="pre">.xmodel</span></code>, respectively.</p>
 <p>As before, we can deploy this using:</p>
@@ -509,6 +516,16 @@ These logs may have helpful error messages.</p>
 The easiest way to do this is with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script in the inference server repository.
 You’ll need to first connect to the node where the container is running.
 On that host:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this lists the running Inference Server containers
+<span class="gp">$ </span>proteus list
+
+<span class="gp"># </span>get the container ID of the container you want to connect to
+
+<span class="gp"># </span>provide the ID as an argument to the attach <span class="nb">command</span> to open a bash shell
+<span class="gp"># </span><span class="k">in</span> the container
+<span class="gp">$ </span>proteus attach -n &lt;container ID&gt;
+</pre></div>
+</div>
 <p>Once in the container, you can find the running <code class="docutils literal notranslate"><span class="pre">proteus-server</span></code> executable and then follow the regular debugging guide to debug the inference server.</p>
 </div>
 </div>
@@ -542,7 +559,7 @@ On that host:</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 23, 2022.
+        Last updated on June 24, 2022.
       </span>
 
     </p>

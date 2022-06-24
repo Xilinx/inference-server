@@ -127,6 +127,7 @@ The string passed to ``inferenceService`` should match the name used in the Infe
 The model should be stored in a cloud storage location compatible with KServe and it should have the following structure:
 
 .. code-block:: text
+
     /
     ├─ model_a/
     │  ├─ 1/
@@ -173,6 +174,7 @@ You'll need to first connect to the node where the container is running.
 On that host:
 
 .. code-block:: console
+  
     # this lists the running Inference Server containers
     $ proteus list
 
