@@ -42,17 +42,12 @@ for input in model.graph.input:
                 # the dimension may have a definite (integer) value or a symbolic identifier or neither:
                 if (d.HasField("dim_value")):
                     shape.append(d.dim_value)
-                    print ('value ', d.dim_value, end=", ")  # known dimension
-                elif (d.HasField("dim_param")):
-                    print ('param ', d.dim_param, end=", ")  # unknown dimension with symbolic name
-                else:
-                    print ("?", end=", ")  # unknown dimension with no name
         else:
             print ("unknown rank", end="")
         print()
         break
 
-print(shape)    
+print('shape of input image is ', shape)    
 
 # Read in the input, and resize it to fit the onnx model
 # we expect a dim_value of 4, and this script just fails if not
@@ -62,9 +57,12 @@ if len(shape) == 4:
     img = cv2.resize(input_img, shape[2:4])
 
     # debug: make so small that contents is human readable
-    img = cv2.resize(input_img, [2,2])
+    img = cv2.resize(input_img, [2,7])
     print('image shape is ', img.shape, '!!')
     print('image as list is ', img.tolist())
+else:
+    print('Unable to read the image dimensions from ', modelname, '.  Expecting a 4-value shape tensor.')
+    exit(-1)
 
 
 server = proteus.Server()
@@ -75,6 +73,7 @@ client.wait_until_live()
 # NEEDS.  
 # ANY KEY-VALUE PAIRS ARE LEGAL
 
+# todo: input should be a bare array, currently assuming int.
 parameters = {"model": modelname,
               "input": img.tolist() # <== [[[159, 162, 211], [185, 176, 172],...
 			  }
@@ -92,8 +91,10 @@ request = proteus.ImageInferenceRequest(images, True)
 print("Perform inference...")
 response = client.infer( worker_name, request)
 assert not response.error, response.error_msg
-    # send the image as a blob, not a path
-# there's a helper that creates a request from an image, see example
+for output in response.outputs:
+    data = output.data
+    print('result returned by server is ', output.name)
+    print('answer is ', data)
 print('Done')
 
 # Model source:

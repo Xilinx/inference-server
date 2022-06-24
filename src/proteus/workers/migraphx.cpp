@@ -20,6 +20,7 @@
 #include <cstddef>  // for size_t, byte
 #include <cstdint>  // for uint32_t, int32_t
 #include <memory>   // for unique_ptr, allocator
+#include <numeric>  // for accumulate
 #include <string>   // for string
 #include <thread>   // for thread
 #include <utility>  // for move
@@ -92,8 +93,26 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
     std::cout << "MIGraphXWorker::doInit\n";
 }
 
+/**
+ * @brief doAllocate() allocates a queue of buffers for input/output.  
+ * A functioning doAllocate() is required or else the worker will 
+ * simply fail to respond to post requests.
+ * 
+ * @param num the number of buffers to add 
+ * @return size_t the number of buffers added
+ */
 size_t MIGraphXWorker::doAllocate(size_t num){
-    return num;
+  std::cout << "MIGraphXWorker::doAllocate\n";
+    // the following is copied from echo.cpp
+  constexpr auto kBufferNum = 10U;
+  size_t buffer_num =
+    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
+  VectorBuffer::allocate(this->input_buffers_, buffer_num,
+                         1 * this->batch_size_, DataType::UINT32);
+  VectorBuffer::allocate(this->output_buffers_, buffer_num,
+                         1 * this->batch_size_, DataType::UINT32);
+  SPDLOG_LOGGER_INFO(this->logger_, std::string("MIGraphXWorker::doAllocate added ") + std::to_string(buffer_num) + " buffers");
+  return buffer_num;
 }
 
 void MIGraphXWorker::doAcquire(RequestParameters* parameters){
@@ -124,70 +143,135 @@ if(GPU)
     else
         target_str = "ref";
     migraphx::target targ = migraphx::target(target_str.c_str());
-std::cout << "Okay, got this far...\n";
+    std::cout << "compiling model...\n";
 
     prog_.compile(migraphx::target("gpu"), comp_opts);    
     std::cout << "done." << std::endl;
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
-    std::cout << "MIGraphXWorker::doRun\n";
-(void)(input_queue);
+      SPDLOG_LOGGER_INFO(this->logger_, "beginning of doRun migraphx");
+std::shared_ptr<InferenceRequest> req;
+  setThreadName("Migraphx");
 
-    // thread housekeeping, boilerplate code following tf_zendnn example
-    std::unique_ptr<Batch> batch;
-    setThreadName("Migraphx");
-
-    while (true) {
-        input_queue->wait_dequeue(batch);
-        if (batch == nullptr) {
-            break;
-        }
-        SPDLOG_LOGGER_DEBUG(this->logger_,
-                            "Got request in MIGraphX. Size: " +
-                            std::to_string(batch->requests->size()));
+  while (true) {
+    BatchPtr batch;
+    input_queue->wait_dequeue(batch);
+    if (batch == nullptr) {
+      break;
+    }
+    SPDLOG_LOGGER_INFO(this->logger_, "Got request in migraphx");
 #ifdef PROTEUS_ENABLE_METRICS
-        Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineIngressWorker);
+    Metrics::getInstance().incrementCounter(
+      MetricCounterIDs::kPipelineIngressWorker);
 #endif
-        for (unsigned int j = 0; j < batch->requests->size(); j++) {
-            auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->requests->size(); j++) {
+      auto& req = batch->requests->at(j);
+#ifdef PROTEUS_ENABLE_TRACING
+      auto& trace = batch->traces.at(j);
+      trace->startSpan("migraphx");
+#endif
+      InferenceResponse resp;
+      resp.setID(req->getID());
+      resp.setModel("migraphx");
+      auto inputs = req->getInputs();   // const std::vector<InferenceRequestInput>
+      auto outputs = req->getOutputs();
+      for (unsigned int i = 0; i < inputs.size(); i++) {
+        auto* input_buffer = inputs[i].getData();
+        // std::byte* output_buffer = outputs[i].getData();
+        // auto* input_buffer = dynamic_cast<VectorBuffer*>(input_ptr);
+        // auto* output_buffer = dynamic_cast<VectorBuffer*>(output_ptr);
+
+        // uint32_t value = *static_cast<uint32_t*>(input_buffer);
+
+        std::cout <<"################## input is " << inputs[i] ;
+
+        // this is my operation: run the migraphx eval() method.
+        // If exceptions can happen, they should be handled
+        try {
+          SPDLOG_LOGGER_INFO(this->logger_, "beginning migraphx eval");
+          migraphx::program_parameters params;
+
+          // populate the migraphx parameters with shape read from the onnx model.
+          auto param_shapes = prog_.get_parameter_shapes();  // program_parameter_shapes struct
+
+          auto input        = param_shapes.names().front();  // "data"
+          params.add(input, migraphx::argument(param_shapes[input], (void *)input_buffer));
+
+
+
+          // Run the inference
+          migraphx::api::arguments  migraphx_output =      this->prog_.eval(params);
+          std::cout << "...inference complete.\n";
+
+
+
+          // parsing of results is copied from examples/vision/cpp_mnist/mnist_inference.cpp
+          // not sure if relevant
+          auto shape   = migraphx_output[0].get_shape();
+          for(int i: shape.lengths())
+            std::cout << "the shape returned by migraphx is " << i << std::endl;
+          // recast the output from a blob to an array of float
+          auto lengths = shape.lengths();
+          auto num_results =
+              std::accumulate(lengths.begin(), lengths.end(), 1, std::multiplies<size_t>());
+          float* results = reinterpret_cast<float*>(migraphx_output[0].data());
+          // get the index of best matching result
+          float* max     = std::max_element(results, results + num_results);
+          int answer     = max - results;
+          std::cout <<"The answer is " << answer << ".\n";
+
+          // to do: move the result from migraphx output to REST output
+
+        InferenceResponseOutput output;
+        output.setDatatype(types::DataType::UINT32);
+        std::string output_name = outputs[i].getName();
+        if (output_name.empty()) {
+          output.setName(inputs[i].getName());
+        } else {
+          output.setName(output_name);
+        }
+        output.setShape({1});
+        auto buffer = std::make_shared<std::vector<uint32_t>>();
+        buffer->resize(1);
+        (*buffer)[0] = answer;
+        auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
+        output.setData(std::move(my_data_cast));
+        resp.addOutput(output);
+
+        } catch (const std::exception& e) {
+          SPDLOG_LOGGER_ERROR(this->logger_, e.what());
+          req->runCallbackError("Something went wrong");
+          continue;
+        }
+        SPDLOG_LOGGER_INFO(this->logger_, "finished migraphx eval");
+
+        // output_buffer->write(value);
+      }
 
 #ifdef PROTEUS_ENABLE_TRACING
-            auto& trace = batch->traces.at(j);
-            trace->startSpan("migraphx");
+      auto context = trace->propagate();
+      resp.setContext(std::move(context));
 #endif
-        // setup following Echo example
-            InferenceResponse resp;
-            resp.setID(req->getID());
-            resp.setModel(input_file_);
-            auto inputs = req->getInputs();
-            auto outputs = req->getOutputs();
-            req->runCallbackOnce(resp);
-        }
-        std::vector<InferenceResponse> responses;
-        responses.reserve(batch->requests->size());
 
-        std::cout << "Input Graph: " << std::endl;    
-        prog_.print();
-        std::cout << std::endl;
-
-        // construct an argument of type migraphx::program_parameters ;
-        // see ...AMDMIGraphX/examples/vision/cpp_mnist/mnist_inference.cpp for example of program_parameters
-
-        migraphx::program_parameters prog_params;
-        auto param_shapes = prog_.get_parameter_shapes();
-        auto input        = param_shapes.names().front();
-        (void)input;
-        // prog_params.add(input, migraphx::argument(param_shapes[input], digit.data()));
-
-        auto result = prog_.eval(prog_params);
-
-        // todo: reply like this.
-        //       req->runCallbackOnce(resp);
-        // Copy the output from the model to the response object
-
+      // respond back to the client
+      req->runCallbackOnce(resp);
+#ifdef PROTEUS_ENABLE_METRICS
+      Metrics::getInstance().incrementCounter(
+        MetricCounterIDs::kPipelineEgressWorker);
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+                                            duration.count());
+#endif
     }
+
+    // todo:  verify the size of input/output buffers and whether we allocated the right size
+    this->returnBuffers(std::move(batch->input_buffers),
+                        std::move(batch->output_buffers));
+    SPDLOG_LOGGER_DEBUG(this->logger_, "Returned buffers");
+  }
+  SPDLOG_LOGGER_INFO(this->logger_, "Migraphx ending");
 }
 
 void MIGraphXWorker::doRelease() {    std::cout << "RELEASE." << std::endl;
