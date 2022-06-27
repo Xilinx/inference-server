@@ -23,6 +23,7 @@
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
 #include "proteus/clients/native.hpp"
+#include "proteus/core/exceptions.hpp"
 
 namespace py = pybind11;
 
@@ -36,6 +37,8 @@ PYBIND11_MODULE(_proteus, m) {
   m.def("initialize", &initialize);
   m.def("initializeLogging", &initializeLogging);
   m.def("terminate", &terminate);
+
+  py::register_exception<proteus_error>(m, "Error");
 
   wrapRequestParameters(m);
   wrapDataType(m);
