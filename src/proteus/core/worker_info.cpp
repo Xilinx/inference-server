@@ -32,6 +32,7 @@
 
 #include "proteus/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
 #include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/exceptions.hpp"   // for file_not_found_error
 #include "proteus/core/interface.hpp"    // IWYU pragma: keep
 #include "proteus/core/predict_api.hpp"  // for RequestParameters
 #include "proteus/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
@@ -57,7 +58,7 @@ void* findFunc(const std::string& func, const std::string& soPath) {
   void* handle = dlopen(soPath.c_str(), RTLD_LOCAL | RTLD_LAZY);
   if (handle == nullptr) {
     const char* error_str = dlerror();
-    throw std::invalid_argument(error_str);
+    throw file_not_found_error(error_str);
   }
 
   /* find the address of function  */

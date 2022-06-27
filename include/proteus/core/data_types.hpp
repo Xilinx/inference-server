@@ -114,7 +114,7 @@ class DataType {
       case DataType::STRING:
         return sizeof(std::string);
       default:
-        throw std::invalid_argument("Unsupported type");
+        throw std::invalid_argument("Size requested of unknown data type");
     }
   }
 
@@ -152,7 +152,7 @@ class DataType {
       case DataType::STRING:
         return "STRING";
       default:
-        throw std::invalid_argument("Unsupported type");
+        throw std::invalid_argument("String requested of unknown data type");
     }
   }
 
@@ -188,7 +188,7 @@ class DataType {
       case detail::hash("UNKNOWN"):
         return DataType::UNKNOWN;
       default:
-        throw std::invalid_argument("Unsupported type construction");
+        throw std::invalid_argument("Unknown data type construction");
     }
   }
 

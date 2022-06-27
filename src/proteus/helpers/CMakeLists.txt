@@ -21,7 +21,7 @@ list(APPEND TARGETS
 
 foreach(target ${TARGETS})
   add_library(${target} STATIC ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROJECT_SOURCE_DIR}/src)
+  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
 endforeach()
 

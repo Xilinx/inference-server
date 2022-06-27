@@ -381,18 +381,13 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     auto batch_offset_backup = batch_offset;
 
     for (const auto& input : grpc_request.inputs()) {
-      try {
-        auto buffers = input_buffers[buffer_index];
-        for (auto& buffer : buffers) {
-          auto& offset = input_offsets[buffer_index];
+      auto buffers = input_buffers[buffer_index];
+      for (auto& buffer : buffers) {
+        auto& offset = input_offsets[buffer_index];
 
-          request->inputs_.push_back(
-            InputBuilder::build(input, buffer, offset));
-          const auto& last_input = request->inputs_.back();
-          offset += (last_input.getSize() * last_input.getDatatype().size());
-        }
-      } catch (const std::invalid_argument& e) {
-        throw;
+        request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
+        const auto& last_input = request->inputs_.back();
+        offset += (last_input.getSize() * last_input.getDatatype().size());
       }
       batch_offset++;
       if (batch_offset == batch_size) {
@@ -411,17 +406,13 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
       for (const auto& output : grpc_request.outputs()) {
         // TODO(varunsh): we're ignoring incoming output data
         (void)output;
-        try {
-          auto buffers = output_buffers[buffer_index];
-          for (auto& buffer : buffers) {
-            auto& offset = output_offsets[buffer_index];
+        auto buffers = output_buffers[buffer_index];
+        for (auto& buffer : buffers) {
+          auto& offset = output_offsets[buffer_index];
 
-            request->outputs_.emplace_back();
-            request->outputs_.back().setData(
-              static_cast<std::byte*>(buffer->data()) + offset);
-          }
-        } catch (const std::invalid_argument& e) {
-          throw;
+          request->outputs_.emplace_back();
+          request->outputs_.back().setData(
+            static_cast<std::byte*>(buffer->data()) + offset);
         }
         batch_offset++;
         if (batch_offset == batch_size) {
@@ -433,18 +424,14 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     } else {
       for (const auto& input : grpc_request.inputs()) {
         (void)input;  // suppress unused variable warning
-        try {
-          auto buffers = output_buffers[buffer_index];
-          for (size_t j = 0; j < buffers.size(); j++) {
-            auto& buffer = buffers[j];
-            const auto& offset = output_offsets[buffer_index];
+        auto buffers = output_buffers[buffer_index];
+        for (size_t j = 0; j < buffers.size(); j++) {
+          auto& buffer = buffers[j];
+          const auto& offset = output_offsets[buffer_index];
 
-            request->outputs_.emplace_back();
-            request->outputs_.back().setData(
-              static_cast<std::byte*>(buffer->data()) + offset);
-          }
-        } catch (const std::invalid_argument& e) {
-          throw;
+          request->outputs_.emplace_back();
+          request->outputs_.back().setData(
+            static_cast<std::byte*>(buffer->data()) + offset);
         }
         batch_offset++;
         if (batch_offset == batch_size) {

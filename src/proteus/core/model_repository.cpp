@@ -23,6 +23,7 @@
 #include <fstream>
 
 #include "model_config.pb.h"
+#include "proteus/core/exceptions.hpp"
 #include "proteus/core/manager.hpp"
 #include "proteus/core/predict_api.hpp"
 #include "proteus/core/worker_info.hpp"
@@ -102,14 +103,14 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   int fileDescriptor = open(config_path.c_str(), O_RDONLY);
 
   if (fileDescriptor < 0) {
-    throw std::runtime_error("Config file could not be opened");
+    throw file_not_found_error("Config file could not be opened");
   }
 
   google::protobuf::io::FileInputStream fileInput(fileDescriptor);
   fileInput.SetCloseOnDelete(true);
 
   if (!google::protobuf::TextFormat::Parse(&fileInput, &config)) {
-    throw std::runtime_error("Config file could not be parsed");
+    throw file_read_error("Config file could not be parsed");
   }
 
   const auto& inputs = config.inputs();
@@ -137,7 +138,7 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   } else if (config.platform() == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
   } else {
-    throw std::runtime_error("Unknown platform");
+    throw std::invalid_argument("Unknown platform");
   }
 
   mapProtoToParameters2(config.parameters(), parameters);
