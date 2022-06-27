@@ -62,7 +62,7 @@ def main():
     while not ready:
         try:
             ready = client.modelReady(worker_name)
-        except ValueError:
+        except RuntimeError:
             pass
     # -load worker:
 
