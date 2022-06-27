@@ -253,7 +253,7 @@ def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
     try:
         while not rest_client.modelReady(response):
             time.sleep(1)
-    except RuntimeError:
+    except proteus.Error:
         pass
 
     yield  # perform testing

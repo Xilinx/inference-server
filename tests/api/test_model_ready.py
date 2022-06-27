@@ -15,6 +15,8 @@
 import pytest
 import time
 
+import proteus
+
 
 @pytest.mark.usefixtures("server")
 class TestModelReady:
@@ -25,7 +27,7 @@ class TestModelReady:
     def is_ready(self, worker):
         try:
             return self.rest_client.modelReady(worker)
-        except RuntimeError:
+        except proteus.Error:
             return False
 
     def test_model_ready(self):
@@ -38,7 +40,7 @@ class TestModelReady:
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        with pytest.raises(RuntimeError) as e_info:
+        with pytest.raises(proteus.Error) as e_info:
             self.rest_client.modelReady(worker)
             assert str(e_info.value) == f"worker {worker} not found"
 

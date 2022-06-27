@@ -97,7 +97,7 @@ def main(args):
     while not ready:
         try:
             ready = client.modelReady(worker_name)
-        except RuntimeError:
+        except proteus.Error:
             pass
 
     # Inference with images
@@ -190,7 +190,7 @@ if __name__ == "__main__":
         type=str,
         required=False,
         help="Full path to the input graph",
-        default=os.path.join(root, "external/pytorch_models/resnet50_pretrained.pth"),
+        default=os.path.join(root, "external/pytorch_models/resnet50_pretrained.pt"),
     )
     parser.add_argument(
         "--image_location",
