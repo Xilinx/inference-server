@@ -56,43 +56,25 @@ void* findFunc(const std::string& func, const std::string& soPath) {
   /* open the needed object */
   void* handle = dlopen(soPath.c_str(), RTLD_LOCAL | RTLD_LAZY);
   if (handle == nullptr) {
-    char* error_str = dlerror();
+    const char* error_str = dlerror();
     throw std::invalid_argument(error_str);
   }
 
   /* find the address of function  */
   void* fptr = dlsym(handle, func.c_str());
   if (fptr == nullptr) {
-    char* error_str = dlerror();
+    const char* error_str = dlerror();
     throw std::invalid_argument(error_str);
   }
   return fptr;
 }
 
-WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
-  this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->buffer_num_ = 0;
-  this->max_buffer_num_ = 0;
-  this->batch_size_ = 1;
-
-  this->addAndStartWorker(name, parameters);
-}
-
-WorkerInfo::~WorkerInfo() {
-  for (auto const& worker : this->workers_) {
-    delete worker.second;  // NOLINT(cppcoreguidelines-owning-memory)
-  }
-}
-
-void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   RequestParameters* parameters) {
+workers::Worker* getWorker(const std::string& name) {
   // multiple workers with different configurations may exist. Remove the config
   // tag that starts with "-" in the name prior to loading the .so
   auto lib_name = name;
-  lib_name[0] = std::toupper(lib_name[0]);
-  auto hyphen_pos = name.find('-');
-  if (hyphen_pos != std::string::npos) {
+  lib_name[0] = static_cast<char>(std::toupper(lib_name[0]));
+  if (auto hyphen_pos = name.find('-'); hyphen_pos != std::string::npos) {
     lib_name.erase(hyphen_pos);
   }
   std::string library =
@@ -103,6 +85,25 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   // cast the void pointer from dlsym to a function pointer. This assumes that
   // void* is same size as function pointer, which should be true on POSIX
   auto* worker = reinterpret_cast<workers::Worker* (*)()>(funcPtr)();
+  return worker;
+}
+
+WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
+  this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
+  this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
+
+  this->addAndStartWorker(name, parameters);
+}
+
+WorkerInfo::~WorkerInfo() {
+  for (const auto& [thread_id, worker] : workers_) {
+    delete worker;  // NOLINT(cppcoreguidelines-owning-memory)
+  }
+}
+
+void WorkerInfo::addAndStartWorker(const std::string& name,
+                                   RequestParameters* parameters) {
+  auto worker = getWorker(name);
   worker->init(parameters);
   this->batch_size_ = worker->getBatchSize();
 
@@ -122,12 +123,27 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   auto max_buffers = worker->getMaxBufferNum();
   worker->setInputBuffers(this->input_buffer_ptr_.get());
   worker->setOutputBuffers(this->output_buffer_ptr_.get());
-  auto buffer_num = worker->allocate(kNumBufferAuto);
-  this->buffer_num_ += buffer_num;
+  try {
+    auto buffer_num = worker->allocate(kNumBufferAuto);
+    this->buffer_num_ += buffer_num;
+  } catch (...) {
+    if (workers_.empty()) {
+      this->batchers_.clear();
+    }
+    throw;
+  }
   this->max_buffer_num_ =
     max_buffers == UINT_MAX ? UINT_MAX : this->max_buffer_num_ + max_buffers;
 
-  worker->acquire(parameters);
+  try {
+    worker->acquire(parameters);
+  } catch (...) {
+    if (workers_.empty()) {
+      this->batchers_.clear();
+    }
+    throw;
+  }
+
   for (const auto& batcher : this->batchers_) {
     if (batcher->getStatus() != BatcherStatus::kRun) {
       batcher->start(this);
@@ -151,9 +167,9 @@ void WorkerInfo::join(std::thread::id id) {
 }
 
 void WorkerInfo::joinAll() {
-  for (auto& thread : this->worker_threads_) {
-    if (thread.second.joinable()) {
-      thread.second.join();
+  for (auto& [thread_id, thread] : worker_threads_) {
+    if (thread.joinable()) {
+      thread.join();
     }
   }
 }
@@ -203,11 +219,11 @@ void WorkerInfo::unload() {
   this->workers_.erase(id);
 }
 
-int WorkerInfo::getGroupSize() { return this->workers_.size(); }
+size_t WorkerInfo::getGroupSize() const { return this->workers_.size(); }
 
 void WorkerInfo::shutdown() {
   auto workers = this->getGroupSize();
-  for (int i = 0; i < workers; i++) {
+  for (auto i = 0U; i < workers; i++) {
     this->unload();
   }
 }
@@ -224,11 +240,11 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) {
+void WorkerInfo::putInputBuffer(BufferPtrs buffer) const {
   this->input_buffer_ptr_->enqueue(std::move(buffer));
 }
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) {
+void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const {
   this->output_buffer_ptr_->enqueue(std::move(buffer));
 }
 
