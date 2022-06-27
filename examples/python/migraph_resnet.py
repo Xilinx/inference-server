@@ -59,21 +59,82 @@ def preprocess(img_data):
     for i in range(img_data.shape[0]):  
         norm_img_data[i,:,:] = (img_data[i,:,:]/255 - mean_vec[i]) / stddev_vec[i]
     return norm_img_data
-
+#
 # Read command line arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("-b", "--batch", help = "Number of images per batch")
-args = parser.parse_args()  
-batch_size = 1 
-if args.batch: 
-    batch_size = int(args.batch)
+#
+root = os.getenv("PROTEUS_ROOT")
+assert root is not None
 
-modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
-# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
-validation_dir = r"/workspace/proteus/external/artifacts/migraphx/ILSVRC2012_img_val/"   # imagenet validation images
-validation_answers_file = validation_dir + 'val.txt'
+# Get the arguments required from the user
+parser = argparse.ArgumentParser(
+    description="Validation (working) for Proteus Migraphx worker"
+)
+parser.add_argument(
+    "--request_size",
+    "-r",
+    type=int,
+    required=False,
+    help="Number of images per REST request",
+    default=4,
+)
+
+parser.add_argument(
+    "--batch_size",
+    "-b",
+    type=int,
+    required=False,
+    default=64,
+    help="Batch size for migraphx evaluation. Default is 64. "
+    "(currently not used)",
+)
+parser.add_argument(
+    "--modelfile",
+    "-m",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"),
+    help="Location of model file on server",
+)
+parser.add_argument(
+    "--validation_dir",
+    "-v",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/ILSVRC2012_img_val"),
+    help="The directory containing validation images",
+)
+parser.add_argument(
+    "--groundtruth",
+    "-g",
+    type=str,
+    required=False,
+    default=  r"val.txt",
+    help="The list of correct category results (ground truth) for the validation set; file must be in the validation directory",
+)
+
+parser.add_argument(
+    "--labels",
+    "-l",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/resnet50-v1-7/imagenet_simple_labels.json"),
+    help="The file containing label names for the model's categories",
+)
+
+# Parse arguments
+args = parser.parse_args()
+batch_size = args.request_size # NOT args.batch_size!
+modelname = args.modelfile
+validation_dir = args.validation_dir
+validation_answers_file =  os.path.join(validation_dir, args.groundtruth)
+labels_file = args.labels
+
+#
+#           End read command line arguments
+#
 
 #  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
+#  We assume here that client is on the same file system as the server
 #  This code is applicable to any onnx model, but for resnet50 the required shape could have been hardcoded:   [1, 3, 224, 224]
 shape=[]
 model = onnx.load(modelname)
@@ -123,7 +184,7 @@ parameters.put("model", modelname)
 worker_name = client.modelLoad("Migraphx", parameters)
 
 # load the labels
-with open('/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/imagenet_simple_labels.json') as json_data:
+with open(labels_file, 'r') as json_data:
     labels = json.load(json_data)
 
 # wait for the worker to load and compile model
@@ -142,7 +203,7 @@ files.remove('val.txt')
 # Read the "answers" file
 ground_truth = [None] * len(files)
 i=1
-with open(os.path.join(validation_dir, 'val.txt'), 'r') as labelfile:
+with open(validation_answers_file, 'r') as labelfile:
     while i < len(ground_truth):
         ground_truth[i] = labelfile.readline().split()[1]
         i = i + 1

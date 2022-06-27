@@ -11,13 +11,13 @@
 # https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.tar.gz
 
 import os
-
-os.getenv("PROTEUS_ROOT")
-
 import proteus
+import proteus.clients
+import argparse
 import onnx
 import cv2
 import numpy as np
+import time
 
 import json       # json for reading labels file
 import migraphx   # migraphx for validation (do the same inference directly)
@@ -25,8 +25,6 @@ import migraphx   # migraphx for validation (do the same inference directly)
 # The make_nxn and preprocess functions are based on an migraphx example at 
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb 
 # The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
-# Note that since there is no standardized implementation of resize, etc., results and therefore
-# preprocessing is not deterministic, validation set scores cannot be guaranteed to be replicated exactly.
 
 ''' crop an image to square and then resize to desired dimension n x n'''
 def make_nxn(image, n):
@@ -56,11 +54,68 @@ def preprocess(img_data):
         norm_img_data[i,:,:] = (img_data[i,:,:]/255 - mean_vec[i]) / stddev_vec[i]
     return norm_img_data
 
-modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
+#
+# Read command line arguments
+#
+root = os.getenv("PROTEUS_ROOT")
+assert root is not None
+
+# Get the arguments required from the user
+parser = argparse.ArgumentParser(
+    description="Example client Proteus Migraphx worker"
+)
+
+parser.add_argument(
+    "--modelfile",
+    "-m",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"),
+    help="Location of model file on server",
+)
+
+parser.add_argument(
+    "--labels",
+    "-l",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/resnet50-v1-7/imagenet_simple_labels.json"),
+    help="The file containing label names for the model's categories",
+)
+
+parser.add_argument(
+    "--image",
+    "-i",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/yflower.jpg"),       # a sunflower
+    help="An image to try inference on",
+)
+
+parser.add_argument(
+    "--image2",
+    "-g",
+    type=str,
+    required=False,
+    default= os.path.join(root,  r"external/artifacts/migraphx/classification.jpg"),       # a dog
+    help="A second image to try inference on",
+)
+
+# Parse arguments
+args = parser.parse_args()
+modelname = args.modelfile
+imagename = args.image
+imagename2 = args.image2
+labels_file = args.labels
+
+#
+#           End read command line arguments
+#
+# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
 # modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
 
-imagename = r"/workspace/proteus/external/artifacts/migraphx/yflower.jpg"        # a sunflower
-imagename2 =r"/workspace/proteus/external/artifacts/migraphx/classification.jpg" # a dog
+# imagename = r"/workspace/proteus/external/artifacts/migraphx/yflower.jpg"        # a sunflower
+# imagename2 =r"/workspace/proteus/external/artifacts/migraphx/classification.jpg" # a dog
 
 #  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
 #  This code is applicable to any onnx model, but for resnet50 the required shape could have been hardcoded:   [1, 3, 224, 224]
@@ -99,10 +154,13 @@ img = preprocess(img)
 # the channel dimension (3) to come before the rows and columns, but OpenCV places channels
 # in the last dimension.
 
-server = proteus.Server()
-client = proteus.RestClient("127.0.0.1:8998")
+client = proteus.clients.HttpClient("http://127.0.0.1:8998")
 print('waiting for server...',end='')
-client.wait_until_live()
+# call to initialize() or initializeLogging() is necessary before trying to contact the server.
+# At time of writing, it's needed whether or not user asks for logging
+proteus.initializeLogging()
+while not client.serverLive():
+    time.sleep(1)
 print('ok.')
 
 # +load worker.  The only parameter the migraphx worker requires is the model file name.
@@ -111,16 +169,6 @@ print('ok.')
 # future use.  It will read
 # the array dimensions and data type from the model.
 
-<<<<<<< HEAD
-parameters = {"model": modelname,
-                # any other migraphx-specific parameters here
-			  }
-
-response = client.load("Migraphx", parameters)
-assert not response.error, response.error_msg
-worker_name = response.html  # Migraphx
-print('response from load is', response.html)
-=======
 parameters = proteus.RequestParameters()
 parameters.put("model", modelname)
 # this call requests the server to either find a running instance of the named
@@ -135,7 +183,6 @@ while not ready:
         ready = client.modelReady(worker_name)
     except ValueError:
         pass
->>>>>>> 40815b3 (clean up debug code and comments)
 
 # Load a picture of a dog
 img2  = cv2.imread(imagename2).astype("float32")
@@ -165,20 +212,18 @@ images=[img2, img, img, img2]
 # images=[img]
 print("Creating inference request...")
 request = proteus.ImageInferenceRequest(images, False)
-
-response = client.infer(worker_name, request)
-assert not response.error, response.error_msg
+response = client.modelInfer(worker_name, request)
+assert not response.isError(), response.getError()
 
 print('Client received inference reply.')
 
 # load the labels
-with open('/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/imagenet_simple_labels.json') as json_data:
+with open(labels_file, 'r') as json_data:
     labels = json.load(json_data)
 
-for output in response.outputs:
-    # output.data is a list of floats.  output also has a datatype member.
-    data = output.data
-    print('name of result returned by server is ', output.name)  # resnet model has only 1 output which doesn't have a name
+for output in response.getOutputs():
+    assert output.datatype == proteus.DataType.FP32
+    recv_data = output.getFp32Data()
     # the predicted category is the one with the highest match value
     answer = np.argmax(recv_data)
     print('client\'s analysis of result: best match category is ', answer,'  match value is ', recv_data[answer], '.  This is a picture of a ', labels[answer])
@@ -210,5 +255,3 @@ print('Done')
 # If this line is commented out, worker persists with doRun thread active, and the entire script 
 # can be run again without any reloading taking place
 # client.unload('Migraphx')
-
-
