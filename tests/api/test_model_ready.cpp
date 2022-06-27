@@ -23,7 +23,7 @@
 bool isReady(proteus::Client* client, const std::string& endpoint) {
   try {
     return client->modelReady(endpoint);
-  } catch (const std::invalid_argument& e) {
+  } catch (const proteus::bad_status&) {
     return false;
   }
 }
@@ -37,7 +37,7 @@ void test(proteus::Client* client) {
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK({ client->modelReady(worker); },
                      { EXPECT_STREQ("worker echo not found", e.what()); },
-                     std::invalid_argument);
+                     proteus::bad_status);
 
   const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);

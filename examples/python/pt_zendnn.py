@@ -97,7 +97,7 @@ def main(args):
     while not ready:
         try:
             ready = client.modelReady(worker_name)
-        except ValueError:
+        except RuntimeError:
             pass
 
     # Inference with images

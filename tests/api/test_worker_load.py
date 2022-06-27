@@ -64,10 +64,10 @@ class TestLoad:
         try:
             while self.rest_client.modelReady(endpoint_0):
                 time.sleep(1)
-        except ValueError:
+        except RuntimeError:
             pass
         try:
             while self.rest_client.modelReady(endpoint_1):
                 time.sleep(1)
-        except ValueError:
+        except RuntimeError:
             pass
