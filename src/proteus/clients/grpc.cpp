@@ -40,6 +40,7 @@
 #include "predict_api.pb.h"                  // for InferTensorContents
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_GRPC
 #include "proteus/core/data_types.hpp"       // for DataType, DataType::...
+#include "proteus/core/exceptions.hpp"       // for bad_status
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
 #include "proteus/servers/grpc_server.hpp"   // for start, stop
 
@@ -85,7 +86,7 @@ ServerMetadata GrpcClient::serverMetadata() {
     ServerMetadata metadata{reply.name(), reply.version(), extensions};
     return metadata;
   }
-  throw std::runtime_error(status.error_message());
+  throw bad_status(status.error_message());
 }
 
 bool GrpcClient::serverLive() {
@@ -103,7 +104,7 @@ bool GrpcClient::serverLive() {
   if (status.error_code() == ::grpc::StatusCode::UNAVAILABLE) {
     return false;
   }
-  throw std::runtime_error(status.error_message());
+  throw bad_status(status.error_message());
 }
 
 bool GrpcClient::serverReady() {
@@ -118,7 +119,7 @@ bool GrpcClient::serverReady() {
   if (status.ok()) {
     return reply.ready();
   }
-  throw std::runtime_error(status.error_message());
+  throw bad_status(status.error_message());
 }
 
 bool GrpcClient::modelReady(const std::string& model) {
@@ -135,7 +136,7 @@ bool GrpcClient::modelReady(const std::string& model) {
   if (status.ok()) {
     return reply.ready();
   }
-  throw std::invalid_argument(status.error_message());
+  throw bad_status(status.error_message());
 }
 
 std::vector<std::string> GrpcClient::modelList() {
@@ -152,7 +153,7 @@ std::vector<std::string> GrpcClient::modelList() {
     std::vector<std::string> models(mods.begin(), mods.end());
     return models;
   }
-  throw std::invalid_argument(status.error_message());
+  throw bad_status(status.error_message());
 }
 
 // refer to cppreference for std::visit
@@ -198,7 +199,7 @@ void GrpcClient::modelLoad(const std::string& model,
   Status status = stub->ModelLoad(&context, request, &reply);
 
   if (!status.ok()) {
-    throw std::runtime_error(status.error_message());
+    throw bad_status(status.error_message());
   }
 }
 
@@ -214,7 +215,7 @@ void GrpcClient::modelUnload(const std::string& model) {
   Status status = stub->ModelUnload(&context, request, &reply);
 
   if (!status.ok()) {
-    throw std::runtime_error(status.error_message());
+    throw bad_status(status.error_message());
   }
 }
 
@@ -237,7 +238,7 @@ std::string GrpcClient::workerLoad(const std::string& worker,
   if (status.ok()) {
     return reply.endpoint();
   }
-  throw std::runtime_error(status.error_message());
+  throw bad_status(status.error_message());
 }
 
 void GrpcClient::workerUnload(const std::string& worker) {
@@ -252,7 +253,7 @@ void GrpcClient::workerUnload(const std::string& worker) {
   Status status = stub->WorkerUnload(&context, request, &reply);
 
   if (!status.ok()) {
-    throw std::runtime_error(status.error_message());
+    throw bad_status(status.error_message());
   }
 }
 
@@ -522,7 +523,7 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   Status status = stub->ModelInfer(&context, grpc_request, &reply);
 
   if (!status.ok()) {
-    throw std::runtime_error(status.error_message());
+    throw bad_status(status.error_message());
   }
 
   InferenceResponse response;

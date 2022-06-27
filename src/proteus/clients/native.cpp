@@ -32,6 +32,7 @@
 #include "proteus/batching/batcher.hpp"         // for Batcher
 #include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/exceptions.hpp"          // for bad_status
 #include "proteus/core/manager.hpp"             // for Manager
 #include "proteus/core/model_repository.hpp"    // for ModelRepository
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
@@ -197,7 +198,11 @@ void NativeClient::workerUnload(const std::string& model) {
 }
 
 bool NativeClient::modelReady(const std::string& model) {
-  return Manager::getInstance().workerReady(model);
+  try {
+    return Manager::getInstance().workerReady(model);
+  } catch (const std::invalid_argument& e) {
+    throw bad_status(e.what());
+  }
 }
 
 std::vector<std::string> NativeClient::modelList() {

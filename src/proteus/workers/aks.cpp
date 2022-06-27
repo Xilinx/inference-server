@@ -39,6 +39,7 @@
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::FP32
+#include "proteus/core/exceptions.hpp"        // for external_error
 #include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
 #include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
@@ -123,7 +124,7 @@ void Aks::doAcquire(RequestParameters* parameters) {
   std::string graph_name = "graph_adder";
   this->graph_ = sysMan_->getGraph(graph_name);
   if (this->graph_ == nullptr) {
-    throw std::runtime_error("AKS graph " + graph_name + " not found");
+    throw external_error("AKS graph " + graph_name + " not found");
   }
 
   this->metadata_.addInputTensor("input", DataType::FP32,

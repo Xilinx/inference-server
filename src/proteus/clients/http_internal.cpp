@@ -162,8 +162,7 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
       }
       case DataType::FP16: {
         // FIXME(varunsh): this is not handled
-        throw std::runtime_error("Writing FP16 not supported");
-        break;
+        throw std::invalid_argument("Writing FP16 not supported at this time");
       }
       case DataType::FP32: {
         setOutputData<float>(json_data, &output, &Json::Value::asFloat);
@@ -392,7 +391,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
         }
       }
-    } catch (const Json::LogicError &e) {
+    } catch (const Json::LogicError &) {
       throw std::invalid_argument(
         "Could not convert some data to the provided data type");
     }
@@ -460,19 +459,15 @@ InferenceRequestPtr RequestBuilder::build(
       throw std::invalid_argument(
         "At least one element in 'inputs' is not an obj");
     }
-    try {
-      const auto &buffers = input_buffers[buffer_index];
-      for (const auto &buffer : buffers) {
-        auto &offset = input_offsets[buffer_index];
+    const auto &buffers = input_buffers[buffer_index];
+    for (const auto &buffer : buffers) {
+      auto &offset = input_offsets[buffer_index];
 
-        auto input =
-          InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
-        offset += (input.getSize() * input.getDatatype().size());
+      auto input =
+        InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
+      offset += (input.getSize() * input.getDatatype().size());
 
-        request->inputs_.push_back(std::move(input));
-      }
-    } catch (const std::invalid_argument &e) {
-      throw;
+      request->inputs_.push_back(std::move(input));
     }
     batch_offset++;
     if (batch_offset == batch_size) {
@@ -489,34 +484,26 @@ InferenceRequestPtr RequestBuilder::build(
   if (req->isMember("outputs")) {
     auto outputs = req->get("outputs", Json::arrayValue);
     for (auto const &i : outputs) {
-      try {
-        auto buffers = output_buffers[buffer_index];
-        for (auto &buffer : buffers) {
-          auto &offset = output_offsets[buffer_index];
+      auto buffers = output_buffers[buffer_index];
+      for (auto &buffer : buffers) {
+        auto &offset = output_offsets[buffer_index];
 
-          auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));
-          output.setData(static_cast<std::byte *>(buffer->data()) + offset);
-          request->outputs_.push_back(std::move(output));
-          // output += request->outputs_.back().getSize(); // see TODO
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
+        auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));
+        output.setData(static_cast<std::byte *>(buffer->data()) + offset);
+        request->outputs_.push_back(std::move(output));
+        // output += request->outputs_.back().getSize(); // see TODO
       }
     }
   } else {
     for (auto const &i : inputs) {
       (void)i;  // suppress unused variable warning
-      try {
-        const auto &buffers = output_buffers[buffer_index];
-        for (const auto &buffer : buffers) {
-          const auto &offset = output_offsets[buffer_index];
+      const auto &buffers = output_buffers[buffer_index];
+      for (const auto &buffer : buffers) {
+        const auto &offset = output_offsets[buffer_index];
 
-          request->outputs_.emplace_back();
-          request->outputs_.back().setData(
-            static_cast<std::byte *>(buffer->data()) + offset);
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
+        request->outputs_.emplace_back();
+        request->outputs_.back().setData(
+          static_cast<std::byte *>(buffer->data()) + offset);
       }
       batch_offset++;
       if (batch_offset == batch_size) {

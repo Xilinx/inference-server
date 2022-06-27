@@ -21,6 +21,7 @@
 #include "proteus/clients/http.hpp"
 #include "proteus/clients/native.hpp"
 #include "proteus/core/data_types.hpp"
+#include "proteus/core/exceptions.hpp"
 #include "proteus/core/predict_api.hpp"
 #include "proteus/helpers/declarations.hpp"
 // IWYU pragma: end_exports
