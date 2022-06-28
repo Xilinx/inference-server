@@ -138,7 +138,7 @@ void v2::ProteusHttpServer::getModelReady(
     if (!Manager::getInstance().workerReady(model)) {
       resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
     }
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     resp->setStatusCode(HttpStatusCode::k400BadRequest);
     resp->setBody(e.what());
   }
@@ -183,7 +183,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   try {
     auto metadata = Manager::getInstance().getWorkerMetadata(model);
     ret = ModelMetadataToJson(metadata);
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     ret["error"] = "Model " + model + " not found.";
     error = true;
   }
@@ -250,7 +250,7 @@ void v2::ProteusHttpServer::inferModel(
   WorkerInfo *worker = nullptr;
   try {
     worker = Manager::getInstance().getWorker(model);
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse("Worker " + model + " not found",
                                   HttpStatusCode::k400BadRequest);
@@ -265,7 +265,7 @@ void v2::ProteusHttpServer::inferModel(
   std::unique_ptr<DrogonHttp> request;
   try {
     request = std::make_unique<DrogonHttp>(req, std::move(callback));
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING

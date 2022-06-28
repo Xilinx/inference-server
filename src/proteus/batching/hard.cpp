@@ -99,12 +99,12 @@ void HardBatcher::doRun(WorkerInfo* worker) {
         if (!worker->inputSizeValid(input_size)) {
           Manager::getInstance().workerAllocate(this->model_, input_size);
         }
-      } catch (const std::invalid_argument& e) {
+      } catch (const invalid_argument& e) {
         req->errorHandler(e);
         continue;
       }
       if (input_size == 0) {
-        auto error = std::invalid_argument("Input size is zero");
+        auto error = invalid_argument("Input size is zero");
         req->errorHandler(error);
         continue;
       }

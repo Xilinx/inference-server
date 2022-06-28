@@ -58,7 +58,7 @@ class DrogonWs : public Interface {
     size_t &batch_offset) override;
 
   size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
+  void errorHandler(const std::exception &e) override;
 
  private:
   void setJson();

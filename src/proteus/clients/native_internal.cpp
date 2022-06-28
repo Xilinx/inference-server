@@ -184,7 +184,7 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   return request;
 }
 
-void CppNativeApi::errorHandler(const std::invalid_argument &e) {
+void CppNativeApi::errorHandler(const std::exception &e) {
   PROTEUS_LOG_ERROR(this->getLogger(), e.what());
   this->getPromise()->set_value(InferenceResponse(e.what()));
 }

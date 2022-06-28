@@ -48,7 +48,7 @@ namespace proteus {
  */
 void* findFunc(const std::string& func, const std::string& soPath) {
   if (func.empty() || soPath.empty()) {
-    throw std::invalid_argument("Function or .so path empty");
+    throw invalid_argument("Function or .so path empty");
   }
 
   // reset errors
@@ -65,7 +65,7 @@ void* findFunc(const std::string& func, const std::string& soPath) {
   void* fptr = dlsym(handle, func.c_str());
   if (fptr == nullptr) {
     const char* error_str = dlerror();
-    throw std::invalid_argument(error_str);
+    throw invalid_argument(error_str);
   }
   return fptr;
 }
@@ -256,7 +256,7 @@ bool WorkerInfo::inputSizeValid(size_t size) const {
   if (size <= this->getMaxBufferNum()) {
     return false;
   }
-  throw std::invalid_argument("Too many input tensors for this model");
+  throw invalid_argument("Too many input tensors for this model");
 }
 
 void WorkerInfo::allocate(size_t request_size) {

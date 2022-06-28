@@ -200,7 +200,7 @@ void NativeClient::workerUnload(const std::string& model) {
 bool NativeClient::modelReady(const std::string& model) {
   try {
     return Manager::getInstance().workerReady(model);
-  } catch (const std::invalid_argument& e) {
+  } catch (const runtime_error& e) {
     throw bad_status(e.what());
   }
 }
