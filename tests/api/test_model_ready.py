@@ -27,7 +27,7 @@ class TestModelReady:
     def is_ready(self, worker):
         try:
             return self.rest_client.modelReady(worker)
-        except proteus.Error:
+        except proteus.RuntimeError:
             return False
 
     def test_model_ready(self):
@@ -40,7 +40,7 @@ class TestModelReady:
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        with pytest.raises(proteus.Error) as e_info:
+        with pytest.raises(proteus.RuntimeError) as e_info:
             self.rest_client.modelReady(worker)
             assert str(e_info.value) == f"worker {worker} not found"
 

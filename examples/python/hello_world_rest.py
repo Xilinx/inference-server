@@ -62,7 +62,7 @@ def main():
     while not ready:
         try:
             ready = client.modelReady(worker_name)
-        except proteus.Error:
+        except proteus.RuntimeError:
             pass
     # -load worker:
 

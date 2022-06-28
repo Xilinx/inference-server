@@ -55,5 +55,5 @@ class TestModelInfer:
         try:
             while self.rest_client.modelReady(endpoint):
                 time.sleep(1)
-        except proteus.Error:
+        except proteus.RuntimeError:
             pass

@@ -38,7 +38,7 @@ PYBIND11_MODULE(_proteus, m) {
   m.def("initializeLogging", &initializeLogging);
   m.def("terminate", &terminate);
 
-  py::register_exception<proteus_error>(m, "Error");
+  py::register_exception<runtime_error>(m, "RuntimeError");
 
   wrapRequestParameters(m);
   wrapDataType(m);

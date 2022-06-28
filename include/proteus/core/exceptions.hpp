@@ -25,24 +25,28 @@
 
 namespace proteus {
 
-class proteus_error : public std::runtime_error {
+class runtime_error : public std::runtime_error {
   using std::runtime_error::runtime_error;
 };
 
-class bad_status : public proteus_error {
-  using proteus_error::proteus_error;
+class bad_status : public runtime_error {
+  using runtime_error::runtime_error;
 };
 
-class file_not_found_error : public proteus_error {
-  using proteus_error::proteus_error;
+class file_not_found_error : public runtime_error {
+  using runtime_error::runtime_error;
 };
 
-class file_read_error : public proteus_error {
-  using proteus_error::proteus_error;
+class file_read_error : public runtime_error {
+  using runtime_error::runtime_error;
 };
 
-class external_error : public proteus_error {
-  using proteus_error::proteus_error;
+class external_error : public runtime_error {
+  using runtime_error::runtime_error;
+};
+
+class invalid_argument : public runtime_error {
+  using runtime_error::runtime_error;
 };
 
 }  // namespace proteus
