@@ -235,7 +235,7 @@ class TestEcho:
 
         try:
             response = self.rest_client.modelInfer(self.model, request)
-        except proteus.Error as e:
+        except proteus.RuntimeError as e:
             assert str(e) == '{"error":"Too many input tensors for this model"}'
         else:
             pytest.fail("Exception not raised")
