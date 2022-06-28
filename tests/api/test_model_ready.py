@@ -42,7 +42,7 @@ class TestModelReady:
 
         with pytest.raises(proteus.RuntimeError) as e_info:
             self.rest_client.modelReady(worker)
-            assert str(e_info.value) == f"worker {worker} not found"
+            assert str(e_info.value) == f"Worker {worker} not found"
 
         endpoint_0 = self.rest_client.workerLoad(worker)
         assert endpoint_0 == "echo"

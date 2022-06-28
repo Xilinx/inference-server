@@ -83,13 +83,11 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
   auto request = std::make_unique<DrogonWs>(conn, std::move(json));
 
-  WorkerInfo *worker = nullptr;
-  try {
-    worker = Manager::getInstance().getWorker(model);
-  } catch (const invalid_argument &e) {
-    PROTEUS_LOG_INFO(logger_, e.what());
+  auto *worker = Manager::getInstance().getWorker(model);
+  if (worker == nullptr) {
+    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
-                   "Model " + model + " not loaded");
+                   "Worker " + model + " not found");
     return;
   }
   auto *batcher = worker->getBatcher();

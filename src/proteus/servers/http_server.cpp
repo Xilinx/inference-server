@@ -183,8 +183,8 @@ void v2::ProteusHttpServer::getModelMetadata(
   try {
     auto metadata = Manager::getInstance().getWorkerMetadata(model);
     ret = ModelMetadataToJson(metadata);
-  } catch (const invalid_argument &e) {
-    ret["error"] = "Model " + model + " not found.";
+  } catch (const runtime_error &e) {
+    ret["error"] = e.what();
     error = true;
   }
 
@@ -248,10 +248,9 @@ void v2::ProteusHttpServer::inferModel(
 #endif
 
   WorkerInfo *worker = nullptr;
-  try {
-    worker = Manager::getInstance().getWorker(model);
-  } catch (const invalid_argument &e) {
-    PROTEUS_LOG_INFO(logger_, e.what());
+  worker = Manager::getInstance().getWorker(model);
+  if (worker == nullptr) {
+    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
     auto resp = errorHttpResponse("Worker " + model + " not found",
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
