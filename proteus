@@ -821,6 +821,14 @@ class Get:
                     "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.0.zip"
                 ],
             })
+            
+        if args.migraphx:
+            files.update({
+                migraphx_models: [
+                    "https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+                    "https://github.com/mvermeulen/rocm-migraphx/tree/master/datasets/imagenet/val.txt",
+                ],
+            })
 
         if args.ptzendnn:
             files.update({
@@ -828,7 +836,6 @@ class Get:
                     "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_4.1G_2.0.zip"
                 ]
             })
-
         for location, urls in files.items():
             for url in urls:
                 if "www.xilinx.com/bin/public/openDownload" in url:

@@ -797,11 +797,17 @@ RUN ln -s /opt/rocm-* /opt/rocm
 RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf
 RUN echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf
 RUN ldconfig
+# ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
+#        for Release version, since it's set up differently than dev
+#
 # Install rbuild
 RUN pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
 # Install MIGraphX from source
 RUN mkdir -p /migraphx
-RUN cd /migraphx && git clone --depth=1 --branch rocm-5.1.1 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
+# RUN cd /migraphx && git clone --depth=1 --branch rocm-5.1.1 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
+# at time of writing, a needed bug fix is in the develop branch of AMDMIGraphX
+RUN cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
+RUN cd /migraphx/src  && git checkout cb18b0b5722373c49f5c257380af206e13344735
 RUN apt install nano
 RUN cd /migraphx/src && rbuild package -d /migraphx/deps -B /migraphx/build
 RUN dpkg -i /migraphx/build/*.deb

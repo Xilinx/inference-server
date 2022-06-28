@@ -101,7 +101,7 @@ parser.add_argument(
     type=str,
     required=False,
     default= os.path.join(root,  r"external/artifacts/migraphx/ILSVRC2012_img_val"),
-    help="The directory containing validation images",
+    help="The directory containing validation images.  See Mike Vermeulen or Brian Pickrell for image set",
 )
 parser.add_argument(
     "--groundtruth",
@@ -207,8 +207,6 @@ with open(validation_answers_file, 'r') as labelfile:
     while i < len(ground_truth):
         ground_truth[i] = labelfile.readline().split()[1]
         i = i + 1
-
-print(ground_truth[12345], '***************************************')
 
 #
 #   Loop thru the image set, reading images and putting together inference requests in batches.

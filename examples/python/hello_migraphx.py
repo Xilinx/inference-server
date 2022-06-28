@@ -88,8 +88,8 @@ parser.add_argument(
     "-i",
     type=str,
     required=False,
-    default= os.path.join(root,  r"external/artifacts/migraphx/yflower.jpg"),       # a sunflower
-    help="An image to try inference on",
+    default= os.path.join(root,  r"tests/assets/girl-1867092_640.jpg"),       # a girl in a sweatshirt
+    help="An image to try inference on.  Use git-lfs to pull image assets",
 )
 
 parser.add_argument(
@@ -97,7 +97,7 @@ parser.add_argument(
     "-g",
     type=str,
     required=False,
-    default= os.path.join(root,  r"external/artifacts/migraphx/classification.jpg"),       # a dog
+    default= os.path.join(root,  r"tests/assets/bicycle-384566_640.jpg"),       # a bicyclist
     help="A second image to try inference on",
 )
 
@@ -111,13 +111,9 @@ labels_file = args.labels
 #
 #           End read command line arguments
 #
-# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
-# modelname = r"/workspace/proteus/external/artifacts/migraphx/resnet50-v1-12/resnet50-v1-12.onnx"
-
-# imagename = r"/workspace/proteus/external/artifacts/migraphx/yflower.jpg"        # a sunflower
-# imagename2 =r"/workspace/proteus/external/artifacts/migraphx/classification.jpg" # a dog
 
 #  load the onnx model to find the input shape, see https://stackoverflow.com/questions/56734576/find-input-shape-from-onnx-file
+#  We assume here that client is on the same file system as the server
 #  This code is applicable to any onnx model, but for resnet50 the required shape could have been hardcoded:   [1, 3, 224, 224]
 shape=[]
 model = onnx.load(modelname)
