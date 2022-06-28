@@ -464,7 +464,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
   }
   try {
     mapResponsetoProto(response, calldata->getReply());
-  } catch (const std::invalid_argument& e) {
+  } catch (const invalid_argument& e) {
     calldata->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
     return;
   }
@@ -505,7 +505,7 @@ class GrpcApiUnary : public Interface {
         std::bind(grpcUnaryCallback, this->calldata_, std::placeholders::_1);
       request->setCallback(std::move(callback));
       return request;
-    } catch (const std::invalid_argument& e) {
+    } catch (const invalid_argument& e) {
       PROTEUS_LOG_INFO(logger, e.what());
       errorHandler(e);
       return nullptr;
@@ -516,7 +516,7 @@ class GrpcApiUnary : public Interface {
     return calldata_->getRequest().inputs_size();
   }
 
-  void errorHandler(const std::invalid_argument& e) override {
+  void errorHandler(const std::exception& e) override {
     PROTEUS_LOG_INFO(this->getLogger(), e.what());
     calldata_->finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   }
@@ -542,7 +542,7 @@ CALLDATA_IMPL(ModelReady, Unary) {
   try {
     reply_.set_ready(Manager::getInstance().workerReady(model));
     finish();
-  } catch (const std::invalid_argument& e) {
+  } catch (const invalid_argument& e) {
     reply_.set_ready(false);
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   }
@@ -651,7 +651,7 @@ void CallDataModelInfer::handleRequest() {
   WorkerInfo* worker = nullptr;
   try {
     worker = Manager::getInstance().getWorker(model);
-  } catch (const std::invalid_argument& e) {
+  } catch (const invalid_argument& e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     finish(
       ::grpc::Status(StatusCode::NOT_FOUND, "Worker " + model + " not found"));

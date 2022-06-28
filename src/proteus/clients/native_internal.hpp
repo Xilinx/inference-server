@@ -44,7 +44,7 @@ class CppNativeApi : public Interface {
     size_t &batch_offset) override;
 
   size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
+  void errorHandler(const std::exception &e) override;
   std::promise<proteus::InferenceResponse> *getPromise();
 
  private:

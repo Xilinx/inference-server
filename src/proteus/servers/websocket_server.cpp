@@ -86,7 +86,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   WorkerInfo *worker = nullptr;
   try {
     worker = Manager::getInstance().getWorker(model);
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "Model " + model + " not loaded");
@@ -124,7 +124,7 @@ DrogonWs::DrogonWs(const drogon::WebSocketConnectionPtr &conn,
 size_t DrogonWs::getInputSize() {
   auto inputs = this->json_->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an array");
   }
   return inputs.size();
 }
@@ -153,7 +153,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
       };
     request->setCallback(std::move(callback));
     return request;
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger, e.what());
     this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition,
                           "Failed to create request");
@@ -161,7 +161,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
   }
 }
 
-void DrogonWs::errorHandler(const std::invalid_argument &e) {
+void DrogonWs::errorHandler(const std::exception &e) {
   PROTEUS_LOG_INFO(this->getLogger(), e.what());
   this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
 }

@@ -138,7 +138,7 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   } else if (config.platform() == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
   } else {
-    throw std::invalid_argument("Unknown platform");
+    throw invalid_argument("Unknown platform");
   }
 
   mapProtoToParameters2(config.parameters(), parameters);
@@ -160,7 +160,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       try {
         ModelRepository::modelLoad(model, &params);
         Manager::getInstance().loadWorker(model, params);
-      } catch (const std::runtime_error& e) {
+      } catch (const runtime_error&) {
         PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
       }
     } else if (action == efsw::Actions::Delete) {

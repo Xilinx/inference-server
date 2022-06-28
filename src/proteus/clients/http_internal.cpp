@@ -37,6 +37,7 @@
 
 #include "proteus/buffers/buffer.hpp"             // for Buffer
 #include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "proteus/core/exceptions.hpp"            // invalid_argument
 #include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "proteus/helpers/compression.hpp"        // for z_decompress
@@ -162,7 +163,7 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
       }
       case DataType::FP16: {
         // FIXME(varunsh): this is not handled
-        throw std::invalid_argument("Writing FP16 not supported at this time");
+        throw invalid_argument("Writing FP16 not supported at this time");
       }
       case DataType::FP32: {
         setOutputData<float>(json_data, &output, &Json::Value::asFloat);
@@ -303,22 +304,21 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
 
     input.shared_data_ = nullptr;
     if (!req->isMember("name")) {
-      throw std::invalid_argument("No 'name' key present in request input");
+      throw invalid_argument("No 'name' key present in request input");
     }
     input.name_ = req->get("name", "").asString();
     if (!req->isMember("shape")) {
-      throw std::invalid_argument("No 'shape' key present in request input");
+      throw invalid_argument("No 'shape' key present in request input");
     }
     auto shape = req->get("shape", Json::arrayValue);
     for (auto const &i : shape) {
       if (!i.isUInt64()) {
-        throw std::invalid_argument(
-          "'shape' must be specified by uint64 elements");
+        throw invalid_argument("'shape' must be specified by uint64 elements");
       }
       input.shape_.push_back(i.asUInt64());
     }
     if (!req->isMember("datatype")) {
-      throw std::invalid_argument("No 'datatype' key present in request input");
+      throw invalid_argument("No 'datatype' key present in request input");
     }
     std::string data_type_str = req->get("datatype", "").asString();
     input.dataType_ = DataType(data_type_str.c_str());
@@ -329,7 +329,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
       input.parameters_ = std::make_unique<RequestParameters>();
     }
     if (!req->isMember("data")) {
-      throw std::invalid_argument("No 'data' key present in request input");
+      throw invalid_argument("No 'data' key present in request input");
     }
     auto data = req->get("data", Json::arrayValue);
     try {
@@ -392,7 +392,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
         }
       }
     } catch (const Json::LogicError &) {
-      throw std::invalid_argument(
+      throw invalid_argument(
         "Could not convert some data to the provided data type");
     }
     return input;
@@ -443,11 +443,11 @@ InferenceRequestPtr RequestBuilder::build(
   }
 
   if (!req->isMember("inputs")) {
-    throw std::invalid_argument("No 'inputs' key present in request");
+    throw invalid_argument("No 'inputs' key present in request");
   }
   auto inputs = req->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an array");
   }
 
   request->callback_ = nullptr;
@@ -456,8 +456,7 @@ InferenceRequestPtr RequestBuilder::build(
   auto batch_offset_backup = batch_offset;
   for (auto const &i : inputs) {
     if (!i.isObject()) {
-      throw std::invalid_argument(
-        "At least one element in 'inputs' is not an obj");
+      throw invalid_argument("At least one element in 'inputs' is not an obj");
     }
     const auto &buffers = input_buffers[buffer_index];
     for (const auto &buffer : buffers) {
@@ -567,7 +566,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
     return root;
   }
 
-  throw std::invalid_argument("Failed to interpret request body as JSON");
+  throw invalid_argument("Failed to interpret request body as JSON");
 }
 
 DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
@@ -579,11 +578,11 @@ DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
 
 size_t DrogonHttp::getInputSize() {
   if (!this->json_->isMember("inputs")) {
-    throw std::invalid_argument("No 'inputs' key present in request");
+    throw invalid_argument("No 'inputs' key present in request");
   }
   auto inputs = this->json_->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an array");
   }
   return inputs.size();
 }
@@ -738,7 +737,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
         try {
           Json::Value ret = parseResponse(response);
           resp = drogon::HttpResponse::newHttpJsonResponse(ret);
-        } catch (const std::invalid_argument &e) {
+        } catch (const invalid_argument &e) {
           resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
         }
       }
@@ -750,7 +749,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
     };
     request->setCallback(std::move(callback));
     return request;
-  } catch (const std::invalid_argument &e) {
+  } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger, e.what());
     this->callback_(
       errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
@@ -758,7 +757,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
   }
 }
 
-void DrogonHttp::errorHandler(const std::invalid_argument &e) {
+void DrogonHttp::errorHandler(const std::exception &e) {
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto &logger = this->getLogger();
   PROTEUS_LOG_DEBUG(logger, e.what());

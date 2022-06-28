@@ -163,7 +163,7 @@ TEST_P(EchoParamFixture, EchoGrpc) {
     try {
       auto response = client.modelInfer("echo", request);
       FAIL() << "No runtime error thrown";
-    } catch (const std::runtime_error& e) {
+    } catch (const runtime_error& e) {
       EXPECT_STREQ(e.what(), "Too many input tensors for this model");
     }
   } else {
@@ -177,7 +177,7 @@ TEST_P(EchoParamFixture, EchoGrpc) {
 #endif
 
 // add_id, add_input_parameters, add_request_parameters, add_outputs, multiplier
-std::tuple<bool, bool, bool, bool, int> configs[] = {
+const std::tuple<bool, bool, bool, bool, int> configs[] = {
   {true, true, true, true, 1},      {true, true, false, true, 1},
   {true, false, false, true, 1},    {false, false, false, true, 1},
   {false, false, false, false, 1},  {false, false, false, false, 10},

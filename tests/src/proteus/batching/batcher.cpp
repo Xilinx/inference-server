@@ -61,7 +61,7 @@ class FakeInterface : public Interface {
     size_t &batch_offset) override;
 
   size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
+  void errorHandler(const std::exception &e) override;
   std::promise<proteus::InferenceResponse> *getPromise();
 
  private:
@@ -100,7 +100,7 @@ std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
   return request;
 }
 
-void FakeInterface::errorHandler(const std::invalid_argument &e) {
+void FakeInterface::errorHandler(const std::exception &e) {
   PROTEUS_LOG_ERROR(this->getLogger(), e.what());
   (void)e;  // suppress unused variable warning
 }

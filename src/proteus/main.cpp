@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
         auto model = path.path().filename();
         try {
           client.modelLoad(model, nullptr);
-        } catch (const std::runtime_error& e) {
+        } catch (const proteus::runtime_error&) {
           PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
         }
       }

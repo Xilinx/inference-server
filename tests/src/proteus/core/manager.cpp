@@ -47,7 +47,7 @@ void Manager::unloadWorker(const std::string& key) {
 WorkerInfo* Manager::getWorker(const std::string& key) {
   auto* worker_info = this->endpoints_.get(key);
   if (worker_info == nullptr) {
-    throw std::invalid_argument("worker " + key + " not found");
+    throw invalid_argument("worker " + key + " not found");
   }
   return worker_info;
 }
