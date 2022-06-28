@@ -161,6 +161,9 @@ InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
   auto* worker = proteus::Manager::getInstance().getWorker(workerName);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + workerName + " not found");
+  }
 
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));

@@ -74,11 +74,7 @@ void Manager::unloadWorker(const std::string& key) {
 }
 
 WorkerInfo* Manager::getWorker(const std::string& key) {
-  auto* worker_info = this->endpoints_.get(key);
-  if (worker_info == nullptr) {
-    throw invalid_argument("worker " + key + " not found");
-  }
-  return worker_info;
+  return this->endpoints_.get(key);
 }
 
 bool Manager::workerReady(const std::string& key) {
@@ -99,12 +95,18 @@ bool Manager::workerReady(const std::string& key) {
 // FIXME(varunsh): potential race condition if the worker is being deleted
 ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   auto* worker = this->getWorker(key);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + key + " not found");
+  }
   auto* foo = worker->workers_.begin()->second;
   return foo->getMetadata();
 }
 
 void Manager::workerAllocate(std::string const& key, int num) {
   const auto* worker = this->getWorker(key);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + key + " not found");
+  }
   auto request =
     std::make_shared<UpdateCommand>(UpdateCommandType::Allocate, key, &num);
   update_queue_->enqueue(request);
@@ -174,6 +176,9 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
       case UpdateCommandType::Ready:
         try {
           auto* workerInfo = this->getWorker(request->key);
+          if (workerInfo == nullptr) {
+            throw invalid_argument("Worker " + request->key + " not found");
+          }
           auto* worker = workerInfo->workers_.begin()->second;
           auto metadata = worker->getMetadata();
           *static_cast<int*>(request->retval) = metadata.isReady();

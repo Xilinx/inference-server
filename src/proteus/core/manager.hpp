@@ -108,7 +108,7 @@ class Manager {
 
   /**
    * @brief Get the WorkerInfo object associated with the given key. If the
-   * worker does not exist, throws an exception.
+   * worker does not exist, returns nullptr
    *
    * @param key name of the worker
    * @return WorkerInfo*

@@ -36,7 +36,7 @@ void test(proteus::Client* client) {
 
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK({ client->modelReady(worker); },
-                     { EXPECT_STREQ("worker echo not found", e.what()); },
+                     { EXPECT_STREQ("Worker echo not found", e.what()); },
                      proteus::bad_status);
 
   const auto endpoint = client->workerLoad(worker, nullptr);

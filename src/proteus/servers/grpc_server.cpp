@@ -649,10 +649,9 @@ void CallDataModelInfer::handleRequest() {
 #endif
 
   WorkerInfo* worker = nullptr;
-  try {
-    worker = Manager::getInstance().getWorker(model);
-  } catch (const invalid_argument& e) {
-    PROTEUS_LOG_INFO(logger_, e.what());
+  worker = Manager::getInstance().getWorker(model);
+  if (worker == nullptr) {
+    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
     finish(
       ::grpc::Status(StatusCode::NOT_FOUND, "Worker " + model + " not found"));
     return;
