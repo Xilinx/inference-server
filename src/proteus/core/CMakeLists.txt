@@ -28,22 +28,15 @@ foreach(target ${targets})
     list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
-# if(${PROTEUS_ENABLE_GRPC})
-#     target_include_directories(predict_api_internal PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-#     target_link_libraries(predict_api_internal INTERFACE lib_grpc)
-# endif()
 target_link_libraries(predict_api INTERFACE jsoncpp)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(data_types INTERFACE xir)
 endif()
-
 add_library(lib_predict_api INTERFACE)
 target_link_libraries(lib_predict_api INTERFACE
     $<TARGET_OBJECTS:predict_api>
     predict_api
-    # $<TARGET_OBJECTS:predict_api_internal>
-    # predict_api_internal
 )
 
 if(${PROTEUS_ENABLE_GRPC})
@@ -57,6 +50,18 @@ if(${PROTEUS_ENABLE_GRPC})
 
     disable_target_linting(lib_grpc)
 endif()
+
+add_library(lib_config model_config.proto)
+target_include_directories(lib_config PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(lib_config INTERFACE protobuf::libprotobuf)
+protobuf_generate(TARGET lib_config LANGUAGE cpp)
+disable_target_linting(lib_config)
+
+add_library(model_repository OBJECT model_repository.cpp)
+target_include_directories(model_repository PRIVATE ${PROTEUS_INCLUDE_DIRS})
+enable_ipo_on_target(model_repository)
+target_include_directories(model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>)
+target_link_libraries(model_repository INTERFACE lib_config)
 
 add_library(core INTERFACE)
 target_link_libraries(core INTERFACE

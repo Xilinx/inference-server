@@ -124,7 +124,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in echo"));
+    PROTEUS_LOG_INFO(logger, "Got request in echo");
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -153,7 +153,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         try {
           value++;
         } catch (const std::exception& e) {
-          PROTEUS_IF_LOGGING(logger.error(e.what()));
+          PROTEUS_LOG_ERROR(logger, e.what());
           req->runCallbackError("Something went wrong");
           continue;
         }
@@ -195,9 +195,9 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("Echo ending"));
+  PROTEUS_LOG_INFO(logger, "Echo ending");
 }
 
 void Echo::doRelease() {}

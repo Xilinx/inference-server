@@ -66,7 +66,7 @@ void WorkerInfo::joinAll() {}
 
 void WorkerInfo::unload() {}
 
-int WorkerInfo::getGroupSize() { return 1; }
+size_t WorkerInfo::getGroupSize() const { return 1; }
 
 void WorkerInfo::shutdown() {}
 
@@ -82,11 +82,11 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) {
+void WorkerInfo::putInputBuffer(BufferPtrs buffer) const {
   this->input_buffer_ptr_->enqueue(std::move(buffer));
 }
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) {
+void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const {
   this->output_buffer_ptr_->enqueue(std::move(buffer));
 }
 

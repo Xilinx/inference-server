@@ -102,8 +102,8 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         // count = this->input_queue_->wait_dequeue_bulk(
         //   std::make_move_iterator(reqs.begin()), this->batch_size_);
         start_time = std::chrono::high_resolution_clock::now();
-        PROTEUS_IF_LOGGING(
-          logger.debug("Got request of a new batch for " + this->model_));
+        PROTEUS_LOG_DEBUG(logger,
+                          "Got request of a new batch for " + this->model_);
       } else {
         count = 1;
         auto remaining_time =
@@ -151,12 +151,12 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
           if (!worker->inputSizeValid(input_size)) {
             Manager::getInstance().workerAllocate(this->model_, input_size);
           }
-        } catch (const std::invalid_argument& e) {
+        } catch (const invalid_argument& e) {
           req->errorHandler(e);
           continue;
         }
         if (input_size == 0) {
-          auto error = std::invalid_argument("Input size is zero");
+          auto error = invalid_argument("Input size is zero");
           req->errorHandler(error);
           continue;
         }
@@ -188,8 +188,8 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
           buffer_index, input_buffers, input_offset, output_buffers,
           output_offset, this->batch_size_, batch_size);
         if (new_req == nullptr) {
-          PROTEUS_IF_LOGGING(logger.debug("Making request for " + this->model_ +
-                                          " failed. Reverting buffers."));
+          PROTEUS_LOG_DEBUG(logger, "Making request for " + this->model_ +
+                                      " failed. Reverting buffers.");
           for (size_t i = 1; i < buffers_needed; i++) {
             worker->putInputBuffer(std::move(input_buffer));
             input_buffer = std::move(batch->input_buffers->back());
@@ -221,7 +221,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
     } while (batch_size % this->batch_size_ != 0 && run);
 
     if (!batch->requests->empty()) {
-      PROTEUS_IF_LOGGING(logger.debug("Enqueuing batch for " + this->model_));
+      PROTEUS_LOG_DEBUG(logger, "Enqueuing batch for " + this->model_);
       batch->input_buffers->push_back(std::move(input_buffer));
       batch->output_buffers->push_back(std::move(output_buffer));
       this->output_queue_->enqueue(std::move(batch));

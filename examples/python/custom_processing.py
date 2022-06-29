@@ -102,23 +102,13 @@ def main():
         proteus.clients.startHttpServer(8998)
 
     # +load worker:
-<<<<<<< HEAD
     parameters = proteus.RequestParameters()
     parameters.put("xmodel", path_to_xmodel)
     worker_name = client.modelLoad("Xmodel", parameters)
-=======
-    parameters = {"xmodel": path_to_xmodel}
-    response = client.load("Xmodel", parameters)
-    assert not response.error, response.error_msg
-    worker_name = response.html
->>>>>>> acc57c7 (first working worker)
 
     ready = False
     while not ready:
-        try:
-            ready = client.modelReady(worker_name)
-        except ValueError:
-            pass
+        ready = client.modelReady(worker_name)
     # -load worker:
 
     # +get images:

@@ -32,7 +32,7 @@ class TestModelInfer:
         Test making an inference
         """
 
-        endpoint = self.rest_client.modelLoad("echo")
+        endpoint = self.rest_client.workerLoad("echo")
         assert endpoint == "echo"
 
         input_data = proteus.predict_api.InferenceRequestInput()
@@ -55,5 +55,5 @@ class TestModelInfer:
         try:
             while self.rest_client.modelReady(endpoint):
                 time.sleep(1)
-        except ValueError:
+        except proteus.RuntimeError:
             pass

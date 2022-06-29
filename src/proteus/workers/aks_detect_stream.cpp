@@ -160,7 +160,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_IF_LOGGING(logger.info("Got request in AksDetectStream"));
+    PROTEUS_LOG_INFO(logger, "Got request in AksDetectStream");
     for (unsigned int k = 0; k < batch->requests->size(); k++) {
       auto& req = batch->requests->at(k);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -178,7 +178,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
           const char* error = "Cannot open video file";
-          PROTEUS_IF_LOGGING(logger.error(error));
+          PROTEUS_LOG_ERROR(logger, error);
           req->runCallbackError(error);
           continue;
         }
@@ -253,7 +253,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             std::string encoded = base64_encode(enc_msg, buf.size());
             frames.push("data:image/jpg;base64," + encoded);
           }
-          PROTEUS_IF_LOGGING(logger.info("Enqueuing in " + key));
+          PROTEUS_LOG_INFO(logger, "Enqueuing in " + key);
           futures.push(
             this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr));
 #ifdef PROTEUS_ENABLE_TRACING
@@ -307,7 +307,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         while (!futures.empty()) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
             futures.front().get();
-          PROTEUS_IF_LOGGING(logger.info("Got future with key " + key));
+          PROTEUS_LOG_INFO(logger, "Got future with key " + key);
           futures.pop();
           auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
           auto shape = outDD[0]->get_tensor()->get_shape();
@@ -352,9 +352,9 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("AksDetectStream ending"));
+  PROTEUS_LOG_INFO(logger, "AksDetectStream ending");
 }
 
 void AksDetectStream::doRelease() {}

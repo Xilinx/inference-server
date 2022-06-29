@@ -167,16 +167,16 @@ void dequeue(int images, FutureQueue& my_queue) {
 
 int run(std::string xmodel, int images, int threads, int runners) {
   proteus::RequestParameters parameters;
-  parameters.put("xmodel", xmodel);
+  parameters.put("model", xmodel);
   parameters.put("share", false);
   auto threads_per_worker = std::max(threads / runners, 1);
   parameters.put("threads", threads_per_worker);
   parameters.put("batchers", 2);
 
   proteus::NativeClient client;
-  auto workerName = client.modelLoad("Xmodel", &parameters);
+  auto workerName = client.workerLoad("Xmodel", &parameters);
   for (auto i = 0; i < runners - 1; i++) {
-    client.modelLoad("Xmodel", &parameters);
+    client.workerLoad("Xmodel", &parameters);
   }
 
   std::vector<uint64_t> shape;

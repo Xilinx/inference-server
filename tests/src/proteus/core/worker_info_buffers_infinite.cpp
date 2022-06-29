@@ -67,7 +67,7 @@ void WorkerInfo::joinAll() {}
 
 void WorkerInfo::unload() {}
 
-int WorkerInfo::getGroupSize() { return 1; }
+size_t WorkerInfo::getGroupSize() const { return 1; }
 
 void WorkerInfo::shutdown() {}
 
@@ -81,9 +81,9 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) { (void)buffer; }
+void WorkerInfo::putInputBuffer(BufferPtrs buffer) const { (void)buffer; }
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) { (void)buffer; }
+void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const { (void)buffer; }
 
 bool WorkerInfo::inputSizeValid(size_t size) const {
   (void)size;

@@ -14,11 +14,13 @@
 
 add_executable(proteus-server main.cpp)
 target_include_directories(proteus-server PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_include_directories(proteus-server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+if(${PROTEUS_ENABLE_GRPC})
+    target_include_directories(proteus-server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
+endif()
 target_link_options(proteus-server PRIVATE "LINKER:-E")
 enable_ipo_on_target(proteus-server)
 
-target_link_libraries(proteus-server PRIVATE batching buffers clients core servers)
+target_link_libraries(proteus-server PRIVATE batching buffers clients core servers efsw model_repository)
 
 add_subdirectory(batching)
 add_subdirectory(bindings)
@@ -50,8 +52,7 @@ add_library(proteus ${TYPE}
     ${SERVER_OBJS}
 )
 enable_ipo_on_target(proteus)
-target_link_libraries(proteus PRIVATE helpers)
-target_link_libraries(proteus PRIVATE Threads::Threads jsoncpp ${CMAKE_DL_LIBS})
+target_link_libraries(proteus PRIVATE helpers Threads::Threads jsoncpp ${CMAKE_DL_LIBS} lib_config efsw model_repository)
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(proteus PRIVATE xir)
 endif()

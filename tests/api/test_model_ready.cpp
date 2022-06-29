@@ -23,7 +23,7 @@
 bool isReady(proteus::Client* client, const std::string& endpoint) {
   try {
     return client->modelReady(endpoint);
-  } catch (const std::invalid_argument& e) {
+  } catch (const proteus::bad_status&) {
     return false;
   }
 }
@@ -34,16 +34,13 @@ void test(proteus::Client* client) {
   auto models_0 = client->modelList();
   EXPECT_TRUE(models_0.empty());
 
-  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
-  EXPECT_THROW_CHECK({ client->modelReady(worker); },
-                     { EXPECT_STREQ("worker echo not found", e.what()); },
-                     std::invalid_argument);
+  EXPECT_FALSE(client->modelReady(worker));
 
-  const auto endpoint = client->modelLoad(worker, nullptr);
+  const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
 
-  while (!isReady(client, endpoint)) {
-    std::this_thread::yield();
+  while (!client->modelReady(endpoint)) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   auto models = client->modelList();
@@ -52,7 +49,7 @@ void test(proteus::Client* client) {
   client->modelUnload(endpoint);
 
   while (isReady(client, endpoint)) {
-    std::this_thread::yield();
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   while (!client->modelList().empty()) {
@@ -60,8 +57,10 @@ void test(proteus::Client* client) {
   }
 }
 
+#ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
+#endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelReady) {
@@ -69,4 +68,6 @@ TEST_F(BaseFixture, ModelReady) {
   test(&client);
 }
 
+#ifdef PROTEUS_ENABLE_HTTP
 TEST_F(HttpFixture, ModelReady) { test(client_.get()); }
+#endif

@@ -18,12 +18,12 @@
 Logs
 ====
 
-Logs collected by Xilinx Inference Server are placed in ``~/.proteus/logs/`` by default.
+Logs collected by AMD Inference Server are placed in ``~/.proteus/logs/`` by default.
 
-Xilinx Inference Server Logs
-----------------------------
+AMD Inference Server Logs
+-------------------------
 
-Logging in Xilinx Inference Server is configured in ``proteus/observation/logging.*``.
+Logging in AMD Inference Server is configured in ``proteus/observation/logging.*``.
 There are multiple knobs that can be tweaked to affect how and which log messages are captured.
 
 .. code-block:: c++

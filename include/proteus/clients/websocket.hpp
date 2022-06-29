@@ -41,12 +41,16 @@ class WebSocketClient : public Client {
   bool serverReady() override;
   bool modelReady(const std::string& model) override;
 
-  std::string modelLoad(const std::string& model,
-                        RequestParameters* parameters) override;
+  void modelLoad(const std::string& model,
+                 RequestParameters* parameters) override;
   void modelUnload(const std::string& model) override;
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
+
+  std::string workerLoad(const std::string& worker,
+                         RequestParameters* parameters) override;
+  void workerUnload(const std::string& worker) override;
 
   void modelInferAsync(const std::string& model,
                        const InferenceRequest& request);

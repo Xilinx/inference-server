@@ -13,27 +13,32 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-The AMD/Xilinx Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, FPGAs and :github:`Vitis AI <Xilinx/Vitis-AI>`..
 
+====================
+AMD Inference Server
+====================
+
+The AMD/Xilinx Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, FPGAs and :github:`Vitis AI <Xilinx/Vitis-AI>`.
 It can be deployed as a server or through custom applications using its C++ API.
-The AMD/Xilinx Inference Server can also be extended to support other hardware accelerators and machine learning frameworks.
+The AMD Inference Server can also be extended to support other hardware accelerators and machine learning frameworks.
 
 Features
 --------
 
-* Inference Server: The AMD/Xilinx Inference Server supports client requests using HTTP REST / websockets protocols using an API based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__
+* Inference Server: The AMD Inference Server supports client requests using HTTP REST / websockets protocols using an API based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__
 * C++ API: custom applications to directly call the backend to bypass the REST interface
 * Python REST library: clients can submit requests to the inference server from Python through this simplified Python API
-* Efficient hardware usage: The AMD/Xilinx Inference Server will automatically make use of all available FPGAs on a machine as needed with `XRM <https://github.com/Xilinx/XRM>`__
+* Efficient hardware usage: The AMD Inference Server will automatically make use of all available FPGAs on a machine as needed with `XRM <https://github.com/Xilinx/XRM>`__
 * User-defined model parallelism: users can define how many models, and how many instances of each, to run simultaneously
 * Batching: incoming requests are batched based on the model's specifications transparently
 * Integrated with Vitis AI: The AMD/Xilinx Inference Server can serve most xmodels generated from Vitis AI
-* End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/master/tools/AKS>`__
+* End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__
+* Integrated with ZenDNN: The AMD Inference Server can serve `ZenDNN <https://developer.amd.com/zendnn/>`_ optimized TensorFlow/PyTorch models on AMD EPYC CPUs.
 
 Learn more
 ----------
 
-The documentation for the AMD/Xilinx Inference Server is available `online <https://xilinx.github.io/inference-server/>`__.
+The documentation for the AMD Inference Server is available `online <https://xilinx.github.io/inference-server/>`__.
 
 Check out the `Quickstart <https://xilinx.github.io/inference-server/main/quickstart.html>`__ on how to get started.
 
@@ -46,6 +51,6 @@ Refer to `Contributing <https://xilinx.github.io/inference-server/main/contribut
 License
 -------
 
-The AMD/Xilinx Inference Server is licensed under the terms of Apache 2.0 (see `LICENSE <https://github.com/Xilinx/inference-server/blob/main/LICENSE>`__).
+The AMD Inference Server is licensed under the terms of Apache 2.0 (see `LICENSE <https://github.com/Xilinx/inference-server/blob/main/LICENSE>`__).
 The LICENSE file contains additional license information for third-party files distributed with this work.
 More license information can be seen in the `dependencies <https://xilinx.github.io/inference-server/main/dependencies.html>`__.

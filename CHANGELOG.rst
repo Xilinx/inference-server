@@ -24,12 +24,34 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 Unreleased
 ----------
 
+Added
+^^^^^
+
+- HTTP/REST C++ client (:commit:`cbf33b8`)
+- gRPC API based on KServe v2 API (:commit:`37a6aad` and others)
+- TensorFlow/Pytorch + ZenDNN backend (:pr:`17` and :pr:`21`)
+- 'ServerMetadata' endpoint to the API (:commit:`7747911`)
+- 'modelList' endpoint to the API (:commit:`7477b7d`)
+- Parse JSON data as string in HTTP body (:commit:`694800e`)
+- Directory monitoring for model loading (:commit:`6459797`)
+
+Changed
+^^^^^^^
+
+- Use Pybind11 to create Python API (:pr:`20`)
+- Two logs are created now: server and client
+- Logging macro is now ``PROTEUS_LOG_*``
+- Loading workers is now case-insensitive (:commit:`14ed4ef` and :commit:`90a51ae`)
+- Build AKS from source (:commit:`e04890f`)
+
 Fixed
 ^^^^^
 
 - Get the right request size in the batcher when enqueuing with the C++ API (:commit:`d1ad81d`)
 - Construct responses correctly in the XModel worker if there are multiple input buffers (:commit:`d1ad81d`)
 - Populate the right number of offsets in the hard batcher (:commit:`6666142`)
+- Calculate offset values correctly during batching (:commit:`8c7534b`)
+- Get correct library dependencies for production container (:commit:`14ed4ef`)
 
 
 :github:`0.1.0 <Xilinx/inference-server/releases/tag/v0.1.0>` - 2022-02-08

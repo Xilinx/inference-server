@@ -53,6 +53,7 @@
 #include "proteus/helpers/declarations.hpp"        // for BufferPtrs, Infere...
 #include "proteus/helpers/parse_env.hpp"           // for autoExpandEnvironm...
 #include "proteus/helpers/queue.hpp"               // for BufferPtrsQueue
+#include "proteus/helpers/string.hpp"              // for endsWith
 #include "proteus/helpers/thread.hpp"              // for setThreadName
 #include "proteus/observation/logging.hpp"         // for Logger
 #include "proteus/observation/metrics.hpp"         // for Metrics, MetricCou...
@@ -127,8 +128,11 @@ void XModel::doInit(RequestParameters* parameters) {
   this->max_buffer_num_ = max_buffer_num;
 
   auto path = kPath;
-  if (parameters->has("xmodel")) {
-    path = parameters->get<std::string>("xmodel");
+  if (parameters->has("model")) {
+    path = parameters->get<std::string>("model");
+    if (!endsWith(path, ".xmodel")) {
+      path += ".xmodel";
+    }
   }
   autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);
@@ -232,8 +236,8 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in xmodel: " +
-                                   std::to_string(batch->requests->size())));
+    PROTEUS_LOG_INFO(logger, "Got request in xmodel: " +
+                               std::to_string(batch->requests->size()));
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -340,7 +344,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           output.setDatatype(this->output_type_);
 
           auto buffer = std::make_shared<std::vector<int8_t>>();
-          buffer->reserve(this->output_size_);
+          buffer->resize(this->output_size_);
           memcpy(buffer->data(),
                  reinterpret_cast<int8_t*>(output_index) +
                    (tensor_count * this->output_size_),
@@ -382,11 +386,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       }
       this->returnBuffers(std::move(batch->input_buffers),
                           std::move(batch->output_buffers));
-      PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+      PROTEUS_LOG_DEBUG(logger, "Returned buffers");
       pool_size--;
     });
   }
-  PROTEUS_IF_LOGGING(logger.info("XModel ending"));
+  PROTEUS_LOG_INFO(logger, "XModel ending");
 }
 
 void XModel::doRelease() {}

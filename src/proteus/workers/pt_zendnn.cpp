@@ -31,6 +31,7 @@
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
 #include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
+#include "proteus/helpers/string.hpp"         // for endswith
 #include "proteus/helpers/thread.hpp"         // for setThreadName
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
@@ -45,8 +46,6 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
 }
 
 namespace proteus {
-
-using types::DataType;
 
 namespace workers {
 
@@ -150,15 +149,20 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
 
   // Load the model
   std::string path;
-  if (parameters->has("model"))
+  if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-  else
-    PROTEUS_IF_LOGGING(logger.error(
-      "Model not provided"));  // Ideally exit since model not provided
+    if (!endsWith(path, ".pt")) {
+      path += ".pt";
+    }
+  } else {
+    PROTEUS_LOG_ERROR(
+      logger,
+      "Model not provided");  // Ideally exit since model not provided
+  }
 
   auto module = torch::jit::load(
     path, torch::kCPU);  // Ideally exit if not able to read the model
-  PROTEUS_IF_LOGGING(logger.info("Model loaded"));
+  PROTEUS_LOG_INFO(logger, "Model loaded");
 
   // Some online optimizations for the model
   module.eval();
@@ -167,7 +171,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   OptimizeFrozenGraph(graph, 1);
   module = torch::jit::optimize_for_inference(
     module);  // Ideally exit if not able to perform optimizations
-  PROTEUS_IF_LOGGING(logger.info("Model Optimized, Ready for prediction"));
+  PROTEUS_LOG_INFO(logger, "Model Optimized, Ready for prediction");
 
   this->model = module;
 
@@ -175,7 +179,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   this->metadata_.addInputTensor(
     "input", input_dt_,
     {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", types::DataType::FP32, {0});
+  this->metadata_.addOutputTensor("output", DataType::FP32, {0});
   this->metadata_.setName("PtZendnn");
 }
 
@@ -192,8 +196,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.debug("Got request in PtZendnn. Size: " +
-                                    std::to_string(batch->requests->size())));
+    PROTEUS_LOG_DEBUG(logger, "Got request in PtZendnn. Size: " +
+                                std::to_string(batch->requests->size()));
 
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->requests->size());
@@ -235,8 +239,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      PROTEUS_IF_LOGGING(
-        logger.debug("Size of input: " + std::to_string(inputs.size())));
+      PROTEUS_LOG_DEBUG(logger,
+                        "Size of input: " + std::to_string(inputs.size()));
 
       // Get all the inputs from the requests and copy to the PT tensor
       for (auto& input : inputs) {
@@ -260,8 +264,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     try {
       output = this->model.forward(input);
     } catch (const c10::Error& e) {
-      PROTEUS_IF_LOGGING(
-        logger.error("Model not suported/Issue with the model"));
+      PROTEUS_LOG_ERROR(logger, "Model not suported/Issue with the model");
       req->runCallbackError("Something went wrong");
     }
 
@@ -269,9 +272,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     auto duration =
       std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     float time_tmp = duration.count();
-    PROTEUS_IF_LOGGING(logger.info("Time taken for " +
-                                   std::to_string(tensor_count) +
-                                   " images: " + std::to_string(time_tmp)));
+    PROTEUS_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
+                               " images: " + std::to_string(time_tmp));
 
     at::Tensor output_tensor;
     if (!output.isTuple())
@@ -293,7 +295,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int i = 0; i < inputs.size(); i++) {
         InferenceResponseOutput output;
         auto buffer = std::make_shared<std::vector<float>>();
-        buffer->reserve(response_size);
+        buffer->resize(response_size);
 
         memcpy(buffer->data(), output_tensor[i].data_ptr<float>(),
                response_size * sizeof(float));
@@ -308,7 +310,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
         }
 
         output.setShape(new_shape);
-        output.setDatatype(types::DataType::FP32);
+        output.setDatatype(DataType::FP32);
         resp.addOutput(output);
       }
 
@@ -321,8 +323,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       auto d = std::chrono::duration_cast<std::chrono::milliseconds>(
         TotalStop - TotalStart);
       float tt = d.count();
-      PROTEUS_IF_LOGGING(
-        logger.debug("Total time taken: " + std::to_string(tt)));
+      PROTEUS_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
 
       req->runCallbackOnce(resp);
 
@@ -335,9 +336,9 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("PtZendnn ending"));
+  PROTEUS_LOG_INFO(logger, "PtZendnn ending");
 }
 
 void PtZendnn::doRelease() {}

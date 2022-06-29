@@ -45,11 +45,7 @@ void Manager::unloadWorker(const std::string& key) {
 }
 
 WorkerInfo* Manager::getWorker(const std::string& key) {
-  auto* worker_info = this->endpoints_.get(key);
-  if (worker_info == nullptr) {
-    throw std::invalid_argument("worker " + key + " not found");
-  }
-  return worker_info;
+  return this->endpoints_.get(key);
 }
 
 bool Manager::workerReady(const std::string& key) {
@@ -59,6 +55,9 @@ bool Manager::workerReady(const std::string& key) {
 
 ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   auto* worker = this->getWorker(key);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + key + " not found");
+  }
   auto* foo = worker->workers_.begin()->second;
   return foo->getMetadata();
 }
@@ -66,8 +65,7 @@ ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
 void Manager::workerAllocate(std::string const& key, int num) {
   auto* worker_info = this->endpoints_.get(key);
   if (!worker_info->inputSizeValid(num)) {
-    PROTEUS_IF_LOGGING(
-      logger_.debug("Allocating more buffers for worker " + key));
+    PROTEUS_LOG_DEBUG(logger_, "Allocating more buffers for worker " + key);
     worker_info->allocate(num);
   }
 }

@@ -25,14 +25,36 @@
 
 #include "proteus/build_options.hpp"
 
-namespace spdlog {
-class logger;
-}
-
 #ifdef PROTEUS_ENABLE_LOGGING
-#define PROTEUS_IF_LOGGING(...) __VA_ARGS__
+
+#ifndef NDEBUG
+// used for debug builds
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
 #else
-#define PROTEUS_IF_LOGGING(...)
+// used for release builds
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
+#endif
+
+#include <spdlog/spdlog.h>
+
+#define PROTEUS_LOG_TRACE(logger, message) \
+  SPDLOG_LOGGER_TRACE(logger.get(), message)
+#define PROTEUS_LOG_DEBUG(logger, message) \
+  SPDLOG_LOGGER_DEBUG(logger.get(), message)
+#define PROTEUS_LOG_INFO(logger, message) \
+  SPDLOG_LOGGER_INFO(logger.get(), message)
+#define PROTEUS_LOG_WARN(logger, message) \
+  SPDLOG_LOGGER_WARN(logger.get(), message)
+#define PROTEUS_LOG_ERROR(logger, message) \
+  SPDLOG_LOGGER_ERROR(logger.get(), message)
+#else
+#define PROTEUS_LOG_TRACE(logger, message)
+#define PROTEUS_LOG_DEBUG(logger, message)
+#define PROTEUS_LOG_INFO(logger, message)
+#define PROTEUS_LOG_WARN(logger, message)
+#define PROTEUS_LOG_ERROR(logger, message)
 #endif
 
 namespace proteus {
@@ -66,11 +88,7 @@ class Logger {
  public:
   explicit Logger(Loggers name);
 
-  void trace(std::string_view message) const;
-  void debug(std::string_view message) const;
-  void info(std::string_view message) const;
-  void warn(std::string_view message) const;
-  void error(std::string_view message) const;
+  spdlog::logger* get() const { return logger_.get(); }
 
  private:
   std::shared_ptr<spdlog::logger> logger_;

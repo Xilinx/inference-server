@@ -49,7 +49,8 @@ def pytest_sessionstart(session):
 
     proteus_command = [str(run_path)]
     http_port = session.config.getoption("--http_port")
-    proteus_command.extend(["--http_port", str(http_port)])
+    proteus_command.extend(["--http-port", str(http_port)])
+    proteus_command.extend(["--model-repository", root_path / "external/repository"])
 
     http_server_addr = "http://" + get_http_addr(session.config)
     addr = socket.gethostbyname(session.config.getoption("hostname"))
@@ -246,14 +247,11 @@ def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
         for key, value in parameters_fixture.items():
             parameters.put(key, value)
 
-    response = rest_client.modelLoad(model_fixture, parameters)
+    response = rest_client.workerLoad(model_fixture, parameters)
     request.cls.model = response
 
-    try:
-        while not rest_client.modelReady(response):
-            time.sleep(1)
-    except ValueError:
-        pass
+    while not rest_client.modelReady(response):
+        time.sleep(1)
 
     yield  # perform testing
 

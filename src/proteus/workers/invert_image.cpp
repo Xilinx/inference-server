@@ -157,7 +157,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_IF_LOGGING(logger.info("Got request in InvertImage"));
+    PROTEUS_LOG_INFO(logger, "Got request in InvertImage");
     for (unsigned int j = 0; j < batch->requests->size(); j++) {
       auto& req = batch->requests->at(j);
 #ifdef PROTEUS_ENABLE_TRACING
@@ -193,7 +193,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           auto* output_data = static_cast<uint8_t*>(output_buffer);
 
           auto buffer = std::make_shared<std::vector<uint8_t>>();
-          buffer->reserve(input_size);
+          buffer->resize(input_size);
           memcpy(buffer->data(), output_data, input_size);
           auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
           output.setData(std::move(my_data_cast));
@@ -206,14 +206,14 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           try {
             img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           } catch (const cv::Exception& e) {
-            PROTEUS_IF_LOGGING(logger.error(e.what()));
+            PROTEUS_LOG_ERROR(logger, e.what());
             req->runCallbackError("Failed to decode base64 image data");
             continue;
           }
 
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            PROTEUS_IF_LOGGING(logger.error(error));
+            PROTEUS_LOG_ERROR(logger, error);
             req->runCallbackError(error);
             continue;
           }
@@ -254,9 +254,9 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("InvertImage ending"));
+  PROTEUS_LOG_INFO(logger, "InvertImage ending");
 }
 
 void InvertImage::doRelease() {}

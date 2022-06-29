@@ -131,7 +131,7 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in fake"));
+    PROTEUS_LOG_INFO(logger, "Got request in fake");
     this->pool_.push([this, batch = std::move(batch)](int id) {
       (void)id;  // suppress unused variable warning
 
@@ -180,10 +180,10 @@ void Fake::doRun(BatchPtrQueue* input_queue) {
       }
       this->returnBuffers(std::move(batch->input_buffers),
                           std::move(batch->output_buffers));
-      PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+      PROTEUS_LOG_DEBUG(logger, "Returned buffers");
     });
   }
-  PROTEUS_IF_LOGGING(logger.info("Fake ending"));
+  PROTEUS_LOG_INFO(logger, "Fake ending");
 }
 
 void Fake::doRelease() {}

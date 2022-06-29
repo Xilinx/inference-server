@@ -56,14 +56,11 @@ def main():
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
-    worker_name = client.modelLoad("Echo")
+    worker_name = client.workerLoad("Echo")
 
     ready = False
     while not ready:
-        try:
-            ready = client.modelReady(worker_name)
-        except ValueError:
-            pass
+        ready = client.modelReady(worker_name)
     # -load worker:
 
     # +inference: construct the request and make the inference

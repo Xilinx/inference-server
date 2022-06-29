@@ -19,10 +19,10 @@
 
 #include "proteus/core/data_types.hpp"
 
-#include <cstddef>    // for size_t
-#include <stdexcept>  // for invalid_argument
+#include <cstddef>  // for size_t
 
 #include "proteus/build_options.hpp"
+#include "proteus/core/exceptions.hpp"
 
 #ifdef PROTEUS_ENABLE_VITIS
 #include <xir/util/data_type.hpp>  // for DataType, DataType::FLOAT, DataTyp...
@@ -41,8 +41,8 @@ DataType mapXirToType(xir::DataType type) {
     if (width == DataType("FP64").size()) {
       return DataType::FP64;
     }
-    throw std::invalid_argument("Unsupported XIR float width: " +
-                                std::to_string(width));
+    throw invalid_argument("Unsupported XIR float width: " +
+                           std::to_string(width));
   }
   if (data_type == xir::DataType::INT || data_type == xir::DataType::XINT) {
     if (width == DataType("INT8").size()) {
@@ -57,8 +57,8 @@ DataType mapXirToType(xir::DataType type) {
     if (width == DataType("INT64").size()) {
       return DataType::INT64;
     }
-    throw std::invalid_argument("Unsupported XIR int width: " +
-                                std::to_string(width));
+    throw invalid_argument("Unsupported XIR int width: " +
+                           std::to_string(width));
   }
   if (data_type == xir::DataType::UINT || data_type == xir::DataType::XUINT) {
     if (width == DataType("UINT8").size()) {
@@ -73,11 +73,10 @@ DataType mapXirToType(xir::DataType type) {
     if (width == DataType("UINT64").size()) {
       return DataType::UINT64;
     }
-    throw std::invalid_argument("Unsupported XIR uint width: " +
-                                std::to_string(width));
+    throw invalid_argument("Unsupported XIR uint width: " +
+                           std::to_string(width));
   }
-  throw std::invalid_argument("Unsupported XIR type: " +
-                              std::to_string(data_type));
+  throw invalid_argument("Unsupported XIR type: " + std::to_string(data_type));
 }
 
 xir::DataType mapTypeToXir(DataType type) {
@@ -102,7 +101,7 @@ xir::DataType mapTypeToXir(DataType type) {
       retval.type = xir::DataType::FLOAT;
       break;
     default:
-      throw std::invalid_argument("Unsupported type conversion to XIR");
+      throw invalid_argument("Unsupported type conversion to XIR");
   }
   retval.bit_width = bit_width;
   return retval;

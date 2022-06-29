@@ -91,14 +91,11 @@ def main(args):
     parameters = proteus.RequestParameters()
     parameters.put("model", args.graph)
     parameters.put("input_size", input_size)
-    worker_name = client.modelLoad("PtZendnn", parameters)
+    worker_name = client.workerLoad("PtZendnn", parameters)
 
     ready = False
     while not ready:
-        try:
-            ready = client.modelReady(worker_name)
-        except ValueError:
-            pass
+        ready = client.modelReady(worker_name)
 
     # Inference with images
     # If with real data, do preprocessing, otherwise create dummy data
@@ -190,7 +187,7 @@ if __name__ == "__main__":
         type=str,
         required=False,
         help="Full path to the input graph",
-        default=os.path.join(root, "external/pytorch_models/resnet50_pretrained.pth"),
+        default=os.path.join(root, "external/pytorch_models/resnet50_pretrained.pt"),
     )
     parser.add_argument(
         "--image_location",

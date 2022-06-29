@@ -88,18 +88,13 @@ class InferenceRequestBuilder<InferenceRequest> {
     auto batch_offset_backup = batch_offset;
 
     for (const auto &input : req.inputs_) {
-      try {
-        const auto &buffers = input_buffers[buffer_index];
-        for (auto &buffer : buffers) {
-          auto &offset = input_offsets[buffer_index];
+      const auto &buffers = input_buffers[buffer_index];
+      for (auto &buffer : buffers) {
+        auto &offset = input_offsets[buffer_index];
 
-          request->inputs_.push_back(
-            InputBuilder::build(input, buffer, offset));
-          const auto &last_input = request->inputs_.back();
-          offset += (last_input.getSize() * last_input.getDatatype().size());
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
+        request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
+        const auto &last_input = request->inputs_.back();
+        offset += (last_input.getSize() * last_input.getDatatype().size());
       }
       batch_offset++;
       if (batch_offset == batch_size) {
@@ -115,17 +110,13 @@ class InferenceRequestBuilder<InferenceRequest> {
     batch_offset = batch_offset_backup;
     if (!req.outputs_.empty()) {
       for (const auto &output : req.outputs_) {
-        try {
-          const auto &buffers = output_buffers[buffer_index];
-          for (auto &buffer : buffers) {
-            const auto &offset = output_offsets[buffer_index];
+        const auto &buffers = output_buffers[buffer_index];
+        for (auto &buffer : buffers) {
+          const auto &offset = output_offsets[buffer_index];
 
-            request->outputs_.emplace_back(output);
-            request->outputs_.back().setData(
-              static_cast<std::byte *>(buffer->data()) + offset);
-          }
-        } catch (const std::invalid_argument &e) {
-          throw;
+          request->outputs_.emplace_back(output);
+          request->outputs_.back().setData(
+            static_cast<std::byte *>(buffer->data()) + offset);
         }
         batch_offset++;
         if (batch_offset == batch_size) {
@@ -137,17 +128,13 @@ class InferenceRequestBuilder<InferenceRequest> {
     } else {
       for (const auto &input : req.inputs_) {
         (void)input;  // suppress unused variable warning
-        try {
-          const auto &buffers = output_buffers[buffer_index];
-          for (auto &buffer : buffers) {
-            const auto &offset = output_offsets[buffer_index];
+        const auto &buffers = output_buffers[buffer_index];
+        for (auto &buffer : buffers) {
+          const auto &offset = output_offsets[buffer_index];
 
-            request->outputs_.emplace_back();
-            request->outputs_.back().setData(
-              static_cast<std::byte *>(buffer->data()) + offset);
-          }
-        } catch (const std::invalid_argument &e) {
-          throw;
+          request->outputs_.emplace_back();
+          request->outputs_.back().setData(
+            static_cast<std::byte *>(buffer->data()) + offset);
         }
         batch_offset++;
         if (batch_offset == batch_size) {
@@ -197,11 +184,8 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
   return request;
 }
 
-void CppNativeApi::errorHandler(const std::invalid_argument &e) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-  logger.error(e.what());
-#endif
+void CppNativeApi::errorHandler(const std::exception &e) {
+  PROTEUS_LOG_ERROR(this->getLogger(), e.what());
   this->getPromise()->set_value(InferenceResponse(e.what()));
 }
 

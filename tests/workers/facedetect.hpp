@@ -83,9 +83,9 @@ std::string load(int workers) {
 
   proteus::NativeClient client;
   for (int i = 0; i < workers - 1; i++) {
-    client.modelLoad("AksDetect", &parameters);
+    client.workerLoad("AksDetect", &parameters);
   }
-  return client.modelLoad("AksDetect", &parameters);
+  return client.workerLoad("AksDetect", &parameters);
 }
 
 std::vector<std::string> getImages(std::string imgDirPath) {

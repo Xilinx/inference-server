@@ -18,13 +18,13 @@
 KServe
 ======
 
-The Xilinx Inference Server can be used with `KServe <https://github.com/kserve/kserve>`__ to deploy the server on a Kubernetes cluster.
+The AMD Inference Server can be used with `KServe <https://github.com/kserve/kserve>`__ to deploy the server on a Kubernetes cluster.
 
 Setting up KServe
 -----------------
 
 Install KServe using the `instructions <https://kserve.github.io/website/admin/serverless/>`__ provided by KServe.
-We have tested with KServe 0.7 using the standard serverless installation but other versions/configurations may work as well.
+We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
 Once KServe is installed, verify basic functionality of the cluster using the `basic tutorial <https://kserve.github.io/website/get_started/first_isvc/>`__ provided by KServe.
 If this succeeds, KServe should be installed correctly.
 
@@ -40,14 +40,15 @@ Building the Server
 
 To use with KServe, we will need to build the production container.
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
-Update the ``PROTEUS_DEFAULT_HTTP_PORT`` variable in the top-level ``CMakeLists.txt`` to 8080 prior to building the production container.
-This change is needed because KServe (currently) has some limitations around using custom ports and this value is hard-coded in some places.
 To build the production container [#f1]_:
 
 .. code-block:: console
 
     $ ./proteus dockerize --production
 
+Depending on what platforms you want to support, add the appropriate flags to enable ZenDNN or Vitis AI.
+Refer to the help or the platform documentation for more information on how to build the right image.
+At this time, enabling :ref:`ZenDNN <zendnn>` is recommended.
 The resulting image must be pushed to a Docker registry.
 If you don't have access to one, you can start a local registry using `these instructions <https://docs.docker.com/registry/deploying/>`__ from Docker.
 Make sure to set up a secure registry if you need access to the registry from more than one host.
@@ -63,36 +64,38 @@ A sample configuration file to start the Inference Server is provided below:
 .. code-block:: yaml
 
     ---
-    apiVersion: "serving.kserve.io/v1beta1"
+    apiVersion: serving.kserve.io/v1beta1
     kind: InferenceService
-    metadata:
+    metadata: null
     annotations:
-        autoscaling.knative.dev/target: "5"
+      autoscaling.knative.dev/target: '5'
     labels:
-        controller-tools.k8s.io: "1.0"
-        app: proteus
-    name: proteus
-    spec:
+      controller-tools.k8s.io: '1.0'
+      app: example-amdserver-multi-isvc
+    name: example-amdserver-multi-isvc
+    spec: null
     predictor:
-        containers:
+      containers:
         - name: custom
-            image: registry/image:version
-            env:
+          image: 'registry/image:version'
+          env:
             - name: MULTI_MODEL_SERVER
-                value: "true"
-            ports:
+              value: 'true'
+          args:
+            - proteus-server
+            - '--http-port=8080'
+            - '--grpc-port=9000'
+          ports:
             - containerPort: 8080
-                protocol: TCP
-            resources:
-            limits:
-                xilinx.com/fpga-xilinx_u250_gen3x16_xdma_shell_3_1-0: 1
+              protocol: TCP
+            - containerPort: 9000
+              protocol: TCP
     ---
 
 Some comments about this configuration file:
 
 #. The autoscaling target defines how the service should be autoscaled in response to incoming requests. The value of 5 indicates that additional containers should be deployed when the number of concurrent requests exceeds 5.
 #. The image string should point to image in the registry that you created earlier. In some cases, Kubernetes may fail to pull the image, even if it's tagged with the right version due to some issues with mapping the version to the image. In these cases, you can use the SHA value of the image directly to skip this lookup. In this case, the image string would be ``registry/image@sha256:<SHA>``.
-#. We have requested one U250 FPGA using the Xilinx FPGA plugin here. Depending on your use cases, this value may be different or not present.
 
 This service can be deployed on the cluster using:
 
@@ -109,18 +112,31 @@ This use case takes advantage of the multi-model serving feature of KServe.
     apiVersion: "serving.kserve.io/v1alpha1"
     kind: TrainedModel
     metadata:
-    name: xmodel-resnet
+      name: mnist
     spec:
-    inferenceService: proteus
-    model:
-        framework: pytorch
-        storageUri: url/to/resnet/xmodel
+      inferenceService: example-amdserver-multi-isvc
+      model:
+        framework: tensorflow
+        storageUri: url/to/model
         memory: 1Gi
     ---
 
-The string passed to the ``name`` field is significant and should be ``xmodel-<something>`` for running XModels.
+The string passed to the ``name`` field is significant and identifies the model name.
+It will be used as the endpoint to make requests.
 The string passed to ``inferenceService`` should match the name used in the InferenceServer YAML.
-The value of the ``framework`` key is unimportant but must be one of the values expected by KServe.
+The model should be stored in a cloud storage location compatible with KServe and it should have the following structure:
+
+.. code-block:: text
+
+    /
+    ├─ model_a/
+    │  ├─ 1/
+    │  │  ├─ saved_model.x
+    │  ├─ config.pbtxt
+
+The names for the files (``saved_model.x`` and ``config.pbtxt``) must match as above.
+The file extension for ``tfzendnn_graphdef`` and ``vitis_xmodel`` models should be ``.pb`` and ``.xmodel``, respectively.
+
 As before, we can deploy this using:
 
 .. code-block:: console
@@ -131,23 +147,14 @@ Making Requests
 ---------------
 
 The method by which you communicate with your service depends on your Kubernetes cluster configuration.
-For example, one way to make requests is to get the address of the INGRESS_HOST and INGRESS_PORT, and then make requests to this URL by setting the ``Host`` header on all requests to your targeted service.
+For example, one way to make requests is to `get the address of the INGRESS_HOST and INGRESS_PORT <https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports>`__, and then make requests to this URL by setting the ``Host`` header on all requests to your targeted service.
 This use case may be needed if your cluster doesn't have a load-balancer and/or DNS enabled.
 
-Once you can communicate with your service, you can make requests to the Inference Server using REST (e.g. with the Python API).
+Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`.
 The request will be routed to the server and the response will be returned.
-To use the Python API, you can set up a `venv <https://docs.python.org/3/library/venv.html>`__ or `conda env <https://docs.conda.io/en/latest/miniconda.html>`__ with Python 3.6+ and install the package in it.
-In your virtual environment, run:
 
-.. code-block:: console
 
-    $ cd ./src/python
-    $ pip install .
-
-Then, you can import the ``proteus`` package in Python and make requests using the API.
-Refer to the Python examples and the API specification for how to make requests.
-
-.. [#f1] Before building the production container, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).
+.. [#f1] Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).
 
 Debugging
 ---------
@@ -167,6 +174,7 @@ You'll need to first connect to the node where the container is running.
 On that host:
 
 .. code-block:: console
+  
     # this lists the running Inference Server containers
     $ proteus list
 

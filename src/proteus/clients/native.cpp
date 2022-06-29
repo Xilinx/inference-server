@@ -32,7 +32,9 @@
 #include "proteus/batching/batcher.hpp"         // for Batcher
 #include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/exceptions.hpp"          // for bad_status
 #include "proteus/core/manager.hpp"             // for Manager
+#include "proteus/core/model_repository.hpp"    // for ModelRepository
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
 #include "proteus/helpers/exec.hpp"             // for exec
 #include "proteus/observation/logging.hpp"      // for initLogging
@@ -84,6 +86,8 @@ void initialize() {
 
   Manager::getInstance().init();
 
+  ModelRepository::setRepository("/workspace/proteus/external/repository");
+
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
 
@@ -103,8 +107,6 @@ void terminate() {
   AKS::SysManagerExt::deleteGlobal();
 #endif
 }
-
-NativeClient::~NativeClient() = default;
 
 ServerMetadata NativeClient::serverMetadata() {
   std::set<std::string, std::less<>> extensions;
@@ -127,12 +129,30 @@ ServerMetadata NativeClient::serverMetadata() {
 bool NativeClient::serverLive() { return true; }
 bool NativeClient::serverReady() { return true; }
 
-std::string NativeClient::modelLoad(const std::string& model,
-                                    RequestParameters* parameters) {
+void NativeClient::modelLoad(const std::string& model,
+                             RequestParameters* parameters) {
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
   if (parameters == nullptr) {
-    return Manager::getInstance().loadWorker(model, RequestParameters());
+    RequestParameters params;
+    ModelRepository::modelLoad(worker_lower, &params);
+    Manager::getInstance().loadWorker(worker_lower, params);
+  } else {
+    ModelRepository::modelLoad(worker_lower, parameters);
+    Manager::getInstance().loadWorker(worker_lower, *parameters);
   }
-  return Manager::getInstance().loadWorker(model, *parameters);
+}
+
+std::string NativeClient::workerLoad(const std::string& model,
+                                     RequestParameters* parameters) {
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  if (parameters == nullptr) {
+    return Manager::getInstance().loadWorker(worker_lower, RequestParameters());
+  }
+  return Manager::getInstance().loadWorker(worker_lower, *parameters);
 }
 
 InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
@@ -141,6 +161,9 @@ InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
   auto* worker = proteus::Manager::getInstance().getWorker(workerName);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + workerName + " not found");
+  }
 
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
@@ -164,11 +187,25 @@ InferenceResponse NativeClient::modelInfer(const std::string& model,
 }
 
 void NativeClient::modelUnload(const std::string& model) {
-  Manager::getInstance().unloadWorker(model);
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  Manager::getInstance().unloadWorker(worker_lower);
+}
+
+void NativeClient::workerUnload(const std::string& model) {
+  auto worker_lower = model;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  Manager::getInstance().unloadWorker(worker_lower);
 }
 
 bool NativeClient::modelReady(const std::string& model) {
-  return Manager::getInstance().workerReady(model);
+  try {
+    return Manager::getInstance().workerReady(model);
+  } catch (const runtime_error& e) {
+    return false;
+  }
 }
 
 std::vector<std::string> NativeClient::modelList() {

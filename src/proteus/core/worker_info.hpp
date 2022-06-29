@@ -99,13 +99,13 @@ class WorkerInfo {
    *
    * @param buffer the buffer to return
    */
-  void putInputBuffer(BufferPtrs buffer);
+  void putInputBuffer(BufferPtrs buffer) const;
   /**
    * @brief Return an output buffer to the worker
    *
    * @param buffer the buffer to return
    */
-  void putOutputBuffer(BufferPtrs buffer);
+  void putOutputBuffer(BufferPtrs buffer) const;
 
   /**
    * @brief Checks if this worker group supports a particular number of input
@@ -141,7 +141,7 @@ class WorkerInfo {
   void allocate(size_t request_size);
 
   /// get the number of workers in the group
-  int getGroupSize();
+  size_t getGroupSize() const;
 
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
@@ -152,9 +152,9 @@ class WorkerInfo {
   std::vector<std::unique_ptr<Batcher>> batchers_;
   BufferPtrsQueuePtr input_buffer_ptr_;
   BufferPtrsQueuePtr output_buffer_ptr_;
-  size_t buffer_num_;
-  size_t max_buffer_num_;
-  size_t batch_size_;
+  size_t buffer_num_ = 0;
+  size_t max_buffer_num_ = 0;
+  size_t batch_size_ = 1;
 
   friend class Manager;
 };

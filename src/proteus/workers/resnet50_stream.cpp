@@ -165,7 +165,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_IF_LOGGING(logger.info("Got request in ResNet50Stream"));
+    PROTEUS_LOG_INFO(logger, "Got request in ResNet50Stream");
     for (auto& req : *(batch->requests)) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -178,7 +178,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
           const char* error = "Cannot open video file";
-          PROTEUS_IF_LOGGING(logger.error(error));
+          PROTEUS_LOG_ERROR(logger, error);
           req->runCallbackError(error);
           continue;
         }
@@ -314,9 +314,9 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
     }
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug("Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  PROTEUS_IF_LOGGING(logger.info("ResNet50Stream ending"));
+  PROTEUS_LOG_INFO(logger, "ResNet50Stream ending");
 }
 
 void ResNet50Stream::doRelease() {}

@@ -16,12 +16,12 @@
 Factors
 =======
 
-Xilinx Inference Server's performance can be maximized by appropriately controlling the factors described here.
+AMD Inference Server's performance can be maximized by appropriately controlling the factors described here.
 
 Hardware
 --------
 
-The :program:`proteus-server` executable or any application that links to Xilinx Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
+The :program:`proteus-server` executable or any application that links to AMD Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
 We suggest at least 32GB of RAM and 6 core/12 threads.
 Other processes running on the server should be minimized.
 
@@ -48,16 +48,16 @@ Depending on your hardware and demand, you may get better performance by changin
 Sending requests
 ^^^^^^^^^^^^^^^^
 
-Making requests to Xilinx Inference Server efficiently allows for overlap and batching to take place, which improves throughput.
+Making requests to AMD Inference Server efficiently allows for overlap and batching to take place, which improves throughput.
 
 For REST requests, make asynchronous requests so sequential requests don't block each other.
 There are a few ways to do this.
 For benchmarking, use ``wrk`` or other HTTP benchmarking executables that ensure maximum throughput.
 If making requests from Python, use ``aiohttp`` or similar packages to make asynchronous requests instead of the ``requests`` package.
-Xilinx Inference Server's Python API provides :py:meth:`~proteus.rest.Client.infer` for synchronous requests and :py:meth:`~proteus.rest.Client.infers` for asynchronous requests with the :py:class:`RestClient <proteus.rest.Client>` class.
+AMD Inference Server's Python API provides :py:meth:`~proteus.rest.Client.infer` for synchronous requests and :py:meth:`~proteus.rest.Client.infers` for asynchronous requests with the :py:class:`RestClient <proteus.rest.Client>` class.
 
 For C++ applications, the same principle holds.
-Using multiple threads to enqueue and dequeue requests to Xilinx Inference Server allows for higher throughput.
+Using multiple threads to enqueue and dequeue requests to AMD Inference Server allows for higher throughput.
 One example of how to do this is in the following snippet:
 
 .. code-block:: cpp
@@ -126,7 +126,7 @@ Worker duplication is one method of parallelizing a worker.
 By default, requesting to load a worker that has already been loaded does nothing.
 However, workers can be manually duplicated for increased throughput.
 All workers accept the ``share`` load-time parameter.
-This parameter is assumed to be true if unspecified but it can be set to false to force Xilinx Inference Server to allocate a new worker.
+This parameter is assumed to be true if unspecified but it can be set to false to force AMD Inference Server to allocate a new worker.
 Each of these workers will share a common batcher, which will push requests to a task queue for the workers in the group.
 
 .. code-block:: python

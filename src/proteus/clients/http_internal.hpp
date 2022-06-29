@@ -103,12 +103,9 @@ class DrogonHttp : public Interface {
     size_t &batch_offset) override;
 
   size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
+  void errorHandler(const std::exception &e) override;
 
  private:
-  /// parse the request's JSON payload and save it for future use
-  void setJson();
-
   drogon::HttpRequestPtr req_;
   DrogonCallback callback_;
   std::shared_ptr<Json::Value> json_;

@@ -101,7 +101,7 @@ class Interface {
    *
    * @param e the raised exception
    */
-  virtual void errorHandler(const std::invalid_argument &e) = 0;
+  virtual void errorHandler(const std::exception &e) = 0;
 
  protected:
   InterfaceType type_;

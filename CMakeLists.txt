@@ -128,6 +128,7 @@ add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
 add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
 add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
 add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ON)
+add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
 
 message(STATUS "  PROTEUS_ENABLE_MIGRAPHX: " ${PROTEUS_ENABLE_MIGRAPHX})
 message(STATUS "Derived Options:")
@@ -136,8 +137,6 @@ if(${PROTEUS_ENABLE_REST} OR ${PROTEUS_ENABLE_METRICS})
 else()
     add_derived_option("ENABLE_HTTP" OFF)
 endif()
-
-add_derived_option("DEFAULT_HTTP_PORT" 8998)
 
 configure_file(src/proteus/build_options.hpp.in ${PROJECT_SOURCE_DIR}/include/proteus/build_options.hpp)
 configure_file(src/gui/src/build_options.ts.in ${PROJECT_SOURCE_DIR}/src/gui/src/build_options.ts)

@@ -61,7 +61,7 @@ class FakeInterface : public Interface {
     size_t &batch_offset) override;
 
   size_t getInputSize() override;
-  void errorHandler(const std::invalid_argument &e) override;
+  void errorHandler(const std::exception &e) override;
   std::promise<proteus::InferenceResponse> *getPromise();
 
  private:
@@ -100,11 +100,8 @@ std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
   return request;
 }
 
-void FakeInterface::errorHandler(const std::invalid_argument &e) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-  logger.error(e.what());
-#endif
+void FakeInterface::errorHandler(const std::exception &e) {
+  PROTEUS_LOG_ERROR(this->getLogger(), e.what());
   (void)e;  // suppress unused variable warning
 }
 
@@ -139,8 +136,8 @@ void Batcher::run(WorkerInfo *worker) {
       output_buffers.back().push_back(buffer.get());
     }
     this->input_queue_->wait_dequeue(req);
-    PROTEUS_IF_LOGGING(
-      logger_.debug("Got initial request of a new batch for " + this->model_));
+    PROTEUS_LOG_DEBUG(logger_,
+                      "Got initial request of a new batch for " + this->model_);
 
     if (req == nullptr) {
       break;
@@ -174,7 +171,7 @@ void Batcher::run(WorkerInfo *worker) {
     // batch_size += 1;
 
     if (!batch->requests->empty()) {
-      PROTEUS_IF_LOGGING(logger_.debug("Enqueuing batch for " + this->model_));
+      PROTEUS_LOG_DEBUG(logger_, "Enqueuing batch for " + this->model_);
       batch->input_buffers->push_back(std::move(input_buffer));
       batch->output_buffers->push_back(std::move(output_buffer));
       this->output_queue_->enqueue(std::move(batch));

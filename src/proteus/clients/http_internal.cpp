@@ -37,6 +37,7 @@
 
 #include "proteus/buffers/buffer.hpp"             // for Buffer
 #include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "proteus/core/exceptions.hpp"            // invalid_argument
 #include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "proteus/helpers/compression.hpp"        // for z_decompress
@@ -59,7 +60,7 @@ RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
     } else if (parameters[id].isDouble()) {
       parameters_->put(id, parameters[id].asDouble());
     } else {
-      PROTEUS_IF_LOGGING(logger.warn("Unknown parameter type, skipping"));
+      PROTEUS_LOG_WARN(logger, "Unknown parameter type, skipping");
     }
   }
   return parameters_;
@@ -162,8 +163,7 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
       }
       case DataType::FP16: {
         // FIXME(varunsh): this is not handled
-        throw std::runtime_error("Writing FP16 not supported");
-        break;
+        throw invalid_argument("Writing FP16 not supported at this time");
       }
       case DataType::FP32: {
         setOutputData<float>(json_data, &output, &Json::Value::asFloat);
@@ -304,22 +304,21 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
 
     input.shared_data_ = nullptr;
     if (!req->isMember("name")) {
-      throw std::invalid_argument("No 'name' key present in request input");
+      throw invalid_argument("No 'name' key present in request input");
     }
     input.name_ = req->get("name", "").asString();
     if (!req->isMember("shape")) {
-      throw std::invalid_argument("No 'shape' key present in request input");
+      throw invalid_argument("No 'shape' key present in request input");
     }
     auto shape = req->get("shape", Json::arrayValue);
     for (auto const &i : shape) {
       if (!i.isUInt64()) {
-        throw std::invalid_argument(
-          "'shape' must be specified by uint64 elements");
+        throw invalid_argument("'shape' must be specified by uint64 elements");
       }
       input.shape_.push_back(i.asUInt64());
     }
     if (!req->isMember("datatype")) {
-      throw std::invalid_argument("No 'datatype' key present in request input");
+      throw invalid_argument("No 'datatype' key present in request input");
     }
     std::string data_type_str = req->get("datatype", "").asString();
     input.dataType_ = DataType(data_type_str.c_str());
@@ -330,7 +329,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
       input.parameters_ = std::make_unique<RequestParameters>();
     }
     if (!req->isMember("data")) {
-      throw std::invalid_argument("No 'data' key present in request input");
+      throw invalid_argument("No 'data' key present in request input");
     }
     auto data = req->get("data", Json::arrayValue);
     try {
@@ -373,7 +372,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
           case DataType::FP16:
             // FIXME(varunsh): this is not handled
-            PROTEUS_IF_LOGGING(logger.warn("Writing FP16 not supported"));
+            PROTEUS_LOG_WARN(logger, "Writing FP16 not supported");
             break;
           case DataType::FP32:
             offset =
@@ -388,12 +387,12 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
             break;
           default:
             // TODO(varunsh): what should we do here?
-            PROTEUS_IF_LOGGING(logger.warn("Unknown datatype"));
+            PROTEUS_LOG_WARN(logger, "Unknown datatype");
             break;
         }
       }
-    } catch (const Json::LogicError &e) {
-      throw std::invalid_argument(
+    } catch (const Json::LogicError &) {
+      throw invalid_argument(
         "Could not convert some data to the provided data type");
     }
     return input;
@@ -444,11 +443,11 @@ InferenceRequestPtr RequestBuilder::build(
   }
 
   if (!req->isMember("inputs")) {
-    throw std::invalid_argument("No 'inputs' key present in request");
+    throw invalid_argument("No 'inputs' key present in request");
   }
   auto inputs = req->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an array");
   }
 
   request->callback_ = nullptr;
@@ -457,22 +456,17 @@ InferenceRequestPtr RequestBuilder::build(
   auto batch_offset_backup = batch_offset;
   for (auto const &i : inputs) {
     if (!i.isObject()) {
-      throw std::invalid_argument(
-        "At least one element in 'inputs' is not an obj");
+      throw invalid_argument("At least one element in 'inputs' is not an obj");
     }
-    try {
-      const auto &buffers = input_buffers[buffer_index];
-      for (const auto &buffer : buffers) {
-        auto &offset = input_offsets[buffer_index];
+    const auto &buffers = input_buffers[buffer_index];
+    for (const auto &buffer : buffers) {
+      auto &offset = input_offsets[buffer_index];
 
-        auto input =
-          InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
-        offset += (input.getSize() * input.getDatatype().size());
+      auto input =
+        InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
+      offset += (input.getSize() * input.getDatatype().size());
 
-        request->inputs_.push_back(std::move(input));
-      }
-    } catch (const std::invalid_argument &e) {
-      throw;
+      request->inputs_.push_back(std::move(input));
     }
     batch_offset++;
     if (batch_offset == batch_size) {
@@ -489,34 +483,26 @@ InferenceRequestPtr RequestBuilder::build(
   if (req->isMember("outputs")) {
     auto outputs = req->get("outputs", Json::arrayValue);
     for (auto const &i : outputs) {
-      try {
-        auto buffers = output_buffers[buffer_index];
-        for (auto &buffer : buffers) {
-          auto &offset = output_offsets[buffer_index];
+      auto buffers = output_buffers[buffer_index];
+      for (auto &buffer : buffers) {
+        auto &offset = output_offsets[buffer_index];
 
-          auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));
-          output.setData(static_cast<std::byte *>(buffer->data()) + offset);
-          request->outputs_.push_back(std::move(output));
-          // output += request->outputs_.back().getSize(); // see TODO
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
+        auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));
+        output.setData(static_cast<std::byte *>(buffer->data()) + offset);
+        request->outputs_.push_back(std::move(output));
+        // output += request->outputs_.back().getSize(); // see TODO
       }
     }
   } else {
     for (auto const &i : inputs) {
       (void)i;  // suppress unused variable warning
-      try {
-        const auto &buffers = output_buffers[buffer_index];
-        for (const auto &buffer : buffers) {
-          const auto &offset = output_offsets[buffer_index];
+      const auto &buffers = output_buffers[buffer_index];
+      for (const auto &buffer : buffers) {
+        const auto &offset = output_offsets[buffer_index];
 
-          request->outputs_.emplace_back();
-          request->outputs_.back().setData(
-            static_cast<std::byte *>(buffer->data()) + offset);
-        }
-      } catch (const std::invalid_argument &e) {
-        throw;
+        request->outputs_.emplace_back();
+        request->outputs_.back().setData(
+          static_cast<std::byte *>(buffer->data()) + offset);
       }
       batch_offset++;
       if (batch_offset == batch_size) {
@@ -543,59 +529,60 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
   return resp;
 }
 
-DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
-                       DrogonCallback callback) {
-  this->req_ = req;
-  this->callback_ = std::move(callback);
-  this->type_ = InterfaceType::kDrogonHttp;
-  this->json_ = nullptr;
+std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
+#ifdef PROTEUS_ENABLE_LOGGING
+  Logger logger{Loggers::kServer};
+#endif
+
+  // attempt to get the JSON object directly first
+  const auto &json_obj = req->getJsonObject();
+  if (json_obj != nullptr) {
+    return json_obj;
+  }
+
+  PROTEUS_LOG_DEBUG(logger, "Failed to get JSON data directly");
+
+  // if it's not valid, then we need to attempt to parse the body
+  auto root = std::make_shared<Json::Value>();
+
+  std::string errors;
+  Json::CharReaderBuilder builder;
+  Json::CharReader *reader = builder.newCharReader();
+  auto body = req->getBody();
+  bool success =
+    reader->parse(body.data(), body.data() + body.size(), root.get(), &errors);
+  if (success) {
+    return root;
+  }
+
+  PROTEUS_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
+
+  // if it's still not valid, attempt to uncompress the body and convert to JSON
+  auto body_decompress = z_decompress(body.data(), body.length());
+  success = reader->parse(body_decompress.data(),
+                          body_decompress.data() + body_decompress.size(),
+                          root.get(), &errors);
+  if (success) {
+    return root;
+  }
+
+  throw invalid_argument("Failed to interpret request body as JSON");
 }
 
-void DrogonHttp::setJson() {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-#endif
-  const auto &json_raw = this->req_->getJsonObject();
-
-  // if we fail to get the JSON object, return
-  if (json_raw == nullptr) {
-    auto root = std::make_shared<Json::Value>();
-    std::string errors;
-    Json::CharReaderBuilder builder;
-    Json::CharReader *reader = builder.newCharReader();
-    auto body = this->req_->getBody();
-    auto body_parsed = z_decompress(body.data(), body.length());
-    if (body_parsed.empty()) {
-      this->callback_(errorHttpResponse("Failed attempt to inflate request",
-                                        HttpStatusCode::k400BadRequest));
-      return;
-    }
-    bool parsingSuccessful =
-      reader->parse(body_parsed.data(), body_parsed.data() + body_parsed.size(),
-                    root.get(), &errors);
-    if (!parsingSuccessful) {
-      this->callback_(errorHttpResponse("Failed to parse JSON request",
-                                        HttpStatusCode::k400BadRequest));
-      return;
-    }
-    PROTEUS_IF_LOGGING(logger.info("Successfully inflated request"));
-    this->json_ = std::move(root);
-  } else {
-    this->json_ = json_raw;
-  }
+DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
+                       DrogonCallback callback)
+  : req_(req), callback_(std::move(callback)) {
+  this->type_ = InterfaceType::kDrogonHttp;
+  this->json_ = parseJson(req.get());
 }
 
 size_t DrogonHttp::getInputSize() {
-  if (this->json_ == nullptr) {
-    this->setJson();
-  }
-
   if (!this->json_->isMember("inputs")) {
-    throw std::invalid_argument("No 'inputs' key present in request");
+    throw invalid_argument("No 'inputs' key present in request");
   }
   auto inputs = this->json_->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an array");
   }
   return inputs.size();
 }
@@ -750,7 +737,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
         try {
           Json::Value ret = parseResponse(response);
           resp = drogon::HttpResponse::newHttpJsonResponse(ret);
-        } catch (const std::invalid_argument &e) {
+        } catch (const invalid_argument &e) {
           resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
         }
       }
@@ -762,18 +749,18 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
     };
     request->setCallback(std::move(callback));
     return request;
-  } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger.info(e.what()));
+  } catch (const invalid_argument &e) {
+    PROTEUS_LOG_INFO(logger, e.what());
     this->callback_(
       errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
     return nullptr;
   }
 }
 
-void DrogonHttp::errorHandler(const std::invalid_argument &e) {
+void DrogonHttp::errorHandler(const std::exception &e) {
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto &logger = this->getLogger();
-  logger.debug(e.what());
+  PROTEUS_LOG_DEBUG(logger, e.what());
 #endif
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
 }

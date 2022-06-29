@@ -17,6 +17,7 @@
 #include <json/reader.h>  // for CharReader, CharReaderBui...
 #include <json/value.h>   // for Value, arrayValue
 
+#include <algorithm>   // for transform
 #include <functional>  // for _Bind_helper<>::type, _Pl...
 #include <memory>      // for allocator, shared_ptr
 #include <string>      // for string, operator+, char_t...
@@ -36,7 +37,7 @@ using drogon::WebSocketMessageType;
 namespace proteus::http {
 
 WebsocketServer::WebsocketServer() {
-  PROTEUS_IF_LOGGING(logger_.info("Constructed WebsocketServer"));
+  PROTEUS_LOG_INFO(logger_, "Constructed WebsocketServer");
 }
 
 void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
@@ -62,8 +63,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
   // if we fail to get the JSON object, return
   if (!parsingSuccessful) {
-    PROTEUS_IF_LOGGING(
-      logger_.info("Failed to parse JSON request to websocket"));
+    PROTEUS_LOG_INFO(logger_, "Failed to parse JSON request to websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No JSON could be parsed in the request");
     return;
@@ -73,21 +73,21 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   if (json->isMember("model")) {
     model = json->get("model", "").asString();
   } else {
-    PROTEUS_IF_LOGGING(logger_.info("No model request found in websocket"));
+    PROTEUS_LOG_INFO(logger_, "No model request found in websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No model found in request");
     return;
   }
+  std::transform(model.begin(), model.end(), model.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
   auto request = std::make_unique<DrogonWs>(conn, std::move(json));
 
-  WorkerInfo *worker = nullptr;
-  try {
-    worker = Manager::getInstance().getWorker(model);
-  } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger_.info(e.what()));
+  auto *worker = Manager::getInstance().getWorker(model);
+  if (worker == nullptr) {
+    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
-                   "Model " + model + " not loaded");
+                   "Worker " + model + " not found");
     return;
   }
   auto *batcher = worker->getBatcher();
@@ -100,14 +100,14 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
 void WebsocketServer::handleConnectionClosed(
   const WebSocketConnectionPtr &conn) {
-  PROTEUS_IF_LOGGING(logger_.info("Websocket closed"));
+  PROTEUS_LOG_INFO(logger_, "Websocket closed");
   // (void)conn;  // suppress unused variable warning
   conn->shutdown();
 }
 
 void WebsocketServer::handleNewConnection(const HttpRequestPtr &req,
                                           const WebSocketConnectionPtr &conn) {
-  PROTEUS_IF_LOGGING(logger_.info("New websocket connection"));
+  PROTEUS_LOG_INFO(logger_, "New websocket connection");
   (void)conn;  // suppress unused variable warning
   (void)req;   // suppress unused variable warning
 }
@@ -122,7 +122,7 @@ DrogonWs::DrogonWs(const drogon::WebSocketConnectionPtr &conn,
 size_t DrogonWs::getInputSize() {
   auto inputs = this->json_->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw std::invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an array");
   }
   return inputs.size();
 }
@@ -151,19 +151,16 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
       };
     request->setCallback(std::move(callback));
     return request;
-  } catch (const std::invalid_argument &e) {
-    PROTEUS_IF_LOGGING(logger.info(e.what()));
+  } catch (const invalid_argument &e) {
+    PROTEUS_LOG_INFO(logger, e.what());
     this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition,
                           "Failed to create request");
     return nullptr;
   }
 }
 
-void DrogonWs::errorHandler(const std::invalid_argument &e) {
-#ifdef PROTEUS_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-  logger.debug(e.what());
-#endif
+void DrogonWs::errorHandler(const std::exception &e) {
+  PROTEUS_LOG_INFO(this->getLogger(), e.what());
   this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
 }
 

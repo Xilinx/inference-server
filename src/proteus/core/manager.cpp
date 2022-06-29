@@ -74,26 +74,39 @@ void Manager::unloadWorker(const std::string& key) {
 }
 
 WorkerInfo* Manager::getWorker(const std::string& key) {
-  auto* worker_info = this->endpoints_.get(key);
-  if (worker_info == nullptr) {
-    throw std::invalid_argument("worker " + key + " not found");
-  }
-  return worker_info;
+  return this->endpoints_.get(key);
 }
 
 bool Manager::workerReady(const std::string& key) {
-  auto metadata = this->getWorkerMetadata(key);
-  return metadata.isReady();
+  std::shared_ptr<proteus::UpdateCommand> request;
+  int ready = -1;
+  request = std::make_shared<UpdateCommand>(UpdateCommandType::Ready, key,
+                                            nullptr, &ready);
+  update_queue_->enqueue(request);
+  while (ready == -1 && request->eptr == nullptr) {
+    std::this_thread::yield();
+  }
+  if (request->eptr != nullptr) {
+    std::rethrow_exception(request->eptr);
+  }
+  return ready;
 }
 
+// FIXME(varunsh): potential race condition if the worker is being deleted
 ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   auto* worker = this->getWorker(key);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + key + " not found");
+  }
   auto* foo = worker->workers_.begin()->second;
   return foo->getMetadata();
 }
 
 void Manager::workerAllocate(std::string const& key, int num) {
-  auto* worker = this->getWorker(key);
+  const auto* worker = this->getWorker(key);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + key + " not found");
+  }
   auto request =
     std::make_shared<UpdateCommand>(UpdateCommandType::Allocate, key, &num);
   update_queue_->enqueue(request);
@@ -120,13 +133,13 @@ void Manager::shutdown() {
 }
 
 void Manager::update_manager(UpdateCommandQueue* input_queue) {
-  PROTEUS_IF_LOGGING(logger_.debug("Starting the Manager update thread"));
+  PROTEUS_LOG_DEBUG(logger_, "Starting the Manager update thread");
   setThreadName("manager");
   std::shared_ptr<UpdateCommand> request;
   bool run = true;
   while (run) {
     input_queue->wait_dequeue(request);
-    PROTEUS_IF_LOGGING(logger_.debug("Got request in Manager update thread"));
+    PROTEUS_LOG_DEBUG(logger_, "Got request in Manager update thread");
     switch (request->cmd) {
       case UpdateCommandType::Shutdown:
         this->endpoints_.shutdown();
@@ -140,9 +153,10 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
           auto* worker_info = this->endpoints_.get(request->key);
           auto num = *static_cast<int*>(request->object);
           if (!worker_info->inputSizeValid(num)) {
-            PROTEUS_IF_LOGGING(logger_.debug(
+            PROTEUS_LOG_DEBUG(
+              logger_,
 
-              "Allocating more buffers for worker " + request->key));
+              "Allocating more buffers for worker " + request->key);
             worker_info->allocate(num);
           }
         } catch (...) {
@@ -150,8 +164,8 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
         }
         break;
       case UpdateCommandType::Add:
-        auto* parameters = static_cast<RequestParameters*>(request->object);
         try {
+          auto* parameters = static_cast<RequestParameters*>(request->object);
           auto endpoint = this->endpoints_.add(request->key, *parameters);
           static_cast<std::string*>(request->retval)
             ->assign(std::string{endpoint});
@@ -159,9 +173,22 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
           request->eptr = std::current_exception();
         }
         break;
+      case UpdateCommandType::Ready:
+        try {
+          auto* workerInfo = this->getWorker(request->key);
+          if (workerInfo == nullptr) {
+            throw invalid_argument("Worker " + request->key + " not found");
+          }
+          auto* worker = workerInfo->workers_.begin()->second;
+          auto metadata = worker->getMetadata();
+          *static_cast<int*>(request->retval) = metadata.isReady();
+        } catch (...) {
+          request->eptr = std::current_exception();
+        }
+        break;
     }
   }
-  PROTEUS_IF_LOGGING(logger_.debug("Ending update_thread"));
+  PROTEUS_LOG_DEBUG(logger_, "Ending update_thread");
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,
@@ -256,15 +283,20 @@ std::string Manager::Endpoints::add(const std::string& worker,
   auto endpoint = this->load(worker, &parameters);
   auto* worker_info = this->get(endpoint);
 
+  std::string worker_name = endpoint;
+  if (parameters.has("worker")) {
+    worker_name = parameters.get<std::string>("worker");
+  }
+
   // if the worker doesn't exist yet, we need to create it
   try {
     if (worker_info == nullptr) {
-      auto new_worker = std::make_unique<WorkerInfo>(endpoint, &parameters);
+      auto new_worker = std::make_unique<WorkerInfo>(worker_name, &parameters);
       this->workers_.insert(std::make_pair(endpoint, std::move(new_worker)));
       // if the worker exists but the share parameter is false, we need to add
       // one
     } else if (!share) {
-      worker_info->addAndStartWorker(endpoint, &parameters);
+      worker_info->addAndStartWorker(worker_name, &parameters);
     }
   } catch (...) {
     // undo the load if the worker creation fails

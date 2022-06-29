@@ -23,7 +23,7 @@
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
 #include <grpcpp/grpcpp.h>                       // for Status, InsecureSer...
 
-#include <algorithm>   // for fill, max
+#include <algorithm>   // for fill, max, transform
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for uint64_t, int16_t
 #include <cstring>     // for memcpy
@@ -36,16 +36,17 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "predict_api.grpc.pb.h"                  // for GRPCInferenceServic...
-#include "predict_api.pb.h"                       // for InferTensorContents
-#include "proteus/batching/batcher.hpp"           // for Batcher
-#include "proteus/buffers/buffer.hpp"             // for Buffer
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
-#include "proteus/clients/native.hpp"             // for NativeClient
-#include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
-#include "proteus/core/interface.hpp"             // for Interface, Interfac...
-#include "proteus/core/manager.hpp"               // for Manager
+#include "predict_api.grpc.pb.h"              // for GRPCInferenceServic...
+#include "predict_api.pb.h"                   // for InferTensorContents
+#include "proteus/batching/batcher.hpp"       // for Batcher
+#include "proteus/buffers/buffer.hpp"         // for Buffer
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/grpc_internal.hpp"  // for mapProtoToParameters
+#include "proteus/clients/native.hpp"         // for NativeClient
+#include "proteus/core/data_types.hpp"        // for DataType, mapStrToType
+#include "proteus/core/interface.hpp"         // for Interface, Interfac...
+#include "proteus/core/manager.hpp"           // for Manager
+#include "proteus/core/model_repository.hpp"
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
@@ -55,8 +56,10 @@
 namespace proteus {
 class CallDataModelInfer;
 class CallDataModelLoad;
+class CallDataWorkerLoad;
 class CallDataModelReady;
 class CallDataModelUnload;
+class CallDataWorkerUnload;
 class CallDataServerLive;
 class CallDataServerMetadata;
 class CallDataServerReady;
@@ -378,18 +381,13 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     auto batch_offset_backup = batch_offset;
 
     for (const auto& input : grpc_request.inputs()) {
-      try {
-        auto buffers = input_buffers[buffer_index];
-        for (auto& buffer : buffers) {
-          auto& offset = input_offsets[buffer_index];
+      auto buffers = input_buffers[buffer_index];
+      for (auto& buffer : buffers) {
+        auto& offset = input_offsets[buffer_index];
 
-          request->inputs_.push_back(
-            InputBuilder::build(input, buffer, offset));
-          const auto& last_input = request->inputs_.back();
-          offset += (last_input.getSize() * last_input.getDatatype().size());
-        }
-      } catch (const std::invalid_argument& e) {
-        throw;
+        request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
+        const auto& last_input = request->inputs_.back();
+        offset += (last_input.getSize() * last_input.getDatatype().size());
       }
       batch_offset++;
       if (batch_offset == batch_size) {
@@ -399,8 +397,8 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
       }
     }
 
-    // TODO(varunsh): output_offset is currently ignored! The size of the output
-    // needs to come from the worker but we have no such information.
+    // TODO(varunsh): output_offset is currently ignored! The size of the
+    // output needs to come from the worker but we have no such information.
     buffer_index = buffer_index_backup;
     batch_offset = batch_offset_backup;
 
@@ -408,17 +406,13 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
       for (const auto& output : grpc_request.outputs()) {
         // TODO(varunsh): we're ignoring incoming output data
         (void)output;
-        try {
-          auto buffers = output_buffers[buffer_index];
-          for (auto& buffer : buffers) {
-            auto& offset = output_offsets[buffer_index];
+        auto buffers = output_buffers[buffer_index];
+        for (auto& buffer : buffers) {
+          auto& offset = output_offsets[buffer_index];
 
-            request->outputs_.emplace_back();
-            request->outputs_.back().setData(
-              static_cast<std::byte*>(buffer->data()) + offset);
-          }
-        } catch (const std::invalid_argument& e) {
-          throw;
+          request->outputs_.emplace_back();
+          request->outputs_.back().setData(
+            static_cast<std::byte*>(buffer->data()) + offset);
         }
         batch_offset++;
         if (batch_offset == batch_size) {
@@ -430,18 +424,14 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     } else {
       for (const auto& input : grpc_request.inputs()) {
         (void)input;  // suppress unused variable warning
-        try {
-          auto buffers = output_buffers[buffer_index];
-          for (size_t j = 0; j < buffers.size(); j++) {
-            auto& buffer = buffers[j];
-            const auto& offset = output_offsets[buffer_index];
+        auto buffers = output_buffers[buffer_index];
+        for (size_t j = 0; j < buffers.size(); j++) {
+          auto& buffer = buffers[j];
+          const auto& offset = output_offsets[buffer_index];
 
-            request->outputs_.emplace_back();
-            request->outputs_.back().setData(
-              static_cast<std::byte*>(buffer->data()) + offset);
-          }
-        } catch (const std::invalid_argument& e) {
-          throw;
+          request->outputs_.emplace_back();
+          request->outputs_.back().setData(
+            static_cast<std::byte*>(buffer->data()) + offset);
         }
         batch_offset++;
         if (batch_offset == batch_size) {
@@ -474,7 +464,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
   }
   try {
     mapResponsetoProto(response, calldata->getReply());
-  } catch (const std::invalid_argument& e) {
+  } catch (const invalid_argument& e) {
     calldata->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
     return;
   }
@@ -515,8 +505,8 @@ class GrpcApiUnary : public Interface {
         std::bind(grpcUnaryCallback, this->calldata_, std::placeholders::_1);
       request->setCallback(std::move(callback));
       return request;
-    } catch (const std::invalid_argument& e) {
-      PROTEUS_IF_LOGGING(logger.info(e.what()));
+    } catch (const invalid_argument& e) {
+      PROTEUS_LOG_INFO(logger, e.what());
       errorHandler(e);
       return nullptr;
     }
@@ -526,11 +516,8 @@ class GrpcApiUnary : public Interface {
     return calldata_->getRequest().inputs_size();
   }
 
-  void errorHandler(const std::invalid_argument& e) override {
-#ifdef PROTEUS_ENABLE_LOGGING
-    const auto& logger = this->getLogger();
-    logger.info(e.what());
-#endif
+  void errorHandler(const std::exception& e) override {
+    PROTEUS_LOG_INFO(this->getLogger(), e.what());
     calldata_->finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   }
 
@@ -555,7 +542,7 @@ CALLDATA_IMPL(ModelReady, Unary) {
   try {
     reply_.set_ready(Manager::getInstance().workerReady(model));
     finish();
-  } catch (const std::invalid_argument& e) {
+  } catch (const invalid_argument& e) {
     reply_.set_ready(false);
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   }
@@ -588,27 +575,51 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   const std::string& model = request_.name();
+  auto model_lower = model;
+  std::transform(model_lower.begin(), model_lower.end(), model_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  auto hyphen_pos = model.find('-');
-  std::string name;
-  // if there's a hyphen in the name, currently assuming it's for xmodel. So,
-  // extract the first part as the worker and the second part as the xmodel file
-  // name. Put that information into the parameters with the default path for
-  // KServe (/mnt/models)
-  if (hyphen_pos != std::string::npos) {
-    name = model.substr(0, hyphen_pos);
-    auto xmodel = model.substr(hyphen_pos + 1, model.length() - hyphen_pos);
-    parameters->put("xmodel",
-                    "/mnt/models/" + model + "/" + xmodel + ".xmodel");
-  } else {
-    name = model;
-  }
+  ModelRepository::modelLoad(model_lower, parameters.get());
 
   std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(name, *parameters);
+    endpoint = Manager::getInstance().loadWorker(model_lower, *parameters);
   } catch (const std::exception& e) {
-    PROTEUS_IF_LOGGING(logger_.error(e.what()));
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+    return;
+  }
+
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(ModelUnload, Unary) {
+  const auto& name = request_.name();
+  auto worker_lower = name;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+
+  Manager::getInstance().unloadWorker(worker_lower);
+  finish();
+}
+CALLDATA_IMPL_END
+
+CALLDATA_IMPL(WorkerLoad, Unary) {
+  auto parameters = mapProtoToParameters(request_.parameters());
+
+  const std::string& worker = request_.name();
+  auto worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+
+  parameters->put("worker", worker_lower);
+
+  std::string endpoint;
+  try {
+    endpoint = Manager::getInstance().loadWorker(worker_lower, *parameters);
+  } catch (const std::exception& e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
   }
@@ -618,10 +629,13 @@ CALLDATA_IMPL(ModelLoad, Unary) {
 }
 CALLDATA_IMPL_END
 
-CALLDATA_IMPL(ModelUnload, Unary) {
-  const auto& name = request_.name();
+CALLDATA_IMPL(WorkerUnload, Unary) {
+  const auto& worker = request_.name();
+  auto worker_lower = worker;
+  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
-  Manager::getInstance().unloadWorker(name);
+  Manager::getInstance().unloadWorker(worker_lower);
   finish();
 }
 CALLDATA_IMPL_END
@@ -635,10 +649,9 @@ void CallDataModelInfer::handleRequest() {
 #endif
 
   WorkerInfo* worker = nullptr;
-  try {
-    worker = Manager::getInstance().getWorker(model);
-  } catch (const std::invalid_argument& e) {
-    PROTEUS_IF_LOGGING(logger_.info(e.what()));
+  worker = Manager::getInstance().getWorker(model);
+  if (worker == nullptr) {
+    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
     finish(
       ::grpc::Status(StatusCode::NOT_FOUND, "Worker " + model + " not found"));
     return;
@@ -693,11 +706,11 @@ class GrpcServer final {
     builder.SetMaxSendMessageSize(kMaxGrpcMessageSize);
     // Listen on the given address without any authentication mechanism.
     builder.AddListeningPort(address, ::grpc::InsecureServerCredentials());
-    // Register "service_" as the instance through which we'll communicate with
-    // clients. In this case it corresponds to an *asynchronous* service.
+    // Register "service_" as the instance through which we'll communicate
+    // with clients. In this case it corresponds to an *asynchronous* service.
     builder.RegisterService(&service_);
-    // Get hold of the completion queue used for the asynchronous communication
-    // with the gRPC runtime.
+    // Get hold of the completion queue used for the asynchronous
+    // communication with the gRPC runtime.
     for (auto i = 0; i < cq_count; i++) {
       cq_.push_back(builder.AddCompletionQueue());
     }
@@ -724,6 +737,8 @@ class GrpcServer final {
     new CallDataModelReady(&service_, my_cq.get());
     new CallDataModelLoad(&service_, my_cq.get());
     new CallDataModelUnload(&service_, my_cq.get());
+    new CallDataWorkerLoad(&service_, my_cq.get());
+    new CallDataWorkerUnload(&service_, my_cq.get());
     new CallDataModelInfer(&service_, my_cq.get());
     // new CallDataStreamModelInfer(&service_, my_cq.get());
     void* tag;  // uniquely identifies a request.
@@ -746,11 +761,15 @@ class GrpcServer final {
   inference::GRPCInferenceService::AsyncService service_;
   std::unique_ptr<::grpc::Server> server_;
   std::vector<std::thread> threads_;
+  ModelRepository repository_;
 };
 
 namespace grpc {
 
-void start(const std::string& address) { GrpcServer::create(address, 1); }
+void start(int port) {
+  const std::string address = "0.0.0.0:" + std::to_string(port);
+  GrpcServer::create(address, 1);
+}
 
 void stop() {
   // the GrpcServer's destructor is called automatically

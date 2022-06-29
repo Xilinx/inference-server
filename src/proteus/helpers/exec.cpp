@@ -14,11 +14,12 @@
 
 #include "proteus/helpers/exec.hpp"
 
-#include <array>      // for array
-#include <cstdio>     // for pclose, fgets, popen, FILE
-#include <memory>     // for unique_ptr
-#include <stdexcept>  // for runtime_error
-#include <string>     // for string
+#include <array>   // for array
+#include <cstdio>  // for pclose, fgets, popen, FILE
+#include <memory>  // for unique_ptr
+#include <string>  // for string
+
+#include "proteus/core/exceptions.hpp"
 
 namespace proteus {
 
@@ -27,9 +28,9 @@ std::string exec(const char* cmd) {
   std::array<char, 128> buffer;  // NOLINT
   std::string result;
   // NOLINTNEXTLINE(cert-env33-c)
-  std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+  std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), &pclose);
   if (!pipe) {
-    throw std::runtime_error("popen() failed!");
+    throw external_error("popen() failed!");
   }
   while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
     result += buffer.data();
