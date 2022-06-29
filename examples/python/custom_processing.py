@@ -108,10 +108,7 @@ def main():
 
     ready = False
     while not ready:
-        try:
-            ready = client.modelReady(worker_name)
-        except proteus.RuntimeError:
-            pass
+        ready = client.modelReady(worker_name)
     # -load worker:
 
     # +get images:

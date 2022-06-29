@@ -174,9 +174,6 @@ bool HttpClient::modelReady(const std::string& model) {
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
-  if (response->statusCode() == drogon::k400BadRequest) {
-    throw bad_status(response->body().data());
-  }
   return response->statusCode() == drogon::k200OK;
 }
 

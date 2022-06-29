@@ -204,7 +204,7 @@ bool NativeClient::modelReady(const std::string& model) {
   try {
     return Manager::getInstance().workerReady(model);
   } catch (const runtime_error& e) {
-    throw bad_status(e.what());
+    return false;
   }
 }
 

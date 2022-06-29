@@ -34,15 +34,12 @@ void test(proteus::Client* client) {
   auto models_0 = client->modelList();
   EXPECT_TRUE(models_0.empty());
 
-  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
-  EXPECT_THROW_CHECK({ client->modelReady(worker); },
-                     { EXPECT_STREQ("Worker echo not found", e.what()); },
-                     proteus::bad_status);
+  EXPECT_FALSE(client->modelReady(worker));
 
   const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
 
-  while (!isReady(client, endpoint)) {
+  while (!client->modelReady(endpoint)) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 

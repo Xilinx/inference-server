@@ -136,7 +136,7 @@ bool GrpcClient::modelReady(const std::string& model) {
   if (status.ok()) {
     return reply.ready();
   }
-  throw bad_status(status.error_message());
+  return false;
 }
 
 std::vector<std::string> GrpcClient::modelList() {

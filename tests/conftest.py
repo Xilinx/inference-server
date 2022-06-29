@@ -250,11 +250,8 @@ def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
     response = rest_client.workerLoad(model_fixture, parameters)
     request.cls.model = response
 
-    try:
-        while not rest_client.modelReady(response):
-            time.sleep(1)
-    except proteus.RuntimeError:
-        pass
+    while not rest_client.modelReady(response):
+        time.sleep(1)
 
     yield  # perform testing
 
