@@ -95,10 +95,7 @@ def main(args):
 
     ready = False
     while not ready:
-        try:
-            ready = client.modelReady(worker_name)
-        except proteus.RuntimeError:
-            pass
+        ready = client.modelReady(worker_name)
 
     # Inference with images
     # If with real data, do preprocessing, otherwise create dummy data

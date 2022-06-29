@@ -24,12 +24,6 @@ class TestModelReady:
     Base class for modelReady tests using the Python bindings
     """
 
-    def is_ready(self, worker):
-        try:
-            return self.rest_client.modelReady(worker)
-        except proteus.RuntimeError:
-            return False
-
     def test_model_ready(self):
         """
         Test that modelReady correctly throws errors and
@@ -40,13 +34,11 @@ class TestModelReady:
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        with pytest.raises(proteus.RuntimeError) as e_info:
-            self.rest_client.modelReady(worker)
-            assert str(e_info.value) == f"Worker {worker} not found"
+        assert not self.rest_client.modelReady(worker)
 
         endpoint_0 = self.rest_client.workerLoad(worker)
         assert endpoint_0 == "echo"
-        while not self.is_ready(worker):
+        while not self.rest_client.modelReady(worker):
             time.sleep(1)
 
         models = self.rest_client.modelList()
@@ -54,7 +46,7 @@ class TestModelReady:
 
         self.rest_client.modelUnload(worker)
 
-        while self.is_ready(worker):
+        while self.rest_client.modelReady(worker):
             time.sleep(1)
 
         models = self.rest_client.modelList()

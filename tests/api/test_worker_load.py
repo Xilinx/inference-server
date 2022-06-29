@@ -61,13 +61,7 @@ class TestLoad:
             endpoint_1
         )  # this unloads the second echo-0 worker
 
-        try:
-            while self.rest_client.modelReady(endpoint_0):
-                time.sleep(1)
-        except proteus.RuntimeError:
-            pass
-        try:
-            while self.rest_client.modelReady(endpoint_1):
-                time.sleep(1)
-        except proteus.RuntimeError:
-            pass
+        while self.rest_client.modelReady(endpoint_0):
+            time.sleep(1)
+        while self.rest_client.modelReady(endpoint_1):
+            time.sleep(1)
