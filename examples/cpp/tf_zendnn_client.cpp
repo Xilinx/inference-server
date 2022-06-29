@@ -213,7 +213,7 @@ struct Option {
   std::string root = std::getenv("PROTEUS_ROOT");
 
   std::string graph =
-    root + "/external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb";
+    root + "/external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
   std::string image_location = root + "/tests/assets/dog-3619020_640.jpg";
   // std::string image_location = "";
   std::string input_node = "input";

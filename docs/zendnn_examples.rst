@@ -41,13 +41,13 @@ The python example is available at :code:`examples/python/tf_zendnn.py`.
 
     .. code-block:: console
 
-        $ python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb --image_location ./tests/assets/dog-3619020_640.jpg
+        $ python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb --image_location ./tests/assets/dog-3619020_640.jpg
 
 2. To run the example with dummy data:
 
     .. code-block:: console
 
-        $ python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb --batch_size 16 --steps 4
+        $ python examples/python/tf_zendnn.py --graph ./external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb --batch_size 16 --steps 4
 
     The above command will run the example with dummy data (4 requests with 16 dummy images each). This can be used as a functional test.
 

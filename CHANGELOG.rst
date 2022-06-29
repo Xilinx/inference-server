@@ -43,6 +43,7 @@ Changed
 - Logging macro is now ``PROTEUS_LOG_*``
 - Loading workers is now case-insensitive (:commit:`14ed4ef` and :commit:`90a51ae`)
 - Build AKS from source (:commit:`e04890f`)
+- Use consistent custom exceptions (:pr:`30`)
 
 Fixed
 ^^^^^
@@ -52,6 +53,7 @@ Fixed
 - Populate the right number of offsets in the hard batcher (:commit:`6666142`)
 - Calculate offset values correctly during batching (:commit:`8c7534b`)
 - Get correct library dependencies for production container (:commit:`14ed4ef`)
+- Correctly throw an exception if a worker gets an error during initialization (:pr:`29`)
 
 
 :github:`0.1.0 <Xilinx/inference-server/releases/tag/v0.1.0>` - 2022-02-08
