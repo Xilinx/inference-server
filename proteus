@@ -815,7 +815,7 @@ class Get:
         if args.tfzendnn:
             files.update({
                 tensorflow_models: [
-                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip"
+                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
                 ],
             })
             
@@ -830,7 +830,7 @@ class Get:
         if args.ptzendnn:
             files.update({
                 pytorch_models:[
-                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip"
+                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
                 ]
             })
         for location, urls in files.items():
