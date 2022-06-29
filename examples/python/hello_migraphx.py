@@ -139,7 +139,7 @@ if len(shape) != 4:
     print('Unable to read the image dimensions from ', modelname, '.  Expecting a 4-value shape tensor.')
     exit(-1)
 
-# Load a picture of a flower
+# Load a picture
 img  = cv2.imread(imagename).astype("float32")
 # Crop to a square, resize
 img = make_nxn(img, shape[2])
