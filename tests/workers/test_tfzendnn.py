@@ -34,7 +34,7 @@ def model_fixture():
 def parameters_fixture():
     return {
         "model": str(
-            root_path / "external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb"
+            root_path / "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb"
         ),
         "input_node": "input",
         "output_node": "resnet_v1_50/predictions/Reshape_1",

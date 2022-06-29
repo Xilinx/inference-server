@@ -195,7 +195,7 @@ if __name__ == "__main__":
         required=False,
         help="Full path to the input graph",
         default=os.path.join(
-            root, "external/tensorflow_models/resnet_v1_50_baseline_6.96B.pb"
+            root, "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb"
         ),
     )
     parser.add_argument(
