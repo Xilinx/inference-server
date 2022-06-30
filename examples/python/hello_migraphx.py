@@ -168,9 +168,8 @@ print('ok.')
 parameters = proteus.RequestParameters()
 parameters.put("model", modelname)
 # this call requests the server to either find a running instance of the named
-# worker type, or else create one and initialize it with the parameters.  It's
-# currently not possible to search for a worker by specifying the model you want.
-worker_name = client.modelLoad("Migraphx", parameters)
+# worker type, or else create one and initialize it with the parameters.
+worker_name = client.workerLoad("Migraphx", parameters)
 
 # wait for the worker to load and compile model
 ready = False

@@ -145,8 +145,8 @@ void MIGraphXWorker::doInit(RequestParameters* parameters){
       input_file_ = parameters->get<std::string>("model");
   }
   else{
-      PROTEUS_IF_LOGGING(logger.error(
-      "MIGraphXWorker parameters required:  \"model\": \"<filepath>\""));  
+      PROTEUS_LOG_ERROR(logger, 
+      "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");
       // Throwing an exception causes server to delete this worker instance.  Client must try again.
       throw std::invalid_argument("model file argument missing from model load request");
   }
@@ -196,7 +196,7 @@ size_t MIGraphXWorker::doAllocate(size_t num){
 
       // Load the compiled MessagePack (*.mxr) file
       std::cout << "Acquiring model file " << compiled_path.c_str() << std::endl;
-      PROTEUS_IF_LOGGING(logger.info( std::string("migraphx worker loading compiled model file ") + compiled_path.c_str()));
+      PROTEUS_LOG_INFO(logger, std::string("migraphx worker loading compiled model file ") + compiled_path.c_str());
       migraphx::file_options options;
       options.set_file_format("msgpack");
 
@@ -243,8 +243,8 @@ size_t MIGraphXWorker::doAllocate(size_t num){
       }
       else  {
           // Not finding the model file makes it impossible to finish initializing this worker
-          PROTEUS_IF_LOGGING(logger.info( std::string("migraphx worker cannot open the model file ") + onnx_path.c_str()\
-          + " or " + compiled_path.c_str() + ".  Does this path exist?"));
+          PROTEUS_LOG_INFO(logger,  std::string("migraphx worker cannot open the model file ") + onnx_path.c_str()\
+          + " or " + compiled_path.c_str() + ".  Does this path exist?");
           throw std::invalid_argument(std::string ("model file ") + onnx_path.c_str() +  " not found or can't be opened");
       }
     }
@@ -253,14 +253,14 @@ size_t MIGraphXWorker::doAllocate(size_t num){
     // only support models with a single input tensor
     migraphx::program_parameter_shapes input_shapes = this->prog_.get_parameter_shapes();
     if(input_shapes.size() != 1){
-      PROTEUS_IF_LOGGING(logger.error( std::string("migraphx worker was passed a model with unexpected number of input shapes=") + std::to_string(input_shapes.size())));
+      PROTEUS_LOG_ERROR(logger, std::string("migraphx worker was passed a model with unexpected number of input shapes=") + std::to_string(input_shapes.size()));
       throw std::invalid_argument(std::string("migraphx worker was passed a model with unexpected number of input shapes=") + std::to_string(input_shapes.size()));
     }
 
     migraphx::shape sh = input_shapes["data"];
     auto lenth = sh.lengths();    // For resnet50, a vector of dimensions 1, 3, 224, 224
     if(lenth.size() != 4){
-      PROTEUS_IF_LOGGING(logger.error(std::string("migraphx worker was passed a model with unexpected number of input dimensions=") + std::to_string(lenth.size())));
+      PROTEUS_LOG_INFO(logger, std::string("migraphx worker was passed a model with unexpected number of input dimensions=") + std::to_string(lenth.size()));
       throw std::invalid_argument(std::string(("migraphx worker was passed a model with unexpected number of input dimensions=") + std::to_string(lenth.size())));
     }
 
@@ -298,7 +298,7 @@ size_t MIGraphXWorker::doAllocate(size_t num){
                         1 * this->batch_size_ * image_height_ * image_width_ * image_channels_, this->input_dt_);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
                         1 * this->batch_size_ * output_classes_, output_dt_);
-  PROTEUS_IF_LOGGING(logger.info( std::string("MIGraphXWorker::doAllocate() added ") + std::to_string(buffer_num) + " buffers"));
+  PROTEUS_LOG_INFO(logger,  std::string("MIGraphXWorker::doAllocate() added ") + std::to_string(buffer_num) + " buffers");
 
   return buffer_num;
 }
@@ -312,7 +312,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
-  PROTEUS_IF_LOGGING(logger.info("beginning of doRun migraphx"));
+  PROTEUS_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
   std::cout << "MIGraphXWorker::doRun\n";
   
   std::shared_ptr<InferenceRequest> req;
@@ -331,7 +331,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_IF_LOGGING(logger.info("Got request in migraphx"));
+    PROTEUS_LOG_INFO(logger, "Got request in migraphx");
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -371,8 +371,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
         int cols = inputs[i].getShape()[2];
 
         DataType dtype = inputs[i].getDatatype();
-        PROTEUS_IF_LOGGING(logger.info(std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) \
-           + ", dtype: " + std::to_string(size_t(dtype))  + ", should be " + std::to_string(size_t(input_dt_)) ));
+        PROTEUS_LOG_INFO(logger, std::string("rows: ") + std::to_string(rows) + ", cols: " + std::to_string(cols) \
+           + ", dtype: " + std::to_string(size_t(dtype))  + ", should be " + std::to_string(size_t(input_dt_)) );
         
         // The MIGraphX operation: run the migraphx eval() method.
         // If migraphx exceptions happen, they will be handled
@@ -390,9 +390,9 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
           //
           // Run the inference
           //
-          PROTEUS_IF_LOGGING(logger.info("beginning migraphx eval"));
+          PROTEUS_LOG_INFO(logger, "beginning migraphx eval");
           migraphx::api::arguments  migraphx_output = this->prog_.eval(params);
-          PROTEUS_IF_LOGGING(logger.info("finishing migraphx eval"));
+          PROTEUS_LOG_INFO(logger, "finishing migraphx eval");
 
           //
           // Transfer the migraphx results to output
@@ -442,12 +442,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
           resp.addOutput(output);
 
         } catch (const std::exception& e) {
-          PROTEUS_IF_LOGGING(logger.error( e.what()));
+          PROTEUS_LOG_ERROR(logger, e.what());
           // Pass error message back as reply to request; continue processing more inference requests 
           req->runCallbackError(std::string("Migraphx inference error: ") + e.what());
           continue;
         }
-        PROTEUS_IF_LOGGING(logger.info("finished migraphx eval"));
+        PROTEUS_LOG_INFO(logger, "Finished migraphx eval");
       }
 
 #ifdef PROTEUS_ENABLE_TRACING
@@ -469,11 +469,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue){
 
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
-    PROTEUS_IF_LOGGING(logger.debug( "Returned buffers"));
+    PROTEUS_LOG_DEBUG(logger,  "Returned buffers");
   }
-  std::cout << "exiting MIGraphXWorker::doInit\n";
+  std::cout << "exiting MIGraphXWorker::doRun \n";
 
-  PROTEUS_IF_LOGGING(logger.info("Migraphx ending"));
+  PROTEUS_LOG_INFO(logger, "Migraphx::doRun ending");
 }
 
 void MIGraphXWorker::doRelease() {    std::cout << "MIGraphXWorker::doRelease\n";
