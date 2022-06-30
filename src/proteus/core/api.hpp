@@ -29,6 +29,9 @@ class RequestParameters;
 void modelLoad(const std::string& model, RequestParameters* parameters);
 void modelUnload(const std::string& model);
 
+std::string workerLoad(const std::string& model, RequestParameters* parameters);
+void workerUnload(const std::string& model);
+
 }  // namespace proteus
 
 #endif  // GUARD_PROTEUS_CORE_API
