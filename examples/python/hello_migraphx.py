@@ -187,12 +187,9 @@ worker_name = client.workerLoad("Migraphx", parameters)
 # wait for the worker to load and compile model
 ready = False
 while not ready:
-    try:
-        ready = client.modelReady(worker_name)
-    except ValueError:
-        pass
+    ready = client.modelReady(worker_name)
 
-# Load a picture of a dog
+# Load a picture
 img2 = cv2.imread(imagename2).astype("float32")
 img2 = make_nxn(img2, shape[2])
 #  Normalize values with values specific to Resnet50
@@ -217,7 +214,7 @@ img2 = preprocess(img2)
 # create a multi-image inference request and send it
 #
 images = [img2, img, img, img2]
-# images=[img]
+
 print("Creating inference request...")
 request = proteus.ImageInferenceRequest(images, False)
 response = client.modelInfer(worker_name, request)

@@ -22,7 +22,6 @@ import multiprocessing as mp
 import os
 from pathlib import Path
 import pty
-import requests
 import shlex
 import shutil
 import subprocess

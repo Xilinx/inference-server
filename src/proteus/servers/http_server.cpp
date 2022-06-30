@@ -282,7 +282,6 @@ void v2::ProteusHttpServer::inferModel(
   request->setTrace(std::move(trace));
 #endif
   batcher->enqueue(std::move(request));
-  // SPDLOG_LOGGER_INFO(this->logger_, "request sent to batcher  " + worker->getBatcher()->getName());
 }
 
 void v2::ProteusHttpServer::load(

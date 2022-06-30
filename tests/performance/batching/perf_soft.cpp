@@ -140,7 +140,6 @@ class PerfSoftBatcherFixture
 // @pytest.mark.perf(group="batcher")
 TEST_P(PerfSoftBatcherFixture, BasicBatching) {
   const auto [batch_size, num_buffers, delay] = GetParam();
-  (void)num_buffers;  // suppress unused variable warning
   auto start_time = std::chrono::high_resolution_clock::now();
 
   auto enqueue =

@@ -130,7 +130,6 @@ add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
 add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ON)
 add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
 
-message(STATUS "  PROTEUS_ENABLE_MIGRAPHX: " ${PROTEUS_ENABLE_MIGRAPHX})
 message(STATUS "Derived Options:")
 if(${PROTEUS_ENABLE_REST} OR ${PROTEUS_ENABLE_METRICS})
     add_derived_option("ENABLE_HTTP" ON)

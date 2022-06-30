@@ -108,7 +108,7 @@ parser.add_argument(
     type=str,
     required=False,
     default=os.path.join(root, r"external/artifacts/migraphx/ILSVRC2012_img_val"),
-    help="The directory containing validation images.  See Mike Vermeulen or Brian Pickrell for image set",
+    help="The directory containing validation images, such as the Imagenet validation set if available",
 )
 parser.add_argument(
     "--groundtruth",
