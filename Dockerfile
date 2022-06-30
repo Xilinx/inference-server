@@ -555,9 +555,10 @@ RUN apt-get update \
         sphinxcontrib-confluencebuilder \
         sphinx-argparse \
         sphinx-issues \
-        # install linting tool
+        # install linting tools
         black \
         cpplint \
+        cmakelang  \
         # install opencv
         opencv-python-headless \
         # install benchmarking dependencies

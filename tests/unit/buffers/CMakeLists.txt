@@ -14,15 +14,25 @@
 
 include(GoogleTest)
 
-list(APPEND targets
-    vector_buffer
-)
+list(APPEND targets vector_buffer)
 
 foreach(target ${targets})
-    add_executable(test_${target} test_${target}.cpp)
-    target_include_directories(test_${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_include_directories(test_${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
-    target_link_libraries(test_${target} buffer data_types fake_observation ${target} gtest gtest_main)
+  add_executable(test_${target} test_${target}.cpp)
+  target_include_directories(
+    test_${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+  )
+  target_include_directories(
+    test_${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS}
+  )
+  target_link_libraries(
+    test_${target}
+    buffer
+    data_types
+    fake_observation
+    ${target}
+    gtest
+    gtest_main
+  )
 
-    gtest_discover_tests(test_${target})
+  gtest_discover_tests(test_${target})
 endforeach()
