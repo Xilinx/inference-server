@@ -30,20 +30,29 @@
 namespace proteus {
 
 void modelLoad(const std::string& model, RequestParameters* parameters) {
+  assert(parameters != nullptr);
   for (const auto& c : model) {
     assert(c == std::tolower(c));
   }
-  if (parameters == nullptr) {
-    RequestParameters params;
-    ModelRepository::modelLoad(model, &params);
-    Manager::getInstance().loadWorker(model, params);
-  } else {
-    ModelRepository::modelLoad(model, parameters);
-    Manager::getInstance().loadWorker(model, *parameters);
-  }
+
+  ModelRepository::modelLoad(model, parameters);
+  Manager::getInstance().loadWorker(model, *parameters);
 }
 
-void modelUnload(const std::string& model) {
+void modelUnload(const std::string& model) { workerUnload(model); }
+
+std::string workerLoad(const std::string& model,
+                       RequestParameters* parameters) {
+  assert(parameters != nullptr);
+  for (const auto& c : model) {
+    assert(c == std::tolower(c));
+  }
+
+  parameters->put("worker", model);
+  return Manager::getInstance().loadWorker(model, *parameters);
+}
+
+void workerUnload(const std::string& model) {
   for (const auto& c : model) {
     assert(c == std::tolower(c));
   }

@@ -374,10 +374,7 @@ void v2::ProteusHttpServer::workerLoad(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  std::string worker_lower = worker;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-  parameters->put("worker", worker_lower);
+  auto worker_lower = toLower(worker);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", worker_lower);
@@ -387,22 +384,17 @@ void v2::ProteusHttpServer::workerLoad(
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
-  std::string endpoint;
+  HttpResponsePtr resp;
   try {
-    endpoint = Manager::getInstance().loadWorker(worker_lower, *parameters);
-  } catch (const std::exception &e) {
+    auto endpoint = ::proteus::workerLoad(worker_lower, parameters.get());
+    resp = HttpResponse::newHttpResponse();
+    resp->setBody(endpoint);
+  } catch (const runtime_error &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading worker " + worker_lower,
-                                  HttpStatusCode::k400BadRequest);
-#ifdef PROTEUS_ENABLE_TRACING
-    auto context = trace->propagate();
-    propagate(resp.get(), context);
-#endif
-    callback(resp);
+    resp = errorHttpResponse("Error loading worker " + worker_lower,
+                             HttpStatusCode::k400BadRequest);
   }
 
-  auto resp = HttpResponse::newHttpResponse();
-  resp->setBody(endpoint);
 #ifdef PROTEUS_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
