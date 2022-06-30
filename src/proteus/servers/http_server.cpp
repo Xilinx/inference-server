@@ -38,10 +38,12 @@
 #include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/http_internal.hpp"      // for propagate, DrogonHttp
 #include "proteus/clients/native.hpp"             // for getHardware
+#include "proteus/core/api.hpp"                   // for modelLoad
 #include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/model_repository.hpp"      // for loadModel
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
+#include "proteus/helpers/string.hpp"             // for toLower
 #include "proteus/observation/logging.hpp"        // for Logger
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
@@ -291,9 +293,7 @@ void v2::ProteusHttpServer::load(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) {
-  std::string model_lower = model;
-  std::transform(model_lower.begin(), model_lower.end(), model_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
+  auto model_lower = toLower(model);
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
   trace->setAttribute("model", model_lower);
@@ -307,23 +307,15 @@ void v2::ProteusHttpServer::load(
   } else {
     parameters = std::make_unique<RequestParameters>();
   }
-
-  try {
-    ModelRepository::modelLoad(model_lower, parameters.get());
-  } catch (const std::exception &e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading model " + model_lower,
-                                  HttpStatusCode::k400BadRequest);
-  }
-
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
+
   try {
-    Manager::getInstance().loadWorker(model_lower, *parameters);
-  } catch (const std::exception &e) {
+    ::proteus::modelLoad(model_lower, parameters.get());
+  } catch (const runtime_error &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
-    auto resp = errorHttpResponse("Error loading worker " + model_lower,
+    auto resp = errorHttpResponse("Error loading model " + model_lower,
                                   HttpStatusCode::k400BadRequest);
 #ifdef PROTEUS_ENABLE_TRACING
     auto context = trace->propagate();
@@ -349,15 +341,13 @@ void v2::ProteusHttpServer::unload(
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
-  std::string name = model;
-  std::transform(name.begin(), name.end(), name.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
+  auto model_lower = toLower(model);
 
 #ifdef PROTEUS_ENABLE_TRACING
-  trace->setAttribute("model", name);
+  trace->setAttribute("model", model_lower);
 #endif
 
-  Manager::getInstance().unloadWorker(name);
+  ::proteus::modelUnload(model_lower);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef PROTEUS_ENABLE_TRACING
