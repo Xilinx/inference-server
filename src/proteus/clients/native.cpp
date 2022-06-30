@@ -134,18 +134,22 @@ bool NativeClient::serverReady() { return true; }
 void NativeClient::modelLoad(const std::string& model,
                              RequestParameters* parameters) {
   auto model_lower = toLower(model);
-  ::proteus::modelLoad(model_lower, parameters);
+  if (parameters == nullptr) {
+    RequestParameters params;
+    ::proteus::modelLoad(model_lower, &params);
+  } else {
+    ::proteus::modelLoad(model_lower, parameters);
+  }
 }
 
 std::string NativeClient::workerLoad(const std::string& model,
                                      RequestParameters* parameters) {
-  auto worker_lower = model;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
+  auto model_lower = toLower(model);
   if (parameters == nullptr) {
-    return Manager::getInstance().loadWorker(worker_lower, RequestParameters());
+    RequestParameters params;
+    return ::proteus::workerLoad(model_lower, &params);
   }
-  return Manager::getInstance().loadWorker(worker_lower, *parameters);
+  return ::proteus::workerLoad(model_lower, parameters);
 }
 
 InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
@@ -185,10 +189,8 @@ void NativeClient::modelUnload(const std::string& model) {
 }
 
 void NativeClient::workerUnload(const std::string& model) {
-  auto worker_lower = model;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-  Manager::getInstance().unloadWorker(worker_lower);
+  auto model_lower = toLower(model);
+  ::proteus::workerUnload(model);
 }
 
 bool NativeClient::modelReady(const std::string& model) {

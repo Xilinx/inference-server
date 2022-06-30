@@ -601,34 +601,25 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(WorkerLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
-  const std::string& worker = request_.name();
-  auto worker_lower = worker;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
+  auto* model = request_.mutable_name();
+  toLower(model);
 
-  parameters->put("worker", worker_lower);
-
-  std::string endpoint;
   try {
-    endpoint = Manager::getInstance().loadWorker(worker_lower, *parameters);
-  } catch (const std::exception& e) {
+    auto endpoint = ::proteus::workerLoad(*model, parameters.get());
+    reply_.set_endpoint(endpoint);
+    finish();
+  } catch (const runtime_error& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
   }
-
-  reply_.set_endpoint(endpoint);
-  finish();
 }
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(WorkerUnload, Unary) {
-  const auto& worker = request_.name();
-  auto worker_lower = worker;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-
-  Manager::getInstance().unloadWorker(worker_lower);
+  auto* worker = request_.mutable_name();
+  toLower(worker);
+  ::proteus::workerUnload(*worker);
   finish();
 }
 CALLDATA_IMPL_END
