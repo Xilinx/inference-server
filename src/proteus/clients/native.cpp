@@ -32,11 +32,13 @@
 #include "proteus/batching/batcher.hpp"         // for Batcher
 #include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/native_internal.hpp"  // for CppNativeApi
+#include "proteus/core/api.hpp"                 // for modelLoad
 #include "proteus/core/exceptions.hpp"          // for bad_status
 #include "proteus/core/manager.hpp"             // for Manager
 #include "proteus/core/model_repository.hpp"    // for ModelRepository
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
 #include "proteus/helpers/exec.hpp"             // for exec
+#include "proteus/helpers/string.hpp"           // for toLower
 #include "proteus/observation/logging.hpp"      // for initLogging
 #include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
 #include "proteus/observation/tracing.hpp"      // for startTrace, startTracer
@@ -131,17 +133,8 @@ bool NativeClient::serverReady() { return true; }
 
 void NativeClient::modelLoad(const std::string& model,
                              RequestParameters* parameters) {
-  auto worker_lower = model;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-  if (parameters == nullptr) {
-    RequestParameters params;
-    ModelRepository::modelLoad(worker_lower, &params);
-    Manager::getInstance().loadWorker(worker_lower, params);
-  } else {
-    ModelRepository::modelLoad(worker_lower, parameters);
-    Manager::getInstance().loadWorker(worker_lower, *parameters);
-  }
+  auto model_lower = toLower(model);
+  ::proteus::modelLoad(model_lower, parameters);
 }
 
 std::string NativeClient::workerLoad(const std::string& model,
@@ -187,10 +180,8 @@ InferenceResponse NativeClient::modelInfer(const std::string& model,
 }
 
 void NativeClient::modelUnload(const std::string& model) {
-  auto worker_lower = model;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-  Manager::getInstance().unloadWorker(worker_lower);
+  auto model_lower = toLower(model);
+  ::proteus::modelUnload(model);
 }
 
 void NativeClient::workerUnload(const std::string& model) {

@@ -36,20 +36,22 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "predict_api.grpc.pb.h"              // for GRPCInferenceServic...
-#include "predict_api.pb.h"                   // for InferTensorContents
-#include "proteus/batching/batcher.hpp"       // for Batcher
-#include "proteus/buffers/buffer.hpp"         // for Buffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/grpc_internal.hpp"  // for mapProtoToParameters
-#include "proteus/clients/native.hpp"         // for NativeClient
-#include "proteus/core/data_types.hpp"        // for DataType, mapStrToType
-#include "proteus/core/interface.hpp"         // for Interface, Interfac...
-#include "proteus/core/manager.hpp"           // for Manager
-#include "proteus/core/model_repository.hpp"
+#include "predict_api.grpc.pb.h"                  // for GRPCInferenceServic...
+#include "predict_api.pb.h"                       // for InferTensorContents
+#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/buffers/buffer.hpp"             // for Buffer
+#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
+#include "proteus/clients/native.hpp"             // for NativeClient
+#include "proteus/core/api.hpp"                   // for modelLoad
+#include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
+#include "proteus/core/interface.hpp"             // for Interface, Interfac...
+#include "proteus/core/manager.hpp"               // for Manager
+#include "proteus/core/model_repository.hpp"      // for ModelRepository
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
+#include "proteus/helpers/string.hpp"             // for toLower
 #include "proteus/observation/logging.hpp"        // for Logger
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
 
@@ -574,17 +576,11 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
-  const std::string& model = request_.name();
-  auto model_lower = model;
-  std::transform(model_lower.begin(), model_lower.end(), model_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-
-  ModelRepository::modelLoad(model_lower, parameters.get());
-
-  std::string endpoint;
+  auto* model = request_.mutable_name();
+  toLower(model);
   try {
-    endpoint = Manager::getInstance().loadWorker(model_lower, *parameters);
-  } catch (const std::exception& e) {
+    ::proteus::modelLoad(*model, parameters.get());
+  } catch (const runtime_error& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
@@ -595,12 +591,9 @@ CALLDATA_IMPL(ModelLoad, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelUnload, Unary) {
-  const auto& name = request_.name();
-  auto worker_lower = name;
-  std::transform(worker_lower.begin(), worker_lower.end(), worker_lower.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-
-  Manager::getInstance().unloadWorker(worker_lower);
+  auto* model = request_.mutable_name();
+  toLower(model);
+  ::proteus::modelUnload(*model);
   finish();
 }
 CALLDATA_IMPL_END

@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets predict_api manager worker_info data_types interface
-                    model_repository
+list(
+  APPEND targets
+         predict_api
+         manager
+         worker_info
+         data_types
+         interface
+         model_repository
+         api
 )
 
 foreach(target ${targets})
