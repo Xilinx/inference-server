@@ -103,7 +103,7 @@ def run_tty_command(command: str, dry_run: bool):
     elif os.WIFSTOPPED(status):
         exit_code = -os.WSTOPSIG(status)
     else:
-        raise Exception("Unknown exception")
+        raise RuntimeError("Unknown exception")
 
     if exit_code != 0:
         sys.exit(exit_code)
@@ -799,18 +799,22 @@ class Get:
             ],
         }
         if args.tfzendnn:
-            files.update({
-                tensorflow_models: [
-                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
-                ],
-            })
+            files.update(
+                {
+                    tensorflow_models: [
+                        "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
+                    ],
+                }
+            )
 
         if args.ptzendnn:
-            files.update({
-                pytorch_models:[
-                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
-                ]
-            })
+            files.update(
+                {
+                    pytorch_models: [
+                        "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
+                    ]
+                }
+            )
 
         for location, urls in files.items():
             for url in urls:
@@ -837,12 +841,22 @@ class Get:
                         with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
                         if args.tfzendnn or args.ptzendnn:
-                            modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
+                            modelpath = str(
+                                tmp_dir / filename.split(".zip")[0] / "float/"
+                            )
                             for filename in os.listdir(modelpath):
-                                modelname = filename if filename.endswith('pb') or filename.endswith('pth') else None
-                            if not os.path.exists(location): os.makedirs(location)
-                            shutil.move(os.path.join(modelpath, modelname),
-                                        os.path.join(location, modelname))
+                                modelname = (
+                                    filename
+                                    if filename.endswith("pb")
+                                    or filename.endswith("pth")
+                                    else None
+                                )
+                            if not os.path.exists(location):
+                                os.makedirs(location)
+                            shutil.move(
+                                os.path.join(modelpath, modelname),
+                                os.path.join(location, modelname),
+                            )
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)

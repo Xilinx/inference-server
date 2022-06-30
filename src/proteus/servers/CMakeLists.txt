@@ -15,39 +15,35 @@
 list(APPEND targets)
 
 if(${PROTEUS_ENABLE_REST})
-    set(targets ${targets} http_server websocket_server)
+  set(targets ${targets} http_server websocket_server)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
-    set(targets ${targets} grpc_server)
+  set(targets ${targets} grpc_server)
 endif()
 
 foreach(target ${targets})
-    add_library(${target} OBJECT ${target}.cpp)
-    target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
-    enable_ipo_on_target(${target})
+  add_library(${target} OBJECT ${target}.cpp)
+  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  enable_ipo_on_target(${target})
 
-    list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
+  list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
 if(${PROTEUS_ENABLE_REST})
-    target_link_libraries(http_server INTERFACE
-        clients core compression observation
-        drogon trantor jsoncpp
-    )
-    target_link_libraries(websocket_server INTERFACE observation drogon trantor)
+  target_link_libraries(http_server INTERFACE clients drogon trantor jsoncpp)
+  target_link_libraries(websocket_server INTERFACE drogon trantor)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
-    target_include_directories(grpc_server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
-    target_link_libraries(grpc_server INTERFACE lib_grpc)
-    add_dependencies(grpc_server lib_grpc)
+  target_include_directories(
+    grpc_server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
+  )
+  target_link_libraries(grpc_server INTERFACE lib_grpc)
+  add_dependencies(grpc_server lib_grpc)
 endif()
 
-add_library(servers INTERFACE)
-target_link_libraries(servers INTERFACE
-    ${SERVER_OBJS}
-    ${targets}
-)
+add_library(servers STATIC ${SERVER_OBJS})
+target_link_libraries(servers INTERFACE ${targets})
 
 set(SERVER_OBJS ${SERVER_OBJS} PARENT_SCOPE)

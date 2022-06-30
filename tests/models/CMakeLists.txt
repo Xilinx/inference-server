@@ -15,19 +15,22 @@
 list(APPEND targets)
 
 if(${PROTEUS_ENABLE_TFZENDNN})
-    list(APPEND targets mnist)
+  list(APPEND targets mnist)
 endif()
 
 foreach(target ${targets})
-    add_executable(test_${target} test_${target}.cpp)
-    target_link_libraries(test_${target} PRIVATE proteus Threads::Threads gtest gtest_main)
-    target_include_directories(test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
+  add_executable(test_${target} test_${target}.cpp)
+  target_link_libraries(
+    test_${target} PRIVATE proteus Threads::Threads gtest gtest_main
+  )
+  target_include_directories(
+    test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS}
+                           ${PROTEUS_TEST_INCLUDE_DIRS}
+  )
 
-    gtest_discover_tests(test_${target})
+  gtest_discover_tests(test_${target})
 endforeach()
 
 if(${PROTEUS_ENABLE_TFZENDNN})
-    target_link_libraries(test_mnist PRIVATE
-        opencv_core opencv_imgcodecs
-    )
+  target_link_libraries(test_mnist PRIVATE opencv_core opencv_imgcodecs)
 endif()

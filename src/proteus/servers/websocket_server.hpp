@@ -72,7 +72,8 @@ class DrogonWs : public Interface {
  * this is primarily used to make inferences to video streaming workers.
  *
  */
-class WebsocketServer : public drogon::WebSocketController<WebsocketServer> {
+class WebsocketServer
+  : public drogon::WebSocketController<WebsocketServer, false> {
  public:
   WebsocketServer();  ///< constructor
 

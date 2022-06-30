@@ -13,11 +13,13 @@
 # limitations under the License.
 
 if(${PROTEUS_ENABLE_PYTHON_BINDINGS})
-    find_package(Python COMPONENTS Interpreter Development)
-    find_package(pybind11 CONFIG)
-    if(${pybind11_FOUND} AND ${Python_FOUND})
-        add_subdirectory(python)
-    else()
-        message(STATUS "Pybind11 or Python3 not found, skipping Python binding generation")
-    endif()
+  find_package(Python COMPONENTS Interpreter Development)
+  find_package(pybind11 CONFIG)
+  if(${pybind11_FOUND} AND ${Python_FOUND})
+    add_subdirectory(python)
+  else()
+    message(
+      STATUS "Pybind11 or Python3 not found, skipping Python binding generation"
+    )
+  endif()
 endif()

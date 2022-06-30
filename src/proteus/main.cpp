@@ -40,8 +40,7 @@ namespace fs = std::filesystem;
  * @param signum Integer ID for the caught interrupt
  */
 void signal_callback_handler(int signum) {
-  std::cout << "Caught interrupt " << signum << ". Proteus is ending..."
-            << std::endl;
+  std::cout << "Caught interrupt " << signum << ". Proteus is ending...\n";
 #ifdef PROTEUS_ENABLE_HTTP
   proteus::http::stop();
 #endif
@@ -90,11 +89,11 @@ int main(int argc, char* argv[]) {
     auto result = options.parse(argc, argv);
 
     if (result.count("help") != 0U) {
-      std::cout << options.help({""}) << std::endl;
+      std::cout << options.help({""}) << "\n";
       exit(0);
     }
   } catch (const cxxopts::OptionException& e) {
-    std::cout << "Error parsing options: " << e.what() << std::endl;
+    std::cout << "Error parsing options: " << e.what() << "\n";
     exit(1);
   }
 
@@ -132,7 +131,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef PROTEUS_ENABLE_HTTP
-  std::cout << "HTTP server starting at port " << http_port << "\n";
+  std::cout << "HTTP server starting at port " << http_port << std::endl;
   proteus::http::start(http_port);
 #else
   while (1) {

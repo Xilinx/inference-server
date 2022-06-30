@@ -15,6 +15,7 @@
 ---
 Checks: >
   *,
+  -altera-*,
   -cppcoreguidelines-non-private-member-variables-in-classes,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-type-reinterpret-cast,
@@ -23,11 +24,15 @@ Checks: >
   -hicpp-no-array-decay,
   -hicpp-signed-bitwise,
   -llvm-header-guard,
+  -llvmlibc-*,
   -misc-non-private-member-variables-in-classes,
   -misc-unused-parameters,
   -modernize-use-trailing-return-type
 #
 # Disabled checks:
+#
+# altera-*
+#   These guidelines are particular to altera and unnecessary here
 #
 # cppcoreguidelines-non-private-member-variables-in-classes
 #   We allow protected member variables in virtual classes.
@@ -52,6 +57,9 @@ Checks: >
 #
 # llvm-header-guard
 #   Doesn't seem to be satisfied easily
+#
+# llvmlibc-*
+#   These guidelines are particular to llvm-libc and unnecessary here
 #
 # misc-non-private-member-variables-in-classes
 #   Alias for cppcoreguidelines-non-private-member-variables-in-classes

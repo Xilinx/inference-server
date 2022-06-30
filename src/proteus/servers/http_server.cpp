@@ -45,6 +45,7 @@
 #include "proteus/observation/logging.hpp"        // for Logger
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
+#include "proteus/servers/websocket_server.hpp"   // for WebsocketServer
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;
@@ -55,9 +56,11 @@ namespace proteus::http {
 
 void start(int port) {
   auto controller = std::make_shared<v2::ProteusHttpServer>();
+  auto ws_controller = std::make_shared<WebsocketServer>();
 
   auto &app = drogon::app();
   app.registerController(controller);
+  app.registerController(ws_controller);
 #ifdef PROTEUS_ENABLE_LOGGING
   auto dir = getLogDirectory();
   app.setLogLevel(trantor::Logger::kWarn).setLogPath(dir);
