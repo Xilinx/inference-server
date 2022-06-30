@@ -28,10 +28,7 @@ setuptools.setup(
     version=version,
     license="Apache 2.0",
     packages=setuptools.find_packages("src"),
-    install_requires=[
-        "numpy",
-        "opencv-python-headless",
-    ],
+    install_requires=["numpy", "opencv-python-headless"],
     python_requires=">=3.6",
     package_dir={"": "src"},
     package_data={

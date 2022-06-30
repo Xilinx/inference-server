@@ -91,10 +91,7 @@ class TestPtZendnn:
         images = []
         for _ in range(batch):
             images.append(
-                preprocess_pt(
-                    image_path,
-                    input_size=preprocessing["input_size"],
-                )
+                preprocess_pt(image_path, input_size=preprocessing["input_size"])
             )
         request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
@@ -114,10 +111,7 @@ class TestPtZendnn:
         images = []
         for _ in range(batch):
             images.append(
-                preprocess_pt(
-                    image_path,
-                    input_size=preprocessing["input_size"],
-                )
+                preprocess_pt(image_path, input_size=preprocessing["input_size"])
             )
         request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)

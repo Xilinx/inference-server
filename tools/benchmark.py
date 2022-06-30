@@ -494,11 +494,7 @@ def parse_wrk_output(output: str) -> dict:
     requests = raw_stats[1].split(",")
     summaries = raw_stats[2].split(",")
 
-    stats = {
-        "latencies": {},
-        "requests": {},
-        "summaries": {},
-    }
+    stats = {"latencies": {}, "requests": {}, "summaries": {}}
 
     metrics = ["min", "max", "mean", "stdev"]
     metrics_summary = ["duration", "requests", "bytes"]
@@ -612,11 +608,7 @@ def make_wrk_benchmarks(raw_stats, benchmark, wrk_config, load):
 
 
 def combine_wrk_stats(samples):
-    stats = {
-        "latencies": {},
-        "requests": {},
-        "summaries": {},
-    }
+    stats = {"latencies": {}, "requests": {}, "summaries": {}}
 
     stats["latencies"]["min"] = min([x["latencies"]["min"] for x in samples])
     stats["latencies"]["max"] = max([x["latencies"]["max"] for x in samples])
