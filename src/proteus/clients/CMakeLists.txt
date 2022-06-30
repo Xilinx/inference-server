@@ -12,48 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND TARGETS
-    native
-    native_internal
-)
+list(APPEND targets native native_internal)
 
 if(${PROTEUS_ENABLE_HTTP})
-    set(TARGETS ${TARGETS} http http_internal websocket)
+  set(targets ${targets} http http_internal websocket)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
-    set(TARGETS ${TARGETS} grpc grpc_internal)
+  set(targets ${targets} grpc grpc_internal)
 endif()
 
-foreach(target ${TARGETS})
-    add_library(${target} OBJECT ${target}.cpp)
-    target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
-    enable_ipo_on_target(${target})
+foreach(target ${targets})
+  add_library(${target} OBJECT ${target}.cpp)
+  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  enable_ipo_on_target(${target})
 
-    list(APPEND CLIENT_OBJS $<TARGET_OBJECTS:${target}>)
+  list(APPEND CLIENT_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
-target_link_libraries(native INTERFACE exec observation)
+target_link_libraries(native INTERFACE batching)
 if(${PROTEUS_ENABLE_AKS})
-    target_link_libraries(native INTERFACE aks)
+  target_link_libraries(native INTERFACE aks)
 endif()
 
 if(${PROTEUS_ENABLE_HTTP})
-    target_link_libraries(http INTERFACE drogon trantor Threads::Threads)
-    target_link_libraries(http_internal INTERFACE drogon)
+  target_link_libraries(http_internal INTERFACE helpers)
+  target_link_libraries(websocket INTERFACE drogon trantor Threads::Threads)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
-    target_include_directories(grpc PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
-    target_link_libraries(grpc INTERFACE lib_grpc)
-    target_include_directories(grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>)
-    target_link_libraries(grpc_internal INTERFACE lib_grpc)
+  target_include_directories(
+    grpc PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
+  )
+  target_include_directories(
+    grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
+  )
 endif()
 
-add_library(clients INTERFACE)
-target_link_libraries(clients INTERFACE
-    ${CLIENT_OBJS}
-    ${TARGETS}
-)
+add_library(clients STATIC ${CLIENT_OBJS})
+target_link_libraries(clients INTERFACE ${targets})
 
 set(CLIENT_OBJS ${CLIENT_OBJS} PARENT_SCOPE)

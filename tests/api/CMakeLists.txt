@@ -12,23 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets
-    test_model_infer
-    test_model_list
-    test_model_ready
-    test_server_live
-    test_server_ready
+list(APPEND targets test_model_infer test_model_list test_model_ready
+                    test_server_live test_server_ready
 )
 
 if(${PROTEUS_ENABLE_TFZENDNN})
-    list(APPEND targets test_model_load)
+  list(APPEND targets test_model_load)
 endif()
 
 foreach(target ${targets})
-    add_executable(${target} ${target}.cpp)
+  add_executable(${target} ${target}.cpp)
 
-    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS})
-    target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
+  target_include_directories(
+    ${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS}
+                      ${PROTEUS_TEST_INCLUDE_DIRS}
+  )
+  target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
 
-    gtest_discover_tests(${target})
+  gtest_discover_tests(${target})
 endforeach()

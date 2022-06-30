@@ -12,23 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND TARGETS
-  base64
-  compression
-  parse_env
-  exec
-)
+list(APPEND targets base64 compression parse_env exec)
 
-foreach(target ${TARGETS})
-  add_library(${target} STATIC ${target}.cpp)
+foreach(target ${targets})
+  add_library(${target} OBJECT ${target}.cpp)
   target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
+
+  list(APPEND HELPER_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
 target_link_libraries(base64 INTERFACE b64)
 target_link_libraries(compression INTERFACE z)
 
-add_library(helpers INTERFACE)
-target_link_libraries(helpers INTERFACE
-  ${TARGETS}
-)
+add_library(helpers STATIC ${HELPER_OBJS})
+target_link_libraries(helpers INTERFACE ${targets})
+
+set(HELPER_OBJS ${HELPER_OBJS} PARENT_SCOPE)

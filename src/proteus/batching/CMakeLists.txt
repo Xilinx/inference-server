@@ -12,33 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+list(APPEND files hard soft)
+list(APPEND targets)
+
 add_library(batcher OBJECT batcher.cpp)
 target_include_directories(batcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_libraries(batcher INTERFACE core observation Threads::Threads)
 enable_ipo_on_target(batcher)
+set(BATCHING_OBJS $<TARGET_OBJECTS:batcher>)
 
-add_library(hardBatcher OBJECT hard.cpp)
-target_include_directories(hardBatcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_libraries(hardBatcher INTERFACE batcher core observation)
-enable_ipo_on_target(hardBatcher)
+foreach(file ${files})
+  set(target ${file}Batcher)
+  add_library(${target} OBJECT ${file}.cpp)
+  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  enable_ipo_on_target(${target})
 
-add_library(softBatcher OBJECT soft.cpp)
-target_include_directories(softBatcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_libraries(softBatcher INTERFACE batcher core observation)
-enable_ipo_on_target(softBatcher)
+  list(APPEND BATCHING_OBJS $<TARGET_OBJECTS:${target}>)
+  list(APPEND targets ${target})
+endforeach()
 
-set(BATCHING_OBJS
-  $<TARGET_OBJECTS:batcher>
-  $<TARGET_OBJECTS:hardBatcher>
-  $<TARGET_OBJECTS:softBatcher>
-)
-
-add_library(batching INTERFACE)
-target_link_libraries(batching INTERFACE
-  ${BATCHING_OBJS}
-  batcher
-  hardBatcher
-  softBatcher
-)
+add_library(batching STATIC ${BATCHING_OBJS})
+target_link_libraries(batching INTERFACE batcher ${targets})
 
 set(BATCHING_OBJS ${BATCHING_OBJS} PARENT_SCOPE)
