@@ -213,6 +213,9 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
         // Load the onnx file
         // Using parse_onnx() instead of load() because there's a bug at the
         // time of writing
+       PROTEUS_LOG_INFO(
+                  logger, std::string("migraphx worker loading ONNX model file ") +
+                  onnx_path.c_str());
         std::cout << "Acquiring model file " << onnx_path.c_str() << std::endl;
         this->prog_ = migraphx::parse_onnx(onnx_path.c_str());
         std::cout << "Finished parsing ONNX model." << std::endl;
@@ -298,13 +301,11 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
 
     // Compile step needs to annotate with batch size when saving compiled model
     // (a new reqt.) migraphx should be able to handle smaller batch, too.
-    this->batch_size_ =
-      64;  // should match the migraphx batch size, fetched from the program.
-           // current workaround: first dimension of input tensor is batch size.
+    this->batch_size_ = lenth[0]; 
 
     // These values are set in the onnx model we're using.
-    image_width_ = lenth[2], image_height_ = lenth[3],
     image_channels_ = lenth[1];
+    image_width_ = lenth[2], image_height_ = lenth[3];
     // Fetch the expected output size (num of categories) from the parsed model.
     // For an output of 1000 label values, output_lengths should be a vector of
     // {1, 1000}
