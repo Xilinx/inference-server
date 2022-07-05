@@ -27,10 +27,10 @@
 #include <initializer_list>  // for initializer_list
 #include <map>               // for map, operator==, map<>::...
 #include <memory>            // for shared_ptr, allocator
-#include <set>               // for set
 #include <sstream>           // for operator<<, ostream, bas...
 #include <string>            // for string, operator<<, char...
 #include <string_view>       // for string_view
+#include <unordered_set>     // for unordered_set
 #include <utility>           // for move
 #include <variant>           // for operator!=, operator<
 #include <vector>            // for vector
@@ -152,7 +152,7 @@ using RequestParametersPtr = std::shared_ptr<RequestParameters>;
 struct ServerMetadata {
   std::string name;
   std::string version;
-  std::set<std::string, std::less<>> extensions;
+  std::unordered_set<std::string> extensions;
 };
 
 /**

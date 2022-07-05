@@ -23,10 +23,10 @@
 #include <cstdlib>        // for getenv
 #include <future>         // for promise
 #include <memory>         // for unique_ptr, make_unique
-#include <set>            // for set
 #include <stdexcept>      // for invalid_argument
 #include <string>         // for string, basic_string
 #include <unordered_map>  // for unordered_map, operat...
+#include <unordered_set>  // for unordered_set
 #include <utility>        // for move, pair, make_pair
 
 #include "proteus/batching/batcher.hpp"         // for Batcher
@@ -111,22 +111,7 @@ void terminate() {
 }
 
 ServerMetadata NativeClient::serverMetadata() {
-  std::set<std::string, std::less<>> extensions;
-  ServerMetadata metadata{"proteus", kProteusVersion, extensions};
-
-#ifdef PROTEUS_ENABLE_AKS
-  metadata.extensions.emplace("aks");
-#endif
-#ifdef PROTEUS_ENABLE_VITIS
-  metadata.extensions.emplace("vitis");
-#endif
-#ifdef PROTEUS_ENABLE_TFZENDNN
-  metadata.extensions.emplace("tfzendnn");
-#endif
-#ifdef PROTEUS_ENABLE_PTZENDNN
-  metadata.extensions.insert("ptzendnn");
-#endif
-  return metadata;
+  return ::proteus::serverMetadata();
 }
 bool NativeClient::serverLive() { return true; }
 bool NativeClient::serverReady() { return true; }
@@ -157,10 +142,6 @@ InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
-  auto* worker = proteus::Manager::getInstance().getWorker(workerName);
-  if (worker == nullptr) {
-    throw invalid_argument("Worker " + workerName + " not found");
-  }
 
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
@@ -172,8 +153,8 @@ InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
   trace->endSpan();
   api->setTrace(std::move(trace));
 #endif
-  worker->getBatcher()->enqueue(std::move(api));
-  // this->cv_.notify_one();
+  ::proteus::modelInfer(workerName, std::move(api));
+
   return future;
 }
 

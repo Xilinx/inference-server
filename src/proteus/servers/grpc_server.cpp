@@ -552,8 +552,7 @@ CALLDATA_IMPL(ModelReady, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ServerMetadata, Unary) {
-  NativeClient client;
-  auto metadata = client.serverMetadata();
+  auto metadata = serverMetadata();
   reply_.set_name(metadata.name);
   reply_.set_version(metadata.version);
   for (const auto& extension : metadata.extensions) {
@@ -632,25 +631,18 @@ void CallDataModelInfer::handleRequest() {
   trace->startSpan("request_handler");
 #endif
 
-  WorkerInfo* worker = nullptr;
-  worker = Manager::getInstance().getWorker(model);
-  if (worker == nullptr) {
-    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
-    finish(
-      ::grpc::Status(StatusCode::NOT_FOUND, "Worker " + model + " not found"));
+  try {
+    auto request = std::make_unique<GrpcApiUnary>(this);
+#ifdef PROTEUS_ENABLE_TRACING
+    trace->endSpan();
+    request->setTrace(std::move(trace));
+#endif
+    ::proteus::modelInfer(model, std::move(request));
+  } catch (const invalid_argument& e) {
+    PROTEUS_LOG_INFO(logger_, e.what());
+    finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
   }
-
-  auto request = std::make_unique<GrpcApiUnary>(this);
-  // #ifdef PROTEUS_ENABLE_METRICS
-  //   request->set_time(now);
-  // #endif
-  auto* batcher = worker->getBatcher();
-#ifdef PROTEUS_ENABLE_TRACING
-  trace->endSpan();
-  request->setTrace(std::move(trace));
-#endif
-  batcher->enqueue(std::move(request));
 }
 
 class GrpcServer final {

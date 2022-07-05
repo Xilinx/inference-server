@@ -159,8 +159,7 @@ void v2::ProteusHttpServer::getServerMetadata(
 #endif
   (void)req;  // suppress unused variable warning
 
-  NativeClient client;
-  auto metadata = client.serverMetadata();
+  auto metadata = serverMetadata();
 
   Json::Value ret;
   ret["name"] = metadata.name;
@@ -252,23 +251,16 @@ void v2::ProteusHttpServer::inferModel(
   trace->startSpan("request_handler");
 #endif
 
-  WorkerInfo *worker = nullptr;
-  worker = Manager::getInstance().getWorker(model);
-  if (worker == nullptr) {
-    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
-    auto resp = errorHttpResponse("Worker " + model + " not found",
-                                  HttpStatusCode::k400BadRequest);
-#ifdef PROTEUS_ENABLE_TRACING
-    auto context = trace->propagate();
-    propagate(resp.get(), context);
-#endif
-    callback(resp);
-    return;
-  }
-
-  std::unique_ptr<DrogonHttp> request;
   try {
-    request = std::make_unique<DrogonHttp>(req, std::move(callback));
+    auto request = std::make_unique<DrogonHttp>(req, std::move(callback));
+#ifdef PROTEUS_ENABLE_METRICS
+    request->set_time(now);
+#endif
+#ifdef PROTEUS_ENABLE_TRACING
+    trace->endSpan();
+    request->setTrace(std::move(trace));
+#endif
+    ::proteus::modelInfer(model, std::move(request));
   } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -278,15 +270,6 @@ void v2::ProteusHttpServer::inferModel(
 #endif
     callback(resp);
   }
-#ifdef PROTEUS_ENABLE_METRICS
-  request->set_time(now);
-#endif
-  auto *batcher = worker->getBatcher();
-#ifdef PROTEUS_ENABLE_TRACING
-  trace->endSpan();
-  request->setTrace(std::move(trace));
-#endif
-  batcher->enqueue(std::move(request));
 }
 
 void v2::ProteusHttpServer::load(
@@ -406,35 +389,19 @@ void v2::ProteusHttpServer::workerUnload(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) {
-  PROTEUS_LOG_INFO(logger_, "Received unload request");
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
-  //   auto json = req->getJsonObject();
-  //   std::string name;
-  //   if (json->isMember("model_name")) {
-  //     name = json->get("model_name", "").asString();
-  //   } else {
-  //     auto resp = errorHttpResponse("No model name specifed in unload
-  //     request",
-  //                                   HttpStatusCode::k400BadRequest);
-  // #ifdef PROTEUS_ENABLE_TRACING
-  //     auto context = trace->propagate();
-  //     propagate(resp.get(), context);
-  // #endif
-  //     callback(resp);
-  //     return;
-  //   }
-  std::string name = worker;
-  std::transform(name.begin(), name.end(), name.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
+  auto worker_lower = toLower(worker);
+
+  PROTEUS_LOG_INFO(logger_, "Received unload request is for " + worker_lower);
 
 #ifdef PROTEUS_ENABLE_TRACING
-  trace->setAttribute("model", name);
+  trace->setAttribute("model", worker_lower);
 #endif
 
-  Manager::getInstance().unloadWorker(name);
+  ::proteus::workerUnload(worker_lower);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef PROTEUS_ENABLE_TRACING
