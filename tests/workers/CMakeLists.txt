@@ -16,10 +16,6 @@ list(APPEND targets
     echo
 )
 
-if(${PROTEUS_ENABLE_MIGRAPHX})
-    set(targets ${targets} migraphx)
-endif()
-
 if(${PROTEUS_ENABLE_VITIS})
     set(targets ${targets} xmodel)
 endif()

@@ -18,7 +18,7 @@ list(APPEND workers
     Echo
     InvertImage
     InvertVideo
-    Migraphx
+    # Migraphx
     # Fake
 )
 
@@ -32,6 +32,10 @@ endif()
 
 if(${PROTEUS_ENABLE_PTZENDNN})
     set(workers ${workers} PtZendnn)
+endif()
+
+if(${PROTEUS_ENABLE_MIGRAPHX})
+    set(workers ${workers} Migraphx)
 endif()
 
 foreach( worker ${workers})

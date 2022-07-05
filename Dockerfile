@@ -21,7 +21,6 @@ ARG UNAME=proteus-user
 
 ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
 ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-yes}
-ARG MIGRAPHX_PATH
 ARG ENABLE_TFZENDNN=${ENABLE_TFZENDNN:-no}
 ARG TFZENDNN_PATH
 ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
@@ -783,13 +782,16 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_final
-
+FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_zendnn
 
 # Install migraphx which supports GPU targets.  At the time of writing this,
-# it was necessary to build migraphx from source but it should be possible to install from repo
-# instead.
+# it was necessary to build migraphx from source because the release branch 
+# didn't contain needed headers but it should be possible to install from repo
+# instead soon.
 #
+FROM proteus_dev_zendnn as proteus_install_migraphx_no
+
+FROM proteus_dev_zendnn as proteus_install_migraphx_yes
 # Add rocm repository
 RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main > /etc/apt/sources.list.d/rocm.list'
 # Install dependencies for migraphx
@@ -838,7 +840,7 @@ RUN groupadd -g 109 render
 RUN  usermod -aG video $UNAME
  # user needs to be in render group in case the docker image is invoked from ubuntu 20.04 based host
 RUN  usermod -aG render $UNAME
-
+FROM proteus_install_migraphx_${ENABLE_MIGRAPHX} as proteus_dev_final
 
     ### end rocm install
 

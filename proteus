@@ -151,6 +151,7 @@ class WriteComposeFile:
         # migraphx devices
         devices.append ('/dev/kfd')
         devices.append ('/dev/dri')
+        # these should be added conditionally, only if found  Figure out what happens if not found?
         files = glob.glob("/dev/dri/render*")
         for file in files:
             devices.append(f"{file}:{file}")
@@ -642,9 +643,7 @@ class Dockerize:
             build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
         if args.migraphx_path:
-            print('migraphx path is ', {args.migraphx_path})
             build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
-            build_args += f" --build-arg MIGRAPHX_PATH={args.migraphx_path}"
 
         if args.tfzendnn_path:
             build_args += f" --build-arg ENABLE_TFZENDNN=yes"
