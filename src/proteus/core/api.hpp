@@ -20,17 +20,24 @@
 #ifndef GUARD_PROTEUS_CORE_API
 #define GUARD_PROTEUS_CORE_API
 
+#include <memory>
 #include <string>
 
 namespace proteus {
 
 class RequestParameters;
+class ServerMetadata;
+class Interface;
 
 void modelLoad(const std::string& model, RequestParameters* parameters);
 void modelUnload(const std::string& model);
 
 std::string workerLoad(const std::string& model, RequestParameters* parameters);
 void workerUnload(const std::string& model);
+
+ServerMetadata serverMetadata();
+
+void modelInfer(const std::string& model, std::unique_ptr<Interface> request);
 
 }  // namespace proteus
 

@@ -22,12 +22,34 @@
 #include <algorithm>
 #include <string>
 
+#include "proteus/batching/batcher.hpp"
+#include "proteus/core/interface.hpp"
 #include "proteus/core/manager.hpp"
 #include "proteus/core/model_repository.hpp"
 #include "proteus/core/predict_api.hpp"
 #include "proteus/core/worker_info.hpp"
+#include "proteus/version.hpp"  // for kProteusVersion
 
 namespace proteus {
+
+ServerMetadata serverMetadata() {
+  std::unordered_set<std::string> extensions;
+  ServerMetadata metadata{"proteus", kProteusVersion, extensions};
+
+#ifdef PROTEUS_ENABLE_AKS
+  metadata.extensions.emplace("aks");
+#endif
+#ifdef PROTEUS_ENABLE_VITIS
+  metadata.extensions.emplace("vitis");
+#endif
+#ifdef PROTEUS_ENABLE_TFZENDNN
+  metadata.extensions.emplace("tfzendnn");
+#endif
+#ifdef PROTEUS_ENABLE_PTZENDNN
+  metadata.extensions.emplace("ptzendnn");
+#endif
+  return metadata;
+}
 
 void modelLoad(const std::string& model, RequestParameters* parameters) {
   assert(parameters != nullptr);
@@ -57,6 +79,15 @@ void workerUnload(const std::string& model) {
     assert(c == std::tolower(c));
   }
   Manager::getInstance().unloadWorker(model);
+}
+
+void modelInfer(const std::string& model, std::unique_ptr<Interface> request) {
+  WorkerInfo* worker = Manager::getInstance().getWorker(model);
+  if (worker == nullptr) {
+    throw invalid_argument("Worker " + model + " not found");
+  }
+  auto* batcher = worker->getBatcher();
+  batcher->enqueue(std::move(request));
 }
 
 }  // namespace proteus
