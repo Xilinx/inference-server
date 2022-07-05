@@ -23,18 +23,18 @@
 #include <google/protobuf/stubs/common.h>        // for string
 #include <grpcpp/grpcpp.h>                       // for ClientContext, Creat...
 
-#include <cstddef>    // for byte, size_t
-#include <cstdint>    // for uint64_t, uint32_t
-#include <cstring>    // for memcpy
-#include <iostream>   // for operator<<, cout
-#include <map>        // for map
-#include <memory>     // for make_shared, reinter...
-#include <set>        // for set
-#include <stdexcept>  // for runtime_error
-#include <string>     // for string, operator+
-#include <utility>    // for move
-#include <variant>    // for visit
-#include <vector>     // for vector
+#include <cstddef>        // for byte, size_t
+#include <cstdint>        // for uint64_t, uint32_t
+#include <cstring>        // for memcpy
+#include <iostream>       // for operator<<, cout
+#include <map>            // for map
+#include <memory>         // for make_shared, reinter...
+#include <stdexcept>      // for runtime_error
+#include <string>         // for string, operator+
+#include <unordered_set>  // for unordered_set
+#include <utility>        // for move
+#include <variant>        // for visit
+#include <vector>         // for vector
 
 #include "predict_api.grpc.pb.h"             // for GRPCInferenceService...
 #include "predict_api.pb.h"                  // for InferTensorContents
@@ -82,7 +82,7 @@ ServerMetadata GrpcClient::serverMetadata() {
 
   if (status.ok()) {
     auto ext = reply.extensions();
-    std::set<std::string, std::less<>> extensions(ext.begin(), ext.end());
+    std::unordered_set<std::string> extensions(ext.begin(), ext.end());
     ServerMetadata metadata{reply.name(), reply.version(), extensions};
     return metadata;
   }
