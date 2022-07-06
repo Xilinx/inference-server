@@ -70,6 +70,8 @@ class NativeClient : public Client {
    */
   bool modelReady(const std::string& model) override;
 
+  ModelMetadata modelMetadata(const std::string& model) override;
+
   /**
    * @brief Load a worker
    *

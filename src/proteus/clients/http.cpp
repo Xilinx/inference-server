@@ -177,6 +177,20 @@ bool HttpClient::modelReady(const std::string& model) {
   return response->statusCode() == drogon::k200OK;
 }
 
+ModelMetadata HttpClient::modelMetadata(const std::string& model) {
+  auto* client = this->impl_->getClient();
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::Get);
+  auto path = "/v2/models/" + model;
+  req->setPath(path);
+  impl_->addHeaders(req);
+
+  auto [result, response] = client->sendRequest(req);
+  check_error(result);
+  auto resp = response->jsonObject();
+  return mapJsonToModelMetadata(resp.get());
+}
+
 void HttpClient::modelLoad(const std::string& model,
                            RequestParameters* parameters) {
   auto* client = this->impl_->getClient();

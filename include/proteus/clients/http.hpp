@@ -55,6 +55,7 @@ class HttpClient : public Client {
   bool serverLive() override;
   bool serverReady() override;
   bool modelReady(const std::string& model) override;
+  ModelMetadata modelMetadata(const std::string& model) override;
 
   void modelLoad(const std::string& model,
                  RequestParameters* parameters) override;

@@ -116,6 +116,7 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
 
 /// convert the metadata to a JSON representation compatible with the server
 Json::Value ModelMetadataToJson(const ModelMetadata &metadata);
+ModelMetadata mapJsonToModelMetadata(const Json::Value *json);
 
 }  // namespace proteus
 
