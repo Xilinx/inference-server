@@ -22,20 +22,25 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace proteus {
 
+class ModelMetadata;
 class RequestParameters;
 class ServerMetadata;
 class Interface;
 
 void modelLoad(const std::string& model, RequestParameters* parameters);
 void modelUnload(const std::string& model);
-
-std::string workerLoad(const std::string& model, RequestParameters* parameters);
-void workerUnload(const std::string& model);
+std::string workerLoad(const std::string& worker,
+                       RequestParameters* parameters);
+void workerUnload(const std::string& worker);
 
 ServerMetadata serverMetadata();
+std::vector<std::string> modelList();
+bool modelReady(const std::string& model);
+ModelMetadata modelMetadata(const std::string& model);
 
 void modelInfer(const std::string& model, std::unique_ptr<Interface> request);
 
