@@ -116,6 +116,10 @@ ServerMetadata NativeClient::serverMetadata() {
 bool NativeClient::serverLive() { return true; }
 bool NativeClient::serverReady() { return true; }
 
+ModelMetadata NativeClient::modelMetadata(const std::string& model) {
+  return ::proteus::modelMetadata(model);
+}
+
 void NativeClient::modelLoad(const std::string& model,
                              RequestParameters* parameters) {
   auto model_lower = toLower(model);

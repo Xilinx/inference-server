@@ -13,7 +13,7 @@
 # limitations under the License.
 
 list(APPEND targets test_model_infer test_model_list test_model_ready
-                    test_server_live test_server_ready
+                    test_server_live test_server_ready test_model_metadata
 )
 
 if(${PROTEUS_ENABLE_TFZENDNN})

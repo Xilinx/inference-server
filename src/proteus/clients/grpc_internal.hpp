@@ -32,6 +32,7 @@ class Map;
 namespace inference {
 class InferParameter;
 class ModelInferResponse;
+class ModelMetadataResponse;
 }  // namespace inference
 
 namespace proteus {
@@ -43,6 +44,9 @@ void mapProtoToParameters(
   RequestParameters& parameters);
 void mapResponsetoProto(InferenceResponse response,
                         inference::ModelInferResponse& reply);
+
+void mapModelMetadataToProto(const ModelMetadata& metadata,
+                             inference::ModelMetadataResponse& resp);
 
 }  // namespace proteus
 

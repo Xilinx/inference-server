@@ -179,6 +179,11 @@ bool WebSocketClient::modelReady(const std::string& model) {
   return client->modelReady(model);
 }
 
+ModelMetadata WebSocketClient::modelMetadata(const std::string& model) {
+  auto* client = this->impl_->getHttpClient();
+  return client->modelMetadata(model);
+}
+
 void WebSocketClient::modelLoad(const std::string& model,
                                 RequestParameters* parameters) {
   auto* client = this->impl_->getHttpClient();

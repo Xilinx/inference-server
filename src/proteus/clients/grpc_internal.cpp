@@ -208,4 +208,31 @@ void mapResponsetoProto(InferenceResponse response,
   }
 }
 
+void mapModelMetadataToProto(const ModelMetadata& metadata,
+                             inference::ModelMetadataResponse& resp) {
+  resp.set_name(metadata.getName());
+  resp.set_platform(metadata.getPlatform());
+
+  const auto& inputs = metadata.getInputs();
+  for (const auto& input : inputs) {
+    auto* tensor = resp.add_inputs();
+    tensor->set_name(input.getName());
+    tensor->set_datatype(input.getDataType().str());
+    const auto& shape = input.getShape();
+    for (const auto& i : shape) {
+      tensor->add_shape(i);
+    }
+  }
+  const auto& outputs = metadata.getOutputs();
+  for (const auto& output : outputs) {
+    auto* tensor = resp.add_outputs();
+    tensor->set_name(output.getName());
+    tensor->set_datatype(output.getDataType().str());
+    const auto& shape = output.getShape();
+    for (const auto& i : shape) {
+      tensor->add_shape(i);
+    }
+  }
+}
+
 }  // namespace proteus
