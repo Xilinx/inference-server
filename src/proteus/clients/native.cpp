@@ -176,14 +176,14 @@ void NativeClient::workerUnload(const std::string& model) {
 
 bool NativeClient::modelReady(const std::string& model) {
   try {
-    return Manager::getInstance().workerReady(model);
-  } catch (const runtime_error& e) {
+    return ::proteus::modelReady(model);
+  } catch (const invalid_argument&) {
     return false;
   }
 }
 
 std::vector<std::string> NativeClient::modelList() {
-  return Manager::getInstance().getWorkerEndpoints();
+  return ::proteus::modelList();
 }
 
 std::string getHardware() {

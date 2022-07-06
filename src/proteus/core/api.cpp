@@ -63,22 +63,22 @@ void modelLoad(const std::string& model, RequestParameters* parameters) {
 
 void modelUnload(const std::string& model) { workerUnload(model); }
 
-std::string workerLoad(const std::string& model,
+std::string workerLoad(const std::string& worker,
                        RequestParameters* parameters) {
   assert(parameters != nullptr);
-  for (const auto& c : model) {
+  for (const auto& c : worker) {
     assert(c == std::tolower(c));
   }
 
-  parameters->put("worker", model);
-  return Manager::getInstance().loadWorker(model, *parameters);
+  parameters->put("worker", worker);
+  return Manager::getInstance().loadWorker(worker, *parameters);
 }
 
-void workerUnload(const std::string& model) {
-  for (const auto& c : model) {
+void workerUnload(const std::string& worker) {
+  for (const auto& c : worker) {
     assert(c == std::tolower(c));
   }
-  Manager::getInstance().unloadWorker(model);
+  Manager::getInstance().unloadWorker(worker);
 }
 
 void modelInfer(const std::string& model, std::unique_ptr<Interface> request) {
@@ -88,6 +88,18 @@ void modelInfer(const std::string& model, std::unique_ptr<Interface> request) {
   }
   auto* batcher = worker->getBatcher();
   batcher->enqueue(std::move(request));
+}
+
+bool modelReady(const std::string& model) {
+  return Manager::getInstance().workerReady(model);
+}
+
+std::vector<std::string> modelList() {
+  return Manager::getInstance().getWorkerEndpoints();
+}
+
+ModelMetadata modelMetadata(const std::string& model){
+  return Manager::getInstance().getWorkerMetadata(model);
 }
 
 }  // namespace proteus

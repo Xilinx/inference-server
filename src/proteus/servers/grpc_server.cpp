@@ -46,7 +46,6 @@
 #include "proteus/core/api.hpp"                   // for modelLoad
 #include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
 #include "proteus/core/interface.hpp"             // for Interface, Interfac...
-#include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/model_repository.hpp"      // for ModelRepository
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
@@ -542,7 +541,7 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelReady, Unary) {
   const auto& model = request_.name();
   try {
-    reply_.set_ready(Manager::getInstance().workerReady(model));
+    reply_.set_ready(::proteus::modelReady(model));
     finish();
   } catch (const invalid_argument& e) {
     reply_.set_ready(false);
@@ -563,8 +562,7 @@ CALLDATA_IMPL(ServerMetadata, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelList, Unary) {
-  NativeClient client;
-  auto models = client.modelList();
+  auto models = ::proteus::modelList();
   for (const auto& model : models) {
     reply_.add_models(model);
   }
