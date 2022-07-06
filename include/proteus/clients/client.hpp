@@ -35,6 +35,7 @@ class Client {
   virtual bool serverLive() = 0;
   virtual bool serverReady() = 0;
   virtual bool modelReady(const std::string& model) = 0;
+  virtual ModelMetadata modelMetadata(const std::string& model) = 0;
 
   virtual void modelLoad(const std::string& model,
                          RequestParameters* parameters) = 0;

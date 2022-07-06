@@ -56,6 +56,7 @@
 
 namespace proteus {
 class CallDataModelInfer;
+class CallDataModelMetadata;
 class CallDataModelLoad;
 class CallDataWorkerLoad;
 class CallDataModelReady;
@@ -550,6 +551,18 @@ CALLDATA_IMPL(ModelReady, Unary) {
 }
 CALLDATA_IMPL_END
 
+CALLDATA_IMPL(ModelMetadata, Unary) {
+  const auto& model = request_.name();
+  try {
+    auto metadata = ::proteus::modelMetadata(model);
+    mapModelMetadataToProto(metadata, reply_);
+    finish();
+  } catch (const invalid_argument& e) {
+    finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+  }
+}
+CALLDATA_IMPL_END
+
 CALLDATA_IMPL(ServerMetadata, Unary) {
   auto metadata = serverMetadata();
   reply_.set_name(metadata.name);
@@ -706,6 +719,7 @@ class GrpcServer final {
     // Spawn a new CallData instance to serve new clients.
     new CallDataServerLive(&service_, my_cq.get());
     new CallDataServerMetadata(&service_, my_cq.get());
+    new CallDataModelMetadata(&service_, my_cq.get());
     new CallDataServerReady(&service_, my_cq.get());
     new CallDataModelList(&service_, my_cq.get());
     new CallDataModelReady(&service_, my_cq.get());

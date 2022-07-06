@@ -792,4 +792,30 @@ Json::Value ModelMetadataToJson(const ModelMetadata &metadata) {
   return ret;
 }
 
+ModelMetadata mapJsonToModelMetadata(const Json::Value *json) {
+  ModelMetadata metadata{json->get("name", "").asString(),
+                         json->get("platform", "").asString()};
+  for (const auto &input : json->get("inputs", Json::arrayValue)) {
+    std::vector<int> shape;
+    shape.reserve(input["shape"].size());
+    for (const auto &index : input["shape"]) {
+      shape.push_back(index.asInt());
+    }
+    metadata.addInputTensor(input["name"].asString(),
+                            DataType(input["datatype"].asString().c_str()),
+                            shape);
+  }
+  for (const auto &output : json->get("outputs", Json::arrayValue)) {
+    std::vector<int> shape;
+    shape.reserve(output["shape"].size());
+    for (const auto &index : output["shape"]) {
+      shape.push_back(index.asInt());
+    }
+    metadata.addOutputTensor(output["name"].asString(),
+                             DataType(output["datatype"].asString().c_str()),
+                             shape);
+  }
+  return metadata;
+}
+
 }  // namespace proteus

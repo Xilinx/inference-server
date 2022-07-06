@@ -139,6 +139,49 @@ bool GrpcClient::modelReady(const std::string& model) {
   return false;
 }
 
+ModelMetadata mapProtoToModelMetadata(
+  const inference::ModelMetadataResponse& resp) {
+  ModelMetadata metadata{resp.name(), resp.platform()};
+  const auto& inputs = resp.inputs();
+  for (const auto& input : inputs) {
+    std::vector<int> shape;
+    shape.reserve(input.shape_size());
+    for (const auto& index : input.shape()) {
+      shape.push_back(static_cast<int>(index));
+    }
+    metadata.addInputTensor(input.name(), DataType(input.datatype().c_str()),
+                            shape);
+  }
+  const auto& outputs = resp.outputs();
+  for (const auto& output : outputs) {
+    std::vector<int> shape;
+    shape.reserve(output.shape_size());
+    for (const auto& index : output.shape()) {
+      shape.push_back(static_cast<int>(index));
+    }
+    metadata.addInputTensor(output.name(), DataType(output.datatype().c_str()),
+                            shape);
+  }
+  return metadata;
+}
+
+ModelMetadata GrpcClient::modelMetadata(const std::string& model) {
+  inference::ModelMetadataRequest request;
+  inference::ModelMetadataResponse reply;
+
+  ClientContext context;
+
+  request.set_name(model);
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->ModelMetadata(&context, request, &reply);
+
+  if (status.ok()) {
+    return mapProtoToModelMetadata(reply);
+  }
+  throw bad_status(status.error_message());
+}
+
 std::vector<std::string> GrpcClient::modelList() {
   inference::ModelListRequest request;
   inference::ModelListResponse reply;
