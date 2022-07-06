@@ -787,7 +787,7 @@ FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_zendnn
 # Install migraphx which supports GPU targets.  At the time of writing this,
 # it was necessary to build migraphx from source because the release branch 
 # didn't contain needed headers but it should be possible to install from repo
-# instead soon.
+# some day.
 #
 FROM proteus_dev_zendnn as proteus_install_migraphx_no
 
@@ -798,9 +798,13 @@ RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0
 # ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
 #        for Release version, since it's set up differently than dev
 #
+# The following apt packages are also required to install rocm/MIGraphX but have already 
+# been installed by this Dockerfile:
+# python3-dev, build-essential, git, sudo, python3-pip 
+#
 # Install rbuild
 RUN apt-get update &&\
-    apt-get install -y bash rocm-dev libpython3.6-dev python3-dev python3-pip miopen-hip-dev \
+    apt-get install -y bash rocm-dev libpython3.6-dev miopen-hip-dev \
     rocblas-dev half aria2 libnuma-dev rocm-cmake \
     && ln -s /opt/rocm-* /opt/rocm \
     && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
@@ -818,8 +822,8 @@ RUN mkdir -p /migraphx \
 # onnx package for Python, used by migraphx example scripts.
 RUN pip3 install onnx
 
-# reset the compiler version, in case build-essential package overrode it
-    # link gcc-9 and g++-9 to gcc and g++
+# reset the compiler version, which gets overridden in the rbuild process
+# (link gcc-9 and g++-9 to gcc and g++)
 RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
         --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
         --slave /usr/bin/gcov gcov /usr/bin/gcov-9 
