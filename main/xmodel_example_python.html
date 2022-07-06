@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -382,13 +383,13 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="running-a-vitis-ai-xmodel-python">
-<span id="xmodel-example-python"></span><h1>Running a Vitis AI XModel (Python)<a class="headerlink" href="#running-a-vitis-ai-xmodel-python" title="Permalink to this headline">¶</a></h1>
+<span id="xmodel-example-python"></span><h1>Running a Vitis AI XModel (Python)<a class="headerlink" href="#running-a-vitis-ai-xmodel-python" title="Permalink to this heading">¶</a></h1>
 <p>This example walks you through the process to make an inference request to a custom XModel in Python.
 If you haven’t already, make sure to go through the <a class="reference internal" href="hello_world_python.html#hello-world-python"><span class="std std-ref">Hello World (Python)</span></a> example first!
 We gloss over some of the details covered in the previous one.
 The complete script used here is available: <code class="file docutils literal notranslate"><span class="pre">examples/python/custom_processing.py</span></code>.</p>
 <div class="section" id="user-variables">
-<h2>User variables<a class="headerlink" href="#user-variables" title="Permalink to this headline">¶</a></h2>
+<h2>User variables<a class="headerlink" href="#user-variables" title="Permalink to this heading">¶</a></h2>
 <p>Making an inference to an actual XModel that accepts an image requires some additional data from the user.
 These variables are pulled out into a separate block to highlight them.</p>
 <ul class="simple">
@@ -403,7 +404,7 @@ These variables are pulled out into a separate block to highlight them.</p>
 </div>
 </div>
 <div class="section" id="load-a-worker">
-<h2>Load a Worker<a class="headerlink" href="#load-a-worker" title="Permalink to this headline">¶</a></h2>
+<h2>Load a Worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
 <p>As in the previous example, we can start the server and set up our client object from <code class="xref py py-class docutils literal notranslate"><span class="pre">RestClient</span></code>.
 To make an inference request to a custom XModel, we use the <strong>Xmodel</strong> worker that we have to load first.
 Some workers accept load-time parameters to configure different options.
@@ -415,15 +416,12 @@ The parameter we add is to pass the path to the XModel that we want to use.</p>
 
 <span class="n">ready</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">while</span> <span class="ow">not</span> <span class="n">ready</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">ready</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelReady</span><span class="p">(</span><span class="n">worker_name</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">pass</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelReady</span><span class="p">(</span><span class="n">worker_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-images">
-<h2>Get Images<a class="headerlink" href="#get-images" title="Permalink to this headline">¶</a></h2>
+<h2>Get Images<a class="headerlink" href="#get-images" title="Permalink to this heading">¶</a></h2>
 <p>Now, we can prepare our request.
 In this example, we use one image and duplicate it <em>batch_size</em> times so we can create one whole batch.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
@@ -434,7 +432,7 @@ In this example, we use one image and duplicate it <em>batch_size</em> times so 
 </div>
 </div>
 <div class="section" id="inference">
-<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h2>
 <p>Using our images, we can construct a request to AMD Inference Server.
 The <code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest</span></code> class is a helper class that simplifies creating a request in the right format.
 It accepts an image or a list of images and an optional boolean parameter that indicates whether the request should store the images directly as a tensor of RGB values.
@@ -451,7 +449,7 @@ By default, images are saved as base64-encoded strings however the Xmodel worker
 <p>The data we receive from the response is a list of numbers.</p>
 </div>
 <div class="section" id="adding-pre-and-post-processing">
-<h2>Adding pre- and post-processing<a class="headerlink" href="#adding-pre-and-post-processing" title="Permalink to this headline">¶</a></h2>
+<h2>Adding pre- and post-processing<a class="headerlink" href="#adding-pre-and-post-processing" title="Permalink to this heading">¶</a></h2>
 <p>Depending on what model is run, you may need to add pre- and post-processing to the request for a useful inference.
 For this model, we do need to apply pre- and post-processing to get accurate classifications.
 To double-check our inference, we can check it against what we expect to receive.
@@ -509,7 +507,7 @@ The pre- and post-processing functions used in this example can be seen in the s
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

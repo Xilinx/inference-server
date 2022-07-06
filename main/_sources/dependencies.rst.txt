@@ -116,6 +116,7 @@ The following packages (and any dependencies) are installed from the Python Pack
 
     :pypipackages:`black`,latest,MIT,Formatting Python files\ :superscript:`d 0`
     :pypipackages:`breathe`,latest,BSD-3,Connect Doxygen to Sphinx for documentation\ :superscript:`d 0`
+    :pypipackages:`cmakelang`,latest,GPL-3,CMake linter and formatter\ :superscript:`d 0`
     :pypipackages:`cpplint`,latest,BSD-3,C++ linter\ :superscript:`d 0`
     :pypipackages:`fastcov`,latest,MIT,Reporting test coverage\ :superscript:`d 0`
     :pypipackages:`numpy`,latest,BSD-3,Scientific computing package for Python\ :superscript:`d 0`

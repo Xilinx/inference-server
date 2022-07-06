@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -381,7 +382,7 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="zendnn">
-<h1>ZenDNN<a class="headerlink" href="#zendnn" title="Permalink to this headline">¶</a></h1>
+<h1>ZenDNN<a class="headerlink" href="#zendnn" title="Permalink to this heading">¶</a></h1>
 <p>AMD Inference Server is integrated with
 <a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN</a> optimized libraries.
 Currently, the AMD Inference Server supports the ZenDNN optimized for
@@ -390,7 +391,7 @@ Check the <a class="reference internal" href="zendnn_examples.html#zendnn-exampl
 <p>For ZenDNN performance, please refer to TensorFlow + ZenDNN and
 PyTorch + ZenDNN User Guide available at the <a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN AMD Developer</a> site.</p>
 <div class="section" id="setup-and-build">
-<h2>Setup and Build<a class="headerlink" href="#setup-and-build" title="Permalink to this headline">¶</a></h2>
+<h2>Setup and Build<a class="headerlink" href="#setup-and-build" title="Permalink to this heading">¶</a></h2>
 <p>To use Inference Server enabled with TensorFlow/PyTorch+ZenDNN, you’ll need Git
 and Docker installed on your machine.</p>
 <ol class="arabic">
@@ -428,7 +429,7 @@ will be used for further setup.</p>
 </div>
 </li>
 </ol>
-<p>You can add the <code class="code docutils literal notranslate"><span class="pre">--no-vitis</span></code> flag to build the docker without Vitis AI components if needed.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">--no-vitis</span></code> flag is provided to build the Docker without Vitis components.</p>
 <p>This will build a docker image with all the dependencies required for
 the AMD Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
 image for further usage.</p>
@@ -436,7 +437,7 @@ image for further usage.</p>
 </ol>
 </div>
 <div class="section" id="get-objects-models-images">
-<h2>Get objects (models/images)<a class="headerlink" href="#get-objects-models-images" title="Permalink to this headline">¶</a></h2>
+<h2>Get objects (models/images)<a class="headerlink" href="#get-objects-models-images" title="Permalink to this heading">¶</a></h2>
 <p>Run the following command to get some <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">lfs</span></code> assets for examples/tests.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git lfs fetch --all
 <span class="gp">$ </span>git lfs pull
@@ -446,8 +447,7 @@ image for further usage.</p>
 <ul>
 <li><p>TensorFlow + ZenDNN</p>
 <blockquote>
-<div><p>Run the command below to download a ResNet50 tensorflow model from the
-<a class="reference external" href="https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/tf_resnetv1_50_imagenet_224_224_6.97G_2.5/model.yaml">Vitis AI model zoo</a></p>
+<div><p>Run the command below to download a ResNet50 TensorFlow model.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus get --tfzendnn
 </pre></div>
 </div>
@@ -456,8 +456,7 @@ image for further usage.</p>
 </li>
 <li><p>PyTorch + ZenDNN</p>
 <blockquote>
-<div><p>Run the command below to download a ResNet50 tensorflow model from
-<a class="reference external" href="https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/pt_resnet50_imagenet_224_224_8.2G_2.5/model.yaml">Vitis AI model zoo</a></p>
+<div><p>Run the command below to download a ResNet50 PyTorch model.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus get --ptzendnn
 </pre></div>
 </div>
@@ -467,7 +466,7 @@ image for further usage.</p>
 </ul>
 </div>
 <div class="section" id="set-up-docker-container">
-<h2>Set Up Docker Container<a class="headerlink" href="#set-up-docker-container" title="Permalink to this headline">¶</a></h2>
+<h2>Set Up Docker Container<a class="headerlink" href="#set-up-docker-container" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic">
 <li><p>Run the container</p>
 <p>By default, the stable dev docker image is built and to run the
@@ -516,7 +515,7 @@ For more info on TorchScript models, please visit <a class="reference external" 
 </ol>
 </div>
 <div class="section" id="run-tests">
-<h2>Run Tests<a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h2>
+<h2>Run Tests<a class="headerlink" href="#run-tests" title="Permalink to this heading">¶</a></h2>
 <p>To verify the working of TensorFlow+ZenDNN in the AMD Inference Server, run a sample test case. This test will load a model and run with a sample image and assert the output.</p>
 <ol class="arabic">
 <li><p>For TensorFlow + ZenDNN</p>
@@ -562,7 +561,7 @@ For more info on TorchScript models, please visit <a class="reference external" 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

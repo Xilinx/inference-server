@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -381,11 +382,11 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="rest-endpoints">
-<h1>REST Endpoints<a class="headerlink" href="#rest-endpoints" title="Permalink to this headline">¶</a></h1>
+<h1>REST Endpoints<a class="headerlink" href="#rest-endpoints" title="Permalink to this heading">¶</a></h1>
 <p>The REST endpoints are based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>.
 Additional endpoints are driven by community adoption.</p>
 <div class="section" id="health">
-<h2>Health<a class="headerlink" href="#health" title="Permalink to this headline">¶</a></h2>
+<h2>Health<a class="headerlink" href="#health" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>GET <code class="docutils literal notranslate"><span class="pre">v2/health/live</span></code>: Check if the server is live</p></li>
 <li><p>GET <code class="docutils literal notranslate"><span class="pre">v2/health/ready</span></code>: Check if the server is ready for inference requests</p></li>
@@ -393,7 +394,7 @@ Additional endpoints are driven by community adoption.</p>
 </ul>
 </div>
 <div class="section" id="metadata">
-<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>GET <code class="docutils literal notranslate"><span class="pre">v2</span></code>: Get AMD Inference Server’s metadata</p></li>
 <li><p>GET <code class="docutils literal notranslate"><span class="pre">v2/hardware</span></code>: Get a string describing the number and type of kernels that are available</p></li>
@@ -402,7 +403,7 @@ Additional endpoints are driven by community adoption.</p>
 </ul>
 </div>
 <div class="section" id="inference">
-<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/repository/models/{model}/load</span></code>: Load a model</p></li>
 <li><p>POST <code class="docutils literal notranslate"><span class="pre">v2/workers/{worker}/load</span></code>: Load a worker. The HTML body in the response contains the endpoint to use for subsequent requests</p></li>
@@ -412,7 +413,7 @@ Additional endpoints are driven by community adoption.</p>
 </ul>
 </div>
 <div class="section" id="observation">
-<h2>Observation<a class="headerlink" href="#observation" title="Permalink to this headline">¶</a></h2>
+<h2>Observation<a class="headerlink" href="#observation" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>GET <code class="docutils literal notranslate"><span class="pre">metrics</span></code>: Get Prometheus metrics</p></li>
 </ul>
@@ -448,7 +449,7 @@ Additional endpoints are driven by community adoption.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

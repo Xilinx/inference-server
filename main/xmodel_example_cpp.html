@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -392,14 +393,14 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="running-a-vitis-ai-xmodel-c">
-<h1>Running a Vitis AI XModel (C++)<a class="headerlink" href="#running-a-vitis-ai-xmodel-c" title="Permalink to this headline">¶</a></h1>
+<h1>Running a Vitis AI XModel (C++)<a class="headerlink" href="#running-a-vitis-ai-xmodel-c" title="Permalink to this heading">¶</a></h1>
 <p>This example walks you through the process to make an inference request to a custom XModel in C++ using two methods: the native C++ API and the gRPC API.
 This example is similar to the <a class="reference internal" href="xmodel_example_python.html#xmodel-example-python"><span class="std std-ref">Running a Vitis AI XModel (Python)</span></a> one but it uses C++ to create a new executable instead of making requests to a server if using the native C++ API.
 With the gRPC API, our executable instead makes a gRPC request to the inference server.
 We first show the example with the native C++ API and then highlight the differences if you were using the gRPC API instead.
 The complete program used here is available: <code class="file docutils literal notranslate"><span class="pre">examples/cpp/custom_processing.cpp</span></code>.</p>
 <div class="section" id="include-the-library">
-<h2>Include the library<a class="headerlink" href="#include-the-library" title="Permalink to this headline">¶</a></h2>
+<h2>Include the library<a class="headerlink" href="#include-the-library" title="Permalink to this heading">¶</a></h2>
 <p>AMD Inference Server’s C++ API allows you to write your own C++ applications that link against AMD Inference Server’s backend.
 This approach bypasses the overheads associated with serialization that occurs with REST-based Python inferencing.
 The public API is defined in <code class="file docutils literal notranslate"><span class="pre">proteus/proteus.hpp</span></code> and we include it here.</p>
@@ -408,7 +409,7 @@ The public API is defined in <code class="file docutils literal notranslate"><sp
 </div>
 </div>
 <div class="section" id="user-variables">
-<h2>User variables<a class="headerlink" href="#user-variables" title="Permalink to this headline">¶</a></h2>
+<h2>User variables<a class="headerlink" href="#user-variables" title="Permalink to this heading">¶</a></h2>
 <p>Making an inference to an actual XModel that accepts an image requires some additional data from the user.
 These variables are pulled out into a separate block to highlight them.</p>
 <ul class="simple">
@@ -425,14 +426,14 @@ These variables are pulled out into a separate block to highlight them.</p>
 </div>
 </div>
 <div class="section" id="initialize">
-<h2>Initialize<a class="headerlink" href="#initialize" title="Permalink to this headline">¶</a></h2>
+<h2>Initialize<a class="headerlink" href="#initialize" title="Permalink to this heading">¶</a></h2>
 <p>Before calling any of other methods in the API, we need to first initialize AMD Inference Server.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">::</span><span class="n">initialize</span><span class="p">();</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="load-a-worker">
-<h2>Load a worker<a class="headerlink" href="#load-a-worker" title="Permalink to this headline">¶</a></h2>
+<h2>Load a worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
 <p>After initialization, we have to load the worker(s) we need for inference.
 To make an inference request to a custom XModel, we use the <strong>Xmodel</strong> worker.
 Some workers accept load-time parameters to configure different options.
@@ -448,7 +449,7 @@ If the worker we’re using doesn’t accept or need load-time parameters, a nul
 <p>The return value from the load is the qualified name that should be used for subsequent operations such as inference.</p>
 </div>
 <div class="section" id="get-images">
-<h2>Get images<a class="headerlink" href="#get-images" title="Permalink to this headline">¶</a></h2>
+<h2>Get images<a class="headerlink" href="#get-images" title="Permalink to this heading">¶</a></h2>
 <p>Now, we can prepare our request.
 In this example, we use one image and duplicate it <em>batch_size</em> times.
 The ResNet50 model we’re using requires some pre-processing before running inference so we add a pre-processing step, which will open the images, resize them to the appropriate size for the model, normalize their values and return the images as vectors of data.
@@ -465,7 +466,7 @@ The implementation of the pre-processing function can be seen in the example’s
 </div>
 </div>
 <div class="section" id="construct-request">
-<h2>Construct request<a class="headerlink" href="#construct-request" title="Permalink to this headline">¶</a></h2>
+<h2>Construct request<a class="headerlink" href="#construct-request" title="Permalink to this heading">¶</a></h2>
 <p>Using our images, we can construct a request to AMD Inference Server’s backend.
 We hardcode the shape of the image to the size we know that the pre-processing enforces.
 We also pass the data-type of the data, which we again know to be an signed 8-bit integer from the pre-processing.</p>
@@ -480,7 +481,7 @@ We also pass the data-type of the data, which we again know to be an signed 8-bi
 </div>
 </div>
 <div class="section" id="inference">
-<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h2>
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h2>
 <p>We can then send the request to AMD Inference Server by passing in a name from the output of a previous <code class="docutils literal notranslate"><span class="pre">load()</span></code> and the request itself.
 With the native C++ API, enqueueing the request returns a Future object that we can later check to get the response.
 For now, since there’s only one, we can call <code class="docutils literal notranslate"><span class="pre">get()</span></code> on a Future object, which will block until the response is available.
@@ -491,7 +492,7 @@ This object can be parsed to analyze the data.</p>
 </div>
 </div>
 <div class="section" id="check-the-response">
-<h2>Check the response<a class="headerlink" href="#check-the-response" title="Permalink to this headline">¶</a></h2>
+<h2>Check the response<a class="headerlink" href="#check-the-response" title="Permalink to this heading">¶</a></h2>
 <p>For this model, we need to post-process the raw output to make a useful classification for our image.
 For each output, we post-process the results to extract the top <em>k</em> indices for the classification.
 We can check this against our expected golden output to confirm that the inference is correct.</p>
@@ -511,7 +512,7 @@ We can check this against our expected golden output to confirm that the inferen
 </div>
 </div>
 <div class="section" id="clean-up">
-<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this headline">¶</a></h2>
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">¶</a></h2>
 <p>To safely end the program, we should signal the AMD Inference Server backend to shutdown.
 During the shutdown, AMD Inference Server will stop any workers that haven’t been unloaded yet and shut down management threads safely.
 Note that this function was also called in the validation step above.</p>
@@ -520,10 +521,10 @@ Note that this function was also called in the validation step above.</p>
 </div>
 </div>
 <div class="section" id="using-grpc">
-<h2>Using gRPC<a class="headerlink" href="#using-grpc" title="Permalink to this headline">¶</a></h2>
+<h2>Using gRPC<a class="headerlink" href="#using-grpc" title="Permalink to this heading">¶</a></h2>
 <p>Using the gRPC API instead just requires a few changes in how requests are made to the server.</p>
 <div class="section" id="id1">
-<h3>Initialize<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Initialize<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <p>In addition to the regular initialization, using the gRPC API requires creating a gRPC client, which defines how we can interact with the gRPC server.
 We construct it with the address of the gRPC server.
 Here, we’re also starting the gRPC server directly by this application at a known port.
@@ -534,7 +535,7 @@ Of course, if the gRPC server already exists, then we don’t need to start it i
 </div>
 </div>
 <div class="section" id="id2">
-<h3>Load a worker<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>Load a worker<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <p>As before, we need to load the appropriate worker.
 The only difference is that we use our gRPC client object to make the request.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
@@ -544,7 +545,7 @@ The only difference is that we use our gRPC client object to make the request.</
 </div>
 </div>
 <div class="section" id="id3">
-<h3>Inference<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<h3>Inference<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
 <p>After preparing the request, we can make a synchronous request to the gRPC server using the gRPC API using the worker name returned from the <code class="docutils literal notranslate"><span class="pre">load</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
 </pre></div>
@@ -582,7 +583,7 @@ The only difference is that we use our gRPC client object to make the request.</
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

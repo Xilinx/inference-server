@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -385,31 +386,31 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="factors">
-<h1>Factors<a class="headerlink" href="#factors" title="Permalink to this headline">¶</a></h1>
+<h1>Factors<a class="headerlink" href="#factors" title="Permalink to this heading">¶</a></h1>
 <p>AMD Inference Server’s performance can be maximized by appropriately controlling the factors described here.</p>
 <div class="section" id="hardware">
-<h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this headline">¶</a></h2>
+<h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this heading">¶</a></h2>
 <p>The <strong class="program">proteus-server</strong> executable or any application that links to AMD Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
 We suggest at least 32GB of RAM and 6 core/12 threads.
 Other processes running on the server should be minimized.</p>
 </div>
 <div class="section" id="compile-the-right-version">
-<h2>Compile the right version<a class="headerlink" href="#compile-the-right-version" title="Permalink to this headline">¶</a></h2>
+<h2>Compile the right version<a class="headerlink" href="#compile-the-right-version" title="Permalink to this heading">¶</a></h2>
 <p>Enable compiler optimizations by building with the <code class="xref std std-option docutils literal notranslate"><span class="pre">--release</span></code> flag.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>proteus build --release
 </pre></div>
 </div>
 </div>
 <div class="section" id="parallelism">
-<h2>Parallelism<a class="headerlink" href="#parallelism" title="Permalink to this headline">¶</a></h2>
+<h2>Parallelism<a class="headerlink" href="#parallelism" title="Permalink to this heading">¶</a></h2>
 <p>There are several areas in which changing the level of parallelism may improve performance.</p>
 <div class="section" id="rest-threads">
-<h3>REST threads<a class="headerlink" href="#rest-threads" title="Permalink to this headline">¶</a></h3>
+<h3>REST threads<a class="headerlink" href="#rest-threads" title="Permalink to this heading">¶</a></h3>
 <p>The number of threads that Drogon uses to receive incoming REST requests is defined by the value of <code class="docutils literal notranslate"><span class="pre">kDefaultDrogonThreads</span></code>, which by default is set to 16.
 Depending on your hardware and demand, you may get better performance by changing this value.</p>
 </div>
 <div class="section" id="sending-requests">
-<h3>Sending requests<a class="headerlink" href="#sending-requests" title="Permalink to this headline">¶</a></h3>
+<h3>Sending requests<a class="headerlink" href="#sending-requests" title="Permalink to this heading">¶</a></h3>
 <p>Making requests to AMD Inference Server efficiently allows for overlap and batching to take place, which improves throughput.</p>
 <p>For REST requests, make asynchronous requests so sequential requests don’t block each other.
 There are a few ways to do this.
@@ -478,7 +479,7 @@ One example of how to do this is in the following snippet:</p>
 <p>Enqueuing and dequeueing in parallel improves performance because it minimizes the number of active requests at any given time.</p>
 </div>
 <div class="section" id="duplicating-workers">
-<h3>Duplicating workers<a class="headerlink" href="#duplicating-workers" title="Permalink to this headline">¶</a></h3>
+<h3>Duplicating workers<a class="headerlink" href="#duplicating-workers" title="Permalink to this heading">¶</a></h3>
 <p>Worker duplication is one method of parallelizing a worker.
 By default, requesting to load a worker that has already been loaded does nothing.
 However, workers can be manually duplicated for increased throughput.
@@ -545,7 +546,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

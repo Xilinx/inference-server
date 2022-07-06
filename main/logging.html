@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -379,10 +380,10 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="logs">
-<span id="id1"></span><h1>Logs<a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Logs<a class="headerlink" href="#logs" title="Permalink to this heading">¶</a></h1>
 <p>Logs collected by AMD Inference Server are placed in <code class="docutils literal notranslate"><span class="pre">~/.proteus/logs/</span></code> by default.</p>
 <div class="section" id="amd-inference-server-logs">
-<h2>AMD Inference Server Logs<a class="headerlink" href="#amd-inference-server-logs" title="Permalink to this headline">¶</a></h2>
+<h2>AMD Inference Server Logs<a class="headerlink" href="#amd-inference-server-logs" title="Permalink to this heading">¶</a></h2>
 <p>Logging in AMD Inference Server is configured in <code class="docutils literal notranslate"><span class="pre">proteus/observation/logging.*</span></code>.
 There are multiple knobs that can be tweaked to affect how and which log messages are captured.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// in logging.hpp</span>
@@ -422,7 +423,7 @@ There are multiple knobs that can be tweaked to affect how and which log message
 </div>
 </div>
 <div class="section" id="drogon-logs">
-<h2>Drogon Logs<a class="headerlink" href="#drogon-logs" title="Permalink to this headline">¶</a></h2>
+<h2>Drogon Logs<a class="headerlink" href="#drogon-logs" title="Permalink to this heading">¶</a></h2>
 <p>Logging in Drogon is configured in <cite>proteus/servers/http_server.cpp</cite> by setting the appropriate log level when initializing the Drogon app.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// in http_server.cpp</span>
 <span class="n">drogon</span><span class="o">::</span><span class="n">app</span><span class="p">()</span><span class="w"></span>
@@ -473,7 +474,7 @@ There are multiple knobs that can be tweaked to affect how and which log message
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

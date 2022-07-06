@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -438,7 +439,7 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="command-line-interface">
-<h1>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
+<h1>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this heading">¶</a></h1>
 <p>The <code class="file docutils literal notranslate"><span class="pre">proteus</span></code> script provides an easy way to launch containers and build the Server.
 The documentation for the options available in this Python script can be seen here or on the terminal using the <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code> flag.</p>
 <p><p>Proteus helper script</p>
@@ -447,7 +448,7 @@ The documentation for the options available in this Python script can be seen he
 </pre></div>
 </div>
 <div class="section" id="Commands">
-<h2>Commands<a class="headerlink" href="#Commands" title="Permalink to this headline">¶</a></h2>
+<h2>Commands<a class="headerlink" href="#Commands" title="Permalink to this heading">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>command</kbd></dt>
 <dd><p>Possible choices: attach, benchmark, build, clangformat, clangtidy, clean, dockerize, get, install, list, make, run, start, test, up</p>
@@ -455,7 +456,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </div>
 <div class="section" id="Options">
-<h2>Options<a class="headerlink" href="#Options" title="Permalink to this headline">¶</a></h2>
+<h2>Options<a class="headerlink" href="#Options" title="Permalink to this heading">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>--dry-run</kbd></dt>
 <dd><p>print the actual commands that would be run without running them</p>
@@ -467,15 +468,15 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </div>
 <div class="section" id="Sub-commands:">
-<h2>Sub-commands:<a class="headerlink" href="#Sub-commands:" title="Permalink to this headline">¶</a></h2>
+<h2>Sub-commands:<a class="headerlink" href="#Sub-commands:" title="Permalink to this heading">¶</a></h2>
 <div class="section" id="attach">
-<h3>attach<a class="headerlink" href="#attach" title="Permalink to this headline">¶</a></h3>
+<h3>attach<a class="headerlink" href="#attach" title="Permalink to this heading">¶</a></h3>
 <p>Attach to a running Proteus container</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">attach</span> <span class="p">[</span><span class="o">-</span><span class="n">n</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat1">
-<h4>Options<a class="headerlink" href="#Options_repeat1" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat1" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-n, --name</kbd></dt>
 <dd><p>name of the container to attach to. Defaults to latest running container</p>
@@ -484,20 +485,20 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="benchmark">
-<h3>benchmark<a class="headerlink" href="#benchmark" title="Permalink to this headline">¶</a></h3>
+<h3>benchmark<a class="headerlink" href="#benchmark" title="Permalink to this heading">¶</a></h3>
 <p>Benchmark Proteus</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">benchmark</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="build">
-<h3>build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
+<h3>build<a class="headerlink" href="#build" title="Permalink to this heading">¶</a></h3>
 <p>Build the proteus project</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">build</span> <span class="p">[</span><span class="o">--</span><span class="n">coverage</span> <span class="o">|</span> <span class="o">--</span><span class="n">debug</span> <span class="o">|</span> <span class="o">--</span><span class="n">release</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">THREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Named Arguments">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h4>
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--coverage</kbd></dt>
 <dd><p>build the coverage configuration</p>
@@ -511,7 +512,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </div>
 <div class="section" id="Options_repeat2">
-<h4>Options<a class="headerlink" href="#Options_repeat2" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat2" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-a, --all</kbd></dt>
 <dd><p>Build additional optional targets</p>
@@ -541,13 +542,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="clangformat">
-<h3>clangformat<a class="headerlink" href="#clangformat" title="Permalink to this headline">¶</a></h3>
+<h3>clangformat<a class="headerlink" href="#clangformat" title="Permalink to this heading">¶</a></h3>
 <p>This is a wrapper around clangformat to format a particular file in place based on the existing clangformat rules. Any unmatched arguments are passed to clang-format. Use clang-format –help to see options</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">clangformat</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">path</span>
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments">
-<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h4>
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>path</kbd></dt>
 <dd><p>Path to a C++ file to analyze</p>
@@ -556,13 +557,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="clangtidy">
-<h3>clangtidy<a class="headerlink" href="#clangtidy" title="Permalink to this headline">¶</a></h3>
+<h3>clangtidy<a class="headerlink" href="#clangtidy" title="Permalink to this heading">¶</a></h3>
 <p>Run clang-tidy on all source files</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">clangtidy</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat3">
-<h4>Options<a class="headerlink" href="#Options_repeat3" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat3" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -572,13 +573,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="clean">
-<h3>clean<a class="headerlink" href="#clean" title="Permalink to this headline">¶</a></h3>
+<h3>clean<a class="headerlink" href="#clean" title="Permalink to this heading">¶</a></h3>
 <p>Delete all generated files, restoring the repo to clean state</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">clean</span> <span class="p">[</span><span class="o">--</span><span class="n">artifacts</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">gui</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat4">
-<h4>Options<a class="headerlink" href="#Options_repeat4" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat4" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--artifacts</kbd></dt>
 <dd><p>Delete downloaded XModel artifacts</p>
@@ -592,13 +593,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="dockerize">
-<h3>dockerize<a class="headerlink" href="#dockerize" title="Permalink to this headline">¶</a></h3>
+<h3>dockerize<a class="headerlink" href="#dockerize" title="Permalink to this heading">¶</a></h3>
 <p>Build a docker image</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">dockerize</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span><span class="o">-</span><span class="n">base</span> <span class="n">DEV_BASE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">production</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">push</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn_path</span> <span class="n">TFZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn_path</span> <span class="n">PTZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat5">
-<h4>Options<a class="headerlink" href="#Options_repeat5" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat5" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dev-base</kbd></dt>
 <dd><p>Name of the image to use as dev image to build the production image.</p>
@@ -634,13 +635,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="get">
-<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<h3>get<a class="headerlink" href="#get" title="Permalink to this heading">¶</a></h3>
 <p>Get artifacts such as XModels</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">q</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat6">
-<h4>Options<a class="headerlink" href="#Options_repeat6" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat6" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-q, --quiet</kbd></dt>
 <dd><p>suppress prints</p>
@@ -658,13 +659,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="install">
-<h3>install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<h3>install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h3>
 <p>Install Proteus. Any unknown arguments are passed to the build command. Use – –help to see options.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">install</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">manifest</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat7">
-<h4>Options<a class="headerlink" href="#Options_repeat7" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat7" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to /tmp/proteus/build</p>
@@ -678,13 +679,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="list">
-<h3>list<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
+<h3>list<a class="headerlink" href="#list" title="Permalink to this heading">¶</a></h3>
 <p>List Proteus containers and images on the host.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="nb">type</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat1">
-<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>type</kbd></dt>
 <dd><p>List the active containers (default) or specify ‘images’ or ‘labels’</p>
@@ -694,13 +695,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="make">
-<h3>make<a class="headerlink" href="#make" title="Permalink to this headline">¶</a></h3>
+<h3>make<a class="headerlink" href="#make" title="Permalink to this heading">¶</a></h3>
 <p>This is a wrapper around make for the current build configuration.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">make</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span> <span class="p">[</span><span class="n">JOBS</span><span class="p">]]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat8">
-<h4>Options<a class="headerlink" href="#Options_repeat8" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat8" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -714,13 +715,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="run">
-<h3>run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h3>
+<h3>run<a class="headerlink" href="#run" title="Permalink to this heading">¶</a></h3>
 <p>This is a wrapper around ‘docker run’ with preset options. Any unparsed arguments are directly passed to ‘docker run’. Use ‘docker run –help’ to see the options.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">run</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span> <span class="o">|</span> <span class="o">--</span><span class="n">autotest</span><span class="o">-</span><span class="n">dev</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">command</span> <span class="n">COMMAND</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">devices</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">image</span> <span class="n">IMAGE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">interactive</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">net</span><span class="o">-</span><span class="n">host</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rm</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">config</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">working</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">xclbins</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Presets">
-<h4>Presets<a class="headerlink" href="#Presets" title="Permalink to this headline">¶</a></h4>
+<h4>Presets<a class="headerlink" href="#Presets" title="Permalink to this heading">¶</a></h4>
 <p>Presets define a set of options together for convenience. If additional options are provided, they override those set in the preset.</p>
 <dl class="option-list">
 <dt><kbd>--dev</kbd></dt>
@@ -732,7 +733,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </div>
 <div class="section" id="Options_repeat9">
-<h4>Options<a class="headerlink" href="#Options_repeat9" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat9" title="Permalink to this heading">¶</a></h4>
 <p>These options may default to a value if a preset is selected.</p>
 <dl class="option-list">
 <dt><kbd>--command</kbd></dt>
@@ -766,13 +767,13 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="start">
-<h3>start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h3>
+<h3>start<a class="headerlink" href="#start" title="Permalink to this heading">¶</a></h3>
 <p>Start proteus-server with the current build configuration. Unknown arguments are passed to proteus-server.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">gdb</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat10">
-<h4>Options<a class="headerlink" href="#Options_repeat10" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat10" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -786,20 +787,20 @@ The documentation for the options available in this Python script can be seen he
 </div>
 </div>
 <div class="section" id="test">
-<h3>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
+<h3>test<a class="headerlink" href="#test" title="Permalink to this heading">¶</a></h3>
 <p>Run Proteus’s test suite. All arguments are passed to the test script.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">test</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="up">
-<h3>up<a class="headerlink" href="#up" title="Permalink to this headline">¶</a></h3>
+<h3>up<a class="headerlink" href="#up" title="Permalink to this heading">¶</a></h3>
 <p>Start docker-compose services</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">up</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PROFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="n">VERSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">only</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="Options_repeat11">
-<h4>Options<a class="headerlink" href="#Options_repeat11" title="Permalink to this headline">¶</a></h4>
+<h4>Options<a class="headerlink" href="#Options_repeat11" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-p, --profile</kbd></dt>
 <dd><p>profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev</p>
@@ -856,7 +857,7 @@ The documentation for the options available in this Python script can be seen he
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

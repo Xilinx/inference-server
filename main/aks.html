@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -379,10 +380,10 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="aks">
-<span id="id1"></span><h1>AKS<a class="headerlink" href="#aks" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>AKS<a class="headerlink" href="#aks" title="Permalink to this heading">¶</a></h1>
 <p>‘<a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS">AKS</a>’ can be used in the AMD Inference Server for end-to-end inference.</p>
 <div class="section" id="introduction-to-aks">
-<h2>Introduction to AKS<a class="headerlink" href="#introduction-to-aks" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction to AKS<a class="headerlink" href="#introduction-to-aks" title="Permalink to this heading">¶</a></h2>
 <p>Using AKS requires three things: the AKS backend, a graph to run, and kernels.
 The AKS backend in installed in the AMD Inference Server container and the repository contains sample graphs and kernels that may be used.
 This reference material is available in <code class="docutils literal notranslate"><span class="pre">external/aks/reference/</span></code>
@@ -391,7 +392,7 @@ Kernels perform the work and are defined in two parts: the kernel source and the
 The source provides the kernels implementation while the definition is a JSON file that provides the metadata for the AKS backend.</p>
 </div>
 <div class="section" id="using-aks-in-amd-inference-server">
-<h2>Using AKS in AMD Inference Server<a class="headerlink" href="#using-aks-in-amd-inference-server" title="Permalink to this headline">¶</a></h2>
+<h2>Using AKS in AMD Inference Server<a class="headerlink" href="#using-aks-in-amd-inference-server" title="Permalink to this heading">¶</a></h2>
 <p>AMD Inference Server already uses AKS in workers such as <code class="docutils literal notranslate"><span class="pre">aks_detect.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">resnet50.cpp</span></code>.
 These workers are good examples of how to incorporate AKS into a AMD Inference Server worker.
 The worker needs to pass a path to an AKS graph and a graph to run to the AKS backend.
@@ -436,7 +437,7 @@ More information about workers in AMD Inference Server is in <a class="reference
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

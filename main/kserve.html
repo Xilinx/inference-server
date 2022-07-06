@@ -61,6 +61,7 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
@@ -382,10 +383,10 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <div class="section" id="kserve">
-<span id="id1"></span><h1>KServe<a class="headerlink" href="#kserve" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>KServe<a class="headerlink" href="#kserve" title="Permalink to this heading">¶</a></h1>
 <p>The AMD Inference Server can be used with <a class="reference external" href="https://github.com/kserve/kserve">KServe</a> to deploy the server on a Kubernetes cluster.</p>
 <div class="section" id="setting-up-kserve">
-<h2>Setting up KServe<a class="headerlink" href="#setting-up-kserve" title="Permalink to this headline">¶</a></h2>
+<h2>Setting up KServe<a class="headerlink" href="#setting-up-kserve" title="Permalink to this heading">¶</a></h2>
 <p>Install KServe using the <a class="reference external" href="https://kserve.github.io/website/admin/serverless/">instructions</a> provided by KServe.
 We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
 Once KServe is installed, verify basic functionality of the cluster using the <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">basic tutorial</a> provided by KServe.
@@ -397,7 +398,7 @@ Refer to the documentation for these respective projects on installation details
 The <a class="reference external" href="https://github.com/prometheus-operator/kube-prometheus/">kube-prometheus</a> project may be a good starting point to install some of these tools.</p>
 </div>
 <div class="section" id="building-the-server">
-<h2>Building the Server<a class="headerlink" href="#building-the-server" title="Permalink to this headline">¶</a></h2>
+<h2>Building the Server<a class="headerlink" href="#building-the-server" title="Permalink to this heading">¶</a></h2>
 <p>To use with KServe, we will need to build the production container.
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 To build the production container <a class="footnote-reference brackets" href="#f1" id="id2">1</a>:</p>
@@ -413,7 +414,7 @@ Make sure to set up a secure registry if you need access to the registry from mo
 Once the image is pushed to the registry, verify that it can be pulled with Docker from all hosts in the Kubernetes cluster.</p>
 </div>
 <div class="section" id="starting-the-service">
-<h2>Starting the Service<a class="headerlink" href="#starting-the-service" title="Permalink to this headline">¶</a></h2>
+<h2>Starting the Service<a class="headerlink" href="#starting-the-service" title="Permalink to this heading">¶</a></h2>
 <p>Services in Kubernetes can be started with YAML configuration files.
 KServe provides two CRDs that we will use: <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> and <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code>.
 A sample configuration file to start the Inference Server is provided below:</p>
@@ -491,7 +492,7 @@ The file extension for <code class="docutils literal notranslate"><span class="p
 </div>
 </div>
 <div class="section" id="making-requests">
-<h2>Making Requests<a class="headerlink" href="#making-requests" title="Permalink to this headline">¶</a></h2>
+<h2>Making Requests<a class="headerlink" href="#making-requests" title="Permalink to this heading">¶</a></h2>
 <p>The method by which you communicate with your service depends on your Kubernetes cluster configuration.
 For example, one way to make requests is to <a class="reference external" href="https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports">get the address of the INGRESS_HOST and INGRESS_PORT</a>, and then make requests to this URL by setting the <code class="docutils literal notranslate"><span class="pre">Host</span></code> header on all requests to your targeted service.
 This use case may be needed if your cluster doesn’t have a load-balancer and/or DNS enabled.</p>
@@ -504,7 +505,7 @@ The request will be routed to the server and the response will be returned.</p>
 </dl>
 </div>
 <div class="section" id="debugging">
-<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h2>
 <p>Debugging the inference server with KServe adds some additional complexity.
 You may have issues with your KServe installation itself (in which case you need to debug KServe alone until you can <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">run a basic InferenceService</a>).
 Once the default KServe example works, then you can begin debugging any inference server specific issues.</p>
@@ -559,7 +560,7 @@ On that host:</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on June 24, 2022.
+        Last updated on July 06, 2022.
       </span>
 
     </p>

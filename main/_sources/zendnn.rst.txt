@@ -63,7 +63,7 @@ and Docker installed on your machine.
 
          $ ./proteus dockerize --no-vitis --ptzendnn=./local/path/to/PT_v1.11.0_ZenDNN_v3.3_C++_API.zip
 
-   You can add the :code:`--no-vitis` flag to build the docker without Vitis AI components if needed.
+   :code:`--no-vitis` flag is provided to build the Docker without Vitis components.
 
    This will build a docker image with all the dependencies required for
    the AMD Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
@@ -83,8 +83,7 @@ To run the examples and test cases, we need to download some models.
 
 * TensorFlow + ZenDNN
 
-   Run the command below to download a ResNet50 tensorflow model from the
-   `Vitis AI model zoo <https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/tf_resnetv1_50_imagenet_224_224_6.97G_2.5/model.yaml>`__
+   Run the command below to download a ResNet50 TensorFlow model.
 
    .. code-block:: console
 
@@ -95,8 +94,7 @@ To run the examples and test cases, we need to download some models.
 
 * PyTorch + ZenDNN
 
-   Run the command below to download a ResNet50 tensorflow model from
-   `Vitis AI model zoo <https://github.com/Xilinx/Vitis-AI/blob/master/model_zoo/model-list/pt_resnet50_imagenet_224_224_8.2G_2.5/model.yaml>`__
+   Run the command below to download a ResNet50 PyTorch model.
 
    .. code-block:: console
 
