@@ -148,10 +148,13 @@ class WriteComposeFile:
         files = glob.glob("/dev/xclmgmt*")
         for file in files:
             devices.append(f"{file}:{file}")
-        # migraphx devices
-        devices.append ('/dev/kfd')
-        devices.append ('/dev/dri')
-        # these should be added conditionally, only if found  Figure out what happens if not found?
+        # migraphx devices, if found
+        kfd = glob.glob('/dev/kfd')
+        dri = glob.glob('/dev/dri')
+        if len(kfd) == 1:
+            devices.append (kfd)
+        if len(dri) == 1:
+            devices.append (dri)
         files = glob.glob("/dev/dri/render*")
         for file in files:
             devices.append(f"{file}:{file}")
