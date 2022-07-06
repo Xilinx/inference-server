@@ -39,7 +39,6 @@
 #include "proteus/clients/http_internal.hpp"      // for propagate, DrogonHttp
 #include "proteus/clients/native.hpp"             // for getHardware
 #include "proteus/core/api.hpp"                   // for modelLoad
-#include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/model_repository.hpp"      // for loadModel
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo
@@ -140,7 +139,7 @@ void v2::ProteusHttpServer::getModelReady(
 
   auto resp = HttpResponse::newHttpResponse();
   try {
-    if (!Manager::getInstance().workerReady(model)) {
+    if (!::proteus::modelReady(model)) {
       resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
     }
   } catch (const invalid_argument &e) {
@@ -185,7 +184,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   Json::Value ret;
   bool error = false;
   try {
-    auto metadata = Manager::getInstance().getWorkerMetadata(model);
+    auto metadata = ::proteus::modelMetadata(model);
     ret = ModelMetadataToJson(metadata);
   } catch (const runtime_error &e) {
     ret["error"] = e.what();
@@ -203,8 +202,7 @@ void v2::ProteusHttpServer::modelList(
   const drogon::HttpRequestPtr &req,
   std::function<void(const drogon::HttpResponsePtr &)> &&callback) {
   (void)req;  // suppress unused variable warning
-  NativeClient client;
-  const auto models = client.modelList();
+  const auto models = ::proteus::modelList();
 
   Json::Value json;
   json["models"] = Json::arrayValue;
