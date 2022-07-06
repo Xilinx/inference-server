@@ -795,31 +795,27 @@ FROM proteus_dev_zendnn as proteus_install_migraphx_yes
 # Add rocm repository
 RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main > /etc/apt/sources.list.d/rocm.list'
 # Install dependencies for migraphx
-RUN apt-get update &&\
-    apt-get install -y sudo git bash build-essential rocm-dev libpython3.6-dev python3-dev python3-pip miopen-hip-dev \
-    rocblas-dev half aria2 libnuma-dev rocm-cmake
-# Workaround broken rocm packages
-RUN ln -s /opt/rocm-* /opt/rocm
-RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf
-RUN echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf
-RUN ldconfig
 # ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
 #        for Release version, since it's set up differently than dev
 #
 # Install rbuild
-RUN pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
+RUN apt-get update &&\
+    apt-get install -y bash rocm-dev libpython3.6-dev python3-dev python3-pip miopen-hip-dev \
+    rocblas-dev half aria2 libnuma-dev rocm-cmake \
+    && ln -s /opt/rocm-* /opt/rocm \
+    && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
+    && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
+    && ldconfig \
+    && pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
 # Install MIGraphX from source
-RUN mkdir -p /migraphx
-# RUN cd /migraphx && git clone --depth=1 --branch rocm-5.1.1 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
-# at time of writing, a needed bug fix is in the develop branch of AMDMIGraphX
-RUN cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src
-RUN cd /migraphx/src  && git checkout cb18b0b5722373c49f5c257380af206e13344735
-RUN apt install nano
-RUN cd /migraphx/src && rbuild package -d /migraphx/deps -B /migraphx/build
-RUN dpkg -i /migraphx/build/*.deb
-RUN rm -rf /migraphx
+RUN mkdir -p /migraphx \
+    && cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src \
+    && cd /migraphx/src  && git checkout cb18b0b5722373c49f5c257380af206e13344735 \
+    && cd /migraphx/src && rbuild package -d /migraphx/deps -B /migraphx/build \
+    && dpkg -i /migraphx/build/*.deb \
+    && rm -rf /migraphx
 
-# onnx package for Python, used during dev.
+# onnx package for Python, used by migraphx example scripts.
 RUN pip3 install onnx
 
 # reset the compiler version, in case build-essential package overrode it
