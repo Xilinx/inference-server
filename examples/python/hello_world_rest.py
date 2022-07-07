@@ -51,8 +51,10 @@ def main():
     # +start server: if it's not already started, start it from Python
     start_server = not client.serverLive()
     if start_server:
-        proteus.initialize()
-        proteus.clients.startHttpServer(8998)
+        server = proteus.servers.Server()
+        server.startHttp(8998)
+        while not client.serverLive():
+            sleep(1)
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
@@ -78,14 +80,6 @@ def main():
         assert len(recv_data) == 1
         assert recv_data[0] == data[index] + 1
     # -validate:
-
-    # +clean up: stop the server if it was started from Python
-    if start_server:
-        proteus.clients.stopHttpServer()
-        proteus.terminate()
-        while client.serverLive():
-            sleep(1)
-    # -clean up:
 
     print("hello_world_rest.py: Passed")
 

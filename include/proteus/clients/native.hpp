@@ -32,17 +32,6 @@
 
 namespace proteus {
 
-/// Initialize proteus - calls initializeLogging internally
-void initialize();
-/// Initialize logging
-void initializeLogging();
-
-/// Shut down proteus
-void terminate();
-
-/// get log directory
-std::string getLogDirectory();
-
 /// Get a string that lists the available kernels ("<name>:i,<name>:j...")
 std::string getHardware();
 

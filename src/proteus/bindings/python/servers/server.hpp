@@ -14,16 +14,16 @@
 
 /**
  * @file
- * @brief Defines the objects for Python bindings
+ * @brief Defines the Python bindings for the server.hpp header
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_HTTP
-#define GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_HTTP
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVER
+#define GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVER
 
 namespace pybind11 {
 class module_;
 }
 
-void wrapHttpClient(pybind11::module_ &);
+void wrapServer(pybind11::module_ &);
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_HTTP
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVER

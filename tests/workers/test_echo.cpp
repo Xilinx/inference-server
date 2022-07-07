@@ -117,9 +117,7 @@ class EchoParamFixture
     }
   }
 
-  static void SetUpTestSuite() { proteus::initialize(); };
-
-  static void TearDownTestSuite() { proteus::terminate(); }
+  proteus::Server server_;
 
  private:
   const int inputs_[2] = {3, 5};
@@ -152,8 +150,11 @@ TEST_P(EchoParamFixture, EchoGrpc) {
   const auto params = GetParam();
   auto multiplier = std::get<4>(params);
 
-  proteus::startGrpcServer(50051);
+  server_.startGrpc(50051);
   auto client = proteus::GrpcClient("localhost:50051");
+  while (!client.serverLive()) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
 
   client.workerLoad("echo", nullptr);
 
@@ -172,7 +173,6 @@ TEST_P(EchoParamFixture, EchoGrpc) {
   }
 
   client.modelUnload("echo");
-  proteus::stopGrpcServer();
 }
 #endif
 

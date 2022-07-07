@@ -33,16 +33,6 @@ class Channel;
 
 namespace proteus {
 
-/**
- * @brief Start the gRPC server. This is a no-op if Proteus is compiled without
- * gRPC support.
- *
- * @param port port to use
- */
-void startGrpcServer(int port);
-
-void stopGrpcServer();
-
 class GrpcClient : public Client {
  public:
   GrpcClient() = delete;

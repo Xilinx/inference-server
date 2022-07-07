@@ -574,18 +574,4 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   return response;
 }
 
-void startGrpcServer(int port) {
-#ifdef PROTEUS_ENABLE_GRPC
-  grpc::start(port);
-#else
-  (void)port;  // suppress unused variable warning
-#endif
-}
-
-void stopGrpcServer() {
-#ifdef PROTEUS_ENABLE_GRPC
-  grpc::stop();
-#endif
-}
-
 }  // namespace proteus

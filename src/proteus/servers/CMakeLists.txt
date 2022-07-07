@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets)
+list(APPEND targets server)
 
 if(${PROTEUS_ENABLE_REST})
   set(targets ${targets} http_server websocket_server)
@@ -29,6 +29,10 @@ foreach(target ${targets})
 
   list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
+
+if(${PROTEUS_ENABLE_AKS})
+  target_link_libraries(server INTERFACE aks)
+endif()
 
 if(${PROTEUS_ENABLE_REST})
   target_link_libraries(http_server INTERFACE clients drogon trantor jsoncpp)

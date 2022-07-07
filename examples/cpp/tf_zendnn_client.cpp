@@ -246,13 +246,12 @@ int main() {
   std::string root = root_env;
 
   // initialize the server
-  proteus::initialize();
+  proteus::Server server;
 
   auto client = proteus::NativeClient();
   auto metadata = client.serverMetadata();
   if (metadata.extensions.find("tfzendnn") == metadata.extensions.end()) {
     std::cout << "TFZenDNN support required but not found.\n";
-    proteus::terminate();
     exit(0);
   }
 
@@ -362,9 +361,6 @@ int main() {
                    std::to_string(options.batch_size / time_tmp * 1000)
               << std::endl;
   }
-
-  // clean up
-  proteus::terminate();
 
   return 0;
 }

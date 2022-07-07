@@ -1,4 +1,4 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2022 Xilinx Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PROTEUS
-#define GUARD_PROTEUS_PROTEUS
+#ifndef GUARD_PROTEUS_SERVERS_SERVER
+#define GUARD_PROTEUS_SERVERS_SERVER
 
-// IWYU pragma: begin_exports
-#include "proteus/build_options.hpp"
-#include "proteus/clients/grpc.hpp"
-#include "proteus/clients/http.hpp"
-#include "proteus/clients/native.hpp"
-#include "proteus/core/data_types.hpp"
-#include "proteus/core/exceptions.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/helpers/declarations.hpp"
-#include "proteus/servers/server.hpp"
-// IWYU pragma: end_exports
+#include <cstdint>
+#include <memory>
+#include <string>
 
-#endif  // GUARD_PROTEUS_PROTEUS
+namespace proteus {
+
+class Server {
+ public:
+  Server();
+  ~Server();
+
+  void startHttp(uint16_t port) const;
+  void startGrpc(uint16_t port) const;
+
+ private:
+  class ServerImpl;
+  std::unique_ptr<ServerImpl> impl_;
+};
+
+/// get log directory
+std::string getLogDirectory();
+
+}  // namespace proteus
+
+#endif  // GUARD_PROTEUS_SERVERS_SERVER

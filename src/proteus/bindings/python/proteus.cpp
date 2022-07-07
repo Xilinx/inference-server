@@ -22,6 +22,7 @@
 #include "proteus/bindings/python/clients/client.hpp"
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
+#include "proteus/bindings/python/servers/server.hpp"
 #include "proteus/clients/native.hpp"
 #include "proteus/core/exceptions.hpp"
 
@@ -32,11 +33,8 @@ namespace proteus {
 PYBIND11_MODULE(_proteus, m) {
   py::module n = m.def_submodule("predict_api", "predict_api documentation");
   py::module c = m.def_submodule("clients", "client documentation");
+  py::module s = m.def_submodule("servers", "server documentation");
   m.doc() = "proteus inference library";
-
-  m.def("initialize", &initialize);
-  m.def("initializeLogging", &initializeLogging);
-  m.def("terminate", &terminate);
 
   py::register_exception<runtime_error>(m, "RuntimeError");
 
@@ -47,6 +45,7 @@ PYBIND11_MODULE(_proteus, m) {
   wrapClient(c);
   wrapHttpClient(c);
   wrapWebSocketClient(c);
+  wrapServer(s);
 }
 
 }  // namespace proteus

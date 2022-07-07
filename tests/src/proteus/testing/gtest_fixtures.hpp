@@ -22,9 +22,7 @@
 
 class BaseFixture : public testing::Test {
  public:
-  static void SetUpTestSuite() { proteus::initialize(); };
-
-  static void TearDownTestSuite() { proteus::terminate(); }
+  proteus::Server server_;
 };
 
 class GrpcFixture : public BaseFixture {
@@ -32,17 +30,11 @@ class GrpcFixture : public BaseFixture {
   void SetUp() override {
     client_ = std::make_unique<proteus::GrpcClient>("localhost:50051");
     if (!client_->serverLive()) {
-      proteus::startGrpcServer(50051);
+      server_.startGrpc(50051);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
       }
-    }
-  }
-
-  void TearDown() override {
-    if (started_) {
-      proteus::stopGrpcServer();
     }
   }
 
@@ -55,17 +47,11 @@ class HttpFixture : public BaseFixture {
   void SetUp() override {
     client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
-      proteus::startHttpServer(8998);
+      server_.startHttp(8998);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
       }
-    }
-  }
-
-  void TearDown() override {
-    if (started_) {
-      proteus::stopHttpServer();
     }
   }
 
