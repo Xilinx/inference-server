@@ -73,14 +73,15 @@ class ProteusHttpServer
   /// Register the modelList endpoint
   ADD_METHOD_TO(ProteusHttpServer::modelList, "v2/models", drogon::Get,
                 drogon::Options);
-  /// Register the inferModel endpoint
-  ADD_METHOD_TO(ProteusHttpServer::inferModel, "v2/models/{model}/infer",
+  /// Register the modelInfer endpoint
+  ADD_METHOD_TO(ProteusHttpServer::modelInfer, "v2/models/{model}/infer",
                 drogon::Post, drogon::Options);
   /// Register the load endpoint
-  ADD_METHOD_TO(ProteusHttpServer::load, "v2/repository/models/{model}/load",
-                drogon::Post, drogon::Options);
+  ADD_METHOD_TO(ProteusHttpServer::modelLoad,
+                "v2/repository/models/{model}/load", drogon::Post,
+                drogon::Options);
   /// Register the unload endpoint
-  ADD_METHOD_TO(ProteusHttpServer::unload,
+  ADD_METHOD_TO(ProteusHttpServer::modelUnload,
                 "v2/repository/models/{model}/unload", drogon::Post,
                 drogon::Options);
   /// Register the workerLoad endpoint
@@ -106,7 +107,7 @@ class ProteusHttpServer
    */
   void getServerLive(
     const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 
   /**
    * @brief Returns 200 if all models are ready for inferencing
@@ -116,7 +117,7 @@ class ProteusHttpServer
    */
   void getServerReady(
     const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 
   /**
    * @brief Returns 200 if a specific model is ready for inferencing
@@ -128,7 +129,7 @@ class ProteusHttpServer
   void getModelReady(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model);
+    std::string const &model) const;
 
   /**
    * @brief Returns metadata associated with Proteus
@@ -138,7 +139,7 @@ class ProteusHttpServer
    */
   void getServerMetadata(
     const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 
   /**
    * @brief Returns metadata associated with a model
@@ -150,7 +151,7 @@ class ProteusHttpServer
   void getModelMetadata(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model);
+    std::string const &model) const;
 
   /**
    * @brief Returns the available hardware on the server
@@ -160,7 +161,7 @@ class ProteusHttpServer
    */
   void getHardware(
     const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 
   /**
    * @brief Returns the active models on the server
@@ -170,7 +171,7 @@ class ProteusHttpServer
    */
   void modelList(
     const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 
   /**
    * @brief Handles inference requests for named models
@@ -179,10 +180,10 @@ class ProteusHttpServer
    * @param callback the callback function to respond to the client
    * @param model name of the model to serve the request
    */
-  void inferModel(
+  void modelInfer(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model);
+    std::string const &model) const;
 
   /**
    * @brief Loads and starts a model
@@ -191,9 +192,10 @@ class ProteusHttpServer
    * @param callback the callback function to respond to the client
    * @param model name of the model to load
    */
-  void load(const drogon::HttpRequestPtr &req,
-            std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-            std::string const &model);
+  void modelLoad(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    std::string const &model) const;
 
   /**
    * @brief Unloads a model
@@ -202,9 +204,10 @@ class ProteusHttpServer
    * @param callback the callback function to respond to the client
    * @param model name of the model to unload
    */
-  void unload(const drogon::HttpRequestPtr &req,
-              std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-              std::string const &model);
+  void modelUnload(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    std::string const &model) const;
 
   /**
    * @brief Loads and starts a worker
@@ -216,7 +219,7 @@ class ProteusHttpServer
   void workerLoad(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &worker);
+    std::string const &worker) const;
 
   /**
    * @brief Unloads a worker
@@ -228,7 +231,7 @@ class ProteusHttpServer
   void workerUnload(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &worker);
+    std::string const &worker) const;
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS
@@ -238,8 +241,9 @@ class ProteusHttpServer
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void metrics(const drogon::HttpRequestPtr &req,
-               std::function<void(const drogon::HttpResponsePtr &)> &&callback);
+  void metrics(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 #endif
 #ifdef PROTEUS_ENABLE_LOGGING
  private:
