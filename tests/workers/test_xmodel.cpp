@@ -27,9 +27,7 @@ std::string path = std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets";
 
 class XModelFixture : public testing::Test {
  public:
-  static void SetUpTestSuite() { proteus::initialize(); };
-
-  static void TearDownTestSuite() { proteus::terminate(); }
+  proteus::Server server_;
 };
 
 // @pytest.mark.extensions(["vitis"])
@@ -37,7 +35,6 @@ class XModelFixture : public testing::Test {
 TEST_F(XModelFixture, proteus) {
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    proteus::terminate();
     GTEST_SKIP();
   }
   EXPECT_TRUE(run(xmodel, images, threads, runners) == EXIT_SUCCESS);
@@ -48,7 +45,6 @@ TEST_F(XModelFixture, proteus) {
 TEST_F(XModelFixture, reference) {
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    proteus::terminate();
     GTEST_SKIP();
   }
   EXPECT_TRUE(run_reference(xmodel, images, threads, runners) == EXIT_SUCCESS);

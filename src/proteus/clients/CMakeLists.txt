@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets native native_internal)
+list(APPEND targets client native native_internal)
 
 if(${PROTEUS_ENABLE_HTTP})
   set(targets ${targets} http http_internal websocket)
@@ -31,9 +31,6 @@ foreach(target ${targets})
 endforeach()
 
 target_link_libraries(native INTERFACE batching)
-if(${PROTEUS_ENABLE_AKS})
-  target_link_libraries(native INTERFACE aks)
-endif()
 
 if(${PROTEUS_ENABLE_HTTP})
   target_link_libraries(http_internal INTERFACE helpers)

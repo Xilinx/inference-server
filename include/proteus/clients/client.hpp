@@ -47,6 +47,9 @@ class Client {
   virtual std::string workerLoad(const std::string& worker,
                                  RequestParameters* parameters) = 0;
   virtual void workerUnload(const std::string& worker) = 0;
+
+ protected:
+  Client();
 };
 
 }  // namespace proteus

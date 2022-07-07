@@ -70,11 +70,10 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST(Native, Facedetect) {
-  proteus::initialize();
+  proteus::Server server;
 
   auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    proteus::terminate();
     GTEST_SKIP();
   }
 
@@ -87,6 +86,4 @@ TEST(Native, Facedetect) {
   run(image_paths, 1, worker_name, my_queue);
 
   dequeue_validate(my_queue, num_images);
-
-  proteus::terminate();
 }

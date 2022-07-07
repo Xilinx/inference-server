@@ -44,71 +44,7 @@
 #include "proteus/observation/tracing.hpp"      // for startTrace, startTracer
 #include "proteus/version.hpp"                  // for kProteusVersion
 
-#ifdef PROTEUS_ENABLE_AKS
-#include <aks/AksSysManagerExt.h>  // for SysManagerExt
-#endif
-
 namespace proteus {
-
-std::string getLogDirectory() {
-  auto* home = std::getenv("HOME");
-  std::string dir;
-  if (home != nullptr) {
-    dir = home;
-    dir += "/.proteus";
-  } else {
-    dir = ".";
-  }
-  dir += "/logs";
-  return dir;
-}
-
-void initializeLogging() {
-#ifdef PROTEUS_ENABLE_LOGGING
-  LogOptions options{
-    "server",  // logger_name
-    getLogDirectory(),
-    true,              // enable file logging
-    LogLevel::kDebug,  // file log level
-    true,              // enable console logging
-    LogLevel::kWarn    // console log level
-  };
-  initLogger(options);
-
-  options.logger_name = "client";
-  initLogger(options);
-#endif
-}
-
-void initialize() {
-  initializeLogging();
-#ifdef PROTEUS_ENABLE_TRACING
-  startTracer();
-#endif
-
-  Manager::getInstance().init();
-
-  ModelRepository::setRepository("/workspace/proteus/external/repository");
-
-#ifdef PROTEUS_ENABLE_AKS
-  auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
-
-  // Load all the kernels
-  aks_sys_manager->loadKernels(std::string(std::getenv("AKS_ROOT")) +
-                               std::string("/kernel_zoo"));
-#endif
-}
-
-void terminate() {
-#ifdef PROTEUS_ENABLE_TRACING
-  stopTracer();
-#endif
-  Manager::getInstance().shutdown();
-
-#ifdef PROTEUS_ENABLE_AKS
-  AKS::SysManagerExt::deleteGlobal();
-#endif
-}
 
 ServerMetadata NativeClient::serverMetadata() {
   return ::proteus::serverMetadata();

@@ -1,4 +1,4 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2022 Xilinx Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PROTEUS
-#define GUARD_PROTEUS_PROTEUS
+#include "proteus/clients/client.hpp"
 
-// IWYU pragma: begin_exports
-#include "proteus/build_options.hpp"
-#include "proteus/clients/grpc.hpp"
-#include "proteus/clients/http.hpp"
-#include "proteus/clients/native.hpp"
-#include "proteus/core/data_types.hpp"
-#include "proteus/core/exceptions.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/helpers/declarations.hpp"
+#include "proteus/observation/logging.hpp"
 #include "proteus/servers/server.hpp"
-// IWYU pragma: end_exports
 
-#endif  // GUARD_PROTEUS_PROTEUS
+namespace proteus {
+
+void initializeClientLogging() {
+#ifdef PROTEUS_ENABLE_LOGGING
+  LogOptions options{
+    "client",  // logger_name
+    getLogDirectory(),
+    true,              // enable file logging
+    LogLevel::kDebug,  // file log level
+    true,              // enable console logging
+    LogLevel::kWarn    // console log level
+  };
+  initLogger(options);
+#endif
+}
+
+Client::Client() { initializeClientLogging(); }
+
+}  // namespace proteus

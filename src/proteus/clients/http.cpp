@@ -41,25 +41,6 @@
 
 namespace proteus {
 
-void startHttpServer(int port) {
-#ifdef PROTEUS_ENABLE_HTTP
-  std::thread{http::start, port}.detach();
-#else
-  (void)port;  // suppress unused variable warning
-#endif
-  HttpClient client("http://127.0.0.1:" + std::to_string(port));
-  bool ready = false;
-  do {
-    ready = client.serverLive();
-  } while (!ready);
-}
-
-void stopHttpServer() {
-#ifdef PROTEUS_ENABLE_HTTP
-  http::stop();
-#endif
-}
-
 class HttpClient::HttpClientImpl {
  public:
   explicit HttpClientImpl(const std::string& address,
