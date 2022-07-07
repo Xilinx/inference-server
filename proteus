@@ -152,9 +152,9 @@ class WriteComposeFile:
         kfd = glob.glob('/dev/kfd')
         dri = glob.glob('/dev/dri')
         if len(kfd) == 1:
-            devices.append(kfd)
-        # if len(dri) == 1:
-        devices.append(dri)
+            devices.append('/dev/kfd')
+        if len(dri) == 1:
+            devices.append('/dev/dri')
         files = glob.glob("/dev/dri/render*")
         for file in files:
             devices.append(f"{file}:{file}")
@@ -1287,7 +1287,7 @@ class Start:
             command += "gdb --args "
         command += f"{args.dir}/{old_build_config}/src/proteus/proteus-server "
         command += " ".join(unknown_args)
- 
+
         run_command(command, args.dry_run)
 
     @classmethod

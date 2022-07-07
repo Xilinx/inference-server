@@ -103,8 +103,8 @@ def main():
 
     # +load worker:
     parameters = proteus.RequestParameters()
-    parameters.put("xmodel", path_to_xmodel)
-    worker_name = client.modelLoad("Xmodel", parameters)
+    parameters.put("model", path_to_xmodel)
+    worker_name = client.workerLoad("Xmodel", parameters)
 
     ready = False
     while not ready:

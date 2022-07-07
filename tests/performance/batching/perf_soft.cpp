@@ -63,7 +63,6 @@ class PerfSoftBatcherFixture
 
   int dequeue() {
     const auto [batch_size, num_buffers, delay] = GetParam();
-    (void)num_buffers;  // suppress unused variable warning
     bool valid_read;
     int count = 0;
     do {

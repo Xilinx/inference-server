@@ -18,7 +18,6 @@ list(APPEND workers
     Echo
     InvertImage
     InvertVideo
-    # Migraphx
     # Fake
 )
 
