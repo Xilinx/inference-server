@@ -125,7 +125,7 @@ parser.add_argument(
     type=str,
     required=False,
     default=os.path.join(
-        root, r"external/artifacts/migraphx/resnet50-v1-7/imagenet_simple_labels.json"
+        root, r"tests/assets/imagenet_simple_labels.json"
     ),
     help="The file containing label names for the model's categories",
 )

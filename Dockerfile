@@ -811,7 +811,6 @@ RUN apt-get update &&\
     && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
     && ldconfig \
     && pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/f74d130aac0405c7e6bc759d331f913a7577bd54.tar.gz
-    
 # Install MIGraphX from source
 RUN mkdir -p /migraphx \
     && cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src \

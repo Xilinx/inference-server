@@ -204,8 +204,19 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
       migraphx::file_options options;
       options.set_file_format("msgpack");
 
-      this->prog_ = migraphx::load(compiled_path.c_str(), options);
-      // prog_ does not need to be compiled.
+      // The hip library will throw a cryptic error if unable to connect with a
+      // GPU at this point.
+      try {
+        this->prog_ = migraphx::load(compiled_path.c_str(), options);
+      } catch (const std::exception& e) {
+        std::string emsg = e.what();
+        if (emsg.find("Failed to call function") != std::string::npos) {
+          emsg = emsg + ".  Server could not connect to a GPU.";
+        }
+        PROTEUS_LOG_ERROR(logger, emsg);
+        throw std::runtime_error(emsg);
+        // prog_ does not need to be compiled.
+      }
     } else {
       // Look for onnx file.  ifstream tests that the file can be opened
       f = std::ifstream(onnx_path.c_str());
@@ -213,10 +224,11 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
         // Load the onnx file
         // Using parse_onnx() instead of load() because there's a bug at the
         // time of writing
-       PROTEUS_LOG_INFO(
-                  logger, std::string("migraphx worker loading ONNX model file ") +
-                  onnx_path.c_str());
+        PROTEUS_LOG_INFO(
+          logger, std::string("migraphx worker loading ONNX model file ") +
+                    onnx_path.c_str());
         std::cout << "Acquiring model file " << onnx_path.c_str() << std::endl;
+
         this->prog_ = migraphx::parse_onnx(onnx_path.c_str());
         std::cout << "Finished parsing ONNX model." << std::endl;
 
@@ -235,8 +247,18 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
           target_str = "ref";
         migraphx::target targ = migraphx::target(target_str.c_str());
         std::cout << "compiling model...\n";
-
-        prog_.compile(migraphx::target("gpu"), comp_opts);
+        // The hip library will throw a cryptic error if unable to connect with
+        // a GPU at this point.
+        try {
+          prog_.compile(migraphx::target("gpu"), comp_opts);
+        } catch (const std::exception& e) {
+          std::string emsg = e.what();
+          if (emsg.find("Failed to call function") != std::string::npos) {
+            emsg = emsg + ".  Server could not connect to a GPU.";
+          }
+          PROTEUS_LOG_ERROR(logger, emsg);
+          throw std::runtime_error(emsg);
+        }
         std::cout << "done." << std::endl;
 
         // Save the compiled program as a MessagePack (*.mxr) file
@@ -301,7 +323,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
 
     // Compile step needs to annotate with batch size when saving compiled model
     // (a new reqt.) migraphx should be able to handle smaller batch, too.
-    this->batch_size_ = lenth[0]; 
+    this->batch_size_ = lenth[0];
 
     // These values are set in the onnx model we're using.
     image_channels_ = lenth[1];

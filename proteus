@@ -152,9 +152,9 @@ class WriteComposeFile:
         kfd = glob.glob('/dev/kfd')
         dri = glob.glob('/dev/dri')
         if len(kfd) == 1:
-            devices.append (kfd)
-        if len(dri) == 1:
-            devices.append (dri)
+            devices.append(kfd)
+        # if len(dri) == 1:
+        devices.append(dri)
         files = glob.glob("/dev/dri/render*")
         for file in files:
             devices.append(f"{file}:{file}")
@@ -645,9 +645,6 @@ class Dockerize:
         if args.dev_base:
             build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
-        if args.migraphx_path:
-            build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
-
         if args.tfzendnn_path:
             build_args += f" --build-arg ENABLE_TFZENDNN=yes"
             build_args += f" --build-arg TFZENDNN_PATH={args.tfzendnn_path}"
@@ -743,13 +740,6 @@ class Dockerize:
             type=str,
             default=None,
             help="PT+ZenDNN C++ package location. If provided, will build with PT+ZenDNN enabled",
-        )
-
-        command_group.add_argument(
-            "--migraphx_path",
-            type=str,
-            default=None,
-            help="MIGraphX/rocm/hip C++ package location. If provided, will build with rocm enabled",
         )
 
         command_group.add_argument(
