@@ -1,4 +1,4 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2022 Xilinx Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PROTEUS
-#define GUARD_PROTEUS_PROTEUS
+/**
+ * @file
+ * @brief Implements the Python bindings for the server.hpp header
+ */
 
-// IWYU pragma: begin_exports
-#include "proteus/build_options.hpp"
-#include "proteus/clients/grpc.hpp"
-#include "proteus/clients/http.hpp"
-#include "proteus/clients/native.hpp"
-#include "proteus/core/data_types.hpp"
-#include "proteus/core/exceptions.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/helpers/declarations.hpp"
 #include "proteus/servers/server.hpp"
-// IWYU pragma: end_exports
 
-#endif  // GUARD_PROTEUS_PROTEUS
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
+#include "proteus/bindings/python/helpers/docstrings.hpp"
+
+namespace py = pybind11;
+
+void wrapServer(py::module_ &m) {
+  using proteus::Server;
+
+  py::class_<Server>(m, "Server")
+    .def(py::init<>(), DOCS(Server, Server))
+    .def("startHttp", &Server::startHttp, py::arg("port"),
+         DOCS(Server, startHttp))
+    .def("startGrpc", &Server::startGrpc, py::arg("port"),
+         DOCS(Server, startGrpc));
+}

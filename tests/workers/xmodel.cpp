@@ -63,15 +63,12 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::initialize();
-  proteus::startHttpServer(8998);
+  proteus::Server server;
+  server.startHttp(8998);
 
   if (run_ref) {
     run_reference(xmodel, images, threads, runners);
   } else {
     run(xmodel, images, threads, runners);
   }
-
-  proteus::stopHttpServer();
-  proteus::terminate();
 }

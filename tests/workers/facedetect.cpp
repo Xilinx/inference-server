@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::initialize();
+  proteus::Server server;
 
   auto workerName = load(runners);
   auto image_paths = getImages(path);
@@ -112,6 +112,4 @@ int main(int argc, char* argv[]) {
             << " queries: " << time_taken * 1000 << " ms" << std::endl;
   std::cout << "Average queries per second: " << throughput << " qps"
             << std::endl;
-
-  proteus::terminate();
 }

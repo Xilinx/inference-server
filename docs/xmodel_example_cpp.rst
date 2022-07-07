@@ -134,19 +134,6 @@ We can check this against our expected golden output to confirm that the inferen
     :language: cpp
     :dedent: 2
 
-Clean up
---------
-
-To safely end the program, we should signal the AMD Inference Server backend to shutdown.
-During the shutdown, AMD Inference Server will stop any workers that haven't been unloaded yet and shut down management threads safely.
-Note that this function was also called in the validation step above.
-
-.. literalinclude:: ../examples/cpp/custom_processing.cpp
-    :start-after: +clean:
-    :end-before: -clean:
-    :language: cpp
-    :dedent: 2
-
 Using gRPC
 ----------
 

@@ -47,18 +47,15 @@ def main(args):
     # Start server: if it's not already started, start it here
     start_server = not client.serverLive()
     if start_server:
-        proteus.initialize()
-        proteus.clients.startHttpServer(8998)
+        server = proteus.servers.Server()
+        server.startHttp(8998)
+        while not client.serverLive():
+            time.sleep(1)
 
     metadata = client.serverMetadata()
 
     if not "tfzendnn" in metadata.extensions:
         print("TFZenDNN support required but not found.")
-        if start_server:
-            proteus.clients.stopHttpServer()
-            proteus.terminate()
-            while client.serverLive():
-                time.sleep(1)
         sys.exit(0)
 
     # Argument parsing
@@ -169,14 +166,6 @@ def main(args):
         )
 
     print("Inference Completed")
-
-    # Stop the server if it was started from Python
-    if start_server:
-        proteus.clients.stopHttpServer()
-        proteus.terminate()
-        while client.serverLive():
-            time.sleep(1)
-        print("Killed Server")
 
 
 if __name__ == "__main__":

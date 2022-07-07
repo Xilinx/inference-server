@@ -31,6 +31,7 @@
 #include "proteus/observation/logging.hpp"    // for logger
 #include "proteus/servers/grpc_server.hpp"    // for start, stop
 #include "proteus/servers/http_server.hpp"    // for start, stop
+#include "proteus/servers/server.hpp"         // for Server
 
 namespace fs = std::filesystem;
 
@@ -97,7 +98,8 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::initialize();
+  proteus::Server server;
+
   proteus::Logger logger{proteus::Loggers::kServer};
 
   proteus::ModelRepository::setRepository(model_repository);
@@ -127,19 +129,17 @@ int main(int argc, char* argv[]) {
 
 #ifdef PROTEUS_ENABLE_GRPC
   std::cout << "gRPC server starting at port " << grpc_port << "\n";
-  proteus::grpc::start(grpc_port);
+  server.startGrpc(grpc_port);
 #endif
 
 #ifdef PROTEUS_ENABLE_HTTP
   std::cout << "HTTP server starting at port " << http_port << std::endl;
-  proteus::http::start(http_port);
+  server.startHttp(http_port);
 #else
   while (1) {
     std::this_thread::yield();
   }
 #endif
-
-  proteus::terminate();
 
   return 0;
 }

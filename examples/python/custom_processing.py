@@ -29,6 +29,7 @@ import numpy as np
 
 import proteus
 import proteus.clients
+import proteus.servers
 
 
 def preprocess(images):
@@ -98,8 +99,10 @@ def main():
 
     start_server = not client.serverLive()
     if start_server:
-        proteus.initialize()
-        proteus.clients.startHttpServer(8998)
+        server = proteus.servers.Server()
+        server.startHttp(8998)
+        while not client.serverLive():
+            sleep(1)
 
     # +load worker:
     parameters = proteus.RequestParameters()
@@ -132,12 +135,6 @@ def main():
         k = postprocess(recv_data, 5)
         assert k == gold_response_output
     # -inference:
-
-    if start_server:
-        proteus.clients.stopHttpServer()
-        proteus.terminate()
-        while client.serverLive():
-            sleep(1)
 
     print("custom_processing.py: Passed")
 

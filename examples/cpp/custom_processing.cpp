@@ -165,9 +165,11 @@ constexpr auto GRPC_ADDRESS = "localhost:50051";
 
 std::string load(const std::string& path_to_xmodel) {
   // +initialize grpc:
-  proteus::startGrpcServer(GRPC_PORT);
   proteus::GrpcClient client{GRPC_ADDRESS};
   // -initialize grpc:
+  while (!client.serverLive()) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
 
   // +load grpc:
   proteus::RequestParameters parameters;
@@ -247,8 +249,11 @@ int main() {
   // -user variables:
 
   // +initialize:
-  proteus::initialize();
-  // -initialize:
+  proteus::Server server;
+// -initialize:
+#ifdef ENABLE_GRPC
+  server.startGrpc(GRPC_PORT);
+#endif
 
   auto worker_name = load(path_to_xmodel);
 
@@ -283,16 +288,11 @@ int main() {
       if (top_k[j] != gold_response_output.at(j)) {
         std::cerr << "Output (" << top_k[j] << ") does not match golden ("
                   << gold_response_output.at(j) << ")\n";
-        proteus::terminate();
         return 1;
       }
     }
   }
   // -validate:
-
-  // +clean:
-  proteus::terminate();
-  // -clean:
 
   std::cout << "custom_processing.cpp: Passed\n";
 

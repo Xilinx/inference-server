@@ -46,6 +46,7 @@
 #include "proteus/observation/logging.hpp"        // for Logger
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
+#include "proteus/servers/server.hpp"             // for getLogDirectory
 #include "proteus/servers/websocket_server.hpp"   // for WebsocketServer
 
 using drogon::HttpRequestPtr;
