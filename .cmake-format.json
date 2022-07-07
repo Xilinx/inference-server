@@ -33,7 +33,11 @@
                     "PROPERTIES": {
                         "kwargs": {
                             "VERSION": 1,
-                            "SOVERSION": 1
+                            "SOVERSION": 1,
+                            "CXX_INCLUDE_WHAT_YOU_USE": 1,
+                            "CXX_CLANG_TIDY": 1,
+                            "CXX_CPPLINT": 1,
+                            "LINK_WHAT_YOU_USE": 1
                         }
                     }
                 }
