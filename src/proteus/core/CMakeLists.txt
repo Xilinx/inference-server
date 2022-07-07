@@ -41,6 +41,7 @@ endif()
 
 if(${PROTEUS_ENABLE_GRPC})
   add_library(lib_grpc STATIC predict_api.proto)
+  disable_target_linting(lib_grpc)
   target_include_directories(lib_grpc PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(lib_grpc INTERFACE gRPC::grpc++)
 
@@ -52,8 +53,6 @@ if(${PROTEUS_ENABLE_GRPC})
     GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
     PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}"
   )
-
-  disable_target_linting(lib_grpc)
 endif()
 
 add_library(lib_config STATIC model_config.proto)
