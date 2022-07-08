@@ -33,8 +33,14 @@ if(${PROTEUS_ENABLE_PTZENDNN})
     set(workers ${workers} PtZendnn)
 endif()
 
+if(${PROTEUS_ENABLE_MIGRAPHX})
+    set(workers ${workers} Migraphx)
+endif()
+
 foreach( worker ${workers})
-    # convert name to file name: separate by capital letters, add underscores and lowercase
+    set(worker_name worker${worker})
+
+    # convert name to file name: separate by capital letters, add underscores and shift to lowercase
     string(REGEX MATCHALL "[A-Z][a-z0-9]+" worker_list "${worker}")
     string (REPLACE ";" "_" worker_list_str "${worker_list}")
     string(TOLOWER ${worker_list_str} file_name)
@@ -59,6 +65,10 @@ target_link_libraries(workerInvertimage PRIVATE base64 opencv_core opencv_imgcod
 target_link_libraries(workerInvertvideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio)
 if(${PROTEUS_ENABLE_VITIS})
     target_link_libraries(workerXmodel PRIVATE parse_env vart-runner target-factory xir observation)
+endif()
+
+if(${PROTEUS_ENABLE_MIGRAPHX})
+    target_link_libraries(workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc opencv_core)
 endif()
 
 if(${PROTEUS_ENABLE_TFZENDNN})
