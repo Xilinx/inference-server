@@ -122,6 +122,7 @@ The following packages (and any dependencies) are installed from the Python Pack
     :pypipackages:`numpy`,latest,BSD-3,Scientific computing package for Python\ :superscript:`d 0`
     :pypipackages:`opencv-python-headless`,latest,MIT,Python bindings for OpenCV\ :superscript:`d 0`
     :pypipackages:`pip`,latest,MIT,Python package installer\ :superscript:`d 0`
+    :pypipackages:`pre-commit`,latest,MIT,Pre-commit hook framework\ :superscript:`d 0`
     :pypipackages:`pybind11_mkdoc`,latest,MIT,Used to extract function documentation for Python binding\ :superscript:`d 0`
     :pypipackages:`pybind11-stubgen`,latest,BSD-3,Used to generate type stubs for Python binding\ :superscript:`d 0`
     :pypipackages:`pytest`,latest,MIT,Python testing infrastructure\ :superscript:`d 0`

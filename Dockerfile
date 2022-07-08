@@ -560,6 +560,7 @@ RUN apt-get update \
         black \
         cpplint \
         cmakelang  \
+        pre-commit \
         # install opencv
         opencv-python-headless \
         # install benchmarking dependencies
