@@ -148,7 +148,13 @@ class WriteComposeFile:
         files = glob.glob("/dev/xclmgmt*")
         for file in files:
             devices.append(f"{file}:{file}")
-
+        # migraphx devices, if found
+        kfd = glob.glob('/dev/kfd')
+        dri = glob.glob('/dev/dri')
+        if len(kfd) == 1:
+            devices.append('/dev/kfd')
+        if len(dri) == 1:
+            devices.append('/dev/dri')
         files = glob.glob("/dev/dri/render*")
         for file in files:
             devices.append(f"{file}:{file}")
@@ -775,6 +781,7 @@ class Get:
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
         repository = Path.cwd() / "external/repository"
         pytorch_models = Path.cwd() / "external/pytorch_models"
+        migraphx_models = Path.cwd() / "external/artifacts/migraphx/resnet50v2"
         alveo_dir = artifact_dir / "u200_u250"
 
         tmp_dir = Path("/tmp/proteus_get")
@@ -797,25 +804,31 @@ class Get:
             tmp_dir: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
             ],
+            migraphx_models: [
+                "https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+            ],
         }
         if args.tfzendnn:
-            files.update(
-                {
-                    tensorflow_models: [
-                        "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
-                    ],
-                }
-            )
+            files.update({
+                tensorflow_models: [
+                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip"
+                ],
+            })
+            
+        if args.migraphx:
+            files.update({
+                migraphx_models: [
+                    "https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+                    "https://github.com/mvermeulen/rocm-migraphx/tree/master/datasets/imagenet/val.txt",
+                ],
+            })
 
         if args.ptzendnn:
-            files.update(
-                {
-                    pytorch_models: [
-                        "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
-                    ]
-                }
-            )
-
+            files.update({
+                pytorch_models:[
+                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip"
+                ]
+            })
         for location, urls in files.items():
             for url in urls:
                 if "www.xilinx.com/bin/public/openDownload" in url:
@@ -897,6 +910,10 @@ class Get:
             "--ptzendnn",
             action="store_true",
             help="If PT+ZenDNN should be enabled",
+        )
+
+        command_group.add_argument(
+            "--migraphx", action="store_true" ,help="If MIGraphX/rocm should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -1152,7 +1169,6 @@ class Run:
                 command += f"--{key} {value} "
 
         command += " ".join(unknown_args)
-
         command += " " + args.image
 
         if args.command is not None:
