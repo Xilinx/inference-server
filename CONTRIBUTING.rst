@@ -79,5 +79,6 @@ Here is an example Signed-off-by line which indicates that the contributor accep
 Style Guide
 -----------
 
-Please run clang-format, clang-tidy and cpplint on your requests prior to submitting them.
+``pre-commit`` is used to enforce style and is included in the development container.
+Install it with ``pre-commit install`` to configure the pre-commit hook.
 Add tests to validate your changes.
