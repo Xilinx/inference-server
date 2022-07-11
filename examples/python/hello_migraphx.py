@@ -235,6 +235,7 @@ def main(args):
 
     # Load a picture
     img = cv2.imread(imagename).astype("float32")
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # Crop to a square, resize
     img = make_nxn(img, shape[2])
     #  Normalize values with values specific to Resnet50
@@ -263,6 +264,7 @@ def main(args):
 
     # Load a picture
     img2 = cv2.imread(imagename2).astype("float32")
+    img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
     img2 = make_nxn(img2, shape[2])
     #  Normalize values with values specific to Resnet50
     img2 = img2.transpose(2, 0, 1)

@@ -134,7 +134,7 @@ class TestMigraphx:
             str(root_path / "tests/assets/bicycle-384566_640.jpg"),
         ]
 
-        gold_responses = [[259, 261, 157, 154, 230], [671, 444, 518, 665, 638]]
+        gold_responses = [[259, 261, 157, 260, 154], [444, 671, 880, 518, 870]]
 
         assert len(image_paths) == len(gold_responses)
         image_num = len(image_paths)
@@ -144,6 +144,7 @@ class TestMigraphx:
         for i in range(batch):
             # Load a picture
             img = cv2.imread(image_paths[i % image_num]).astype("float32")
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             # Crop to a square, resize
             img = make_nxn(img, 224)
             #  Normalize contents with values specific to Resnet50
