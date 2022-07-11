@@ -59,9 +59,9 @@ for dir in /workspace/*; do  # lists the absolute path to the file/directory
   break
 done
 
-# Any devices passed into the container are assumed to be in /dev/. Then, we 
+# Any devices passed into the container are assumed to be in /dev/. Then, we
 # want to allow the container user to have access to them. So, we find all the
-# GIDs that own devices in /dev/, create groups for them if they don't exist, 
+# GIDs that own devices in /dev/, create groups for them if they don't exist,
 # and add the user to these groups
 groups=$(find /dev/ | xargs stat -c %g | sort | uniq)
 
@@ -78,7 +78,7 @@ for group in $groups; do
       group=$new_group
 
       count=$((count+1))
-      new_group="group$count"      
+      new_group="group$count"
     fi
     # if the user isn't a member of the group, then join it
     if ! id -nG proteus-user | grep -qw "$group"; then

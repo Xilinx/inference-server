@@ -813,26 +813,32 @@ class Get:
             ],
         }
         if args.tfzendnn:
-            files.update({
-                tensorflow_models: [
-                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
-                ],
-            })
-            
+            files.update(
+                {
+                    tensorflow_models: [
+                        "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
+                    ],
+                }
+            )
+
         if args.migraphx:
-            files.update({
-                migraphx_models: [
-                    "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
-                    "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
-                ],
-            })
+            files.update(
+                {
+                    migraphx_models: [
+                        "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+                        "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
+                    ],
+                }
+            )
 
         if args.ptzendnn:
-            files.update({
-                pytorch_models:[
-                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
-                ]
-            })
+            files.update(
+                {
+                    pytorch_models: [
+                        "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
+                    ]
+                }
+            )
         for location, urls in files.items():
             for url in urls:
                 if "www.xilinx.com/bin/public/openDownload" in url:
@@ -917,7 +923,9 @@ class Get:
         )
 
         command_group.add_argument(
-            "--migraphx", action="store_true" ,help="If MIGraphX/rocm should be enabled",
+            "--migraphx",
+            action="store_true",
+            help="If MIGraphX/rocm should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)

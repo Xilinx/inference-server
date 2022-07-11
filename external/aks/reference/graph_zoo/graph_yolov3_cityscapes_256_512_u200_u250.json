@@ -1,59 +1,101 @@
 {
   "graph_name": "yolov3_cityscapes",
-
   "node_list": [
     {
+      "next_node": [
+        "yolov3_fpga"
+      ],
       "node_name": "yolov3_preproc",
-      "node_params" : {
+      "node_params": {
         "DetectionPreProcess": {
-          "net_h" : 256,
-          "net_w" : 512,
           "net_c": 3,
+          "net_h": 256,
+          "net_w": 512,
           "output_layout": "NHWC"
         }
-      },
-      "next_node": ["yolov3_fpga"]
+      }
     },
-
     {
+      "next_node": [
+        "yolov3_post"
+      ],
       "node_name": "yolov3_fpga",
       "node_params": {
         "DPURunner": {
-          "model_file" : "artifacts/u200_u250/yolov3_adas_pruned_0_9/yolov3_adas_pruned_0_9.xmodel",
+          "model_file": "artifacts/u200_u250/yolov3_adas_pruned_0_9/yolov3_adas_pruned_0_9.xmodel",
           "num_runners": 1
         }
-      },
-      "next_node": [  "yolov3_post" ]
+      }
     },
-
     {
+      "next_node": [
+        "yolov3_save_labels"
+      ],
       "node_name": "yolov3_post",
       "node_params": {
         "YoloPostProcess": {
+          "anchor_cnt": 5,
+          "biases": [
+            5.5,
+            7,
+            8,
+            17,
+            14,
+            11,
+            13,
+            29,
+            24,
+            17,
+            18,
+            46,
+            33,
+            29,
+            47,
+            23,
+            28,
+            68,
+            52,
+            42,
+            76,
+            37,
+            40,
+            97,
+            74,
+            64,
+            105,
+            63,
+            66,
+            131,
+            123,
+            100,
+            167,
+            83,
+            98,
+            174,
+            165,
+            158,
+            347,
+            98
+          ],
+          "conf_thresh": 0.05,
           "input_layout": "NHWC",
-          "yolo_version": 3,
-          "net_h":        256,
-          "net_w":        512,
-          "num_classes":  3,
-          "anchor_cnt":   5,
-          "conf_thresh":  0.05,
-          "iou_thresh":   0.45,
-          "biases":    [5.5,7,8,17,14,11,13,29,24,17,18,46,33,29,47,23,28,68,52,42,76,37,40,97,74,64,105,63,66,131,123,100,167,83,98,174,165,158,347,98]
+          "iou_thresh": 0.45,
+          "net_h": 256,
+          "net_w": 512,
+          "num_classes": 3,
+          "yolo_version": 3
         }
-      },
-      "next_node": ["yolov3_save_labels"]
+      }
     },
-
     {
+      "next_node": [],
       "node_name": "yolov3_save_labels",
       "node_params": {
         "SaveBoxesDarknetFormat": {
           "format": "opencv"
         }
-      },
-      "next_node": []
+      }
     }
   ],
-
   "version": "0.1"
 }

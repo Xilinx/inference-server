@@ -45,7 +45,7 @@ and Docker installed on your machine.
       will be used for further setup.
 
       .. note:: The package will be needed by the Docker build process so it must be in a location that is not excluded in the ``.dockerignore`` file such as the root of the repository.
-      
+
 
 2. Build the docker with TensorFlow/PyTorch+ZenDNN
 

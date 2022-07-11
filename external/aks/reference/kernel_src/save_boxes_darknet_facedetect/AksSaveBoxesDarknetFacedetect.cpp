@@ -33,7 +33,7 @@ class SaveBoxesDarknetFormat : public AKS::KernelBase {
   int _net_h;
   int _net_w;
   ///. Save the output from postproc kernel in Darknet format for mAP
-  ///calculation.
+  /// calculation.
   XYWH _opencvStyleCoords(float img_w, float img_h, float llx, float lly,
                           float urx, float ury);
 

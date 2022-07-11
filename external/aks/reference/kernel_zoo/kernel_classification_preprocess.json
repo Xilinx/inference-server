@@ -1,18 +1,31 @@
 {
-  "kernel_name": "ClassificationPreProcess",
   "description": "Preprocess an image for a classification network",
-  "kernel_type": "cpp",
   "device_type": "cpu",
-  "kernel_lib" : "libs/libClassificationPreProcess.so",
+  "kernel_lib": "libs/libClassificationPreProcess.so",
+  "kernel_name": "ClassificationPreProcess",
+  "kernel_type": "cpp",
   "num_cu": 1,
-
-  "param_list" : {
-    "net_w": {"type": "int"},
-    "net_h": {"type": "int"},
-    "net_c": {"type": "int"},
-    "th1":{"type": "int"},
-    "th2": {"type": "float"},
-    "mean": {"type": "float_array"},
-    "output_layout" : {"type": "string"}
+  "param_list": {
+    "mean": {
+      "type": "float_array"
+    },
+    "net_c": {
+      "type": "int"
+    },
+    "net_h": {
+      "type": "int"
+    },
+    "net_w": {
+      "type": "int"
+    },
+    "output_layout": {
+      "type": "string"
+    },
+    "th1": {
+      "type": "int"
+    },
+    "th2": {
+      "type": "float"
+    }
   }
 }

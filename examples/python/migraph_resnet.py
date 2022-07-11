@@ -124,9 +124,7 @@ parser.add_argument(
     "-l",
     type=str,
     required=False,
-    default=os.path.join(
-        root, r"tests/assets/imagenet_simple_labels.json"
-    ),
+    default=os.path.join(root, r"tests/assets/imagenet_simple_labels.json"),
     help="The file containing label names for the model's categories",
 )
 

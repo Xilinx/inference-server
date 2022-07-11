@@ -1,18 +1,31 @@
 {
-  "kernel_name": "ClassificationImreadPreProcess",
   "description": "Reads an image and preprocesses it for classification network",
-  "kernel_type": "cpp",
   "device_type": "cpu",
-  "kernel_lib" : "libs/libClassificationImreadPreProcess.so",
+  "kernel_lib": "libs/libClassificationImreadPreProcess.so",
+  "kernel_name": "ClassificationImreadPreProcess",
+  "kernel_type": "cpp",
   "num_cu": 8,
-
-  "param_list" : {
-    "net_w": {"type": "int"},
-    "net_h": {"type": "int"},
-    "net_c": {"type": "int"},
-    "th1":{"type": "int"},
-    "th2": {"type": "float"},
-    "mean": {"type": "float_array"},
-    "output_layout" : {"type": "string"}
+  "param_list": {
+    "mean": {
+      "type": "float_array"
+    },
+    "net_c": {
+      "type": "int"
+    },
+    "net_h": {
+      "type": "int"
+    },
+    "net_w": {
+      "type": "int"
+    },
+    "output_layout": {
+      "type": "string"
+    },
+    "th1": {
+      "type": "int"
+    },
+    "th2": {
+      "type": "float"
+    }
   }
 }

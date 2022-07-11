@@ -101,7 +101,7 @@ std::vector<std::string> modelList() {
   return Manager::getInstance().getWorkerEndpoints();
 }
 
-ModelMetadata modelMetadata(const std::string& model){
+ModelMetadata modelMetadata(const std::string& model) {
   return Manager::getInstance().getWorkerMetadata(model);
 }
 
