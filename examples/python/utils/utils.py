@@ -127,9 +127,12 @@ def postprocess(response, k=5):
         [numpy.ndarray]: topK values
     """
     outputs = response.getOutputs()
-    response_data = outputs[0].getFp32Data()
-    response_data = np.argsort(response_data)
-    return response_data[-k:][::-1]
+    responses = []
+    for output in outputs:
+        response_data = output.getFp32Data()
+        response_data = np.argsort(response_data)
+        responses.append(response_data[-k:][::-1])
+    return responses
 
 
 def preprocess_pt(image_location, input_size):

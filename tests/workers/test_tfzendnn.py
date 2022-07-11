@@ -86,7 +86,8 @@ class TestTfZendnn:
                 assert output.parameters.empty()
         return response
 
-    def test_tfzendnn_0(self):
+    @pytest.mark.parametrize("num", [1, 8])
+    def test_tfzendnn_0(self, num):
         """
         Send a request to tf model as tensor data
         """
@@ -94,7 +95,7 @@ class TestTfZendnn:
 
         preprocessing = {"input_size": 224, "resize_method": "crop"}
 
-        batch = 1
+        batch = num
         images = []
         for _ in range(batch):
             images.append(
@@ -106,33 +107,10 @@ class TestTfZendnn:
             )
         request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
-        k = postprocess(response, 5)
+        top_k_responses = postprocess(response, 5)
         gold_response_output = [259, 261, 154, 260, 263]
-        assert (k == gold_response_output).all()
-
-    def test_tfzendnn_1(self):
-        """
-        Send a request to tf model as tensor data
-        """
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
-
-        preprocessing = {"input_size": 224, "resize_method": "crop"}
-
-        batch = 8
-        images = []
-        for _ in range(batch):
-            images.append(
-                preprocess(
-                    image_path,
-                    input_size=preprocessing["input_size"],
-                    resize_method=preprocessing["resize_method"],
-                )
-            )
-        request = proteus.ImageInferenceRequest(images, True)
-        response = self.send_request(request)
-        k = postprocess(response, 5)
-        gold_response_output = [259, 261, 154, 260, 263]
-        assert (k == gold_response_output).all()
+        for top_k in top_k_responses:
+            assert (top_k == gold_response_output).all()
 
     @pytest.mark.benchmark(group="TfZendnn")
     def test_benchmark_tfzendnn(self, benchmark, model_fixture, parameters_fixture):

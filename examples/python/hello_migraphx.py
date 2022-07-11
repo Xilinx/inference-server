@@ -74,7 +74,7 @@ parser.add_argument(
     type=str,
     required=False,
     default=os.path.join(
-        root, r"external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx"
+        root, "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
     ),
     help="Location of model file on server",
 )
@@ -96,7 +96,7 @@ parser.add_argument(
     type=str,
     required=False,
     default=os.path.join(
-        root, r"tests/assets/girl-1867092_640.jpg"
+        root, r"tests/assets/dog-3619020_640.jpg"
     ),  # a girl in a sweatshirt
     help="An image to try inference on.  Use git-lfs to pull image assets",
 )
@@ -144,6 +144,8 @@ for input in model.graph.input:
         break
 
 print("This model's shape of input image is ", shape)
+if(len(shape) == 3):
+    shape.insert(0, 1)
 if len(shape) != 4:
     print(
         "Unable to read the image dimensions from ",
@@ -168,8 +170,10 @@ print("waiting for server...", end="")
 # call to initialize() or initializeLogging() is necessary before trying to contact the server.
 # At time of writing, it's needed whether or not user asks for logging
 proteus.initializeLogging()
-while not client.serverLive():
-    time.sleep(1)
+start_server = not client.serverLive()
+if start_server:
+    proteus.initialize()
+    proteus.clients.startHttpServer(8998)
 print("ok.")
 
 # +load worker.  The only parameter the migraphx worker requires is the model file name.
@@ -274,3 +278,9 @@ print("Done")
 # If this line is commented out, worker persists with doRun thread active, and the entire script
 # can be run again without any reloading taking place
 # client.unload('Migraphx')
+
+if start_server:
+    proteus.clients.stopHttpServer()
+    proteus.terminate()
+    while client.serverLive():
+        time.sleep(1)
