@@ -30,6 +30,10 @@ if(${PROTEUS_ENABLE_PTZENDNN})
   set(workers ${workers} PtZendnn)
 endif()
 
+if(${PROTEUS_ENABLE_MIGRAPHX})
+    set(workers ${workers} Migraphx)
+endif()
+
 foreach(worker ${workers})
   # convert name to file name: separate by capital letters, add underscores and
   # lowercase
@@ -67,6 +71,10 @@ if(${PROTEUS_ENABLE_VITIS})
   target_link_libraries(
     workerXmodel PRIVATE parse_env vart-runner target-factory xir observation
   )
+endif()
+
+if(${PROTEUS_ENABLE_MIGRAPHX})
+    target_link_libraries(workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc opencv_core)
 endif()
 
 if(${PROTEUS_ENABLE_TFZENDNN})

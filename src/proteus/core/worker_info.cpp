@@ -261,7 +261,7 @@ bool WorkerInfo::inputSizeValid(size_t size) const {
 
 void WorkerInfo::allocate(size_t request_size) {
   // TODO(varunsh): can result in deadlock in manager if allocated num !=
-  // request
+  // request  
   auto allocated =
     this->workers_.begin()->second->allocate(request_size - this->buffer_num_);
   this->buffer_num_ += allocated;

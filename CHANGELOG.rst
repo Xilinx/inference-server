@@ -34,6 +34,7 @@ Added
 - 'modelList' endpoint to the API (:commit:`7477b7d`)
 - Parse JSON data as string in HTTP body (:commit:`694800e`)
 - Directory monitoring for model loading (:commit:`6459797`)
+- MIGraphX backend (:pr:`34`)
 
 Changed
 ^^^^^^^

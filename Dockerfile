@@ -20,6 +20,7 @@ ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 ARG UNAME=proteus-user
 
 ARG ENABLE_VITIS=${ENABLE_VITIS:-yes}
+ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-no}
 ARG ENABLE_TFZENDNN=${ENABLE_TFZENDNN:-no}
 ARG TFZENDNN_PATH
 ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
@@ -782,7 +783,53 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_final
+# Install migraphx which supports GPU targets.  At the time of writing this,
+# it was necessary to build migraphx from source because the release branch 
+# didn't contain needed headers but it should be possible to install from repo
+# some day.
+#
+FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_install_migraphx_no
+
+FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_install_migraphx_yes
+# Add rocm repository
+RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main > /etc/apt/sources.list.d/rocm.list'
+# Install dependencies for migraphx
+# ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
+#        for Release version, since it's set up differently than dev
+#
+# The following apt packages are also required to install rocm/MIGraphX but have already 
+# been installed by this Dockerfile:
+# python3-dev, build-essential, git, sudo, python3-pip 
+#
+# Install rbuild
+RUN apt-get update &&\
+    apt-get install -y bash rocm-dev libpython3.6-dev miopen-hip-dev \
+    rocblas-dev half aria2 libnuma-dev rocm-cmake \
+    && ln -s /opt/rocm-* /opt/rocm \
+    && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
+    && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
+    && ldconfig \
+    && pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/f74d130aac0405c7e6bc759d331f913a7577bd54.tar.gz
+# Install MIGraphX from source
+RUN mkdir -p /migraphx \
+    && cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src \
+    && cd /migraphx/src  && git checkout cb18b0b5722373c49f5c257380af206e13344735 \
+    && cd /migraphx/src && rbuild package -d /migraphx/deps -B /migraphx/build \
+    && dpkg -i /migraphx/build/*.deb \
+    && rm -rf /migraphx
+
+# onnx package for Python, used by migraphx example scripts.
+RUN pip3 install onnx
+
+# reset the compiler version, which gets overridden in the rbuild process
+# (link gcc-9 and g++-9 to gcc and g++)
+RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
+        --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
+        --slave /usr/bin/gcov gcov /usr/bin/gcov-9 
+
+### end rocm install
+
+FROM proteus_install_migraphx_${ENABLE_MIGRAPHX} as proteus_dev_final
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT

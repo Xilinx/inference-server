@@ -145,13 +145,16 @@ class WriteComposeFile:
     def get_devices():
         devices = []
 
+        # used for FPGAs
         files = glob.glob("/dev/xclmgmt*")
         for file in files:
-            devices.append(f"{file}:{file}")
-
-        files = glob.glob("/dev/dri/render*")
-        for file in files:
-            devices.append(f"{file}:{file}")
+            devices.append(f"{file}")
+        # used for GPUs
+        if os.path.exists("/dev/kfd"):
+            devices.append("/dev/kfd")
+        # used for GPUs and FPGAs (?)
+        if os.path.exists("/dev/dri"):
+            devices.append("/dev/dri")
 
         return devices
 
@@ -647,6 +650,9 @@ class Dockerize:
             build_args += f" --build-arg ENABLE_PTZENDNN=yes"
             build_args += f" --build-arg PTZENDNN_PATH={args.ptzendnn_path}"
 
+        if args.migraphx:
+            build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
+
         try:
             git_branch = (
                 subprocess.check_output(shlex.split("git rev-parse --abbrev-ref HEAD"))
@@ -737,6 +743,12 @@ class Dockerize:
         )
 
         command_group.add_argument(
+            "--migraphx",
+            action="store_true",
+            help="If provided, will build with Migraphx enabled",
+        )
+
+        command_group.add_argument(
             "--suffix",
             action="store",
             help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
@@ -775,6 +787,7 @@ class Get:
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
         repository = Path.cwd() / "external/repository"
         pytorch_models = Path.cwd() / "external/pytorch_models"
+        migraphx_models = Path.cwd() / "external/artifacts/migraphx/resnet50v2"
         alveo_dir = artifact_dir / "u200_u250"
 
         tmp_dir = Path("/tmp/proteus_get")
@@ -782,6 +795,7 @@ class Get:
         alveo_dir.mkdir(exist_ok=True, parents=True)
         tmp_dir.mkdir(exist_ok=True, parents=True)
         repository.mkdir(exist_ok=True, parents=True)
+        migraphx_models.mkdir(exist_ok=True, parents=True)
 
         files = {
             test_asset_dir: [
@@ -799,23 +813,26 @@ class Get:
             ],
         }
         if args.tfzendnn:
-            files.update(
-                {
-                    tensorflow_models: [
-                        "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
-                    ],
-                }
-            )
+            files.update({
+                tensorflow_models: [
+                    "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
+                ],
+            })
+            
+        if args.migraphx:
+            files.update({
+                migraphx_models: [
+                    "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+                    "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
+                ],
+            })
 
         if args.ptzendnn:
-            files.update(
-                {
-                    pytorch_models: [
-                        "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
-                    ]
-                }
-            )
-
+            files.update({
+                pytorch_models:[
+                    "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
+                ]
+            })
         for location, urls in files.items():
             for url in urls:
                 if "www.xilinx.com/bin/public/openDownload" in url:
@@ -841,22 +858,12 @@ class Get:
                         with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
                         if args.tfzendnn or args.ptzendnn:
-                            modelpath = str(
-                                tmp_dir / filename.split(".zip")[0] / "float/"
-                            )
+                            modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
                             for filename in os.listdir(modelpath):
-                                modelname = (
-                                    filename
-                                    if filename.endswith("pb")
-                                    or filename.endswith("pth")
-                                    else None
-                                )
-                            if not os.path.exists(location):
-                                os.makedirs(location)
-                            shutil.move(
-                                os.path.join(modelpath, modelname),
-                                os.path.join(location, modelname),
-                            )
+                                modelname = filename if filename.endswith('pb') or filename.endswith('pth') else None
+                            if not os.path.exists(location): os.makedirs(location)
+                            shutil.move(os.path.join(modelpath, modelname),
+                                        os.path.join(location, modelname))
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)
@@ -897,6 +904,10 @@ class Get:
             "--ptzendnn",
             action="store_true",
             help="If PT+ZenDNN should be enabled",
+        )
+
+        command_group.add_argument(
+            "--migraphx", action="store_true" ,help="If MIGraphX/rocm should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)
@@ -1152,7 +1163,6 @@ class Run:
                 command += f"--{key} {value} "
 
         command += " ".join(unknown_args)
-
         command += " " + args.image
 
         if args.command is not None:
