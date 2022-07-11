@@ -1,32 +1,36 @@
 {
-  "graph_name": "graph_adder", 
+  "graph_name": "graph_adder",
   "node_list": [
     {
+      "next_node": [
+        "add2"
+      ],
       "node_name": "add1",
-      "node_params" : {
+      "node_params": {
         "Add": {
-          "adder" : 10 
+          "adder": 10
         }
-      },
-      "next_node": ["add2"]
+      }
     },
     {
+      "next_node": [
+        "add3"
+      ],
       "node_name": "add2",
-      "node_params" : {
+      "node_params": {
         "Add": {
-          "adder" : 20 
+          "adder": 20
         }
-      },
-      "next_node": ["add3"]
+      }
     },
     {
+      "next_node": [],
       "node_name": "add3",
-      "node_params" : {
+      "node_params": {
         "Add": {
-          "adder" : 30 
+          "adder": 30
         }
-      },
-      "next_node": []
+      }
     }
   ]
 }

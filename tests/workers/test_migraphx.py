@@ -30,8 +30,9 @@ from utils.utils import postprocess
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
 # The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
 
+
 def make_nxn(image, n):
-    """ 
+    """
     Crop an image to square and then resize to desired dimension n x n
     """
     width = image.shape[1]
@@ -48,6 +49,7 @@ def make_nxn(image, n):
         return cv2.resize(square, (n, n))
     else:
         return cv2.resize(image, (n, n))
+
 
 def preprocess(img_data):
     """
@@ -127,15 +129,12 @@ class TestMigraphx:
         """
         Send a request to model as tensor data
         """
-        image_paths = [ 
-            str(root_path / "tests/assets/dog-3619020_640.jpg"), 
-            str(root_path / "tests/assets/bicycle-384566_640.jpg")
+        image_paths = [
+            str(root_path / "tests/assets/dog-3619020_640.jpg"),
+            str(root_path / "tests/assets/bicycle-384566_640.jpg"),
         ]
 
-        gold_responses = [
-            [259, 261, 157, 154, 230],
-            [671, 444, 518, 665, 638]
-        ]
+        gold_responses = [[259, 261, 157, 154, 230], [671, 444, 518, 665, 638]]
 
         assert len(image_paths) == len(gold_responses)
         image_num = len(image_paths)

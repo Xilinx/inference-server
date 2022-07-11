@@ -1,44 +1,44 @@
 {
-  "graph_name": "test_yolo_postproc", 
-  
+  "graph_name": "test_yolo_postproc",
   "node_list": [
     {
+      "next_node": [
+        "writeDarknetFormat"
+      ],
       "node_name": "yolov2_post",
       "node_params": {
         "YoloPostProcess": {
-          "yolo_version": 2,
-          "net_h":        608,
-          "net_w":        608,
-          "num_classes":  80,
-          "anchor_cnt":   5,
-          "conf_thresh":  0.24,
-          "iou_thresh":   0.45,
-          "biases":       [ 0.572730004787445068359375,
-                            0.677384972572326660156250,
-                            1.874459981918334960937500,
-                            2.062530040740966796875000,
-                            3.338429927825927734375000,
-                            5.474339962005615234375000,
-                            7.882820129394531250000000,
-                            3.527780055999755859375000,
-                            9.770520210266113281250000,
-                            9.168279647827148437500000]
+          "anchor_cnt": 5,
+          "biases": [
+            0.5727300047874451,
+            0.6773849725723267,
+            1.874459981918335,
+            2.062530040740967,
+            3.3384299278259277,
+            5.474339962005615,
+            7.882820129394531,
+            3.527780055999756,
+            9.770520210266113,
+            9.168279647827148
+          ],
+          "conf_thresh": 0.24,
+          "iou_thresh": 0.45,
+          "net_h": 608,
+          "net_w": 608,
+          "num_classes": 80,
+          "yolo_version": 2
         }
-      },
-      "next_node": ["writeDarknetFormat"]
+      }
     },
-  
     {
+      "next_node": [],
       "node_name": "writeDarknetFormat",
       "node_params": {
         "SaveBoxesDarknetFormat": {
           "output_dir": "out_labels"
         }
-      },
-      "next_node": []
+      }
     }
   ],
-  
   "version": "0.1"
 }
-

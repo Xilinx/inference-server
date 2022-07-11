@@ -87,7 +87,7 @@ install(
   TARGETS proteus
   EXPORT proteus_Targets
   RUNTIME COMPONENT proteus_Runtime
-  LIBRARY COMPONENT proteus_Runtime 
+  LIBRARY COMPONENT proteus_Runtime
   NAMELINK_COMPONENT proteus_Development
   ARCHIVE COMPONENT proteus_Development
   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"

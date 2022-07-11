@@ -786,7 +786,7 @@ RUN apt-get update \
     && rm -fr /tmp/*
 
 # Install migraphx which supports GPU targets.  At the time of writing this,
-# it was necessary to build migraphx from source because the release branch 
+# it was necessary to build migraphx from source because the release branch
 # didn't contain needed headers but it should be possible to install from repo
 # some day.
 #
@@ -799,9 +799,9 @@ RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0
 # ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
 #        for Release version, since it's set up differently than dev
 #
-# The following apt packages are also required to install rocm/MIGraphX but have already 
+# The following apt packages are also required to install rocm/MIGraphX but have already
 # been installed by this Dockerfile:
-# python3-dev, build-essential, git, sudo, python3-pip 
+# python3-dev, build-essential, git, sudo, python3-pip
 #
 # Install rbuild
 RUN apt-get update &&\
@@ -827,7 +827,7 @@ RUN pip3 install onnx
 # (link gcc-9 and g++-9 to gcc and g++)
 RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
         --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
-        --slave /usr/bin/gcov gcov /usr/bin/gcov-9 
+        --slave /usr/bin/gcov gcov /usr/bin/gcov-9
 
 ### end rocm install
 

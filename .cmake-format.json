@@ -1,55 +1,55 @@
 {
-    "parse": {
-        "additional_commands": {
-            "protobuf_generate": {
-                "kwargs": {
-                    "TARGET": 1,
-                    "LANGUAGE": 1,
-                    "GENERATE_EXTENSIONS": 1,
-                    "PLUGIN": 1
-                }
-            },
-            "list": {
-                "kwargs": {
-                    "APPEND": 1,
-                    "OUTPUT_VARIABLE": 1,
-                    "PREPEND": 1,
-                    "TRANSFORM": 1
-                },
-                "pargs": "*"
-            },
-            "pybind11_add_module": {
-                "flags": [
-                    "THIN_LTO",
-                    "MODULE",
-                    "SHARED",
-                    "NO_EXTRAS",
-                    "EXCLUDE_FROM_ALL",
-                    "SYSTEM"
-                ]
-            },
-            "set_target_properties": {
-                "kwargs": {
-                    "PROPERTIES": {
-                        "kwargs": {
-                            "VERSION": 1,
-                            "SOVERSION": 1,
-                            "CXX_INCLUDE_WHAT_YOU_USE": 1,
-                            "CXX_CLANG_TIDY": 1,
-                            "CXX_CPPLINT": 1,
-                            "LINK_WHAT_YOU_USE": 1
-                        }
-                    }
-                }
-            }
+  "format": {
+    "autosort": true,
+    "dangle_parens": true,
+    "max_subgroups_hwrap": 3
+  },
+  "markup": {
+    "first_comment_is_literal": true
+  },
+  "parse": {
+    "additional_commands": {
+      "list": {
+        "kwargs": {
+          "APPEND": 1,
+          "OUTPUT_VARIABLE": 1,
+          "PREPEND": 1,
+          "TRANSFORM": 1
+        },
+        "pargs": "*"
+      },
+      "protobuf_generate": {
+        "kwargs": {
+          "GENERATE_EXTENSIONS": 1,
+          "LANGUAGE": 1,
+          "PLUGIN": 1,
+          "TARGET": 1
         }
-    },
-    "format": {
-        "autosort": true,
-        "max_subgroups_hwrap": 3,
-        "dangle_parens": true
-    },
-    "markup": {
-        "first_comment_is_literal": true
+      },
+      "pybind11_add_module": {
+        "flags": [
+          "THIN_LTO",
+          "MODULE",
+          "SHARED",
+          "NO_EXTRAS",
+          "EXCLUDE_FROM_ALL",
+          "SYSTEM"
+        ]
+      },
+      "set_target_properties": {
+        "kwargs": {
+          "PROPERTIES": {
+            "kwargs": {
+              "CXX_CLANG_TIDY": 1,
+              "CXX_CPPLINT": 1,
+              "CXX_INCLUDE_WHAT_YOU_USE": 1,
+              "LINK_WHAT_YOU_USE": 1,
+              "SOVERSION": 1,
+              "VERSION": 1
+            }
+          }
+        }
+      }
     }
+  }
 }

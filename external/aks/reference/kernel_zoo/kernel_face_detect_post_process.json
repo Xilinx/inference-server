@@ -1,14 +1,16 @@
 {
-  "kernel_name": "FaceDetectPostProcess",
   "description": "Postprocessing kernel Face Detection network",
-  "kernel_type": "cpp",
   "device_type": "cpu",
-  "kernel_lib" : "libs/libFaceDetectPostProcess.so",
-
+  "kernel_lib": "libs/libFaceDetectPostProcess.so",
+  "kernel_name": "FaceDetectPostProcess",
+  "kernel_type": "cpp",
   "num_cu": "2",
-
-  "param_list" : {
-    "stride"    : {"type": "int"},
-    "gs_tiling" : {"type": "int"}
+  "param_list": {
+    "gs_tiling": {
+      "type": "int"
+    },
+    "stride": {
+      "type": "int"
+    }
   }
 }

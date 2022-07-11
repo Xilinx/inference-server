@@ -1,43 +1,47 @@
 {
   "graph_name": "facedetect",
-
   "node_list": [
     {
+      "next_node": [
+        "facedetect_fpga"
+      ],
       "node_name": "preproc",
-      "node_params" : {
+      "node_params": {
         "FaceDetectImreadPreProcess": {
-          "net_w" : 320,
-          "net_h" : 320,
+          "mean": [
+            128.0,
+            128.0,
+            128.0
+          ],
           "net_c": 3,
-          "mean": [128.0, 128.0, 128.0],
+          "net_h": 320,
+          "net_w": 320,
           "output_layout": "NHWC"
         }
-      },
-      "next_node": ["facedetect_fpga"]
+      }
     },
-
     {
+      "next_node": [
+        "facedetect_post"
+      ],
       "node_name": "facedetect_fpga",
       "node_params": {
         "DPURunner": {
-          "model_file" : "artifacts/u50/densebox_320_320/densebox_320_320.xmodel",
+          "model_file": "artifacts/u50/densebox_320_320/densebox_320_320.xmodel",
           "num_runners": 4
         }
-      },
-      "next_node": ["facedetect_post"]
+      }
     },
-
     {
+      "next_node": [],
       "node_name": "facedetect_post",
       "node_params": {
         "FaceDetectPostProcess": {
-          "stride" : 8,
-          "gs_tiling": 0
+          "gs_tiling": 0,
+          "stride": 8
         }
-      },
-      "next_node": []
+      }
     }
   ],
-
   "version": "0.1"
 }

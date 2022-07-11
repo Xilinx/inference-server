@@ -84,9 +84,7 @@ parser.add_argument(
     "-l",
     type=str,
     required=False,
-    default=os.path.join(
-        root, r"tests/assets/imagenet_simple_labels.json"
-    ),
+    default=os.path.join(root, r"tests/assets/imagenet_simple_labels.json"),
     help="The file containing label names for the model's categories",
 )
 
@@ -144,7 +142,7 @@ for input in model.graph.input:
         break
 
 print("This model's shape of input image is ", shape)
-if(len(shape) == 3):
+if len(shape) == 3:
     shape.insert(0, 1)
 if len(shape) != 4:
     print(

@@ -187,9 +187,9 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
       // Load the onnx file
       // Using parse_onnx() instead of load() because there's a bug at the
       // time of writing
-      PROTEUS_LOG_INFO(
-        logger, std::string("migraphx worker loading ONNX model file ") +
-                  onnx_path.c_str());
+      PROTEUS_LOG_INFO(logger,
+                       std::string("migraphx worker loading ONNX model file ") +
+                         onnx_path.c_str());
 
       this->prog_ = migraphx::parse_onnx(onnx_path.c_str());
 
@@ -262,12 +262,12 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
     sh.lengths();  // For resnet50, a vector of dimensions 1, 3, 224, 224
   if (length.size() != 4) {
     PROTEUS_LOG_INFO(logger,
-                      std::string("migraphx worker was passed a model with "
-                                  "unexpected number of input dimensions=") +
-                        std::to_string(length.size()));
+                     std::string("migraphx worker was passed a model with "
+                                 "unexpected number of input dimensions=") +
+                       std::to_string(length.size()));
     throw std::invalid_argument(
       std::string(("migraphx worker was passed a model with unexpected "
-                    "number of input dimensions=") +
+                   "number of input dimensions=") +
                   std::to_string(length.size())));
   }
 
@@ -289,9 +289,8 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   // For an output of 1000 label values, output_lengths should be a vector of
   // {1, 1000}
   std::vector<size_t> output_lengths = output_shapes[0].lengths();
-  output_classes_ =
-    std::accumulate(output_lengths.begin(), output_lengths.end(), 1,
-                    std::multiplies<size_t>());
+  output_classes_ = std::accumulate(
+    output_lengths.begin(), output_lengths.end(), 1, std::multiplies<size_t>());
 }
 
 /**
@@ -307,7 +306,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
 size_t MIGraphXWorker::doAllocate(size_t num) {
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
-#endif 
+#endif
   //
   // Allocate
   //

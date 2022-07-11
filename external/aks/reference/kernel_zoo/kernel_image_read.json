@@ -1,12 +1,13 @@
 {
-  "kernel_name": "ImageRead",
   "description": "Reads an image from the image_path provided",
-  "kernel_type": "cpp",
   "device_type": "cpu",
-  "kernel_lib" : "libs/libImageRead.so",
+  "kernel_lib": "libs/libImageRead.so",
+  "kernel_name": "ImageRead",
+  "kernel_type": "cpp",
   "num_cu": 8,
-
-  "param_list" : {
-    "image_path" : {"type": "string"}
+  "param_list": {
+    "image_path": {
+      "type": "string"
+    }
   }
 }

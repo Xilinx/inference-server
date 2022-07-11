@@ -174,7 +174,7 @@ You'll need to first connect to the node where the container is running.
 On that host:
 
 .. code-block:: console
-  
+
     # this lists the running Inference Server containers
     $ proteus list
 

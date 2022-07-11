@@ -1,12 +1,15 @@
 {
-  "kernel_name": "SaveBoxesDarknetFormat",
   "description": "Returns detection boxes in Darknet format. Output format: {batch idx, class id, score, x, y, w, h}",
-  "kernel_type": "cpp",
   "device_type": "cpu",
-  "kernel_lib" : "libs/libSaveBoxesDarknetFormat.so",
-
-  "param_list" : {
-    "output_dir": {"type": "string"},
-    "format": {"type": "string"}
+  "kernel_lib": "libs/libSaveBoxesDarknetFormat.so",
+  "kernel_name": "SaveBoxesDarknetFormat",
+  "kernel_type": "cpp",
+  "param_list": {
+    "format": {
+      "type": "string"
+    },
+    "output_dir": {
+      "type": "string"
+    }
   }
 }
