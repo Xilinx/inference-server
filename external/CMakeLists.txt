@@ -15,22 +15,22 @@
 add_custom_target(extra)
 
 if(${PROTEUS_ENABLE_AKS})
-    set(AKS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aks)
+  set(AKS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aks)
 
-    foreach(DIR graph_zoo kernel_src kernel_zoo cmake-kernels.sh)
-        if(NOT EXISTS ${AKS_PATH}/${DIR})
-            file(COPY ${AKS_PATH}/reference/${DIR} DESTINATION ${AKS_PATH})
-        endif()
-    endforeach()
+  foreach(DIR graph_zoo kernel_src kernel_zoo cmake-kernels.sh)
+    if(NOT EXISTS ${AKS_PATH}/${DIR})
+      file(COPY ${AKS_PATH}/reference/${DIR} DESTINATION ${AKS_PATH})
+    endif()
+  endforeach()
 
-    file(MAKE_DIRECTORY ${AKS_PATH}/libs)
+  file(MAKE_DIRECTORY ${AKS_PATH}/libs)
 
-    add_custom_target(
-        aks-kernels
-        WORKING_DIRECTORY ${AKS_PATH}
-        COMMAND bash cmake-kernels.sh --type release
-        COMMENT "Building AKS kernels"
-    )
+  add_custom_target(
+    aks-kernels
+    WORKING_DIRECTORY ${AKS_PATH}
+    COMMAND bash cmake-kernels.sh --type release
+    COMMENT "Building AKS kernels"
+  )
 
-    add_dependencies(extra aks-kernels)
+  add_dependencies(extra aks-kernels)
 endif()

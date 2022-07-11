@@ -5,6 +5,7 @@
     "max_subgroups_hwrap": 3
   },
   "markup": {
+    "enable_markup": false,
     "first_comment_is_literal": true
   },
   "parse": {
