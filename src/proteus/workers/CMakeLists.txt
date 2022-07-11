@@ -38,8 +38,6 @@ if(${PROTEUS_ENABLE_MIGRAPHX})
 endif()
 
 foreach( worker ${workers})
-    set(worker_name worker${worker})
-
     # convert name to file name: separate by capital letters, add underscores and shift to lowercase
     string(REGEX MATCHALL "[A-Z][a-z0-9]+" worker_list "${worker}")
     string (REPLACE ";" "_" worker_list_str "${worker_list}")

@@ -16,7 +16,7 @@
 AMD Inference Server
 ====================
 
-The AMD/Xilinx Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, FPGAs and :github:`Vitis AI <Xilinx/Vitis-AI>`.
+The AMD Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, FPGAs.
 It can be deployed as a server or through custom applications using its C++ API.
 The AMD Inference Server can also be extended to support other hardware accelerators and machine learning frameworks.
 
