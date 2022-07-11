@@ -124,6 +124,9 @@ ServerMetadata NativeClient::serverMetadata() {
 #ifdef PROTEUS_ENABLE_PTZENDNN
   metadata.extensions.insert("ptzendnn");
 #endif
+#ifdef PROTEUS_ENABLE_MIGRAPHX
+  metadata.extensions.insert("migraphx");
+#endif
   return metadata;
 }
 bool NativeClient::serverLive() { return true; }

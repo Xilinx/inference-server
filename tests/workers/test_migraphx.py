@@ -81,7 +81,7 @@ def parameters_fixture():
     }
 
 
-# @pytest.mark.extensions(["migraphx"])
+@pytest.mark.extensions(["migraphx"])
 @pytest.mark.usefixtures("load")
 class TestMigraphx:
     """
@@ -127,13 +127,24 @@ class TestMigraphx:
         """
         Send a request to model as tensor data
         """
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
+        image_paths = [ 
+            str(root_path / "tests/assets/dog-3619020_640.jpg"), 
+            str(root_path / "tests/assets/bicycle-384566_640.jpg")
+        ]
+
+        gold_responses = [
+            [259, 261, 157, 154, 230],
+            [671, 444, 518, 665, 638]
+        ]
+
+        assert len(image_paths) == len(gold_responses)
+        image_num = len(image_paths)
 
         batch = num
         images = []
-        for _ in range(batch):
+        for i in range(batch):
             # Load a picture
-            img = cv2.imread(image_path).astype("float32")
+            img = cv2.imread(image_paths[i % image_num]).astype("float32")
             # Crop to a square, resize
             img = make_nxn(img, 224)
             #  Normalize contents with values specific to Resnet50
@@ -142,10 +153,11 @@ class TestMigraphx:
             images.append(img)
         request = proteus.ImageInferenceRequest(images, True)
         response = self.send_request(request)
-        k = postprocess(response, 5)
-        # Look for the top 5 categories (not underlying scores)
-        gold_response_output = [259, 261, 157, 154, 230]
-        assert (k == gold_response_output).all()
+        top_k_responses = postprocess(response, 5)
+
+        for i, top_k in enumerate(top_k_responses):
+            # Look for the top 5 categories (not underlying scores)
+            assert (top_k == gold_responses[i % image_num]).all()
 
     @pytest.mark.benchmark(group="Migraphx")
     def test_benchmark_Migraphx(self, benchmark, model_fixture, parameters_fixture):
