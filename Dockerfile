@@ -783,16 +783,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /tmp/*
 
-FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_dev_zendnn
-
 # Install migraphx which supports GPU targets.  At the time of writing this,
 # it was necessary to build migraphx from source because the release branch 
 # didn't contain needed headers but it should be possible to install from repo
 # some day.
 #
-FROM proteus_dev_zendnn as proteus_install_migraphx_no
+FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_install_migraphx_no
 
-FROM proteus_dev_zendnn as proteus_install_migraphx_yes
+FROM proteus_install_ptzendnn_${ENABLE_PTZENDNN} as proteus_install_migraphx_yes
 # Add rocm repository
 RUN sh -c 'echo deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main > /etc/apt/sources.list.d/rocm.list'
 # Install dependencies for migraphx
@@ -829,21 +827,9 @@ RUN      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
         --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
         --slave /usr/bin/gcov gcov /usr/bin/gcov-9 
 
-# permissions workarounds for difficulties when running an Ubuntu 18.04 container on a
-# Ubuntu 20.04 host.  The container needs permissions for group "video" to access
-# the GPU driver file, but that group has been renamed to "render" for 20.04.
+### end rocm install
 
-# needed since this doesn’t already exist in /etc/groups in 18.04
-# The hard-coded group ID 109 is a temporary workaround since it's not guaranteed to have
-# that gid in every case.  Todo: determine gid at runtime (time of docker container startup)
-RUN groupadd -g 109 render      
-# user needs to be in video group in case the docker image is invoked from ubuntu 18.04 based host
-RUN  usermod -aG video $UNAME
- # user needs to be in render group in case the docker image is invoked from ubuntu 20.04 based host
-RUN  usermod -aG render $UNAME
 FROM proteus_install_migraphx_${ENABLE_MIGRAPHX} as proteus_dev_final
-
-    ### end rocm install
 
 ARG COPY_DIR
 ARG PROTEUS_ROOT

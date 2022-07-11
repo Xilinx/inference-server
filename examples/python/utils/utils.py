@@ -25,7 +25,7 @@ def center_crop(img, dim):
         dim (tuple): Shape of the output image
 
     Returns:
-        [numpy.ndarray]: Image croppepd to dim shape
+        [numpy.ndarray]: Image cropped to dim shape
     """
 
     width, height = img.shape[1], img.shape[0]
