@@ -167,13 +167,12 @@ img = preprocess(img)
 
 client = proteus.clients.HttpClient("http://127.0.0.1:8998")
 print("waiting for server...", end="")
-# call to initialize() or initializeLogging() is necessary before trying to contact the server.
-# At time of writing, it's needed whether or not user asks for logging
-proteus.initializeLogging()
 start_server = not client.serverLive()
 if start_server:
-    proteus.initialize()
-    proteus.clients.startHttpServer(8998)
+    server = proteus.servers.Server()
+    server.startHttp(8998)
+    while not client.serverLive():
+        time.sleep(1)
 print("ok.")
 
 # +load worker.  The only parameter the migraphx worker requires is the model file name.
@@ -278,9 +277,3 @@ print("Done")
 # If this line is commented out, worker persists with doRun thread active, and the entire script
 # can be run again without any reloading taking place
 # client.unload('Migraphx')
-
-if start_server:
-    proteus.clients.stopHttpServer()
-    proteus.terminate()
-    while client.serverLive():
-        time.sleep(1)
