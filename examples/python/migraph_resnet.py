@@ -241,6 +241,7 @@ for file in files:
         print("file ", file)
         # Load a picture
         imgV = cv2.imread(filename).astype("float32")
+        imgV = cv2.cvtColor(imgV, cv2.COLOR_BGR2RGB)
         imgV = make_nxn(imgV, shape[2])
         #  Normalize values with values specific to Resnet50
         imgV = imgV.transpose(2, 0, 1)
