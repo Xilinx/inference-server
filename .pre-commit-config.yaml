@@ -9,6 +9,10 @@ repos:
     rev: v13.0.0
     hooks:
       - id: clang-format
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.10
+    hooks:
+    - id: cmake-format
   # general hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0

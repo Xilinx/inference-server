@@ -13,15 +13,13 @@
 # limitations under the License.
 
 # Look for an executable called torch, torch_cpu and c10
-find_library(PT_LIBRARY
-  NAMES torch torch_cpu c10
-  DOC "Path to pytorch executable"
+find_library(
+  PT_LIBRARY NAMES torch torch_cpu c10 DOC "Path to pytorch executable"
 )
 
 include(FindPackageHandleStandardArgs)
 
 # Handle standard arguments to find_package like REQUIRED and QUIET
-find_package_handle_standard_args(ptzendnn
-  "Failed to find pytorch executable"
-  PT_LIBRARY
+find_package_handle_standard_args(
+  ptzendnn "Failed to find pytorch executable" PT_LIBRARY
 )

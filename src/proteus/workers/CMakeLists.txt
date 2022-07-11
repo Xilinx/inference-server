@@ -14,8 +14,12 @@
 
 include(GNUInstallDirs)
 
-list(APPEND workers Echo InvertImage InvertVideo
-                    # Fake
+list(
+  APPEND workers
+         Echo
+         InvertImage
+         InvertVideo
+         # Fake
 )
 
 if(${PROTEUS_ENABLE_VITIS})
@@ -74,7 +78,10 @@ if(${PROTEUS_ENABLE_VITIS})
 endif()
 
 if(${PROTEUS_ENABLE_MIGRAPHX})
-    target_link_libraries(workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc opencv_core)
+  target_link_libraries(
+    workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc
+                           opencv_core
+  )
 endif()
 
 if(${PROTEUS_ENABLE_TFZENDNN})

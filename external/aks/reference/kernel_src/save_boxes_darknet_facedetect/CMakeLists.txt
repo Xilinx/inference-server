@@ -15,7 +15,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -O0 -fno-inline")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -O0 -fno-inline")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 project(SaveBoxesDarknetFacedetect VERSION 1.4.0)
@@ -23,16 +23,11 @@ find_package(xir REQUIRED)
 find_package(unilog REQUIRED)
 find_package(vart REQUIRED)
 
-
-if (NOT "${AKS_INSTALL_PREFIX}" STREQUAL "")
+if(NOT "${AKS_INSTALL_PREFIX}" STREQUAL "")
   message(STATUS "AKS Install Prefix: ${AKS_INSTALL_PREFIX}")
-  find_package(aks REQUIRED
-    PATHS ${AKS_INSTALL_PREFIX}
-    NO_DEFAULT_PATH
-  )
+  find_package(aks REQUIRED PATHS ${AKS_INSTALL_PREFIX} NO_DEFAULT_PATH)
 else()
-  find_package(aks REQUIRED
-  )
+  find_package(aks REQUIRED)
 endif()
 message(STATUS "AKS Includes: ${aks_INCLUDE_DIRS}")
 
@@ -43,22 +38,19 @@ else()
   find_package(Boost 1.65.1 REQUIRED COMPONENTS system filesystem)
 endif()
 
-add_library (${PROJECT_NAME} SHARED
-  AksSaveBoxesDarknetFacedetect.cpp
+add_library(${PROJECT_NAME} SHARED AksSaveBoxesDarknetFacedetect.cpp)
+
+set_target_properties(
+  ${PROJECT_NAME} PROPERTIES VERSION "${PROJECT_VERSION}"
+                             SOVERSION "${PROJECT_VERSION_MAJOR}"
 )
 
-set_target_properties (${PROJECT_NAME} PROPERTIES
-  VERSION   "${PROJECT_VERSION}"
-  SOVERSION "${PROJECT_VERSION_MAJOR}"
-)
+target_include_directories(${PROJECT_NAME} PRIVATE ${aks_INCLUDE_DIRS})
 
-target_include_directories (${PROJECT_NAME}
-  PRIVATE ${aks_INCLUDE_DIRS}
-)
-
-target_link_libraries (${PROJECT_NAME}
- PRIVATE ${Boost_LIBRARY}
- PRIVATE ${aks_LIBRARIES}
- PRIVATE vart-runner
- PRIVATE xir unilog
+target_link_libraries(
+  ${PROJECT_NAME}
+  PRIVATE ${Boost_LIBRARY}
+  PRIVATE ${aks_LIBRARIES}
+  PRIVATE vart-runner
+  PRIVATE xir unilog
 )

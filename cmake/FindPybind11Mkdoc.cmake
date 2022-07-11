@@ -13,15 +13,13 @@
 # limitations under the License.
 
 # Look for an executable called pybind11_mkdoc
-find_program(pybind11_mkdoc
-  NAMES pybind11-mkdoc
-  DOC "Path to pybind11_mkdoc executable"
+find_program(
+  pybind11_mkdoc NAMES pybind11-mkdoc DOC "Path to pybind11_mkdoc executable"
 )
 
 include(FindPackageHandleStandardArgs)
 
 # Handle standard arguments to find_package like REQUIRED and QUIET
-find_package_handle_standard_args(Pybind11Mkdoc
-  "Failed to find pybind11_mkdoc executable"
-  pybind11_mkdoc
+find_package_handle_standard_args(
+  Pybind11Mkdoc "Failed to find pybind11_mkdoc executable" pybind11_mkdoc
 )

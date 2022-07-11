@@ -12,7 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets base64 compression parse_env exec)
+list(
+  APPEND targets
+         base64
+         compression
+         parse_env
+         exec
+)
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)

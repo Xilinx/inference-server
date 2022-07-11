@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets client native native_internal)
+list(
+  APPEND targets
+         client
+         native
+         native_internal
+)
 
 if(${PROTEUS_ENABLE_HTTP})
   set(targets ${targets} http http_internal websocket)

@@ -15,7 +15,9 @@
 list(
   APPEND targets
          # predict_api
-         predict_api manager worker_info_buffers_infinite
+         predict_api
+         manager
+         worker_info_buffers_infinite
          worker_info_buffers_finite
          # data_types interface
 )

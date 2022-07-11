@@ -13,15 +13,14 @@
 # limitations under the License.
 
 # Look for an executable called pybind11-stubgen
-find_program(pybind11_stubgen
-  NAMES pybind11-stubgen
+find_program(
+  pybind11_stubgen NAMES pybind11-stubgen
   DOC "Path to pybind11-stubgen executable"
 )
 
 include(FindPackageHandleStandardArgs)
 
 # Handle standard arguments to find_package like REQUIRED and QUIET
-find_package_handle_standard_args(Pybind11Stubgen
-  "Failed to find pybind11-stubgen executable"
-  pybind11_stubgen
+find_package_handle_standard_args(
+  Pybind11Stubgen "Failed to find pybind11-stubgen executable" pybind11_stubgen
 )

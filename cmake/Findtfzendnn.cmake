@@ -13,15 +13,11 @@
 # limitations under the License.
 
 # Look for an executable called tensorflow_cc
-find_library(TF_LIBRARY
-  NAMES tensorflow_cc
-  DOC "Path to tensorflow executable"
-)
+find_library(TF_LIBRARY NAMES tensorflow_cc DOC "Path to tensorflow executable")
 
 include(FindPackageHandleStandardArgs)
 
 # Handle standard arguments to find_package like REQUIRED and QUIET
-find_package_handle_standard_args(tfzendnn
-  "Failed to find tensorflow executable"
-  TF_LIBRARY
+find_package_handle_standard_args(
+  tfzendnn "Failed to find tensorflow executable" TF_LIBRARY
 )
