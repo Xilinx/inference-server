@@ -181,11 +181,12 @@ if len(shape) != 4:
 
 client = proteus.clients.HttpClient("http://127.0.0.1:8998")
 print("waiting for server...", end="")
-# call to initialize() or initializeLogging() is necessary before trying to contact the server.
-# At time of writing, it's needed whether or not user asks for logging
-proteus.initializeLogging()
-while not client.serverLive():
-    time.sleep(1)
+start_server = not client.serverLive()
+if start_server:
+    server = proteus.servers.Server()
+    server.startHttp(8998)
+    while not client.serverLive():
+        time.sleep(1)
 print("ok.")
 
 # +load worker.  The only parameter the migraphx worker requires is the model file name.

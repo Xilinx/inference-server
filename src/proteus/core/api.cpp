@@ -48,6 +48,9 @@ ServerMetadata serverMetadata() {
 #ifdef PROTEUS_ENABLE_PTZENDNN
   metadata.extensions.emplace("ptzendnn");
 #endif
+#ifdef PROTEUS_ENABLE_MIGRAPHX
+  metadata.extensions.emplace("migraphx");
+#endif
   return metadata;
 }
 

@@ -542,7 +542,8 @@ RUN apt-get update \
         wheel \
         # the sphinx theme has a bug with docutils>=0.17
         "docutils<0.17" \
-    && pip install --no-cache-dir \
+    # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
+    && pip install --no-cache-dir --ignore-installed \
         # install testing dependencies
         pytest \
         pytest-cpp \
