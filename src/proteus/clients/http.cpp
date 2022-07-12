@@ -100,7 +100,7 @@ ServerMetadata HttpClient::serverMetadata() {
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
-  if (response->getStatusCode() != drogon::k200OK) {
+  if (response->statusCode() != drogon::k200OK) {
     throw bad_status(response->getJsonError());
   }
   ServerMetadata metadata;
@@ -229,7 +229,7 @@ std::string HttpClient::workerLoad(const std::string& model,
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
-  if (response->statusCode() == drogon::k400BadRequest) {
+  if (response->statusCode() != drogon::k200OK) {
     throw bad_status(std::string(response->body()));
   }
   return std::string(response->body());
@@ -268,7 +268,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
-  if (response->statusCode() == drogon::k400BadRequest) {
+  if (response->statusCode() != drogon::k200OK) {
     throw bad_status(std::string(response->body()));
   }
 
@@ -287,7 +287,7 @@ std::vector<std::string> HttpClient::modelList() {
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
-  if (response->getStatusCode() != drogon::k200OK) {
+  if (response->statusCode() != drogon::k200OK) {
     throw bad_status(response->getJsonError());
   }
   auto json = response->jsonObject();
