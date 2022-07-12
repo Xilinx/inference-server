@@ -880,6 +880,22 @@ class Get:
                                 os.path.join(modelpath, modelname),
                                 os.path.join(location, modelname),
                             )
+                            if modelname.endswith("pth"):
+                                subprocess.check_call(
+                                    [
+                                        sys.executable,
+                                        "-m",
+                                        "pip",
+                                        "install",
+                                        "-r",
+                                        "tools/zendnn/requirements.txt",
+                                    ]
+                                )
+                                import tools.zendnn.convert_to_torchscript as converter
+
+                                converter_args = argparse.Namespace
+                                converter_args.graph = os.path.join(location, modelname)
+                                converter.main(converter_args)
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)
