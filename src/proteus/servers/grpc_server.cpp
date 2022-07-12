@@ -131,7 +131,7 @@ class CallData : public CallDataBase {
   virtual void addNewCallData() = 0;
 
   virtual void waitForRequest() = 0;
-  virtual void handleRequest() = 0;
+  virtual void handleRequest() noexcept = 0;
 
   // The means of communication with the gRPC runtime for an asynchronous
   // server.
@@ -325,7 +325,7 @@ using InputBuilder =
       service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
                                   this);                                      \
     }                                                                         \
-    void handleRequest() override
+    void handleRequest() noexcept override
 #else
 #define CALLDATA_IMPL(endpoint, type)                                         \
   class CallData##endpoint                                                    \
@@ -343,7 +343,7 @@ using InputBuilder =
       service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
                                   this);                                      \
     }                                                                         \
-    void handleRequest() override
+    void handleRequest() noexcept override
 #endif
 
 #define CALLDATA_IMPL_END \
@@ -520,7 +520,7 @@ class GrpcApiUnary : public Interface {
 
   void errorHandler(const std::exception& e) override {
     PROTEUS_LOG_INFO(this->getLogger(), e.what());
-    calldata_->finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+    calldata_->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 
  private:
@@ -547,6 +547,9 @@ CALLDATA_IMPL(ModelReady, Unary) {
   } catch (const invalid_argument& e) {
     reply_.set_ready(false);
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+  } catch (const std::exception& e) {
+    reply_.set_ready(false);
+    finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 }
 CALLDATA_IMPL_END
@@ -559,6 +562,8 @@ CALLDATA_IMPL(ModelMetadata, Unary) {
     finish();
   } catch (const invalid_argument& e) {
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
+  } catch (const std::exception& e) {
+    finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 }
 CALLDATA_IMPL_END
@@ -594,6 +599,9 @@ CALLDATA_IMPL(ModelLoad, Unary) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
+  } catch (const std::exception& e) {
+    finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
+    return;
   }
 
   finish();
@@ -621,7 +629,9 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   } catch (const runtime_error& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
-    return;
+  } catch (const std::exception& e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 }
 CALLDATA_IMPL_END
@@ -634,7 +644,7 @@ CALLDATA_IMPL(WorkerUnload, Unary) {
 }
 CALLDATA_IMPL_END
 
-void CallDataModelInfer::handleRequest() {
+void CallDataModelInfer::handleRequest() noexcept {
   const auto& model = request_.model_name();
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
@@ -652,7 +662,9 @@ void CallDataModelInfer::handleRequest() {
   } catch (const invalid_argument& e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
-    return;
+  } catch (const std::exception& e) {
+    PROTEUS_LOG_ERROR(logger_, e.what());
+    finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 }
 
