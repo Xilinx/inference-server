@@ -34,7 +34,9 @@ Added
 - 'modelList' endpoint to the API (:commit:`7477b7d`)
 - Parse JSON data as string in HTTP body (:commit:`694800e`)
 - Directory monitoring for model loading (:commit:`6459797`)
+- 'ModelMetadata' endpoint to the API (:commit:`22b9d1a`)
 - MIGraphX backend (:pr:`34`)
+- Pre-commit for style verification(:commit:`048bdd7`)
 
 Changed
 ^^^^^^^
@@ -55,6 +57,7 @@ Fixed
 - Calculate offset values correctly during batching (:commit:`8c7534b`)
 - Get correct library dependencies for production container (:commit:`14ed4ef`)
 - Correctly throw an exception if a worker gets an error during initialization (:pr:`29`)
+- Detect errors in HTTP client during loading (:commit:`99ffc33`)
 
 
 :github:`0.1.0 <Xilinx/inference-server/releases/tag/v0.1.0>` - 2022-02-08

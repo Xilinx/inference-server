@@ -37,12 +37,18 @@ def main(args):
         )
     try:
         import torch
-        from resnet50 import resnet50
     except ModuleNotFoundError:
         raise ModuleNotFoundError(
-            "PyTorch not installed, plese install"
+            "PyTorch not installed, please install"
             " PyTorch/refer the docs to use this script. "
         )
+
+    # the way this script is called determines which import will succeed, so try
+    # both
+    try:
+        from resnet50 import resnet50
+    except ImportError:
+        from .resnet50 import resnet50
 
     # Prepare filename to save the model
     # <model>.pth-><model>.pt
