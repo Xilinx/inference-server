@@ -166,9 +166,9 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   torch::jit::Module torch_module;
   try {
     torch_module = torch::jit::load(path, torch::kCPU);
-  } catch (const std::exception& e) {
+  } catch (const c10::Error& e) {
     PROTEUS_LOG_ERROR(logger, e.what());
-    throw runtime_error("Could not load model with torch");
+    throw file_read_error("Could not load model with torch");
   }
 
   PROTEUS_LOG_INFO(logger, "Model loaded");
@@ -182,7 +182,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
     torch_module = torch::jit::optimize_for_inference(torch_module);
   } catch (const std::exception& e) {
     PROTEUS_LOG_ERROR(logger, e.what());
-    throw runtime_error("Unable to perform optimizations");
+    throw external_error("Unable to perform optimizations");
   }
   PROTEUS_LOG_INFO(logger, "Model Optimized, Ready for prediction");
 

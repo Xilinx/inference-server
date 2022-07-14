@@ -425,7 +425,8 @@ function(setup_target_for_coverage_lcov)
     POST_BUILD
     COMMAND cp -rfs ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_NAME}
             ${PROJECT_SOURCE_DIR}/src/gui/public/
-    COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/${Coverage_NAME}
+    COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/${Coverage_NAME} >
+            /dev/null
     COMMENT
       "Linking ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_NAME} to gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   )
