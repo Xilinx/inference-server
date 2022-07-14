@@ -627,18 +627,19 @@ class Dockerize:
         unknown_arguments = " ".join(unknown_args)
 
         tag_prefix = f"{args.registry}"
+        target = "final"
+        build_args = ""
         if args.production:
             tag_prefix += f"/proteus" + args.suffix
-            target = "proteus"
+            build_args += "--build-arg IMAGE_TYPE=prod "
         else:
             tag_prefix += f"/proteus-dev" + args.suffix
-            target = "proteus_dev_final"
+            build_args += "--build-arg IMAGE_TYPE=dev "
 
         latest_tag = f"{tag_prefix}:latest"
 
-        build_args = ""
-        if not args.vitis:
-            build_args += "--build-arg ENABLE_VITIS=no "
+        if args.vitis:
+            build_args += "--build-arg ENABLE_VITIS=yes "
         if args.dev_base:
             build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
@@ -707,10 +708,10 @@ class Dockerize:
             "-h", "--help", action="help", help="show this help message and exit"
         )
         command_group.add_argument(
-            "--no-vitis",
+            "--vitis",
             dest="vitis",
-            action="store_false",
-            help="Remove Vitis dependencies from the container",
+            action="store_true",
+            help="If provided, build with Vitis AI enabled",
         )
         command_group.add_argument(
             "--production",
