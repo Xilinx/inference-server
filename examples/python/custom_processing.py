@@ -22,6 +22,7 @@ this example.
 
 import math
 import os
+import sys
 from time import sleep
 
 import cv2
@@ -103,6 +104,12 @@ def main():
         server.startHttp(8998)
         while not client.serverLive():
             sleep(1)
+
+    metadata = client.serverMetadata()
+
+    if "vitis" not in metadata.extensions:
+        print("Vitis AI support required but not found.")
+        sys.exit(0)
 
     # +load worker:
     parameters = proteus.RequestParameters()

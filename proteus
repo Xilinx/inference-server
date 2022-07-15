@@ -627,18 +627,19 @@ class Dockerize:
         unknown_arguments = " ".join(unknown_args)
 
         tag_prefix = f"{args.registry}"
+        target = "final"
+        build_args = ""
         if args.production:
             tag_prefix += f"/proteus" + args.suffix
-            target = "proteus"
+            build_args += "--build-arg IMAGE_TYPE=prod "
         else:
             tag_prefix += f"/proteus-dev" + args.suffix
-            target = "proteus_dev_final"
+            build_args += "--build-arg IMAGE_TYPE=dev "
 
         latest_tag = f"{tag_prefix}:latest"
 
-        build_args = ""
-        if not args.vitis:
-            build_args += "--build-arg ENABLE_VITIS=no "
+        if args.vitis:
+            build_args += "--build-arg ENABLE_VITIS=yes "
         if args.dev_base:
             build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
 
@@ -707,10 +708,10 @@ class Dockerize:
             "-h", "--help", action="help", help="show this help message and exit"
         )
         command_group.add_argument(
-            "--no-vitis",
+            "--vitis",
             dest="vitis",
-            action="store_false",
-            help="Remove Vitis dependencies from the container",
+            action="store_true",
+            help="If provided, build with Vitis AI enabled",
         )
         command_group.add_argument(
             "--production",
@@ -811,34 +812,18 @@ class Get:
             tmp_dir: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
             ],
+            tensorflow_models: [
+                "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
+            ],
+            migraphx_models: [
+                "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+                "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
+            ],
+            pytorch_models: [
+                "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
+            ],
         }
-        if args.tfzendnn:
-            files.update(
-                {
-                    tensorflow_models: [
-                        "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
-                    ],
-                }
-            )
 
-        if args.migraphx:
-            files.update(
-                {
-                    migraphx_models: [
-                        "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
-                        "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
-                    ],
-                }
-            )
-
-        if args.ptzendnn:
-            files.update(
-                {
-                    pytorch_models: [
-                        "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
-                    ]
-                }
-            )
         for location, urls in files.items():
             for url in urls:
                 if "www.xilinx.com/bin/public/openDownload" in url:
@@ -863,39 +848,35 @@ class Get:
                     elif filename.endswith("zip"):
                         with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                             zip_ref.extractall(str(tmp_dir))
-                        if args.tfzendnn or args.ptzendnn:
-                            modelpath = str(
-                                tmp_dir / filename.split(".zip")[0] / "float/"
+                        modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
+                        for filename in os.listdir(modelpath):
+                            modelname = (
+                                filename
+                                if filename.endswith("pb") or filename.endswith("pth")
+                                else None
                             )
-                            for filename in os.listdir(modelpath):
-                                modelname = (
-                                    filename
-                                    if filename.endswith("pb")
-                                    or filename.endswith("pth")
-                                    else None
-                                )
-                            if not os.path.exists(location):
-                                os.makedirs(location)
-                            shutil.move(
-                                os.path.join(modelpath, modelname),
-                                os.path.join(location, modelname),
+                        if not os.path.exists(location):
+                            os.makedirs(location)
+                        shutil.move(
+                            os.path.join(modelpath, modelname),
+                            os.path.join(location, modelname),
+                        )
+                        if modelname.endswith("pth"):
+                            subprocess.check_call(
+                                [
+                                    sys.executable,
+                                    "-m",
+                                    "pip",
+                                    "install",
+                                    "-r",
+                                    "tools/zendnn/requirements.txt",
+                                ]
                             )
-                            if modelname.endswith("pth"):
-                                subprocess.check_call(
-                                    [
-                                        sys.executable,
-                                        "-m",
-                                        "pip",
-                                        "install",
-                                        "-r",
-                                        "tools/zendnn/requirements.txt",
-                                    ]
-                                )
-                                import tools.zendnn.convert_to_torchscript as converter
+                            import tools.zendnn.convert_to_torchscript as converter
 
-                                converter_args = argparse.Namespace
-                                converter_args.graph = os.path.join(location, modelname)
-                                converter.main(converter_args)
+                            converter_args = argparse.Namespace
+                            converter_args.graph = os.path.join(location, modelname)
+                            converter.main(converter_args)
                     else:
                         shutil.copy2(filepath, str(location / filename))
                         os.remove(filepath)
@@ -914,7 +895,9 @@ class Get:
     @classmethod
     def add(cls, parser):
         subparser = parser.add_parser(
-            "get", help="Get artifacts such as XModels", add_help=False
+            "get",
+            help="Get artifacts (images, videos and models) for examples and tests",
+            add_help=False,
         )
 
         command_group = subparser.add_argument_group("Options")
@@ -924,24 +907,6 @@ class Get:
 
         command_group.add_argument(
             "-q", "--quiet", action="store_true", help="suppress prints"
-        )
-
-        command_group.add_argument(
-            "--tfzendnn",
-            action="store_true",
-            help="If TF+ZenDNN should be enabled",
-        )
-
-        command_group.add_argument(
-            "--ptzendnn",
-            action="store_true",
-            help="If PT+ZenDNN should be enabled",
-        )
-
-        command_group.add_argument(
-            "--migraphx",
-            action="store_true",
-            help="If MIGraphX/rocm should be enabled",
         )
 
         subparser.set_defaults(func=cls.parse)

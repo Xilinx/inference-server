@@ -82,6 +82,9 @@ print_header "Building the stable production docker image"
 print_header "Testing the stable dev docker image"
 
 ./proteus --dry-run up --profile autotest-dev
+./proteus up --profile autotest-dev --write-only
+docker-compose stop
+docker-compose rm -f
 ./proteus up --profile autotest-dev
 
 # This test must be run after the previous one. It requires that certain files
@@ -90,4 +93,7 @@ print_header "Testing the stable dev docker image"
 print_header "Testing the stable production docker image"
 
 ./proteus --dry-run up --profile autotest
+./proteus up --profile autotest --write-only
+docker-compose stop
+docker-compose rm -f
 ./proteus up --profile autotest
