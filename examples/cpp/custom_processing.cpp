@@ -171,6 +171,12 @@ std::string load(const std::string& path_to_xmodel) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
+  auto metadata = client.serverMetadata();
+  if (metadata.extensions.find("vitis") == metadata.extensions.end()) {
+    std::cout << "Vitis AI support required but not found.\n";
+    exit(0);
+  }
+
   // +load grpc:
   proteus::RequestParameters parameters;
   parameters.put("model", path_to_xmodel);
@@ -196,10 +202,16 @@ std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
 }
 #else
 std::string load(const std::string& path_to_xmodel) {
+  proteus::NativeClient client;
+  auto metadata = client.serverMetadata();
+  if (metadata.extensions.find("vitis") == metadata.extensions.end()) {
+    std::cout << "Vitis AI support required but not found.\n";
+    exit(0);
+  }
+
   // +load native:
   proteus::RequestParameters parameters;
   parameters.put("model", path_to_xmodel);
-  proteus::NativeClient client;
   auto worker_name = client.workerLoad("Xmodel", &parameters);
   // -load native:
 
