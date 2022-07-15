@@ -23,8 +23,8 @@ EOF
 ALL_ARGS=("$@")
 # get the current directory
 # DIR="$( cd "$( dirname "$0" )" && pwd )"
-DEPS_FILE=deps.txt
-UNIQUE_DEPS_FILE=deps_unique.txt
+DEPS_FILE=/tmp/deps.txt
+UNIQUE_DEPS_FILE=/tmp/deps_unique.txt
 
 resolve_symlinks() {
   dep=$1
@@ -191,8 +191,14 @@ done
 # overwrite the file
 echo -n > $DEPS_FILE
 
-paths=($(cat /usr/local/manifests/proteus.txt))
-
+if test -f /usr/local/manifests/proteus.txt; then
+  paths=($(cat /usr/local/manifests/proteus.txt))
+elif test -f /root/deps/usr/local/manifests/proteus.txt; then
+  paths=($(cat /root/deps/usr/local/manifests/proteus.txt))
+else
+  echo "No manifest file found"
+  exit 1
+fi
 if [[ $VITIS == "yes" ]]; then
   paths+=("./external/aks/libs/*")
 fi

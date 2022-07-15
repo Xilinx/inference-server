@@ -968,13 +968,11 @@ ARG PROTEUS_ROOT
 ARG ENABLE_VITIS
 ARG ENABLE_MIGRAPHX
 
-# delete any inherited artifacts and recreate
-RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
-
 COPY . $PROTEUS_ROOT
 
 RUN ldconfig \
-    && mkdir -p ${COPY_DIR} \
+    # delete any inherited artifacts and recreate
+    && rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR} \
     # install libproteus.so
     && cd ${PROTEUS_ROOT} \
     && ./proteus install --all \
@@ -992,6 +990,7 @@ RUN ldconfig \
     && rm -rf /var/lib/apt/lists/* \
     # create a copy of all the dynamic libraries needed by the server and workers
     && cd ${PROTEUS_ROOT} \
+    && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} --migraphx ${ENABLE_MIGRAPHX} > ${MANIFESTS_DIR}/prod.txt \
     && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS} --migraphx ${ENABLE_MIGRAPHX}
 
 FROM base AS vitis_installer_prod_yes
