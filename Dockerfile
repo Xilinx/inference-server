@@ -679,6 +679,8 @@ FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_no
 
 FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_yes
 
+ARG COPY_DIR
+
 COPY --from=tfzendnn_builder ${COPY_DIR} /
 
 FROM common_builder AS ptzendnn_builder
@@ -723,6 +725,8 @@ RUN VERSION=5.3.0 \
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_yes
+
+ARG COPY_DIR
 
 COPY --from=ptzendnn_builder ${COPY_DIR} /
 
