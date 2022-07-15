@@ -211,6 +211,9 @@ def main(args):
             break
 
     print("This model's shape of input image is ", shape)
+    # If only 3 dimensions were found, assume the 0'th dimension was not parsed and insert a 1.
+    if len(shape) == 3:
+        shape.insert(0, 1)
     if len(shape) != 4:
         print(
             "Unable to read the image dimensions from ",
@@ -318,10 +321,6 @@ def main(args):
                     correct_answers / (correct_answers + wrong_answers),
                 )
                 print("     ----------------------------------------")
-
-    # # for debug: redisplay the processed images
-    display_img = images[5]
-    display_img = display_img.transpose(1, 2, 0)
 
     print("Done")
 
