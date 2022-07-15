@@ -321,10 +321,6 @@ def main(args):
                 )
                 print("     ----------------------------------------")
 
-    # # for debug: redisplay the processed images
-    display_img = images[5]
-    display_img = display_img.transpose(1, 2, 0)
-
     print("Done")
 
     # If this line is commented out, worker persists with doRun thread active, and the entire script
