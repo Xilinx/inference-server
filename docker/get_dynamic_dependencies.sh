@@ -191,7 +191,7 @@ done
 # overwrite the file
 echo -n > $DEPS_FILE
 
-paths=("/usr/local/bin/proteus-server" "/usr/local/lib/proteus/*")
+paths=($(cat /usr/local/manifests/proteus.txt))
 
 if [[ $VITIS == "yes" ]]; then
   paths+=("./external/aks/libs/*")

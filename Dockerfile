@@ -1013,7 +1013,7 @@ COPY --from=builder_prod $PROTEUS_ROOT/docker/.env $PROTEUS_ROOT/external/overla
 COPY --from=builder_prod $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/proteus/aks/graph_zoo/
 COPY --from=builder_prod $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/proteus/aks/kernel_zoo/
 
-ENV LD_LIBRARY_PATH="/usr/local/lib/proteus:/opt/xilinx/proteus/aks"
+ENV LD_LIBRARY_PATH="/opt/xilinx/proteus/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"
 # TODO(varunsh): we shouldn't hardcode dpuv3int8 here
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
