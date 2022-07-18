@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -385,31 +386,31 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="factors">
+  <section id="factors">
 <h1>Factors<a class="headerlink" href="#factors" title="Permalink to this heading">¶</a></h1>
 <p>AMD Inference Server’s performance can be maximized by appropriately controlling the factors described here.</p>
-<div class="section" id="hardware">
+<section id="hardware">
 <h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this heading">¶</a></h2>
 <p>The <strong class="program">proteus-server</strong> executable or any application that links to AMD Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
 We suggest at least 32GB of RAM and 6 core/12 threads.
 Other processes running on the server should be minimized.</p>
-</div>
-<div class="section" id="compile-the-right-version">
+</section>
+<section id="compile-the-right-version">
 <h2>Compile the right version<a class="headerlink" href="#compile-the-right-version" title="Permalink to this heading">¶</a></h2>
 <p>Enable compiler optimizations by building with the <code class="xref std std-option docutils literal notranslate"><span class="pre">--release</span></code> flag.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>proteus build --release
 </pre></div>
 </div>
-</div>
-<div class="section" id="parallelism">
+</section>
+<section id="parallelism">
 <h2>Parallelism<a class="headerlink" href="#parallelism" title="Permalink to this heading">¶</a></h2>
 <p>There are several areas in which changing the level of parallelism may improve performance.</p>
-<div class="section" id="rest-threads">
+<section id="rest-threads">
 <h3>REST threads<a class="headerlink" href="#rest-threads" title="Permalink to this heading">¶</a></h3>
 <p>The number of threads that Drogon uses to receive incoming REST requests is defined by the value of <code class="docutils literal notranslate"><span class="pre">kDefaultDrogonThreads</span></code>, which by default is set to 16.
 Depending on your hardware and demand, you may get better performance by changing this value.</p>
-</div>
-<div class="section" id="sending-requests">
+</section>
+<section id="sending-requests">
 <h3>Sending requests<a class="headerlink" href="#sending-requests" title="Permalink to this heading">¶</a></h3>
 <p>Making requests to AMD Inference Server efficiently allows for overlap and batching to take place, which improves throughput.</p>
 <p>For REST requests, make asynchronous requests so sequential requests don’t block each other.
@@ -477,8 +478,8 @@ One example of how to do this is in the following snippet:</p>
 </pre></div>
 </div>
 <p>Enqueuing and dequeueing in parallel improves performance because it minimizes the number of active requests at any given time.</p>
-</div>
-<div class="section" id="duplicating-workers">
+</section>
+<section id="duplicating-workers">
 <h3>Duplicating workers<a class="headerlink" href="#duplicating-workers" title="Permalink to this heading">¶</a></h3>
 <p>Worker duplication is one method of parallelizing a worker.
 By default, requesting to load a worker that has already been loaded does nothing.
@@ -513,9 +514,9 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
 <span class="n">client</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;Xmodel&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -546,7 +547,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>

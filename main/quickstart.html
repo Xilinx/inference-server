@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -381,7 +382,7 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quickstart">
+  <section id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">¶</a></h1>
 <p>The easiest way to use the AMD Inference Server is to run it inside a Docker container.
 For these instructions, you’ll need Git, Python3, and <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>.
@@ -391,7 +392,7 @@ The most up-to-date documentation for this script can be seen with <a class="ref
 You can also use <code class="xref std std-option docutils literal notranslate"><span class="pre">--dry-run</span></code> before any command to see the underlying commands the script is running.</p>
 <p>Some options also require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a>.
 Running tests requires using Git LFS when cloning this repository to get testing assets.</p>
-<div class="section" id="build-or-get-the-docker-image">
+<section id="build-or-get-the-docker-image">
 <h2>Build or Get the Docker Image<a class="headerlink" href="#build-or-get-the-docker-image" title="Permalink to this heading">¶</a></h2>
 <p>We can build several types of containers.
 Development (dev) containers are intended for working on the AMD Inference Server or applications that link to the AMD Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start.
@@ -412,8 +413,8 @@ The dev container will mount the working directory into <code class="file docuti
 These details are the <code class="xref std std-option docutils literal notranslate"><span class="pre">--dev</span></code> profile.
 Some options may be overridden on the command-line (use <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code> to see the options).
 If you’d like to enable <a class="reference internal" href="zendnn.html#zendnn"><span class="std std-ref">TF+ZenDNN or PT+ZenDNN</span></a> support in the container, pass the appropriate flag to the <code class="xref std std-option docutils literal notranslate"><span class="pre">dockerize</span></code> command.</p>
-</div>
-<div class="section" id="building-the-amd-inference-server">
+</section>
+<section id="building-the-amd-inference-server">
 <h2>Building the AMD Inference Server<a class="headerlink" href="#building-the-amd-inference-server" title="Permalink to this heading">¶</a></h2>
 <p>These commands are all run inside the dev container.
 Here, <code class="file docutils literal notranslate"><span class="pre">./proteus</span></code> is aliased to <strong class="command">proteus</strong>.
@@ -430,16 +431,16 @@ Subsequent builds can omit <code class="xref std std-option docutils literal not
 <p class="admonition-title">Attention</p>
 <p>When starting new containers or switching to different ones after having run build once, you may need to run <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">build</span> <span class="pre">--regen</span> <span class="pre">--clean</span></code> initially. New containers mount the working directory and so stale artifacts from previous builds may be present. These two flags delete the CMake cache and do a clean build, respectively.</p>
 </div>
-</div>
-<div class="section" id="getting-artifacts">
+</section>
+<section id="getting-artifacts">
 <h2>Getting Artifacts<a class="headerlink" href="#getting-artifacts" title="Permalink to this heading">¶</a></h2>
 <p>For running tests and certain examples, you may need to get artifacts such as test images and XModels.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>proteus get
 </pre></div>
 </div>
 <p>You must abide by the license agreements of these files, if you choose to download them.</p>
-</div>
-<div class="section" id="running-the-amd-inference-server">
+</section>
+<section id="running-the-amd-inference-server">
 <h2>Running the AMD Inference Server<a class="headerlink" href="#running-the-amd-inference-server" title="Permalink to this heading">¶</a></h2>
 <p>Once the server is built, start the server to begin serving requests.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># start proteus-server in the background</span>
@@ -461,8 +462,8 @@ $ proteus <span class="nb">test</span>
 </pre></div>
 </div>
 <p>Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
@@ -493,7 +494,7 @@ $ proteus <span class="nb">test</span>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>

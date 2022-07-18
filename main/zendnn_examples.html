@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -387,10 +388,10 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="zendnn-examples">
+  <section id="zendnn-examples">
 <span id="id1"></span><h1>ZenDNN Examples<a class="headerlink" href="#zendnn-examples" title="Permalink to this heading">¶</a></h1>
 <p>There are two examples provided in the repo (Python API and C++ API) for both TensorFlow and PyTorch.</p>
-<div class="section" id="python-api">
+<section id="python-api">
 <h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this heading">¶</a></h2>
 <p>Python examples below will do the following:</p>
 <ol class="arabic simple">
@@ -401,7 +402,7 @@ function OptanonWrapper() { }
 <li><p>Get the result back from the AMD Inference Server over HTTP</p></li>
 <li><p>Post process if any and display the output</p></li>
 </ol>
-<div class="section" id="tensorflow-zendnn">
+<section id="tensorflow-zendnn">
 <h3>TensorFlow + ZenDNN<a class="headerlink" href="#tensorflow-zendnn" title="Permalink to this heading">¶</a></h3>
 <p>The python example is available at <code class="code docutils literal notranslate"><span class="pre">examples/python/tf_zendnn.py</span></code>.</p>
 <ol class="arabic">
@@ -425,8 +426,8 @@ function OptanonWrapper() { }
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python examples/python/tf_zendnn.py --help
 </pre></div>
 </div>
-</div>
-<div class="section" id="pytorch-zendnn">
+</section>
+<section id="pytorch-zendnn">
 <h3>PyTorch + ZenDNN<a class="headerlink" href="#pytorch-zendnn" title="Permalink to this heading">¶</a></h3>
 <p>The python example is available at <code class="code docutils literal notranslate"><span class="pre">examples/python/pt_zendnn.py</span></code>.</p>
 <ol class="arabic">
@@ -452,9 +453,9 @@ function OptanonWrapper() { }
 </pre></div>
 </div>
 </div></blockquote>
-</div>
-</div>
-<div class="section" id="c-api">
+</section>
+</section>
+<section id="c-api">
 <h2>C++ API<a class="headerlink" href="#c-api" title="Permalink to this heading">¶</a></h2>
 <p>The C++ API bypasses the HTTP server and connects directly to the Inference Server.
 The flow is as follows:</p>
@@ -470,22 +471,22 @@ The flow is as follows:</p>
 <li><p>To run the C++ example with real image, provide <code class="code docutils literal notranslate"><span class="pre">image_location</span></code> in <code class="code docutils literal notranslate"><span class="pre">Option</span></code> struct in source code.</p></li>
 <li><p>If <code class="code docutils literal notranslate"><span class="pre">image_location</span></code> is set to <code class="code docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> in <code class="code docutils literal notranslate"><span class="pre">Option</span></code>, dummy data will be used. This can be used for benchmarking.</p></li>
 </ul>
-<div class="section" id="id2">
+<section id="id2">
 <h3>TensorFlow + ZenDNN<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <p>Source is available at <code class="code docutils literal notranslate"><span class="pre">examples/cpp/tf_zendnn_client.cpp</span></code>. To build and run the example:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug <span class="o">&amp;&amp;</span> ./build/Debug/examples/cpp/tf_zendnn_client
 </pre></div>
 </div>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h3>PyTorch + ZenDNN<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
 <p>Source is available at <code class="code docutils literal notranslate"><span class="pre">examples/cpp/pt_zendnn_client.cpp</span></code>. To build and run the example:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug <span class="o">&amp;&amp;</span> ./build/Debug/examples/cpp/pt_zendnn_client
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -516,7 +517,7 @@ The flow is as follows:</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>

@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -387,14 +388,14 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="changelog"></span><div class="section" id="id1">
+  <span class="target" id="changelog"></span><section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<div class="section" id="unreleased">
+<section id="unreleased">
 <h2>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this heading">¶</a></h2>
-<div class="section" id="added">
+<section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>HTTP/REST C++ client (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/cbf33b8">&#64;cbf33b8</a>)</p></li>
@@ -404,9 +405,12 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>‘modelList’ endpoint to the API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/7477b7d">&#64;7477b7d</a>)</p></li>
 <li><p>Parse JSON data as string in HTTP body (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/694800e">&#64;694800e</a>)</p></li>
 <li><p>Directory monitoring for model loading (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/6459797">&#64;6459797</a>)</p></li>
+<li><p>‘ModelMetadata’ endpoint to the API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/22b9d1a">&#64;22b9d1a</a>)</p></li>
+<li><p>MIGraphX backend (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/34">#34</a>)</p></li>
+<li><p>Pre-commit for style verification(<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/048bdd7">&#64;048bdd7</a>)</p></li>
 </ul>
-</div>
-<div class="section" id="changed">
+</section>
+<section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Use Pybind11 to create Python API (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/20">#20</a>)</p></li>
@@ -415,9 +419,10 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Loading workers is now case-insensitive (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/14ed4ef">&#64;14ed4ef</a> and <a class="reference external" href="https://github.com/Xilinx/inference-server/commit/90a51ae">&#64;90a51ae</a>)</p></li>
 <li><p>Build AKS from source (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/e04890f">&#64;e04890f</a>)</p></li>
 <li><p>Use consistent custom exceptions (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/30">#30</a>)</p></li>
+<li><p>Update Docker build commands to opt-in to all backends (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/43">#43</a>)</p></li>
 </ul>
-</div>
-<div class="section" id="fixed">
+</section>
+<section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Get the right request size in the batcher when enqueuing with the C++ API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
@@ -426,12 +431,13 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Calculate offset values correctly during batching (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/8c7534b">&#64;8c7534b</a>)</p></li>
 <li><p>Get correct library dependencies for production container (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/14ed4ef">&#64;14ed4ef</a>)</p></li>
 <li><p>Correctly throw an exception if a worker gets an error during initialization (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/29">#29</a>)</p></li>
+<li><p>Detect errors in HTTP client during loading (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/99ffc33">&#64;99ffc33</a>)</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="id2">
+</section>
+</section>
+<section id="id2">
 <h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
-<div class="section" id="id3">
+<section id="id3">
 <h3>Added<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Core inference server functionality</p></li>
@@ -446,9 +452,9 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Documentation, examples, and some tests</p></li>
 <li><p>Experimental GUI</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -479,7 +485,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>

@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -378,12 +379,12 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="vitis-ai">
+  <section id="vitis-ai">
 <h1>Vitis AI<a class="headerlink" href="#vitis-ai" title="Permalink to this heading">¶</a></h1>
 <p>Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
 These instructions assume an Alveo card.
 If using a different card, follow the appropriate instructions for your card.</p>
-<div class="section" id="setting-up-the-host">
+<section id="setting-up-the-host">
 <h2>Setting up the host<a class="headerlink" href="#setting-up-the-host" title="Permalink to this heading">¶</a></h2>
 <p>Follow the instructions on <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup/alveo">setting up Alveo cards</a>.
 In essence, you will need to program the shell and platform on the FPGA.
@@ -395,8 +396,8 @@ If this executable is not on your PATH, it should be in <code class="docutils li
 <p>You will also need the XCLBINs corresponding to your card on the host.
 By default, these will be placed in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins</span></code> and will be mounted into the container if using Docker with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script.
 The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> environment variable should point to the directory containing the XCLBINs needed for your FPGA.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
@@ -427,7 +428,7 @@ The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMW
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>

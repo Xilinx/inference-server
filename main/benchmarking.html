@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -379,7 +380,7 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="benchmarking">
+  <section id="benchmarking">
 <h1>Benchmarking<a class="headerlink" href="#benchmarking" title="Permalink to this heading">¶</a></h1>
 <p>AMD Inference Server can be benchmarked from the command-line using the benchmarking utility.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>proteus benchmark
@@ -395,7 +396,7 @@ The raw data is also saved in JSON format.</p>
 <li><p>cpp: run C++ executables</p></li>
 </ul>
 <p>Refer to <code class="docutils literal notranslate"><span class="pre">benchmark.yml</span></code> for more a detailed explanation of the different options for each type of benchmark.</p>
-<div class="section" id="xmodel-benchmarking">
+<section id="xmodel-benchmarking">
 <h2>XModel Benchmarking<a class="headerlink" href="#xmodel-benchmarking" title="Permalink to this heading">¶</a></h2>
 <p>The XModel test in <code class="docutils literal notranslate"><span class="pre">tests/cpp/native/xmodel.cpp</span></code> is the easiest way to benchmark an arbitrary XModel that you may want to serve with AMD Inference Server.
 It gets built as part of the regular AMD Inference Server build flow (for benchmarking, use the <code class="xref std std-option docutils literal notranslate"><span class="pre">--release</span></code> flag to build optimized executables).
@@ -404,14 +405,14 @@ It will print out the <abbr title="queries per second">QPS</abbr> of the request
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./build/Release/tests/cpp/native/xmodel -m &lt;path to xmodel&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="kernel-simulation">
+</section>
+<section id="kernel-simulation">
 <h2>Kernel Simulation<a class="headerlink" href="#kernel-simulation" title="Permalink to this heading">¶</a></h2>
 <p>With some modifications, the Xmodel worker can be used as a way to simulate a hypothetical FPGA kernel with a certain load.
 Running this kind of test requires some code changes, which are described in <code class="docutils literal notranslate"><span class="pre">tools/xmodel_benchmark.sh</span></code>.
 With this script, you can compile the executable with different configurations and loads and print the averaged results to the terminal.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
@@ -442,7 +443,7 @@ With this script, you can compile the executable with different configurations a
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>

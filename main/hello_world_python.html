@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -384,12 +385,12 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="hello-world-python">
+  <section id="hello-world-python">
 <span id="id1"></span><h1>Hello World (Python)<a class="headerlink" href="#hello-world-python" title="Permalink to this heading">¶</a></h1>
 <p>AMD Inference Server’s Python API allows you to start the server and send requests to it from Python.
 This example walks you through how to start the server and use Python to send requests to a simple model.
 The complete script used here is available: <code class="file docutils literal notranslate"><span class="pre">examples/python/hello_world_rest.py</span></code>.</p>
-<div class="section" id="import-the-library">
+<section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Permalink to this heading">¶</a></h2>
 <p>We need to bring in the AMD Inference Server Python library.
 The library’s source code is in <code class="file docutils literal notranslate"><span class="pre">src/python</span></code> and it gets installed in the dev container on startup.</p>
@@ -397,16 +398,16 @@ The library’s source code is in <code class="file docutils literal notranslate
 <span class="kn">import</span> <span class="nn">proteus</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="create-our-client-and-server-objects">
+</section>
+<section id="create-our-client-and-server-objects">
 <h2>Create our client and server objects<a class="headerlink" href="#create-our-client-and-server-objects" title="Permalink to this heading">¶</a></h2>
 <p>We assume that the server will be running locally with the default HTTP port and pass that to the client.
 In this example, we’ll be using REST to communicate to the server so we create a <code class="xref py py-class docutils literal notranslate"><span class="pre">RestClient</span></code> object.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">clients</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:8998&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="is-amd-inference-server-already-running">
+</section>
+<section id="is-amd-inference-server-already-running">
 <h2>Is AMD Inference Server already running?<a class="headerlink" href="#is-amd-inference-server-already-running" title="Permalink to this heading">¶</a></h2>
 <p>If the server is already started externally, we don’t want to start it again.
 So, we attempt to check if the server is live.
@@ -414,12 +415,14 @@ If this fails, we start the server ourselves.
 Either way, the client will attempt to communicate to the server at <code class="docutils literal notranslate"><span class="pre">http://localhost:8998</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">start_server</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">serverLive</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">start_server</span><span class="p">:</span>
-    <span class="n">proteus</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
-    <span class="n">proteus</span><span class="o">.</span><span class="n">clients</span><span class="o">.</span><span class="n">startHttpServer</span><span class="p">(</span><span class="mi">8998</span><span class="p">)</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">Server</span><span class="p">()</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">startHttp</span><span class="p">(</span><span class="mi">8998</span><span class="p">)</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">serverLive</span><span class="p">():</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="load-a-worker">
+</section>
+<section id="load-a-worker">
 <h2>Load a worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
 <p>Inference requests in AMD Inference Server are made to workers.
 Workers are started as threads in AMD Inference Server and have a defined lifecycle.
@@ -434,8 +437,8 @@ We’ll use it to demonstrate the Python flow.</p>
     <span class="n">ready</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelReady</span><span class="p">(</span><span class="n">worker_name</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="inference">
+</section>
+<section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h2>
 <p>Once the worker is ready, we can make an inference request to it.
 We construct a request that contains five integers and send it to AMD Inference Server.
@@ -445,8 +448,8 @@ The <code class="docutils literal notranslate"><span class="pre">NumericalInfere
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="validate-the-response">
+</section>
+<section id="validate-the-response">
 <h2>Validate the response<a class="headerlink" href="#validate-the-response" title="Permalink to this heading">¶</a></h2>
 <p>Now, we want to check what our response is.
 Here, we can simplify our checks because we already know what we expect to receive.
@@ -461,22 +464,15 @@ We also check that each output only has one index and is one more than the corre
     <span class="k">assert</span> <span class="n">recv_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="clean-up">
+</section>
+<section id="clean-up">
 <h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">¶</a></h2>
 <p>Workers that are loaded in AMD Inference Server will persist until the server shuts down or they’re explicitly unloaded.
 While it’s not shown here, the Python API provides an <code class="docutils literal notranslate"><span class="pre">unload()</span></code> method for this purpose.
 Finally, if we started the server from Python, we shut it down before finishing.
 If there are any loaded workers at this time, they will be cleaned up before shutdown.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">start_server</span><span class="p">:</span>
-    <span class="n">proteus</span><span class="o">.</span><span class="n">clients</span><span class="o">.</span><span class="n">stopHttpServer</span><span class="p">()</span>
-    <span class="n">proteus</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
-    <span class="k">while</span> <span class="n">client</span><span class="o">.</span><span class="n">serverLive</span><span class="p">():</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
@@ -507,7 +503,7 @@ If there are any loaded workers at this time, they will be cleaned up before shu
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 06, 2022.
+        Last updated on July 18, 2022.
       </span>
 
     </p>
