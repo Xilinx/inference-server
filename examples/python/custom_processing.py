@@ -27,11 +27,16 @@ from time import sleep
 
 import cv2
 import numpy as np
+import linecache
+import glob
 
 import proteus
 import proteus.clients
 import proteus.servers
 
+def getimagepaths(path):
+    a = glob.glob(path + '/*.jpg')
+    return a
 
 def preprocess(images):
     images_preprocessed = []
@@ -91,7 +96,7 @@ def main():
     # +user variables: update as needed!
     batch_size = 4
     path_to_xmodel = "${PROTEUS_ROOT}/external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel"
-    path_to_image = root + "/tests/assets/dog-3619020_640.jpg"
+    image_paths = getimagepaths( root + "/tests/assets" )
     # for this image, we know what we expect to receive with this XModel
     gold_response_output = [259, 261, 260, 154, 230]
     # -user variables
@@ -123,8 +128,8 @@ def main():
 
     # +get images:
     images = []
-    for _ in range(batch_size):
-        image = cv2.imread(path_to_image)
+    for j in range(len(image_paths)):
+        image = cv2.imread(image_paths[j])
         images.append(image)
     # -get images:
 
@@ -135,12 +140,21 @@ def main():
     response = client.modelInfer(worker_name, request)
     assert not response.isError(), response.getError()
     outputs = response.getOutputs()
+    i=0;
     for output in outputs:
         assert output.datatype == proteus.DataType.INT8
         recv_data = output.getInt8Data()
         # Can optionally post-process the result
         k = postprocess(recv_data, 5)
-        assert k == gold_response_output
+        print("Input filename: ", image_paths[i])
+        print("classification: ", k)
+        print("1: ",linecache.getline("../../tests/assets/imagenet_simple_labels.json", k[0]+2))
+        print("2: ",linecache.getline("../../tests/assets/imagenet_simple_labels.json", k[1]+2))
+        print("3: ",linecache.getline("../../tests/assets/imagenet_simple_labels.json", k[2]+2))
+        print("4: ",linecache.getline("../../tests/assets/imagenet_simple_labels.json", k[3]+2))
+        print("-----------------------")
+        i = i+1 
+        #assert k == gold_response_output
     # -inference:
 
     print("custom_processing.py: Passed")
