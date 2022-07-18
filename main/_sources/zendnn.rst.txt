@@ -78,7 +78,7 @@ Run the following command to get some ``git lfs`` assets for examples/tests.
    $ git lfs pull
 
 To run the examples and test cases, we need to download some models.
-Run the command below to download a ResNet50 TensorFlow model.
+Run the command below to download ResNet50 TensorFlow and PyTorch models.
 
 .. code-block:: console
 
