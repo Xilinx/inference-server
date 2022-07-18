@@ -18,9 +18,9 @@ import sys
 import time
 
 import numpy as np
+from utils.utils import postprocess, preprocess_pt
 
 import proteus
-from utils.utils import preprocess_pt, postprocess
 
 
 def main(args):
@@ -88,6 +88,7 @@ def main(args):
     parameters = proteus.RequestParameters()
     parameters.put("model", args.graph)
     parameters.put("input_size", input_size)
+    parameters.put("output_classes", 1000)
     worker_name = client.workerLoad("PtZendnn", parameters)
 
     ready = False
@@ -98,7 +99,7 @@ def main(args):
     # If with real data, do preprocessing, otherwise create dummy data
     if real_data:
         # For tests with single images
-        images = [preprocess_pt(args.image_location, input_size)]
+        images = []
         images.append(preprocess_pt(args.image_location, input_size))
         request = proteus.ImageInferenceRequest(images)
         response = client.modelInfer(worker_name, request)
@@ -110,8 +111,8 @@ def main(args):
 
         # Print top1 and top5 classess
         print("Image: {}".format(args.image_location))
-        print("Top 1 Class: {}".format(classes[idx_1[0]]))
-        print("Top 5 classes: {}".format(", ".join(classes[idx_5])))
+        print("Top 1 Class: {}".format(classes[idx_1[0]][0]))
+        print("Top 5 classes: {}".format(", ".join(classes[tuple(idx_5)])))
 
     else:
         # For functionality check with multiple images

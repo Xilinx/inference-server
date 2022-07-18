@@ -37,9 +37,9 @@
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
-#include "tensorflow/c/c_api.h"
-#include "tensorflow/core/platform/env.h"
-#include "tensorflow/core/public/session.h"
+#include "tensorflow/c/c_api.h"               // for TensorFlow version
+#include "tensorflow/core/platform/env.h"     // for TensorFlow environment
+#include "tensorflow/core/public/session.h"   // for TensorFlow sessions
 
 namespace tf = ::tensorflow;
 
@@ -179,8 +179,7 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   // Start a new session
   status_ = tf::NewSession(options, &(this->session_));
   if (!status_.ok()) {
-    // Should exit if not able to initiate session
-    PROTEUS_LOG_ERROR(logger, status_.ToString());
+    throw external_error("Could not initialize a tensorflow session");
   }
   PROTEUS_LOG_INFO(logger, "New TF Session Initiated");
 
@@ -192,24 +191,19 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
       path += ".pb";
     }
   } else {
-    PROTEUS_LOG_ERROR(
-      logger,
-      "Model not provided");  // Ideally exit since model not provided
+    throw invalid_argument("Model not provided in load-time parameters");
   }
+
   status_ = tf::ReadBinaryProto(tf::Env::Default(), path, &graph_def_);
   if (!status_.ok()) {
-    PROTEUS_LOG_ERROR(
-      logger,
-      status_.ToString());  // Ideally exit if not able to read the model
+    throw external_error("Could not load model with tensorflow");
   }
   PROTEUS_LOG_INFO(logger, "Reading Model");
 
   // Add the graph to the session
   status_ = this->session_->Create(graph_def_);
   if (!status_.ok()) {
-    PROTEUS_LOG_ERROR(
-      logger,
-      status_.ToString());  // Ideally exit if not able to create session
+    throw external_error("Could not load the model to session");
   }
   PROTEUS_LOG_INFO(logger, "TF Session Created, Ready for prediction");
 
