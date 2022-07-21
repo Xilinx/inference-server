@@ -23,8 +23,24 @@ EOF
 ALL_ARGS=("$@")
 # get the current directory
 # DIR="$( cd "$( dirname "$0" )" && pwd )"
-DEPS_FILE=deps.txt
-UNIQUE_DEPS_FILE=deps_unique.txt
+DEPS_FILE=/tmp/deps.txt
+UNIQUE_DEPS_FILE=/tmp/deps_unique.txt
+
+resolve_symlinks() {
+  dep=$1
+
+  dir=$(dirname $dep)
+  while [[ -L $dep ]]; do
+    # echo $dep
+    echo "$dep" >> $DEPS_FILE
+    dep=$(readlink $dep)
+    # if the next path isn't absolute, append the directory from above and resolve full path
+    if [[ ! "$dep" = /* ]]; then
+      dep=$(realpath -s $dir/$dep)
+    fi
+  done
+  echo "$dep" >> $DEPS_FILE
+}
 
 get_dependencies() {
   dynamic_file=$1
@@ -33,17 +49,7 @@ get_dependencies() {
   readarray -t deps < <(ldd $dynamic_file | tr -s '[:blank:]' '\n' | grep '^/')
 
   for dep in "${deps[@]}"; do
-    dir=$(dirname $dep)
-    while [[ -L $dep ]]; do
-      # echo $dep
-      echo "$dep" >> $DEPS_FILE
-      dep=$(readlink $dep)
-      # if the next path isn't absolute, append the directory from above and resolve full path
-      if [[ ! "$dep" = /* ]]; then
-        dep=$(realpath $dir/$dep)
-      fi
-    done
-    echo "$dep" >> $DEPS_FILE
+    resolve_symlinks $dep
   done
 }
 
@@ -51,18 +57,26 @@ add_vitis_deps() {
   # some vitis libraries are found in .xmodels or are otherwise not linked to.
   # As such, we don't find them in get_dependencies. We add them here manually
 
-  vitis_libs=(
-    librt-engine
-    libtarget-factory
-    libunilog
-    libvart
-    libxir
+  vitis_debs=(
     xrm
     xrt
   )
 
-  for lib in ${vitis_libs[@]}; do
+  vitis_libs=(
+    rt-engine
+    target_factory
+    unilog
+    vart
+    xir
+  )
+
+  for lib in ${vitis_debs[@]}; do
     lib_path=$(dpkg -L $lib | grep -F .so)
+    echo "$lib_path" >> $DEPS_FILE
+  done
+
+  for lib in ${vitis_libs[@]}; do
+    lib_path=$(grep -F .so /usr/local/manifests/$lib.txt)
     echo "$lib_path" >> $DEPS_FILE
   done
 
@@ -84,7 +98,34 @@ add_vitis_deps() {
 
   for bin in ${other_files[@]}; do
     get_dependencies $bin
-    echo "$bin" >> $DEPS_FILE
+    resolve_symlinks $bin
+  done
+}
+
+add_migraphx_deps() {
+  # we need these files in the production container. Manually copy over
+  other_files=(
+    /usr/share/libdrm/amdgpu.ids
+  )
+
+  for file in ${other_files[@]}; do
+    echo "$file" >> $DEPS_FILE
+  done
+
+  other_bins=(
+    /opt/rocm-5.0.0/llvm/bin/clang
+  )
+
+  for bin in ${other_bins[@]}; do
+    get_dependencies $bin
+    resolve_symlinks $bin
+  done
+
+  # something is missing in migraphx... for now, add everything
+  all_libs=$(find /opt/rocm/ -name *.so*)
+
+  for file in ${all_libs[@]}; do
+    echo "$file" >> $DEPS_FILE
   done
 }
 
@@ -97,7 +138,7 @@ add_other_bins() {
 
   for bin in ${other_files[@]}; do
     get_dependencies $bin
-    echo "$bin" >> $DEPS_FILE
+    resolve_symlinks $bin
   done
 }
 
@@ -128,6 +169,7 @@ parse_path() {
 
 COPY=""
 VITIS=""
+MIGRAPHX=""
 
 # Parse Options
 while true; do
@@ -139,8 +181,9 @@ while true; do
     break;
   fi
   case "$1" in
-    "-c" | "--copy" ) COPY=$2 ; shift 2 ;;
-    "--vitis"       ) VITIS=$2; shift 2 ;;
+    "-c" | "--copy" ) COPY=$2    ; shift 2 ;;
+    "--vitis"       ) VITIS=$2   ; shift 2 ;;
+    "--migraphx"    ) MIGRAPHX=$2; shift 2 ;;
     *) break;;
   esac
 done
@@ -148,10 +191,14 @@ done
 # overwrite the file
 echo -n > $DEPS_FILE
 
-# rest_args=("${ALL_ARGS[@]:${arg_counter}}")
-
-paths=("/usr/local/bin/proteus-server" "/usr/local/lib/proteus/*")
-
+if test -f /usr/local/manifests/proteus.txt; then
+  paths=($(cat /usr/local/manifests/proteus.txt))
+elif test -f /root/deps/usr/local/manifests/proteus.txt; then
+  paths=($(cat /root/deps/usr/local/manifests/proteus.txt))
+else
+  echo "No manifest file found"
+  exit 1
+fi
 if [[ $VITIS == "yes" ]]; then
   paths+=("./external/aks/libs/*")
 fi
@@ -162,6 +209,10 @@ done
 
 if [[ $VITIS == "yes" ]]; then
   add_vitis_deps
+fi
+
+if [[ $MIGRAPHX == "yes" ]]; then
+  add_migraphx_deps
 fi
 
 add_other_bins

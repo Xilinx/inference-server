@@ -66,13 +66,13 @@ add_custom_command(
     "Linking ${DOXYGEN_OUTPUT_DIR} to Proteus gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen
   COMMAND cp -rfs ${DOXYGEN_OUTPUT_DIR} ${PROJECT_SOURCE_DIR}/src/gui/public/
-  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen
+  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen > /dev/null
   COMMENT
     "Linking ${DOXYGEN_OUTPUT_DIR} to global docs at ${PROJECT_SOURCE_DIR}/build/docs/doxygen"
   COMMAND mkdir -p ${PROJECT_SOURCE_DIR}/build/docs
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/build/docs/doxygen
   COMMAND cp -rfs ${DOXYGEN_OUTPUT_DIR} ${PROJECT_SOURCE_DIR}/build/docs
-  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/build/docs/doxygen
+  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/build/docs/doxygen > /dev/null
 )
 
 set(SPHINX_SOURCE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -107,12 +107,12 @@ add_custom_command(
     "Linking ${SPHINX_BUILD} to Proteus gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx
   COMMAND cp -rfs ${SPHINX_BUILD} ${PROJECT_SOURCE_DIR}/src/gui/public/
-  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx
+  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx > /dev/null
   COMMENT
     "Linking ${SPHINX_BUILD} to global docs at ${PROJECT_SOURCE_DIR}/build/docs/sphinx"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/build/docs/sphinx
   COMMAND cp -rfs ${SPHINX_BUILD} ${PROJECT_SOURCE_DIR}/build/docs
-  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/build/docs/sphinx
+  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/build/docs/sphinx > /dev/null
 )
 
 add_custom_target(

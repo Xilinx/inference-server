@@ -47,6 +47,7 @@ Changed
 - Loading workers is now case-insensitive (:commit:`14ed4ef` and :commit:`90a51ae`)
 - Build AKS from source (:commit:`e04890f`)
 - Use consistent custom exceptions (:pr:`30`)
+- Update Docker build commands to opt-in to all backends (:pr:`43`)
 
 Fixed
 ^^^^^

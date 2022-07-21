@@ -15,14 +15,14 @@
 import os
 import sys
 
-import pytest
 import numpy as np
+import pytest
+from helper import root_path, run_benchmark
+
 import proteus
 
-from helper import run_benchmark, root_path
-
 sys.path.insert(0, os.path.join(root_path, "examples/python"))
-from utils.utils import preprocess_pt, postprocess
+from utils.utils import postprocess, preprocess_pt
 
 
 @pytest.fixture(scope="class")
@@ -35,6 +35,7 @@ def parameters_fixture():
     return {
         "model": str(root_path / "external/pytorch_models/resnet50_pretrained.pt"),
         "input_size": 224,
+        "output_classes": 1000,
     }
 
 

@@ -29,15 +29,17 @@ class TestServerLive:
         assert self.rest_client.serverLive()
 
 
+# this test always fails if the server is started outside of the test framework
+# Until we can correctly detect that, this test should not be running in CI
 # not using the server fixture here
-class TestServerNotLive:
-    """
-    Base class for serverLive tests using the Python bindings
-    """
+# class TestServerNotLive:
+#     """
+#     Base class for serverLive tests using the Python bindings
+#     """
 
-    def test_server_live(self):
-        """
-        Test serverLive
-        """
+#     def test_server_live(self):
+#         """
+#         Test serverLive
+#         """
 
-        assert not self.rest_client.serverLive()
+#         assert not self.rest_client.serverLive()

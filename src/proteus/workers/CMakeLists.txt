@@ -137,6 +137,7 @@ if(${PROTEUS_ENABLE_AKS})
               opencv_imgcodecs
     )
     target_include_directories(${worker_name} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    add_dependencies(${worker_name} aks-kernels)
     enable_ipo_on_target(${worker_name})
 
     list(APPEND WORKER_TARGETS ${worker_name})
@@ -167,5 +168,5 @@ endif()
 # DURATION=${DURATION}) unset(DURATION CACHE)
 
 install(TARGETS ${WORKER_TARGETS} LIBRARY COMPONENT proteus_Runtime
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/proteus"
+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
