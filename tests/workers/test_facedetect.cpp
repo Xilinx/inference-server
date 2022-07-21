@@ -71,8 +71,9 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST(Native, Facedetect) {
   proteus::Server server;
+  proteus::NativeClient client;
 
-  auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
+  auto fpgas_exist = client.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
     GTEST_SKIP();
   }

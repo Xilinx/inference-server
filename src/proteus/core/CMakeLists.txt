@@ -38,6 +38,7 @@ target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
   target_link_libraries(data_types INTERFACE xir)
 endif()
+target_link_libraries(api INTERFACE sockpp)
 
 if(${PROTEUS_ENABLE_GRPC})
   add_library(lib_grpc STATIC predict_api.proto)

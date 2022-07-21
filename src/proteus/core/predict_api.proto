@@ -75,6 +75,8 @@ service GRPCInferenceService
   // google.rpc.Status returned for the request. The OK code indicates success
   // and other codes indicate failure.
   rpc ModelList(ModelListRequest) returns (ModelListResponse) {}
+
+  rpc HasHardware(HasHardwareRequest) returns (HasHardwareResponse) {}
 }
 
 message ServerLiveRequest {}
@@ -325,6 +327,16 @@ message WorkerUnloadRequest{
 }
 
 message WorkerUnloadResponse{}
+
+message HasHardwareRequest {
+  string name = 1;
+  uint32 num = 2;
+}
+
+message HasHardwareResponse{
+  // True if the inference server has the requested hardware
+  bool found = 1;
+}
 
 // An inference parameter value. The Parameters message describes a
 // "name"/"value" pair, where the "name" is the name of the parameter

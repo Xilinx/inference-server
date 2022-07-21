@@ -615,6 +615,17 @@ RUN apt-get update \
     && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cat install_manifest.txt > ${MANIFESTS_DIR}/aks.txt
 
+RUN wget https://github.com/fpagliughi/sockpp/archive/refs/tags/v0.7.1.tar.gz \
+    && tar -xzf v0.7.1.tar.gz \
+    && cd sockpp-0.7.1/ \
+    && mkdir build && cd build \
+    && cmake .. \
+        -DCMAKE_BUILD_TYPE=Release \
+    && make -j$(($(nproc) - 1)) \
+    && make install \
+    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cat install_manifest.txt > ${MANIFESTS_DIR}/sockcpp.txt
+
 FROM dev_base AS vitis_installer_no
 
 FROM dev_base AS vitis_installer_yes
