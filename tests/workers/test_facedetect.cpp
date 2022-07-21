@@ -75,7 +75,7 @@ TEST(Native, Facedetect) {
 
   auto fpgas_exist = client.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    GTEST_SKIP();
+    GTEST_SKIP() << "No FPGAs available";
   }
 
   auto path = prepareDirectory();

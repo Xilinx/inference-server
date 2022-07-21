@@ -36,7 +36,7 @@ class XModelFixture : public testing::Test {
 TEST_F(XModelFixture, proteus) {
   auto fpgas_exist = client_.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    GTEST_SKIP();
+    GTEST_SKIP() << "No FPGAs available";
   }
   EXPECT_TRUE(run(xmodel, images, threads, runners) == EXIT_SUCCESS);
 }
@@ -46,7 +46,7 @@ TEST_F(XModelFixture, proteus) {
 TEST_F(XModelFixture, reference) {
   auto fpgas_exist = client_.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    GTEST_SKIP();
+    GTEST_SKIP() << "No FPGAs available";
   }
   EXPECT_TRUE(run_reference(xmodel, images, threads, runners) == EXIT_SUCCESS);
 }
