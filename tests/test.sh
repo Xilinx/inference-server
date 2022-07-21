@@ -77,6 +77,10 @@ do
   esac
 done
 
+if [[ -z $LD_LIBRARY_PATH && -f ~/.env ]]; then
+  source ~/.env
+fi
+
 # if the python package doesn't exist, do a build first for the BUILD variable
 if ! pip list | grep Proteus &> /dev/null; then
   # use the lowercase value of BUILD as the flag to the build command
@@ -96,10 +100,6 @@ if [[ $MODE == "tests" || $MODE == "all" ]]; then
 
   if [[ $BENCHMARK == "only" ]]; then
     SAVE_BENCHMARK="--benchmark-autosave"
-  fi
-
-  if [[ -z $LD_LIBRARY_PATH && -f ~/.env ]]; then
-    source ~/.env
   fi
 
   if [[ -n "$LOAD" ]] ; then
