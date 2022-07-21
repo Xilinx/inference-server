@@ -23,9 +23,10 @@ services:
     volumes:
       # for test artifacts
       - $PWD/external:/workspace/proteus/external:ro
+      - $PWD/external/artifacts:/opt/xilinx/proteus/artifacts:ro
       - $PWD/tests/assets:/workspace/proteus/tests/assets:ro
   proteus-tester:
-    command: [./tests/test.sh, --hostname, proteus, "-k", "(not invert_video) and (not resnet50_stream)"]
+    command: [./tests/test.sh, --hostname, proteus]
     depends_on:
       - proteus
     extra_hosts:

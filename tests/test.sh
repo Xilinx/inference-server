@@ -80,7 +80,7 @@ done
 # if the python package doesn't exist, do a build first for the BUILD variable
 if ! pip list | grep Proteus &> /dev/null; then
   # use the lowercase value of BUILD as the flag to the build command
-  ${root_path}/proteus build --"${BUILD,,}"
+  ${root_path}/proteus build --"${BUILD,,}" --regen --clean
 fi
 
 retval=0
