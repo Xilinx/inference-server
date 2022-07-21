@@ -57,12 +57,13 @@ def preprocess(img_data):
 
     Args:
         img_data (np.array): array in 3 dimensions [channels, rows, cols] with value range 0-255
-
+        The vectors are for RGB images, so images read with OpenCV must have channels 
+        converted before calling.
     Returns:
         Response: np.array
     """
-    mean_vec = np.array([0.485, 0.456, 0.406])
-    stddev_vec = np.array([0.229, 0.224, 0.225])
+    mean_vec = np.array([0.406, 0.456, 0.485])
+    stddev_vec = np.array([0.225, 0.224, 0.229])
     norm_img_data = np.zeros(img_data.shape).astype("float32")
     for i in range(img_data.shape[0]):
         norm_img_data[i, :, :] = (img_data[i, :, :] / 255 - mean_vec[i]) / stddev_vec[i]
@@ -133,9 +134,7 @@ class TestMigraphx:
             str(root_path / "tests/assets/dog-3619020_640.jpg"),
             str(root_path / "tests/assets/bicycle-384566_640.jpg"),
         ]
-
-        gold_responses = [[259, 261, 157, 260, 154], [444, 671, 880, 518, 870]]
-
+        gold_responses = [[259, 261, 157, 260, 154], [671, 444, 880, 518, 870]]
         assert len(image_paths) == len(gold_responses)
         image_num = len(image_paths)
 

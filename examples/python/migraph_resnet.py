@@ -77,10 +77,11 @@ def preprocess(img_data):
 
     Args:
         img_data (np.array): 3 dimensions [channels, rows, cols] with value range 0-255
+        the vectors are for RGB images, so images read with OpenCV must have channels 
+        converted before calling.
     """
-    # todo: are these vectors based on RGB images or BGR?  Results seem good
-    mean_vec = np.array([0.485, 0.456, 0.406])
-    stddev_vec = np.array([0.229, 0.224, 0.225])
+    mean_vec = np.array([0.406, 0.456, 0.485])
+    stddev_vec = np.array([0.225, 0.224, 0.229])
     norm_img_data = np.zeros(img_data.shape).astype("float32")
     for i in range(img_data.shape[0]):
         norm_img_data[i, :, :] = (img_data[i, :, :] / 255 - mean_vec[i]) / stddev_vec[i]
@@ -211,6 +212,7 @@ def main(args):
             break
 
     print("This model's shape of input image is ", shape)
+    # If only 3 dimensions were found, assume the 0'th dimension was not parsed and insert a 1.
     if len(shape) == 3:
         shape.insert(0, 1)
     if len(shape) != 4:
@@ -323,10 +325,6 @@ def main(args):
                     correct_answers / (correct_answers + wrong_answers),
                 )
                 print("     ----------------------------------------")
-
-    # # for debug: redisplay the processed images
-    display_img = images[5]
-    display_img = display_img.transpose(1, 2, 0)
 
     print("Done")
 

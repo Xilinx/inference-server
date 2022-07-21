@@ -38,9 +38,7 @@
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
-#include "torch/csrc/jit/passes/freeze_module.h"
-#include "torch/csrc/jit/passes/frozen_graph_optimizations.h"
-#include "torch/script.h"
+#include "torch/script.h"                     // for PyTorch
 
 namespace fs = std::filesystem;
 
@@ -109,7 +107,7 @@ void PtZendnn::doInit(RequestParameters* parameters) {
   this->batch_size_ = batch_size;
 
   // Image properties
-  unsigned kTotalClasses = 1001;
+  unsigned kTotalClasses = 1000;
   unsigned kImageWidth = 224;
   unsigned kImageHeight = 224;
   unsigned kImageChannels = 3;
@@ -151,7 +149,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
 #endif
 
   if (!parameters->has("model")) {
-    throw invalid_argument("No model not provided in load-time parameters");
+    throw invalid_argument("Model not provided in load-time parameters");
   }
   fs::path path = parameters->get<std::string>("model");
   if (!path.has_extension()) {
@@ -166,23 +164,20 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   torch::jit::Module torch_module;
   try {
     torch_module = torch::jit::load(path, torch::kCPU);
-  } catch (const std::exception& e) {
+  } catch (const c10::Error& e) {
     PROTEUS_LOG_ERROR(logger, e.what());
-    throw runtime_error("Could not load model with torch");
+    throw file_read_error("Could not load model with torch");
   }
 
   PROTEUS_LOG_INFO(logger, "Model loaded");
 
   // Some online optimizations for the model
   torch_module.eval();
-  torch_module = torch::jit::freeze_module(torch_module);
-  auto graph = torch_module.get_method("forward").graph();
-  OptimizeFrozenGraph(graph, true);
   try {
     torch_module = torch::jit::optimize_for_inference(torch_module);
   } catch (const std::exception& e) {
     PROTEUS_LOG_ERROR(logger, e.what());
-    throw runtime_error("Unable to perform optimizations");
+    throw external_error("Unable to perform optimizations");
   }
   PROTEUS_LOG_INFO(logger, "Model Optimized, Ready for prediction");
 

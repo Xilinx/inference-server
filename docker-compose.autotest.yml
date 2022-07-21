@@ -21,10 +21,11 @@ services:
     ports:
       - 127.0.0.1:8998:8998 # used for proteus server
     volumes:
-      - $AKS_ROOT/graph_zoo:/opt/xilinx/proteus/aks/graph_zoo
-      - $AKS_ROOT/kernel_zoo:/opt/xilinx/proteus/aks/kernel_zoo
+      # for test artifacts
+      - $PWD/external:/workspace/proteus/external:ro
+      - $PWD/tests/assets:/workspace/proteus/tests/assets:ro
   proteus-tester:
-    command: [./tests/test.sh, --mode, python, --hostname, proteus, "-k", "(not invert_video) and (not resnet50_stream)"]
+    command: [./tests/test.sh, --hostname, proteus, "-k", "(not invert_video) and (not resnet50_stream)"]
     depends_on:
       - proteus
     extra_hosts:
