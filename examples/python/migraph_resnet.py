@@ -290,7 +290,7 @@ def main(args):
                 request = proteus.ImageInferenceRequest(images, False)
                 print("request is ready.  Sending...")
                 response = client.modelInfer(worker_name, request)
-                assert not response.isError(), response.getError()
+                # assert not response.isError(), response.getError()
                 print("Client received inference reply.")
                 j = 0
                 for output in response.getOutputs():

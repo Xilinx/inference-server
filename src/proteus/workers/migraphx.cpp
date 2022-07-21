@@ -448,77 +448,79 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       // for each request in the batch
       std::cout << "----------------------\nRequests in this batch:  " << std::to_string(batch->requests->size()) << std::endl;
       for (unsigned int j = 0; j < batch->requests->size(); j++) {
-        auto& req = batch->requests->at(j);
-        InferenceResponse resp;
-        resp.setID(req->getID());
-        resp.setModel("migraphx");
+        try{
+          auto& req = batch->requests->at(j);
+          InferenceResponse resp;
+          resp.setID(req->getID());
+          resp.setModel("migraphx");
 
-        // We don't use the outputs portion of the request currently.  It is part
-        // of the kserve format specification, which the Inference Server is
-        // intended to follow. "The $request_output JSON is used to request which
-        // output tensors should be returned from the model."
-        // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md
-        //
-        // Selecting the request output is only relevant to models that have more
-        // than one output tensor.
-        //
-        auto inputs = req0->getInputs();                           // const std::vector<InferenceRequestInput>
-        auto outputs = req->getOutputs();                          // one result vector for each request
-        //
-        // Transfer the migraphx results to output
-        //
-        size_t result_size =
-          migraphx_output.size();  // should be 1 item with items for each input, each input has 1000 (for resnet) categories
-        if (result_size != 1)
-          throw std::length_error(
-            "result count from migraphx call was not 1");
-        auto shape = migraphx_output[0].get_shape();
+          // We don't use the outputs portion of the request currently.  It is part
+          // of the kserve format specification, which the Inference Server is
+          // intended to follow. "The $request_output JSON is used to request which
+          // output tensors should be returned from the model."
+          // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md
+          //
+          // Selecting the request output is only relevant to models that have more
+          // than one output tensor.
+          //
+          auto inputs = req0->getInputs();                           // const std::vector<InferenceRequestInput>
+          auto outputs = req->getOutputs();                          // one result vector for each request
+          throw std::runtime_error("test error");
+          //
+          // Transfer the migraphx results to output
+          //
+          size_t result_size =
+            migraphx_output.size();  // should be 1 item with items for each input, each input has 1000 (for resnet) categories
+          if (result_size != 1)
+            throw std::length_error(
+              "result count from migraphx call was not 1");
+          auto shape = migraphx_output[0].get_shape();
 
-        // recast the migraphx output from a blob to an array of this->output_dt_      
-        auto lengths = shape.lengths();
-        size_t num_results = std::accumulate(lengths.begin()+1, lengths.end(), 1, std::multiplies<size_t>());
-        // size of each result array, bytes
-        size_t size_of_result = num_results*output_dt_.size();
-        // for each image in the request, there should be 1 vector of 1000 values
-        std::cout << "Request with " << std::to_string(req->getInputs().size()) << " images\n";
+          // recast the migraphx output from a blob to an array of this->output_dt_      
+          auto lengths = shape.lengths();
+          size_t num_results = std::accumulate(lengths.begin()+1, lengths.end(), 1, std::multiplies<size_t>());
+          // size of each result array, bytes
+          size_t size_of_result = num_results*output_dt_.size();
+          // for each image in the request, there should be 1 vector of 1000 values
+          std::cout << "Request with " << std::to_string(req->getInputs().size()) << " images\n";
 
-        for(size_t k = 0; k < req->getInputs().size() && input_index < batch_size_; k++){
-          char* results = migraphx_output[0].data() + (input_index++)*size_of_result;
+          for(size_t k = 0; k < req->getInputs().size() && input_index < batch_size_; k++){
+            char* results = migraphx_output[0].data() + (input_index++)*size_of_result;
 #ifndef NDEBUG
-          {
-            float* zresults =
-              reinterpret_cast<float*>(results);
+            {
+              float* zresults =
+                reinterpret_cast<float*>(results);
 
-            // for debug  Compare this result with
-            //    values seen by client to verify output packet is correct.
-            float* myMax = std::max_element(zresults, zresults + num_results);
-            int answer = myMax - zresults;
-            std::cout << "Ok.  the top-ranked index is " << answer << " val. "
-                      << *myMax << std::endl;
-          }
+              // for debug  Compare this result with
+              //    values seen by client to verify output packet is correct.
+              float* myMax = std::max_element(zresults, zresults + num_results);
+              int answer = myMax - zresults;
+              std::cout << "Ok.  the top-ranked index is " << answer << " val. "
+                        << *myMax << std::endl;
+            }
 #endif
-          // the kserve specification for response output is at
-          // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
-          InferenceResponseOutput output;
-          output.setDatatype(output_dt_);
-          // todo:  use real indexes here
-          std::string output_name = outputs[0].getName();
-          if (output_name.empty()) {
-            output.setName(inputs[0].getName());
-          } else {
-            output.setName(output_name);
-          }
-          output.setShape({num_results});
-          output.setData(results);
+            // the kserve specification for response output is at
+            // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
+            InferenceResponseOutput output;
+            output.setDatatype(output_dt_);
+            // todo:  use real indexes here
+            std::string output_name = outputs[0].getName();
+            if (output_name.empty()) {
+              output.setName(inputs[0].getName());
+            } else {
+              output.setName(output_name);
+            }
+            output.setShape({num_results});
+            output.setData(results);
 
-          // Copy migraphx results to a buffer and add to output
-          auto buffer = std::make_shared<std::vector<std::byte>>();
-          buffer->resize(size_of_result);
-          memcpy(&((*buffer)[0]), results, size_of_result);
-          auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
-          output.setData(std::move(my_data_cast));
-          resp.addOutput(output);
-        }
+            // Copy migraphx results to a buffer and add to output
+            auto buffer = std::make_shared<std::vector<std::byte>>();
+            buffer->resize(size_of_result);
+            memcpy(&((*buffer)[0]), results, size_of_result);
+            auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
+            output.setData(std::move(my_data_cast));
+            resp.addOutput(output);
+          }
 
           // respond back to the client
           req->runCallbackOnce(resp);
@@ -528,21 +530,26 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::high_resolution_clock::now() - batch->start_times[j]);
           Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
-                                                duration.count());
+                                                  duration.count());
 #endif
+        } catch (const std::exception& e) {
+          PROTEUS_LOG_ERROR(logger, e.what());
+          // Pass error message back as reply to request; continue processing
+          // more inference requests
+
+          req->runCallbackError(std::string("Error processing Migraphx request: ") +
+                                e.what());
+        }
 
       }  // end j, request
     } catch (const std::exception& e) {
+      // This outer catch block catches exceptions in evaluation of the batch.
       PROTEUS_LOG_ERROR(logger, e.what());
-      // Pass error message back as reply to request; continue processing
-      // more inference requests
-
-      // TODO: change this to run callback for all requests in the batch
-      req->runCallbackError(std::string("Migraphx inference error: ") +
+      // Pass error message back as reply for each request in the batch
+      for (auto& req : *(batch->requests)) {
+           req->runCallbackError(std::string("Migraphx inference error: ") +
                             e.what());
-
-      //next batch
-      continue;
+      }
     }
     PROTEUS_LOG_INFO(logger, "Finished migraphx eval");
   
@@ -551,9 +558,6 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     PROTEUS_LOG_DEBUG(logger, "Returned buffers");
       
   }  // end while (batch)
-       
-  
-
   PROTEUS_LOG_INFO(logger, "Migraphx::doRun ending");
 }
 
