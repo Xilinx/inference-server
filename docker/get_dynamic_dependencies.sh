@@ -62,7 +62,7 @@ add_vitis_deps() {
     xrt
   )
 
-  vitis_libs=(
+  vitis_manifests=(
     rt-engine
     target_factory
     unilog
@@ -70,14 +70,20 @@ add_vitis_deps() {
     xir
   )
 
-  for lib in ${vitis_debs[@]}; do
-    lib_path=$(dpkg -L $lib | grep -F .so)
-    echo "$lib_path" >> $DEPS_FILE
+  for deb in ${vitis_debs[@]}; do
+    lib_paths=($(dpkg -L $deb | grep -F .so))
+    for lib in ${lib_paths[@]}; do
+      parse_path $lib
+      resolve_symlinks $lib
+    done
   done
 
-  for lib in ${vitis_libs[@]}; do
-    lib_path=$(grep -F .so /usr/local/manifests/$lib.txt)
-    echo "$lib_path" >> $DEPS_FILE
+  for manifest in ${vitis_manifests[@]}; do
+    lib_paths=$(grep -F .so /usr/local/manifests/$manifest.txt)
+    for lib in ${lib_paths[@]}; do
+      parse_path $lib
+      resolve_symlinks $lib
+    done
   done
 
   # we need xrm in the production container. Manually copy over the needed files
@@ -87,7 +93,7 @@ add_vitis_deps() {
   )
 
   for file in ${other_files[@]}; do
-    echo "$file" >> $DEPS_FILE
+    resolve_symlinks $file
   done
 
   # any other binary dependencies needed
@@ -97,7 +103,7 @@ add_vitis_deps() {
   )
 
   for bin in ${other_files[@]}; do
-    get_dependencies $bin
+    parse_path $bin
     resolve_symlinks $bin
   done
 }
@@ -109,7 +115,7 @@ add_migraphx_deps() {
   )
 
   for file in ${other_files[@]}; do
-    echo "$file" >> $DEPS_FILE
+    resolve_symlinks $file
   done
 
   other_bins=(
@@ -125,7 +131,7 @@ add_migraphx_deps() {
   all_libs=$(find /opt/rocm/ -name *.so*)
 
   for file in ${all_libs[@]}; do
-    echo "$file" >> $DEPS_FILE
+    resolve_symlinks $file
   done
 }
 
@@ -195,6 +201,8 @@ if test -f /usr/local/manifests/proteus.txt; then
   paths=($(cat /usr/local/manifests/proteus.txt))
 elif test -f /root/deps/usr/local/manifests/proteus.txt; then
   paths=($(cat /root/deps/usr/local/manifests/proteus.txt))
+elif test -f /tmp/proteus/build/Release/install_manifest.txt; then
+  paths=($(cat /tmp/proteus/build/Release/install_manifest.txt))
 else
   echo "No manifest file found"
   exit 1

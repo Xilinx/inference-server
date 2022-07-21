@@ -90,6 +90,11 @@ done
 # insert line break
 echo ""
 
+# if there are any FPGAs, attempt to load xclbins
+if command -v fpga-util >/dev/null 2>&1; then
+  fpga-util load-all
+fi
+
 # drop access to the right user and run the CMD
 if [ "$user" = "root" ]; then
   exec gosu root "$@"
