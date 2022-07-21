@@ -53,6 +53,8 @@ class WebSocketClient : public Client {
                          RequestParameters* parameters) override;
   void workerUnload(const std::string& worker) override;
 
+  bool hasHardware(const std::string& name, int num) override;
+
   void modelInferAsync(const std::string& model,
                        const InferenceRequest& request);
   // TODO(varunsh): change to InferenceReponse

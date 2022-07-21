@@ -48,6 +48,8 @@ using InferenceResponseFuture = std::future<proteus::InferenceResponse>;
 
 using StringMap = std::unordered_map<std::string, std::string>;
 
+using Kernels = std::unordered_map<std::string, int>;
+
 }  // namespace proteus
 
 #endif  // GUARD_PROTEUS_HELPERS_DECLARATIONS

@@ -68,6 +68,8 @@ class HttpClient : public Client {
                          RequestParameters* parameters) override;
   void workerUnload(const std::string& worker) override;
 
+  bool hasHardware(const std::string& name, int num) override;
+
  private:
   class HttpClientImpl;
   std::unique_ptr<HttpClientImpl> impl_;

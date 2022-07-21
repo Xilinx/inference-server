@@ -301,4 +301,21 @@ std::vector<std::string> HttpClient::modelList() {
   return models;
 }
 
+bool HttpClient::hasHardware(const std::string& name, int num) {
+  auto* client = this->impl_->getClient();
+
+  Json::Value json;
+  json["name"] = name;
+  json["num"] = num;
+  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
+  req->setMethod(drogon::Get);
+  const std::string path = "/v2/hardware";
+  req->setPath(path);
+  impl_->addHeaders(req);
+
+  auto [result, response] = client->sendRequest(req);
+  check_error(result);
+  return response->statusCode() == drogon::k200OK;
+}
+
 }  // namespace proteus

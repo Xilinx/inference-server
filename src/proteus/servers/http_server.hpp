@@ -68,7 +68,7 @@ class ProteusHttpServer
   ADD_METHOD_TO(ProteusHttpServer::getModelMetadata, "v2/models/{model}",
                 drogon::Get, drogon::Options);
   /// Register the getHardware endpoint
-  ADD_METHOD_TO(ProteusHttpServer::getHardware, "v2/hardware", drogon::Get,
+  ADD_METHOD_TO(ProteusHttpServer::hasHardware, "v2/hardware", drogon::Get,
                 drogon::Options);
   /// Register the modelList endpoint
   ADD_METHOD_TO(ProteusHttpServer::modelList, "v2/models", drogon::Get,
@@ -159,7 +159,7 @@ class ProteusHttpServer
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void getHardware(
+  void hasHardware(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 

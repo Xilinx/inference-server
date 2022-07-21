@@ -53,5 +53,7 @@ void wrapHttpClient(py::module_ &m) {
          DOCS(HttpClient, workerUnload))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
          py::arg("request"), DOCS(HttpClient, modelInfer))
-    .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList));
+    .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
+    .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
+         py::arg("num"), DOCS(HttpClient, modelList));
 }

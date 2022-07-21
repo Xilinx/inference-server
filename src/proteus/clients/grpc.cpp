@@ -574,4 +574,23 @@ InferenceResponse GrpcClient::modelInfer(const std::string& model,
   return response;
 }
 
+bool GrpcClient::hasHardware(const std::string& name, int num) {
+  inference::HasHardwareRequest grpc_request;
+  inference::HasHardwareResponse reply;
+
+  ClientContext context;
+
+  grpc_request.set_name(name);
+  grpc_request.set_num(num);
+
+  auto* stub = this->impl_->getStub();
+  Status status = stub->HasHardware(&context, grpc_request, &reply);
+
+  if (!status.ok()) {
+    throw bad_status(status.error_message());
+  }
+
+  return reply.found();
+}
+
 }  // namespace proteus

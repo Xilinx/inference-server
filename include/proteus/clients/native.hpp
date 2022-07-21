@@ -32,20 +32,6 @@
 
 namespace proteus {
 
-/// Get a string that lists the available kernels ("<name>:i,<name>:j...")
-std::string getHardware();
-
-/**
- * @brief Check if a particular kernel exists on the server. The string
- * splitting code is inspired from: https://stackoverflow.com/a/14266139
- *
- * @param kernel kernel name to check if it exists. An empty string is a special
- * name that matches any kernel name.
- * @param num minimum number of the kernels that should be present
- * @return bool
- */
-bool hasHardware(const std::string& kernel, size_t num);
-
 class NativeClient : public Client {
  public:
   ServerMetadata serverMetadata() override;
@@ -84,6 +70,8 @@ class NativeClient : public Client {
   std::string workerLoad(const std::string& worker,
                          RequestParameters* parameters) override;
   void workerUnload(const std::string& worker) override;
+
+  bool hasHardware(const std::string& name, int num) override;
 
   /**
    * @brief Enqueue an inference request to Proteus
