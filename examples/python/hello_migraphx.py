@@ -155,9 +155,7 @@ def parse_args():
         "-i",
         type=str,
         required=False,
-        default=os.path.join(
-            root, "tests/assets/dog-3619020_640.jpg"
-        ),  # a dog
+        default=os.path.join(root, "tests/assets/dog-3619020_640.jpg"),  # a dog
         help="An image to try inference on.  Use git-lfs to pull image assets",
     )
 
