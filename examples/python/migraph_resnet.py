@@ -159,8 +159,8 @@ def parse_args():
 
 def main(args):
 
-    batch_size = args.batch_size 
-    request_size = args.request_size 
+    batch_size = args.batch_size
+    request_size = args.request_size
     modelname = args.modelfile
     validation_dir = args.validation_dir
     validation_answers_file = os.path.join(validation_dir, args.groundtruth)
@@ -223,7 +223,7 @@ def main(args):
         )
         sys.exit(-1)
 
-    # +load worker.  The only parameter the migraphx worker requires is the model file name.
+    # load worker.  The only parameter the migraphx worker requires is the model file name.
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
     # future use.  It will read
@@ -232,10 +232,10 @@ def main(args):
     parameters = proteus.RequestParameters()
     parameters.put("model", modelname)
     parameters.put("batch", batch_size)
-    parameters.put("timeout", 6000) #ms; built-in
+    parameters.put("timeout", 100)  # ms
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.
-    print('loading worker Migraphx with model file ', modelname)
+    print("loading worker Migraphx with model file ", modelname)
     worker_name = client.workerLoad("Migraphx", parameters)
 
     # load the labels
@@ -292,7 +292,7 @@ def main(args):
                 request = proteus.ImageInferenceRequest(images, False)
                 print("request is ready.  Sending...")
                 response = client.modelInfer(worker_name, request)
-                # assert not response.isError(), response.getError()
+                assert not response.isError(), response.getError()
                 print("Client received inference reply.")
                 j = 0
                 for output in response.getOutputs():

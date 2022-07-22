@@ -133,9 +133,11 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   const auto& logger = this->getLogger();
 #endif
 
+  std::cout << " MIGraphXWorker::doInit \n";
+
   if (parameters->has("batch")) {
     this->batch_size_ = parameters->get<int>("batch");
-  }      
+  }
   if (parameters->has("model")) {
     input_file_ = parameters->get<std::string>("model");
   } else {
@@ -173,6 +175,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   std::ifstream f(compiled_path.c_str());
   if (f.good()) {
     // Load the compiled MessagePack (*.mxr) file
+    std::cout << " Loading model file " << compiled_path << std::endl;
     PROTEUS_LOG_INFO(
       logger, std::string("migraphx worker loading compiled model file ") +
                 compiled_path.c_str());
@@ -194,6 +197,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
     }
   } else {
     // Look for onnx file.  ifstream tests that the file can be opened
+    std::cout << " Loading model file " << onnx_path << std::endl;
     f = std::ifstream(onnx_path.c_str());
     if (f.good()) {
       // Load the onnx file
@@ -204,13 +208,15 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
                          onnx_path.c_str());
 
       migraphx::onnx_options onnx_opts;
-      // onnx_opts.set_input_parameter_shape("data", {2, 3, 224, 224}); //  {todo:  read from user request here}  set_default_dim_value
-      onnx_opts.set_default_dim_value(batch_size_);  
-      this->prog_ = migraphx::parse_onnx(onnx_path.c_str(), onnx_opts );
+      // onnx_opts.set_input_parameter_shape("data", {2, 3, 224, 224}); //
+      // {todo:  read from user request here}  set_default_dim_value
+      onnx_opts.set_default_dim_value(batch_size_);
+      this->prog_ = migraphx::parse_onnx(onnx_path.c_str(), onnx_opts);
 
       auto param_shapes =
         prog_.get_parameter_shapes();  // program_parameter_shapes struct
-      // auto input = param_shapes.names().front();  // "data", not currently used
+      // auto input = param_shapes.names().front();  // "data", not currently
+      // used
 
       // Compile the model.  Hard-coded choices of offload_copy and gpu
       // target.
@@ -246,6 +252,8 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
         options.set_file_format("msgpack");
 
         migraphx::save(this->prog_, compiled_path.c_str(), options);
+        std::cout << " Saved compiled model file " << compiled_path
+                  << std::endl;
       }
 
     } else {
@@ -297,14 +305,13 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   migraphx_shape_datatype_t output_type = output_shapes[0].type();
   this->output_dt_ = toDataType(output_type);
 
-  // Compile step needs to annotate with batch size when saving compiled model
-  // (a new reqt.) migraphx should be able to handle smaller batch, too.
   this->batch_size_ = length[0];
 
   // These values are set in the onnx model we're using.
   image_channels_ = length[1];
   image_width_ = length[2], image_height_ = length[3];
-  image_size_ = image_width_ * image_height_ * image_channels_ * this->input_dt_.size();
+  image_size_ =
+    image_width_ * image_height_ * image_channels_ * this->input_dt_.size();
   // Fetch the expected output size (num of categories) from the parsed model.
   // For an output of 1000 label values, output_lengths should be a vector of
   // {1, 1000}
@@ -356,7 +363,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 #endif
   PROTEUS_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
 
-  std::shared_ptr<InferenceRequest> req;
+  // std::shared_ptr<InferenceRequest> req;
   setThreadName("Migraphx");
 
   //
@@ -373,6 +380,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       break;
     }
     PROTEUS_LOG_INFO(logger, "Got request in migraphx");
+    std::chrono::time_point batch_tp =
+      std::chrono::high_resolution_clock::now();
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -380,19 +389,27 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
     // Safety check:  count all the items in all the requests in this batch
     size_t items_in_batch = 0;
-    for (unsigned int j = 0; j < batch->requests->size(); j++){
-      auto& req = batch->requests->at(j);
-      items_in_batch += req->getInputSize();
+    for (unsigned int j = 0; j < batch->requests->size(); j++) {
+      auto& req_b = batch->requests->at(j);
+      items_in_batch += req_b->getInputSize();
     }
-    if(items_in_batch > this->batch_size_){
-      PROTEUS_LOG_WARN(logger, "migraphx was passed a batch with " + std::to_string(items_in_batch) + " items, batch size is only " + std::to_string(batch_size_) + ".  Discarding extras.");
+    std::cout << "MIGraphXWorker::doRun received request batch with " +
+                   std::to_string(batch->requests->size()) + " requests, " +
+                   std::to_string(items_in_batch) + " items\n";
+    if (items_in_batch > this->batch_size_) {
+      PROTEUS_LOG_WARN(logger, "migraphx was passed a batch with " +
+                                 std::to_string(items_in_batch) +
+                                 " items, batch size is only " +
+                                 std::to_string(batch_size_) +
+                                 ".  Discarding extras.");
     }
 
     //
     //             run evaluation on the entire batch
     //
 
-    // The 0'th data pointer for the 0'th request is the base address of the whole data array for the batch
+    // The 0'th data pointer for the 0'th request is the base address of the
+    // whole data array for the batch
     auto& req0 = batch->requests->at(0);
 
     // The initial implementation of migraphx worker assumes that the model
@@ -402,17 +419,17 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
     auto* input_buffer = inputs0[0].getData();
 
-    // the next 3 values are part of the model and don't need to be read here except for verification
-    // In the input buffer, the 0'th dimension is color channels (3)
+    // the next 3 values are part of the model and don't need to be read here
+    // except for verification In the input buffer, the 0'th dimension is color
+    // channels (3)
     int rows = inputs0[0].getShape()[1];
     int cols = inputs0[0].getShape()[2];
 
     DataType dtype = inputs0[0].getDatatype();
     PROTEUS_LOG_INFO(logger, std::string("rows: ") + std::to_string(rows) +
-                                ", cols: " + std::to_string(cols) +
-                                ", dtype: " + std::to_string(size_t(dtype)) +
-                                ", should be " +
-                                std::to_string(size_t(input_dt_)));
+                               ", cols: " + std::to_string(cols) + ", dtype: " +
+                               std::to_string(size_t(dtype)) + ", should be " +
+                               std::to_string(size_t(input_dt_)));
 
     // The MIGraphX operation: run the migraphx eval() method.
     // If migraphx exceptions happen, they will be handled
@@ -421,24 +438,32 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
       // populate the migraphx parameters with shape read from the onnx
       // model.
-      auto param_shapes =
-        prog_.get_parameter_shapes();
+      auto param_shapes = prog_.get_parameter_shapes();
 
       // No validation; it should not be possible to receive an empty
       // param_shapes or names
       auto input = param_shapes.names().front();  // "data"
 
-      params.add(input, migraphx::argument(param_shapes[input],
-                                            (void*)input_buffer));
+      params.add(input,
+                 migraphx::argument(param_shapes[input], (void*)input_buffer));
       //
       // Run the inference
       //
       PROTEUS_LOG_INFO(logger, "beginning migraphx eval");
-          migraphx::api::arguments migraphx_output = this->prog_.eval(params);
-      PROTEUS_LOG_INFO(logger, "finishing migraphx eval");
+      std::chrono::time_point eval_tp =
+        std::chrono::high_resolution_clock::now();
+      migraphx::api::arguments migraphx_output = this->prog_.eval(params);
+      auto eval_duration =
+        std::chrono::duration_cast<std::chrono::microseconds>(
+          std::chrono::high_resolution_clock::now() - eval_tp);
+      PROTEUS_LOG_INFO(logger,
+                       std::string("finishing migraphx eval; batch size: ") +
+                         std::to_string(batch_size_) + "  elapsed time: " +
+                         std::to_string(eval_duration.count()) + " us");
 
       //
-      //           Fetch the results and populate response to each request in the batch
+      //           Fetch the results and populate response to each request in
+      //           the batch
       //
 
       // tracking the location of individual images in a request requires
@@ -446,50 +471,57 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       size_t input_index = 0;
 
       // for each request in the batch
-      std::cout << "----------------------\nRequests in this batch:  " << std::to_string(batch->requests->size()) << std::endl;
       for (unsigned int j = 0; j < batch->requests->size(); j++) {
-        try{
-          auto& req = batch->requests->at(j);
+        auto& req = batch->requests->at(j);
+        try {
           InferenceResponse resp;
           resp.setID(req->getID());
           resp.setModel("migraphx");
 
-          // We don't use the outputs portion of the request currently.  It is part
-          // of the kserve format specification, which the Inference Server is
-          // intended to follow. "The $request_output JSON is used to request which
-          // output tensors should be returned from the model."
+          // We don't use the outputs portion of the request currently.  It is
+          // part of the kserve format specification, which the Inference Server
+          // is intended to follow. "The $request_output JSON is used to request
+          // which output tensors should be returned from the model."
           // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md
           //
-          // Selecting the request output is only relevant to models that have more
-          // than one output tensor.
+          // Selecting the request output is only relevant to models that have
+          // more than one output tensor.
           //
-          auto inputs = req0->getInputs();                           // const std::vector<InferenceRequestInput>
-          auto outputs = req->getOutputs();                          // one result vector for each request
-          throw std::runtime_error("test error");
+          auto inputs =
+            req0->getInputs();  // const std::vector<InferenceRequestInput>
+          auto outputs =
+            req->getOutputs();  // one result vector for each request
           //
           // Transfer the migraphx results to output
           //
           size_t result_size =
-            migraphx_output.size();  // should be 1 item with items for each input, each input has 1000 (for resnet) categories
+            migraphx_output
+              .size();  // should be 1 item with items for each input, each
+                        // input has 1000 (for resnet) categories
           if (result_size != 1)
             throw std::length_error(
               "result count from migraphx call was not 1");
           auto shape = migraphx_output[0].get_shape();
 
-          // recast the migraphx output from a blob to an array of this->output_dt_      
+          // recast the migraphx output from a blob to an array of
+          // this->output_dt_
           auto lengths = shape.lengths();
-          size_t num_results = std::accumulate(lengths.begin()+1, lengths.end(), 1, std::multiplies<size_t>());
+          size_t num_results = std::accumulate(
+            lengths.begin() + 1, lengths.end(), 1, std::multiplies<size_t>());
           // size of each result array, bytes
-          size_t size_of_result = num_results*output_dt_.size();
-          // for each image in the request, there should be 1 vector of 1000 values
-          std::cout << "Request with " << std::to_string(req->getInputs().size()) << " images\n";
+          size_t size_of_result = num_results * output_dt_.size();
+          // for each image in the request, there should be 1 vector of 1000
+          // values
+          std::cout << "Request with "
+                    << std::to_string(req->getInputs().size()) << " images\n";
 
-          for(size_t k = 0; k < req->getInputs().size() && input_index < batch_size_; k++){
-            char* results = migraphx_output[0].data() + (input_index++)*size_of_result;
+          for (size_t k = 0;
+               k < req->getInputs().size() && input_index < batch_size_; k++) {
+            char* results =
+              migraphx_output[0].data() + (input_index++) * size_of_result;
 #ifndef NDEBUG
             {
-              float* zresults =
-                reinterpret_cast<float*>(results);
+              float* zresults = reinterpret_cast<float*>(results);
 
               // for debug  Compare this result with
               //    values seen by client to verify output packet is correct.
@@ -517,7 +549,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             auto buffer = std::make_shared<std::vector<std::byte>>();
             buffer->resize(size_of_result);
             memcpy(&((*buffer)[0]), results, size_of_result);
-            auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
+            auto my_data_cast =
+              std::reinterpret_pointer_cast<std::byte>(buffer);
             output.setData(std::move(my_data_cast));
             resp.addOutput(output);
           }
@@ -529,16 +562,16 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             MetricCounterIDs::kPipelineEgressWorker);
           auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::high_resolution_clock::now() - batch->start_times[j]);
-          Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
-                                                  duration.count());
+          Metrics::getInstance().observeSummary(
+            MetricSummaryIDs::kRequestLatency, duration.count());
 #endif
         } catch (const std::exception& e) {
           PROTEUS_LOG_ERROR(logger, e.what());
           // Pass error message back as reply to request; continue processing
           // more inference requests
 
-          req->runCallbackError(std::string("Error processing Migraphx request: ") +
-                                e.what());
+          req->runCallbackError(
+            std::string("Error processing Migraphx request: ") + e.what());
         }
 
       }  // end j, request
@@ -546,17 +579,24 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       // This outer catch block catches exceptions in evaluation of the batch.
       PROTEUS_LOG_ERROR(logger, e.what());
       // Pass error message back as reply for each request in the batch
-      for (auto& req : *(batch->requests)) {
-           req->runCallbackError(std::string("Migraphx inference error: ") +
-                            e.what());
+      for (auto& req_e : *(batch->requests)) {
+        req_e->runCallbackError(std::string("Migraphx inference error: ") +
+                                e.what());
       }
     }
     PROTEUS_LOG_INFO(logger, "Finished migraphx eval");
-  
+
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
+    auto batch_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::high_resolution_clock::now() - batch_tp);
+    PROTEUS_LOG_INFO(
+      logger, std::string("finishing migraphx batch processing; batch size: ") +
+                std::to_string(batch_size_) + "  elapsed time: " +
+                std::to_string(batch_duration.count()) + " us");
+
     PROTEUS_LOG_DEBUG(logger, "Returned buffers");
-      
+
   }  // end while (batch)
   PROTEUS_LOG_INFO(logger, "Migraphx::doRun ending");
 }
