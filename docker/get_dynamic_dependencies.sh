@@ -13,35 +13,59 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This script will find, and optionally copy, all the dependencies needed to run
+# the inference server in the release production container.
 
 usage() {
 cat << EOF
+./get_dynamic_dependencies.sh [--copy /path/] [flags]
 
+--copy: copy the found files to the provided location. If not provided, just
+        print to stdout
+
+flags:
+  --vitis [yes|no]: Add Vitis-related dependencies
+  --migraphx [yes|no]: Add migraphx-related dependencies
 EOF
 }
 
 ALL_ARGS=("$@")
 # get the current directory
 # DIR="$( cd "$( dirname "$0" )" && pwd )"
-DEPS_FILE=/tmp/deps.txt
-UNIQUE_DEPS_FILE=/tmp/deps_unique.txt
 
+save_data() {
+  if [[ -n $DEPS_FILE ]]; then
+    printf '%s\n' "$1" >> $DEPS_FILE
+  else
+    printf '%s\n' "$1"
+  fi
+}
+
+# Usage: resolve_symlinks /path/to/file
+#
+# This function will add the file, and any symlinks along the way, to the
+# dependency list with absolute paths
 resolve_symlinks() {
   dep=$1
 
   dir=$(dirname $dep)
   while [[ -L $dep ]]; do
-    # echo $dep
-    echo "$dep" >> $DEPS_FILE
+    save_data "$(realpath -s $dep)"
     dep=$(readlink $dep)
-    # if the next path isn't absolute, append the directory from above and resolve full path
+    # if the next path isn't absolute, append the directory from above and
+    # resolve full path
     if [[ ! "$dep" = /* ]]; then
-      dep=$(realpath -s $dir/$dep)
+      dep="$dir/$dep"
     fi
   done
-  echo "$dep" >> $DEPS_FILE
+  save_data "$(realpath -s $dep)"
 }
 
+# Usage: get_dependencies /path/to/file
+#
+# This function only works for dynamically linked objects (other files are
+# ignored). The shared libraries the file links to (with ldd) are added to
+# the dependency list.
 get_dependencies() {
   dynamic_file=$1
 
@@ -51,6 +75,34 @@ get_dependencies() {
   for dep in "${deps[@]}"; do
     resolve_symlinks $dep
   done
+  # add the dynamic file itself
+  resolve_symlinks $dep
+}
+
+# Usage: find_dynamic /path/to/dir
+#
+# Given a directory, find all the dynamic files in the tree and add them to the
+# dependency list
+find_dynamic() {
+  path=$(realpath "$1")
+
+  if [ ! -d $path ]; then
+    return
+  fi
+
+  files=( $(find $path ))
+  for file in "${files[@]}"; do
+    get_dependencies $dynamic_file
+  done
+}
+
+remove_duplicates() {
+  cat -n $DEPS_FILE | sort -uk2 | sort -nk1 | cut -f2- > $UNIQUE_DEPS_FILE
+  rm $DEPS_FILE
+}
+
+copy_files() {
+  cat $UNIQUE_DEPS_FILE | xargs -I{} bash -c "if [ -f {} ]; then cp --parents -P {} $1; fi"
 }
 
 add_vitis_deps() {
@@ -73,16 +125,14 @@ add_vitis_deps() {
   for deb in ${vitis_debs[@]}; do
     lib_paths=($(dpkg -L $deb | grep -F .so))
     for lib in ${lib_paths[@]}; do
-      parse_path $lib
-      resolve_symlinks $lib
+      get_dependencies $lib
     done
   done
 
   for manifest in ${vitis_manifests[@]}; do
     lib_paths=$(grep -F .so /usr/local/manifests/$manifest.txt)
     for lib in ${lib_paths[@]}; do
-      parse_path $lib
-      resolve_symlinks $lib
+      get_dependencies $lib
     done
   done
 
@@ -93,7 +143,7 @@ add_vitis_deps() {
   )
 
   for file in ${other_files[@]}; do
-    resolve_symlinks $file
+    get_dependencies $file
   done
 
   # any other binary dependencies needed
@@ -103,8 +153,7 @@ add_vitis_deps() {
   )
 
   for bin in ${other_files[@]}; do
-    parse_path $bin
-    resolve_symlinks $bin
+    get_dependencies $bin
   done
 }
 
@@ -115,22 +164,24 @@ add_migraphx_deps() {
   )
 
   for file in ${other_files[@]}; do
-    resolve_symlinks $file
+    get_dependencies $file
   done
 
   other_bins=(
+    /bin/lsmod
     /opt/rocm-5.0.0/llvm/bin/clang
   )
 
   for bin in ${other_bins[@]}; do
     get_dependencies $bin
-    resolve_symlinks $bin
   done
 
-  # something is missing in migraphx... for now, add everything
-  all_libs=$(find /opt/rocm/ -name *.so*)
+  # something is missing in migraphx... just adding .so files doesn't work
+  # either so for now, add everything
+  # all_libs=$(find /opt/rocm/ -name *.so*)
+  all_files=$(find /opt/rocm/)
 
-  for file in ${all_libs[@]}; do
+  for file in ${all_files[@]}; do
     resolve_symlinks $file
   done
 }
@@ -144,92 +195,79 @@ add_other_bins() {
 
   for bin in ${other_files[@]}; do
     get_dependencies $bin
-    resolve_symlinks $bin
   done
 }
 
-remove_duplicates() {
-  cat -n $DEPS_FILE | sort -uk2 | sort -nk1 | cut -f2- > $UNIQUE_DEPS_FILE
-  rm $DEPS_FILE
-}
-
-copy_files() {
-  cat $UNIQUE_DEPS_FILE | xargs -I{} bash -c "if [ -f {} ]; then cp --parents -P {} $1; fi"
-}
-
-parse_path() {
-  path=$(realpath "$1")
-
-  if ! compgen -G "$path" &> /dev/null; then
-    echo "$path does not exist, skipping"
+add_proteus_deps() {
+  if test -f /usr/local/manifests/proteus.txt; then
+    files=($(cat /usr/local/manifests/proteus.txt))
+  elif test -f /root/deps/usr/local/manifests/proteus.txt; then
+    files=($(cat /root/deps/usr/local/manifests/proteus.txt))
+  elif test -f /tmp/proteus/build/Release/install_manifest.txt; then
+    files=($(cat /tmp/proteus/build/Release/install_manifest.txt))
+  else
+    echo "Warning: no manifest file found"
     return
   fi
 
-  dynamic_files=( $(file $path | awk -F: '$2 ~ "dynamically linked" {print $1}') )
-  for dynamic_file in "${dynamic_files[@]}"; do
-    if [[ ! -z $dynamic_file ]]; then
-      get_dependencies $dynamic_file
-    fi
+  for file in "${files[@]}"; do
+    get_dependencies "$file"
   done
 }
 
-COPY=""
-VITIS=""
-MIGRAPHX=""
+main() {
+  # these files hold the temporary files as they're discovered
+  DEPS_FILE=/tmp/deps.txt
+  UNIQUE_DEPS_FILE=/tmp/deps_unique.txt
 
-# Parse Options
-while true; do
-  if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
-    usage;
-    exit 0;
+  COPY=""
+  VITIS=""
+  MIGRAPHX=""
+
+  # Parse Options
+  while true; do
+    if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+      usage;
+      exit 0;
+    fi
+    if [[ -z "$1" ]]; then
+      break;
+    fi
+    case "$1" in
+      "-c" | "--copy" ) COPY=$2    ; shift 2 ;;
+      "--vitis"       ) VITIS=$2   ; shift 2 ;;
+      "--migraphx"    ) MIGRAPHX=$2; shift 2 ;;
+      *) break;;
+    esac
+  done
+
+  # overwrite the file
+  echo -n > $DEPS_FILE
+
+  add_proteus_deps
+
+  if [[ $VITIS == "yes" ]]; then
+    add_vitis_deps
   fi
-  if [[ -z "$1" ]]; then
-    break;
+
+  if [[ $MIGRAPHX == "yes" ]]; then
+    add_migraphx_deps
   fi
-  case "$1" in
-    "-c" | "--copy" ) COPY=$2    ; shift 2 ;;
-    "--vitis"       ) VITIS=$2   ; shift 2 ;;
-    "--migraphx"    ) MIGRAPHX=$2; shift 2 ;;
-    *) break;;
-  esac
-done
 
-# overwrite the file
-echo -n > $DEPS_FILE
+  add_other_bins
 
-if test -f /usr/local/manifests/proteus.txt; then
-  paths=($(cat /usr/local/manifests/proteus.txt))
-elif test -f /root/deps/usr/local/manifests/proteus.txt; then
-  paths=($(cat /root/deps/usr/local/manifests/proteus.txt))
-elif test -f /tmp/proteus/build/Release/install_manifest.txt; then
-  paths=($(cat /tmp/proteus/build/Release/install_manifest.txt))
-else
-  echo "No manifest file found"
-  exit 1
-fi
-if [[ $VITIS == "yes" ]]; then
-  paths+=("./external/aks/libs/*")
-fi
+  remove_duplicates
 
-for path in "${paths[@]}"; do
-  parse_path "$path"
-done
+  if [[ ! -z $COPY ]]; then
+    copy_files $COPY
+  else
+    cat $UNIQUE_DEPS_FILE
+    rm $UNIQUE_DEPS_FILE
+  fi
+}
 
-if [[ $VITIS == "yes" ]]; then
-  add_vitis_deps
-fi
+# if the script is being sourced, return. Otherwise, suppress the error from
+# return and continue to call main()
+return 2> /dev/null
 
-if [[ $MIGRAPHX == "yes" ]]; then
-  add_migraphx_deps
-fi
-
-add_other_bins
-
-remove_duplicates
-
-if [[ ! -z $COPY ]]; then
-  copy_files $COPY
-else
-  cat $UNIQUE_DEPS_FILE
-  rm $UNIQUE_DEPS_FILE
-fi
+main "$@"
