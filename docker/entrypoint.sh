@@ -83,6 +83,7 @@ for group in $groups; do
     # if the user isn't a member of the group, then join it
     if ! id -nG proteus-user | grep -qw "$group"; then
       usermod -aG $group proteus-user
+      usermod -aG $group root
     fi
   fi
 done

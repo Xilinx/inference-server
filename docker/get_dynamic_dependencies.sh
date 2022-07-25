@@ -76,7 +76,7 @@ get_dependencies() {
     resolve_symlinks $dep
   done
   # add the dynamic file itself
-  resolve_symlinks $dep
+  resolve_symlinks $dynamic_file
 }
 
 # Usage: find_dynamic /path/to/dir

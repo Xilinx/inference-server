@@ -822,15 +822,19 @@ RUN echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubun
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         /*.deb \
     # having symlinks between rocm-* and rocm complicates building the production
-    # image so move files over but keep the symlink for compatibility
-    && rsync -a /opt/rocm/* /opt/rocm-* \
+    # image so make /opt/rocm a real directory and move files over to it from
+    # /opt/rocm-* but add a symlink for /opt/rocm-* for compatibility
+    && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \
     && rm -rf /opt/rocm \
-    && ln -s /opt/rocm-* /opt/rocm \
+    && mkdir /opt/rocm \
+    && rsync -a $dir/* /opt/rocm/ \
+    && rm -rf $dir \
+    && ln -s /opt/rocm $dir \
     # install .whl from the builder
     && pip3 install --no-cache-dir /*.whl \
     && rm -f /*.whl \
     # clean up
-    && apt-get purge -y --auto-remove  python3-pip rsync \
+    && apt-get purge -y --auto-remove python3-pip rsync \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /*.deb
@@ -996,17 +1000,9 @@ RUN ldconfig \
     # build the static GUI files
     # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        # needed for get_dynamic_dependencies.sh
-        file \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    # create a copy of all the dynamic libraries needed by the server and workers
     && cd ${PROTEUS_ROOT} \
-    && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} --migraphx ${ENABLE_MIGRAPHX} > ${MANIFESTS_DIR}/prod.txt \
-    && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS} --migraphx ${ENABLE_MIGRAPHX}
+    && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} > ${MANIFESTS_DIR}/prod.txt \
+    && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS}
 
 FROM base AS vitis_installer_prod_yes
 
@@ -1037,7 +1033,47 @@ ENV PATH="/opt/xilinx/proteus/bin:${PATH}"
 
 FROM base AS vitis_installer_prod_no
 
-FROM vitis_installer_prod_${ENABLE_VITIS} AS prod
+FROM vitis_installer_prod_${ENABLE_VITIS} AS migraphx_installer_prod_no
+
+FROM vitis_installer_prod_${ENABLE_VITIS} AS migraphx_installer_prod_yes
+
+ARG COPY_DIR
+
+COPY --from=migraphx_builder ${COPY_DIR} /
+
+# install all .deb files from the builder
+RUN echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main" > /etc/apt/sources.list.d/rocm.list \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        rsync \
+        # these packages are required to build with migraphx but don't get installed
+        # as dependencies. They also create /opt/rocm-* so we can make a symlink
+        # before installing migraphx
+        miopen-hip-dev \
+        rocm-device-libs \
+        rocblas-dev \
+        libnuma1 \
+    && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
+    && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
+    && ldconfig \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        /*.deb \
+    # having symlinks between rocm-* and rocm complicates building the production
+    # image so move files over to rocm/ but add a symlink for compatibility
+    && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \
+    && rm -rf /opt/rocm \
+    && mkdir /opt/rocm \
+    && rsync -a $dir/* /opt/rocm/ \
+    && rm -rf $dir \
+    && ln -s /opt/rocm $dir \
+    # clean up
+    && apt-get purge -y --auto-remove rsync \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f /*.deb \
+    && rm -f /*.wheel
+
+FROM migraphx_installer_prod_${ENABLE_MIGRAPHX} as prod
 
 ARG PROTEUS_ROOT
 ARG COPY_DIR
