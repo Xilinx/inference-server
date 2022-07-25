@@ -56,8 +56,8 @@ setup() {
 }
 
 @test "get_dependencies_text" {
-    run get_dependencies "/etc/os-release"
-    refute_output
+    run get_dependencies "/usr/lib/os-release"
+    assert_output "/usr/lib/os-release"
 }
 
 @test "get_dependencies_lib" {
