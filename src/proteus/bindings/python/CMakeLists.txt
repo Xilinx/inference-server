@@ -68,6 +68,9 @@ target_link_libraries(
 )
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME _proteus)
 
+# if building a wheel, the CMake build there sets this variable so we can detect
+# here whether CMake is running in the regular build or as part of the wheel
+# building run
 get_target_property(output_directory proteus_py LIBRARY_OUTPUT_DIRECTORY)
 if(NOT output_directory)
   set(output_directory ${CMAKE_CURRENT_BINARY_DIR})
@@ -91,13 +94,48 @@ else()
   )
 endif()
 
+# copy over Python package source files to the build tree
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/setup.py ${CMAKE_CURRENT_BINARY_DIR}/setup.py
+  COPYONLY
+)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/__init__.py
+  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/__init__.py COPYONLY
+)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/clients/__init__.py
+  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/clients/__init__.py COPYONLY
+)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/predict_api/__init__.py
+  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/predict_api/__init__.py COPYONLY
+)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/servers/__init__.py
+  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/servers/__init__.py COPYONLY
+)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/py.typed
+  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/py.typed COPYONLY
+)
+
 get_target_property(output_directory_2 proteus_py LIBRARY_OUTPUT_DIRECTORY)
+# i.e. if the regular CMake build is running
 if(NOT output_directory_2)
+  execute_process(
+    COMMAND ${Python_EXECUTABLE} -m site --user-site
+    OUTPUT_VARIABLE
+      PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE
+      # COMMAND_ECHO STDOUT
+      COMMAND_ERROR_IS_FATAL ANY
+  )
+
   add_custom_command(
     TARGET proteus_py
     POST_BUILD
-    COMMAND pip install --prefix ~/.local . -v
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND pip install --prefix ~/.local .
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
   )
 endif()
 
