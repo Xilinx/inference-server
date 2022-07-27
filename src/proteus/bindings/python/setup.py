@@ -12,19 +12,60 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import multiprocessing as mp
 import os
-import setuptools
+import subprocess
+import sys
 
-version_path = os.getenv("PROTEUS_ROOT")
-if version_path:
-    version_path += "/VERSION"
-    with open(version_path, "r") as f:
-        version = f.read()
-else:
-    version = "0.0.0"
+import setuptools
+from setuptools.command.build_ext import build_ext
+
+root_path = os.getenv("PROTEUS_ROOT")
+assert root_path is not None
+
+
+class CMakeExtension(setuptools.Extension):
+    def __init__(self, name, sourcedir=root_path):
+        setuptools.Extension.__init__(self, name, sources=[])
+        self.sourcedir = os.path.abspath(sourcedir)
+
+
+class CMakeBuild(build_ext):
+    def build_extension(self, ext):
+        extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+
+        # required for auto-detection & inclusion of auxiliary "native" libs
+        if not extdir.endswith(os.path.sep):
+            extdir += os.path.sep
+
+        cmake_args = [
+            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DCMAKE_BUILD_TYPE=Release",
+        ]
+        cmake_args += ["-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE"]
+        cmake_args += ["-DCMAKE_INSTALL_RPATH={}".format("$ORIGIN")]
+        # cmake_args += ["-DPROTEUS_ENABLE_VITIS=OFF"]
+        # cmake_args += ["-DPROTEUS_ENABLE_MIGRAPHX=OFF"]
+        # cmake_args += ["-DPROTEUS_ENABLE_TFZENDNN=OFF"]
+        # cmake_args += ["-DPROTEUS_ENABLE_PTZENDNN=OFF"]
+        # cmake_args += ["-DPROTEUS_ENABLE_AKS=OFF"]
+
+        build_temp = os.path.join(self.build_temp, ext.name)
+        if not os.path.exists(build_temp):
+            os.makedirs(build_temp)
+
+        os.environ.putenv("CMAKE_BUILD_PARALLEL_LEVEL", str(mp.cpu_count()))
+        subprocess.check_call(["cmake", ext.sourcedir] + cmake_args, cwd=build_temp)
+        subprocess.check_call(["cmake", "--build", "."], cwd=build_temp)
+
+
+version_path = root_path + "/VERSION"
+with open(version_path, "r") as f:
+    version = f.read()
 
 setuptools.setup(
-    name="Proteus",
+    name="proteus",
     version=version,
     license="Apache 2.0",
     packages=setuptools.find_packages("src"),
@@ -36,10 +77,10 @@ setuptools.setup(
     package_dir={"": "src"},
     package_data={
         "": [
-            "_proteus.cpython-36m-x86_64-linux-gnu.so",
-            "proteus-stubs/*.pyi",
-            "_proteus-stubs/*.pyi",
+            "*.so*",
         ]
     },
     zip_safe=False,  # required for mypy
+    ext_modules=[CMakeExtension("proteus")],
+    cmdclass={"build_ext": CMakeBuild},
 )

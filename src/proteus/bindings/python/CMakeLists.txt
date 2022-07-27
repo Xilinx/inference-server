@@ -53,7 +53,7 @@ if(NOT EXISTS ${dummy_new_file})
   file(WRITE ${dummy_new_file} "")
 endif()
 execute_process(
-  COMMAND sh -c "pip list | grep Proteus > /dev/null" RESULT_VARIABLE Result
+  COMMAND sh -c "pip list | grep proteus > /dev/null" RESULT_VARIABLE Result
 )
 if(${Result})
   # touch the file to modify it if pip fails to find the package
@@ -68,12 +68,22 @@ target_link_libraries(
 )
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME _proteus)
 
+get_target_property(output_directory proteus_py LIBRARY_OUTPUT_DIRECTORY)
+if(NOT output_directory)
+  set(output_directory ${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
 find_package(Pybind11Stubgen)
 if(${Pybind11Stubgen_FOUND})
   add_custom_command(
-    TARGET proteus_py POST_BUILD
-    COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} pybind11-stubgen -o
-            ${CMAKE_CURRENT_BINARY_DIR} _proteus --no-setup-py
+    TARGET proteus_py
+    POST_BUILD
+    COMMAND PYTHONPATH=${output_directory} pybind11-stubgen -o
+            ${output_directory} _proteus --no-setup-py
+    COMMAND mkdir -p ${output_directory}/proteus
+    COMMAND cp -rf ${output_directory}/_proteus-stubs/*
+            ${output_directory}/proteus
+    COMMAND rm -rf ${output_directory}/_proteus-stubs
   )
 else()
   message(
@@ -81,54 +91,36 @@ else()
   )
 endif()
 
-# copy over Python package source files to the build tree
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/setup.py ${CMAKE_CURRENT_BINARY_DIR}/setup.py
-  COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/clients/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/clients/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/predict_api/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/predict_api/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/servers/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/servers/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/py.typed
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/py.typed COPYONLY
-)
-
-execute_process(
-  COMMAND ${Python_EXECUTABLE} -m site --user-site
-  OUTPUT_VARIABLE
-    PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE
-    # COMMAND_ECHO STDOUT
-    COMMAND_ERROR_IS_FATAL ANY
-)
-
-add_custom_command(
-  TARGET proteus_py
-  POST_BUILD
-  COMMAND pip install --prefix ~/.local .
-  COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
-  # COMMENT "Add ${CMAKE_CURRENT_BINARY_DIR} to the PYTHONPATH to use the
-  # proteus Python package"
-)
-
-# we need to run this after the pip install above
-if(${Pybind11Stubgen_FOUND})
+get_target_property(output_directory_2 proteus_py LIBRARY_OUTPUT_DIRECTORY)
+if(NOT output_directory_2)
   add_custom_command(
-    TARGET proteus_py POST_BUILD
-    COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} pybind11-stubgen -o
-            ${CMAKE_CURRENT_BINARY_DIR} proteus --no-setup-py
+    TARGET proteus_py
+    POST_BUILD
+    COMMAND pip install --prefix ~/.local . -v
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   )
 endif()
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+# cmake-format: off
+install(
+  TARGETS proteus_py
+  RUNTIME COMPONENT proteus_Runtime
+  LIBRARY COMPONENT proteus_Runtime
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+)
+# cmake-format: on
+
+# we need to run this after the pip install above
+# if(${Pybind11Stubgen_FOUND})
+#   file(GLOB lib_exists ${output_directory}/_proteus*.so)
+#   if(EXISTS ${lib_exists})
+#     add_custom_command(
+#       TARGET proteus_py POST_BUILD
+#       COMMAND PYTHONPATH=${output_directory} pybind11-stubgen -o
+#               ${output_directory} proteus --no-setup-py
+#     )
+#   endif()
+# endif()
