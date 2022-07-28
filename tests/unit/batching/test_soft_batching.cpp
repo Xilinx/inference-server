@@ -17,7 +17,6 @@
 #include <memory>    // for allocator, make_unique
 #include <numeric>   // for accumulate
 #include <optional>  // for optional
-#include <queue>     // for queue
 #include <utility>   // for pair, move
 #include <vector>    // for vector
 
@@ -189,7 +188,6 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
   const auto& batch_config = GetParam();
   auto requests = batch_config.requests;
 
-  std::queue<InferenceResponseFuture> foo;
   for (const auto& i : requests) {
     auto request = create_request(i);
     auto req = std::make_unique<CppNativeApi>(request);
