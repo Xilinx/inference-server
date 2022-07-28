@@ -21,6 +21,7 @@ external/aks/libs
 external/artifacts
 external/repository
 private/
+src/proteus/bindings/python/dist
 
 # files
 **/callgrind.out.*

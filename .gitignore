@@ -26,6 +26,7 @@ external/aks/*
 external/overlaybins
 docs/_*/
 tests/shell/test_helper
+src/proteus/bindings/python/dist
 
 # files
 callgrind.out.*

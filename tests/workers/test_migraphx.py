@@ -15,16 +15,15 @@
 import os
 import sys
 
-import pytest
-import numpy as np
-import proteus
 import cv2
+import numpy as np
+import pytest
+from helper import root_path, run_benchmark
 
-from helper import run_benchmark, root_path
+import proteus
 
 sys.path.insert(0, os.path.join(root_path, "examples/python"))
 from utils.utils import postprocess
-
 
 # The make_nxn and preprocess functions are based on an migraphx example at
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
@@ -57,7 +56,7 @@ def preprocess(img_data):
 
     Args:
         img_data (np.array): array in 3 dimensions [channels, rows, cols] with value range 0-255
-        The vectors are for RGB images, so images read with OpenCV must have channels 
+        The vectors are for RGB images, so images read with OpenCV must have channels
         converted before calling.
     Returns:
         Response: np.array
@@ -125,7 +124,7 @@ class TestMigraphx:
                 assert output.parameters.empty()
         return response
 
-    @pytest.mark.parametrize("num", [1, 8])
+    @pytest.mark.parametrize("num", [1])
     def test_migraphx(self, num):
         """
         Send a request to model as tensor data
