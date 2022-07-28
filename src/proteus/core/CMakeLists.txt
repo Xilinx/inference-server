@@ -66,6 +66,7 @@ target_include_directories(
   model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>
 )
 target_link_libraries(model_repository INTERFACE lib_config efsw)
+add_dependencies(model_repository lib_config)
 
 add_library(core STATIC ${CORE_OBJS})
 target_link_libraries(core INTERFACE ${targets})
