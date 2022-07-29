@@ -14,13 +14,13 @@
 
 import numpy as np
 import pytest
-
-import proteus
 from proteus.predict_api import (
     InferenceRequest,
     InferenceRequestInput,
     InferenceResponse,
 )
+
+import proteus
 
 
 @pytest.fixture(scope="class")
@@ -37,7 +37,7 @@ def parameters_fixture():
 @pytest.mark.extensions(["aks", "vitis"])
 class TestAks:
     def test_aks_0(self):
-        numbers = [3.0, 5.0]
+        numbers = [3.0]
         request = InferenceRequest()
         request.id = "hello_world"
 

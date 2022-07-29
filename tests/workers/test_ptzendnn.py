@@ -36,6 +36,7 @@ def parameters_fixture():
         "model": str(root_path / "external/pytorch_models/resnet50_pretrained.pt"),
         "input_size": 224,
         "output_classes": 1000,
+        "batch_size": 8,
     }
 
 

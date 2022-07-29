@@ -15,14 +15,14 @@
 import os
 import sys
 
-import pytest
 import numpy as np
+import pytest
+from helper import root_path, run_benchmark
+
 import proteus
 
-from helper import run_benchmark, root_path
-
 sys.path.insert(0, os.path.join(root_path, "examples/python"))
-from utils.utils import preprocess, postprocess
+from utils.utils import postprocess, preprocess
 
 
 @pytest.fixture(scope="class")
@@ -42,6 +42,7 @@ def parameters_fixture():
         "output_classes": 1000,
         "inter_op": 64,
         "intra_op": 1,
+        "batch_size": 8,
     }
 
 
