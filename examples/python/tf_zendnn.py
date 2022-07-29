@@ -18,10 +18,10 @@ import sys
 import time
 
 import numpy as np
+from utils.utils import postprocess, preprocess
 
 import proteus
 import proteus.clients
-from utils.utils import preprocess, postprocess
 
 
 def main(args):
@@ -96,6 +96,7 @@ def main(args):
     parameters.put("output_classes", output_classes)
     parameters.put("inter_op", args.inter_op)
     parameters.put("intra_op", args.intra_op)
+    parameters.put("batch_size", batch_size)
     worker_name = client.workerLoad("TfZendnn", parameters)
 
     ready = False
