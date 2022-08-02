@@ -115,8 +115,7 @@ def parse_args():
         type=int,
         required=False,
         default=64,
-        help="Batch size for migraphx evaluation. Default is 64. "
-        "(You must delete the model's *.mxr file to change batch size once set)",
+        help="Batch size for migraphx evaluation. Default is 64. ",
     )
     parser.add_argument(
         "--modelfile",
