@@ -138,8 +138,8 @@ Kernels getHardware() {
   }
   std::string response_str;
   response_str.resize(total_len);
-  auto foo = conn.read_n(response_str.data(), total_len);
-  if (foo == -1) {
+  auto bytes_read = conn.read_n(response_str.data(), total_len);
+  if (bytes_read == -1) {
     throw external_error("wrong number of bytes read at data");
   }
 
@@ -178,11 +178,11 @@ Kernels getHardware() {
 bool hasHardware(const std::string& name, int num) {
   auto kernels = getHardware();
 
-  auto foo = kernels.find(name);
-  if (foo == kernels.end()) {
+  auto kernel_iterator = kernels.find(name);
+  if (kernel_iterator == kernels.end()) {
     return false;
   }
-  return foo->second >= num;
+  return kernel_iterator->second >= num;
 }
 
 }  // namespace proteus
