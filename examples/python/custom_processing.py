@@ -93,7 +93,7 @@ def main():
     path_to_xmodel = "${PROTEUS_ROOT}/external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel"
     path_to_image = root + "/tests/assets/dog-3619020_640.jpg"
     # for this image, we know what we expect to receive with this XModel
-    gold_response_output = [259, 261, 260, 154, 230]
+    gold_response_output = [259, 261, 260, 157, 154]
     # -user variables
 
     client = proteus.clients.HttpClient("http://127.0.0.1:8998")
