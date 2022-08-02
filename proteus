@@ -16,11 +16,10 @@
 import argparse
 import getpass
 import glob
-import hashlib
+import importlib
 import json
 import multiprocessing as mp
 import os
-from pathlib import Path
 import pty
 import shlex
 import shutil
@@ -28,16 +27,25 @@ import subprocess
 import sys
 import tarfile
 import textwrap
-import time
 import urllib.error
 import urllib.request
 import zipfile
+from pathlib import Path
 
 
 def get_version():
+    """
+    Read the VERSION file and return as a string
+
+    Returns:
+        str: VERSION
+    """
     version_file = Path(__file__).parent.resolve() / "VERSION"
     with open(version_file, "r") as f:
         return f.readline().strip()
+
+
+help_message = "show this help message and exit"
 
 
 # https://stackoverflow.com/a/34736291/13621369
@@ -237,24 +245,6 @@ class WriteComposeFile:
                     config["services"][service], "devices", cls.get_devices()
                 )
 
-            # if args.user_config:
-            #     cls.set_or_extend(
-            #         config["services"][service], "volumes", cls.get_user_configs()
-            #     )
-
-            # if args.xclbins:
-            #     default_xclbin_path = "/opt/xilinx/overlaybins"
-            #     if Path(default_xclbin_path).exists():
-            #         mount = f"{default_xclbin_path}:{default_xclbin_path}:ro"
-            #         cls.set_or_extend(config["services"][service], "volumes", mount)
-
-            # if args.command:
-            #     cls.set_or_extend(
-            #         config["services"][service],
-            #         "command",
-            #         shlex.split(args.command.strip('"')),
-            #     )
-
         if args.dry_run:
             print(json.dumps(config, indent=2))
         else:
@@ -262,10 +252,19 @@ class WriteComposeFile:
                 yaml.dump(config, f)
 
 
+def reject_unknown_args(unknown_args):
+    if unknown_args:
+        unknown_arguments = " ".join(unknown_args)
+        raise argparse.ArgumentError(
+            None, f"Unknown argument(s) passed: {unknown_arguments}"
+        )
+
+
 class Attach:
     @staticmethod
     def parse(args, unknown_args):
-        user = getpass.getuser()
+        reject_unknown_args(unknown_args)
+
         cmd = f"docker ps --filter status=running --filter 'label=project=proteus' --latest --quiet"
         if args.name is None:
             try:
@@ -299,14 +298,13 @@ class Attach:
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument(
-            "-n",
-            "--name",
+            "name",
             action="store",
+            default=None,
+            nargs="?",
             help="name of the container to attach to. Defaults to latest running container",
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         subparser.set_defaults(func=cls.parse)
 
 
@@ -370,9 +368,8 @@ class Build:
             run_command(command, args.dry_run)
 
         # if the package isn't importable, then we need to delete the CMake cache so the package can be installed by the build
-        try:
-            import proteus
-        except ImportError:
+        package_installed = importlib.util.find_spec("proteus")
+        if package_installed is None:
             args.regen = True
 
         cmake_cache = build_dir / "CMakeCache.txt"
@@ -495,67 +492,7 @@ class Build:
             help="number of threads for Make (defaults to number of processors)",
             default=mp.cpu_count(),
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
-        subparser.set_defaults(func=cls.parse)
-
-
-class ClangFormat:
-    @staticmethod
-    def parse(args, unknown_args):
-        unknown_commands = " ".join(unknown_args)
-        command = f"clang-format -style=file -i {unknown_commands} {args.path}"
-        run_command(command, args.dry_run)
-
-    @classmethod
-    def add(cls, parser):
-        subparser = parser.add_parser(
-            "clangformat",
-            help="Run clangformat on a file",
-            add_help=False,
-            description="This is a wrapper around clangformat to format a particular file in place based on the existing clangformat rules. Any unmatched arguments are passed to clang-format. Use clang-format --help to see options",
-        )
-        subparser.add_argument(
-            "path", action="store", help="Path to a C++ file to analyze"
-        )
-
-        command_group = subparser.add_argument_group("Options")
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
-        subparser.set_defaults(func=cls.parse)
-
-
-class ClangTidy:
-    @staticmethod
-    def parse(args, unknown_args):
-        _, old_build_config, _ = get_build_config(args.dir)
-        if old_build_config is None:
-            old_build_config = "Debug"
-
-        unknown_commands = " ".join(unknown_args)
-        command = f"clang-tidy -format-style=file -p={args.dir}/{old_build_config} {unknown_commands}"
-        run_command(command, args.dry_run)
-
-    @classmethod
-    def add(cls, parser):
-        subparser = parser.add_parser(
-            "clangtidy", help="Run clang-tidy on all source files", add_help=False
-        )
-
-        command_group = subparser.add_argument_group("Options")
-        command_group.add_argument(
-            "-d",
-            "--dir",
-            action="store",
-            help="root path to the build tree. Defaults to ./build",
-            default=str(Path.cwd() / "build"),
-        )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
-
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         subparser.set_defaults(func=cls.parse)
 
 
@@ -605,11 +542,9 @@ class Clean:
         command_group.add_argument(
             "--artifacts",
             action="store_true",
-            help="Delete downloaded XModel artifacts",
+            help="Delete downloaded artifacts",
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         command_group.add_argument(
             "--no-gui",
             dest="gui",
@@ -704,9 +639,7 @@ class Dockerize:
             help=f"Name of the image to use as dev image to build the production image.",
             default="",
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         command_group.add_argument(
             "--vitis",
             dest="vitis",
@@ -761,13 +694,57 @@ class Dockerize:
 
 class Get:
     @staticmethod
+    def _download(args, url, tmp_dir, location, filename):
+        if args.dry_run:
+            print(f"Downloading {filename} from {url} to {location}")
+            return
+        with open(tmp_dir / filename, "wb") as f:
+            req = urllib.request.Request(url)
+            # need to specify the user-agent for accessing wikimedia
+            req.add_header("User-Agent", f"proteus {get_version()}")
+            response = urllib.request.urlopen(req)
+            f.write(response.read())
+
+        filepath = str(tmp_dir / filename)
+        if filename.endswith("tar.gz"):
+            tar_file = tarfile.open(filepath, mode="r:gz")
+            tar_file.extractall(location)
+        elif filename.endswith("zip"):
+            with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
+                zip_ref.extractall(str(tmp_dir))
+            model_path = str(tmp_dir / filename.split(".zip")[0] / "float/")
+            for filename in os.listdir(model_path):
+                modelname = (
+                    filename
+                    if filename.endswith("pb") or filename.endswith("pth")
+                    else None
+                )
+            if not os.path.exists(location):
+                os.makedirs(location)
+            shutil.move(
+                os.path.join(model_path, modelname),
+                os.path.join(location, modelname),
+            )
+            if modelname.endswith("pth"):
+                run_command(
+                    f"{sys.executable} -m pip install -r tools/zendnn/requirements.txt",
+                    args.dry_run,
+                )
+                import tools.zendnn.convert_to_torchscript as converter
+
+                converter_args = argparse.Namespace
+                converter_args.graph = os.path.join(location, modelname)
+                converter.main(converter_args)
+        else:
+            shutil.copy2(filepath, str(location / filename))
+            os.remove(filepath)
+        if not args.quiet:
+            print(f"Downloaded {url} to {str(location/filename)}")
+
+    @staticmethod
     def parse(args, unknown_args):
 
-        if unknown_args:
-            unknown_arguments = " ".join(unknown_args)
-            raise argparse.ArgumentError(
-                None, f"Unknown argument(s) passed: {unknown_arguments}"
-            )
+        reject_unknown_args(unknown_args)
 
         if not args.dry_run:
             print(
@@ -804,10 +781,9 @@ class Get:
                 "https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg",
             ],
             alveo_dir: [
-                "https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r1.4.0.tar.gz",
-                "https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz",
-                "https://www.xilinx.com/bin/public/openDownload?filename=yolov3_adas_pruned_0_9-u200-u250-r1.4.0.tar.gz",
-                "https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc-u200-u250-r1.4.0.tar.gz",
+                "https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r2.5.0.tar.gz",
+                "https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r2.5.0.tar.gz",
+                "https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc_tf-u200-u250-r2.5.0.tar.gz",
             ],
             tmp_dir: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
@@ -831,57 +807,8 @@ class Get:
                     filename = url[url.index(search_str) + len(search_str) :]
                 else:
                     filename = os.path.basename(urllib.parse.urlparse(url).path)
-                if args.dry_run:
-                    print(f"Downloading {filename} from {url} to {location}")
-                else:
-                    with open(tmp_dir / filename, "wb") as f:
-                        req = urllib.request.Request(url)
-                        # need to specify the user-agent for accessing wikimedia
-                        req.add_header("User-Agent", f"proteus {get_version()}")
-                        response = urllib.request.urlopen(req)
-                        f.write(response.read())
 
-                    filepath = str(tmp_dir / filename)
-                    if filename.endswith("tar.gz"):
-                        tar_file = tarfile.open(filepath, mode="r:gz")
-                        tar_file.extractall(location)
-                    elif filename.endswith("zip"):
-                        with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
-                            zip_ref.extractall(str(tmp_dir))
-                        modelpath = str(tmp_dir / filename.split(".zip")[0] / "float/")
-                        for filename in os.listdir(modelpath):
-                            modelname = (
-                                filename
-                                if filename.endswith("pb") or filename.endswith("pth")
-                                else None
-                            )
-                        if not os.path.exists(location):
-                            os.makedirs(location)
-                        shutil.move(
-                            os.path.join(modelpath, modelname),
-                            os.path.join(location, modelname),
-                        )
-                        if modelname.endswith("pth"):
-                            subprocess.check_call(
-                                [
-                                    sys.executable,
-                                    "-m",
-                                    "pip",
-                                    "install",
-                                    "-r",
-                                    "tools/zendnn/requirements.txt",
-                                ]
-                            )
-                            import tools.zendnn.convert_to_torchscript as converter
-
-                            converter_args = argparse.Namespace
-                            converter_args.graph = os.path.join(location, modelname)
-                            converter.main(converter_args)
-                    else:
-                        shutil.copy2(filepath, str(location / filename))
-                        os.remove(filepath)
-                    if not args.quiet:
-                        print(f"Downloaded {url} to {str(location/filename)}")
+                Get._download(args, url, tmp_dir, location, filename)
 
         if not args.dry_run:
             adas_webm = Path(tmp_dir / "adas_detection/video/adas.webm")
@@ -901,9 +828,7 @@ class Get:
         )
 
         command_group = subparser.add_argument_group("Options")
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
 
         command_group.add_argument(
             "-q", "--quiet", action="store_true", help="suppress prints"
@@ -963,9 +888,7 @@ class Install:
             action="store_true",
             help="Print the list of files last installed.",
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
 
         subparser.set_defaults(func=cls.parse)
 
@@ -984,7 +907,7 @@ class List:
             if shutil.which("jq") is not None:
                 run_shell_command(command, args.dry_run)
             else:
-                print("Install jq to use this command")
+                raise argparse.ArgumentError(None, "Install jq to use this command")
         else:
             if unknown_args:
                 command += " ".join(unknown_args)
@@ -1008,9 +931,7 @@ class List:
         )
 
         command_group = subparser.add_argument_group("Options")
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
 
         subparser.set_defaults(func=cls.parse)
 
@@ -1044,9 +965,7 @@ class Make:
             help="root path to the build tree. Defaults to ./build",
             default=str(Path.cwd() / "build"),
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         command_group.add_argument(
             "-j",
             dest="jobs",
@@ -1061,6 +980,30 @@ class Make:
 
 class Run:
     @staticmethod
+    def dict_to_flags(flags: dict):
+        command = ""
+        for key, value in flags.items():
+            if not value:
+                continue
+            if isinstance(value, list):
+                for item in value:
+                    command += f"--{key} {item} "
+            elif isinstance(value, dict):
+                items = []
+                for _, value_2 in value.items():
+                    if isinstance(value_2, list):
+                        items.extend(value_2)
+                    else:
+                        items.append(value_2)
+                for item in items:
+                    command += f"--{key} {item} "
+            elif value is True:
+                command += f"--{key} "
+            else:
+                command += f"--{key} {value} "
+        return command
+
+    @staticmethod
     def parse(args, unknown_args: list):
         if args.image is None and args.preset is None:
             raise argparse.ArgumentError(
@@ -1070,6 +1013,7 @@ class Run:
         flags = {}
         image = None
         cmd = None
+        root_dir = "/workspace/proteus"
         if args.preset == "dev":
             image = f"{getpass.getuser()}/proteus-dev:latest"
             flags["cap-add"] = "SYS_PTRACE"
@@ -1081,17 +1025,17 @@ class Run:
             flags["tty"] = True
             flags["volume"] = {
                 "user_config": WriteComposeFile.get_user_configs(),
-                "working_dir": f"{Path.cwd()}:/workspace/proteus",
+                "working_dir": f"{Path.cwd()}:{root_dir}",
                 "xclbins": WriteComposeFile.get_xclbins(),
             }
-            flags["workdir"] = "/workspace/proteus"
+            flags["workdir"] = root_dir
         elif args.preset == "autotest-dev":
             cmd = "./tools/coverage.sh -t 50"
             image = f"{getpass.getuser()}/proteus-dev:latest"
             flags["volume"] = {
-                "working_dir": f"{Path.cwd()}:/workspace/proteus",
+                "working_dir": f"{Path.cwd()}:{root_dir}",
             }
-            flags["workdir"] = "/workspace/proteus"
+            flags["workdir"] = root_dir
 
         # if a preset was used, use the default image if no explicit image was provided.
         if args.image is None:
@@ -1114,10 +1058,10 @@ class Run:
 
         if args.working_dir is not None:
             if args.working_dir:
-                flags["volume"]["working_dir"] = f"{Path.cwd()}:/workspace/proteus"
+                flags["volume"]["working_dir"] = f"{Path.cwd()}:{root_dir}"
             else:
                 flags["volume"]["working_dir"] = False
-                if flags["workdir"] == "/workspace/proteus":
+                if flags["workdir"] == root_dir:
                     flags["workdir"] = False
         if args.xclbins is not None:
             if args.xclbins:
@@ -1141,25 +1085,7 @@ class Run:
         columns, lines = shutil.get_terminal_size()
         command = f"docker run -e COLUMNS={columns} -e LINES={lines} "
 
-        for key, value in flags.items():
-            if not value:
-                continue
-            if isinstance(value, list):
-                for item in value:
-                    command += f"--{key} {item} "
-            elif isinstance(value, dict):
-                items = []
-                for _, value_2 in value.items():
-                    if isinstance(value_2, list):
-                        items.extend(value_2)
-                    else:
-                        items.append(value_2)
-                for item in items:
-                    command += f"--{key} {item} "
-            elif value is True:
-                command += f"--{key} "
-            else:
-                command += f"--{key} {value} "
+        command += Run.dict_to_flags(flags)
 
         command += " ".join(unknown_args)
         command += " " + args.image
@@ -1220,9 +1146,7 @@ class Run:
             help="Pass devices from host to container, if they exist",
             default=None,
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         command_group.add_argument(
             "--image",
             action="store",
@@ -1309,9 +1233,7 @@ class Start:
             help="root path to the build tree. Defaults to ./build",
             default=str(Path.cwd() / "build"),
         )
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         command_group.add_argument(
             "--gdb",
             action="store_true",
@@ -1410,9 +1332,7 @@ class Up:
         )
 
         command_group = subparser.add_argument_group("Options")
-        command_group.add_argument(
-            "-h", "--help", action="help", help="show this help message and exit"
-        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
         command_group.add_argument(
             "-p",
             "--profile",
@@ -1460,8 +1380,6 @@ def get_parser():
     Attach.add(subparser)
     Benchmark.add(subparser)
     Build.add(subparser)
-    ClangFormat.add(subparser)
-    ClangTidy.add(subparser)
     Clean.add(subparser)
     Dockerize.add(subparser)
     Get.add(subparser)
@@ -1479,9 +1397,7 @@ def get_parser():
         action="store_true",
         help="print the actual commands that would be run without running them",
     )
-    command_group.add_argument(
-        "-h", "--help", action="help", help="show this help message and exit"
-    )
+    command_group.add_argument("-h", "--help", action="help", help=help_message)
     command_group.add_argument(
         "-v",
         "--version",

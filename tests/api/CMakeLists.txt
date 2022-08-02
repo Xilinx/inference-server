@@ -35,5 +35,5 @@ foreach(target ${targets})
   )
   target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
 
-  gtest_discover_tests(${target})
+  gtest_discover_tests(${target} DISCOVERY_TIMEOUT 30)
 endforeach()

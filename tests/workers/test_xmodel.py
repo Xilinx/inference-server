@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
 import math
 
 import cv2
 import numpy as np
+import pytest
+from helper import root_path, run_benchmark
 
-from helper import run_benchmark, root_path
 import proteus
 
 
@@ -164,7 +164,7 @@ class TestXmodel:
         assert output.datatype == proteus.DataType.INT8
         data = output.getInt8Data()
         k = self.postprocess(data, 5)
-        gold_response_output = [259, 261, 260, 154, 230]
+        gold_response_output = [259, 261, 260, 157, 154]
         assert k == gold_response_output
 
     @pytest.mark.benchmark(group="xmodel")
