@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#include "proteus/helpers/declarations.hpp"
+
 namespace proteus {
 
 class ModelMetadata;
@@ -43,6 +45,9 @@ bool modelReady(const std::string& model);
 ModelMetadata modelMetadata(const std::string& model);
 
 void modelInfer(const std::string& model, std::unique_ptr<Interface> request);
+
+Kernels getHardware();
+bool hasHardware(const std::string& name, int num);
 
 }  // namespace proteus
 

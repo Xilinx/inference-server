@@ -182,7 +182,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     ${PROJECT_SOURCE_DIR}/tests/test.sh
     EXECUTABLE_ARGS
     --mode
-    all
+    tests
     --build
     Coverage
     --load-before
@@ -197,6 +197,8 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     EXCLUDE
     ${PROJECT_SOURCE_DIR}/build
     ${PROJECT_SOURCE_DIR}/tests
+    ${PROJECT_SOURCE_DIR}/external
+    ${PROJECT_SOURCE_DIR}/examples
   )
 else()
   message(STATUS "Not a coverage build, not configuring coverage measurement")

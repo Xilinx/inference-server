@@ -57,7 +57,7 @@ The following packages (and any dependencies) are installed from Ubuntu's reposi
     :header: Name,Version,License,Usage
     :widths: auto
 
-    :ubuntupackages:`bash_completion`,1:2.8-1ubuntu1,GPL-2+,Scripts used to auto-complete bash commands\ :superscript:`d 0`
+    :ubuntupackages:`bash-completion`,1:2.8-1ubuntu1,GPL-2+,Scripts used to auto-complete bash commands\ :superscript:`d 0`
     :ubuntupackages:`clang-format-10`,1:10.0.0-4ubuntu1~18.04.2,Apache 2.0 with LLVM exceptions + others,Executable used to apply formatting\ :superscript:`d 0`
     :ubuntupackages:`clang-tidy-10`,1:10.0.0-4ubuntu1~18.04.2,Apache 2.0 with LLVM exceptions + others,Executable used for linting\ :superscript:`d 0`
     :ubuntupackages:`curl`,7.58.0-2ubuntu3.14,Curl,Executable used for transferring data\ :superscript:`a 0`

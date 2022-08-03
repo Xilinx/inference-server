@@ -58,8 +58,8 @@ ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
   if (worker == nullptr) {
     throw invalid_argument("Worker " + key + " not found");
   }
-  auto* foo = worker->workers_.begin()->second;
-  return foo->getMetadata();
+  auto* worker_class = worker->workers_.begin()->second;
+  return worker_class->getMetadata();
 }
 
 void Manager::workerAllocate(std::string const& key, int num) {

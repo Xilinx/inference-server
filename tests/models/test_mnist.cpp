@@ -71,10 +71,12 @@ void test(proteus::Client* client) {
 }
 
 #ifdef PROTEUS_ENABLE_GRPC
+// @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, mnist) { test(client_.get()); }
 #endif
 
+// @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, mnist) {
   NativeClient client;
@@ -82,6 +84,7 @@ TEST_F(BaseFixture, mnist) {
 }
 
 #ifdef PROTEUS_ENABLE_HTTP
+// @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, mnist) { test(client_.get()); }
 #endif

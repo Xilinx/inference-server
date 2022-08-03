@@ -19,16 +19,24 @@
 
 #include "proteus/core/api.hpp"
 
+#include <json/reader.h>  // for CharReaderBuilder
+#include <json/value.h>
+
 #include <algorithm>
 #include <string>
 
 #include "proteus/batching/batcher.hpp"
+#include "proteus/build_options.hpp"
 #include "proteus/core/interface.hpp"
 #include "proteus/core/manager.hpp"
 #include "proteus/core/model_repository.hpp"
 #include "proteus/core/predict_api.hpp"
 #include "proteus/core/worker_info.hpp"
 #include "proteus/version.hpp"  // for kProteusVersion
+
+#ifdef PROTEUS_ENABLE_VITIS
+#include <sockpp/tcp_connector.h>
+#endif
 
 namespace proteus {
 
@@ -103,6 +111,78 @@ std::vector<std::string> modelList() {
 
 ModelMetadata modelMetadata(const std::string& model) {
   return Manager::getInstance().getWorkerMetadata(model);
+}
+
+Kernels getHardware() {
+  Kernels kernels;
+
+#ifdef PROTEUS_ENABLE_VITIS
+  sockpp::socket_initializer sockInit;
+  sockpp::tcp_connector conn({"localhost", 9763});
+  if (!conn) {
+    std::cerr << "Error connecting to server"
+              << "\n\t" << conn.last_error_str() << std::endl;
+  }
+
+  std::string request("{\"request\":{\"name\":\"list\",\"requestId\":\"1\"}}");
+
+  auto bar = conn.write(request);
+  if (bar == -1) {
+    throw external_error("Bytes no match");
+  }
+
+  int total_len = 0;
+  auto len_read = conn.read_n(&total_len, 4);
+  if (len_read == -1) {
+    throw external_error("wrong number of bytes read initially");
+  }
+  std::string response_str;
+  response_str.resize(total_len);
+  auto bytes_read = conn.read_n(response_str.data(), total_len);
+  if (bytes_read == -1) {
+    throw external_error("wrong number of bytes read at data");
+  }
+
+  std::string errors;
+  Json::CharReaderBuilder builder;
+  Json::CharReader* reader = builder.newCharReader();
+  Json::Value response;
+  reader->parse(response_str.c_str(),
+                response_str.data() + response_str.length(), &response,
+                &errors);
+
+  auto data = response["response"]["data"];
+  auto num_fpgas = std::stoi(data["deviceNumber"].asString());
+  for (auto i = 0; i < num_fpgas; ++i) {
+    auto device = data["device_" + std::to_string(i)];
+    if (!device.isMember("cuNumber   ")) {
+      continue;
+    }
+    auto cu_num = std::stoi(device["cuNumber   "].asString());
+    for (auto j = 0; j < cu_num; ++j) {
+      auto kernel =
+        device["cu_" + std::to_string(j)]["kernelName   "].asString();
+      if (kernels.find(kernel) == kernels.end()) {
+        kernels.try_emplace(kernel, 1);
+      } else {
+        kernels.at(kernel)++;
+      }
+    }
+  }
+
+#endif
+
+  return kernels;
+}
+
+bool hasHardware(const std::string& name, int num) {
+  auto kernels = getHardware();
+
+  auto kernel_iterator = kernels.find(name);
+  if (kernel_iterator == kernels.end()) {
+    return false;
+  }
+  return kernel_iterator->second >= num;
 }
 
 }  // namespace proteus

@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-
 import numpy as np
+import pytest
+from helper import root_path, run_benchmark
 
-from helper import run_benchmark, root_path
 import proteus
 
 
@@ -62,7 +61,7 @@ class TestInferImageResNet50DPUCADF8H:
             )
 
         num_inputs = len(request.getInputs())
-        gold_response_output = [259, 261, 154, 260, 204]
+        gold_response_output = [259, 261, 154, 152, 204]
 
         if check_asserts:
             assert not response.isError(), response.getError()

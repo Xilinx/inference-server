@@ -36,6 +36,7 @@ def parameters_fixture():
         "model": str(root_path / "external/pytorch_models/resnet50_pretrained.pt"),
         "input_size": 224,
         "output_classes": 1000,
+        "batch_size": 8,
     }
 
 
@@ -106,7 +107,7 @@ class TestPtZendnn:
             assert (top_k == gold_response_output).all()
 
     @pytest.mark.benchmark(group="PtZendnn")
-    def test_benchmark_xmodel(self, benchmark, model_fixture, parameters_fixture):
+    def test_benchmark_ptzendnn(self, benchmark, model_fixture, parameters_fixture):
 
         batch_size = 16
         input_size = parameters_fixture.get("input_size")

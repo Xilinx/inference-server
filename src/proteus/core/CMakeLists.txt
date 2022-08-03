@@ -37,6 +37,7 @@ target_link_libraries(predict_api INTERFACE jsoncpp)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
   target_link_libraries(data_types INTERFACE xir)
+  target_link_libraries(api INTERFACE sockpp)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
@@ -65,6 +66,7 @@ target_include_directories(
   model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>
 )
 target_link_libraries(model_repository INTERFACE lib_config efsw)
+add_dependencies(model_repository lib_config)
 
 add_library(core STATIC ${CORE_OBJS})
 target_link_libraries(core INTERFACE ${targets})

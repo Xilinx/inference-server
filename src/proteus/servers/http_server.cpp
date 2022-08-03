@@ -215,19 +215,29 @@ void v2::ProteusHttpServer::modelList(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::getHardware(
+void v2::ProteusHttpServer::hasHardware(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
-  PROTEUS_LOG_INFO(logger_, "Received getHardware request");
+  PROTEUS_LOG_INFO(logger_, "Received hasHardware request");
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
-  (void)req;  // suppress unused variable warning
+  auto &json = req->jsonObject();
 
-  auto hw = proteus::getHardware();
+  if (json == nullptr) {
+    auto resp = errorHttpResponse("No JSON body in hasHardware request",
+                                  HttpStatusCode::k400BadRequest);
+    callback(resp);
+    return;
+  }
+
+  auto found = proteus::hasHardware(json->get("name", "").asString(),
+                                    json->get("num", 1).asInt());
 
   auto resp = HttpResponse::newHttpResponse();
-  resp->setBody(hw);
+  if (!found) {
+    resp->setStatusCode(drogon::k404NotFound);
+  }
   callback(resp);
 }
 

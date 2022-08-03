@@ -250,7 +250,7 @@ int main() {
   std::string root = root_env;
 
   // +user variables: update as needed!
-  const auto request_num = 8;
+  const auto request_num = 4;
   const auto* path_to_xmodel =
     "${PROTEUS_ROOT}/external/artifacts/u200_u250/resnet_v1_50_tf/"
     "resnet_v1_50_tf.xmodel";

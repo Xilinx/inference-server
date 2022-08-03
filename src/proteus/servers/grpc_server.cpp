@@ -644,6 +644,13 @@ CALLDATA_IMPL(WorkerUnload, Unary) {
 }
 CALLDATA_IMPL_END
 
+CALLDATA_IMPL(HasHardware, Unary) {
+  auto found = ::proteus::hasHardware(request_.name(), request_.num());
+  reply_.set_found(found);
+  finish();
+}
+CALLDATA_IMPL_END
+
 void CallDataModelInfer::handleRequest() noexcept {
   const auto& model = request_.model_name();
 #ifdef PROTEUS_ENABLE_TRACING
@@ -740,6 +747,7 @@ class GrpcServer final {
     new CallDataWorkerLoad(&service_, my_cq.get());
     new CallDataWorkerUnload(&service_, my_cq.get());
     new CallDataModelInfer(&service_, my_cq.get());
+    new CallDataHasHardware(&service_, my_cq.get());
     // new CallDataStreamModelInfer(&service_, my_cq.get());
     void* tag;  // uniquely identifies a request.
     bool ok;

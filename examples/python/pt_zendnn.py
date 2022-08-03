@@ -89,6 +89,7 @@ def main(args):
     parameters.put("model", args.graph)
     parameters.put("input_size", input_size)
     parameters.put("output_classes", 1000)
+    parameters.put("batch_size", batch_size)
     worker_name = client.workerLoad("PtZendnn", parameters)
 
     ready = False

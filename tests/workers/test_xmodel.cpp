@@ -28,14 +28,15 @@ std::string path = std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets";
 class XModelFixture : public testing::Test {
  public:
   proteus::Server server_;
+  proteus::NativeClient client_;
 };
 
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST_F(XModelFixture, proteus) {
-  auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
+  auto fpgas_exist = client_.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    GTEST_SKIP();
+    GTEST_SKIP() << "No FPGAs available";
   }
   EXPECT_TRUE(run(xmodel, images, threads, runners) == EXIT_SUCCESS);
 }
@@ -43,9 +44,9 @@ TEST_F(XModelFixture, proteus) {
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST_F(XModelFixture, reference) {
-  auto fpgas_exist = proteus::hasHardware("DPUCADF8H", 1);
+  auto fpgas_exist = client_.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
-    GTEST_SKIP();
+    GTEST_SKIP() << "No FPGAs available";
   }
   EXPECT_TRUE(run_reference(xmodel, images, threads, runners) == EXIT_SUCCESS);
 }

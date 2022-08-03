@@ -15,6 +15,7 @@
 #include <cstddef>   // for size_t
 #include <cstdint>   // for uint8_t, uint64_t
 #include <memory>    // for allocator, make_unique
+#include <numeric>   // for accumulate
 #include <optional>  // for optional
 #include <utility>   // for pair, move
 #include <vector>    // for vector
@@ -32,12 +33,32 @@
 
 namespace proteus {
 
-constexpr auto kTimeoutMs = 1000;  // timeout in ms
-constexpr auto kTimeoutUs =
-  kTimeoutMs * 1000 * 1.5;  // timeout in us with buffer
+// timeout in ms for the batcher
+constexpr auto kTimeoutMs = 1000;
+// timeout in us with a safety factor of 10 to read from the batcher
+constexpr auto kTimeoutUs = kTimeoutMs * 1000 * 10;
 
-class UnitSoftBatcherFixture
-  : public testing::TestWithParam<std::pair<int, int>> {
+struct BatchConfig {
+  int batch_size;
+  std::initializer_list<int> requests;
+  std::initializer_list<int> golden;
+
+  friend std::ostream& operator<<(std::ostream& os, const BatchConfig& self) {
+    os << "Batch Size: " << self.batch_size << ", ";
+    os << "Requests: {";
+    for (const auto& i : self.requests) {
+      os << i << ",";
+    }
+    os << "}, Golden: {";
+    for (const auto& i : self.golden) {
+      os << i << ",";
+    }
+    os << "}";
+    return os;
+  }
+};
+
+class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
  protected:
   void SetUp() override {
 #ifdef PROTEUS_ENABLE_LOGGING
@@ -52,13 +73,16 @@ class UnitSoftBatcherFixture
     initLogger(options);
 #endif
 
-    auto [batch_size, requests] = GetParam();
+    const auto& batch_config = GetParam();
+    int batch_size = batch_config.batch_size;
 
     const auto kBufferNum = 10;
     const auto kDataShape = {1UL, 2UL, 50UL};
-    const auto kDataSize = 100;
+    // the product of the data shape < 255 to fit into uint8
+    const uint8_t kDataSize = 100;
 
     this->data_size_ = kDataSize;
+    this->data_shape_ = kDataShape;
 
     RequestParameters parameters;
     parameters.put("timeout", kTimeoutMs);
@@ -85,13 +109,9 @@ class UnitSoftBatcherFixture
     this->batcher_->start(&this->worker_.value());
 
     data_.resize(kDataSize);
-    for (auto i = 0; i < kDataSize; i++) {
+    for (uint8_t i = 0; i < kDataSize; i++) {
       data_[i] = i;
     }
-
-    this->request_ = InferenceRequest();
-    this->request_.addInputTensor(static_cast<void*>(data_.data()), kDataShape,
-                                  DataType::UINT8);
   }
 
   void TearDown() override {
@@ -99,8 +119,20 @@ class UnitSoftBatcherFixture
     batcher_->end();
   }
 
-  void check_batch(int batches, int batch_size) {
-    for (auto i = 0; i < batches; i++) {
+  void compare_data(Buffer* tensor, int offset) const {
+    for (auto k = 0; k < data_size_; k++) {
+      auto data = *(static_cast<uint8_t*>(tensor->data(k + offset)));
+      EXPECT_EQ(data, k);
+    }
+  }
+
+  void check_batch() {
+    const auto& batch_config = GetParam();
+    auto requests = std::vector(batch_config.requests);
+    auto golden = batch_config.golden;
+
+    int tensor_index = 0;
+    for (const auto& i : golden) {
       BatchPtr batch;
       ASSERT_EQ(
         batcher_->getOutputQueue()->wait_dequeue_timed(batch, kTimeoutUs),
@@ -108,46 +140,82 @@ class UnitSoftBatcherFixture
 
       EXPECT_EQ(batch->input_buffers->size(), 1);
       EXPECT_EQ(batch->output_buffers->size(), 1);
-      EXPECT_EQ(batch->requests->size(), batch_size);
+      EXPECT_EQ(batch->requests->size(), i);
+
+      auto num_tensors = 0;
+      for (auto j = tensor_index; j < tensor_index + i; j++) {
+        num_tensors += requests[j];
+      }
+      tensor_index += i;
 
       for (const auto& buffer : *(batch->input_buffers)) {
         EXPECT_EQ(buffer.size(), 1);
-        auto& first_tensor = buffer[0];
-        for (auto j = 0; j < batch_size; j++) {
-          for (auto k = 0; k < data_size_; k++) {
-            auto data = *(static_cast<uint8_t*>(first_tensor->data(k)));
-            EXPECT_EQ(data, k);
-          }
+        auto& first_buffer = buffer[0];
+        for (auto j = 0; j < num_tensors; j++) {
+          compare_data(first_buffer.get(), j * data_size_);
         }
+      }
+
+      for (const auto& req : *(batch->requests)) {
+        req->runCallback(InferenceResponse());
       }
     }
   }
 
+  void enqueue(std::unique_ptr<CppNativeApi> req) {
+    batcher_->enqueue(std::move(req));
+  }
+
+  InferenceRequest create_request(int tensors) {
+    InferenceRequest request;
+    for (auto i = 0; i < tensors; ++i) {
+      request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
+                             DataType::UINT8);
+    }
+    return request;
+  }
+
+ private:
   int data_size_;
   std::vector<uint8_t> data_;
+  std::initializer_list<uint64_t> data_shape_;
   InferenceRequest request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;
 };
 
 TEST_P(UnitSoftBatcherFixture, BasicBatching) {
-  auto [batch_size, num_requests] = GetParam();
-  const auto kLeftover = static_cast<int>(num_requests % batch_size != 0);
-  const auto kBatchCount = num_requests / batch_size + kLeftover;
+  const auto& batch_config = GetParam();
+  auto requests = batch_config.requests;
 
-  for (auto i = 0; i < num_requests; i++) {
-    auto req = std::make_unique<CppNativeApi>(this->request_);
-    batcher_->enqueue(std::move(req));
+  for (const auto& i : requests) {
+    auto request = create_request(i);
+    auto req = std::make_unique<CppNativeApi>(request);
+    this->enqueue(std::move(req));
   }
 
-  this->check_batch(kBatchCount - kLeftover, batch_size);
-  if (kLeftover) {
-    this->check_batch(kLeftover, num_requests % batch_size);
-  }
+  this->check_batch();
 }
 
-// pairs of (batch_size, num_requests)
-std::pair<int, int> configs[] = {{1, 1}, {1, 2}, {2, 1}, {2, 2}, {2, 3}};
+// batch size, requests, golden # tensors per response,
+/**
+ * The BatchConfig defines the configuration for the batcher. It has the
+ * following interpretation:
+ *
+ * {a, {b0, b1...bn}, {c0, c1... cm}}
+ *
+ * a: the configured batch size for the batcher
+ * b: this array defines the number of requests with request x having bx tensors
+ * c: this array defines that batch x will have cx requests with all
+ *    corresponding tensors associated with them from b
+ *
+ */
+const std::array<BatchConfig, 7> configs = {
+  BatchConfig{1, {1}, {1}},          BatchConfig{1, {1, 1}, {1, 1}},
+  BatchConfig{2, {1}, {1}},          BatchConfig{2, {1, 1}, {2}},
+  BatchConfig{2, {1, 1, 1}, {2, 1}}, BatchConfig{4, {3, 2}, {1, 1}},
+  BatchConfig{4, {2, 2}, {2}},
+};
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitSoftBatcherFixture,
                          testing::ValuesIn(configs));
 
