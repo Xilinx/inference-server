@@ -192,6 +192,7 @@ def main(args):
     shape = []
     import onnx
 
+    print('Loading model to verify data shape...')
     model = onnx.load(modelname)
     for input in model.graph.input:
         if input.name == "data":

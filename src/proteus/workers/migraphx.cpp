@@ -133,7 +133,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   const auto& logger = this->getLogger();
 #endif
 
-  std::cout << " MIGraphXWorker::doInit \n";
+  PROTEUS_LOG_INFO(logger, " MIGraphXWorker::doInit \n");
 
   if (parameters->has("batch")) {
     this->batch_size_ = parameters->get<int>("batch");
@@ -175,7 +175,6 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   std::ifstream f(compiled_path.c_str());
   if (f.good()) {
     // Load the compiled MessagePack (*.mxr) file
-    std::cout << " Loading model file " << compiled_path << std::endl;
     PROTEUS_LOG_INFO(
       logger, std::string("migraphx worker loading compiled model file ") +
                 compiled_path.c_str());
@@ -197,7 +196,6 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
     }
   } else {
     // Look for onnx file.  ifstream tests that the file can be opened
-    std::cout << " Loading model file " << onnx_path << std::endl;
     f = std::ifstream(onnx_path.c_str());
     if (f.good()) {
       // Load the onnx file
@@ -252,8 +250,8 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
         options.set_file_format("msgpack");
 
         migraphx::save(this->prog_, compiled_path.c_str(), options);
-        std::cout << " Saved compiled model file " << compiled_path
-                  << std::endl;
+        PROTEUS_LOG_INFO(logger, std::string(" Saved compiled model file ") +
+                                   compiled_path.c_str());
       }
 
     } else {
@@ -379,7 +377,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger, "Got request in migraphx");
+    PROTEUS_LOG_INFO(logger, "New batch request in migraphx");
     std::chrono::time_point batch_tp =
       std::chrono::high_resolution_clock::now();
 #ifdef PROTEUS_ENABLE_METRICS
@@ -393,9 +391,10 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       auto& req_b = batch->requests->at(j);
       items_in_batch += req_b->getInputSize();
     }
-    std::cout << "MIGraphXWorker::doRun received request batch with " +
-                   std::to_string(batch->requests->size()) + " requests, " +
-                   std::to_string(items_in_batch) + " items\n";
+    PROTEUS_LOG_DEBUG(
+      logger, "MIGraphXWorker::doRun received request batch with " +
+                std::to_string(batch->requests->size()) + " requests, " +
+                std::to_string(items_in_batch) + " items");
     if (items_in_batch > this->batch_size_) {
       PROTEUS_LOG_WARN(logger, "migraphx was passed a batch with " +
                                  std::to_string(items_in_batch) +
@@ -422,14 +421,10 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     // the next 3 values are part of the model and don't need to be read here
     // except for verification In the input buffer, the 0'th dimension is color
     // channels (3)
-    int rows = inputs0[0].getShape()[1];
-    int cols = inputs0[0].getShape()[2];
+    // int rows = inputs0[0].getShape()[1];
+    // int cols = inputs0[0].getShape()[2];
 
-    DataType dtype = inputs0[0].getDatatype();
-    PROTEUS_LOG_INFO(logger, std::string("rows: ") + std::to_string(rows) +
-                               ", cols: " + std::to_string(cols) + ", dtype: " +
-                               std::to_string(size_t(dtype)) + ", should be " +
-                               std::to_string(size_t(input_dt_)));
+    // DataType dtype = inputs0[0].getDatatype();
 
     // The MIGraphX operation: run the migraphx eval() method.
     // If migraphx exceptions happen, they will be handled
@@ -449,17 +444,18 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       //
       // Run the inference
       //
-      PROTEUS_LOG_INFO(logger, "beginning migraphx eval");
+      PROTEUS_LOG_INFO(logger, "Beginning migraphx eval");
       std::chrono::time_point eval_tp =
         std::chrono::high_resolution_clock::now();
       migraphx::api::arguments migraphx_output = this->prog_.eval(params);
       auto eval_duration =
         std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::high_resolution_clock::now() - eval_tp);
-      PROTEUS_LOG_INFO(logger,
-                       std::string("finishing migraphx eval; batch size: ") +
-                         std::to_string(batch_size_) + "  elapsed time: " +
-                         std::to_string(eval_duration.count()) + " us");
+      PROTEUS_LOG_INFO(
+        logger, std::string("Finished migraphx eval; batch size: ") +
+                  std::to_string(batch_size_) + "  elapsed time: " +
+                  std::to_string(eval_duration.count()) + " us.  Images/sec: " +
+                  std::to_string(1.e6 * batch_size_ / (eval_duration.count())));
 
       //
       //           Fetch the results and populate response to each request in
@@ -512,13 +508,15 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           size_t size_of_result = num_results * output_dt_.size();
           // for each image in the request, there should be 1 vector of 1000
           // values
-          std::cout << "Request with "
-                    << std::to_string(req->getInputs().size()) << " images\n";
+          PROTEUS_LOG_DEBUG(logger, std::string("Request with ") +
+                                      std::to_string(req->getInputs().size()) +
+                                      " images");
 
           for (size_t k = 0;
                k < req->getInputs().size() && input_index < batch_size_; k++) {
             char* results =
               migraphx_output[0].data() + (input_index++) * size_of_result;
+#define NDEBUG
 #ifndef NDEBUG
             {
               float* zresults = reinterpret_cast<float*>(results);
@@ -584,14 +582,13 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
                                 e.what());
       }
     }
-    PROTEUS_LOG_INFO(logger, "Finished migraphx eval");
 
     this->returnBuffers(std::move(batch->input_buffers),
                         std::move(batch->output_buffers));
     auto batch_duration = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::high_resolution_clock::now() - batch_tp);
     PROTEUS_LOG_INFO(
-      logger, std::string("finishing migraphx batch processing; batch size: ") +
+      logger, std::string("Finished migraphx batch processing; batch size: ") +
                 std::to_string(batch_size_) + "  elapsed time: " +
                 std::to_string(batch_duration.count()) + " us");
 
