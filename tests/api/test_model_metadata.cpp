@@ -34,7 +34,7 @@ void test(proteus::Client* client) {
   EXPECT_EQ(metadata.getPlatform(), "cpu");
   // TODO(varunsh): add other assertions
 
-  client->modelUnload(model);  // unload the model
+  client->workerUnload(model);  // unload the model
 
   while (!client->modelList().empty()) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -43,16 +43,16 @@ void test(proteus::Client* client) {
 
 #ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
+TEST_F(GrpcFixture, modelMetadata) { test(client_.get()); }
 #endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, workerLoad) {
+TEST_F(BaseFixture, modelMetadata) {
   proteus::NativeClient client;
   test(&client);
 }
 
 #ifdef PROTEUS_ENABLE_HTTP
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, modelLoad) { test(client_.get()); }
+TEST_F(HttpFixture, modelMetadata) { test(client_.get()); }
 #endif

@@ -61,6 +61,8 @@ class GrpcClient : public Client {
                          RequestParameters* parameters) override;
   void workerUnload(const std::string& worker) override;
 
+  bool hasHardware(const std::string& name, int num) override;
+
  private:
   class GrpcClientImpl;
   std::unique_ptr<GrpcClientImpl> impl_;

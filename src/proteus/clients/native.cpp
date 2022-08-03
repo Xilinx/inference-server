@@ -126,62 +126,8 @@ std::vector<std::string> NativeClient::modelList() {
   return ::proteus::modelList();
 }
 
-std::string getHardware() {
-  std::string hardware;
-#ifdef PROTEUS_ENABLE_VITIS
-  hardware = exec("fpga-util get-kernels");
-  if (!hardware.empty()) {
-    hardware.pop_back();  // remove trailing newline character
-  }
-#endif
-  return hardware;
-}
-
-bool hasHardware(const std::string& kernel, size_t num) {
-  // hw is of the form "kernel0:num0[,kernel1:num1,...]"
-  auto hw = getHardware();
-  std::string delimiter = ",";
-
-  std::unordered_map<std::string, size_t> kernels;
-  size_t pos = 0;
-  size_t max_kernel_num = 0;
-  do {
-    pos = hw.find(delimiter);
-    auto token = hw.substr(0, pos);
-    if (size_t found = token.find(':'); found != std::string::npos) {
-      auto found_kernel = token.substr(0, found);
-      size_t found_num = 0;
-      size_t idx = 0;
-      auto substr = token.substr(found + 1, std::string::npos);
-      try {
-        found_num = std::stoi(substr, &idx);
-      } catch (const std::invalid_argument&) {
-        // if the substring can't be converted to an integer
-        found_num = 0;
-      }
-      if (idx != substr.length()) {
-        // if there are non-numeric characters in the "number"
-        found_num = 0;
-      }
-      kernels.try_emplace(found_kernel, found_num);
-      if (found_num > max_kernel_num) {
-        max_kernel_num = found_num;
-      }
-    }
-    hw.erase(0, pos + delimiter.length());
-  } while (pos != std::string::npos);
-
-  // For the special case of an empty kernel string, return if there are any
-  // kernels that exceed the requested number. This allows you to match if there
-  // is any one type of kernel in sufficient number.
-  if (kernel.empty()) {
-    return max_kernel_num >= num;
-  }
-
-  if (kernels.find(kernel) == kernels.end()) {
-    return false;
-  }
-  return kernels[kernel] >= num;
+bool NativeClient::hasHardware(const std::string& name, int num) {
+  return ::proteus::hasHardware(name, num);
 }
 
 }  // namespace proteus

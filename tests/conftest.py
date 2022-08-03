@@ -20,26 +20,16 @@ import subprocess
 import time
 
 import pytest
-import requests
-from xprocess import ProcessStarter
+from helper import build_path, kDefaultHttpPort, root_path, run_path
 from pytest_cpp.plugin import CppItem
+from xprocess import ProcessStarter
 
 import proteus
-from helper import kDefaultHttpPort, run_path, root_path, build_path
+import proteus.clients
+import proteus.servers
 
 proteus_command = []
 http_server_addr = ""
-
-
-def isUp(server_addr):
-    try:
-        response = requests.get(f"{server_addr}/v2/health/ready", timeout=5)
-    except:
-        return False
-    else:
-        if response.status_code == 200:
-            return True
-        return False
 
 
 @pytest.hookimpl
@@ -56,7 +46,8 @@ def pytest_sessionstart(session):
     addr = socket.gethostbyname(session.config.getoption("hostname"))
     ip_addr = ipaddress.ip_address(addr)
     if not ip_addr.is_loopback:
-        if not isUp(http_server_addr):
+        client = proteus.clients.HttpClient(http_server_addr)
+        if not client.serverLive():
             pytest.exit(f"No HTTP server found at {http_server_addr}", returncode=1)
 
 
@@ -108,7 +99,7 @@ def add_cpp_markers(items):
         base_name = item.name.split("/")
         test_name = base_name[1] if len(base_name) > 1 else base_name[0]
         test = test_name.split(".")
-        bar = f"((\/\/ @pytest.*\s)*)^TEST[_]?[FP]?\({test[0]}, {test[1]}\)"
+        bar = f"((\/\/ @pytest.*\s)*)(^\/\/.*\s)?^TEST[_]?[FP]?\({test[0]}, {test[1]}\)"
         match = re.search(bar, lines, re.MULTILINE)
         if not match:
             continue
@@ -149,12 +140,13 @@ def pytest_collection_modifyitems(config, items):
 
     add_cpp_markers(items)
 
-    if not isUp(http_server_addr):
-        proc = subprocess.Popen(proteus_command, stdout=subprocess.DEVNULL)
-        while not isUp(http_server_addr):
+    client = proteus.clients.HttpClient(http_server_addr)
+    if not client.serverLive():
+        server = proteus.servers.Server()
+        server.startHttp(8998)
+        client = proteus.clients.HttpClient("http://127.0.0.1:8998")
+        while not client.serverLive():
             time.sleep(1)
-    else:
-        proc = None
 
     filter_tests(items, config.getoption("--benchmark"), "benchmark")
     filter_tests(items, config.getoption("--perf"), "perf")
@@ -162,32 +154,34 @@ def pytest_collection_modifyitems(config, items):
     fpgas_option = str(config.getoption("--fpgas"))
     if fpgas_option:
         fpga_arg: str = fpgas_option
+        try:
+            # parse --fpga options from DPUCADF8H:1,DPUCAHX8H:2... to {"DPUCADF8H": 1, "DPUCAHX8H": 2, ...}
+            fpgas_avail = dict(
+                (fpga[0], int(fpga[1]))
+                for fpga in [x.split(":") for x in fpga_arg.split(",")]
+            )
+        except:
+            fpgas_avail = {}
     else:
-        endpoint = http_server_addr + "/v2/hardware"
-        response = requests.get(endpoint)
-        fpga_arg = response.content.decode("utf-8")
-    try:
-        # parse --fpga options from DPUCADF8H:1,DPUCAHX8H:2... to {"DPUCADF8H": 1, "DPUCAHX8H": 2, ...}
-        fpgas_avail = dict(
-            (fpga[0], int(fpga[1]))
-            for fpga in [x.split(":") for x in fpga_arg.split(",")]
-        )
-    except:
         fpgas_avail = {}
+
+    client = proteus.clients.HttpClient(http_server_addr)
     for item in items:
         for mark in item.iter_markers(name="fpgas"):
             fpga_i = mark.args[0]
             fpga_num_i = int(mark.args[1])
 
             if fpga_i not in fpgas_avail or fpga_num_i > fpgas_avail[fpga_i]:
-                skip_fpga = pytest.mark.skip(
-                    reason=f"Needs {fpga_num_i} {fpga_i} FPGA(s). Use --fpgas {fpga_i}:{fpga_num_i} to specify"
-                )
-                item.add_marker(skip_fpga)
+                if client.hasHardware(fpga_i, fpga_num_i):
+                    fpgas_avail[fpga_i] = fpga_num_i
+                if fpga_i not in fpgas_avail or fpga_num_i > fpgas_avail[fpga_i]:
+                    skip_fpga = pytest.mark.skip(
+                        reason=f"Needs {fpga_num_i} {fpga_i} FPGA(s). Use --fpgas {fpga_i}:{fpga_num_i} to specify"
+                    )
+                    item.add_marker(skip_fpga)
 
-    endpoint = http_server_addr + "/v2"
-    response = requests.get(endpoint).json()
-    extensions = set(extension for extension in response["extensions"])
+    metadata = client.serverMetadata()
+    extensions = set(extension for extension in metadata.extensions)
 
     for extension in config.getoption("--skip-extensions"):
         if extension in extensions:
@@ -203,18 +197,14 @@ def pytest_collection_modifyitems(config, items):
                 )
                 item.add_marker(skip_extension)
 
-    if proc is not None:
-        proc.kill()
-        while isUp(http_server_addr):
-            time.sleep(1)
-
 
 @pytest.fixture(scope="class")
 def server(xprocess):
     global http_server_addr
     global proteus_command
 
-    if not isUp(http_server_addr):
+    client = proteus.clients.HttpClient(http_server_addr)
+    if not client.serverLive():
 
         class Starter(ProcessStarter):
             pattern = "HTTP server starting at port"
@@ -222,7 +212,7 @@ def server(xprocess):
             terminate_on_interrupt = True
 
             def startup_check(self):
-                while not isUp(http_server_addr):
+                while not client.serverLive():
                     time.sleep(1)
                 return True
 
@@ -234,7 +224,7 @@ def server(xprocess):
 
         xprocess.getinfo("server").terminate()
 
-        while isUp(http_server_addr):
+        while client.serverLive():
             time.sleep(1)
     else:
         yield

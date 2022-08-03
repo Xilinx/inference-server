@@ -249,6 +249,7 @@ int main() {
   parameters.put("model", options.graph);
   parameters.put("input_size", options.input_size);
   parameters.put("output_classes", options.output_classes);
+  parameters.put("batch_size", options.batch_size);
   auto workerName = client.workerLoad("PtZendnn", &parameters);
 
   float time_tmp = 0.f;

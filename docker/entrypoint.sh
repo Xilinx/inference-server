@@ -83,12 +83,18 @@ for group in $groups; do
     # if the user isn't a member of the group, then join it
     if ! id -nG proteus-user | grep -qw "$group"; then
       usermod -aG $group proteus-user
+      usermod -aG $group root
     fi
   fi
 done
 
 # insert line break
 echo ""
+
+# if there are any FPGAs, attempt to load xclbins
+if command -v fpga-util >/dev/null 2>&1; then
+  fpga-util load-all
+fi
 
 # drop access to the right user and run the CMD
 if [ "$user" = "root" ]; then

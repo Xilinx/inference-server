@@ -59,6 +59,7 @@ Fixed
 - Get correct library dependencies for production container (:commit:`14ed4ef`)
 - Correctly throw an exception if a worker gets an error during initialization (:pr:`29`)
 - Detect errors in HTTP client during loading (:commit:`99ffc33`)
+- Construct batches with the right sizes (:pr:`57`)
 
 
 :github:`0.1.0 <Xilinx/inference-server/releases/tag/v0.1.0>` - 2022-02-08

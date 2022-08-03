@@ -15,10 +15,10 @@
 import json
 
 import pytest
-
 from helper import root_path
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
+
 import proteus
-from proteus.predict_api import InferenceRequestInput, InferenceRequest
 
 
 @pytest.fixture(scope="class")
@@ -68,8 +68,8 @@ class TestResnet50Stream:
         for i in range(count):
             resp_str = self.ws_client.modelRecv()
             resp = json.loads(resp_str)
-            foo = resp["data"]["img"]
-            if len(foo) > 50:
+            data = resp["data"]["img"]
+            if len(data) > 50:
                 print(f"{i} got an image")
             else:
                 print(resp)

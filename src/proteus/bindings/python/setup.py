@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+
 import setuptools
 
 version_path = os.getenv("PROTEUS_ROOT")

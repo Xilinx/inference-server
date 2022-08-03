@@ -55,15 +55,13 @@ and Docker installed on your machine.
 
       .. code-block:: console
 
-         $ ./proteus dockerize --no-vitis --tfzendnn=./local/path/to/TF_v2.9_ZenDNN_v3.3_C++_API.zip
+         $ ./proteus dockerize --tfzendnn=./local/path/to/TF_v2.9_ZenDNN_v3.3_C++_API.zip
 
    2. For PyTorch
 
       .. code-block:: console
 
-         $ ./proteus dockerize --no-vitis --ptzendnn=./local/path/to/PT_v1.11.0_ZenDNN_v3.3_C++_API.zip
-
-   :code:`--no-vitis` flag is provided to build the Docker without Vitis components.
+         $ ./proteus dockerize --ptzendnn=./local/path/to/PT_v1.11.0_ZenDNN_v3.3_C++_API.zip
 
    This will build a docker image with all the dependencies required for
    the AMD Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
@@ -80,28 +78,13 @@ Run the following command to get some ``git lfs`` assets for examples/tests.
    $ git lfs pull
 
 To run the examples and test cases, we need to download some models.
+Run the command below to download ResNet50 TensorFlow and PyTorch models.
 
-* TensorFlow + ZenDNN
+.. code-block:: console
 
-   Run the command below to download a ResNet50 TensorFlow model.
+   $ ./proteus get
 
-   .. code-block:: console
-
-      $ ./proteus get --tfzendnn
-
-   The model downloaded will be available at :code:`./external/tensorflow_models.`
-
-
-* PyTorch + ZenDNN
-
-   Run the command below to download a ResNet50 PyTorch model.
-
-   .. code-block:: console
-
-      $ ./proteus get --ptzendnn
-
-   The model downloaded will be available at :code:`./external/pytorch_models`.
-
+The models downloaded will be available at :code:`./external/tensorflow_models.` and :code:`./external/pytorch_models`.
 
 Set Up Docker Container
 -----------------------

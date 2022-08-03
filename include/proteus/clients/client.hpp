@@ -48,6 +48,8 @@ class Client {
                                  RequestParameters* parameters) = 0;
   virtual void workerUnload(const std::string& worker) = 0;
 
+  virtual bool hasHardware(const std::string& name, int num) = 0;
+
  protected:
   Client();
 };
