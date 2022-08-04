@@ -38,8 +38,8 @@ endforeach()
 target_link_libraries(native INTERFACE batching)
 
 if(${PROTEUS_ENABLE_HTTP})
-  target_link_libraries(http_internal INTERFACE helpers)
-  target_link_libraries(websocket INTERFACE drogon trantor Threads::Threads)
+  target_link_libraries(http_internal INTERFACE helpers jsoncpp)
+  target_link_libraries(websocket INTERFACE Drogon::Drogon)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
@@ -49,6 +49,7 @@ if(${PROTEUS_ENABLE_GRPC})
   target_include_directories(
     grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )
+  target_link_libraries(grpc INTERFACE lib_grpc)
 endif()
 
 add_library(clients STATIC ${CLIENT_OBJS})

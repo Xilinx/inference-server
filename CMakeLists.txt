@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.19.4) # minimum is at least 3.12...
+cmake_minimum_required(VERSION 3.21)
 
 # parse Proteus version
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ver)
@@ -90,14 +90,18 @@ list(APPEND CMAKE_PREFIX_PATH /opt/rocm/hip /opt/rocm)
 find_package(migraphx QUIET)
 find_package(tfzendnn)
 find_package(ptzendnn)
-find_package(Protobuf)
+find_package(protobuf CONFIG)
 find_package(absl CONFIG)
 find_package(gRPC CONFIG)
 find_package(Doxygen)
 find_package(Sphinx)
+find_package(efsw)
+find_package(json-c)
+find_package(prometheus-cpp)
+find_package(sockpp)
 
 find_package(xir QUIET)
-find_package(vart QUIET)
+find_package(vart CONFIG COMPONENTS runner util QUIET)
 find_package(rt-engine QUIET)
 find_package(unilog QUIET)
 find_package(target-factory QUIET)

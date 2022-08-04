@@ -42,19 +42,6 @@ class Server::ServerImpl {
 #endif
 };
 
-std::string getLogDirectory() {
-  auto* home = std::getenv("HOME");
-  std::string dir;
-  if (home != nullptr) {
-    dir = home;
-    dir += "/.proteus";
-  } else {
-    dir = ".";
-  }
-  dir += "/logs";
-  return dir;
-}
-
 void initializeServerLogging() {
 #ifdef PROTEUS_ENABLE_LOGGING
   LogOptions options{
@@ -80,7 +67,8 @@ void initialize() {
 
   Manager::getInstance().init();
 
-  ModelRepository::setRepository("/workspace/proteus/external/repository");
+  ModelRepository::setRepository(std::string(std::getenv("PROTEUS_ROOT")) +
+                                 "/external/repository");
 
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();

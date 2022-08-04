@@ -92,4 +92,17 @@ Logger::Logger(Loggers name) {
   assert(logger_ != nullptr);
 }
 
+std::string getLogDirectory() {
+  auto* home = std::getenv("HOME");
+  std::string dir;
+  if (home != nullptr) {
+    dir = home;
+    dir += "/.proteus";
+  } else {
+    dir = ".";
+  }
+  dir += "/logs";
+  return dir;
+}
+
 }  // namespace proteus

@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(proteus-server main.cpp)
-target_include_directories(proteus-server PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_options(proteus-server PRIVATE "LINKER:-E")
-enable_ipo_on_target(proteus-server)
+add_executable(proteus-server-exe main.cpp)
+target_include_directories(proteus-server-exe PRIVATE ${PROTEUS_INCLUDE_DIRS})
+target_link_options(proteus-server-exe PRIVATE "LINKER:-E")
+enable_ipo_on_target(proteus-server-exe)
+set_target_properties(proteus-server-exe PROPERTIES OUTPUT_NAME proteus-server)
 
 target_link_libraries(
-  proteus-server PRIVATE batching clients core helpers observation servers
+  proteus-server-exe PRIVATE batching clients core helpers observation servers
 )
 
 add_subdirectory(batching)
@@ -43,27 +44,33 @@ endif()
 string(TOUPPER ${type} TYPE)
 
 add_library(
-  proteus
-  ${TYPE}
-  ${BATCHING_OBJS}
-  ${CLIENT_OBJS}
-  ${CORE_OBJS}
-  ${HELPER_OBJS}
-  ${OBSERVATION_OBJS}
-  ${SERVER_OBJS}
+  proteus-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
+                 ${OBSERVATION_OBJS} ${SERVER_OBJS}
 )
-enable_ipo_on_target(proteus)
 target_link_libraries(
-  proteus PRIVATE batching clients core helpers observation servers
+  proteus-server PRIVATE batching core helpers observation servers
 )
 
-# add alias to keep build and install interface the same
-add_library(proteus::proteus ALIAS proteus)
-
-set_target_properties(
-  proteus PROPERTIES VERSION ${proteus_VERSION}
-                     SOVERSION ${proteus_VERSION_MAJOR}
+add_library(
+  proteus-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
 )
+target_link_libraries(proteus-client PRIVATE clients core observation)
+
+set(output_libraries proteus-server proteus-client)
+foreach(lib ${output_libraries})
+  enable_ipo_on_target(${lib})
+
+  # add alias to keep build and install interface the same
+  add_library(proteus::${lib} ALIAS ${lib})
+
+  set_target_properties(
+    ${lib} PROPERTIES VERSION ${proteus_VERSION}
+                      SOVERSION ${proteus_VERSION_MAJOR}
+  )
+endforeach()
+
+add_library(proteus INTERFACE)
+target_link_libraries(proteus INTERFACE proteus-server proteus-client)
 
 # ~~~
 # include(GenerateExportHeader)
@@ -84,7 +91,7 @@ set(proteus_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/proteus"
 
 # cmake-format: off
 install(
-  TARGETS proteus
+  TARGETS proteus-client proteus-server
   EXPORT proteus_Targets
   RUNTIME COMPONENT proteus_Runtime
   LIBRARY COMPONENT proteus_Runtime
@@ -98,7 +105,7 @@ install(
 # cmake-format: on
 
 install(
-  TARGETS proteus-server
+  TARGETS proteus-server-exe
   EXPORT proteus_Server
   RUNTIME COMPONENT proteus_Runtime
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
@@ -124,3 +131,101 @@ install(FILES "${PROJECT_SOURCE_DIR}/cmake/proteusConfig.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/proteusConfigVersion.cmake"
         DESTINATION "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Development
 )
+
+install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
+        COMPONENT proteus_Development
+)
+
+set(dependencies efsw::efsw protobuf::libprotobuf)
+set(deb_dependencies "")
+
+if(${PROTEUS_ENABLE_HTTP})
+  list(APPEND dependencies Drogon::Drogon Trantor::Trantor)
+  list(APPEND deb_dependencies libjsoncpp1)
+endif()
+
+if(${PROTEUS_ENABLE_PYTHON_BINDINGS})
+  find_package(Python COMPONENTS Interpreter Development)
+  execute_process(
+    COMMAND ${Python_EXECUTABLE} "-c" "import xir; print(xir.__file__)"
+    OUTPUT_VARIABLE PY_XIR_PATH OUTPUT_STRIP_TRAILING_WHITESPACE
+                                COMMAND_ERROR_IS_FATAL ANY
+  )
+  list(APPEND deb_dependencies "libpython3.6")
+endif()
+
+if(${PROTEUS_ENABLE_VITIS})
+  list(
+    APPEND dependencies
+           json-c::json-c
+           rt-engine::rt-engine
+           Sockpp::sockpp
+           unilog::unilog
+           vart::runner
+           vart::util
+           xir::xir
+  )
+  list(APPEND deb_dependencies libgoogle-glog0v5 xrt)
+
+  if(${PROTEUS_ENABLE_PYTHON_BINDINGS})
+    install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT proteus_Runtime)
+  endif()
+endif()
+
+if(${PROTEUS_ENABLE_AKS})
+  list(APPEND dependencies aks::aks)
+  list(APPEND deb_dependencies libboost-system1.65.1
+              "libboost-filesystem1.65.1"
+  )
+endif()
+
+if(${PROTEUS_ENABLE_TRACING})
+  list(APPEND dependencies opentelemetry-cpp::jaeger_trace_exporter
+              opentelemetry-cpp::resources opentelemetry-cpp::trace
+              opentelemetry-cpp::common opentelemetry-cpp::http_client_curl
+  )
+endif()
+
+if(${PROTEUS_ENABLE_METRICS})
+  list(APPEND dependencies prometheus-cpp::core)
+endif()
+
+install(
+  IMPORTED_RUNTIME_ARTIFACTS
+  ${dependencies}
+  RUNTIME_DEPENDENCY_SET
+  proteus_Dependencies
+  LIBRARY
+  COMPONENT
+  proteus_Runtime
+  LIBRARY
+  DESTINATION
+  "${CMAKE_INSTALL_LIBDIR}"
+)
+
+install(RUNTIME_DEPENDENCY_SET proteus_Dependencies DESTINATION
+        "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Runtime
+)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "libproteus")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AMD Inference Server")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.rst")
+set(CPACK_PACKAGE_VENDOR "Xilinx Inc.")
+set(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGE_CONTACT "varunsh@amd.com")
+set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/proteus")
+set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.rst")
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
+
+set(CPACK_DEB_COMPONENT_INSTALL OFF)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Varun Sharma")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+string(REPLACE ";" ", " deb_dependencies "${deb_dependencies}")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS ${deb_dependencies})
+# set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+# set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
+
+include(CPack)
