@@ -791,6 +791,10 @@ RUN mkdir -p /migraphx \
     && rbuild package -d /migraphx/deps -B /migraphx/build --define "BUILD_TESTING=OFF" \
     && cp /migraphx/build/*.deb ${COPY_DIR}
 
+# Alternative: install MIGraphX with package manager
+# RUN sudo apt update \
+#     && sudo apt install -y migraphx
+
 # build wheel for onnx (it needs protobuf), used by migraphx example scripts
 RUN pip3 wheel onnx \
     && cp *.whl ${COPY_DIR}

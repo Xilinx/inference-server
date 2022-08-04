@@ -115,8 +115,7 @@ def parse_args():
         type=int,
         required=False,
         default=64,
-        help="Batch size for migraphx evaluation. Default is 64. "
-        "(currently not used)",
+        help="Batch size for migraphx evaluation. Default is 64. ",
     )
     parser.add_argument(
         "--modelfile",
@@ -159,7 +158,8 @@ def parse_args():
 
 def main(args):
 
-    batch_size = args.request_size  # NOT args.batch_size!
+    batch_size = args.batch_size
+    request_size = args.request_size
     modelname = args.modelfile
     validation_dir = args.validation_dir
     validation_answers_file = os.path.join(validation_dir, args.groundtruth)
@@ -192,6 +192,7 @@ def main(args):
     shape = []
     import onnx
 
+    print('Loading model to verify data shape...')
     model = onnx.load(modelname)
     for input in model.graph.input:
         if input.name == "data":
@@ -222,7 +223,7 @@ def main(args):
         )
         sys.exit(-1)
 
-    # +load worker.  The only parameter the migraphx worker requires is the model file name.
+    # load worker.  The only parameter the migraphx worker requires is the model file name.
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
     # future use.  It will read
@@ -230,8 +231,11 @@ def main(args):
 
     parameters = proteus.RequestParameters()
     parameters.put("model", modelname)
+    parameters.put("batch", batch_size)
+    parameters.put("timeout", 100)  # ms
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.
+    print("loading worker Migraphx with model file ", modelname)
     worker_name = client.workerLoad("Migraphx", parameters)
 
     # load the labels
@@ -267,7 +271,7 @@ def main(args):
     correct_answers = 0
     wrong_answers = 0
 
-    images = [None] * batch_size
+    images = [None] * request_size
     index = 0
     for file in files:
         filename = os.path.join(validation_dir, file)
@@ -280,9 +284,9 @@ def main(args):
             #  Normalize values with values specific to Resnet50
             imgV = imgV.transpose(2, 0, 1)
             imgV = preprocess(imgV)
-            images[index % batch_size] = imgV
+            images[index % request_size] = imgV
             index = index + 1
-            if index % batch_size == 0:
+            if index % request_size == 0:
                 print("processed so far: ", index, " of ", len(files))
                 print("Creating inference request with ", len(images), " items")
                 request = proteus.ImageInferenceRequest(images, False)
@@ -296,7 +300,7 @@ def main(args):
                     recv_data = output.getFp32Data()
                     # the predicted category is the one with the highest match value
                     answer = np.argmax(recv_data)
-                    step_index = index - batch_size + j + 1
+                    step_index = index - request_size + j + 1
                     print(
                         "Reading result: best match category is ",
                         answer,
