@@ -183,6 +183,7 @@ RUN apt-get update \
 # install other apt packages used by build stages
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        checkinstall \
         python3-pip \
         python3-setuptools \
         python3-wheel
