@@ -283,50 +283,42 @@ function OptanonWrapper() { }
 <li class="toctree-l4"><a class="reference internal" href="#Options_repeat2">Options</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#clangformat">clangformat</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#clangtidy">clangtidy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clean">clean</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Options_repeat3">Options</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#clean">clean</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dockerize">dockerize</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Options_repeat4">Options</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#dockerize">dockerize</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get">get</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Options_repeat5">Options</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#get">get</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install">install</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Options_repeat6">Options</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#install">install</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat7">Options</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#list">list</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat1">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#make">make</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat8">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Options_repeat7">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#run">run</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Presets">Presets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat9">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Options_repeat8">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#start">start</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat10">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Options_repeat9">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#test">test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#up">up</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat11">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Options_repeat10">Options</a></li>
 </ul>
 </li>
 </ul>
@@ -452,7 +444,7 @@ The documentation for the options available in this Python script can be seen he
 <h2>Commands<a class="headerlink" href="#Commands" title="Permalink to this heading">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>command</kbd></dt>
-<dd><p>Possible choices: attach, benchmark, build, clangformat, clangtidy, clean, dockerize, get, install, list, make, run, start, test, up</p>
+<dd><p>Possible choices: attach, benchmark, build, clean, dockerize, get, install, list, make, run, start, test, up</p>
 </dd>
 </dl>
 </section>
@@ -473,13 +465,13 @@ The documentation for the options available in this Python script can be seen he
 <section id="attach">
 <h3>attach<a class="headerlink" href="#attach" title="Permalink to this heading">¶</a></h3>
 <p>Attach to a running Proteus container</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">attach</span> <span class="p">[</span><span class="o">-</span><span class="n">n</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">attach</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="Options_repeat1">
 <h4>Options<a class="headerlink" href="#Options_repeat1" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>-n, --name</kbd></dt>
+<dt><kbd>name</kbd></dt>
 <dd><p>name of the container to attach to. Defaults to latest running container</p>
 </dd>
 </dl>
@@ -525,7 +517,7 @@ The documentation for the options available in this Python script can be seen he
 </dd>
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to place the build tree. Defaults to ./build</p>
-<p>Default: “/workspace/proteus/build/Debug/docs/build”</p>
+<p>Default: “/workspace/proteus/build/Release/docs/build”</p>
 </dd>
 <dt><kbd>-l, --lint</kbd></dt>
 <dd><p>Enable build-time linting in CMake. Defaults to false</p>
@@ -542,48 +534,17 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 </section>
-<section id="clangformat">
-<h3>clangformat<a class="headerlink" href="#clangformat" title="Permalink to this heading">¶</a></h3>
-<p>This is a wrapper around clangformat to format a particular file in place based on the existing clangformat rules. Any unmatched arguments are passed to clang-format. Use clang-format –help to see options</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">clangformat</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">path</span>
-</pre></div>
-</div>
-<section id="Positional Arguments">
-<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this heading">¶</a></h4>
-<dl class="option-list">
-<dt><kbd>path</kbd></dt>
-<dd><p>Path to a C++ file to analyze</p>
-</dd>
-</dl>
-</section>
-</section>
-<section id="clangtidy">
-<h3>clangtidy<a class="headerlink" href="#clangtidy" title="Permalink to this heading">¶</a></h3>
-<p>Run clang-tidy on all source files</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">clangtidy</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
-</pre></div>
-</div>
-<section id="Options_repeat3">
-<h4>Options<a class="headerlink" href="#Options_repeat3" title="Permalink to this heading">¶</a></h4>
-<dl class="option-list">
-<dt><kbd>-d, --dir</kbd></dt>
-<dd><p>root path to the build tree. Defaults to ./build</p>
-<p>Default: “/workspace/proteus/build/Debug/docs/build”</p>
-</dd>
-</dl>
-</section>
-</section>
 <section id="clean">
 <h3>clean<a class="headerlink" href="#clean" title="Permalink to this heading">¶</a></h3>
 <p>Delete all generated files, restoring the repo to clean state</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">clean</span> <span class="p">[</span><span class="o">--</span><span class="n">artifacts</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">gui</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat4">
-<h4>Options<a class="headerlink" href="#Options_repeat4" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat3">
+<h4>Options<a class="headerlink" href="#Options_repeat3" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--artifacts</kbd></dt>
-<dd><p>Delete downloaded XModel artifacts</p>
+<dd><p>Delete downloaded artifacts</p>
 <p>Default: False</p>
 </dd>
 <dt><kbd>--no-gui</kbd></dt>
@@ -599,8 +560,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">dockerize</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span><span class="o">-</span><span class="n">base</span> <span class="n">DEV_BASE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">production</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">push</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn_path</span> <span class="n">TFZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn_path</span> <span class="n">PTZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat5">
-<h4>Options<a class="headerlink" href="#Options_repeat5" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat4">
+<h4>Options<a class="headerlink" href="#Options_repeat4" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dev-base</kbd></dt>
 <dd><p>Name of the image to use as dev image to build the production image.</p>
@@ -645,8 +606,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">q</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat6">
-<h4>Options<a class="headerlink" href="#Options_repeat6" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat5">
+<h4>Options<a class="headerlink" href="#Options_repeat5" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-q, --quiet</kbd></dt>
 <dd><p>suppress prints</p>
@@ -661,8 +622,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">install</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">manifest</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat7">
-<h4>Options<a class="headerlink" href="#Options_repeat7" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat6">
+<h4>Options<a class="headerlink" href="#Options_repeat6" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to /tmp/proteus/build</p>
@@ -681,8 +642,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="nb">type</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Positional Arguments_repeat1">
-<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this heading">¶</a></h4>
+<section id="Positional Arguments">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>type</kbd></dt>
 <dd><p>List the active containers (default) or specify ‘images’ or ‘labels’</p>
@@ -697,12 +658,12 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">make</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span> <span class="p">[</span><span class="n">JOBS</span><span class="p">]]</span>
 </pre></div>
 </div>
-<section id="Options_repeat8">
-<h4>Options<a class="headerlink" href="#Options_repeat8" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat7">
+<h4>Options<a class="headerlink" href="#Options_repeat7" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
-<p>Default: “/workspace/proteus/build/Debug/docs/build”</p>
+<p>Default: “/workspace/proteus/build/Release/docs/build”</p>
 </dd>
 <dt><kbd>-j</kbd></dt>
 <dd><p>Allow N jobs at once; infinite jobs with no arg. Defaults to number of cores.</p>
@@ -729,8 +690,8 @@ The documentation for the options available in this Python script can be seen he
 </dd>
 </dl>
 </section>
-<section id="Options_repeat9">
-<h4>Options<a class="headerlink" href="#Options_repeat9" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat8">
+<h4>Options<a class="headerlink" href="#Options_repeat8" title="Permalink to this heading">¶</a></h4>
 <p>These options may default to a value if a preset is selected.</p>
 <dl class="option-list">
 <dt><kbd>--command</kbd></dt>
@@ -769,12 +730,12 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">gdb</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat10">
-<h4>Options<a class="headerlink" href="#Options_repeat10" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat9">
+<h4>Options<a class="headerlink" href="#Options_repeat9" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
-<p>Default: “/workspace/proteus/build/Debug/docs/build”</p>
+<p>Default: “/workspace/proteus/build/Release/docs/build”</p>
 </dd>
 <dt><kbd>--gdb</kbd></dt>
 <dd><p>Run server with GDB.</p>
@@ -796,8 +757,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">up</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PROFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="n">VERSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">only</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat11">
-<h4>Options<a class="headerlink" href="#Options_repeat11" title="Permalink to this heading">¶</a></h4>
+<section id="Options_repeat10">
+<h4>Options<a class="headerlink" href="#Options_repeat10" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-p, --profile</kbd></dt>
 <dd><p>profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev</p>
@@ -854,7 +815,7 @@ The documentation for the options available in this Python script can be seen he
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 28, 2022.
+        Last updated on August 05, 2022.
       </span>
 
     </p>
