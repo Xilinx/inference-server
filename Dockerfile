@@ -157,8 +157,8 @@ RUN apt-get update \
     && cd protobuf-${VERSION} \
     && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=NO -DBUILD_SHARED_LIBS=YES \
     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/protobuf.txt \
+    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp build/install_manifest.txt ${MANIFESTS_DIR}/protobuf.txt \
     && cd /tmp \
     && rm -rf /tmp/*
 
