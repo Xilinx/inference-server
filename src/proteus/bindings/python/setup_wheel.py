@@ -45,6 +45,7 @@ class CMakeBuild(build_ext):
         ]
         cmake_args += ["-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE"]
         cmake_args += ["-DCMAKE_INSTALL_RPATH={}".format("$ORIGIN")]
+        cmake_args += ["-DPROTEUS_BUILD_TESTING=OFF"]
         # cmake_args += ["-DPROTEUS_ENABLE_VITIS=OFF"]
         # cmake_args += ["-DPROTEUS_ENABLE_MIGRAPHX=OFF"]
         # cmake_args += ["-DPROTEUS_ENABLE_TFZENDNN=OFF"]

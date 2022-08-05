@@ -27,6 +27,14 @@ Unreleased
 Added
 ^^^^^
 
+- Allow building Debian package (:commit:`930fab2`)
+
+:github:`0.2.0 <Xilinx/inference-server/releases/tag/v0.2.0>` - 2022-08-05
+--------------------------------------------------------------------------
+
+Added
+^^^^^
+
 - HTTP/REST C++ client (:commit:`cbf33b8`)
 - gRPC API based on KServe v2 API (:commit:`37a6aad` and others)
 - TensorFlow/Pytorch + ZenDNN backend (:pr:`17` and :pr:`21`)
@@ -48,6 +56,7 @@ Changed
 - Build AKS from source (:commit:`e04890f`)
 - Use consistent custom exceptions (:pr:`30`)
 - Update Docker build commands to opt-in to all backends (:pr:`43`)
+- Renamed 'modelLoad' to 'workerLoad' and changed the behavior for 'modelLoad' (:pr:`27`)
 
 Fixed
 ^^^^^
