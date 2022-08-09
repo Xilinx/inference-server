@@ -31,7 +31,7 @@ void test(proteus::Client* client) {
   EXPECT_TRUE(client->modelReady(model));
 
   std::string path =
-    std::string(std::getenv("PROTEUS_ROOT")) + "tests/assets/nine_9723.jpg";
+    std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets/nine_9723.jpg";
   auto img = cv::imread(path);
   cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
   img.convertTo(img, CV_32FC3, 1.0 / 255.0);

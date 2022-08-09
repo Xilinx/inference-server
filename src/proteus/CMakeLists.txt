@@ -44,6 +44,20 @@ endif()
 string(TOUPPER ${type} TYPE)
 
 add_library(
+  proteus
+  ${TYPE}
+  ${BATCHING_OBJS}
+  ${CLIENT_OBJS}
+  ${CORE_OBJS}
+  ${HELPER_OBJS}
+  ${OBSERVATION_OBJS}
+  ${SERVER_OBJS}
+)
+target_link_libraries(
+  proteus PRIVATE batching clients core helpers observation servers
+)
+
+add_library(
   proteus-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
                  ${OBSERVATION_OBJS} ${SERVER_OBJS}
 )
@@ -56,7 +70,7 @@ add_library(
 )
 target_link_libraries(proteus-client PRIVATE clients core observation)
 
-set(output_libraries proteus-server proteus-client)
+set(output_libraries proteus proteus-server proteus-client)
 foreach(lib ${output_libraries})
   enable_ipo_on_target(${lib})
 
@@ -68,9 +82,6 @@ foreach(lib ${output_libraries})
                       SOVERSION ${proteus_VERSION_MAJOR}
   )
 endforeach()
-
-add_library(proteus INTERFACE)
-target_link_libraries(proteus INTERFACE proteus-server proteus-client)
 
 # ~~~
 # include(GenerateExportHeader)
@@ -91,7 +102,7 @@ set(proteus_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/proteus"
 
 # cmake-format: off
 install(
-  TARGETS proteus-client proteus-server
+  TARGETS proteus proteus-client proteus-server
   EXPORT proteus_Targets
   RUNTIME COMPONENT proteus_Runtime
   LIBRARY COMPONENT proteus_Runtime
