@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.21)
 # parse Proteus version
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ver)
 string(REPLACE "\n" "" ver ${ver})
-string(REGEX MATCHALL "([0-9]+)|-(.*)" result ${ver})
+string(REGEX MATCHALL "([0-9]+)|-(.*)\+" result ${ver})
 list(GET result 0 ver_major)
 list(GET result 1 ver_minor)
 list(GET result 2 ver_patch)

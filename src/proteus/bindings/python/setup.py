@@ -25,7 +25,7 @@ else:
     version = "0.0.0"
 
 setuptools.setup(
-    name="Proteus",
+    name="proteus",
     version=version,
     license="Apache 2.0",
     packages=setuptools.find_packages("src"),
