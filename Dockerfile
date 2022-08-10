@@ -146,23 +146,20 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         autoconf \
         automake \
-        checkinstall \
         curl \
         libtool \
         unzip \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && VERSION=3.19.4 \
-    && wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
+    && VERSION=3.21.1 \
+    && wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v21.1/protobuf-cpp-${VERSION}.tar.gz \
     && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
     && cd protobuf-${VERSION} \
-    && ./autogen.sh \
-    && ./configure \
-    && make -j$(($(nproc) - 1)) \
-    && checkinstall -y --pkgname protobuf --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=NO -DBUILD_SHARED_LIBS=YES \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp build/install_manifest.txt ${MANIFESTS_DIR}/protobuf.txt \
     && cd /tmp \
-    && dpkg -L protobuf | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && dpkg -L protobuf > ${MANIFESTS_DIR}/protobuf.txt \
     && rm -rf /tmp/*
 
 # install pybind11 2.9.1 - used by Vitis AI
@@ -186,6 +183,7 @@ RUN apt-get update \
 # install other apt packages used by build stages
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        checkinstall \
         python3-pip \
         python3-setuptools \
         python3-wheel
@@ -615,9 +613,10 @@ RUN apt-get update \
     && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cat install_manifest.txt > ${MANIFESTS_DIR}/aks.txt
 
-RUN wget https://github.com/fpagliughi/sockpp/archive/refs/tags/v0.7.1.tar.gz \
-    && tar -xzf v0.7.1.tar.gz \
-    && cd sockpp-0.7.1/ \
+RUN COMMIT=e5c51b541d5cbcf353d4165499103f5e6d7e7ea9 \
+    && wget --quiet https://github.com/fpagliughi/sockpp/archive/${COMMIT}.tar.gz \
+    && tar -xzf ${COMMIT}.tar.gz \
+    && cd sockpp-${COMMIT}/ \
     && mkdir build && cd build \
     && cmake .. \
         -DCMAKE_BUILD_TYPE=Release \

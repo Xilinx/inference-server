@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+set -eo pipefail
 
 usage() {
 cat << EOF
@@ -47,10 +47,9 @@ BENCHMARK="skip"
 PERF="skip"
 SAVE_BENCHMARK=""
 
-full_path=$(realpath $0)
-python_tests_path=$(dirname $full_path)
-root_path=${python_tests_path}/..
-examples_path=${root_path}/examples
+root_path=$(realpath "$(dirname "$(realpath "$0")")/..")
+python_tests_path="${root_path}"/tests/
+examples_path="${root_path}"/examples
 cur_path=$(pwd)
 
 if [[ -f ${root_path}/build/config.txt ]]; then
@@ -82,9 +81,11 @@ if [[ -z $LD_LIBRARY_PATH && -f ~/.env ]]; then
 fi
 
 # if the python package doesn't exist, do a build first for the BUILD variable
-if ! pip list | grep Proteus &> /dev/null; then
+if ! pip list | grep proteus &> /dev/null; then
+  cd $root_path
   # use the lowercase value of BUILD as the flag to the build command
-  ${root_path}/proteus build --"${BUILD,,}" --regen --clean
+  ./proteus build --"${BUILD,,}" --regen --clean
+  cd $cur_path
 fi
 
 retval=0
@@ -108,7 +109,7 @@ if [[ $MODE == "tests" || $MODE == "all" ]]; then
     fi
   fi
 
-  testpaths="${python_tests_path}/../build/$BUILD/tests ${python_tests_path}"
+  testpaths="${root_path}/build/$BUILD/tests ${python_tests_path}"
 
   cd "$python_tests_path"
   if [[ -n $TESTS ]]; then
@@ -131,7 +132,7 @@ if [[ $MODE == "examples" || $MODE == "all" ]]; then
     fi
   done
 
-  for file in $(find $PROTEUS_ROOT/build/$BUILD/examples/cpp -type f -print); do
+  for file in $(find $root_path/build/$BUILD/examples/cpp -type f -print); do
     real_file=$(realpath $file)
     if [ -x $real_file ]; then
       $real_file

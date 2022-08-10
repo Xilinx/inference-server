@@ -68,6 +68,12 @@ target_link_libraries(
 )
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME _proteus)
 
+if(UNIX AND NOT APPLE)
+  set_target_properties(proteus_py PROPERTIES INSTALL_RPATH "$ORIGIN")
+elseif(APPLE)
+  set_target_properties(proteus_py PROPERTIES INSTALL_RPATH "@loader_path")
+endif()
+
 # if building a wheel, the CMake build there sets this variable so we can detect
 # here whether CMake is running in the regular build or as part of the wheel
 # building run
@@ -125,10 +131,8 @@ get_target_property(output_directory_2 proteus_py LIBRARY_OUTPUT_DIRECTORY)
 if(NOT output_directory_2)
   execute_process(
     COMMAND ${Python_EXECUTABLE} -m site --user-site
-    OUTPUT_VARIABLE
-      PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE
-      # COMMAND_ECHO STDOUT
-      COMMAND_ERROR_IS_FATAL ANY
+    OUTPUT_VARIABLE PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE
+                    COMMAND_ERROR_IS_FATAL ANY
   )
 
   add_custom_command(
@@ -145,7 +149,6 @@ include(CMakePackageConfigHelpers)
 # cmake-format: off
 install(
   TARGETS proteus_py
-  RUNTIME COMPONENT proteus_Runtime
   LIBRARY COMPONENT proteus_Runtime
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )

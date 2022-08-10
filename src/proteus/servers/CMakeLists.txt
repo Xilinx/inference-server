@@ -35,8 +35,8 @@ if(${PROTEUS_ENABLE_AKS})
 endif()
 
 if(${PROTEUS_ENABLE_REST})
-  target_link_libraries(http_server INTERFACE clients drogon trantor jsoncpp)
-  target_link_libraries(websocket_server INTERFACE drogon trantor)
+  target_link_libraries(http_server INTERFACE clients Drogon::Drogon)
+  target_link_libraries(websocket_server INTERFACE Drogon::Drogon)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
