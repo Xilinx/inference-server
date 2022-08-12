@@ -46,8 +46,8 @@ std::vector<std::vector<int8_t>> preprocess(
   const auto width = 224;
   const auto channels = 3;
   std::string layout = "NHWC";
-  const auto fix_scale = 1;
-  const std::array mean = {123, 107, 104};
+  const int8_t fix_scale = 1;
+  const std::array<int8_t, 3> mean = {123, 107, 104};
 
   std::vector<std::vector<int8_t>> outputs;
   outputs.reserve(paths.size());
@@ -68,7 +68,9 @@ std::vector<std::vector<int8_t>> preprocess(
         for (int h = 0; h < height; h++) {
           for (int w = 0; w < width; w++) {
             output[(c * height * width) + (h * width) + w] =
-              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean.at(c)) * fix_scale;
+              (static_cast<int8_t>(resizedImg.at<cv::Vec3b>(h, w)[c]) -
+               mean.at(c)) *
+              fix_scale;
           }
         }
       }
@@ -76,8 +78,10 @@ std::vector<std::vector<int8_t>> preprocess(
       for (int h = 0; h < height; h++) {
         for (int w = 0; w < width; w++) {
           for (int c = 0; c < channels; c++) {
-            output[h * width * channels + w * channels + c] =
-              (resizedImg.at<cv::Vec3b>(h, w)[c] - mean.at(c)) * fix_scale;
+            output[(h * width * channels) + (w * channels) + c] =
+              (static_cast<int8_t>(resizedImg.at<cv::Vec3b>(h, w)[c]) -
+               mean.at(c)) *
+              fix_scale;
           }
         }
       }
@@ -153,7 +157,7 @@ std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
   auto size = output.getSize();
 
   std::vector<double> softmax;
-  softmax.resize(size);
+  softmax.resize(size, 0);
 
   calc_softmax<T>(data->data(), size, softmax.data());
   return get_top_k(softmax.data(), size, k);
@@ -256,7 +260,9 @@ int main() {
     "resnet_v1_50_tf.xmodel";
   const auto path_to_image = root + "/tests/assets/dog-3619020_640.jpg";
   // for this image, we know what we expect to receive with this XModel
-  const std::array gold_response_output = {259, 261, 260, 230, 154};
+  // note this is different than custom_processing.py due to how the top_k are
+  // calculated. Index 230 and 154 are equal classifications
+  const std::array gold_response_output = {259, 261, 260, 157, 230};
   const auto k = gold_response_output.size();
   // -user variables:
 
@@ -272,10 +278,7 @@ int main() {
   // +prepare images:
   std::vector<std::string> paths;
   paths.reserve(request_num);
-
-  for (auto i = 0; i < request_num; i++) {
-    paths.emplace_back(path_to_image);
-  }
+  paths.emplace_back(path_to_image);
 
   auto images = preprocess(paths);
   // -prepare images:
@@ -284,27 +287,27 @@ int main() {
   const std::initializer_list<uint64_t> shape = {224, 224, 3};
 
   proteus::InferenceRequest request;
-  for (auto i = 0; i < request_num; i++) {
-    request.addInputTensor(static_cast<void*>(images[i].data()), shape,
-                           proteus::DataType::INT8);
-  }
+  request.addInputTensor(static_cast<void*>(images[0].data()), shape,
+                         proteus::DataType::INT8);
   // -construct request:
 
-  auto results = infer(worker_name, request);
+  for (auto i = 0; i < request_num; i++) {
+    auto results = infer(worker_name, request);
 
-  // +validate:
-  auto outputs = results.getOutputs();
-  for (auto& output : outputs) {
-    std::vector<int> top_k = postprocess(output, k);
-    for (size_t j = 0; j < k; j++) {
-      if (top_k[j] != gold_response_output.at(j)) {
-        std::cerr << "Output (" << top_k[j] << ") does not match golden ("
-                  << gold_response_output.at(j) << ")\n";
-        return 1;
+    // +validate:
+    auto outputs = results.getOutputs();
+    for (auto& output : outputs) {
+      std::vector<int> top_k = postprocess(output, k);
+      for (size_t j = 0; j < k; j++) {
+        if (top_k[j] != gold_response_output.at(j)) {
+          std::cerr << "Output (" << top_k[j] << ") does not match golden ("
+                    << gold_response_output.at(j) << ")\n";
+          return 1;
+        }
       }
     }
+    // -validate:
   }
-  // -validate:
 
   std::cout << "custom_processing.cpp: Passed\n";
 

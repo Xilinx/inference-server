@@ -71,7 +71,7 @@ def preprocess(img_data):
 
     Args:
         img_data (np.array): 3 dimensions [channels, rows, cols] with value range 0-255
-        the vectors are for RGB images, so images read with OpenCV must have channels 
+        the vectors are for RGB images, so images read with OpenCV must have channels
         converted before calling.
     """
     mean_vec = np.array([0.406, 0.456, 0.485])
@@ -287,7 +287,7 @@ def main(args):
     #
     # create a multi-image inference request and send it
     #
-    images = [img2, img, img, img2]
+    images = [img2]
 
     print("Creating inference request...")
     request = proteus.ImageInferenceRequest(images, False)

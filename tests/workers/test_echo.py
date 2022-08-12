@@ -12,17 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
 import numpy as np
-
-import proteus
+import pytest
+from helper import run_benchmark
 from proteus.predict_api import (
     InferenceRequest,
     InferenceRequestInput,
     InferenceRequestOutput,
 )
 
-from helper import run_benchmark
+import proteus
 
 
 @pytest.fixture(scope="class")
@@ -41,8 +40,8 @@ class TestEcho:
     Test the Echo worker
     """
 
-    inputs = [3, 5]
-    golden_outputs = [4, 6]
+    inputs = [3]
+    golden_outputs = [4]
 
     @classmethod
     def construct_request(
@@ -70,20 +69,9 @@ class TestEcho:
             parameters.put("key", "value")
             input_0.parameters = parameters
 
-        input_1 = InferenceRequestInput()
-        input_1.name = "echo"
-        input_1.datatype = proteus.DataType.UINT32
-        input_1.shape = [1]
-        input_1.setUint32Data(np.array([cls.inputs[1]], np.uint32))
-        if add_input_parameters:
-            parameters = proteus.RequestParameters()
-            parameters.put("key2", 1)
-            input_1.parameters = parameters
-
         request = InferenceRequest()
         for _ in range(multiplier):
             request.addInputTensor(input_0)
-            request.addInputTensor(input_1)
 
         if add_id:
             request.id = "hello_world"
@@ -142,18 +130,17 @@ class TestEcho:
         assert response.model == "echo"
 
         outputs = response.getOutputs()
-        assert len(outputs) == 2 * input_tensors
+        assert len(outputs) == 1 * input_tensors
 
         for i in range(input_tensors):
-            for j in range(2):
-                output = outputs[(i * 2) + j]
-                data = output.getUint32Data()
-                assert len(data) == 1
-                assert data[0] == self.golden_outputs[j]
-                assert output.datatype == proteus.DataType.UINT32
-                assert output.name == "echo"
-                assert output.parameters.empty()
-                assert output.shape == [1]
+            output = outputs[i]
+            data = output.getUint32Data()
+            assert len(data) == 1
+            assert data[0] == self.golden_outputs[0]
+            assert output.datatype == proteus.DataType.UINT32
+            assert output.name == "echo"
+            assert output.parameters.empty()
+            assert output.shape == [1]
 
         if id_present:
             assert response.id == "hello_world"
@@ -212,33 +199,6 @@ class TestEcho:
         request = self.construct_request(add_id, False, False)
 
         self.send_request(request, add_id)
-
-    def test_echo_5(self):
-        """
-        Send a request to echo with no optional parameters with more input tensors
-        than echo initially allocates so it's forced to allocate more.
-        """
-        add_id = False
-        multiplier = 10
-        request = self.construct_request(add_id, False, False, multiplier)
-
-        self.send_request(request, add_id, multiplier)
-
-    def test_echo_6(self):
-        """
-        Send a request to echo with no optional parameters with too many input
-        tensors.
-        """
-        add_id = False
-        multiplier = 30
-        request = self.construct_request(add_id, False, False, multiplier)
-
-        try:
-            response = self.rest_client.modelInfer(self.model, request)
-        except proteus.RuntimeError as e:
-            assert str(e) == '{"error":"Too many input tensors for this model"}'
-        else:
-            pytest.fail("Exception not raised")
 
     @pytest.mark.benchmark(group="echo")
     def test_benchmark_echo_0(self, benchmark, model_fixture, parameters_fixture):

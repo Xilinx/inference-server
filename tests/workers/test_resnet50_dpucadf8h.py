@@ -79,7 +79,7 @@ class TestInferImageResNet50DPUCADF8H:
                 np.testing.assert_almost_equal(gold_response_output, data, 2)
         return response
 
-    def construct_request(self, asTensor, batches=4):
+    def construct_request(self, asTensor, batches=1):
         image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
 
         # TODO(vishalk): AKS gives a segfault if batch != 4

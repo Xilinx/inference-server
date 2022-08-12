@@ -21,11 +21,13 @@ detailed commentary on this example.
 # fmt: off
 # +imports:
 from time import sleep
-import proteus
-# -imports:
-# fmt: on
 
 import numpy as np
+
+import proteus
+
+# -imports:
+# fmt: on
 
 
 def NumericalInferenceRequest(data, datatype=proteus.DataType.UINT32):
@@ -66,7 +68,7 @@ def main():
     # -load worker:
 
     # +inference: construct the request and make the inference
-    data = [3, 1, 4, 1, 5]
+    data = [3]
     request = NumericalInferenceRequest(data)
     response = client.modelInfer(worker_name, request)
     # -inference:
