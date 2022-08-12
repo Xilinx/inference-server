@@ -35,7 +35,6 @@
 #include "proteus/core/api.hpp"                 // for modelLoad
 #include "proteus/core/exceptions.hpp"          // for bad_status
 #include "proteus/core/manager.hpp"             // for Manager
-#include "proteus/core/model_repository.hpp"    // for ModelRepository
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
 #include "proteus/helpers/exec.hpp"             // for exec
 #include "proteus/helpers/string.hpp"           // for toLower

@@ -21,6 +21,7 @@ import json
 import multiprocessing as mp
 import os
 import pty
+import re
 import shlex
 import shutil
 import subprocess
@@ -615,6 +616,8 @@ class Dockerize:
         labels = f"--label git-branch={git_branch} --label git-commit={git_commit}"
 
         version = get_version()
+        # normalize docker tag
+        version = re.sub("[^A-Za-z0-9.]+", "-", version)
         os.environ["DOCKER_BUILDKIT"] = "1"
         command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} {unknown_arguments} ."
         run_command(command, args.dry_run)

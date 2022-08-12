@@ -37,17 +37,15 @@
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
 #include "proteus/clients/http_internal.hpp"  // for mapJsonToResponse, mapP...
 #include "proteus/core/exceptions.hpp"        // for bad_status
-#include "proteus/servers/http_server.hpp"    // for stop, start
 
 namespace proteus {
 
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address,
-                          const StringMap& headers) {
+  explicit HttpClientImpl(const std::string& address, const StringMap& headers)
+    : headers_(headers) {
     loop_.run();
     client_ = drogon::HttpClient::newHttpClient(address, loop_.getLoop());
-    headers_ = headers;
   }
 
   drogon::HttpClient* getClient() { return client_.get(); }

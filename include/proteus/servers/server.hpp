@@ -34,9 +34,6 @@ class Server {
   std::unique_ptr<ServerImpl> impl_;
 };
 
-/// get log directory
-std::string getLogDirectory();
-
 }  // namespace proteus
 
 #endif  // GUARD_PROTEUS_SERVERS_SERVER

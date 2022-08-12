@@ -97,6 +97,9 @@ class Logger {
 /// Initialize logging for the inference server
 void initLogger(const LogOptions& options);
 
+/// get log directory
+std::string getLogDirectory();
+
 }  // namespace proteus
 
 #endif  // GUARD_PROTEUS_OBSERVATION_LOGGING

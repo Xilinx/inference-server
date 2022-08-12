@@ -77,7 +77,7 @@ std::string load(int workers) {
   proteus::RequestParameters parameters;
   parameters.put("aks_graph_name", "facedetect");
   parameters.put("aks_graph",
-                 "/workspace/proteus/external/aks/graph_zoo/"
+                 "${AKS_ROOT}/graph_zoo/"
                  "graph_facedetect_u200_u250_proteus.json");
   parameters.put("share", false);
 
