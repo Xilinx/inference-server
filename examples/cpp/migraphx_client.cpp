@@ -58,7 +58,8 @@ std::string ReadNthLine(const std::string filename, int N) {
 }
 
 /**
- * @brief Image preprocessing helper.  Crops the input `img` from center to a specific dimension specified
+ * @brief Image preprocessing helper.  Crops the input `img` from center to a
+ * specific dimension specified
  *
  * @param img: Image which needs to be cropped
  * @param height: height of the output image
@@ -73,7 +74,6 @@ cv::Mat center_crop(cv::Mat img, int height, int width) {
   return img;
 }
 
-
 /**
  * @brief Utility function:  fetches an image or images from file and returns an
  * array that can be passed as data to the migraphx worker.
@@ -84,16 +84,15 @@ cv::Mat center_crop(cv::Mat img, int height, int width) {
  * @return std::vector<std::vector<float>>
  */
 std::vector<std::vector<float>> preprocess(
-  std::filesystem::path const& image_filename, size_t batch_size, size_t image_size) {
-
-
+  std::filesystem::path const& image_filename, size_t batch_size,
+  size_t image_size) {
   // placeholder
   std::vector<std::vector<float>> outputs;
   outputs.reserve(batch_size);
 
   // load the image
   auto img = cv::imread(image_filename.c_str());
-  if(img.empty()) {
+  if (img.empty()) {
     std::cout << "Unable to load image " << image_filename.c_str() << std::endl;
     exit(1);
   }
@@ -126,12 +125,13 @@ std::vector<std::vector<float>> preprocess(
   for (size_t index = 0; index < batch_size; index++) {
     outputs.emplace_back(output1);
     // auto& output = outputs[index++];
-  } 
-  std::cout << "preprocess() returning vector of " << std::to_string(outputs.size())<< " images of " << outputs[batch_size-1].size() << std::endl;
+  }
+  std::cout << "preprocess() returning vector of "
+            << std::to_string(outputs.size()) << " images of "
+            << outputs[batch_size - 1].size() << std::endl;
 
   return outputs;
 }
-
 
 /**
  * @brief Calculate softmax of the data.
@@ -162,8 +162,8 @@ void calc_softmax(const float* data, size_t size, double* result) {
 }
 
 /**
- * @brief After running softmax, get the labels associated with the top k values.
- *         This is identical to processing in pt_zendnn_client.cpp
+ * @brief After running softmax, get the labels associated with the top k
+ * values. This is identical to processing in pt_zendnn_client.cpp
  *
  * @param d pointer to the data
  * @param size number of elements in the data
@@ -186,7 +186,8 @@ std::vector<int> get_top_k(const double* d, int size, int k) {
 }
 
 /**
- * @brief Perform postprocessing of the data. This is identical to processing in pt_zendnn_client.cpp
+ * @brief Perform postprocessing of the data. This is identical to processing in
+ * pt_zendnn_client.cpp
  *
  * @param output output from Proteus
  * @param k number of top elements to return
@@ -203,7 +204,6 @@ std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
   return get_top_k(softmax.data(), size, k);
 }
 
-
 /**
  * @brief user variables: update as needed!
  * If image location is provided, the prediction is done for that image,
@@ -219,18 +219,17 @@ struct Option {
     root / "tests/assets/dog-3619020_640.jpg";
 
   // same content as tests/assets/imagenet_simple_labels.json
-  std::filesystem::path class_file = root /
-    "/examples/python/utils/imagenet_classes.txt";
+  std::filesystem::path class_file =
+    root / "examples/python/utils/imagenet_classes.txt";
 
-  int batch_size = 640;
-  int input_size = 224;  // the input size is set by the Resnet model (224x224 pixels)
-  // int output_classes = 1000;
+  int batch_size = 64;
+  int input_size =
+    224;  // the input size is set by the Resnet model (224x224 pixels)
 
   // values used in iterations and postprocessing
   int output_classes = 1000;
-  int warmup_step = 5;
   int steps = 10;
-  int topK = 5;  
+  int topK = 5;
 } options;
 
 /** Runs an MiGraphX inference straight from the API, without going
@@ -255,13 +254,14 @@ int main(int argc, char* argv[]) {
   if (argc > 1) model = std::string(argv[1]);
 
   int batch_size(64);
-  if(argc > 2) batch_size = atoi(argv[2]);
+  if (argc > 2) batch_size = atoi(argv[2]);
   options.batch_size = batch_size;
 
-    // The image file path is hardcoded.  For performance testing we'll just 
-    // process multiple copies of the same image.
-  std::filesystem::path image_filename = options.image_location;    
-    std::cout << " input image is " << image_filename << "   batch size is " << std::to_string(batch_size) << std::endl;  
+  // The image file path is hardcoded.  For performance testing we'll just
+  // process multiple copies of the same image.
+  std::filesystem::path image_filename = options.image_location;
+  std::cout << " input image is " << image_filename << "   batch size is "
+            << std::to_string(batch_size) << std::endl;
 
   // initialize the server
   proteus::Server server;
@@ -274,10 +274,10 @@ int main(int argc, char* argv[]) {
     exit(0);
   }
 
-  // 
+  //
   // load worker with required parameters
   //
-  
+
   proteus::RequestParameters parameters;
   parameters.put("batch", batch_size);
   parameters.put("model", model);
@@ -291,17 +291,17 @@ int main(int argc, char* argv[]) {
 
   const std::initializer_list<uint64_t> shape = {
     3, static_cast<long unsigned>(options.input_size),
-    static_cast<long unsigned>(options.input_size)
-  };
+    static_cast<long unsigned>(options.input_size)};
   std::queue<proteus::InferenceResponseFuture> queue;
   proteus::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(images[0].data()), shape,
-                          proteus::DataType::FP32);
+                         proteus::DataType::FP32);
   // Timing the prediction
-  auto start = std::chrono::high_resolution_clock::now();  // Timing the start 
-  auto results = client.modelInfer(workerName, request); 
-  auto stop = std::chrono::high_resolution_clock::now(); 
-  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+  auto start = std::chrono::high_resolution_clock::now();  // Timing the start
+  auto results = client.modelInfer(workerName, request);
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration =
+    std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
   float time_tmp = duration.count();
 
   // Parse the results and report the top K results
@@ -311,22 +311,22 @@ int main(int argc, char* argv[]) {
     std::cout << "Top " << options.topK << " classes:" << std::endl;
     for (int j = 0; j < options.topK; j++)
       std::cout << j + 1 << ": Index: " << top_k[j]
-                << " :: Class: " << ReadNthLine(options.class_file,
-                top_k[j])
+                << " :: Class: " << ReadNthLine(options.class_file, top_k[j])
                 << std::endl;
   }
 
   // Running for `steps` number of times for proper benchmarking
-  start = std::chrono::high_resolution_clock::now();  // Timing the start 
+  start = std::chrono::high_resolution_clock::now();  // Timing the start
   for (int step = 0; step < options.steps; step++) {
-      for (auto i = 0; i < options.batch_size; i++) {
-        proteus::InferenceRequest request;
-        request.addInputTensor(static_cast<void*>(images[i].data()), shape,
-                               proteus::DataType::FP32);
-        auto results = client.modelInfer(workerName, request);
-      }
+    for (auto i = 0; i < options.batch_size; i++) {
+      proteus::InferenceRequest request;
+      request.addInputTensor(static_cast<void*>(images[i].data()), shape,
+                             proteus::DataType::FP32);
+      auto results = client.modelInfer(workerName, request);
+    }
 
-    std::cout <<" INPUT, batch size: " << request.getInputSize() << " " << options.batch_size << std::endl;
+    std::cout << " INPUT, batch size: " << request.getInputSize() << " "
+              << options.batch_size << std::endl;
     // auto results = client.modelInfer(workerName, request);
   }
   // Timing the prediction
@@ -334,19 +334,19 @@ int main(int argc, char* argv[]) {
   duration =
     std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
   time_tmp = float(duration.count()) / options.steps;
-    
-  std::cout << "\nAverage time taken for " << options.image_location.c_str() << " : " <<
-                  std::to_string(time_tmp) << "ms" << std::endl;
+
+  std::cout << "\nAverage time taken for " << options.image_location.c_str()
+            << " : " << std::to_string(time_tmp) << "ms" << std::endl;
 
   std::cout << "Batch Size: " + std::to_string(options.batch_size) +
-                  " FPS: " +
-                  std::to_string(options.batch_size / time_tmp * 1000)
+                 " FPS: " + std::to_string(options.batch_size / time_tmp * 1000)
             << std::endl;
   std::cout << " finished.  Time is " << std::to_string(time_tmp) << std::endl;
 
   return 0;
 }
 
+// clang-format off
 // // This is the Migraphx C++ API main, not the inference server C+ API
 // int main(int argc, char* argv[]){
 // std::string model_filename =
@@ -389,3 +389,4 @@ int main(int argc, char* argv[]) {
 // We should see 1000 items returned.
 // std::cout << "done.  elem is " << std::to_string(elem_num) << std::endl;
 // }
+// clang-format on
