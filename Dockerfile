@@ -141,7 +141,7 @@ WORKDIR /tmp
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-# install protobuf 3.19.4 for gRPC - Used by Vitis AI and onnx
+# install protobuf 3.21.1 for gRPC - Used by Vitis AI and onnx
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         autoconf \

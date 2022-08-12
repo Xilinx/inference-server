@@ -142,12 +142,13 @@ def main(args):
             images = [image for image in images]
 
             # Send request to the server
-            request = proteus.ImageInferenceRequest(images)
             start = time.time()
-            response = client.modelInfer(worker_name, request)
+            for image in images:
+                request = proteus.ImageInferenceRequest(image)
+                response = client.modelInfer(worker_name, request)
+                assert not response.isError(), response.getError()
             end = time.time()
             total_time += end - start
-            assert not response.isError(), response.getError()
 
             num_processed_images += batch_size
             num_remaining_images -= batch_size

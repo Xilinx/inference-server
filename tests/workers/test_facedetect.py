@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
 import numpy as np
+import pytest
+from helper import root_path, run_benchmark
 
-from helper import run_benchmark, root_path
 import proteus
 
 
@@ -92,8 +92,7 @@ class TestInferImageFacedetectDPUCADF8H:
 
     def construct_request(self, asTensor):
         image_path = str(root_path / "tests/assets/girl-1867092_640.jpg")
-        # TODO(vishalk): AKS gives a segfault if batch != 4
-        batch = 4
+        batch = 1
         images = [image_path] * batch
         request = proteus.ImageInferenceRequest(images, asTensor)
 

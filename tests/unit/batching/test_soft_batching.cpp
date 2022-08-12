@@ -166,12 +166,10 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     batcher_->enqueue(std::move(req));
   }
 
-  InferenceRequest create_request(int tensors) {
+  InferenceRequest create_request() {
     InferenceRequest request;
-    for (auto i = 0; i < tensors; ++i) {
-      request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
-                             DataType::UINT8);
-    }
+    request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
+                           DataType::UINT8);
     return request;
   }
 
@@ -189,9 +187,11 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
   auto requests = batch_config.requests;
 
   for (const auto& i : requests) {
-    auto request = create_request(i);
-    auto req = std::make_unique<CppNativeApi>(request);
-    this->enqueue(std::move(req));
+    for (auto j = 0; j < i; ++j) {
+      auto request = create_request();
+      auto req = std::make_unique<CppNativeApi>(request);
+      this->enqueue(std::move(req));
+    }
   }
 
   this->check_batch();
@@ -213,8 +213,8 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
 const std::array<BatchConfig, 7> configs = {
   BatchConfig{1, {1}, {1}},          BatchConfig{1, {1, 1}, {1, 1}},
   BatchConfig{2, {1}, {1}},          BatchConfig{2, {1, 1}, {2}},
-  BatchConfig{2, {1, 1, 1}, {2, 1}}, BatchConfig{4, {3, 2}, {1, 1}},
-  BatchConfig{4, {2, 2}, {2}},
+  BatchConfig{2, {1, 1, 1}, {2, 1}}, BatchConfig{4, {1, 1, 1, 1, 1}, {4, 1}},
+  BatchConfig{4, {1, 1, 1, 1}, {4}},
 };
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitSoftBatcherFixture,
                          testing::ValuesIn(configs));

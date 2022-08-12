@@ -101,8 +101,7 @@ class TestInferImageYoloV3DPUCADF8H:
     def construct_request(self, asTensor):
         image_path = str(root_path / "tests/assets/bicycle-384566_640.jpg")
 
-        # TODO(vishalk): AKS gives a segfault if batch != 4
-        batch = 4
+        batch = 1
         images = [image_path] * batch
         request = proteus.ImageInferenceRequest(images, asTensor)
 

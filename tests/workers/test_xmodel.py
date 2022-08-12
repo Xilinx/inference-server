@@ -151,21 +151,22 @@ class TestXmodel:
 
         batch = 4
         images = []
-        for _ in range(batch):
+        for _ in range(1):
             image = cv2.imread(image_path)
             images.append(image)
 
         images = self.preprocess(images, preprocessing)
-        request = proteus.ImageInferenceRequest(images, True)
-        response = self.send_request(request)
-        outputs = response.getOutputs()
-        assert len(outputs) == batch
-        output = outputs[0]
-        assert output.datatype == proteus.DataType.INT8
-        data = output.getInt8Data()
-        k = self.postprocess(data, 5)
-        gold_response_output = [259, 261, 260, 157, 154]
-        assert k == gold_response_output
+        for _ in range(batch):
+            request = proteus.ImageInferenceRequest(images[0], True)
+            response = self.send_request(request)
+            outputs = response.getOutputs()
+            assert len(outputs) == 1
+            output = outputs[0]
+            assert output.datatype == proteus.DataType.INT8
+            data = output.getInt8Data()
+            k = self.postprocess(data, 5)
+            gold_response_output = [259, 261, 260, 157, 154]
+            assert k == gold_response_output
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark, model_fixture, parameters_fixture):

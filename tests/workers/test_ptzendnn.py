@@ -81,7 +81,7 @@ class TestPtZendnn:
                 assert output.parameters.empty()
         return response
 
-    @pytest.mark.parametrize("num", [1, 8])
+    @pytest.mark.parametrize("num", [1])
     def test_ptzendnn_0(self, num):
         """
         Send a request to pt model as tensor data

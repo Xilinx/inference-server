@@ -306,24 +306,24 @@ int main() {
       static_cast<long unsigned>(options.input_size)};
     // Warmup laps to get the best performance
     for (int step = 0; step < options.warmup_step; step++) {
-      proteus::InferenceRequest request;
       for (auto i = 0; i < options.batch_size; i++) {
+        proteus::InferenceRequest request;
         request.addInputTensor(static_cast<void*>(images[i].data()), shape,
                                proteus::DataType::FP32);
+        auto results = client.modelInfer(workerName, request);
       }
-      auto results = client.modelInfer(workerName, request);
     }
 
     // Running for `steps` number of time for proper benchmarking
     auto start = std::chrono::high_resolution_clock::now();  // Timing the start
     for (int step = 0; step < options.steps; step++) {
       std::queue<proteus::InferenceResponseFuture> queue;
-      proteus::InferenceRequest request;
       for (auto i = 0; i < options.batch_size; i++) {
+        proteus::InferenceRequest request;
         request.addInputTensor(static_cast<void*>(images[i].data()), shape,
                                proteus::DataType::FP32);
+        auto results = client.modelInfer(workerName, request);
       }
-      auto results = client.modelInfer(workerName, request);
     }
     // Timing the prediction
     auto stop = std::chrono::high_resolution_clock::now();
