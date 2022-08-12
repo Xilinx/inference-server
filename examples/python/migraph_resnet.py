@@ -253,7 +253,7 @@ def main(args):
     # list all the *.jpg images in the validation image directory
     files = os.listdir(validation_dir)
     files.sort()
-    files.remove("val.txt")
+    files.remove(args.groundtruth)
 
     # Read the "answers" file
     ground_truth = [None] * len(files)

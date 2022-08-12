@@ -53,3 +53,16 @@ if(${PROTEUS_ENABLE_PTZENDNN})
     pt_zendnn_client PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS}
   )
 endif()
+
+
+if(${PROTEUS_ENABLE_MIGRAPHX})
+  add_executable(migraphx_client migraphx_client.cpp)
+
+  target_link_libraries(
+    migraphx_client PRIVATE proteus opencv_imgcodecs opencv_imgproc
+                             opencv_core migraphx::c
+  )
+  target_include_directories(
+    migraphx_client PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS}
+  )
+endif()
