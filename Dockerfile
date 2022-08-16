@@ -141,7 +141,8 @@ WORKDIR /tmp
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-# install protobuf 3.21.1 for gRPC - Used by Vitis AI and onnx
+# install protobuf 3.19.4 for gRPC - Used by Vitis AI and onnx
+# onnx requires 3.19.4 due to Protobuf python
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
         autoconf \
@@ -151,10 +152,10 @@ RUN apt-get update \
         unzip \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && VERSION=3.21.1 \
-    && wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v21.1/protobuf-cpp-${VERSION}.tar.gz \
+    && VERSION=3.19.4 \
+    && wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
     && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
-    && cd protobuf-${VERSION} \
+    && cd protobuf-${VERSION}/cmake \
     && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=NO -DBUILD_SHARED_LIBS=YES \
     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
     && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
