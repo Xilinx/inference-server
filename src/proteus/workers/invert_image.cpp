@@ -144,7 +144,6 @@ void InvertImage::doAcquire(RequestParameters* parameters) {
 }
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
   setThreadName("InvertImage");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -158,10 +157,10 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
     }
 
     PROTEUS_LOG_INFO(logger, "Got request in InvertImage");
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      const auto& req = batch->getRequest(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      const auto& trace = batch->getTrace(j);
       trace->startSpan("InvertImage");
 #endif
       InferenceResponse resp;
@@ -242,7 +241,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       }
 #ifdef PROTEUS_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+        std::chrono::high_resolution_clock::now() - batch->getTime(j));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
@@ -252,9 +251,6 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #endif
       req->runCallbackOnce(resp);
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "InvertImage ending");
 }

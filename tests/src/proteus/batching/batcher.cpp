@@ -54,11 +54,9 @@ class FakeInterface : public Interface {
   explicit FakeInterface(InferenceRequestInput request);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) override;
+    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+    const BufferRawPtrs &output_buffers,
+    std::vector<size_t> &output_offsets) override;
 
   size_t getInputSize() override;
   void errorHandler(const std::exception &e) override;
@@ -86,14 +84,11 @@ void fakeCppCallback(const InferenceResponsePromisePtr &promise,
 }
 
 std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
-  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
+  const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+  const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
   auto request = std::make_shared<FakeInferenceRequest>(
-    this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
-    output_offsets, batch_size, batch_offset);
+    this->request_, input_buffers, input_offsets, output_buffers,
+    output_offsets);
   Callback callback =
     std::bind(fakeCppCallback, this->promise_, std::placeholders::_1);
   request->setCallback(std::move(callback));
@@ -112,29 +107,13 @@ void Batcher::run(WorkerInfo *worker) {
   bool run = true;
 
   while (run) {
-    auto batch = std::make_unique<Batch>();
-    batch->requests =
-      std::make_unique<std::vector<std::shared_ptr<InferenceRequest>>>();
-    batch->input_buffers = std::make_unique<std::vector<BufferPtrs>>();
-
-    batch->output_buffers = std::make_unique<std::vector<BufferPtrs>>();
-    auto input_buffer = worker->getInputBuffer();
-    std::vector<size_t> input_offset = {0};
-    auto output_buffer = worker->getOutputBuffer();
-    std::vector<size_t> output_offset = {0};
-    size_t batch_size = 0;
+    auto batch = std::make_unique<Batch>(worker);
+    auto input_buffers = batch->getRawInputBuffers();
+    auto output_buffers = batch->getRawOutputBuffers();
+    std::vector<size_t> input_offset(input_buffers.size(), 0);
+    std::vector<size_t> output_offset(output_buffers.size(), 0);
 
     // wait for the first request
-    std::vector<BufferRawPtrs> input_buffers;
-    input_buffers.emplace_back();
-    for (const auto &buffer : input_buffer) {
-      input_buffers.back().push_back(buffer.get());
-    }
-    std::vector<BufferRawPtrs> output_buffers;
-    output_buffers.emplace_back();
-    for (const auto &buffer : output_buffer) {
-      output_buffers.back().push_back(buffer.get());
-    }
     this->input_queue_->wait_dequeue(req);
     PROTEUS_LOG_DEBUG(logger_,
                       "Got initial request of a new batch for " + this->model_);
@@ -147,33 +126,23 @@ void Batcher::run(WorkerInfo *worker) {
     auto trace = req->getTrace();
     trace->startSpan("fake_batcher");
 #endif
-    // auto fake_req = dynamic_cast<FakeInterface*>(req.get());
-    // InferenceRequestPtr new_req;
-    // if(fake_req != nullptr){
     req->getInputSize();  // initialize the req object
-    size_t buffer_index = 0;
-    auto new_req =
-      req->getRequest(buffer_index, input_buffers, input_offset, output_buffers,
-                      output_offset, this->batch_size_, batch_size);
-    // } else {
-    //   new_req = std::make_unique<FakeInferenceRequest>();
-    // }
+    auto new_req = req->getRequest(input_buffers, input_offset, output_buffers,
+                                   output_offset);
 
-    batch->requests->push_back(new_req);
+    batch->addRequest(new_req);
 
 #ifdef PROTEUS_ENABLE_TRACING
     trace->endSpan();
-    batch->traces.emplace_back(std::move(trace));
+    batch->addTrace(std::move(trace));
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
-    batch->start_times.emplace_back(req->get_time());
+    batch->addTime(req->get_time());
 #endif
     // batch_size += 1;
 
-    if (!batch->requests->empty()) {
+    if (!batch->empty()) {
       PROTEUS_LOG_DEBUG(logger_, "Enqueuing batch for " + this->model_);
-      batch->input_buffers->push_back(std::move(input_buffer));
-      batch->output_buffers->push_back(std::move(output_buffer));
       this->output_queue_->enqueue(std::move(batch));
     }
   }

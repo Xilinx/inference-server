@@ -138,9 +138,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
         batcher_->getOutputQueue()->wait_dequeue_timed(batch, kTimeoutUs),
         true);
 
-      EXPECT_EQ(batch->input_buffers->size(), 1);
-      EXPECT_EQ(batch->output_buffers->size(), 1);
-      EXPECT_EQ(batch->requests->size(), i);
+      EXPECT_EQ(batch->size(), i);
 
       auto num_tensors = 0;
       for (auto j = tensor_index; j < tensor_index + i; j++) {
@@ -148,15 +146,16 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
       }
       tensor_index += i;
 
-      for (const auto& buffer : *(batch->input_buffers)) {
-        EXPECT_EQ(buffer.size(), 1);
-        auto& first_buffer = buffer[0];
+      const auto& buffers = batch->getInputBuffers();
+      EXPECT_EQ(buffers.size(), 1);
+      for (const auto& buffer : buffers) {
         for (auto j = 0; j < num_tensors; j++) {
-          compare_data(first_buffer.get(), j * data_size_);
+          compare_data(buffer.get(), j * data_size_);
         }
       }
 
-      for (const auto& req : *(batch->requests)) {
+      const auto& reqs = batch->getRequests();
+      for (const auto& req : reqs) {
         req->runCallback(InferenceResponse());
       }
     }

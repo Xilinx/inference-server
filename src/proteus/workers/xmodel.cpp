@@ -222,7 +222,6 @@ void XModel::doAcquire(RequestParameters* parameters) {
 }
 
 void XModel::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
   std::atomic_int32_t pool_size = 0;
   const int max_pool_size = this->pool_.size() * 4;  // 4 is arbitrary
   setThreadName("XModel");
@@ -236,8 +235,8 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger, "Got request in xmodel: " +
-                               std::to_string(batch->requests->size()));
+    PROTEUS_LOG_INFO(logger,
+                     "Got request in xmodel: " + std::to_string(batch->size()));
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
@@ -248,57 +247,48 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     }
     this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
       (void)id;  // suppress unused variable warning
-#ifdef PROTEUS_ENABLE_LOGGING
-      const auto& logger = this->getLogger();
-#endif
 #ifdef PROTEUS_ENABLE_TRACING
-      for (unsigned int j = 0; j < batch->requests->size(); j++) {
-        auto& trace = batch->traces.at(j);
+      for (unsigned int j = 0; j < batch->size(); j++) {
+        auto& trace = batch->getTrace(j);
         trace->startSpan("xmodel");
       }
 #endif
 
       std::queue<std::pair<uint32_t, int>> futures;
-      std::vector<vart::TensorBuffer*> outputs_ptrs_global;
-      for (size_t i = 0; i < batch->input_buffers->size(); i++) {
-        std::vector<vart::TensorBuffer*> inputsPtr;
-        std::vector<vart::TensorBuffer*> outputsPtr;
+      std::vector<vart::TensorBuffer*> inputsPtr;
+      std::vector<vart::TensorBuffer*> outputsPtr;
 
-        auto& input_buffers = (*(batch->input_buffers))[i];
-        inputsPtr.reserve(input_buffers.size());
-        auto& output_buffers = (*(batch->output_buffers))[i];
-        outputsPtr.reserve(output_buffers.size());
-        outputs_ptrs_global.reserve(outputs_ptrs_global.size() +
-                                    output_buffers.size());
+      auto& input_buffers = batch->getInputBuffers();
+      inputsPtr.reserve(input_buffers.size());
+      auto& output_buffers = batch->getOutputBuffers();
+      outputsPtr.reserve(output_buffers.size());
 
-        for (const auto& buffer : input_buffers) {
-          auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-          inputsPtr.emplace_back(vart->getTensorBuffer());
-        }
-        for (const auto& buffer : output_buffers) {
-          auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-          outputsPtr.emplace_back(vart->getTensorBuffer());
-          outputs_ptrs_global.emplace_back(vart->getTensorBuffer());
-        }
-
-        // FIXME(varunsh): there's a bug in rt-engine where calling sync_for_*()
-        // functions for DPUCADF8H results in wrong inferences. The bug has been
-        // identified and fixed so this check can be removed once it's live
-        if (this->kernel_ != "DPUCADF8H") {
-          for (auto* input : inputsPtr) {
-            const auto* tensor = input->get_tensor();
-            input->sync_for_write(
-              0, tensor->get_element_num() / (tensor->get_shape())[0]);
-          }
-        }
-
-        futures.push(getRunner()->execute_async(inputsPtr, outputsPtr));
+      for (const auto& buffer : input_buffers) {
+        auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+        inputsPtr.emplace_back(vart->getTensorBuffer());
+      }
+      for (const auto& buffer : output_buffers) {
+        auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+        outputsPtr.emplace_back(vart->getTensorBuffer());
       }
 
-      std::vector<InferenceResponse> responses;
-      responses.reserve(batch->requests->size());
+      // FIXME(varunsh): there's a bug in rt-engine where calling sync_for_*()
+      // functions for DPUCADF8H results in wrong inferences. The bug has been
+      // identified and fixed so this check can be removed once it's live
+      if (this->kernel_ != "DPUCADF8H") {
+        for (auto* input : inputsPtr) {
+          const auto* tensor = input->get_tensor();
+          input->sync_for_write(
+            0, tensor->get_element_num() / (tensor->get_shape())[0]);
+        }
+      }
 
-      for (auto& req : *(batch->requests)) {
+      futures.push(getRunner()->execute_async(inputsPtr, outputsPtr));
+
+      std::vector<InferenceResponse> responses;
+      responses.reserve(batch->size());
+
+      for (const auto& req : *batch) {
         auto& resp = responses.emplace_back();
         resp.setID(req->getID());
         resp.setModel("xmodel");
@@ -311,25 +301,23 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       }
 
       if (this->kernel_ != "DPUCADF8H") {
-        for (auto* output : outputs_ptrs_global) {
+        for (auto* output : outputsPtr) {
           const auto* tensor = output->get_tensor();
           output->sync_for_read(
             0, tensor->get_element_num() / (tensor->get_shape())[0]);
         }
       }
 
-      for (unsigned int k = 0; k < batch->requests->size(); k++) {
-        auto req = (*batch->requests)[k];
+      for (unsigned int k = 0; k < batch->size(); k++) {
+        const auto& req = batch->getRequest(k);
         auto inputs = req->getInputs();
         auto outputs = req->getOutputs();
         auto& resp = responses[k];
 
         auto tensor_count = 0U;
-        auto buffer_index = 0;
         for (unsigned int i = 0; i < inputs.size(); i++) {
           // TODO(varunsh): assuming 1 output tensor (per 1 input)!
-          auto* output_index =
-            (*batch->output_buffers)[buffer_index][0]->data();
+          auto* output_index = output_buffers[0]->data();
           InferenceResponseOutput output;
           auto output_tensors = getRunner()->get_output_tensors();
           auto output_shape =
@@ -362,15 +350,10 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 
           resp.addOutput(output);
           tensor_count++;
-          if (tensor_count == this->batch_size_) {
-            tensor_count = 0;
-            buffer_index++;
-            // std::fill(input_offsets.begin(), input_offsets.end(), 0);
-          }
         }
 
 #ifdef PROTEUS_ENABLE_TRACING
-        auto context = batch->traces.at(k)->propagate();
+        auto context = batch->getTrace(k)->propagate();
         resp.setContext(std::move(context));
 #endif
 
@@ -379,14 +362,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         Metrics::getInstance().incrementCounter(
           MetricCounterIDs::kPipelineEgressWorker);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-          std::chrono::high_resolution_clock::now() - batch->start_times[k]);
+          std::chrono::high_resolution_clock::now() - batch->getTime(k));
         Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                               duration.count());
 #endif
       }
-      this->returnBuffers(std::move(batch->input_buffers),
-                          std::move(batch->output_buffers));
-      PROTEUS_LOG_DEBUG(logger, "Returned buffers");
       pool_size--;
     });
   }

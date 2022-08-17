@@ -22,14 +22,14 @@
 
 #include <chrono>     // for high_resolution_clock
 #include <cstddef>    // for size_t
-#include <memory>     // for shared_ptr, unique_ptr
-#include <stdexcept>  // for invalid_argument
+#include <exception>  // for exception
+#include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
+#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
 #include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
-#include "proteus/observation/logging.hpp"   // for LoggerPtr
-#include "proteus/observation/tracing.hpp"   // for SpanPtr, Span
+#include "proteus/observation/logging.hpp"   // for Logger, Loggers, Loggers...
+#include "proteus/observation/tracing.hpp"   // for TracePtr
 
 namespace proteus {
 class InferenceRequest;
@@ -80,21 +80,16 @@ class Interface {
   /**
    * @brief Construct an InferenceRequest using the data in the Interface
    *
-   * @param buffer_index the index to use for the vector of I/O buffers
    * @param input_buffers a vector of buffers to hold the input data
    * @param input_offsets offsets of where to start storing input data
    * @param output_buffers a vector of buffers to hold the output data
    * @param output_offsets offsets of where to start storing output data
-   * @param batch_size the requested batch size
-   * @param batch_offset the current batch size
    * @return std::shared_ptr<InferenceRequest>
    */
   virtual std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) = 0;
+    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+    const BufferRawPtrs &output_buffers,
+    std::vector<size_t> &output_offsets) = 0;
 
   /**
    * @brief Given an exception, handle the exception appropriately.
@@ -114,6 +109,7 @@ class Interface {
 #ifdef PROTEUS_ENABLE_LOGGING
   const Logger &getLogger() const;
 #endif
+
  private:
 #ifdef PROTEUS_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};

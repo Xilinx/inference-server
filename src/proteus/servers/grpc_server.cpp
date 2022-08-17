@@ -348,7 +348,7 @@ using InputBuilder =
 
 #define CALLDATA_IMPL_END \
   }                       \
-  ;
+  ;  // NOLINT
 
 CALLDATA_IMPL(ModelInfer, Unary);
 
@@ -363,13 +363,11 @@ CALLDATA_IMPL_END
 template <>
 class InferenceRequestBuilder<CallDataModelInfer*> {
  public:
-  static InferenceRequestPtr build(
-    const CallDataModelInfer* req, size_t& buffer_index,
-    const std::vector<BufferRawPtrs>& input_buffers,
-    std::vector<size_t>& input_offsets,
-    const std::vector<BufferRawPtrs>& output_buffers,
-    std::vector<size_t>& output_offsets, const size_t& batch_size,
-    size_t& batch_offset) {
+  static InferenceRequestPtr build(const CallDataModelInfer* req,
+                                   const BufferRawPtrs& input_buffers,
+                                   std::vector<size_t>& input_offsets,
+                                   const BufferRawPtrs& output_buffers,
+                                   std::vector<size_t>& output_offsets) {
     auto request = std::make_shared<InferenceRequest>();
     const auto& grpc_request = req->getRequest();
 
@@ -379,67 +377,47 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
 
     request->callback_ = nullptr;
 
-    auto buffer_index_backup = buffer_index;
-    auto batch_offset_backup = batch_offset;
-
     for (const auto& input : grpc_request.inputs()) {
-      auto buffers = input_buffers[buffer_index];
+      const auto& buffers = input_buffers;
+      auto index = 0;
       for (auto& buffer : buffers) {
-        auto& offset = input_offsets[buffer_index];
+        auto& offset = input_offsets[index];
 
         request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
         const auto& last_input = request->inputs_.back();
         offset += (last_input.getSize() * last_input.getDatatype().size());
-      }
-      batch_offset++;
-      if (batch_offset == batch_size) {
-        batch_offset = 0;
-        buffer_index++;
-        // std::fill(input_offsets.begin(), input_offsets.end(), 0);
+        index++;
       }
     }
 
     // TODO(varunsh): output_offset is currently ignored! The size of the
     // output needs to come from the worker but we have no such information.
-    buffer_index = buffer_index_backup;
-    batch_offset = batch_offset_backup;
-
     if (grpc_request.outputs_size() != 0) {
       for (const auto& output : grpc_request.outputs()) {
         // TODO(varunsh): we're ignoring incoming output data
         (void)output;
-        auto buffers = output_buffers[buffer_index];
+        const auto& buffers = output_buffers;
+        auto index = 0;
         for (auto& buffer : buffers) {
-          auto& offset = output_offsets[buffer_index];
+          auto& offset = output_offsets[index];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
             static_cast<std::byte*>(buffer->data()) + offset);
-        }
-        batch_offset++;
-        if (batch_offset == batch_size) {
-          batch_offset = 0;
-          buffer_index++;
-          std::fill(output_offsets.begin(), output_offsets.end(), 0);
+          index++;
         }
       }
     } else {
       for (const auto& input : grpc_request.inputs()) {
         (void)input;  // suppress unused variable warning
-        auto buffers = output_buffers[buffer_index];
+        const auto& buffers = output_buffers;
         for (size_t j = 0; j < buffers.size(); j++) {
           auto& buffer = buffers[j];
-          const auto& offset = output_offsets[buffer_index];
+          const auto& offset = output_offsets[j];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
             static_cast<std::byte*>(buffer->data()) + offset);
-        }
-        batch_offset++;
-        if (batch_offset == batch_size) {
-          batch_offset = 0;
-          buffer_index++;
-          std::fill(output_offsets.begin(), output_offsets.end(), 0);
         }
       }
     }
@@ -491,18 +469,16 @@ class GrpcApiUnary : public Interface {
   }
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t& buffer_index, const std::vector<BufferRawPtrs>& input_buffers,
-    std::vector<size_t>& input_offsets,
-    const std::vector<BufferRawPtrs>& output_buffers,
-    std::vector<size_t>& output_offsets, const size_t& batch_size,
-    size_t& batch_offset) override {
+    const BufferRawPtrs& input_buffers, std::vector<size_t>& input_offsets,
+    const BufferRawPtrs& output_buffers,
+    std::vector<size_t>& output_offsets) override {
 #ifdef PROTEUS_ENABLE_LOGGING
     const auto& logger = this->getLogger();
 #endif
     try {
-      auto request = RequestBuilder::build(
-        this->calldata_, buffer_index, input_buffers, input_offsets,
-        output_buffers, output_offsets, batch_size, batch_offset);
+      auto request =
+        RequestBuilder::build(this->calldata_, input_buffers, input_offsets,
+                              output_buffers, output_offsets);
       Callback callback =
         std::bind(grpcUnaryCallback, this->calldata_, std::placeholders::_1);
       request->setCallback(std::move(callback));

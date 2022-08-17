@@ -19,18 +19,17 @@
 
 #include "proteus/clients/native_internal.hpp"
 
-#include <algorithm>   // for fill
-#include <cstddef>     // for size_t, byte
+#include <cstddef>     // for byte, size_t
 #include <cstdint>     // for uint64_t
 #include <cstring>     // for memcpy
-#include <functional>  // for _Bind_helper<>::type, _Placeh...
+#include <functional>  // for multiplies
 #include <numeric>     // for accumulate
 #include <string>      // for string
 #include <utility>     // for move
 
 #include "proteus/buffers/buffer.hpp"       // for Buffer
-#include "proteus/core/data_types.hpp"      // for getSize
-#include "proteus/observation/logging.hpp"  // for Logger
+#include "proteus/core/data_types.hpp"      // for DataType
+#include "proteus/observation/logging.hpp"  // for Logger, PROTEUS_LOG_ERROR
 
 namespace proteus {
 template <typename T>
@@ -71,76 +70,57 @@ using InputBuilder = InferenceRequestInputBuilder<InferenceRequestInput>;
 template <>
 class InferenceRequestBuilder<InferenceRequest> {
  public:
-  static InferenceRequestPtr build(
-    const InferenceRequest &req, size_t &buffer_index,
-    const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) {
+  static InferenceRequestPtr build(const InferenceRequest &req,
+                                   const BufferRawPtrs &input_buffers,
+                                   std::vector<size_t> &input_offsets,
+                                   const BufferRawPtrs &output_buffers,
+                                   std::vector<size_t> &output_offsets) {
     auto request = std::make_shared<InferenceRequest>();
 
     request->id_ = req.id_;
     request->parameters_ = req.parameters_;
     request->callback_ = nullptr;
 
-    auto buffer_index_backup = buffer_index;
-    auto batch_offset_backup = batch_offset;
-
     for (const auto &input : req.inputs_) {
-      const auto &buffers = input_buffers[buffer_index];
+      const auto &buffers = input_buffers;
+      auto index = 0;
       for (auto &buffer : buffers) {
-        auto &offset = input_offsets[buffer_index];
+        auto &offset = input_offsets[index];
 
         request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
         const auto &last_input = request->inputs_.back();
         offset += (last_input.getSize() * last_input.getDatatype().size());
-      }
-      batch_offset++;
-      if (batch_offset == batch_size) {
-        batch_offset = 0;
-        buffer_index++;
-        // std::fill(input_offsets.begin(), input_offsets.end(), 0);
+        index++;
       }
     }
 
     // TODO(varunsh): output_offset is currently ignored! The size of the output
     // needs to come from the worker but we have no such information.
-    buffer_index = buffer_index_backup;
-    batch_offset = batch_offset_backup;
     if (!req.outputs_.empty()) {
       for (const auto &output : req.outputs_) {
-        const auto &buffers = output_buffers[buffer_index];
+        const auto &buffers = output_buffers;
+        auto index = 0;
         for (auto &buffer : buffers) {
-          const auto &offset = output_offsets[buffer_index];
+          const auto &offset = output_offsets[index];
 
           request->outputs_.emplace_back(output);
           request->outputs_.back().setData(
             static_cast<std::byte *>(buffer->data()) + offset);
-        }
-        batch_offset++;
-        if (batch_offset == batch_size) {
-          batch_offset = 0;
-          buffer_index++;
-          std::fill(output_offsets.begin(), output_offsets.end(), 0);
+          index++;
         }
       }
     } else {
       for (const auto &input : req.inputs_) {
         (void)input;  // suppress unused variable warning
-        const auto &buffers = output_buffers[buffer_index];
+        const auto &buffers = output_buffers;
+        auto index = 0;
         for (auto &buffer : buffers) {
-          const auto &offset = output_offsets[buffer_index];
+          const auto &offset = output_offsets[index];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
             static_cast<std::byte *>(buffer->data()) + offset);
-        }
-        batch_offset++;
-        if (batch_offset == batch_size) {
-          batch_offset = 0;
-          buffer_index++;
-          std::fill(output_offsets.begin(), output_offsets.end(), 0);
+          index++;
         }
       }
     }
@@ -168,14 +148,11 @@ std::promise<proteus::InferenceResponse> *CppNativeApi::getPromise() {
 // }
 
 std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
-  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
-  auto request = RequestBuilder::build(
-    this->request_, buffer_index, input_buffers, input_offsets, output_buffers,
-    output_offsets, batch_size, batch_offset);
+  const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+  const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
+  auto request =
+    RequestBuilder::build(this->request_, input_buffers, input_offsets,
+                          output_buffers, output_offsets);
   Callback callback =
     [promise = std::move(this->promise_)](const InferenceResponse &response) {
       promise->set_value(response);

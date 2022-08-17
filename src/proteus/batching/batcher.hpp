@@ -20,14 +20,12 @@
 #ifndef GUARD_PROTEUS_BATCHING_BATCHER
 #define GUARD_PROTEUS_BATCHING_BATCHER
 
-#include <chrono>              // for system_clock::time_point
-#include <condition_variable>  // for condition_variable
-#include <cstddef>             // for size_t
-#include <memory>              // for unique_ptr, shared_ptr
-#include <mutex>               // for mutex
-#include <string>              // for string
-#include <thread>              // for thread
-#include <vector>              // for vector
+#include <chrono>   // for system_clock::time_point
+#include <cstddef>  // for size_t
+#include <memory>   // for unique_ptr, shared_ptr
+#include <string>   // for string
+#include <thread>   // for thread
+#include <vector>   // for vector
 
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/predict_api.hpp"      // for RequestParameters
@@ -37,6 +35,7 @@
 #include "proteus/observation/tracing.hpp"   // for TracePtr
 
 namespace proteus {
+class Buffer;
 class WorkerInfo;
 }  // namespace proteus
 
@@ -50,15 +49,47 @@ enum class BatcherStatus { kNew, kRun, kInactive, kDead };
  * metadata that should be sent to the worker.
  *
  */
-struct Batch {
-  std::unique_ptr<std::vector<InferenceRequestPtr>> requests;
-  std::unique_ptr<std::vector<BufferPtrs>> input_buffers;
-  std::unique_ptr<std::vector<BufferPtrs>> output_buffers;
+class Batch {
+ public:
+  explicit Batch(const WorkerInfo* worker);
+  ~Batch();
+
+  void addRequest(InferenceRequestPtr request);
+
+  const InferenceRequestPtr& getRequest(int index);
+  const std::vector<InferenceRequestPtr>& getRequests();
+  const BufferPtrs& getInputBuffers() const;
+  const BufferPtrs& getOutputBuffers() const;
+  std::vector<Buffer*> getRawInputBuffers() const;
+  std::vector<Buffer*> getRawOutputBuffers() const;
+
+  bool empty() const;
+  size_t size() const;
+  size_t input_size() const;
+  size_t output_size() const;
+
 #ifdef PROTEUS_ENABLE_TRACING
-  std::vector<TracePtr> traces;
+  void addTrace(TracePtr trace);
+  TracePtr& getTrace(int index);
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
-  std::vector<std::chrono::high_resolution_clock::time_point> start_times;
+  void addTime(std::chrono::high_resolution_clock::time_point timestamp);
+  std::chrono::high_resolution_clock::time_point getTime(int index);
+#endif
+
+  auto begin() const { return requests_.begin(); }
+  auto end() const { return requests_.end(); }
+
+ private:
+  const WorkerInfo* worker_;
+  std::vector<InferenceRequestPtr> requests_;
+  std::vector<BufferPtr> input_buffers_;
+  std::vector<BufferPtr> output_buffers_;
+#ifdef PROTEUS_ENABLE_TRACING
+  std::vector<TracePtr> traces_;
+#endif
+#ifdef PROTEUS_ENABLE_METRICS
+  std::vector<std::chrono::high_resolution_clock::time_point> start_times_;
 #endif
 };
 
@@ -139,8 +170,6 @@ class Batcher {
   std::shared_ptr<BlockingQueue<InterfacePtr>> input_queue_;
   std::shared_ptr<BatchPtrQueue> output_queue_;
   std::thread thread_;
-  std::condition_variable cv_;
-  std::mutex cv_m_;
   std::string model_;
   RequestParameters parameters_;
 

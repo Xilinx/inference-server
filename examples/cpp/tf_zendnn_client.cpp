@@ -17,20 +17,22 @@
  * @brief Implements a client application for TfZendnn worker
  */
 
-#include <array>                  // for array
+#include <algorithm>              // for copy, max
+#include <chrono>                 // for milliseconds, duration_cast, operator-
 #include <cmath>                  // for exp
-#include <cstdint>                // for int8_t, uint64_t
-#include <cstdlib>                // for getenv, size_t
-#include <fstream>                // For files
-#include <future>                 // for future
+#include <cstdint>                // for uint64_t
+#include <cstdlib>                // for exit, getenv, size_t
+#include <fstream>                // for fstream
 #include <initializer_list>       // for initializer_list
-#include <iostream>               // for operator<<, basic_ostream::operator<<
-#include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
+#include <iostream>               // for operator<<, basic_ostream, endl
+#include <memory>                 // for allocator_traits<>::value_type
+#include <opencv2/core.hpp>       // for Mat, MatSize, operator*, operator-
 #include <opencv2/imgcodecs.hpp>  // for imread
-#include <opencv2/imgproc.hpp>    // for resize
+#include <opencv2/imgproc.hpp>    // for resize, cvtColor, INTER_LINEAR, COL...
 #include <queue>                  // for priority_queue, queue
-#include <string>                 // for string, allocator, operator==, basi...
-#include <utility>                // for pair, move
+#include <string>                 // for string, operator+, allocator, opera...
+#include <unordered_set>          // for operator==, unordered_set, unordere...
+#include <utility>                // for pair
 #include <vector>                 // for vector
 
 #include "proteus/proteus.hpp"  // for InferenceResponseFuture, terminate
@@ -275,8 +277,8 @@ int main() {
     auto images = preprocess(paths, options.input_size, options.resize_method);
 
     const std::initializer_list<uint64_t> shape = {
-      static_cast<long unsigned>(options.input_size),
-      static_cast<long unsigned>(options.input_size), 3};
+      static_cast<uint64_t>(options.input_size),
+      static_cast<uint64_t>(options.input_size), 3};
     std::queue<proteus::InferenceResponseFuture> queue;
     proteus::InferenceRequest request;
     auto start = std::chrono::high_resolution_clock::now();  // Timing the start
@@ -317,8 +319,8 @@ int main() {
 
     // inference
     const std::initializer_list<uint64_t> shape = {
-      static_cast<long unsigned>(options.input_size),
-      static_cast<long unsigned>(options.input_size), 3};
+      static_cast<uint64_t>(options.input_size),
+      static_cast<uint64_t>(options.input_size), 3};
     // Warmup laps to get the best performance
     for (int step = 0; step < options.warmup_step; step++) {
       std::queue<proteus::InferenceResponseFuture> queue;
@@ -348,11 +350,11 @@ int main() {
     time_tmp = duration.count() / options.steps;
   }
 
-  if (!options.image_location.empty())
+  if (!options.image_location.empty()) {
     std::cout << "\nTime taken for " + options.image_location + " : " +
                    std::to_string(time_tmp)
               << "ms" << std::endl;
-  else {
+  } else {
     std::cout << "\nAverage time taken for " +
                    std::to_string(options.batch_size) +
                    " images: " + std::to_string(time_tmp)

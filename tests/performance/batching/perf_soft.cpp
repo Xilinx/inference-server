@@ -72,9 +72,6 @@ class PerfSoftBatcherFixture
       std::this_thread::sleep_for(std::chrono::microseconds(delay));
       if (valid_read) {
         count++;
-        this->worker_->putInputBuffer(std::move((*(batch->input_buffers))[0]));
-        this->worker_->putOutputBuffer(
-          std::move((*(batch->output_buffers))[0]));
       }
     } while (valid_read);
     return count;
