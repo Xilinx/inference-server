@@ -26,7 +26,6 @@
 
 #include "proteus/batching/batcher.hpp"      // for Batcher
 #include "proteus/buffers/buffer.hpp"        // IWYU pragma: keep
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/predict_api.hpp"      // for RequestParameters
 #include "proteus/core/worker_info.hpp"      // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"  // for BufferPtrs

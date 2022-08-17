@@ -24,7 +24,7 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"    // for Client
+#include "proteus/clients/client.hpp"    // IWYU pragma: export
 #include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
 namespace proteus {

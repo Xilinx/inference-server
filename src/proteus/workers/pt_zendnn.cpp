@@ -17,28 +17,36 @@
  * @brief Implements the PtZendnn worker
  */
 
+#include <torch/script.h>  // for IValue, Tensor, Device
+
+#include <algorithm>   // for copy
+#include <chrono>      // for duration, operator-
 #include <cstddef>     // for size_t, byte
-#include <cstdint>     // for uint32_t, int32_t
-#include <filesystem>  // for path
+#include <cstdint>     // for int32_t, uint64_t
+#include <cstring>     // for memcpy
+#include <exception>   // for exception
+#include <filesystem>  // for path, exists, filesystem
+#include <functional>  // for multiplies
 #include <memory>      // for unique_ptr, allocator
-#include <string>      // for string
+#include <numeric>     // for accumulate
+#include <ratio>       // for milli, micro
+#include <string>      // for string, operator+, to_s...
 #include <thread>      // for thread
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "proteus/batching/hard.hpp"          // for HardBatcher
+#include "proteus/batching/hard.hpp"          // for Batch, BatchPtrQueue
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
-#include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
-#include "proteus/helpers/string.hpp"         // for endswith
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/data_types.hpp"        // for DataType, DataType::FP32
+#include "proteus/core/exceptions.hpp"        // for external_error, file_no...
+#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Requ...
+#include "proteus/helpers/declarations.hpp"   // for InferenceResponseOutput
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/metrics.hpp"    // for Metrics
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/workers/worker.hpp"         // for Worker
-#include "torch/script.h"                     // for PyTorch
+#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
+#include "proteus/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace fs = std::filesystem;
 

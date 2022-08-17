@@ -20,28 +20,19 @@
 
 #include "proteus/clients/native.hpp"
 
-#include <cstdlib>        // for getenv
-#include <future>         // for promise
-#include <memory>         // for unique_ptr, make_unique
-#include <stdexcept>      // for invalid_argument
-#include <string>         // for string, basic_string
-#include <unordered_map>  // for unordered_map, operat...
-#include <unordered_set>  // for unordered_set
-#include <utility>        // for move, pair, make_pair
+#include <future>   // for future, promise
+#include <memory>   // for unique_ptr, make_unique
+#include <string>   // for string
+#include <utility>  // for move
 
-#include "proteus/batching/batcher.hpp"         // for Batcher
 #include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
 #include "proteus/clients/native_internal.hpp"  // for CppNativeApi
-#include "proteus/core/api.hpp"                 // for modelLoad
-#include "proteus/core/exceptions.hpp"          // for bad_status
-#include "proteus/core/manager.hpp"             // for Manager
-#include "proteus/core/worker_info.hpp"         // for WorkerInfo
-#include "proteus/helpers/exec.hpp"             // for exec
+#include "proteus/core/api.hpp"                 // for modelLoad, workerLoad
+#include "proteus/core/exceptions.hpp"          // for invalid_argument
+#include "proteus/core/interface.hpp"           // for Interface
 #include "proteus/helpers/string.hpp"           // for toLower
-#include "proteus/observation/logging.hpp"      // for initLogging
 #include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
-#include "proteus/observation/tracing.hpp"      // for startTrace, startTracer
-#include "proteus/version.hpp"                  // for kProteusVersion
+#include "proteus/observation/tracing.hpp"      // for startTrace, Trace
 
 namespace proteus {
 

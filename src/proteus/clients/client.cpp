@@ -14,8 +14,8 @@
 
 #include "proteus/clients/client.hpp"
 
-#include "proteus/observation/logging.hpp"
-#include "proteus/servers/server.hpp"
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/observation/logging.hpp"  // for getLogDirectory, initLogger
 
 namespace proteus {
 

@@ -13,12 +13,14 @@
 // limitations under the License.
 
 #include <algorithm>  // for find
+#include <chrono>     // for milliseconds
 #include <memory>     // for allocator, unique_ptr
-#include <stdexcept>  // for runtime_error
-#include <string>     // for string
+#include <string>     // for string, basic_string
+#include <thread>     // for sleep_for
+#include <vector>     // for vector
 
-#include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
+#include "proteus/proteus.hpp"                 // for NativeClient, GrpcClient
+#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
 void test(proteus::Client* client) {
   const std::string worker = "echo";

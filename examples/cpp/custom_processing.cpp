@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <algorithm>  // for max, fill
-#include <array>      // for array
-#include <chrono>     // for seconds
-#include <cmath>      // for exp
-#include <cstdint>    // for int8_t, uint64_t, int32_t
-#include <cstdlib>    // for exit, getenv, size_t
-#include <future>
+#include <algorithm>              // for max, fill
+#include <array>                  // for array
+#include <cmath>                  // for exp
+#include <cstdint>                // for int8_t, uint64_t, int32_t
+#include <cstdlib>                // for exit, getenv, size_t
 #include <initializer_list>       // for initializer_list
 #include <iostream>               // for operator<<, basic_ostream::operator<<
 #include <memory>                 // for allocator, allocator_traits<>::valu...
@@ -27,10 +25,14 @@
 #include <opencv2/imgproc.hpp>    // for resize
 #include <queue>                  // for priority_queue
 #include <string>                 // for string, operator==, basic_string
-#include <thread>                 // for sleep_for
 #include <unordered_set>          // for operator==, unordered_set, unordere...
 #include <utility>                // for pair
 #include <vector>                 // for vector
+
+#ifdef ENABLE_GRPC
+#include <chrono>  // for seconds
+#include <thread>  // for sleep_for
+#endif
 
 // +include:
 #include "proteus/proteus.hpp"

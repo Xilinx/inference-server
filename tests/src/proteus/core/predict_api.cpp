@@ -17,11 +17,15 @@
  * @brief Implements the fake predict api InferenceRequest
  */
 
-#include <memory>  // for make_unique
-#include <string>  // for string
-#include <vector>  // for vector
+#include "proteus/core/predict_api.hpp"  // for InferenceRequestInput
 
-#include "proteus/core/fake_predict_api.hpp"
+#include <cstddef>  // for size_t
+#include <memory>   // for make_unique
+#include <string>   // for string
+#include <vector>   // for vector
+
+#include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
+#include "proteus/helpers/declarations.hpp"   // for BufferRawPtrs
 
 namespace proteus {
 

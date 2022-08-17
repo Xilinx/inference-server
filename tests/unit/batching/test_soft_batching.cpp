@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstddef>   // for size_t
-#include <cstdint>   // for uint8_t, uint64_t
-#include <memory>    // for allocator, make_unique
-#include <numeric>   // for accumulate
-#include <optional>  // for optional
-#include <utility>   // for pair, move
-#include <vector>    // for vector
+#include <array>             // for array
+#include <cstddef>           // for size_t
+#include <cstdint>           // for uint8_t, uint64_t
+#include <initializer_list>  // for initializer_list
+#include <memory>            // for allocator, make_unique
+#include <optional>          // for optional
+#include <ostream>           // for operator<<, basic_ost...
+#include <utility>           // for move
+#include <vector>            // for vector
 
-#include "gtest/gtest.h"                        // for EXPECT_EQ, UnitTest
+#include "gtest/gtest.h"                        // for ParamIteratorInterface
 #include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
 #include "proteus/buffers/buffer.hpp"           // for Buffer
 #include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
@@ -30,6 +32,7 @@
 #include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"     // for BufferPtrs
+#include "proteus/observation/logging.hpp"      // for initLogger, LogLevel
 
 namespace proteus {
 

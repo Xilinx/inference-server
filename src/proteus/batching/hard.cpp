@@ -25,7 +25,6 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "proteus/buffers/buffer.hpp"
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
 #include "proteus/core/exceptions.hpp"       // for invalid_argument
 #include "proteus/core/interface.hpp"        // for Interface

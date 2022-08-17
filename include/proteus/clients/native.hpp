@@ -20,11 +20,10 @@
 #ifndef GUARD_PROTEUS_CLIENTS_NATIVE
 #define GUARD_PROTEUS_CLIENTS_NATIVE
 
-#include <cstddef>  // for size_t
-#include <string>   // for string
-#include <vector>   // for vector
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"        // for Client
+#include "proteus/clients/client.hpp"        // IWYU pragma: export
 #include "proteus/core/predict_api.hpp"      // for InferenceRequest (ptr only)
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseFuture
 

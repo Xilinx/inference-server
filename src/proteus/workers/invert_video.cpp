@@ -25,7 +25,6 @@
 #include <opencv2/videoio.hpp>    // for VideoCapture, CV_CAP_PRO...
 #include <string>                 // for string, operator+, char_...
 #include <thread>                 // for thread
-#include <utility>                // for move
 #include <vector>                 // for vector
 
 #include "proteus/batching/batcher.hpp"       // for Batch, BatchPtrQueue

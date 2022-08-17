@@ -24,6 +24,8 @@
 #include <string>   // for string
 #include <utility>  // for move
 
+#include "proteus/buffers/buffer.hpp"       // IWYU pragma: keep
+#include "proteus/core/interface.hpp"       // IWYU pragma: keep
 #include "proteus/core/worker_info.hpp"     // for WorkerInfo
 #include "proteus/observation/logging.hpp"  // for Logger, Loggers, Loggers:...
 

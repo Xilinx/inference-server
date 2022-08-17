@@ -17,14 +17,15 @@
 #include <json/reader.h>  // for CharReader, CharReaderBui...
 #include <json/value.h>   // for Value, arrayValue
 
-#include <algorithm>   // for transform
-#include <functional>  // for _Bind_helper<>::type, _Pl...
-#include <memory>      // for allocator, shared_ptr
-#include <string>      // for string, operator+, char_t...
-#include <utility>     // for move
+#include <algorithm>  // for transform
+#include <cctype>     // for tolower
+#include <memory>     // for allocator, shared_ptr
+#include <string>     // for string, operator+, char_t...
+#include <utility>    // for move
 
-#include "proteus/batching/batcher.hpp"  // for Batcher
-#include "proteus/clients/http_internal.hpp"
+#include "proteus/batching/batcher.hpp"           // for Batcher
+#include "proteus/clients/http_internal.hpp"      // for RequestBuilder
+#include "proteus/core/exceptions.hpp"            // for invalid_argument
 #include "proteus/core/manager.hpp"               // for Manager
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
 #include "proteus/core/worker_info.hpp"           // for WorkerInfo

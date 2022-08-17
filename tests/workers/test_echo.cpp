@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdint>    // for uint32_t
-#include <future>     // for future
-#include <memory>     // for allocator, make_shared, __shared_ptr_...
-#include <stdexcept>  // for runtime_error
-#include <tuple>      // for tuple, get
-#include <vector>     // for vector
+#include <chrono>   // for seconds
+#include <cstdint>  // for uint32_t
+#include <memory>   // for allocator, make_shared, __shared_ptr_...
+#include <thread>   // for sleep_for
+#include <tuple>    // for tuple, get
+#include <vector>   // for vector
 
-#include "gtest/gtest.h"        // for Message, AssertionResult, TestPartResult
-#include "proteus/proteus.hpp"  // for InferenceRequestInput, RequestParameters
+#include "gtest/gtest.h"        // for ParamIteratorInterface, Message, Test...
+#include "proteus/proteus.hpp"  // for RequestParameters, InferenceRequestInput
 
 namespace proteus {
 

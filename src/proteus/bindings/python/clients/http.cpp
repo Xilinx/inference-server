@@ -19,10 +19,13 @@
 
 #include "proteus/clients/http.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <pybind11/cast.h>      // for arg
+#include <pybind11/pybind11.h>  // for class_, init
+#include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"
+#include <unordered_map>  // for unordered_map
+
+#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
 
 namespace py = pybind11;
 
