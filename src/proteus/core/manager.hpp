@@ -36,10 +36,8 @@
 #include "proteus/helpers/queue.hpp"        // for BlockingConcurrentQueue
 #include "proteus/observation/logging.hpp"  // for LoggerPtr
 
-// namespace proteus {
-// class WorkerInfo;
-// }
 // IWYU pragma: no_forward_declare proteus::RequestParameters
+// IWYU pragma: no_forward_declare proteus::WorkerInfo
 
 namespace proteus {
 

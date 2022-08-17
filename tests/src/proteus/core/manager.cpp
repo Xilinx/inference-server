@@ -20,17 +20,16 @@
 
 #include "proteus/core/manager.hpp"
 
-#include <stdexcept>  // for invalid_argument
-#include <thread>     // for thread
-#include <utility>    // for pair, make_pair, move
+#include <thread>   // for thread
+#include <utility>  // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/exceptions.hpp"   // for invalid_argument
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
 #include "proteus/workers/worker.hpp"    // for Worker
 
 namespace proteus {
 
-Manager::Manager() {}
+Manager::Manager() = default;
 
 std::string Manager::loadWorker(std::string const& key,
                                 RequestParameters parameters) {

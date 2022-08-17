@@ -17,29 +17,45 @@
  * @brief Implements the TfZendnn worker
  */
 
-#include <cstddef>  // for size_t, byte
-#include <cstdint>  // for uint32_t, int32_t
-#include <memory>   // for unique_ptr, allocator
-#include <string>   // for string
-#include <thread>   // for thread
-#include <utility>  // for move
-#include <vector>   // for vector
+#include <tensorflow/c/c_api.h>                         // for TF_Version
+#include <tensorflow/core/framework/graph.pb.h>         // for GraphDef
+#include <tensorflow/core/framework/tensor.h>           // for Tensor
+#include <tensorflow/core/framework/tensor_shape.h>     // for TensorShape
+#include <tensorflow/core/framework/tensor_shape.pb.h>  // for tensorflow
+#include <tensorflow/core/framework/tensor_types.h>     // for TTypes<>::Flat
+#include <tensorflow/core/framework/types.pb.h>         // for DT_FLOAT
+#include <tensorflow/core/platform/env.h>               // for ReadBinaryProto
+#include <tensorflow/core/platform/status.h>            // for Status
+#include <tensorflow/core/protobuf/config.pb.h>         // for ConfigProto
+#include <tensorflow/core/public/session.h>             // for NewSession
+#include <tensorflow/core/public/session_options.h>     // for SessionOptions
 
-#include "proteus/batching/hard.hpp"          // for HardBatcher
+#include <algorithm>   // for copy, max
+#include <chrono>      // for milliseconds
+#include <cstddef>     // for size_t, byte
+#include <cstdint>     // for int32_t, uint...
+#include <cstring>     // for memcpy
+#include <functional>  // for multiplies
+#include <memory>      // for allocator
+#include <numeric>     // for accumulate
+#include <string>      // for string, opera...
+#include <thread>      // for thread
+#include <utility>     // for pair, move
+#include <vector>      // for vector
+
+#include "proteus/batching/hard.hpp"          // for Batch, BatchP...
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
-#include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABL...
+#include "proteus/core/data_types.hpp"        // for DataType, Dat...
+#include "proteus/core/exceptions.hpp"        // for external_error
+#include "proteus/core/predict_api.hpp"       // for InferenceResp...
+#include "proteus/helpers/declarations.hpp"   // for InferenceResp...
 #include "proteus/helpers/string.hpp"         // for endsWith
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/metrics.hpp"    // for Metrics
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/workers/worker.hpp"         // for Worker
-#include "tensorflow/c/c_api.h"               // for TensorFlow version
-#include "tensorflow/core/platform/env.h"     // for TensorFlow environment
-#include "tensorflow/core/public/session.h"   // for TensorFlow sessions
+#include "proteus/observation/logging.hpp"    // for Logger, PROTE...
+#include "proteus/observation/metrics.hpp"    // for Metrics, Metr...
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/workers/worker.hpp"         // for Worker, kNumB...
 
 namespace tf = ::tensorflow;
 

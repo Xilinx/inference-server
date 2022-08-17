@@ -22,7 +22,7 @@
 #include <cmath>                  // for exp
 #include <cstdint>                // for uint64_t
 #include <cstdlib>                // for exit, getenv, size_t
-#include <fstream>                // for fstream
+#include <fstream>                // IWYU pragma: keep
 #include <initializer_list>       // for initializer_list
 #include <iostream>               // for operator<<, basic_ostream, endl
 #include <memory>                 // for allocator_traits<>::value_type

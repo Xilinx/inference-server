@@ -19,8 +19,9 @@
 
 #include "proteus/servers/server.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <pybind11/cast.h>      // for arg
+#include <pybind11/pybind11.h>  // for class_, init
+#include <pybind11/stl.h>       // IWYU pragma: keep
 
 #include "proteus/bindings/python/helpers/docstrings.hpp"
 

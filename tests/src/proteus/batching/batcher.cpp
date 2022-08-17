@@ -19,26 +19,23 @@
 
 #include "proteus/batching/batcher.hpp"
 
-#include <chrono>      // for system_clock::time_point
 #include <cstddef>     // for size_t
+#include <exception>   // for exception
 #include <functional>  // for _Bind_helper<>::type
 #include <future>      // for promise
-#include <memory>      // for unique_ptr, shared_ptr
-#include <stdexcept>   // for invalid_argument
-#include <string>      // for operator+
+#include <memory>      // for shared_ptr, unique_ptr
+#include <string>      // for operator+, char_traits
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "proteus/buffers/buffer.hpp"         // IWYU pragma: keep
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "proteus/core/interface.hpp"         // for InterfacePtr, Interface
+#include "proteus/core/interface.hpp"         // for Interface
 #include "proteus/core/predict_api.hpp"       // for InferenceResponsePromis...
-#include "proteus/core/worker_info.hpp"       // for WorkerInfo
 #include "proteus/helpers/queue.hpp"          // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_DEBUG
+#include "proteus/observation/tracing.hpp"    // for Trace
 
 // IWYU pragma: no_forward_declare proteus::Buffer
 

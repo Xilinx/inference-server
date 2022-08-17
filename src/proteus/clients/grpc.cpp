@@ -21,7 +21,7 @@
 
 #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
 #include <google/protobuf/stubs/common.h>        // for string
-#include <grpcpp/grpcpp.h>                       // for ClientContext, Creat...
+#include <grpcpp/grpcpp.h>                       // for Status, ClientContext
 
 #include <cstddef>        // for byte, size_t
 #include <cstdint>        // for uint64_t, uint32_t
@@ -29,20 +29,17 @@
 #include <iostream>       // for operator<<, cout
 #include <map>            // for map
 #include <memory>         // for make_shared, reinter...
-#include <stdexcept>      // for runtime_error
-#include <string>         // for string, operator+
+#include <string>         // for string, basic_string
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for move
 #include <variant>        // for visit
 #include <vector>         // for vector
 
 #include "predict_api.grpc.pb.h"             // for GRPCInferenceService...
-#include "predict_api.pb.h"                  // for InferTensorContents
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_GRPC
+#include "predict_api.pb.h"                  // for RepeatedField, Infer...
 #include "proteus/core/data_types.hpp"       // for DataType, DataType::...
 #include "proteus/core/exceptions.hpp"       // for bad_status
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
-#include "proteus/servers/grpc_server.hpp"   // for start, stop
 
 using grpc::ClientContext;
 using grpc::Status;

@@ -24,8 +24,6 @@
 
 #ifdef PROTEUS_ENABLE_GRPC
 
-#include <string>
-
 namespace proteus::grpc {
 
 void start(int port);

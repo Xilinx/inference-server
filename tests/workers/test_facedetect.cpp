@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cmath>    // for abs
-#include <cstdlib>  // for getenv
+#include <cstdlib>  // for getenv, abs
 
 #include "facedetect.hpp"  // IWYU pragma: associated
 #include "gtest/gtest.h"   // for Test, AssertionResult, EXPECT_EQ

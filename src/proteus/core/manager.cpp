@@ -20,11 +20,11 @@
 
 #include "proteus/core/manager.hpp"
 
-#include <stdexcept>  // for invalid_argument
-#include <thread>     // for yield, thread
-#include <utility>    // for pair, make_pair, move
+#include <thread>   // for yield, thread
+#include <utility>  // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING, kMax...
+#include "proteus/build_options.hpp"     // for kMaxModelNameSize
+#include "proteus/core/exceptions.hpp"   // for invalid_argument
 #include "proteus/core/worker_info.hpp"  // for WorkerInfo
 #include "proteus/helpers/thread.hpp"    // for setThreadName
 #include "proteus/workers/worker.hpp"    // for Worker

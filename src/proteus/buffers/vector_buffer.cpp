@@ -19,8 +19,9 @@
 
 #include "proteus/buffers/vector_buffer.hpp"
 
-#include <memory>   // for make_unique
-#include <utility>  // for move
+#include <algorithm>  // for max
+#include <memory>     // for make_unique
+#include <utility>    // for move
 
 #include "proteus/helpers/declarations.hpp"  // for BufferPtrs
 

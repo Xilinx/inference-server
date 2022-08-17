@@ -19,14 +19,18 @@
 
 #include "proteus/core/predict_api.hpp"
 
-#include <pybind11/numpy.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <pybind11/attr.h>      // for keep_alive
+#include <pybind11/cast.h>      // for arg
+#include <pybind11/numpy.h>     // for array_t
+#include <pybind11/pybind11.h>  // for class_, init
+#include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include <sstream>
+#include <array>          // for array
+#include <sstream>        // IWYU pragma: keep
+#include <unordered_map>  // for unordered_map
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"
-#include "proteus/bindings/python/helpers/print.hpp"
+#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "proteus/bindings/python/helpers/print.hpp"       // for to_string
 
 namespace py = pybind11;
 

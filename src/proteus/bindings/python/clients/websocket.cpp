@@ -19,12 +19,15 @@
 
 #include "proteus/clients/websocket.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <pybind11/cast.h>      // for arg
+#include <pybind11/pybind11.h>  // for class_, init
+#include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include <sstream>
+#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"
+namespace proteus {
+class DataType;
+}
 
 namespace py = pybind11;
 

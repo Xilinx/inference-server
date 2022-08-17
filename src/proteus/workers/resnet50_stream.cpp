@@ -42,6 +42,7 @@
 
 #include "proteus/batching/batcher.hpp"       // for BatchPtr, BatchPtrQueue
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::STRING
 #include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "proteus/helpers/base64.hpp"         // for base64_encode

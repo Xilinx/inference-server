@@ -25,7 +25,7 @@ namespace proteus {
 
 class Buffer;
 
-struct Batch;
+class Batch;
 
 class Interface;
 using InterfacePtr = std::unique_ptr<Interface>;

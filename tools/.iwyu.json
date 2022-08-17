@@ -222,5 +222,29 @@
       "<drogon/HttpResponse.h>",
       "public"
     ]
+  },
+  {
+    "include": [
+      "@<ATen/.*>",
+      "private",
+      "\"torch/script.h\"",
+      "public"
+    ]
+  },
+  {
+    "include": [
+      "@<c10/.*>",
+      "private",
+      "\"torch/script.h\"",
+      "public"
+    ]
+  },
+  {
+    "include": [
+      "@<torch/.*>",
+      "private",
+      "\"torch/script.h\"",
+      "public"
+    ]
   }
 ]

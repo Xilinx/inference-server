@@ -12,13 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgproc.hpp>
+#include <cstdlib>                // for getenv
+#include <memory>                 // for allocator, unique_ptr
+#include <opencv2/core.hpp>       // for Mat, CV_32FC3
+#include <opencv2/imgcodecs.hpp>  // for imread
+#include <opencv2/imgproc.hpp>    // for cvtColor, COLOR_BGR2GRAY
+#include <string>                 // for string, operator+
+#include <thread>                 // for yield
+#include <vector>                 // for vector
 
-#include "gtest/gtest.h"        // for Message, AssertionResult, TestPartResult
-#include "proteus/proteus.hpp"  // for InferenceRequestInput, RequestParameters
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
+#include "proteus/proteus.hpp"                 // for InferenceRequestInput
+#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
 namespace proteus {
 

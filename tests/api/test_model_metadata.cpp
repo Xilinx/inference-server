@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <chrono>
-#include <string>  // for string
-#include <thread>
+#include <chrono>  // for seconds
+#include <memory>  // for unique_ptr
+#include <string>  // for allocator, string
+#include <thread>  // for sleep_for
+#include <vector>  // for vector
 
-#include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
+#include "proteus/proteus.hpp"                 // for ModelMetadata, NativeC...
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
 void test(proteus::Client* client) {

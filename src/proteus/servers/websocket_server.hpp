@@ -21,8 +21,8 @@
 #include <drogon/WebSocketController.h>  // for WS_PATH_ADD, WS_PATH_LIST...
 
 #include <cstddef>    // for size_t
+#include <exception>  // for exception
 #include <memory>     // for shared_ptr, allocator
-#include <stdexcept>  // for invalid_argument
 #include <string>     // for string
 #include <vector>     // for vector
 

@@ -21,37 +21,34 @@
 
 #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
-#include <grpcpp/grpcpp.h>                       // for Status, InsecureSer...
+#include <grpcpp/grpcpp.h>                       // for ServerCompletionQueue
 
-#include <algorithm>   // for fill, max, transform
-#include <cstddef>     // for size_t, byte
-#include <cstdint>     // for uint64_t, int16_t
-#include <cstring>     // for memcpy
-#include <exception>   // for exception
-#include <functional>  // for _Bind_helper<>::type
-#include <iostream>    // for operator<<, cout
-#include <memory>      // for unique_ptr, shared_ptr
-#include <stdexcept>   // for invalid_argument
-#include <thread>      // for thread, yield
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <cstddef>        // for size_t, byte
+#include <cstdint>        // for uint64_t, int16_t
+#include <cstring>        // for memcpy
+#include <exception>      // for exception
+#include <functional>     // for _Bind_helper<>::type
+#include <iostream>       // for operator<<, cout
+#include <memory>         // for unique_ptr, shared_ptr
+#include <string>         // for allocator, string
+#include <thread>         // for thread, yield
+#include <unordered_set>  // for unordered_set
+#include <utility>        // for move
+#include <vector>         // for vector
 
 #include "predict_api.grpc.pb.h"                  // for GRPCInferenceServic...
 #include "predict_api.pb.h"                       // for InferTensorContents
-#include "proteus/batching/batcher.hpp"           // for Batcher
 #include "proteus/buffers/buffer.hpp"             // for Buffer
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_LOGGING
 #include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
-#include "proteus/clients/native.hpp"             // for NativeClient
-#include "proteus/core/api.hpp"                   // for modelLoad
-#include "proteus/core/data_types.hpp"            // for DataType, mapStrToType
+#include "proteus/core/api.hpp"                   // for hasHardware, modelI...
+#include "proteus/core/data_types.hpp"            // for DataType, DataType:...
+#include "proteus/core/exceptions.hpp"            // for invalid_argument
 #include "proteus/core/interface.hpp"             // for Interface, Interfac...
-#include "proteus/core/model_repository.hpp"      // for ModelRepository
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
 #include "proteus/helpers/string.hpp"             // for toLower
-#include "proteus/observation/logging.hpp"        // for Logger
+#include "proteus/observation/logging.hpp"        // for Logger, Loggers
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
 
 namespace proteus {
@@ -65,6 +62,8 @@ class CallDataWorkerUnload;
 class CallDataServerLive;
 class CallDataServerMetadata;
 class CallDataServerReady;
+class CallDataHasHardware;
+class CallDataModelList;
 }  // namespace proteus
 
 // use aliases to prevent clashes between grpc:: and proteus::grpc::
@@ -745,7 +744,6 @@ class GrpcServer final {
   inference::GRPCInferenceService::AsyncService service_;
   std::unique_ptr<::grpc::Server> server_;
   std::vector<std::thread> threads_;
-  ModelRepository repository_;
 };
 
 namespace grpc {
