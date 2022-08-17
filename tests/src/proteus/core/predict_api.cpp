@@ -26,12 +26,9 @@
 namespace proteus {
 
 FakeInferenceRequest::FakeInferenceRequest(
-  InferenceRequestInput& req, size_t& buffer_index,
-  const std::vector<BufferRawPtrs>& input_buffers,
-  std::vector<size_t>& input_offsets,
-  const std::vector<BufferRawPtrs>& output_buffers,
-  std::vector<size_t>& output_offsets, const size_t& batch_size,
-  size_t& batch_offset) {
+  InferenceRequestInput& req, const BufferRawPtrs& input_buffers,
+  std::vector<size_t>& input_offsets, const BufferRawPtrs& output_buffers,
+  std::vector<size_t>& output_offsets) {
   this->id_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
   this->callback_ = nullptr;
@@ -40,13 +37,10 @@ FakeInferenceRequest::FakeInferenceRequest(
   this->outputs_.emplace_back();
 
   (void)req;
-  (void)buffer_index;
   (void)input_buffers;
   (void)input_offsets;
   (void)output_buffers;
   (void)output_offsets;
-  (void)batch_size;
-  (void)batch_offset;
 }
 
 FakeInferenceRequest::FakeInferenceRequest() {

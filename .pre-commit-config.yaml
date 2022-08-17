@@ -19,13 +19,18 @@ repos:
     rev: v0.6.10
     hooks:
     - id: cmake-format
+      args: [--style=file]
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: cpplint
   # general hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
     hooks:
       - id: check-added-large-files
       - id: pretty-format-json
-        args: [--autofix]
+        args: [--autofix, --no-sort-keys]
       - id: check-merge-conflict
       - id: trailing-whitespace
       - id: end-of-file-fixer

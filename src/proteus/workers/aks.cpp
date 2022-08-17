@@ -135,7 +135,6 @@ void Aks::doAcquire(RequestParameters* parameters) {
 }
 
 void Aks::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
   setThreadName("Aks");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -148,10 +147,10 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
       break;
     }
     PROTEUS_LOG_INFO(logger, "Got request in aks");
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      const auto& req = batch->getRequest(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      const auto& trace = batch->getTrace(j);
       trace->startSpan("aks");
 #endif
       InferenceResponse resp;
@@ -197,19 +196,16 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef PROTEUS_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+        std::chrono::high_resolution_clock::now() - batch->getTime(j));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
 #ifdef PROTEUS_ENABLE_TRACING
-      auto context = batch->traces.at(j)->propagate();
+      auto context = trace->propagate();
       resp.setContext(std::move(context));
 #endif
       req->runCallbackOnce(resp);
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "Aks ending");
 }

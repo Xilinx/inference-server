@@ -27,12 +27,16 @@ set -eo pipefail
 # turn on extended globbing
 shopt -s extglob
 
+iwyu=0
+tidy=0
 run=0
 check=0
 
 while true
 do
   case "$1" in
+    --iwyu      ) iwyu=1  ; shift 1 ;;
+    --tidy      ) tidy=1  ; shift 1 ;;
     --run       ) run=1   ; shift 1 ;;
     --check     ) check=1 ; shift 1 ;;
     -h | --help ) usage   ; exit  0 ;;
@@ -45,18 +49,42 @@ if [[ $run == 0 && $check == 0 ]]; then
     exit 1
 fi
 
+if [[ $iwyu == 0 && $tidy == 0 ]]; then
+    echo "At least one of --iwyu or --tidy must be set"
+    exit 1
+fi
+
+run_iwyu() {
+    source_file="$1"
+
+    echo $source_file
+    # strip the root_dir from the source file path
+    relative_path=${source_file##${root_dir}/}
+    cache_entry="$cache_dir/iwyu/$relative_path"
+    new_hash=$(md5sum $source_file | cut -d ' ' -f 1)
+    if [[ -f "$cache_entry" ]]; then
+        old_hash=$(tail -n 1 $cache_entry)
+        if [[ $old_hash == $new_hash ]]; then
+            return
+        fi
+    fi
+    mkdir -p $(dirname $cache_entry)
+    python3 /usr/local/bin/iwyu_tool.py -p ${build_dir} $source_file -- -Xiwyu --mapping_file=$root_dir/tools/.iwyu.json > $cache_entry 2>&1
+    echo $new_hash >> $cache_entry
+}
+
 run_tidy() {
     source_file="$1"
 
     echo $source_file
     # strip the root_dir from the source file path
     relative_path=${source_file##${root_dir}/}
-    cache_entry="$cache_dir/$relative_path"
+    cache_entry="$cache_dir/tidy/$relative_path"
     new_hash=$(md5sum $source_file | cut -d ' ' -f 1)
     if [[ -f "$cache_entry" ]]; then
         old_hash=$(tail -n 1 $cache_entry)
         if [[ $old_hash == $new_hash ]]; then
-            continue
+            return
         fi
     fi
     mkdir -p $(dirname $cache_entry)
@@ -66,10 +94,11 @@ run_tidy() {
 
 run_check() {
     source_file="$1"
+    linter="$2"
 
     # strip the root_dir from the source file path
     relative_path=${source_file##${root_dir}/}
-    cache_entry="$cache_dir/$relative_path"
+    cache_entry="$cache_dir/$linter/$relative_path"
     if [[ -f "$cache_entry" ]]; then
         if grep $source_file $cache_entry; then
             cat $cache_entry
@@ -95,7 +124,7 @@ if [[ ! -d $build_dir ]]; then
     exit 1
 fi
 
-cache_dir="$build_dir/tidy_cache"
+cache_dir="$build_dir/lint_cache"
 mkdir -p "$cache_dir"
 
 source_files=()
@@ -109,9 +138,19 @@ done
 
 for source_file in ${source_files[@]}; do
     if [[ $run == 1 ]]; then
-        run_tidy $source_file
+        if [[ $iwyu == 1 ]]; then
+            run_iwyu $source_file
+        fi
+        if [[ $tidy == 1 ]]; then
+            run_tidy $source_file
+        fi
     fi
     if [[ $check == 1 ]]; then
-        run_check $source_file
+        if [[ $iwyu == 1 ]]; then
+            run_check $source_file iwyu
+        fi
+        if [[ $tidy == 1 ]]; then
+            run_check $source_file tidy
+        fi
     fi
 done

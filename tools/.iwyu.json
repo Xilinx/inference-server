@@ -214,5 +214,13 @@
       "<drogon/HttpRequest.h>",
       "public"
     ]
+  },
+  {
+    "symbol": [
+      "drogon::HttpResponsePtr",
+      "private",
+      "<drogon/HttpResponse.h>",
+      "public"
+    ]
   }
 ]

@@ -166,7 +166,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
     }
 
     PROTEUS_LOG_INFO(logger, "Got request in ResNet50Stream");
-    for (auto& req : *(batch->requests)) {
+    for (const auto& req : *batch) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto key = req->getParameters()->get<std::string>("key");
@@ -312,9 +312,6 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
         }
       }
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "ResNet50Stream ending");
 }

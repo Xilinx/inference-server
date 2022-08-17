@@ -25,9 +25,9 @@
 #include <json/value.h>                   // for Value
 
 #include <cstddef>     // for size_t
+#include <exception>   // for invalid_argument
 #include <functional>  // for function
 #include <memory>      // for shared_ptr
-#include <stdexcept>   // for invalid_argument
 #include <string>      // for string
 #include <vector>      // for vector
 
@@ -63,13 +63,11 @@ Json::Value mapRequestToJson(const InferenceRequest &request);
 template <>
 class InferenceRequestBuilder<std::shared_ptr<Json::Value>> {
  public:
-  static InferenceRequestPtr build(
-    const std::shared_ptr<Json::Value> &req, size_t &buffer_index,
-    const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset);
+  static InferenceRequestPtr build(const std::shared_ptr<Json::Value> &req,
+                                   const BufferRawPtrs &input_buffers,
+                                   std::vector<size_t> &input_offsets,
+                                   const BufferRawPtrs &output_buffers,
+                                   std::vector<size_t> &output_offsets);
 };
 
 using RequestBuilder = InferenceRequestBuilder<std::shared_ptr<Json::Value>>;
@@ -96,11 +94,9 @@ class DrogonHttp : public Interface {
   DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) override;
+    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+    const BufferRawPtrs &output_buffers,
+    std::vector<size_t> &output_offsets) override;
 
   size_t getInputSize() override;
   void errorHandler(const std::exception &e) override;

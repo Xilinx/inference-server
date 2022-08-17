@@ -128,19 +128,14 @@ size_t DrogonWs::getInputSize() {
 }
 
 std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
-  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offset,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offset, const size_t &batch_size,
-  size_t &batch_offset) {
-  std::shared_ptr<InferenceRequest> request;
+  const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offset,
+  const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offset) {
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto &logger = this->getLogger();
 #endif
   try {
     auto request = RequestBuilder::build(
-      this->json_, buffer_index, input_buffers, input_offset, output_buffers,
-      output_offset, batch_size, batch_offset);
+      this->json_, input_buffers, input_offset, output_buffers, output_offset);
     Callback callback =
       [conn = std::move(this->conn_)](const InferenceResponse &response) {
         auto outputs = response.getOutputs();

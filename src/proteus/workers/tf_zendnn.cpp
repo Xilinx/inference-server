@@ -216,23 +216,22 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
 }
 
 void TfZendnn::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("TfZendnn");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
   while (true) {
+    std::unique_ptr<Batch> batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
     }
     PROTEUS_LOG_DEBUG(logger, "Got request in TfZendnn. Size: " +
-                                std::to_string(batch->requests->size()));
+                                std::to_string(batch->size()));
 
     std::vector<InferenceResponse> responses;
-    responses.reserve(batch->requests->size());
+    responses.reserve(batch->size());
 
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
@@ -242,11 +241,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     auto TotalStart = std::chrono::high_resolution_clock::now();
 
     // Find total number of images to initialize for TF tensor
-    unsigned tensor_count = 0;
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto req = batch->requests->at(j);
-      tensor_count += req->getInputs().size();
-    }
+    auto tensor_count = static_cast<int>(batch->size());
 
     // Initialize a TensorFlow tensor with required shape
     tf::Tensor input_tensor(
@@ -256,11 +251,11 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     uint64_t input_size = image_height_ * image_width_ * image_channels_;
     size_t vec_size = 0;
 
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      auto& req = batch->getRequest(j);
 
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      auto& trace = batch->getTrace(j);
       trace->startSpan("tfzendnn");
 #endif
       auto& resp = responses.emplace_back();
@@ -275,7 +270,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       // Get all the inputs from the requests and copy to the TensorFlow tensor
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
-        const float* floatBuffer = (float*)input_buffer;
+        const auto* floatBuffer = static_cast<float*>(input_buffer);
         std::copy(floatBuffer, floatBuffer + input_size,
                   input_tensor.flat<float>().data() + vec_size);
         vec_size = vec_size + input_size;
@@ -304,15 +299,17 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
     if (!status_.ok()) {
       PROTEUS_LOG_ERROR(logger, status_.ToString());
-      req->runCallbackError("Issue with prediction");
+      for (const auto& req : *batch) {
+        req->runCallbackError("Issue with prediction");
+      }
     }
     PROTEUS_LOG_DEBUG(logger, output_tensor[0].DebugString());
 
     // Copy the output from the model to the response object
     size_t response_size = output_classes_;
     std::vector<size_t> new_shape = {response_size};
-    for (unsigned int k = 0; k < batch->requests->size(); k++) {
-      auto req = (*batch->requests)[k];
+    for (unsigned int k = 0; k < batch->size(); k++) {
+      const auto& req = batch->getRequest(k);
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto& resp = responses[k];
@@ -341,7 +338,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       }
 
 #ifdef PROTEUS_ENABLE_TRACING
-      auto context = batch->traces.at(k)->propagate();
+      auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
 
@@ -357,14 +354,11 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef PROTEUS_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->start_times[k]);
+        std::chrono::high_resolution_clock::now() - batch->getTime(k));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "TfZendnn ending");
 }

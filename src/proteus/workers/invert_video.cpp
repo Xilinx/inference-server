@@ -108,7 +108,6 @@ void InvertVideo::doAcquire(RequestParameters* parameters) {
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
   setThreadName("InvertVideo");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -122,10 +121,10 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
     }
 
     PROTEUS_LOG_INFO(logger, "Got request in InvertVideo");
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      const auto& req = batch->getRequest(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      const auto& trace = batch->getTrace(j);
       trace->startSpan("InvertVideo");
 #endif
       auto inputs = req->getInputs();
@@ -193,13 +192,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         }
       }
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
-  // if (req != nullptr && req->getWsConn()->connected()) {
-  //   req->getWsConn()->shutdown(drogon::CloseCode::kNormalClosure);
-  // }
   PROTEUS_LOG_INFO(logger, "InvertVideo ending");
 }
 

@@ -21,9 +21,8 @@
 
 #include <utility>  // for move
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_TRACING
-#include "proteus/observation/logging.hpp"  // for getLogger, LoggerPtr
-#include "proteus/observation/tracing.hpp"  // for SpanPtr
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/observation/tracing.hpp"  // for TracePtr
 
 namespace proteus {
 

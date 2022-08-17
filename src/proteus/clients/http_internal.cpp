@@ -422,12 +422,9 @@ using OutputBuilder =
   InferenceRequestOutputBuilder<std::shared_ptr<Json::Value>>;
 
 InferenceRequestPtr RequestBuilder::build(
-  const std::shared_ptr<Json::Value> &req, size_t &buffer_index,
-  const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
+  const std::shared_ptr<Json::Value> &req, const BufferRawPtrs &input_buffers,
+  std::vector<size_t> &input_offsets, const BufferRawPtrs &output_buffers,
+  std::vector<size_t> &output_offsets) {
   auto request = std::make_shared<InferenceRequest>();
 
   if (req->isMember("id")) {
@@ -452,63 +449,53 @@ InferenceRequestPtr RequestBuilder::build(
 
   request->callback_ = nullptr;
 
-  auto buffer_index_backup = buffer_index;
-  auto batch_offset_backup = batch_offset;
   for (auto const &i : inputs) {
     if (!i.isObject()) {
       throw invalid_argument("At least one element in 'inputs' is not an obj");
     }
-    const auto &buffers = input_buffers[buffer_index];
+    const auto &buffers = input_buffers;
+    auto index = 0;
     for (const auto &buffer : buffers) {
-      auto &offset = input_offsets[buffer_index];
+      auto &offset = input_offsets[index];
 
       auto input =
         InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
       offset += (input.getSize() * input.getDatatype().size());
 
       request->inputs_.push_back(std::move(input));
-    }
-    batch_offset++;
-    if (batch_offset == batch_size) {
-      batch_offset = 0;
-      buffer_index++;
-      // std::fill(input_offsets.begin(), input_offsets.end(), 0);
+      index++;
     }
   }
 
   // TODO(varunsh): output_offset is currently ignored! The size of the output
   // needs to come from the worker but we have no such information.
-  buffer_index = buffer_index_backup;
-  batch_offset = batch_offset_backup;
   if (req->isMember("outputs")) {
     auto outputs = req->get("outputs", Json::arrayValue);
     for (auto const &i : outputs) {
-      auto buffers = output_buffers[buffer_index];
+      const auto &buffers = output_buffers;
+      auto index = 0;
       for (auto &buffer : buffers) {
-        auto &offset = output_offsets[buffer_index];
+        auto &offset = output_offsets[index];
 
         auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));
         output.setData(static_cast<std::byte *>(buffer->data()) + offset);
         request->outputs_.push_back(std::move(output));
         // output += request->outputs_.back().getSize(); // see TODO
+        index++;
       }
     }
   } else {
     for (auto const &i : inputs) {
       (void)i;  // suppress unused variable warning
-      const auto &buffers = output_buffers[buffer_index];
+      const auto &buffers = output_buffers;
+      auto index = 0;
       for (const auto &buffer : buffers) {
-        const auto &offset = output_offsets[buffer_index];
+        const auto &offset = output_offsets[index];
 
         request->outputs_.emplace_back();
         request->outputs_.back().setData(
           static_cast<std::byte *>(buffer->data()) + offset);
-      }
-      batch_offset++;
-      if (batch_offset == batch_size) {
-        batch_offset = 0;
-        buffer_index++;
-        std::fill(output_offsets.begin(), output_offsets.end(), 0);
+        index++;
       }
     }
   }
@@ -715,18 +702,15 @@ void propagate(drogon::HttpResponse *resp, const StringMap &context) {
 #endif
 
 std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
-  size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-  std::vector<size_t> &input_offsets,
-  const std::vector<BufferRawPtrs> &output_buffers,
-  std::vector<size_t> &output_offsets, const size_t &batch_size,
-  size_t &batch_offset) {
+  const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+  const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto &logger = this->getLogger();
 #endif
   try {
-    auto request = RequestBuilder::build(
-      this->json_, buffer_index, input_buffers, input_offsets, output_buffers,
-      output_offsets, batch_size, batch_offset);
+    auto request =
+      RequestBuilder::build(this->json_, input_buffers, input_offsets,
+                            output_buffers, output_offsets);
     Callback callback = [callback = std::move(this->callback_)](
                           const InferenceResponse &response) {
       drogon::HttpResponsePtr resp;
