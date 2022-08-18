@@ -67,8 +67,8 @@ std::string NativeClient::workerLoad(const std::string& model,
   return ::proteus::workerLoad(model_lower, parameters);
 }
 
-InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
-                                              InferenceRequest request) {
+InferenceResponseFuture NativeClient::modelInferAsync(
+  const std::string& workerName, const InferenceRequest& request) {
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
@@ -77,7 +77,7 @@ InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
   auto trace = startTrace(&(__func__[0]));
   trace->startSpan("C++ enqueue");
 #endif
-  auto api = std::make_unique<CppNativeApi>(std::move(request));
+  auto api = std::make_unique<CppNativeApi>(request);
   auto future = api->getPromise()->get_future();
 #ifdef PROTEUS_ENABLE_TRACING
   trace->endSpan();
@@ -90,7 +90,7 @@ InferenceResponseFuture NativeClient::enqueue(const std::string& workerName,
 
 InferenceResponse NativeClient::modelInfer(const std::string& model,
                                            const InferenceRequest& request) {
-  auto future = enqueue(model, request);
+  auto future = modelInferAsync(model, request);
   return future.get();
 }
 

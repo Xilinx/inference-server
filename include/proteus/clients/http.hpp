@@ -63,8 +63,11 @@ class HttpClient : public Client {
   void modelLoad(const std::string& model,
                  RequestParameters* parameters) override;
   void modelUnload(const std::string& model) override;
+
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
+  InferenceResponseFuture modelInferAsync(
+    const std::string& model, const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
 
   std::string workerLoad(const std::string& worker,

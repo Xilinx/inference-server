@@ -255,10 +255,10 @@ void HttpClient::workerUnload(const std::string& model) {
   }
 }
 
-InferenceResponse HttpClient::modelInfer(const std::string& model,
-                                         const InferenceRequest& request) {
-  auto* client = this->impl_->getClient();
-
+InferenceResponse runInference(drogon::HttpClient* client,
+                               const std::string& model,
+                               const InferenceRequest& request,
+                               const StringMap& headers) {
   assert(!request.getInputs().empty());
 
   auto json = mapRequestToJson(request);
@@ -266,7 +266,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   req->setMethod(drogon::Post);
   auto path = "/v2/models/" + model + "/infer";
   req->setPath(path);
-  addHeaders(req, headers_);
+  addHeaders(req, headers);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -276,6 +276,17 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
 
   auto resp = response->jsonObject();
   return mapJsonToResponse(resp.get());
+}
+
+InferenceResponseFuture HttpClient::modelInferAsync(
+  const std::string& model, const InferenceRequest& request) {
+  return std::async(runInference, this->impl_->getClient(), model, request,
+                    headers_);
+}
+
+InferenceResponse HttpClient::modelInfer(const std::string& model,
+                                         const InferenceRequest& request) {
+  return runInference(this->impl_->getClient(), model, request, headers_);
 }
 
 std::vector<std::string> HttpClient::modelList() {

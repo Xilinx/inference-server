@@ -41,6 +41,7 @@ std::vector<char> imgData;
 
 void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
              const std::string& workerName, FutureQueue& my_queue) {
+  proteus::NativeClient client;
   for (int i = 0; i < count; i++) {
     auto img = cv::imread(image_paths[start_index + i]);
     auto shape = {static_cast<uint64_t>(img.size[0]),
@@ -54,8 +55,7 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
     request.addInputTensor(static_cast<void*>(imgData.data()), shape,
                            proteus::DataType::UINT8);
 
-    auto future =
-      proteus::NativeClient::enqueue(workerName, std::move(request));
+    auto future = client.modelInferAsync(workerName, request);
     my_queue.enqueue(std::move(future));
   }
 }

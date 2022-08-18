@@ -151,8 +151,9 @@ using FutureQueue =
 
 void enqueue(int images, const std::string& workerName,
              proteus::InferenceRequest request, FutureQueue& my_queue) {
+  proteus::NativeClient client;
   for (int i = 0; i < images; i++) {
-    auto future = proteus::NativeClient::enqueue(workerName, request);
+    auto future = client.modelInferAsync(workerName, request);
     my_queue.enqueue(std::move(future));
   }
 }
