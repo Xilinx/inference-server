@@ -19,11 +19,12 @@ repos:
     rev: v0.6.10
     hooks:
     - id: cmake-format
-      args: [--style=file]
   - repo: https://github.com/cmake-lint/cmake-lint
     rev: 1.4.2
     hooks:
       - id: cmakelint
+        # cmake-format may align text vertically at weird indents
+        args: [--filter=-whitespace/indent]
   # - repo: https://github.com/Takishima/cmake-pre-commit-hooks
   #   rev: v1.5.3
   #   hooks:

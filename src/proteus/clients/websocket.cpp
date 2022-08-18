@@ -206,6 +206,12 @@ void WebSocketClient::workerUnload(const std::string& model) {
   client->workerUnload(model);
 }
 
+InferenceResponseFuture WebSocketClient::modelInferAsync(
+  const std::string& model, const InferenceRequest& request) {
+  auto* client = this->impl_->getHttpClient();
+  return client->modelInferAsync(model, request);
+}
+
 InferenceResponse WebSocketClient::modelInfer(const std::string& model,
                                               const InferenceRequest& request) {
   auto* client = this->impl_->getHttpClient();
@@ -222,8 +228,8 @@ bool WebSocketClient::hasHardware(const std::string& name, int num) {
   return client->hasHardware(name, num);
 }
 
-void WebSocketClient::modelInferAsync(const std::string& model,
-                                      const InferenceRequest& request) {
+void WebSocketClient::modelInferWs(const std::string& model,
+                                   const InferenceRequest& request) {
   auto* client = this->impl_->getWsClient();
 
   auto json = mapRequestToJson(request);

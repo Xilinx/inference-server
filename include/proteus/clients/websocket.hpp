@@ -47,6 +47,8 @@ class WebSocketClient : public Client {
   void modelUnload(const std::string& model) override;
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
+  InferenceResponseFuture modelInferAsync(
+    const std::string& model, const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
 
   std::string workerLoad(const std::string& worker,
@@ -55,8 +57,7 @@ class WebSocketClient : public Client {
 
   bool hasHardware(const std::string& name, int num) override;
 
-  void modelInferAsync(const std::string& model,
-                       const InferenceRequest& request);
+  void modelInferWs(const std::string& model, const InferenceRequest& request);
   // TODO(varunsh): change to InferenceReponse
   std::string modelRecv();
   void close();

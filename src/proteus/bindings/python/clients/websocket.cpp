@@ -55,8 +55,8 @@ void wrapWebSocketClient(py::module_ &m) {
          DOCS(WebSocketClient, modelUnload))
     .def("modelInfer", &WebSocketClient::modelInfer, py::arg("model"),
          py::arg("request"), DOCS(WebSocketClient, modelInfer))
-    .def("modelInferAsync", &WebSocketClient::modelInferAsync, py::arg("model"),
-         py::arg("request"), DOCS(WebSocketClient, modelInferAsync))
+    .def("modelInferWs", &WebSocketClient::modelInferWs, py::arg("model"),
+         py::arg("request"), DOCS(WebSocketClient, modelInferWs))
     .def("modelRecv", &WebSocketClient::modelRecv,
          DOCS(WebSocketClient, modelRecv))
     .def("modelList", &WebSocketClient::modelList,
