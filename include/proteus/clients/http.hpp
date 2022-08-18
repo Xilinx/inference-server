@@ -47,9 +47,12 @@ namespace proteus {
 
 class HttpClient : public Client {
  public:
-  HttpClient() = delete;
-  HttpClient(const std::string& address, const StringMap& headers = {});
-  ~HttpClient();
+  HttpClient(std::string address, const StringMap& headers = {});
+  HttpClient(HttpClient const&);
+  HttpClient& operator=(const HttpClient&) = delete;
+  HttpClient(HttpClient&& other) noexcept;
+  HttpClient& operator=(HttpClient&& other) noexcept = delete;
+  ~HttpClient() override;
 
   ServerMetadata serverMetadata() override;
   bool serverLive() override;
@@ -70,7 +73,15 @@ class HttpClient : public Client {
 
   bool hasHardware(const std::string& name, int num) override;
 
+  const std::string& getAddress() const&;
+  std::string getAddress() const&&;
+  const StringMap& getHeaders() const&;
+  StringMap getHeaders() const&&;
+
  private:
+  std::string address_;
+  StringMap headers_;
+
   class HttpClientImpl;
   std::unique_ptr<HttpClientImpl> impl_;
 };
