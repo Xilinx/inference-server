@@ -26,6 +26,7 @@
 #include <unordered_map>  // for unordered_map
 
 #include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "proteus/helpers/declarations.hpp"
 
 namespace py = pybind11;
 
@@ -58,5 +59,15 @@ void wrapHttpClient(py::module_ &m) {
          py::arg("request"), DOCS(HttpClient, modelInfer))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
     .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
-         py::arg("num"), DOCS(HttpClient, modelList));
+         py::arg("num"), DOCS(HttpClient, modelList))
+    .def(py::pickle(
+      [](const HttpClient &p) {  // __getstate__
+        return py::make_tuple(p.getAddress(), p.getHeaders());
+      },
+      [](py::tuple t) -> HttpClient {  // __setstate__
+        if (t.size() != 2) {
+          throw proteus::runtime_error("Invalid state!");
+        }
+        return {t[0].cast<std::string>(), t[1].cast<proteus::StringMap>()};
+      }));
 }

@@ -148,6 +148,7 @@ def main(args):
         )
 
         # Run the inference for the images
+        processes = int(mp.cpu_count() / 2)
         while num_remaining_images >= batch_size:
 
             # create some random data
@@ -157,10 +158,10 @@ def main(args):
             images = [image for image in images]
 
             # Send request to the server
-            infer_2 = functools.partial(infer, client, worker_name)
+            make_inference = functools.partial(infer, client, worker_name)
             start = time.time()
-            with mp.Pool(4) as p:
-                p.map(infer_2, images)
+            with mp.Pool(processes) as p:
+                p.map(make_inference, images)
             end = time.time()
             total_time += end - start
 

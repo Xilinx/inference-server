@@ -104,7 +104,7 @@ def parse_args():
         type=int,
         required=False,
         help="Number of images per REST request",
-        default=4,
+        default=1,
     )
 
     parser.add_argument(
@@ -251,7 +251,8 @@ def main(args):
     # list all the *.jpg images in the validation image directory
     files = os.listdir(validation_dir)
     files.sort()
-    files.remove("val.txt")
+    if validation_answers_file in files:
+        files.remove(validation_answers_file)
 
     # Read the "answers" file
     ground_truth = [None] * len(files)
