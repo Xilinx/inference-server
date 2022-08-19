@@ -803,6 +803,11 @@ class Get:
             ],
         }
 
+        if run_command("git lfs version", args.dry_run) is None:
+            run_command("git lfs pull", args.dry_run)
+        else:
+            print("Git LFS not found, not automatically getting LFS artifacts")
+
         for location, urls in files.items():
             for url in urls:
                 if "www.xilinx.com/bin/public/openDownload" in url:
