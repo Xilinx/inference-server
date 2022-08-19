@@ -28,6 +28,13 @@ Added
 ^^^^^
 
 - Allow building Debian package (:commit:`930fab2`)
+- Add ``modelInferAsync`` to the API (:commit:`2f4a6c2`)
+
+Changed
+^^^^^^^
+
+- Use input tensors in requests correctly (:pr:`61`)
+
 
 :github:`0.2.0 <Xilinx/inference-server/releases/tag/v0.2.0>` - 2022-08-05
 --------------------------------------------------------------------------

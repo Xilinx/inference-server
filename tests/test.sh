@@ -80,6 +80,20 @@ if [[ -z $LD_LIBRARY_PATH && -f ~/.env ]]; then
   source ~/.env
 fi
 
+# make sure Git LFS artifacts are downloaded
+jpgs=($(find $root_path/tests/assets/ -name "*.jpg"))
+for jpg in ${jpgs[@]}; do
+  if file $jpg | grep "ASCII" &> /dev/null; then
+    if git lfs version &> /dev/null; then
+      git lfs pull
+    else
+      "Git LFS artifacts are not present and git lfs is not installed"
+      exit 1
+    fi
+  fi
+done
+
+
 # if the python package doesn't exist, do a build first for the BUILD variable
 if ! pip list | grep proteus &> /dev/null; then
   cd $root_path
