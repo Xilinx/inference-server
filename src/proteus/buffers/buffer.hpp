@@ -22,11 +22,8 @@
 #define GUARD_PROTEUS_BUFFERS_BUFFER
 
 #include <cstddef>  // for size_t
-#include <cstdint>  // for int16_t, int32_t, int64_t
-#include <string>
-
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/observation/logging.hpp"  // for getLogger, LoggerPtr
+#include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uint...
+#include <string>   // for string
 
 namespace proteus {
 

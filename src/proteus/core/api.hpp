@@ -30,7 +30,7 @@ namespace proteus {
 
 class ModelMetadata;
 class RequestParameters;
-class ServerMetadata;
+struct ServerMetadata;
 class Interface;
 
 void modelLoad(const std::string& model, RequestParameters* parameters);

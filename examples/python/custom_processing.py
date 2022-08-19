@@ -123,7 +123,7 @@ def main():
 
     # +get images:
     images = []
-    for _ in range(batch_size):
+    for _ in range(1):
         image = cv2.imread(path_to_image)
         images.append(image)
     # -get images:
@@ -131,16 +131,17 @@ def main():
     # +inference:
     images = preprocess(images)
     # Construct the request and send it
-    request = proteus.ImageInferenceRequest(images, True)
-    response = client.modelInfer(worker_name, request)
-    assert not response.isError(), response.getError()
-    outputs = response.getOutputs()
-    for output in outputs:
-        assert output.datatype == proteus.DataType.INT8
-        recv_data = output.getInt8Data()
-        # Can optionally post-process the result
-        k = postprocess(recv_data, 5)
-        assert k == gold_response_output
+    for _ in range(batch_size):
+        request = proteus.ImageInferenceRequest(images, True)
+        response = client.modelInfer(worker_name, request)
+        assert not response.isError(), response.getError()
+        outputs = response.getOutputs()
+        for output in outputs:
+            assert output.datatype == proteus.DataType.INT8
+            recv_data = output.getInt8Data()
+            # Can optionally post-process the result
+            k = postprocess(recv_data, 5)
+            assert k == gold_response_output
     # -inference:
 
     print("custom_processing.py: Passed")

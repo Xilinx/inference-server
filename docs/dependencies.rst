@@ -170,7 +170,7 @@ The following packages are installed from Github.
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server\ :superscript:`a 0`
     :github:`pybind/pybind11`,2.9.1,BSD-3,Headers used to build Python bindings\ :superscript:`d 0`
     :github:`jupp0r/prometheus-cpp`,0.12.2,MIT,Dynamically linked by proteus-server for metrics\ :superscript:`a 0`
-    :github:`protocolbuffers/protobuf`,3.21.1,BSD-3,Dynamically linked by proteus-server and Vitis libraries\ :superscript:`a 0`
+    :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by proteus-server and Vitis libraries\ :superscript:`a 0`
     :github:`fpagliughi/sockpp`,e5c51b5,BSD-3,Dynamically linked by proteus-server :superscript:`a 0`
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging\ :superscript:`a 0`
     :github:`Xilinx/Vitis-AI`,latest,Apache 2.0,VART is dynamically linked by proteus-server\ :superscript:`a 1`

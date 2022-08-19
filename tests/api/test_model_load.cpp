@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <memory>     // for allocator, unique_ptr
-#include <stdexcept>  // for runtime_error
-#include <string>     // for string
+#include <memory>  // for allocator, unique_ptr
+#include <string>  // for string
+#include <thread>  // for yield
+#include <vector>  // for vector
 
-#include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
+#include "proteus/proteus.hpp"                 // for NativeClient, GrpcClient
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
 void test(proteus::Client* client) {

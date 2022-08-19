@@ -19,13 +19,23 @@ repos:
     rev: v0.6.10
     hooks:
     - id: cmake-format
+  - repo: https://github.com/cmake-lint/cmake-lint
+    rev: 1.4.2
+    hooks:
+      - id: cmakelint
+        # cmake-format may align text vertically at weird indents
+        args: [--filter=-whitespace/indent]
+  # - repo: https://github.com/Takishima/cmake-pre-commit-hooks
+  #   rev: v1.5.3
+  #   hooks:
+  #     - id: lizard
   # general hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
     hooks:
       - id: check-added-large-files
       - id: pretty-format-json
-        args: [--autofix]
+        args: [--autofix, --no-sort-keys]
       - id: check-merge-conflict
       - id: trailing-whitespace
       - id: end-of-file-fixer

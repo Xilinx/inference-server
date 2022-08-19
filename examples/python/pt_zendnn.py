@@ -13,6 +13,8 @@
 # limitations under the License.
 
 import argparse
+import functools
+import multiprocessing as mp
 import os
 import sys
 import time
@@ -21,6 +23,19 @@ import numpy as np
 from utils.utils import postprocess, preprocess_pt
 
 import proteus
+
+
+def infer(client, worker_name, image):
+    """
+    Make an inference. For multiprocessing, the function must be defined at the
+    top level
+
+    Args:
+        image (np.array): Image to send to the server
+    """
+    request = proteus.ImageInferenceRequest(image)
+    response = client.modelInfer(worker_name, request)
+    assert not response.isError(), response.getError()
 
 
 def main(args):
@@ -127,6 +142,7 @@ def main(args):
         )
 
         # Run the inference for the images
+        processes = int(mp.cpu_count() / 2)
         while num_remaining_images >= batch_size:
 
             # create some random data
@@ -136,12 +152,12 @@ def main(args):
             images = [image for image in images]
 
             # Send request to the server
-            request = proteus.ImageInferenceRequest(images)
+            make_inference = functools.partial(infer, client, worker_name)
             start = time.time()
-            response = client.modelInfer(worker_name, request)
+            with mp.Pool(processes) as p:
+                p.map(make_inference, images)
             end = time.time()
             total_time += end - start
-            assert not response.isError(), response.getError()
 
             num_processed_images += batch_size
             num_remaining_images -= batch_size

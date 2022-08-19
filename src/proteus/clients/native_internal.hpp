@@ -21,9 +21,9 @@
 #define GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL
 
 #include <cstddef>    // for size_t
+#include <exception>  // for exception
 #include <future>     // for promise
 #include <memory>     // for shared_ptr
-#include <stdexcept>  // for invalid_argument
 #include <vector>     // for vector
 
 #include "proteus/core/interface.hpp"        // for Interface
@@ -37,11 +37,9 @@ class CppNativeApi : public Interface {
   explicit CppNativeApi(InferenceRequest request);
 
   std::shared_ptr<InferenceRequest> getRequest(
-    size_t &buffer_index, const std::vector<BufferRawPtrs> &input_buffers,
-    std::vector<size_t> &input_offsets,
-    const std::vector<BufferRawPtrs> &output_buffers,
-    std::vector<size_t> &output_offsets, const size_t &batch_size,
-    size_t &batch_offset) override;
+    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+    const BufferRawPtrs &output_buffers,
+    std::vector<size_t> &output_offsets) override;
 
   size_t getInputSize() override;
   void errorHandler(const std::exception &e) override;

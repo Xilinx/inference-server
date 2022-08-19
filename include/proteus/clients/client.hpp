@@ -40,8 +40,11 @@ class Client {
   virtual void modelLoad(const std::string& model,
                          RequestParameters* parameters) = 0;
   virtual void modelUnload(const std::string& model) = 0;
+
   virtual InferenceResponse modelInfer(const std::string& model,
                                        const InferenceRequest& request) = 0;
+  virtual InferenceResponseFuture modelInferAsync(
+    const std::string& model, const InferenceRequest& request) = 0;
   virtual std::vector<std::string> modelList() = 0;
 
   virtual std::string workerLoad(const std::string& worker,

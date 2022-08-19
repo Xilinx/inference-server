@@ -131,15 +131,13 @@ class TestMigraphx:
         """
         image_paths = [
             str(root_path / "tests/assets/dog-3619020_640.jpg"),
-            str(root_path / "tests/assets/bicycle-384566_640.jpg"),
         ]
-        gold_responses = [[259, 261, 157, 260, 154], [671, 444, 880, 518, 870]]
+        gold_responses = [[259, 261, 157, 260, 154]]
         assert len(image_paths) == len(gold_responses)
         image_num = len(image_paths)
 
-        batch = num
-        images = []
-        for i in range(batch):
+        request_num = num
+        for i in range(request_num):
             # Load a picture
             img = cv2.imread(image_paths[i % image_num]).astype("float32")
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -148,19 +146,19 @@ class TestMigraphx:
             #  Normalize contents with values specific to Resnet50
             img = img.transpose(2, 0, 1)
             img = preprocess(img)
-            images.append(img)
-        request = proteus.ImageInferenceRequest(images, True)
-        response = self.send_request(request)
-        top_k_responses = postprocess(response, 5)
 
-        for i, top_k in enumerate(top_k_responses):
-            # Look for the top 5 categories (not underlying scores)
-            assert (top_k == gold_responses[i % image_num]).all()
+            request = proteus.ImageInferenceRequest(img, True)
+            response = self.send_request(request)
+            top_k_responses = postprocess(response, 5)
+
+            for i, top_k in enumerate(top_k_responses):
+                # Look for the top 5 categories (not underlying scores)
+                assert (top_k == gold_responses[i % image_num]).all()
 
     @pytest.mark.benchmark(group="Migraphx")
     def test_benchmark_Migraphx(self, benchmark, model_fixture, parameters_fixture):
 
-        batch_size = 16
+        batch_size = 1
         input_size = parameters_fixture.get("input_size")
         images = np.random.uniform(
             0.0, 255.0, (batch_size, input_size, input_size, 3)

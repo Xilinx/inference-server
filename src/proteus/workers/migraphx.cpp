@@ -386,15 +386,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 #endif
 
     // Safety check:  count all the items in all the requests in this batch
-    size_t items_in_batch = 0;
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req_b = batch->requests->at(j);
-      items_in_batch += req_b->getInputSize();
-    }
-    PROTEUS_LOG_DEBUG(
-      logger, "MIGraphXWorker::doRun received request batch with " +
-                std::to_string(batch->requests->size()) + " requests, " +
-                std::to_string(items_in_batch) + " items");
+    size_t items_in_batch = batch->size();
+
+    PROTEUS_LOG_DEBUG(logger,
+                      "MIGraphXWorker::doRun received request batch with " +
+                        std::to_string(batch->size()) + " requests, " +
+                        std::to_string(items_in_batch) + " items");
     if (items_in_batch > this->batch_size_) {
       PROTEUS_LOG_WARN(logger, "migraphx was passed a batch with " +
                                  std::to_string(items_in_batch) +
@@ -409,7 +406,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
     // The 0'th data pointer for the 0'th request is the base address of the
     // whole data array for the batch
-    auto& req0 = batch->requests->at(0);
+    auto& req0 = batch->getRequest(0);
 
     // The initial implementation of migraphx worker assumes that the model
     // has only one input tensor (for Resnet models, an image) and identifying
@@ -439,8 +436,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       // param_shapes or names
       auto input = param_shapes.names().front();  // "data"
 
-      params.add(input,
-                 migraphx::argument(param_shapes[input], (void*)input_buffer));
+      params.add(input, migraphx::argument(param_shapes[input], input_buffer));
       //
       // Run the inference
       //
@@ -467,8 +463,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       size_t input_index = 0;
 
       // for each request in the batch
-      for (unsigned int j = 0; j < batch->requests->size(); j++) {
-        auto& req = batch->requests->at(j);
+      for (unsigned int j = 0; j < batch->size(); j++) {
+        auto& req = batch->getRequest(j);
         try {
           InferenceResponse resp;
           resp.setID(req->getID());
@@ -559,7 +555,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           Metrics::getInstance().incrementCounter(
             MetricCounterIDs::kPipelineEgressWorker);
           auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+            std::chrono::high_resolution_clock::now() - batch->getTime(j));
           Metrics::getInstance().observeSummary(
             MetricSummaryIDs::kRequestLatency, duration.count());
 #endif
@@ -571,29 +567,24 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           req->runCallbackError(
             std::string("Error processing Migraphx request: ") + e.what());
         }
-
       }  // end j, request
     } catch (const std::exception& e) {
       // This outer catch block catches exceptions in evaluation of the batch.
       PROTEUS_LOG_ERROR(logger, e.what());
       // Pass error message back as reply for each request in the batch
-      for (auto& req_e : *(batch->requests)) {
+      const auto& requests = batch->getRequests();
+      for (auto& req_e : requests) {
         req_e->runCallbackError(std::string("Migraphx inference error: ") +
                                 e.what());
       }
     }
 
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
     auto batch_duration = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::high_resolution_clock::now() - batch_tp);
     PROTEUS_LOG_INFO(
       logger, std::string("Finished migraphx batch processing; batch size: ") +
                 std::to_string(batch_size_) + "  elapsed time: " +
                 std::to_string(batch_duration.count()) + " us");
-
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
-
   }  // end while (batch)
   PROTEUS_LOG_INFO(logger, "Migraphx::doRun ending");
 }

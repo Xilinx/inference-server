@@ -147,7 +147,6 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
 }
 
 void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
   setThreadName("AksDetectStream");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -161,10 +160,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
     }
 
     PROTEUS_LOG_INFO(logger, "Got request in AksDetectStream");
-    for (unsigned int k = 0; k < batch->requests->size(); k++) {
-      auto& req = batch->requests->at(k);
+    for (unsigned int k = 0; k < batch->size(); k++) {
+      const auto& req = batch->getRequest(k);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(k);
+      const auto& trace = batch->getTrace(k);
       trace->startSpan("aks_detect_stream");
 #endif
       auto inputs = req->getInputs();
@@ -350,9 +349,6 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         }
       }
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "AksDetectStream ending");
 }

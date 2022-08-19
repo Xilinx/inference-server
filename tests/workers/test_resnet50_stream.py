@@ -57,7 +57,7 @@ class TestResnet50Stream:
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 
-        self.ws_client.modelInferAsync(self.model, request)
+        self.ws_client.modelInferWs(self.model, request)
         response_str = self.ws_client.modelRecv()
         response = json.loads(response_str)
 

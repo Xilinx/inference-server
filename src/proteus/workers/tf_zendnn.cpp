@@ -17,29 +17,45 @@
  * @brief Implements the TfZendnn worker
  */
 
-#include <cstddef>  // for size_t, byte
-#include <cstdint>  // for uint32_t, int32_t
-#include <memory>   // for unique_ptr, allocator
-#include <string>   // for string
-#include <thread>   // for thread
-#include <utility>  // for move
-#include <vector>   // for vector
+#include <tensorflow/c/c_api.h>                         // for TF_Version
+#include <tensorflow/core/framework/graph.pb.h>         // for GraphDef
+#include <tensorflow/core/framework/tensor.h>           // for Tensor
+#include <tensorflow/core/framework/tensor_shape.h>     // for TensorShape
+#include <tensorflow/core/framework/tensor_shape.pb.h>  // for tensorflow
+#include <tensorflow/core/framework/tensor_types.h>     // for TTypes<>::Flat
+#include <tensorflow/core/framework/types.pb.h>         // for DT_FLOAT
+#include <tensorflow/core/platform/env.h>               // for ReadBinaryProto
+#include <tensorflow/core/platform/status.h>            // for Status
+#include <tensorflow/core/protobuf/config.pb.h>         // for ConfigProto
+#include <tensorflow/core/public/session.h>             // for NewSession
+#include <tensorflow/core/public/session_options.h>     // for SessionOptions
 
-#include "proteus/batching/hard.hpp"          // for HardBatcher
+#include <algorithm>   // for copy, max
+#include <chrono>      // for milliseconds
+#include <cstddef>     // for size_t, byte
+#include <cstdint>     // for int32_t, uint...
+#include <cstring>     // for memcpy
+#include <functional>  // for multiplies
+#include <memory>      // for allocator
+#include <numeric>     // for accumulate
+#include <string>      // for string, opera...
+#include <thread>      // for thread
+#include <utility>     // for pair, move
+#include <vector>      // for vector
+
+#include "proteus/batching/hard.hpp"          // for Batch, BatchP...
 #include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
-#include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABL...
+#include "proteus/core/data_types.hpp"        // for DataType, Dat...
+#include "proteus/core/exceptions.hpp"        // for external_error
+#include "proteus/core/predict_api.hpp"       // for InferenceResp...
+#include "proteus/helpers/declarations.hpp"   // for InferenceResp...
 #include "proteus/helpers/string.hpp"         // for endsWith
 #include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/metrics.hpp"    // for Metrics
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/workers/worker.hpp"         // for Worker
-#include "tensorflow/c/c_api.h"               // for TensorFlow version
-#include "tensorflow/core/platform/env.h"     // for TensorFlow environment
-#include "tensorflow/core/public/session.h"   // for TensorFlow sessions
+#include "proteus/observation/logging.hpp"    // for Logger, PROTE...
+#include "proteus/observation/metrics.hpp"    // for Metrics, Metr...
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/workers/worker.hpp"         // for Worker, kNumB...
 
 namespace tf = ::tensorflow;
 
@@ -216,23 +232,22 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
 }
 
 void TfZendnn::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
-  std::unique_ptr<Batch> batch;
   setThreadName("TfZendnn");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
   while (true) {
+    std::unique_ptr<Batch> batch;
     input_queue->wait_dequeue(batch);
     if (batch == nullptr) {
       break;
     }
     PROTEUS_LOG_DEBUG(logger, "Got request in TfZendnn. Size: " +
-                                std::to_string(batch->requests->size()));
+                                std::to_string(batch->size()));
 
     std::vector<InferenceResponse> responses;
-    responses.reserve(batch->requests->size());
+    responses.reserve(batch->size());
 
 #ifdef PROTEUS_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
@@ -242,11 +257,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     auto TotalStart = std::chrono::high_resolution_clock::now();
 
     // Find total number of images to initialize for TF tensor
-    unsigned tensor_count = 0;
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto req = batch->requests->at(j);
-      tensor_count += req->getInputs().size();
-    }
+    auto tensor_count = static_cast<int>(batch->size());
 
     // Initialize a TensorFlow tensor with required shape
     tf::Tensor input_tensor(
@@ -256,11 +267,11 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     uint64_t input_size = image_height_ * image_width_ * image_channels_;
     size_t vec_size = 0;
 
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      auto& req = batch->getRequest(j);
 
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      auto& trace = batch->getTrace(j);
       trace->startSpan("tfzendnn");
 #endif
       auto& resp = responses.emplace_back();
@@ -275,7 +286,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       // Get all the inputs from the requests and copy to the TensorFlow tensor
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
-        const float* floatBuffer = (float*)input_buffer;
+        const auto* floatBuffer = static_cast<float*>(input_buffer);
         std::copy(floatBuffer, floatBuffer + input_size,
                   input_tensor.flat<float>().data() + vec_size);
         vec_size = vec_size + input_size;
@@ -304,15 +315,17 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
     if (!status_.ok()) {
       PROTEUS_LOG_ERROR(logger, status_.ToString());
-      req->runCallbackError("Issue with prediction");
+      for (const auto& req : *batch) {
+        req->runCallbackError("Issue with prediction");
+      }
     }
     PROTEUS_LOG_DEBUG(logger, output_tensor[0].DebugString());
 
     // Copy the output from the model to the response object
     size_t response_size = output_classes_;
     std::vector<size_t> new_shape = {response_size};
-    for (unsigned int k = 0; k < batch->requests->size(); k++) {
-      auto req = (*batch->requests)[k];
+    for (unsigned int k = 0; k < batch->size(); k++) {
+      const auto& req = batch->getRequest(k);
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto& resp = responses[k];
@@ -341,7 +354,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       }
 
 #ifdef PROTEUS_ENABLE_TRACING
-      auto context = batch->traces.at(k)->propagate();
+      auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
 
@@ -357,14 +370,11 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef PROTEUS_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->start_times[k]);
+        std::chrono::high_resolution_clock::now() - batch->getTime(k));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "TfZendnn ending");
 }

@@ -24,7 +24,7 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"    // for Client
+#include "proteus/clients/client.hpp"    // IWYU pragma: export
 #include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
 namespace grpc {
@@ -35,10 +35,9 @@ namespace proteus {
 
 class GrpcClient : public Client {
  public:
-  GrpcClient() = delete;
-  GrpcClient(const std::string& address);
-  GrpcClient(const std::shared_ptr<::grpc::Channel>& channel);
-  ~GrpcClient();
+  explicit GrpcClient(const std::string& address);
+  explicit GrpcClient(const std::shared_ptr<::grpc::Channel>& channel);
+  ~GrpcClient() override;
 
   ServerMetadata serverMetadata() override;
   bool serverLive() override;
@@ -49,8 +48,11 @@ class GrpcClient : public Client {
   void modelLoad(const std::string& model,
                  RequestParameters* parameters) override;
   void modelUnload(const std::string& model) override;
+
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
+  InferenceResponseFuture modelInferAsync(
+    const std::string& model, const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
   // int streamModelInferStart(const std::string& model,
   //                           const InferenceRequest& request,

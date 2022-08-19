@@ -28,10 +28,9 @@ Source of ground truth labels for validation set:
 """
 
 
-import os
-
 import argparse
 import json  # json for reading labels file
+import os
 import sys
 import time
 
@@ -40,7 +39,6 @@ import numpy as np
 
 import proteus
 import proteus.clients
-
 
 # The make_nxn and preprocess functions are based on an migraphx example at
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
@@ -77,7 +75,7 @@ def preprocess(img_data):
 
     Args:
         img_data (np.array): 3 dimensions [channels, rows, cols] with value range 0-255
-        the vectors are for RGB images, so images read with OpenCV must have channels 
+        the vectors are for RGB images, so images read with OpenCV must have channels
         converted before calling.
     """
     mean_vec = np.array([0.406, 0.456, 0.485])
@@ -106,7 +104,7 @@ def parse_args():
         type=int,
         required=False,
         help="Number of images per REST request",
-        default=4,
+        default=1,
     )
 
     parser.add_argument(
@@ -192,7 +190,7 @@ def main(args):
     shape = []
     import onnx
 
-    print('Loading model to verify data shape...')
+    print("Loading model to verify data shape...")
     model = onnx.load(modelname)
     for input in model.graph.input:
         if input.name == "data":
@@ -253,7 +251,9 @@ def main(args):
     # list all the *.jpg images in the validation image directory
     files = os.listdir(validation_dir)
     files.sort()
-    files.remove(args.groundtruth)
+
+    if args.groundtruth in files:
+        files.remove(args.groundtruth)
 
     # Read the "answers" file
     ground_truth = [None] * len(files)
@@ -284,47 +284,46 @@ def main(args):
             #  Normalize values with values specific to Resnet50
             imgV = imgV.transpose(2, 0, 1)
             imgV = preprocess(imgV)
-            images[index % request_size] = imgV
+            # images[index % request_size] = imgV
             index = index + 1
-            if index % request_size == 0:
-                print("processed so far: ", index, " of ", len(files))
-                print("Creating inference request with ", len(images), " items")
-                request = proteus.ImageInferenceRequest(images, False)
-                print("request is ready.  Sending...")
-                response = client.modelInfer(worker_name, request)
-                assert not response.isError(), response.getError()
-                print("Client received inference reply.")
-                j = 0
-                for output in response.getOutputs():
-                    assert output.datatype == proteus.DataType.FP32
-                    recv_data = output.getFp32Data()
-                    # the predicted category is the one with the highest match value
-                    answer = np.argmax(recv_data)
-                    step_index = index - request_size + j + 1
-                    print(
-                        "Reading result: best match category is ",
-                        answer,
-                        "  value is ",
-                        recv_data[answer],
-                        ".  This is a picture of a ",
-                        labels[answer],
-                        "    ground truth: ",
-                        ground_truth[step_index],
-                    )
-                    if int(answer) == int(ground_truth[step_index]):
-                        correct_answers = correct_answers + 1.0
-                    else:
-                        wrong_answers = wrong_answers + 1.0
-                    j = j + 1
+            print("processed so far: ", index, " of ", len(files))
+            print("Creating inference request with ", len(images), " items")
+            request = proteus.ImageInferenceRequest(imgV, False)
+            print("request is ready.  Sending...")
+            response = client.modelInfer(worker_name, request)
+            assert not response.isError(), response.getError()
+            print("Client received inference reply.")
+            j = 0
+            for output in response.getOutputs():
+                assert output.datatype == proteus.DataType.FP32
+                recv_data = output.getFp32Data()
+                # the predicted category is the one with the highest match value
+                answer = np.argmax(recv_data)
+                step_index = index - request_size + j + 1
                 print(
-                    "Correct: ",
-                    correct_answers,
-                    "  Wrong: ",
-                    wrong_answers,
-                    "    Accuracy: ",
-                    correct_answers / (correct_answers + wrong_answers),
+                    "Reading result: best match category is ",
+                    answer,
+                    "  value is ",
+                    recv_data[answer],
+                    ".  This is a picture of a ",
+                    labels[answer],
+                    "    ground truth: ",
+                    ground_truth[step_index],
                 )
-                print("     ----------------------------------------")
+                if int(answer) == int(ground_truth[step_index]):
+                    correct_answers = correct_answers + 1.0
+                else:
+                    wrong_answers = wrong_answers + 1.0
+                j = j + 1
+            print(
+                "Correct: ",
+                correct_answers,
+                "  Wrong: ",
+                wrong_answers,
+                "    Accuracy: ",
+                correct_answers / (correct_answers + wrong_answers),
+            )
+            print("     ----------------------------------------")
 
     print("Done")
 

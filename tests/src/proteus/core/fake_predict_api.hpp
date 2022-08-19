@@ -36,12 +36,11 @@ namespace proteus {
 class FakeInferenceRequest : public InferenceRequest {
  public:
   FakeInferenceRequest();  ///< Constructor
-  FakeInferenceRequest(InferenceRequestInput& req, size_t& buffer_index,
-                       const std::vector<BufferRawPtrs>& input_buffers,
+  FakeInferenceRequest(InferenceRequestInput& req,
+                       const BufferRawPtrs& input_buffers,
                        std::vector<size_t>& input_offsets,
-                       const std::vector<BufferRawPtrs>& output_buffers,
-                       std::vector<size_t>& output_offsets,
-                       const size_t& batch_size, size_t& batch_offset);
+                       const BufferRawPtrs& output_buffers,
+                       std::vector<size_t>& output_offsets);
 };
 
 }  // namespace proteus

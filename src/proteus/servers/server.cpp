@@ -14,16 +14,17 @@
 
 #include "proteus/servers/server.hpp"
 
-#include <thread>
+#include <cstdlib>  // for getenv
+#include <string>   // for operator+, string
+#include <thread>   // for thread
 
-#include "proteus/build_options.hpp"
-#include "proteus/core/manager.hpp"
-#include "proteus/core/model_repository.hpp"
-#include "proteus/core/worker_info.hpp"
-#include "proteus/observation/logging.hpp"
-#include "proteus/observation/tracing.hpp"
-#include "proteus/servers/grpc_server.hpp"
-#include "proteus/servers/http_server.hpp"
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "proteus/core/manager.hpp"           // for Manager
+#include "proteus/core/model_repository.hpp"  // for ModelRepository
+#include "proteus/observation/logging.hpp"    // for initLogger, getLogDirec...
+#include "proteus/observation/tracing.hpp"    // for startTracer, stopTracer
+#include "proteus/servers/grpc_server.hpp"    // for start, stop
+#include "proteus/servers/http_server.hpp"    // for stop, start
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt

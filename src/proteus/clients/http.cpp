@@ -20,51 +20,55 @@
 #include "proteus/clients/http.hpp"
 
 #include <drogon/HttpClient.h>            // for HttpClient, HttpClientPtr
-#include <drogon/HttpRequest.h>           // for HttpRequest
+#include <drogon/HttpRequest.h>           // for HttpRequest, HttpReques...
 #include <drogon/HttpResponse.h>          // for HttpResponse
-#include <drogon/HttpTypes.h>             // for Get, ReqResult, k200OK
+#include <drogon/HttpTypes.h>             // for k200OK, Get, Post, ReqR...
 #include <json/value.h>                   // for Value, arrayValue, obje...
-#include <trantor/net/EventLoop.h>        // for EventLoop
 #include <trantor/net/EventLoopThread.h>  // for EventLoopThread
 
-#include <cassert>      // for assert
-#include <set>          // for set
-#include <stdexcept>    // for invalid_argument, runti...
-#include <string_view>  // for string_view
-#include <thread>       // for thread
-#include <utility>      // for tuple_element<>::type
+#include <cassert>        // for assert
+#include <unordered_set>  // for unordered_set
+#include <utility>        // for tuple_element<>::type
 
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
-#include "proteus/clients/http_internal.hpp"  // for mapJsonToResponse, mapP...
+#include "proteus/clients/http_internal.hpp"  // for mapParametersToJson
 #include "proteus/core/exceptions.hpp"        // for bad_status
 
 namespace proteus {
 
+void addHeaders(drogon::HttpRequestPtr req, const StringMap& headers) {
+  for (const auto& [field, value] : headers) {
+    req->addHeader(field, value);
+  }
+}
+
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address, const StringMap& headers)
-    : headers_(headers) {
+  explicit HttpClientImpl(const std::string& address) {
     loop_.run();
     client_ = drogon::HttpClient::newHttpClient(address, loop_.getLoop());
   }
 
   drogon::HttpClient* getClient() { return client_.get(); }
 
-  void addHeaders(drogon::HttpRequestPtr req) const {
-    for (const auto& [field, value] : headers_) {
-      req->addHeader(field, value);
-    }
-  }
-
  private:
   trantor::EventLoopThread loop_;
   drogon::HttpClientPtr client_;
-  StringMap headers_;
 };
 
-HttpClient::HttpClient(const std::string& address, const StringMap& headers) {
-  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address, headers);
+HttpClient::HttpClient(std::string address, const StringMap& headers)
+  : address_(std::move(address)), headers_(headers) {
+  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address_);
 }
+
+HttpClient::HttpClient(const HttpClient& other)
+  : address_(other.address_), headers_(other.headers_) {
+  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address_);
+}
+
+HttpClient::HttpClient(HttpClient&& other) noexcept
+  : address_(std::move(other.address_)),
+    headers_(std::move(other.headers_)),
+    impl_(std::move(other.impl_)) {}
 
 // needed for HttpClientImpl forward declaration in WebSocket client
 HttpClient::~HttpClient() = default;
@@ -94,7 +98,7 @@ ServerMetadata HttpClient::serverMetadata() {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
   req->setPath("/v2");
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -119,7 +123,7 @@ bool HttpClient::serverLive() {
   req->setMethod(drogon::Get);
   auto path = "/v2/health/live";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   if (result != drogon::ReqResult::Ok) {
@@ -135,7 +139,7 @@ bool HttpClient::serverReady() {
   req->setMethod(drogon::Get);
   auto path = "/v2/health/ready";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -149,7 +153,7 @@ bool HttpClient::modelReady(const std::string& model) {
   req->setMethod(drogon::Get);
   auto path = "/v2/models/" + model + "/ready";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -162,7 +166,7 @@ ModelMetadata HttpClient::modelMetadata(const std::string& model) {
   req->setMethod(drogon::Get);
   auto path = "/v2/models/" + model;
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -183,7 +187,7 @@ void HttpClient::modelLoad(const std::string& model,
   req->setMethod(drogon::Post);
   auto path = "/v2/repository/models/" + model + "/load";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -200,7 +204,7 @@ void HttpClient::modelUnload(const std::string& model) {
   req->setMethod(drogon::Post);
   auto path = "/v2/repository/models/" + model + "/unload";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -223,7 +227,7 @@ std::string HttpClient::workerLoad(const std::string& model,
   req->setMethod(drogon::Post);
   auto path = "/v2/workers/" + model + "/load";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -241,7 +245,7 @@ void HttpClient::workerUnload(const std::string& model) {
   req->setMethod(drogon::Post);
   auto path = "/v2/workers/" + model + "/unload";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -251,10 +255,10 @@ void HttpClient::workerUnload(const std::string& model) {
   }
 }
 
-InferenceResponse HttpClient::modelInfer(const std::string& model,
-                                         const InferenceRequest& request) {
-  auto* client = this->impl_->getClient();
-
+InferenceResponse runInference(drogon::HttpClient* client,
+                               const std::string& model,
+                               const InferenceRequest& request,
+                               const StringMap& headers) {
   assert(!request.getInputs().empty());
 
   auto json = mapRequestToJson(request);
@@ -262,7 +266,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   req->setMethod(drogon::Post);
   auto path = "/v2/models/" + model + "/infer";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -274,6 +278,17 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   return mapJsonToResponse(resp.get());
 }
 
+InferenceResponseFuture HttpClient::modelInferAsync(
+  const std::string& model, const InferenceRequest& request) {
+  return std::async(runInference, this->impl_->getClient(), model, request,
+                    headers_);
+}
+
+InferenceResponse HttpClient::modelInfer(const std::string& model,
+                                         const InferenceRequest& request) {
+  return runInference(this->impl_->getClient(), model, request, headers_);
+}
+
 std::vector<std::string> HttpClient::modelList() {
   auto* client = this->impl_->getClient();
 
@@ -281,7 +296,7 @@ std::vector<std::string> HttpClient::modelList() {
   req->setMethod(drogon::Get);
   const std::string path = "/v2/models";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -309,11 +324,17 @@ bool HttpClient::hasHardware(const std::string& name, int num) {
   req->setMethod(drogon::Get);
   const std::string path = "/v2/hardware";
   req->setPath(path);
-  impl_->addHeaders(req);
+  addHeaders(req, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
   return response->statusCode() == drogon::k200OK;
 }
+
+const std::string& HttpClient::getAddress() const& { return address_; }
+std::string HttpClient::getAddress() const&& { return address_; }
+
+const StringMap& HttpClient::getHeaders() const& { return headers_; }
+StringMap HttpClient::getHeaders() const&& { return headers_; }
 
 }  // namespace proteus

@@ -19,23 +19,30 @@
 
 #include "proteus/core/api.hpp"
 
-#include <json/reader.h>  // for CharReaderBuilder
-#include <json/value.h>
+#include <json/reader.h>  // for CharReaderBuilder, Char...
+#include <json/value.h>   // for Value
 
-#include <algorithm>
-#include <string>
+#include <cassert>        // for assert
+#include <cctype>         // for tolower
+#include <iostream>       // for operator<<, basic_ostream
+#include <string>         // for string, operator+, stoi
+#include <unordered_map>  // for operator==, unordered_m...
+#include <unordered_set>  // for unordered_set
+#include <utility>        // for move, pair
 
-#include "proteus/batching/batcher.hpp"
-#include "proteus/build_options.hpp"
-#include "proteus/core/interface.hpp"
-#include "proteus/core/manager.hpp"
-#include "proteus/core/model_repository.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/core/worker_info.hpp"
-#include "proteus/version.hpp"  // for kProteusVersion
+#include "proteus/batching/batcher.hpp"       // for Batcher
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_VITIS
+#include "proteus/core/exceptions.hpp"        // for external_error, invalid...
+#include "proteus/core/interface.hpp"         // IWYU pragma: keep
+#include "proteus/core/manager.hpp"           // for Manager
+#include "proteus/core/model_repository.hpp"  // for ModelRepository
+#include "proteus/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
+#include "proteus/core/worker_info.hpp"       // for WorkerInfo
+#include "proteus/version.hpp"                // for kProteusVersion
 
 #ifdef PROTEUS_ENABLE_VITIS
-#include <sockpp/tcp_connector.h>
+#include <sockpp/socket.h>         // for socket, socket_initializer
+#include <sockpp/tcp_connector.h>  // for tcp_connector
 #endif
 
 namespace proteus {

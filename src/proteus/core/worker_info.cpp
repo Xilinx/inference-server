@@ -22,17 +22,14 @@
 
 #include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
 
-#include <cctype>       // for toupper
-#include <climits>      // for UINT_MAX
-#include <cstdint>      // for int32_t
-#include <stdexcept>    // for invalid_argument
-#include <string>       // for string, operator+, basic_string
-#include <type_traits>  // for remove_reference<>::type
-#include <utility>      // for pair, move, make_pair
+#include <cctype>   // for toupper
+#include <climits>  // for UINT_MAX
+#include <cstdint>  // for int32_t
+#include <string>   // for string, operator+, basic_string
+#include <utility>  // for pair, move, make_pair
 
 #include "proteus/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/exceptions.hpp"   // for file_not_found_error
+#include "proteus/core/exceptions.hpp"   // for invalid_argument, file_not_f...
 #include "proteus/core/interface.hpp"    // IWYU pragma: keep
 #include "proteus/core/predict_api.hpp"  // for RequestParameters
 #include "proteus/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...

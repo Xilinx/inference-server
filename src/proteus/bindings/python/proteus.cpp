@@ -23,7 +23,6 @@
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
 #include "proteus/bindings/python/servers/server.hpp"
-#include "proteus/clients/native.hpp"
 #include "proteus/core/exceptions.hpp"
 
 namespace py = pybind11;

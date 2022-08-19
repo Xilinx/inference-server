@@ -20,11 +20,10 @@
 #ifndef GUARD_PROTEUS_CLIENTS_NATIVE
 #define GUARD_PROTEUS_CLIENTS_NATIVE
 
-#include <cstddef>  // for size_t
-#include <string>   // for string
-#include <vector>   // for vector
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"        // for Client
+#include "proteus/clients/client.hpp"        // IWYU pragma: export
 #include "proteus/core/predict_api.hpp"      // for InferenceRequest (ptr only)
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseFuture
 
@@ -63,16 +62,9 @@ class NativeClient : public Client {
    * @param worker name of the worker to unload
    */
   void modelUnload(const std::string& model) override;
+
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
-  std::vector<std::string> modelList() override;
-
-  std::string workerLoad(const std::string& worker,
-                         RequestParameters* parameters) override;
-  void workerUnload(const std::string& worker) override;
-
-  bool hasHardware(const std::string& name, int num) override;
-
   /**
    * @brief Enqueue an inference request to Proteus
    *
@@ -80,8 +72,15 @@ class NativeClient : public Client {
    * @param request the request to make
    * @return InferenceResponseFuture a future to get the results of the request
    */
-  static InferenceResponseFuture enqueue(const std::string& workerName,
-                                         InferenceRequest request);
+  InferenceResponseFuture modelInferAsync(
+    const std::string& workerName, const InferenceRequest& request) override;
+  std::vector<std::string> modelList() override;
+
+  std::string workerLoad(const std::string& worker,
+                         RequestParameters* parameters) override;
+  void workerUnload(const std::string& worker) override;
+
+  bool hasHardware(const std::string& name, int num) override;
 };
 
 }  // namespace proteus

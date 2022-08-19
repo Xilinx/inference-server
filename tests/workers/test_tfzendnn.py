@@ -87,7 +87,7 @@ class TestTfZendnn:
                 assert output.parameters.empty()
         return response
 
-    @pytest.mark.parametrize("num", [1, 8])
+    @pytest.mark.parametrize("num", [1])
     def test_tfzendnn_0(self, num):
         """
         Send a request to tf model as tensor data

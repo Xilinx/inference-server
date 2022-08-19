@@ -20,29 +20,25 @@
 #include "proteus/batching/soft.hpp"
 
 #include <algorithm>  // for max
-#include <chrono>     // for system_clock::time_point
+#include <chrono>     // for milliseconds, duration_cast
 #include <cstddef>    // for size_t
 #include <cstdint>    // for int32_t
 #include <memory>     // for unique_ptr, allocator
-#include <queue>      // for queue
 #include <ratio>      // for ratio
-#include <stdexcept>  // for invalid_argument
 #include <string>     // for operator+, char_traits
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "proteus/buffers/buffer.hpp"        // IWYU pragma: keep
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
+#include "proteus/core/exceptions.hpp"       // for invalid_argument
 #include "proteus/core/interface.hpp"        // for Interface
-#include "proteus/core/manager.hpp"          // for Manager
-#include "proteus/core/predict_api.hpp"      // for RequestParameters, Infer...
-#include "proteus/core/worker_info.hpp"      // for WorkerInfo
-#include "proteus/helpers/declarations.hpp"  // for InterfacePtr, BufferPtrs
+#include "proteus/core/predict_api.hpp"      // for RequestParameters
+#include "proteus/helpers/declarations.hpp"  // for InterfacePtr
 #include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
 #include "proteus/helpers/thread.hpp"        // for setThreadName
-#include "proteus/observation/logging.hpp"   // for Logger
+#include "proteus/observation/logging.hpp"   // for Logger, PROTEUS_LOG_DEBUG
 #include "proteus/observation/metrics.hpp"   // for Metrics, MetricCounterIDs
-#include "proteus/observation/tracing.hpp"   // for TracePtr, Trace
+#include "proteus/observation/tracing.hpp"   // for Trace
 
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
@@ -66,18 +62,12 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
       milliseconds(this->parameters_.get<int32_t>("timeout")));
   }
 
-  std::queue<InterfacePtr> backup;
-
   while (run) {
-    auto batch = std::make_unique<Batch>();
-    batch->requests =
-      std::make_unique<std::vector<std::shared_ptr<InferenceRequest>>>();
-    batch->input_buffers = std::make_unique<std::vector<BufferPtrs>>();
-    batch->output_buffers = std::make_unique<std::vector<BufferPtrs>>();
-    auto input_buffer = worker->getInputBuffer();
-    std::vector<size_t> input_offset = {0};
-    auto output_buffer = worker->getOutputBuffer();
-    std::vector<size_t> output_offset = {0};
+    auto batch = std::make_unique<Batch>(worker);
+    auto input_buffers = batch->getRawInputBuffers();
+    auto output_buffers = batch->getRawOutputBuffers();
+    std::vector<size_t> input_offset(input_buffers.size(), 0);
+    std::vector<size_t> output_offset(output_buffers.size(), 0);
     size_t batch_size = 0;
 
 #ifdef PROTEUS_ENABLE_METRICS
@@ -94,24 +84,19 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
     do {
       InterfacePtr req;
-      if (!backup.empty()) {
-        req = std::move(backup.front());
-        backup.pop();
+      if (first_request) {
+        // wait for the first request
+        this->input_queue_->wait_dequeue(req);
+        start_time = std::chrono::high_resolution_clock::now();
+        PROTEUS_LOG_DEBUG(logger,
+                          "Got request of a new batch for " + this->model_);
       } else {
-        if (first_request) {
-          // wait for the first request
-          this->input_queue_->wait_dequeue(req);
-          start_time = std::chrono::high_resolution_clock::now();
-          PROTEUS_LOG_DEBUG(logger,
-                            "Got request of a new batch for " + this->model_);
-        } else {
-          auto remaining_time =
-            kTimeout - (std::chrono::high_resolution_clock::now() - start_time);
-          auto duration = std::max(remaining_time, std::chrono::nanoseconds(0));
-          bool valid = this->input_queue_->wait_dequeue_timed(req, duration);
-          if (!valid) {
-            break;
-          }
+        auto remaining_time =
+          kTimeout - (std::chrono::high_resolution_clock::now() - start_time);
+        auto duration = std::max(remaining_time, std::chrono::nanoseconds(0));
+        bool valid = this->input_queue_->wait_dequeue_timed(req, duration);
+        if (!valid) {
+          break;
         }
       }
 
@@ -120,13 +105,10 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         break;
       }
 
-      size_t input_size = 0;
-      try {
-        input_size = req->getInputSize();
-        if (!worker->inputSizeValid(input_size)) {
-          Manager::getInstance().workerAllocate(this->model_, input_size);
-        }
-      } catch (const invalid_argument& e) {
+      auto input_size = req->getInputSize();
+      if (input_size != input_buffers.size()) {
+        auto e =
+          invalid_argument("Number of input tensors do not match worker");
         req->errorHandler(e);
         continue;
       }
@@ -134,28 +116,6 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         auto error = invalid_argument("Input size is zero");
         req->errorHandler(error);
         continue;
-      }
-
-      if (input_size > batch_size_) {
-        auto error = invalid_argument("Input size is larger than batch size");
-        req->errorHandler(error);
-        continue;
-      }
-
-      if (batch_size + input_size > batch_size_) {
-        backup.push(std::move(req));
-        break;
-      }
-
-      std::vector<BufferRawPtrs> input_buffers;
-      input_buffers.emplace_back();
-      for (const auto& buffer : input_buffer) {
-        input_buffers.back().push_back(buffer.get());
-      }
-      std::vector<BufferRawPtrs> output_buffers;
-      output_buffers.emplace_back();
-      for (const auto& buffer : output_buffer) {
-        output_buffers.back().push_back(buffer.get());
       }
 
 #ifdef PROTEUS_ENABLE_TRACING
@@ -168,77 +128,38 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         MetricCounterIDs::kPipelineIngressBatcher);
 #endif
 
-      auto buffers_needed =
-        ((input_size + batch_size - 1) / this->batch_size_) + 1;
-      if (buffers_needed > 1) {
-        for (size_t i = 1; i < buffers_needed; i++) {
-          batch->input_buffers->push_back(std::move(input_buffer));
-          batch->output_buffers->push_back(std::move(output_buffer));
-          input_buffer = worker->getInputBuffer();
-          input_buffers.emplace_back();
-          for (const auto& buffer : input_buffer) {
-            input_buffers.back().push_back(buffer.get());
-          }
-          output_buffer = worker->getOutputBuffer();
-          output_buffers.emplace_back();
-          for (const auto& buffer : output_buffer) {
-            output_buffers.back().push_back(buffer.get());
-          }
-          input_offset.push_back(0);
-          output_offset.push_back(0);
-        }
-      }
-
       auto old_input_offset = input_offset;
       auto old_output_offset = output_offset;
-      size_t buffer_index = 0;
-      auto new_req = req->getRequest(buffer_index, input_buffers, input_offset,
-                                     output_buffers, output_offset,
-                                     this->batch_size_, batch_size);
+      auto new_req = req->getRequest(input_buffers, input_offset,
+                                     output_buffers, output_offset);
       if (new_req == nullptr) {
         PROTEUS_LOG_DEBUG(logger, "Making request for " + this->model_ +
                                     " failed. Reverting buffers.");
-        for (size_t i = 1; i < buffers_needed; i++) {
-          worker->putInputBuffer(std::move(input_buffer));
-          input_buffer = std::move(batch->input_buffers->back());
-          batch->input_buffers->pop_back();
-
-          worker->putOutputBuffer(std::move(output_buffer));
-          output_buffer = std::move(batch->output_buffers->back());
-          batch->output_buffers->pop_back();
-
-          input_buffers.pop_back();
-          output_buffers.pop_back();
-        }
         input_offset = old_input_offset;
         output_offset = old_output_offset;
       } else {
-        batch->requests->push_back(new_req);
+        batch->addRequest(new_req);
+        batch_size++;
         if (first_request) {
           first_request = false;
         }
 #ifdef PROTEUS_ENABLE_TRACING
         trace->endSpan();
-        batch->traces.emplace_back(std::move(trace));
+        batch->addTrace(std::move(trace));
 #endif
 #ifdef PROTEUS_ENABLE_METRICS
-        batch->start_times.emplace_back(req->get_time());
+        batch->addTime(req->get_time());
 #endif
       }
     } while (batch_size % this->batch_size_ != 0 && run);
 
-    if (!batch->requests->empty()) {
+    if (!batch->empty()) {
       PROTEUS_LOG_DEBUG(logger, "Enqueuing batch for " + this->model_);
-      batch->input_buffers->push_back(std::move(input_buffer));
-      batch->output_buffers->push_back(std::move(output_buffer));
       this->output_queue_->enqueue(std::move(batch));
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressBatcher);
 #endif
-    } else {
-      worker->putInputBuffer(std::move(input_buffer));
-      worker->putOutputBuffer(std::move(output_buffer));
     }
   }
 }

@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstddef>   // for size_t
-#include <cstdint>   // for uint8_t, uint64_t
-#include <memory>    // for allocator, make_unique
-#include <numeric>   // for accumulate
-#include <optional>  // for optional
-#include <utility>   // for pair, move
-#include <vector>    // for vector
+#include <array>             // for array
+#include <cstddef>           // for size_t
+#include <cstdint>           // for uint8_t, uint64_t
+#include <initializer_list>  // for initializer_list
+#include <memory>            // for allocator, make_unique
+#include <optional>          // for optional
+#include <ostream>           // for operator<<, basic_ost...
+#include <utility>           // for move
+#include <vector>            // for vector
 
-#include "gtest/gtest.h"                        // for EXPECT_EQ, UnitTest
+#include "gtest/gtest.h"                        // for ParamIteratorInterface
 #include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
 #include "proteus/buffers/buffer.hpp"           // for Buffer
 #include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
@@ -30,6 +32,7 @@
 #include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
 #include "proteus/helpers/declarations.hpp"     // for BufferPtrs
+#include "proteus/observation/logging.hpp"      // for initLogger, LogLevel
 
 namespace proteus {
 
@@ -138,9 +141,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
         batcher_->getOutputQueue()->wait_dequeue_timed(batch, kTimeoutUs),
         true);
 
-      EXPECT_EQ(batch->input_buffers->size(), 1);
-      EXPECT_EQ(batch->output_buffers->size(), 1);
-      EXPECT_EQ(batch->requests->size(), i);
+      EXPECT_EQ(batch->size(), i);
 
       auto num_tensors = 0;
       for (auto j = tensor_index; j < tensor_index + i; j++) {
@@ -148,15 +149,16 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
       }
       tensor_index += i;
 
-      for (const auto& buffer : *(batch->input_buffers)) {
-        EXPECT_EQ(buffer.size(), 1);
-        auto& first_buffer = buffer[0];
+      const auto& buffers = batch->getInputBuffers();
+      EXPECT_EQ(buffers.size(), 1);
+      for (const auto& buffer : buffers) {
         for (auto j = 0; j < num_tensors; j++) {
-          compare_data(first_buffer.get(), j * data_size_);
+          compare_data(buffer.get(), j * data_size_);
         }
       }
 
-      for (const auto& req : *(batch->requests)) {
+      const auto& reqs = batch->getRequests();
+      for (const auto& req : reqs) {
         req->runCallback(InferenceResponse());
       }
     }
@@ -166,12 +168,10 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     batcher_->enqueue(std::move(req));
   }
 
-  InferenceRequest create_request(int tensors) {
+  InferenceRequest create_request() {
     InferenceRequest request;
-    for (auto i = 0; i < tensors; ++i) {
-      request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
-                             DataType::UINT8);
-    }
+    request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
+                           DataType::UINT8);
     return request;
   }
 
@@ -189,9 +189,11 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
   auto requests = batch_config.requests;
 
   for (const auto& i : requests) {
-    auto request = create_request(i);
-    auto req = std::make_unique<CppNativeApi>(request);
-    this->enqueue(std::move(req));
+    for (auto j = 0; j < i; ++j) {
+      auto request = create_request();
+      auto req = std::make_unique<CppNativeApi>(request);
+      this->enqueue(std::move(req));
+    }
   }
 
   this->check_batch();
@@ -213,8 +215,8 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
 const std::array<BatchConfig, 7> configs = {
   BatchConfig{1, {1}, {1}},          BatchConfig{1, {1, 1}, {1, 1}},
   BatchConfig{2, {1}, {1}},          BatchConfig{2, {1, 1}, {2}},
-  BatchConfig{2, {1, 1, 1}, {2, 1}}, BatchConfig{4, {3, 2}, {1, 1}},
-  BatchConfig{4, {2, 2}, {2}},
+  BatchConfig{2, {1, 1, 1}, {2, 1}}, BatchConfig{4, {1, 1, 1, 1, 1}, {4, 1}},
+  BatchConfig{4, {1, 1, 1, 1}, {4}},
 };
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitSoftBatcherFixture,
                          testing::ValuesIn(configs));

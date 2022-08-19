@@ -112,7 +112,6 @@ void Echo::doAcquire(RequestParameters* parameters) {
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {
-  std::shared_ptr<InferenceRequest> req;
   setThreadName("Echo");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -129,10 +128,10 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      const auto& req = batch->getRequest(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      const auto& trace = batch->getTrace(j);
       trace->startSpan("echo");
 #endif
       InferenceResponse resp;
@@ -188,14 +187,11 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressWorker);
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->start_times[j]);
+        std::chrono::high_resolution_clock::now() - batch->getTime(j));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "Echo ending");
 }

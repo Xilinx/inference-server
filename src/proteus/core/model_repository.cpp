@@ -14,20 +14,20 @@
 
 #include "proteus/core/model_repository.hpp"
 
-#include <fcntl.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-#include <google/protobuf/text_format.h>
+#include <fcntl.h>                                     // for open, O_RDONLY
+#include <google/protobuf/io/zero_copy_stream_impl.h>  // for FileInputStream
+#include <google/protobuf/repeated_ptr_field.h>        // for RepeatedPtrField
+#include <google/protobuf/text_format.h>               // for TextFormat
 
-#include <cassert>
-#include <filesystem>
-#include <fstream>
+#include <chrono>      // for milliseconds
+#include <filesystem>  // for path, operator/
+#include <thread>      // for sleep_for
 
-#include "model_config.pb.h"
-#include "proteus/core/exceptions.hpp"
-#include "proteus/core/manager.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/core/worker_info.hpp"
-#include "proteus/observation/logging.hpp"
+#include "model_config.pb.h"                // for Config, InferP...
+#include "proteus/core/exceptions.hpp"      // for file_not_found...
+#include "proteus/core/manager.hpp"         // for Manager
+#include "proteus/core/predict_api.hpp"     // for RequestParameters
+#include "proteus/observation/logging.hpp"  // for Logger, PROTEU...
 
 namespace fs = std::filesystem;
 

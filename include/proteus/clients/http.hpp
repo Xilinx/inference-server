@@ -20,13 +20,13 @@
 #ifndef GUARD_PROTEUS_CLIENTS_HTTP
 #define GUARD_PROTEUS_CLIENTS_HTTP
 
-#include <memory>         // for unique_ptr
-#include <string>         // for string
-#include <unordered_map>  // for unordered_map
-#include <vector>         // for vector
+#include <memory>  // for unique_ptr
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"    // for Client
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "proteus/clients/client.hpp"        // IWYU pragma: export
+#include "proteus/core/predict_api.hpp"      // for RequestParameters (ptr o...
+#include "proteus/helpers/declarations.hpp"  // for StringMap
 
 namespace proteus {
 
@@ -47,9 +47,12 @@ namespace proteus {
 
 class HttpClient : public Client {
  public:
-  HttpClient() = delete;
-  HttpClient(const std::string& address, const StringMap& headers = {});
-  ~HttpClient();
+  HttpClient(std::string address, const StringMap& headers = {});
+  HttpClient(HttpClient const&);
+  HttpClient& operator=(const HttpClient&) = delete;
+  HttpClient(HttpClient&& other) noexcept;
+  HttpClient& operator=(HttpClient&& other) noexcept = delete;
+  ~HttpClient() override;
 
   ServerMetadata serverMetadata() override;
   bool serverLive() override;
@@ -60,8 +63,11 @@ class HttpClient : public Client {
   void modelLoad(const std::string& model,
                  RequestParameters* parameters) override;
   void modelUnload(const std::string& model) override;
+
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) override;
+  InferenceResponseFuture modelInferAsync(
+    const std::string& model, const InferenceRequest& request) override;
   std::vector<std::string> modelList() override;
 
   std::string workerLoad(const std::string& worker,
@@ -70,7 +76,15 @@ class HttpClient : public Client {
 
   bool hasHardware(const std::string& name, int num) override;
 
+  const std::string& getAddress() const&;
+  std::string getAddress() const&&;
+  const StringMap& getHeaders() const&;
+  StringMap getHeaders() const&&;
+
  private:
+  std::string address_;
+  StringMap headers_;
+
   class HttpClientImpl;
   std::unique_ptr<HttpClientImpl> impl_;
 };

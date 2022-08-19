@@ -17,20 +17,21 @@
  * @brief Parses the command-line arguments and implements Proteus's entrypoint
  */
 
-#include <csignal>              // for signal, SIGINT
+#include <csignal>              // for signal, SIGINT, SIGTERM
 #include <cstdlib>              // for exit
-#include <cxxopts/cxxopts.hpp>  // for Options, value, OptionAdder
+#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Opt...
 #include <efsw/efsw.hpp>        // for FileWatcher
-#include <filesystem>
-#include <iostream>  // for operator<<, endl, basic_o...
-#include <string>    // for string, allocator, operat...
+#include <filesystem>           // for path, directory_iterator
+#include <iostream>             // for operator<<, basic_ostre...
+#include <memory>               // for unique_ptr, make_unique
+#include <string>               // for string, allocator, char...
 
-#include "proteus/build_options.hpp"   // for PROTEUS_ENABLE_HTTP, PROT...
-#include "proteus/clients/native.hpp"  // for initialize, terminate
-#include "proteus/core/model_repository.hpp"  // for ModelRepository
-#include "proteus/observation/logging.hpp"    // for logger
-#include "proteus/servers/grpc_server.hpp"    // for start, stop
-#include "proteus/servers/http_server.hpp"    // for start, stop
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "proteus/clients/native.hpp"         // for NativeClient
+#include "proteus/core/exceptions.hpp"        // for runtime_error
+#include "proteus/core/model_repository.hpp"  // for UpdateListener, ModelRe...
+#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
+#include "proteus/servers/http_server.hpp"    // for stop
 #include "proteus/servers/server.hpp"         // for Server
 
 namespace fs = std::filesystem;

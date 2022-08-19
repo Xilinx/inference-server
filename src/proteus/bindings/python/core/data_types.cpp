@@ -19,16 +19,19 @@
 
 #include "proteus/core/data_types.hpp"
 
-#include <pybind11/operators.h>
-#include <pybind11/pybind11.h>
+#include <pybind11/cast.h>       // for arg
+#include <pybind11/operators.h>  // for self, operator==, self_t
+#include <pybind11/pybind11.h>   // for class_, enum_, object, init, module_
 
-#include <sstream>
+#include <sstream>  // IWYU pragma: keep
+
+#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_VITIS
+
+// IWYU pragma: no_forward_declare xir::Datatype
 
 #ifdef PROTEUS_ENABLE_VITIS
-#include <xir/util/data_type.hpp>
+#include <xir/util/data_type.hpp>  // IWYU pragma: keep
 #endif
-
-#include "proteus/bindings/python/helpers/docstrings.hpp"
 
 namespace py = pybind11;
 

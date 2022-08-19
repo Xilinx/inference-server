@@ -24,29 +24,23 @@
 #include <json/value.h>               // for Value, arrayValue
 #include <trantor/utils/Logger.h>     // for Logger, Logger::kWarn
 
-#include <algorithm>  // for transform
-#include <chrono>     // for high_resolution_clock
-#include <exception>  // for exception
-#include <memory>     // for allocator, shared_ptr
-#include <set>        // for set
-#include <stdexcept>  // for invalid_argument
-#include <string>     // for operator+, string
-#include <utility>    // for move
-#include <vector>     // for vector
+#include <chrono>         // for high_resolution_clock
+#include <memory>         // for shared_ptr, __share...
+#include <string>         // for allocator, operator+
+#include <unordered_set>  // for unordered_set
+#include <utility>        // for move
+#include <vector>         // for vector
 
-#include "proteus/batching/batcher.hpp"           // for Batcher
 #include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/http_internal.hpp"      // for propagate, DrogonHttp
-#include "proteus/clients/native.hpp"             // for getHardware
-#include "proteus/core/api.hpp"                   // for modelLoad
-#include "proteus/core/model_repository.hpp"      // for loadModel
+#include "proteus/clients/http_internal.hpp"      // for propagate, errorHtt...
+#include "proteus/core/api.hpp"                   // for hasHardware, modelI...
+#include "proteus/core/exceptions.hpp"            // for runtime_error, inva...
+#include "proteus/core/interface.hpp"             // for Interface
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
-#include "proteus/core/worker_info.hpp"           // for WorkerInfo
 #include "proteus/helpers/string.hpp"             // for toLower
-#include "proteus/observation/logging.hpp"        // for Logger
+#include "proteus/observation/logging.hpp"        // for Logger, PROTEUS_LOG...
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
-#include "proteus/servers/server.hpp"             // for getLogDirectory
 #include "proteus/servers/websocket_server.hpp"   // for WebsocketServer
 
 using drogon::HttpRequestPtr;

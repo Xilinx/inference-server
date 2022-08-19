@@ -164,27 +164,16 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     }
     PROTEUS_LOG_INFO(logger, "Got request in Resnet50");
     std::vector<InferenceResponse> responses;
-    responses.reserve(batch->requests->size());
+    responses.reserve(batch->size());
 
     std::vector<std::unique_ptr<vart::TensorBuffer>> v;
-    auto batches = 1;
-    if (batches != 1) {
-      /*
-        While the KServe spec allows any number of input tensors in the
-        request, AKS works most easily when a particular request has 1 batch
-        size worth of data. Supporting more data complicates this code and so
-        for now, we exclude this case.
-      */
-      req->runCallbackOnce(InferenceResponse());
-      continue;
-    }
-    v.reserve(batches);
+    v.reserve(batch->input_size());
 
     size_t tensor_count = 0;
-    for (unsigned int j = 0; j < batch->requests->size(); j++) {
-      auto& req = batch->requests->at(j);
+    for (unsigned int j = 0; j < batch->size(); j++) {
+      const auto& req = batch->getRequest(j);
 #ifdef PROTEUS_ENABLE_TRACING
-      auto& trace = batch->traces.at(j);
+      auto& trace = batch->getTrace(j);
       trace->startSpan("Resnet50");
 #endif
       auto& resp = responses.emplace_back();
@@ -271,8 +260,8 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     }
 
     tensor_count = 0;
-    for (unsigned int k = 0; k < batch->requests->size(); k++) {
-      auto req = (*batch->requests)[k];
+    for (unsigned int k = 0; k < batch->size(); k++) {
+      const auto& req = batch->getRequest(k);
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto& resp = responses[k];
@@ -301,19 +290,16 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef PROTEUS_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->start_times[k]);
+        std::chrono::high_resolution_clock::now() - batch->getTime(k));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
 #ifdef PROTEUS_ENABLE_TRACING
-      auto context = batch->traces.at(k)->propagate();
+      auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
       req->runCallbackOnce(resp);
     }
-    this->returnBuffers(std::move(batch->input_buffers),
-                        std::move(batch->output_buffers));
-    PROTEUS_LOG_DEBUG(logger, "Returned buffers");
   }
   PROTEUS_LOG_INFO(logger, "ResNet50 ending");
 }

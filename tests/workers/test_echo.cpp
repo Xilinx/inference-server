@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdint>    // for uint32_t
-#include <future>     // for future
-#include <memory>     // for allocator, make_shared, __shared_ptr_...
-#include <stdexcept>  // for runtime_error
-#include <tuple>      // for tuple, get
-#include <vector>     // for vector
+#include <chrono>   // for seconds
+#include <cstdint>  // for uint32_t
+#include <memory>   // for allocator, make_shared, __shared_ptr_...
+#include <thread>   // for sleep_for
+#include <tuple>    // for tuple, get
+#include <vector>   // for vector
 
-#include "gtest/gtest.h"        // for Message, AssertionResult, TestPartResult
-#include "proteus/proteus.hpp"  // for InferenceRequestInput, RequestParameters
+#include "gtest/gtest.h"        // for ParamIteratorInterface, Message, Test...
+#include "proteus/proteus.hpp"  // for RequestParameters, InferenceRequestInput
 
 namespace proteus {
 
@@ -42,21 +42,9 @@ class EchoParamFixture
       input_0.setParameters(parameters);
     }
 
-    InferenceRequestInput input_1;
-    input_1.setName("echo");
-    input_1.setDatatype(DataType::UINT32);
-    input_1.setShape({1});
-    input_1.setData((void*)(&(inputs_[1])));
-    if (add_input_parameters) {
-      auto parameters = std::make_shared<RequestParameters>();
-      parameters->put("key_1", 1);
-      input_1.setParameters(parameters);
-    }
-
     InferenceRequest request;
     for (auto i = 0; i < multiplier; i++) {
       request.addInputTensor(input_0);
-      request.addInputTensor(input_1);
     }
 
     if (add_outputs) {
@@ -68,7 +56,6 @@ class EchoParamFixture
         output.setParameters(parameters);
       }
       for (auto i = 0; i < multiplier; i++) {
-        request.addOutputTensor(output);
         request.addOutputTensor(output);
       }
     }
@@ -95,21 +82,19 @@ class EchoParamFixture
     EXPECT_FALSE(response.isError());
     EXPECT_EQ(response.getModel(), "echo");
     auto outputs = response.getOutputs();
-    EXPECT_EQ(outputs.size(), multiplier * 2);
+    EXPECT_EQ(outputs.size(), multiplier);
 
     for (auto i = 0; i < multiplier; i++) {
-      for (auto j = 0; j < 2; j++) {
-        auto output = outputs[(i * 2 + j)];
-        auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
-        EXPECT_EQ(data->size(), 1);
-        EXPECT_EQ((*data)[0], golden_outputs_[j]);
-        EXPECT_EQ(output.getDatatype(), DataType::UINT32);
-        EXPECT_EQ(output.getName(), "echo");
-        EXPECT_TRUE(output.getParameters()->empty());
-        auto shape = output.getShape();
-        EXPECT_EQ(shape.size(), 1);
-        EXPECT_EQ(shape[0], 1);
-      }
+      const auto& output = outputs[i];
+      auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
+      EXPECT_EQ(data->size(), 1);
+      EXPECT_EQ((*data)[0], golden_outputs_[0]);
+      EXPECT_EQ(output.getDatatype(), DataType::UINT32);
+      EXPECT_EQ(output.getName(), "echo");
+      EXPECT_TRUE(output.getParameters()->empty());
+      auto shape = output.getShape();
+      EXPECT_EQ(shape.size(), 1);
+      EXPECT_EQ(shape[0], 1);
     }
 
     if (add_id) {
@@ -120,14 +105,11 @@ class EchoParamFixture
   proteus::Server server_;
 
  private:
-  const int inputs_[2] = {3, 5};
-  const int golden_outputs_[2] = {4, 6};
+  const int inputs_[1] = {3};
+  const int golden_outputs_[1] = {4};
 };
 
 TEST_P(EchoParamFixture, EchoNative) {
-  const auto params = GetParam();
-  auto multiplier = std::get<4>(params);
-
   proteus::NativeClient client;
   client.workerLoad("echo", nullptr);
 
@@ -135,21 +117,13 @@ TEST_P(EchoParamFixture, EchoNative) {
 
   auto response = client.modelInfer("echo", request);
 
-  if (multiplier == 30) {
-    EXPECT_TRUE(response.isError());
-    EXPECT_EQ(response.getError(), "Too many input tensors for this model");
-  } else {
-    validate(response);
-  }
+  validate(response);
 
   client.modelUnload("echo");
 }
 
 #ifdef PROTEUS_ENABLE_GRPC
 TEST_P(EchoParamFixture, EchoGrpc) {
-  const auto params = GetParam();
-  auto multiplier = std::get<4>(params);
-
   server_.startGrpc(50051);
   auto client = proteus::GrpcClient("localhost:50051");
   while (!client.serverLive()) {
@@ -160,17 +134,8 @@ TEST_P(EchoParamFixture, EchoGrpc) {
 
   auto request = this->construct_request();
 
-  if (multiplier == 30) {
-    try {
-      auto response = client.modelInfer("echo", request);
-      FAIL() << "No runtime error thrown";
-    } catch (const runtime_error& e) {
-      EXPECT_STREQ(e.what(), "Too many input tensors for this model");
-    }
-  } else {
-    auto response = client.modelInfer("echo", request);
-    validate(response);
-  }
+  auto response = client.modelInfer("echo", request);
+  validate(response);
 
   client.modelUnload("echo");
 }
@@ -178,10 +143,9 @@ TEST_P(EchoParamFixture, EchoGrpc) {
 
 // add_id, add_input_parameters, add_request_parameters, add_outputs, multiplier
 const std::tuple<bool, bool, bool, bool, int> configs[] = {
-  {true, true, true, true, 1},      {true, true, false, true, 1},
-  {true, false, false, true, 1},    {false, false, false, true, 1},
-  {false, false, false, false, 1},  {false, false, false, false, 10},
-  {false, false, false, false, 30},
+  {true, true, true, true, 1},     {true, true, false, true, 1},
+  {true, false, false, true, 1},   {false, false, false, true, 1},
+  {false, false, false, false, 1},
 };
 INSTANTIATE_TEST_SUITE_P(Echo, EchoParamFixture, testing::ValuesIn(configs));
 
