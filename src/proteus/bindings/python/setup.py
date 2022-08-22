@@ -37,9 +37,7 @@ setuptools.setup(
     package_dir={"": "src"},
     package_data={
         "": [
-            "_proteus.cpython-36m-x86_64-linux-gnu.so",
-            "proteus-stubs/*.pyi",
-            "_proteus-stubs/*.pyi",
+            "*.pyi",
         ]
     },
     zip_safe=False,  # required for mypy
