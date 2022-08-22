@@ -89,9 +89,9 @@ if(${Pybind11Stubgen_FOUND})
     POST_BUILD
     COMMAND PYTHONPATH=${output_directory} pybind11-stubgen -o
             ${output_directory} _proteus --no-setup-py
-    COMMAND mkdir -p ${output_directory}/proteus
+    COMMAND mkdir -p ${output_directory}/src/proteus
     COMMAND cp -rf ${output_directory}/_proteus-stubs/*
-            ${output_directory}/proteus
+            ${output_directory}/src/proteus
     COMMAND rm -rf ${output_directory}/_proteus-stubs
   )
 else()
@@ -101,29 +101,11 @@ else()
 endif()
 
 # copy over Python package source files to the build tree
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/setup.py ${CMAKE_CURRENT_BINARY_DIR}/setup.py
-  COPYONLY
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/setup.py
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 )
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/clients/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/clients/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/predict_api/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/predict_api/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/servers/__init__.py
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/servers/__init__.py COPYONLY
-)
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/proteus/py.typed
-  ${CMAKE_CURRENT_BINARY_DIR}/src/proteus/py.typed COPYONLY
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 get_target_property(output_directory_2 proteus_py LIBRARY_OUTPUT_DIRECTORY)
@@ -138,7 +120,7 @@ if(NOT output_directory_2)
   add_custom_command(
     TARGET proteus_py
     POST_BUILD
-    COMMAND pip install --prefix ~/.local .
+    COMMAND pip install --prefix ~/.local . ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
   )
 endif()
