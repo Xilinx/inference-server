@@ -120,7 +120,7 @@ if(NOT output_directory_2)
   add_custom_command(
     TARGET proteus_py
     POST_BUILD
-    COMMAND pip install --prefix ~/.local . ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND pip install --prefix ~/.local ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
   )
 endif()

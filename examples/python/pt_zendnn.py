@@ -25,19 +25,6 @@ from utils.utils import postprocess, preprocess_pt
 import proteus
 
 
-def infer(client, worker_name, image):
-    """
-    Make an inference. For multiprocessing, the function must be defined at the
-    top level
-
-    Args:
-        image (np.array): Image to send to the server
-    """
-    request = proteus.ImageInferenceRequest(image)
-    response = client.modelInfer(worker_name, request)
-    assert not response.isError(), response.getError()
-
-
 def main(args):
     """
     This is the main method which
@@ -55,22 +42,9 @@ def main(args):
         FileNotFoundError: If image_location is given and the file is not found
     """
 
-    # Create server objects
-    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
-
-    # Start server: if it's not already started, start it here
-    start_server = not client.serverLive()
-    if start_server:
-        server = proteus.servers.Server()
-        server.startHttp(8998)
-        while not client.serverLive():
-            time.sleep(1)
-
-    metadata = client.serverMetadata()
-
-    if not "ptzendnn" in metadata.extensions:
-        print("PTZenDNN support required but not found.")
-        sys.exit(0)
+    client, server = proteus.start_http_client_server(
+        "http://127.0.0.1:8998", "ptzendnn"
+    )
 
     # Argument parsing
     real_data = True if args.image_location else False
@@ -80,16 +54,13 @@ def main(args):
     # Validating if Image and Model are available
     if not os.path.exists(args.graph):
         raise FileNotFoundError(
-            "Model not found in the location: {}."
-            "Please Check the parameter".format(args.graph)
+            f"Model not found in the location: {args.graph}. Please check the parameter"
         )
 
-    if real_data:
-        if not os.path.exists(args.image_location):
-            raise FileNotFoundError(
-                "Image not found in the location: {}."
-                "Please Check the parameter".format(args.image_location)
-            )
+    if real_data and not os.path.exists(args.image_location):
+        raise FileNotFoundError(
+            f"Image not found in the location: {args.image_location}. Please check the parameter"
+        )
 
     # If predicting on real image, load class list from file.
     if real_data:
@@ -113,13 +84,12 @@ def main(args):
 
     # Inference with images
     # If with real data, do preprocessing, otherwise create dummy data
+    processes = int(mp.cpu_count() / 2)  # arbitrarily use half available cores
     if real_data:
         # For tests with single images
         images = []
         images.append(preprocess_pt(args.image_location, input_size))
-        request = proteus.ImageInferenceRequest(images)
-        response = client.modelInfer(worker_name, request)
-        assert not response.isError(), response.getError()
+        proteus.parallel_infer(client, worker_name, images, processes)
 
         # Post process to get top1 and top5 classes
         idx_1 = postprocess(response, 1)
@@ -142,7 +112,6 @@ def main(args):
         )
 
         # Run the inference for the images
-        processes = int(mp.cpu_count() / 2)
         while num_remaining_images >= batch_size:
 
             # create some random data
@@ -152,10 +121,8 @@ def main(args):
             images = [image for image in images]
 
             # Send request to the server
-            make_inference = functools.partial(infer, client, worker_name)
             start = time.time()
-            with mp.Pool(processes) as p:
-                p.map(make_inference, images)
+            proteus.parallel_infer(client, worker_name, images, processes)
             end = time.time()
             total_time += end - start
 
