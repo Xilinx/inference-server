@@ -37,6 +37,7 @@
 
 #include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/data_types.hpp"       // for DataType, mapTypeToStr
+#include "proteus/core/mixins.hpp"           // for Serializable
 #include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
 
 namespace proteus {
@@ -49,7 +50,7 @@ using Parameter = std::variant<bool, int32_t, double, std::string>;
  * bool, number or string). We further restrict numbers to be doubles or int32.
  *
  */
-class RequestParameters {
+class RequestParameters : public Serializable {
  public:
   /**
    * @brief Put in a key-value pair
@@ -126,6 +127,10 @@ class RequestParameters {
 
   auto end() { return parameters_.end(); }
   auto cend() const { return parameters_.cend(); }
+
+  size_t serializeSize() const override;
+  void serialize(std::byte *data_out) const override;
+  void deserialize(const std::byte *data_in) override;
 
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
