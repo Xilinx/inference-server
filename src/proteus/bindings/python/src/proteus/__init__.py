@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import functools
+import multiprocessing as mp
+import sys
+import time
+
 from _proteus import *
 
 
@@ -88,3 +93,62 @@ def ImageInferenceRequest(images, asTensor=False):
             raise TypeError("Unknown type passed to ImageInferenceRequest")
         request.addInputTensor(input_n)
     return request
+
+
+def _infer(client, model, image):
+    """
+    Make an inference. For multiprocessing, the function must be defined at the
+    top level
+
+    Args:
+        client (proteus.client): client to send request with
+        model (str): name of the model/worker to make the inference
+        image (np.array): Image to send to the server
+    """
+    request = ImageInferenceRequest(image)
+    response = client.modelInfer(model, request)
+    assert not response.isError(), response.getError()
+
+
+def parallel_infer(client, model, data, processes):
+    """
+    Make an inference to the server in parallel with n processes
+
+    Args:
+        client (proteus.client): Client to make the inference with
+        model (str): Name of the model/worker to make the inference
+        data (list[np.ndarray]): List of data to send
+        processes (int): number of processes to use
+
+    Returns:
+        list[proteus.InferenceResponse]: Responses for each request
+    """
+
+    make_inference = functools.partial(_infer, client, model)
+    with mp.Pool(processes) as p:
+        p.map(make_inference, data)
+        p.close()
+        p.join()
+
+
+def start_http_client_server(address: str, extension=None):
+    client = clients.HttpClient(address)
+    port = address.split(":")[-1]
+
+    # if it's not already started, start it here
+    start_server = not client.serverLive()
+    if start_server:
+        server = servers.Server()
+        server.startHttp(int(port))
+        while not client.serverLive():
+            time.sleep(1)
+    else:
+        server = None
+
+    if extension:
+        metadata = client.serverMetadata()
+        if extension not in metadata.extensions:
+            print(f"{extension} support required but not found.")
+            sys.exit(0)
+
+    return client, server
