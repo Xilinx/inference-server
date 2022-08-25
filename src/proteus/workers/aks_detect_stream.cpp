@@ -172,10 +172,11 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
 
-        auto* idata = static_cast<char*>(input_buffer);
+        const auto* idata = static_cast<char*>(input_buffer);
+        std::string data{idata, input.getSize()};
 
-        cv::VideoCapture cap(idata);  // open the video file
-        if (!cap.isOpened()) {        // check if we succeeded
+        cv::VideoCapture cap(data);  // open the video file
+        if (!cap.isOpened()) {       // check if we succeeded
           const char* error = "Cannot open video file";
           PROTEUS_LOG_ERROR(logger, error);
           req->runCallbackError(error);
@@ -205,7 +206,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         std::string metadata = "[" + std::to_string(video_width) + "," +
                                std::to_string(video_height) + "]";
         auto message = constructMessage(key, std::to_string(fps), metadata);
-        output.setData(&message);
+        output.setData(message.data());
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
@@ -295,7 +296,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
               output.setName("image");
               output.setDatatype(DataType::STRING);
               auto message = constructMessage(key, frames.front(), labels[j]);
-              output.setData(&message);
+              output.setData(message.data());
               output.setShape({message.size()});
               resp.addOutput(output);
               req->runCallback(resp);
@@ -340,7 +341,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             output.setName("image");
             output.setDatatype(DataType::STRING);
             auto message = constructMessage(key, frames.front(), labels[j]);
-            output.setData(&message);
+            output.setData(message.data());
             output.setShape({message.size()});
             resp.addOutput(output);
             req->runCallback(resp);

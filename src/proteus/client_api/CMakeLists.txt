@@ -1,4 +1,4 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2022 Xilinx Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,19 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include(GoogleTest)
+list(APPEND files infer_async)
 
-list(APPEND targets inference_request_input request_parameters)
+foreach(file ${files})
+  set(target ${file})
+  add_library(${target} OBJECT ${file}.cpp)
+  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  enable_ipo_on_target(${target})
 
-foreach(target ${targets})
-  add_executable(test_${target} test_${target}.cpp)
-  target_include_directories(
-    test_${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
-  )
-  target_include_directories(
-    test_${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS}
-  )
-  target_link_libraries(test_${target} predict_api gtest gtest_main)
-
-  gtest_discover_tests(test_${target})
+  list(APPEND CLIENT_API_OBJS $<TARGET_OBJECTS:${target}>)
+  list(APPEND targets ${target})
 endforeach()
+
+add_library(client_api STATIC ${CLIENT_API_OBJS})
+target_link_libraries(client_api INTERFACE ${targets})
+
+set(CLIENT_API_OBJS ${CLIENT_API_OBJS} PARENT_SCOPE)

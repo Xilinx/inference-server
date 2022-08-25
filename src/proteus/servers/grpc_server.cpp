@@ -206,7 +206,6 @@ class InferenceRequestInputBuilder<
     const inference::ModelInferRequest_InferInputTensor& req,
     Buffer* input_buffer, size_t offset) {
     InferenceRequestInput input;
-    input.shared_data_ = nullptr;
     input.name_ = req.name();
     input.shape_.reserve(req.shape_size());
     for (const auto& index : req.shape()) {

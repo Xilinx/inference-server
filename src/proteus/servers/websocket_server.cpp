@@ -139,10 +139,14 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
       this->json_, input_buffers, input_offset, output_buffers, output_offset);
     Callback callback =
       [conn = std::move(this->conn_)](const InferenceResponse &response) {
-        auto outputs = response.getOutputs();
-        auto *msg = static_cast<std::string *>(outputs[0].getData());
-        if (conn->connected()) {
-          conn->send(*msg);
+        if (response.isError()) {
+          conn->send(response.getError());
+        } else {
+          auto outputs = response.getOutputs();
+          const auto *msg = static_cast<char *>(outputs[0].getData());
+          if (conn->connected()) {
+            conn->send(msg, outputs[0].getSize());
+          }
         }
       };
     request->setCallback(std::move(callback));

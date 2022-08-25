@@ -62,7 +62,10 @@ class TestFacedetectStream:
 
         self.ws_client.modelInferWs(self.model, request)
         response_str = self.ws_client.modelRecv()
-        response = json.loads(response_str)
+        try:
+            response = json.loads(response_str)
+        except json.JSONDecodeError as e:
+            pytest.fail(f"Failed to parse as JSON: {response_str}", False)
 
         assert response["key"] == "0"
         assert float(response["data"]["img"]) == 15.0

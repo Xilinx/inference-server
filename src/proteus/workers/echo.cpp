@@ -168,11 +168,10 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
           output.setName(output_name);
         }
         output.setShape({1});
-        auto buffer = std::make_shared<std::vector<uint32_t>>();
-        buffer->resize(1);
-        (*buffer)[0] = value;
-        auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
-        output.setData(std::move(my_data_cast));
+        std::vector<std::byte> buffer;
+        buffer.resize(sizeof(uint32_t));
+        memcpy(buffer.data(), &value, sizeof(uint32_t));
+        output.setData(std::move(buffer));
         resp.addOutput(output);
       }
 

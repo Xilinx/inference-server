@@ -163,7 +163,7 @@ struct ServerMetadata {
 /**
  * @brief Holds an inference request's input data
  */
-class InferenceRequestInput {
+class InferenceRequestInput : public Serializable {
  public:
   /// Construct a new InferenceRequestInput object
   InferenceRequestInput();
@@ -182,7 +182,7 @@ class InferenceRequestInput {
   /// Set the request's data
   void setData(void *buffer);
   /// Set the request's shared data
-  void setData(std::shared_ptr<std::byte> buffer);
+  void setData(std::vector<std::byte> &&buffer);
   /// check if the stored data is shared
   bool sharedData() const;
 
@@ -222,6 +222,10 @@ class InferenceRequestInput {
   /// Get the tensor's size (number of elements)
   size_t getSize() const;
 
+  size_t serializeSize() const override;
+  void serialize(std::byte *data_out) const override;
+  void deserialize(const std::byte *data_in) override;
+
   /// Provide an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
                                   InferenceRequestInput const &my_class) {
@@ -247,7 +251,7 @@ class InferenceRequestInput {
   DataType dataType_;
   RequestParametersPtr parameters_;
   void *data_;
-  std::shared_ptr<std::byte> shared_data_;
+  std::vector<std::byte> shared_data_;
 
   template <typename U>
   friend class InferenceRequestInputBuilder;

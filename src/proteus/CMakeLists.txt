@@ -25,6 +25,7 @@ target_link_libraries(
 add_subdirectory(batching)
 add_subdirectory(bindings)
 add_subdirectory(buffers)
+add_subdirectory(client_api)
 add_subdirectory(clients)
 add_subdirectory(core)
 add_subdirectory(helpers)
@@ -87,7 +88,9 @@ endforeach()
 # include(GenerateExportHeader)
 # generate_export_header(proteus EXPORT_FILE_NAME include/proteus/export.h)
 # target_compile_definitions(
-#   proteus PUBLIC "$<$<NOT:$<BOOL:${PROTEUS_BUILD_SHARED}>>:PROTEUS_STATIC_DEFINE>")
+#   proteus PUBLIC
+#   "$<$<NOT:$<BOOL:${PROTEUS_BUILD_SHARED}>>:PROTEUS_STATIC_DEFINE>"
+# )
 # target_include_directories(
 #   proteus PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
 # )

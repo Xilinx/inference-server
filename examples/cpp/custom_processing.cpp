@@ -158,13 +158,13 @@ std::vector<int> get_top_k(const double* d, int size, int k) {
  */
 template <typename T>
 std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  auto* data = static_cast<std::vector<T>*>(output.getData());
+  const auto* data = static_cast<T*>(output.getData());
   auto size = output.getSize();
 
   std::vector<double> softmax;
   softmax.resize(size, 0);
 
-  calc_softmax<T>(data->data(), size, softmax.data());
+  calc_softmax<T>(data, size, softmax.data());
   return get_top_k(softmax.data(), size, k);
 }
 
