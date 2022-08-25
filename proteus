@@ -183,6 +183,10 @@ class WriteComposeFile:
         if ssh.exists():
             configs.append(f"{str(ssh)}:/home/proteus-user/.ssh:ro")
 
+        gpg = Path.home() / ".gnupg"
+        if gpg.exists():
+            configs.append(f"{str(gpg)}:/home/proteus-user/.gnupg:rw")
+
         return configs
 
     @staticmethod

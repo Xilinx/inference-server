@@ -893,6 +893,7 @@ RUN apt-get update \
         curl \
         make \
         # used for git
+        gpg \
         openssh-client \
         python3 \
         python3-dev \
