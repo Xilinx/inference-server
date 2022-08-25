@@ -240,7 +240,6 @@ InferenceRequestInput::InferenceRequestInput(void *data,
                                              std::string name)
   : dataType_(dataType) {
   this->data_ = data;
-  this->shared_data_ = nullptr;
   this->shape_ = std::move(shape);
   this->name_ = std::move(name);
   this->parameters_ = std::make_unique<RequestParameters>();
@@ -248,7 +247,6 @@ InferenceRequestInput::InferenceRequestInput(void *data,
 
 InferenceRequestInput::InferenceRequestInput() : dataType_(DataType::UINT32) {
   this->data_ = nullptr;
-  this->shared_data_ = nullptr;
   this->name_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
 }
@@ -263,12 +261,12 @@ void InferenceRequestInput::setDatatype(DataType type) {
 
 void InferenceRequestInput::setData(void *buffer) { this->data_ = buffer; }
 
-void InferenceRequestInput::setData(std::shared_ptr<std::byte> buffer) {
+void InferenceRequestInput::setData(std::vector<std::byte> &&buffer) {
   this->shared_data_ = std::move(buffer);
 }
 
 bool InferenceRequestInput::sharedData() const {
-  return this->shared_data_ != nullptr;
+  return this->shared_data_.empty();
 }
 
 size_t InferenceRequestInput::getSize() const {
@@ -277,10 +275,88 @@ size_t InferenceRequestInput::getSize() const {
 }
 
 void *InferenceRequestInput::getData() const {
-  if (this->shared_data_ != nullptr) {
-    return this->shared_data_.get();
+  if (!this->shared_data_.empty()) {
+    return (void *)shared_data_.data();
   }
   return this->data_;
+}
+
+struct InferenceRequestInputSizes {
+  size_t name;
+  size_t shape;
+  size_t dataType;
+  size_t parameters;
+  size_t data;
+  size_t shared_data;
+};
+
+size_t InferenceRequestInput::serializeSize() const {
+  auto size = sizeof(InferenceRequestInputSizes);
+  size += name_.length();
+  size += shape_.size() * sizeof(uint64_t);
+  size += sizeof(uint8_t);
+  size += parameters_->serializeSize();
+  if (!shared_data_.empty()) {
+    size += shared_data_.size();
+  } else {
+    size += sizeof(data_);
+  }
+  return size;
+}
+
+void InferenceRequestInput::serialize(std::byte *data_out) const {
+  InferenceRequestInputSizes metadata{name_.length(),
+                                      shape_.size() * sizeof(uint64_t),
+                                      sizeof(uint8_t),
+                                      parameters_->serializeSize(),
+                                      0,
+                                      0};
+  if (!shared_data_.empty()) {
+    metadata.shared_data = this->getSize() * dataType_.size();
+  } else {
+    metadata.data = sizeof(data_);
+  }
+  data_out = copy(metadata, data_out, sizeof(InferenceRequestInputSizes));
+  data_out = copy(name_.c_str(), data_out, metadata.name);
+  data_out = copy(shape_.data(), data_out, metadata.shape);
+  data_out = copy(static_cast<uint8_t>(dataType_), data_out, metadata.dataType);
+  parameters_->serialize(data_out);
+  data_out += metadata.parameters;
+  if (!shared_data_.empty()) {
+    proteus::copy(shared_data_.data(), data_out, metadata.shared_data);
+  } else {
+    std::memcpy(data_out, &data_, metadata.data);
+  }
+}
+
+void InferenceRequestInput::deserialize(const std::byte *data_in) {
+  const auto metadata =
+    *reinterpret_cast<const InferenceRequestInputSizes *>(data_in);
+  data_in += sizeof(InferenceRequestInputSizes);
+
+  name_.resize(metadata.name);
+  std::memcpy(name_.data(), data_in, metadata.name);
+  data_in += metadata.name;
+
+  shape_.resize(metadata.shape / sizeof(uint64_t));
+  std::memcpy(shape_.data(), data_in, metadata.shape);
+  data_in += metadata.shape;
+
+  uint8_t type;
+  std::memcpy(&type, data_in, metadata.dataType);
+  data_in += metadata.dataType;
+  dataType_ = DataType(static_cast<DataType::Value>(type));
+
+  parameters_ = std::make_shared<RequestParameters>();
+  parameters_->deserialize(data_in);
+  data_in += parameters_->serializeSize();
+
+  if (metadata.shared_data != 0) {
+    shared_data_.resize(metadata.shared_data);
+    std::memcpy(shared_data_.data(), data_in, metadata.shared_data);
+  } else {
+    std::memcpy(&data_, data_in, metadata.data);
+  }
 }
 
 InferenceRequestOutput::InferenceRequestOutput() {

@@ -420,9 +420,9 @@ void mapRequestToProto(const InferenceRequest& request,
         break;
       }
       case DataType::STRING: {
-        auto* data = static_cast<std::string*>(input.getData());
+        const auto* data = static_cast<char*>(input.getData());
         auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
-        contents->Add(std::move(*data));
+        contents->Add(data);
         // for(size_t i = 0; i < output.getSize(); i++){
         //   contents->Add(data->data()[i]);
         // }
@@ -456,52 +456,47 @@ void mapPrototoResponse(const inference::ModelInferResponse& reply,
     }
     output.setShape(shape);
     // TODO(varunsh): skipping parameters for now
-
+    std::vector<std::byte> data;
     switch (output.getDatatype()) {
       case DataType::BOOL: {
-        auto data = std::make_shared<std::vector<char>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().bool_contents().data(),
+        data.resize(size * sizeof(char));
+        std::memcpy(data.data(), tensor.contents().bool_contents().data(),
                     size * sizeof(char));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         break;
       }
       case DataType::UINT8:
       case DataType::UINT16:
       case DataType::UINT32: {
-        auto data = std::make_shared<std::vector<uint32_t>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().uint_contents().data(),
+        data.resize(size * sizeof(uint32_t));
+        std::memcpy(data.data(), tensor.contents().uint_contents().data(),
                     size * sizeof(uint32_t));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         output.setDatatype(DataType::UINT32);
         break;
       }
       case DataType::UINT64: {
-        auto data = std::make_shared<std::vector<uint64_t>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().uint64_contents().data(),
+        data.resize(size * sizeof(uint64_t));
+        std::memcpy(data.data(), tensor.contents().uint64_contents().data(),
                     size * sizeof(uint64_t));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         break;
       }
       case DataType::INT8:
       case DataType::INT16:
       case DataType::INT32: {
-        auto data = std::make_shared<std::vector<int32_t>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().int_contents().data(),
+        data.resize(size * sizeof(int32_t));
+        std::memcpy(data.data(), tensor.contents().int_contents().data(),
                     size * sizeof(int32_t));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         output.setDatatype(DataType::INT32);
         break;
       }
       case DataType::INT64: {
-        auto data = std::make_shared<std::vector<int64_t>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().int64_contents().data(),
+        data.resize(size * sizeof(int64_t));
+        std::memcpy(data.data(), tensor.contents().int64_contents().data(),
                     size * sizeof(int64_t));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         break;
       }
       case DataType::FP16: {
@@ -510,27 +505,24 @@ void mapPrototoResponse(const inference::ModelInferResponse& reply,
         break;
       }
       case DataType::FP32: {
-        auto data = std::make_shared<std::vector<float>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().fp32_contents().data(),
+        data.resize(size * sizeof(float));
+        std::memcpy(data.data(), tensor.contents().fp32_contents().data(),
                     size * sizeof(float));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         break;
       }
       case DataType::FP64: {
-        auto data = std::make_shared<std::vector<double>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().fp64_contents().data(),
+        data.resize(size * sizeof(double));
+        std::memcpy(data.data(), tensor.contents().fp64_contents().data(),
                     size * sizeof(double));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         break;
       }
       case DataType::STRING: {
-        auto data = std::make_shared<std::vector<std::byte>>();
-        data->resize(size);
-        std::memcpy(data->data(), tensor.contents().bytes_contents().data(),
+        data.resize(size * sizeof(std::byte));
+        std::memcpy(data.data(), tensor.contents().bytes_contents().data(),
                     size * sizeof(std::byte));
-        output.setData(std::reinterpret_pointer_cast<std::byte>(data));
+        output.setData(std::move(data));
         break;
       }
       default:

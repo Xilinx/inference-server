@@ -95,13 +95,15 @@ Json::Value mapParametersToJson(RequestParameters *parameters) {
 template <typename T, typename Fn>
 void setOutputData(const Json::Value &json, InferenceResponseOutput *output,
                    Fn f) {
-  auto data = std::make_shared<std::vector<T>>();
-  data->reserve(json.size());
+  std::vector<std::byte> data;
+  data.resize(json.size() * sizeof(T));
+  auto *ptr = data.data();
   for (const auto &datum : json) {
-    data->push_back((datum.*f)());
+    auto raw_datum = static_cast<T>((datum.*f)());
+    memcpy(ptr, &raw_datum, sizeof(T));
+    ptr += sizeof(T);
   }
-  auto data_cast = std::reinterpret_pointer_cast<std::byte>(data);
-  output->setData(std::move(data_cast));
+  output->setData(std::move(data));
 }
 
 InferenceResponse mapJsonToResponse(Json::Value *json) {
@@ -174,13 +176,12 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
         break;
       }
       case DataType::STRING: {
-        auto data = std::make_shared<std::string>();
         assert(json_data.size() == 1);
         auto str = json_data[0].asString();
-        data->reserve(str.size());
-        data->assign(str);
-        auto data_cast = std::reinterpret_pointer_cast<std::byte>(data);
-        output.setData(std::move(data_cast));
+        std::vector<std::byte> data;
+        data.resize(str.length());
+        memcpy(data.data(), str.data(), str.length());
+        output.setData(std::move(data));
         break;
       }
       default:
@@ -274,8 +275,9 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
         break;
       }
       case DataType::STRING: {
-        auto *data = static_cast<std::string *>(input.getData());
-        json_input["data"].append(*data);
+        const auto *data = static_cast<char *>(input.getData());
+        std::string str{data, input.getSize()};
+        json_input["data"].append(str);
         break;
       }
       default:
@@ -302,7 +304,6 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
 #endif
     input.data_ = input_buffer->data();
 
-    input.shared_data_ = nullptr;
     if (!req->isMember("name")) {
       throw invalid_argument("No 'name' key present in request input");
     }
@@ -580,79 +581,80 @@ Json::Value parseResponse(InferenceResponse response) {
   ret["outputs"] = Json::arrayValue;
   ret["id"] = response.getID();
   auto outputs = response.getOutputs();
-  for (InferenceResponseOutput &output : outputs) {
+  for (const InferenceResponseOutput &output : outputs) {
     Json::Value json_output;
     json_output["name"] = output.getName();
     json_output["parameters"] = Json::objectValue;
     json_output["data"] = Json::arrayValue;
     json_output["shape"] = Json::arrayValue;
     json_output["datatype"] = output.getDatatype().str();
-    auto shape = output.getShape();
+    const auto &shape = output.getShape();
     for (const size_t &index : shape) {
       json_output["shape"].append(static_cast<Json::UInt>(index));
     }
 
+    const auto output_size = output.getSize();
     switch (output.getDatatype()) {
       case DataType::BOOL: {
-        auto *data = static_cast<std::vector<bool> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append(static_cast<bool>((*data)[i]));
+        const auto *data = static_cast<bool *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::UINT8: {
-        auto *data = static_cast<std::vector<uint8_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<uint8_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::UINT16: {
-        auto *data = static_cast<std::vector<uint16_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<uint16_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::UINT32: {
-        auto *data = static_cast<std::vector<uint32_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<uint32_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::UINT64: {
-        auto *data = static_cast<std::vector<uint64_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append(static_cast<Json::UInt64>((*data)[i]));
+        const auto *data = static_cast<uint64_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(static_cast<Json::UInt64>(data[i]));
         }
         break;
       }
       case DataType::INT8: {
-        auto *data = static_cast<std::vector<int8_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<int8_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::INT16: {
-        auto *data = static_cast<std::vector<int16_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<int16_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::INT32: {
-        auto *data = static_cast<std::vector<int32_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<int32_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::INT64: {
-        auto *data = static_cast<std::vector<int64_t> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append(static_cast<Json::Int64>((*data)[i]));
+        const auto *data = static_cast<int64_t *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(static_cast<Json::Int64>(data[i]));
         }
         break;
       }
@@ -662,22 +664,23 @@ Json::Value parseResponse(InferenceResponse response) {
         break;
       }
       case DataType::FP32: {
-        auto *data = static_cast<std::vector<float> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<float *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::FP64: {
-        auto *data = static_cast<std::vector<double> *>(output.getData());
-        for (size_t i = 0; i < output.getSize(); i++) {
-          json_output["data"].append((*data)[i]);
+        const auto *data = static_cast<double *>(output.getData());
+        for (size_t i = 0; i < output_size; i++) {
+          json_output["data"].append(data[i]);
         }
         break;
       }
       case DataType::STRING: {
-        auto *data = static_cast<std::string *>(output.getData());
-        json_output["data"].append(*data);
+        const auto *data = static_cast<char *>(output.getData());
+        std::string str{data, output.getSize()};
+        json_output["data"].append(str);
         // for(size_t i = 0; i < output.getSize(); i++){
         //   json_output["data"].append(data->data()[i]);
         // }

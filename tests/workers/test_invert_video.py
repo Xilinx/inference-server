@@ -72,7 +72,7 @@ class TestInvertVideo:
             resp_data = resp["data"]["img"].split(",")[1]
             _, frame = cap.read()
             frame = cv2.bitwise_not(frame)
-            compare_jpgs(resp_data, frame)
+            compare_jpgs(resp_data.encode(), frame)
 
     def test_invert_video_0(self):
         requested_frames_count = 100

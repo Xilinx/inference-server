@@ -44,7 +44,7 @@ void test(proteus::Client* client) {
   input_0.setName("input0");
   input_0.setDatatype(DataType::FP32);
   input_0.setShape({28, 28, 1});
-  input_0.setData((void*)(img.data));
+  input_0.setData(img.data);
 
   InferenceRequest request;
   request.addInputTensor(input_0);
@@ -56,8 +56,7 @@ void test(proteus::Client* client) {
   const auto& output = outputs[0];
   EXPECT_EQ(output.getSize(), 10);
   EXPECT_EQ(output.getDatatype(), DataType::FP32);
-  const auto data = *static_cast<std::vector<float>*>(output.getData());
-  EXPECT_EQ(data.size(), 10);
+  const auto* data = static_cast<float*>(output.getData());
 
   float max = 0;
   int index = -1;

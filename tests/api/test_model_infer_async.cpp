@@ -52,9 +52,8 @@ void test(proteus::Client* client) {
     auto outputs = response.getOutputs();
     EXPECT_EQ(outputs.size(), 1);
     for (const auto& output : outputs) {
-      auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
-      EXPECT_EQ(data->size(), 1);
-      EXPECT_EQ((*data)[0], 2);
+      const auto* data = static_cast<uint32_t*>(output.getData());
+      EXPECT_EQ(data[0], 2);
     }
   }
 

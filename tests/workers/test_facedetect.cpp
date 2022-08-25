@@ -44,7 +44,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
     auto outputs = results.getOutputs();
     EXPECT_EQ(outputs.size(), 1);
     for (auto& output : outputs) {
-      auto* data = static_cast<std::vector<float>*>(output.getData());
+      const auto* data = static_cast<float*>(output.getData());
       auto size = output.getSize();
       EXPECT_STREQ(output.getName().c_str(), "");
       EXPECT_STREQ(output.getDatatype().str(), "FP32");
@@ -60,7 +60,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       for (size_t i = 0; i < gold_response_size; i++) {
         // expect that the response values are within 1% of the golden
         const float abs_error = std::abs(gold_response_output[i] * 0.01);
-        EXPECT_NEAR((*data)[i], gold_response_output[i], abs_error);
+        EXPECT_NEAR(data[i], gold_response_output[i], abs_error);
       }
     }
   }

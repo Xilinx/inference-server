@@ -171,13 +171,8 @@ void wrapRequestParameters(py::module_ &m) {
 
 template <typename T>
 py::array_t<T> getData(const proteus::InferenceRequestInput &self) {
-  if (self.sharedData()) {
-    auto *data = static_cast<std::vector<T> *>(self.getData());
-    return py::array_t<T>(self.getSize(), data->data());
-  } else {
-    auto *data = static_cast<T *>(self.getData());
-    return py::array_t<T>(self.getSize(), data);
-  }
+  auto *data = static_cast<T *>(self.getData());
+  return py::array_t<T>(self.getSize(), data);
 
   // return py::memoryview::from_memory(data->data(), self.getSize());
 }
@@ -225,10 +220,10 @@ void wrapPredictApi(py::module_ &m) {
     .def(
       "setStringData",
       [](proteus::InferenceRequestInput &self, std::string &str) {
-        auto ptr = std::make_shared<std::string>(str);
-        auto ptr_cast = std::reinterpret_pointer_cast<std::byte>(ptr);
-        // self.setData(static_cast<void *>(&str));
-        self.setData(ptr_cast);
+        std::vector<std::byte> data;
+        data.resize(str.length());
+        memcpy(data.data(), str.data(), str.length());
+        self.setData(std::move(data));
       },
       py::keep_alive<1, 2>())
     .def("getUint8Data", &getData<uint8_t>, py::keep_alive<0, 1>())
@@ -241,15 +236,7 @@ void wrapPredictApi(py::module_ &m) {
     .def("getInt64Data", &getData<int64_t>, py::keep_alive<0, 1>())
     .def("getFp32Data", &getData<float>, py::keep_alive<0, 1>())
     .def("getFp64Data", &getData<double>, py::keep_alive<0, 1>())
-
-    // pybind11 complains about weak reference if I add keep_alive<0,1> to this
-    .def(
-      "getStringData",
-      [](proteus::InferenceRequestInput &self) {
-        auto *data = static_cast<std::string *>(self.getData());
-        return *data;
-      },
-      py::return_value_policy::reference)
+    .def("getStringData", &getData<char>, py::keep_alive<0, 1>())
     .def_property("name", &InferenceRequestInput::getName,
                   &InferenceRequestInput::setName)
     .def_property("shape", &InferenceRequestInput::getShape, setShape)

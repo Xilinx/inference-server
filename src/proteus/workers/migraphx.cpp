@@ -540,12 +540,10 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             output.setData(results);
 
             // Copy migraphx results to a buffer and add to output
-            auto buffer = std::make_shared<std::vector<std::byte>>();
-            buffer->resize(size_of_result);
-            memcpy(&((*buffer)[0]), results, size_of_result);
-            auto my_data_cast =
-              std::reinterpret_pointer_cast<std::byte>(buffer);
-            output.setData(std::move(my_data_cast));
+            std::vector<std::byte> buffer;
+            buffer.resize(size_of_result);
+            memcpy(buffer.data(), results, size_of_result);
+            output.setData(std::move(buffer));
             resp.addOutput(output);
           }
 

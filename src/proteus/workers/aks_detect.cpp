@@ -129,6 +129,15 @@ size_t AksDetect::doAllocate(size_t num) {
   return buffer_num;
 }
 
+struct DetectResponse {
+  float class_id;
+  float score;
+  float x;
+  float y;
+  float w;
+  float h;
+};
+
 void AksDetect::doAcquire(RequestParameters* parameters) {
   auto kPath =
     std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_proteus.json");
@@ -249,22 +258,15 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
     int size = shape.size() > 1 ? shape[0] * shape[1] : 0;
 
     auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
-    auto my_data_2 = std::vector<std::shared_ptr<std::vector<float>>>();
-    my_data_2.reserve(this->batch_size_);
-    for (size_t i = 0; i < this->batch_size_; i++) {
-      my_data_2.push_back(std::make_shared<std::vector<float>>());
-    }
+    auto my_data_2 = std::vector<std::vector<std::byte>>();
+    my_data_2.resize(this->batch_size_);
     for (int i = 0; i < size; i += 7) {
       auto batch_id = static_cast<int>(topKData[i]);
-      auto len = my_data_2[batch_id]->size();
-      my_data_2[batch_id]->resize(len + 6);
+      auto len = my_data_2[batch_id].size();
+      my_data_2[batch_id].resize(len + sizeof(DetectResponse));
 
-      (*my_data_2[batch_id].get())[len] = topKData[i + 1];      // class id
-      (*my_data_2[batch_id].get())[len + 1] = topKData[i + 2];  // score
-      (*my_data_2[batch_id].get())[len + 2] = topKData[i + 3];  // x
-      (*my_data_2[batch_id].get())[len + 3] = topKData[i + 4];  // y
-      (*my_data_2[batch_id].get())[len + 4] = topKData[i + 5];  // w
-      (*my_data_2[batch_id].get())[len + 5] = topKData[i + 6];  // h
+      memcpy(my_data_2[batch_id].data() + len, &(topKData[i + 1]),
+             sizeof(DetectResponse));
     }
 
     tensor_count = 0;
@@ -287,11 +289,9 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
           output.setName(output_name);
         }
 
-        output.setShape({6, my_data_2[tensor_count]->size() / 6});
-        auto my_data_cast =
-          std::reinterpret_pointer_cast<std::byte>(my_data_2[tensor_count]);
-        std::shared_ptr<std::byte> new_ptr(my_data_cast, my_data_cast.get());
-        output.setData(std::move(new_ptr));
+        output.setShape(
+          {6, my_data_2[tensor_count].size() / sizeof(DetectResponse)});
+        output.setData(std::move(my_data_2[tensor_count]));
         resp.addOutput(output);
         tensor_count++;
       }

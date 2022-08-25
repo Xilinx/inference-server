@@ -185,11 +185,10 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
         output.setDatatype(DataType::FP32);
         output.setName("aks");
         output.setShape({1});
-        auto buffer = std::make_shared<std::vector<float>>();
-        buffer->resize(1);
-        (*buffer)[0] = value;
-        auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
-        output.setData(std::move(my_data_cast));
+        std::vector<std::byte> buffer;
+        buffer.resize(sizeof(float));
+        memcpy(buffer.data(), &value, sizeof(float));
+        output.setData(std::move(buffer));
         resp.addOutput(output);
       }
 

@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import argparse
+import base64
 import json
 import os
 
-import argparse
-import base64
 import cv2
 import numpy as np
 import pytest
+from helper import root_path, run_benchmark, run_benchmark_func
 
-from helper import run_benchmark, run_benchmark_func, root_path
 import proteus
 
 
@@ -35,7 +35,7 @@ def parameters_fixture():
     return None
 
 
-def compare_jpgs(test_image, reference_image, shape=None):
+def compare_jpgs(test_image, reference_image):
     """
     Compare a base64 encoded JPG image string with a reference image (as a np
     buffer). Since JPGs are lossy, images that are "equal" may be slightly
@@ -48,10 +48,8 @@ def compare_jpgs(test_image, reference_image, shape=None):
         shape (list, optional): Check that the labeled shape of the test image
             matches its actual decoded shape. Defaults to None.
     """
-    decoded_image = base64.decodebytes(str.encode(test_image))
+    decoded_image = base64.decodebytes(test_image)
     buffer = np.frombuffer(decoded_image, dtype=np.uint8)
-    if shape:
-        assert shape == [len(buffer)]
     received_image = cv2.imdecode(buffer, cv2.IMREAD_UNCHANGED)
     diff = received_image.astype(np.int16) - reference_image.astype(np.int16)
     m_norm = np.sum(np.absolute(diff))  # Manhattan norm
@@ -95,7 +93,7 @@ class TestInvertImage:
         output = outputs[0]
         if output.datatype == proteus.DataType.STRING:
             data = output.getStringData()
-            compare_jpgs(data, image, shape=output.shape)
+            compare_jpgs(data, image)
             assert output.parameters.empty()
         else:
             assert output.shape == [*image.shape]

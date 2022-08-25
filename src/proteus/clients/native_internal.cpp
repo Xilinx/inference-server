@@ -48,7 +48,6 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
                                      Buffer *input_buffer, size_t offset) {
     InferenceRequestInput input;
     input.data_ = req.data_;
-    input.shared_data_ = nullptr;
     input.name_ = req.name_;
     input.shape_.reserve(req.shape_.size());
     input.shape_ = req.shape_;

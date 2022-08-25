@@ -19,7 +19,6 @@ list(
          Echo
          InvertImage
          InvertVideo
-         # Fake
 )
 
 if(${PROTEUS_ENABLE_VITIS})
@@ -97,8 +96,6 @@ if(${PROTEUS_ENABLE_PTZENDNN})
   )
   target_link_libraries(workerPtzendnn PRIVATE torch torch_cpu c10)
 endif()
-
-# target_link_libraries(workerFake PRIVATE observation)
 
 if(${PROTEUS_ENABLE_AKS})
 

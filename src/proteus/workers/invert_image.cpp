@@ -191,11 +191,10 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
           auto* output_data = static_cast<uint8_t*>(output_buffer);
 
-          auto buffer = std::make_shared<std::vector<uint8_t>>();
-          buffer->resize(input_size);
-          memcpy(buffer->data(), output_data, input_size);
-          auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(buffer);
-          output.setData(std::move(my_data_cast));
+          std::vector<std::byte> buffer;
+          buffer.resize(input_size);
+          memcpy(buffer.data(), output_data, input_size);
+          output.setData(std::move(buffer));
           output.setDatatype(DataType::UINT8);
         } else if (input_dtype == DataType::STRING) {
           auto* idata = static_cast<char*>(input_buffer);
@@ -220,12 +219,13 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           std::vector<unsigned char> buf;
           cv::imencode(".jpg", img, buf);
           const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-          auto encoded =
-            std::make_shared<std::string>(base64_encode(enc_msg, buf.size()));
-          auto my_data_cast = std::reinterpret_pointer_cast<std::byte>(encoded);
-          output.setData(std::move(my_data_cast));
+          auto encoded = base64_encode(enc_msg, buf.size());
+          std::vector<std::byte> buffer;
+          buffer.resize(encoded.size());
+          memcpy(buffer.data(), encoded.data(), encoded.length());
+          output.setData(std::move(buffer));
           output.setDatatype(DataType::STRING);
-          output.setShape({buf.size()});
+          output.setShape({encoded.size()});
         }
 
         // if our output is explicitly named, use that name in response, or use

@@ -86,9 +86,8 @@ class EchoParamFixture
 
     for (auto i = 0; i < multiplier; i++) {
       const auto& output = outputs[i];
-      auto* data = static_cast<std::vector<uint32_t>*>(output.getData());
-      EXPECT_EQ(data->size(), 1);
-      EXPECT_EQ((*data)[0], golden_outputs_[0]);
+      const auto* data = static_cast<uint32_t*>(output.getData());
+      EXPECT_EQ(data[0], golden_outputs_[0]);
       EXPECT_EQ(output.getDatatype(), DataType::UINT32);
       EXPECT_EQ(output.getName(), "echo");
       EXPECT_TRUE(output.getParameters()->empty());
