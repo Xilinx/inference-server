@@ -25,7 +25,7 @@
 #include <vector>   // for vector
 
 #include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "proteus/helpers/declarations.hpp"   // for BufferRawPtrs
+#include "proteus/declarations.hpp"           // for BufferRawPtrs
 
 namespace proteus {
 

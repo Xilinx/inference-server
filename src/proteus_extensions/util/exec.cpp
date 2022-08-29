@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/helpers/exec.hpp"
+#include "proteus_extensions/util/exec.hpp"
 
-#include <array>   // for array
-#include <cstdio>  // for pclose, fgets, popen, FILE
-#include <memory>  // for unique_ptr
-#include <string>  // for string
-
-#include "proteus/core/exceptions.hpp"
+#include <array>         // for array
+#include <cstdio>        // for pclose, fgets, popen, FILE
+#include <memory>        // for unique_ptr
+#include <string>        // for string
+#include <system_error>  // for system_error
 
 namespace proteus {
 
@@ -30,7 +29,7 @@ std::string exec(const char* cmd) {
   // NOLINTNEXTLINE(cert-env33-c)
   std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), &pclose);
   if (!pipe) {
-    throw external_error("popen() failed!");
+    throw std::system_error(EPIPE, std::generic_category(), "popen failed");
   }
   while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
     result += buffer.data();

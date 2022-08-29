@@ -26,10 +26,10 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/interface.hpp"        // for Interface
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
-#include "proteus/observation/logging.hpp"   // for LoggerPtr
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/interface.hpp"       // for Interface
+#include "proteus/declarations.hpp"         // for BufferRawPtrs
+#include "proteus/observation/logging.hpp"  // for LoggerPtr
 
 namespace Json {
 class Value;

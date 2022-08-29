@@ -23,8 +23,8 @@
 #include <cstddef>  // for size_t
 #include <vector>   // for vector
 
-#include "proteus/core/predict_api.hpp"      // for InferenceRequest, Infere...
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest, Infere...
+#include "proteus/declarations.hpp"      // for BufferRawPtrs
 
 namespace proteus {
 

@@ -27,12 +27,12 @@
 #include <thread>   // for thread
 #include <vector>   // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api.hpp"      // for RequestParameters
-#include "proteus/helpers/declarations.hpp"  // for BufferPtrs, InferenceReq...
-#include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
-#include "proteus/observation/logging.hpp"   // for LoggerPtr
-#include "proteus/observation/tracing.hpp"   // for TracePtr
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/predict_api.hpp"     // for RequestParameters
+#include "proteus/declarations.hpp"         // for BufferPtrs, InferenceReq...
+#include "proteus/observation/logging.hpp"  // for LoggerPtr
+#include "proteus/observation/tracing.hpp"  // for TracePtr
+#include "proteus/util/queue.hpp"           // for BlockingConcurrentQueue
 
 namespace proteus {
 class Buffer;

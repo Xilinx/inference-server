@@ -35,10 +35,10 @@
 #include <variant>           // for operator!=, operator<
 #include <vector>            // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"       // for DataType, mapTypeToStr
-#include "proteus/core/mixins.hpp"           // for Serializable
-#include "proteus/helpers/declarations.hpp"  // for InferenceResponseOutput
+#include "proteus/build_options.hpp"    // for PROTEUS_ENABLE_TRACING
+#include "proteus/core/data_types.hpp"  // for DataType, mapTypeToStr
+#include "proteus/core/mixins.hpp"      // for Serializable
+#include "proteus/declarations.hpp"     // for InferenceResponseOutput
 
 namespace proteus {
 

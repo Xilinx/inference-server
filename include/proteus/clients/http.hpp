@@ -24,9 +24,9 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"        // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"      // for RequestParameters (ptr o...
-#include "proteus/helpers/declarations.hpp"  // for StringMap
+#include "proteus/clients/client.hpp"    // IWYU pragma: export
+#include "proteus/core/predict_api.hpp"  // for RequestParameters (ptr o...
+#include "proteus/declarations.hpp"      // for StringMap
 
 namespace proteus {
 

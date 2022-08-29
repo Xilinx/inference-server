@@ -31,7 +31,7 @@
 #include "proteus/core/data_types.hpp"          // for DataType, DataType::U...
 #include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "proteus/core/worker_info.hpp"         // for WorkerInfo
-#include "proteus/helpers/declarations.hpp"     // for BufferPtrs
+#include "proteus/declarations.hpp"             // for BufferPtrs
 #include "proteus/observation/logging.hpp"      // for initLogger, LogLevel
 
 namespace proteus {

@@ -37,11 +37,11 @@
 #include "proteus/core/exceptions.hpp"            // for runtime_error, inva...
 #include "proteus/core/interface.hpp"             // for Interface
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
-#include "proteus/helpers/string.hpp"             // for toLower
 #include "proteus/observation/logging.hpp"        // for Logger, PROTEUS_LOG...
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
 #include "proteus/servers/websocket_server.hpp"   // for WebsocketServer
+#include "proteus_extensions/util/string.hpp"     // for toLower
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;

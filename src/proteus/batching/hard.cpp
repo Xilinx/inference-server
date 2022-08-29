@@ -25,14 +25,14 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_METRICS
-#include "proteus/core/exceptions.hpp"       // for invalid_argument
-#include "proteus/core/interface.hpp"        // for Interface
-#include "proteus/helpers/declarations.hpp"  // for InterfacePtr
-#include "proteus/helpers/queue.hpp"         // for BlockingConcurrentQueue
-#include "proteus/helpers/thread.hpp"        // for setThreadName
-#include "proteus/observation/metrics.hpp"   // for Metrics, MetricCounterIDs
-#include "proteus/observation/tracing.hpp"   // for Trace
+#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_METRICS
+#include "proteus/core/exceptions.hpp"         // for invalid_argument
+#include "proteus/core/interface.hpp"          // for Interface
+#include "proteus/declarations.hpp"            // for InterfacePtr
+#include "proteus/observation/metrics.hpp"     // for Metrics, MetricCounterIDs
+#include "proteus/observation/tracing.hpp"     // for Trace
+#include "proteus/util/queue.hpp"              // for BlockingConcurrentQueue
+#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 // IWYU pragma: no_forward_declare proteus::Buffer
 

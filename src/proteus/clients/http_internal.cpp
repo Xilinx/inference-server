@@ -40,8 +40,8 @@
 #include "proteus/core/exceptions.hpp"            // invalid_argument
 #include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
-#include "proteus/helpers/compression.hpp"        // for z_decompress
 #include "proteus/observation/logging.hpp"        // for Logger
+#include "proteus_extensions/util/compression.hpp"  // for z_decompress
 
 namespace proteus {
 
@@ -570,8 +570,9 @@ size_t DrogonHttp::getInputSize() {
   }
   auto inputs = this->json_->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw invalid_argument("'inputs' is not an array");
+    throw invalid_argument("'inputs' is not an arrafy");
   }
+
   return inputs.size();
 }
 

@@ -23,7 +23,7 @@
 #include <memory>     // for make_unique
 #include <utility>    // for move
 
-#include "proteus/helpers/declarations.hpp"  // for BufferPtrs
+#include "proteus/declarations.hpp"  // for BufferPtrs
 
 namespace proteus {
 

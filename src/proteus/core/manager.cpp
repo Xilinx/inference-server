@@ -23,11 +23,11 @@
 #include <thread>   // for yield, thread
 #include <utility>  // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"     // for kMaxModelNameSize
-#include "proteus/core/exceptions.hpp"   // for invalid_argument
-#include "proteus/core/worker_info.hpp"  // for WorkerInfo
-#include "proteus/helpers/thread.hpp"    // for setThreadName
-#include "proteus/workers/worker.hpp"    // for Worker
+#include "proteus/build_options.hpp"           // for kMaxModelNameSize
+#include "proteus/core/exceptions.hpp"         // for invalid_argument
+#include "proteus/core/worker_info.hpp"        // for WorkerInfo
+#include "proteus/workers/worker.hpp"          // for Worker
+#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 namespace proteus {
 

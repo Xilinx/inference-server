@@ -34,12 +34,12 @@
 #include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
-#include "proteus/helpers/declarations.hpp"   // for BufferPtr, InferenceResp...
-#include "proteus/helpers/thread.hpp"         // for setThreadName
+#include "proteus/declarations.hpp"           // for BufferPtr, InferenceResp...
 #include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "proteus/workers/worker.hpp"         // for Worker
+#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 // opencv for debugging only --
 #include <migraphx/filesystem.hpp>

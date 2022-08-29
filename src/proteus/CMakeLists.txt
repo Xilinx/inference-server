@@ -19,7 +19,7 @@ enable_ipo_on_target(proteus-server-exe)
 set_target_properties(proteus-server-exe PROPERTIES OUTPUT_NAME proteus-server)
 
 target_link_libraries(
-  proteus-server-exe PRIVATE batching clients core helpers observation servers
+  proteus-server-exe PRIVATE batching clients core observation servers
 )
 
 add_subdirectory(batching)
@@ -28,7 +28,6 @@ add_subdirectory(buffers)
 add_subdirectory(client_operators)
 add_subdirectory(clients)
 add_subdirectory(core)
-add_subdirectory(helpers)
 add_subdirectory(observation)
 add_subdirectory(servers)
 add_subdirectory(workers)
@@ -55,17 +54,13 @@ add_library(
   ${OBSERVATION_OBJS}
   ${SERVER_OBJS}
 )
-target_link_libraries(
-  proteus PRIVATE batching clients core helpers observation servers
-)
+target_link_libraries(proteus PRIVATE batching clients core observation servers)
 
 add_library(
   proteus-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
                  ${OBSERVATION_OBJS} ${SERVER_OBJS}
 )
-target_link_libraries(
-  proteus-server PRIVATE batching core helpers observation servers
-)
+target_link_libraries(proteus-server PRIVATE batching core observation servers)
 
 add_library(
   proteus-client ${TYPE} ${CLIENT_OPERATORS_OBJS} ${CLIENT_OBJS} ${CORE_OBJS}

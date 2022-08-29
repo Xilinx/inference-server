@@ -17,7 +17,7 @@
  * @brief Implements base64 encoding/decoding
  */
 
-#include "proteus/helpers/base64.hpp"
+#include "proteus_extensions/util/base64.hpp"
 
 #include <stdexcept>
 

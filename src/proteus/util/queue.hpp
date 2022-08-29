@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_HELPERS_QUEUE
-#define GUARD_PROTEUS_HELPERS_QUEUE
+#ifndef GUARD_PROTEUS_UTIL_QUEUE
+#define GUARD_PROTEUS_UTIL_QUEUE
 
 #include <concurrentqueue/blockingconcurrentqueue.h>  // IWYU pragma: export
 
 #include <memory>
 #include <vector>
 
-#include "proteus/helpers/declarations.hpp"
+#include "proteus/declarations.hpp"
 
 namespace proteus {
 
@@ -34,4 +34,4 @@ using InferenceRequestPtrQueue = BlockingQueue<InferenceRequestPtr>;
 
 }  // namespace proteus
 
-#endif  // GUARD_PROTEUS_HELPERS_QUEUE
+#endif  // GUARD_PROTEUS_UTIL_QUEUE

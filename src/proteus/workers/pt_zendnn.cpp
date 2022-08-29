@@ -35,18 +35,18 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "proteus/batching/hard.hpp"          // for Batch, BatchPtrQueue
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::FP32
-#include "proteus/core/exceptions.hpp"        // for external_error, file_no...
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Requ...
-#include "proteus/helpers/declarations.hpp"   // for InferenceResponseOutput
-#include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
-#include "proteus/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
-#include "proteus/observation/tracing.hpp"    // for Trace
-#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "proteus/batching/hard.hpp"           // for Batch, BatchPtrQueue
+#include "proteus/buffers/vector_buffer.hpp"   // for VectorBuffer
+#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/data_types.hpp"         // for DataType, DataType::FP32
+#include "proteus/core/exceptions.hpp"         // for external_error, file_no...
+#include "proteus/core/predict_api.hpp"        // for InferenceResponse, Requ...
+#include "proteus/declarations.hpp"            // for InferenceResponseOutput
+#include "proteus/observation/logging.hpp"     // for Logger, PROTEUS_LOG_INFO
+#include "proteus/observation/metrics.hpp"     // for Metrics, MetricCounterIDs
+#include "proteus/observation/tracing.hpp"     // for Trace
+#include "proteus/workers/worker.hpp"          // for Worker, kNumBufferAuto
+#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 namespace fs = std::filesystem;
 
