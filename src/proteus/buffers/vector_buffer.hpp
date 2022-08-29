@@ -25,7 +25,7 @@
 
 #include "proteus/buffers/buffer.hpp"   // for Buffer
 #include "proteus/core/data_types.hpp"  // for DataType
-#include "proteus/helpers/queue.hpp"    // for BufferPtrsQueue
+#include "proteus/util/queue.hpp"       // for BufferPtrsQueue
 
 namespace proteus {
 

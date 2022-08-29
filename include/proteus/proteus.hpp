@@ -23,7 +23,7 @@
 #include "proteus/core/data_types.hpp"
 #include "proteus/core/exceptions.hpp"
 #include "proteus/core/predict_api.hpp"
-#include "proteus/helpers/declarations.hpp"
+#include "proteus/declarations.hpp"
 #include "proteus/servers/server.hpp"
 // IWYU pragma: end_exports
 

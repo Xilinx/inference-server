@@ -23,9 +23,9 @@
 #include <memory>  // for shared_ptr, uniqu...
 #include <stack>   // for stack
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_TR...
-#include "proteus/core/predict_api.hpp"      // for RequestParameters
-#include "proteus/helpers/declarations.hpp"  // for StringMap
+#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TR...
+#include "proteus/core/predict_api.hpp"  // for RequestParameters
+#include "proteus/declarations.hpp"      // for StringMap
 
 // IWYU pragma: no_forward_declare proteus::RequestParameters
 

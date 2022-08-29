@@ -32,7 +32,7 @@
 #include <utility>
 #include <vector>
 
-#include "proteus/helpers/thread.hpp"
+#include "proteus_extensions/util/thread.hpp"
 
 #ifndef _ctplThreadPoolLength_
 #define _ctplThreadPoolLength_ 100

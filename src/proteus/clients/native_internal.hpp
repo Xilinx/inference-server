@@ -26,9 +26,9 @@
 #include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "proteus/core/interface.hpp"        // for Interface
-#include "proteus/core/predict_api.hpp"      // for InferenceRequest, Infere...
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
+#include "proteus/core/interface.hpp"    // for Interface
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest, Infere...
+#include "proteus/declarations.hpp"      // for BufferRawPtrs
 
 namespace proteus {
 

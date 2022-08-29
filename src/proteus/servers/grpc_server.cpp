@@ -46,10 +46,10 @@
 #include "proteus/core/exceptions.hpp"            // for invalid_argument
 #include "proteus/core/interface.hpp"             // for Interface, Interfac...
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "proteus/helpers/declarations.hpp"       // for BufferRawPtrs, Infe...
-#include "proteus/helpers/string.hpp"             // for toLower
+#include "proteus/declarations.hpp"               // for BufferRawPtrs, Infe...
 #include "proteus/observation/logging.hpp"        // for Logger, Loggers
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
+#include "proteus_extensions/util/string.hpp"     // for toLower
 
 namespace proteus {
 class CallDataModelInfer;

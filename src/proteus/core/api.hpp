@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "proteus/helpers/declarations.hpp"
+#include "proteus/declarations.hpp"
 
 namespace proteus {
 

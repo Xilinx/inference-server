@@ -40,13 +40,13 @@
 #include "proteus/core/data_types.hpp"        // for DataType, DataType::FP32
 #include "proteus/core/exceptions.hpp"        // for external_error
 #include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
-#include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
-#include "proteus/helpers/thread.hpp"         // for setThreadName
+#include "proteus/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
 #include "proteus/observation/tracing.hpp"    // for Trace
 #include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "proteus_extensions/util/parse_env.hpp"  // for autoExpandEnvironmentVa...
+#include "proteus_extensions/util/thread.hpp"     // for setThreadName
 
 namespace AKS {
 class AIGraph;

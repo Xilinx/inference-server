@@ -12,8 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-# add_subdirectory(buffers) add_subdirectory(clients)
-add_subdirectory(core)
-add_subdirectory(observation)
-# add_subdirectory(servers) add_subdirectory(testing) add_subdirectory(workers)
+# add_subdirectory(pre_post_processing)
+add_subdirectory(util)

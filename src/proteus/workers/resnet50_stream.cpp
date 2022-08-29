@@ -40,17 +40,17 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"       // for BatchPtr, BatchPtrQueue
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::STRING
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "proteus/helpers/base64.hpp"         // for base64_encode
-#include "proteus/helpers/declarations.hpp"   // for BufferPtrs, InferenceRe...
-#include "proteus/helpers/parse_env.hpp"      // for autoExpandEnvironmentVa...
-#include "proteus/helpers/thread.hpp"         // for setThreadName
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "proteus/batching/batcher.hpp"        // for BatchPtr, BatchPtrQueue
+#include "proteus/buffers/vector_buffer.hpp"   // for VectorBuffer
+#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_LOGGING
+#include "proteus/core/data_types.hpp"         // for DataType, DataType::STRING
+#include "proteus/core/predict_api.hpp"        // for InferenceResponse, Infe...
+#include "proteus/declarations.hpp"            // for BufferPtrs, InferenceRe...
+#include "proteus/observation/logging.hpp"     // for Logger
+#include "proteus/workers/worker.hpp"          // for Worker, kNumBufferAuto
+#include "proteus_extensions/util/base64.hpp"  // for base64_encode
+#include "proteus_extensions/util/parse_env.hpp"  // for autoExpandEnvironmentVa...
+#include "proteus_extensions/util/thread.hpp"     // for setThreadName
 
 namespace AKS {
 class AIGraph;

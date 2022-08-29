@@ -26,10 +26,10 @@
 #include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"         // for PROTEUS_ENABLE_LOGGING
-#include "proteus/helpers/declarations.hpp"  // for BufferRawPtrs
-#include "proteus/observation/logging.hpp"   // for Logger, Loggers, Loggers...
-#include "proteus/observation/tracing.hpp"   // for TracePtr
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "proteus/declarations.hpp"         // for BufferRawPtrs
+#include "proteus/observation/logging.hpp"  // for Logger, Loggers, Loggers...
+#include "proteus/observation/tracing.hpp"  // for TracePtr
 
 namespace proteus {
 class InferenceRequest;

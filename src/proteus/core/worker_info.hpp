@@ -28,8 +28,8 @@
 #include <thread>   // for thread, thread::id
 #include <vector>   // for vector
 
-#include "proteus/helpers/declarations.hpp"  // for BufferPtr
-#include "proteus/helpers/queue.hpp"         // for BufferPtrsQueuePtr
+#include "proteus/declarations.hpp"  // for BufferPtr
+#include "proteus/util/queue.hpp"    // for BufferPtrsQueuePtr
 
 namespace proteus {
 class Batcher;

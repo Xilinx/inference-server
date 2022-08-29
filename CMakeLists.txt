@@ -28,13 +28,11 @@ if(result_len EQUAL "4")
   string(SUBSTRING ${ver_label} 1 ${ver_label_len} ver_label)
   message(
     STATUS
-      "Building Proteus version ${ver_major}.${ver_minor}.${ver_patch}-${ver_label}"
+      "Building version ${ver_major}.${ver_minor}.${ver_patch}-${ver_label}"
   )
 else()
   set(ver_label "")
-  message(
-    STATUS "Building Proteus version ${ver_major}.${ver_minor}.${ver_patch}"
-  )
+  message(STATUS "Building version ${ver_major}.${ver_minor}.${ver_patch}")
 endif()
 
 # set the project name
@@ -123,10 +121,7 @@ if(${xir_FOUND}
 else()
   set(PROTEUS_VITIS_FOUND OFF)
   set(PROTEUS_AKS_FOUND OFF)
-  message(
-    STATUS
-      "One or more Vitis dependencies weren't found. Disabling all Vitis dependencies"
-  )
+  message(STATUS "One or more Vitis dependencies not found. Disabling Vitis")
 endif()
 
 configure_file(
@@ -226,6 +221,7 @@ endif()
 
 add_subdirectory(external)
 add_subdirectory(src/proteus)
+add_subdirectory(src/proteus_extensions)
 if(${PROTEUS_BUILD_EXAMPLES})
   add_subdirectory(examples/cpp)
 endif()

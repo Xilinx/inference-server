@@ -26,7 +26,7 @@
 #include <unordered_map>  // for unordered_map
 
 #include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "proteus/helpers/declarations.hpp"
+#include "proteus/declarations.hpp"
 
 namespace py = pybind11;
 

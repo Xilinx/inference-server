@@ -30,9 +30,9 @@
 #include "proteus/core/api.hpp"                 // for modelLoad, workerLoad
 #include "proteus/core/exceptions.hpp"          // for invalid_argument
 #include "proteus/core/interface.hpp"           // for Interface
-#include "proteus/helpers/string.hpp"           // for toLower
 #include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
 #include "proteus/observation/tracing.hpp"      // for startTrace, Trace
+#include "proteus_extensions/util/string.hpp"   // for toLower
 
 namespace proteus {
 

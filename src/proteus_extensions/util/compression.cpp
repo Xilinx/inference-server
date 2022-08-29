@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/helpers/compression.hpp"
+#include "proteus_extensions/util/compression.hpp"
 
 #include <zlib.h>  // for z_stream, inflate, inflateEnd, Z_OK, Z_NO_FLUSH
 

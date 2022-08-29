@@ -21,17 +21,10 @@ list(
 )
 
 foreach(target ${targets})
-  add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  add_library(${target} STATIC ${target}.cpp)
   enable_ipo_on_target(${target})
-
-  list(APPEND HELPER_OBJS $<TARGET_OBJECTS:${target}>)
+  target_include_directories(${target} PRIVATE ${PROJECT_SOURCE_DIR}/src)
 endforeach()
 
 target_link_libraries(base64 INTERFACE b64)
 target_link_libraries(compression INTERFACE z)
-
-add_library(helpers STATIC ${HELPER_OBJS})
-target_link_libraries(helpers INTERFACE ${targets})
-
-set(HELPER_OBJS ${HELPER_OBJS} PARENT_SCOPE)
