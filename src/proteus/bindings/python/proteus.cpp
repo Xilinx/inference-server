@@ -19,6 +19,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "proteus/bindings/python/client_operators/client_operators.hpp"
 #include "proteus/bindings/python/clients/client.hpp"
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
@@ -31,6 +32,8 @@ namespace proteus {
 
 PYBIND11_MODULE(_proteus, m) {
   py::module n = m.def_submodule("predict_api", "predict_api documentation");
+  py::module f =
+    m.def_submodule("client_operators", "client operators documentation");
   py::module c = m.def_submodule("clients", "client documentation");
   py::module s = m.def_submodule("servers", "server documentation");
   m.doc() = "proteus inference library";
@@ -45,6 +48,7 @@ PYBIND11_MODULE(_proteus, m) {
   wrapHttpClient(c);
   wrapWebSocketClient(c);
   wrapServer(s);
+  wrapInferAsync(f);
 }
 
 }  // namespace proteus

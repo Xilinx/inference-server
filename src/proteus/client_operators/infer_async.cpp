@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/client_api/infer_async.hpp"
+#include "proteus/client_operators/infer_async.hpp"
 
 #include <queue>
 #include <thread>
 
 namespace proteus {
 
-std::vector<InferenceResponse> infer_async_ordered(
+std::vector<InferenceResponse> inferAsyncOrdered(
   Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests) {
   std::queue<InferenceResponseFuture> q;
@@ -27,17 +27,20 @@ std::vector<InferenceResponse> infer_async_ordered(
     q.push(client->modelInferAsync(model, request));
   }
 
+  std::cout << "Pushed all\n";
+
   const auto num_requests = requests.size();
   std::vector<InferenceResponse> responses;
   responses.reserve(num_requests);
   for (auto i = 0U; i < num_requests; ++i) {
     auto& future = q.front();
     responses.push_back(future.get());
+    q.pop();
   }
   return responses;
 }
 
-std::vector<InferenceResponse> infer_async_ordered_batched(
+std::vector<InferenceResponse> inferAsyncOrderedBatched(
   Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests, size_t batch_size) {
   auto num_requests = requests.size();

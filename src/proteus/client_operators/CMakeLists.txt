@@ -12,7 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-add_subdirectory(buffers)
-add_subdirectory(client_operators)
-add_subdirectory(core)
+list(APPEND files infer_async)
+
+foreach(file ${files})
+  set(target ${file})
+  add_library(${target} OBJECT ${file}.cpp)
+  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  enable_ipo_on_target(${target})
+
+  list(APPEND CLIENT_OPERATORS_OBJS $<TARGET_OBJECTS:${target}>)
+  list(APPEND targets ${target})
+endforeach()
+
+add_library(client_operators STATIC ${CLIENT_OPERATORS_OBJS})
+target_link_libraries(client_operators INTERFACE ${targets})
+
+set(CLIENT_OPERATORS_OBJS ${CLIENT_OPERATORS_OBJS} PARENT_SCOPE)

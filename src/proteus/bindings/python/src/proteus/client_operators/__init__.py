@@ -12,7 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-add_subdirectory(buffers)
-add_subdirectory(client_operators)
-add_subdirectory(core)
+from _proteus.client_operators import *
