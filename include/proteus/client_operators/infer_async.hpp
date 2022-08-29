@@ -9,10 +9,10 @@
 
 namespace proteus {
 
-std::vector<InferenceResponse> infer_async_ordered(
+std::vector<InferenceResponse> inferAsyncOrdered(
   Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests);
-std::vector<InferenceResponse> infer_async_ordered_batched(
+std::vector<InferenceResponse> inferAsyncOrderedBatched(
   Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests, size_t batch_size);
 

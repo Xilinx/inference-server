@@ -12,19 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND files infer_async)
+include(GoogleTest)
 
-foreach(file ${files})
-  set(target ${file})
-  add_library(${target} OBJECT ${file}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  enable_ipo_on_target(${target})
+list(APPEND targets infer_async)
 
-  list(APPEND CLIENT_API_OBJS $<TARGET_OBJECTS:${target}>)
-  list(APPEND targets ${target})
+foreach(target ${targets})
+  add_executable(test_${target} test_${target}.cpp)
+  target_include_directories(
+    test_${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+  )
+  target_include_directories(
+    test_${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS}
+  )
+  target_link_libraries(test_${target} proteus gtest gtest_main)
+
+  gtest_discover_tests(test_${target})
 endforeach()
-
-add_library(client_api STATIC ${CLIENT_API_OBJS})
-target_link_libraries(client_api INTERFACE ${targets})
-
-set(CLIENT_API_OBJS ${CLIENT_API_OBJS} PARENT_SCOPE)

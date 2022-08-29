@@ -118,11 +118,11 @@ def main(args):
             images = np.random.uniform(
                 0.0, 255.0, (batch_size, input_size, input_size, 3)
             ).astype(np.float32)
-            images = [image for image in images]
+            images = [proteus.ImageInferenceRequest(image) for image in images]
 
             # Send request to the server
             start = time.time()
-            proteus.parallel_infer(client, worker_name, images, processes)
+            proteus.client_operators.inferAsyncOrdered(client, worker_name, images)
             end = time.time()
             total_time += end - start
 
