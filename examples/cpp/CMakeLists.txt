@@ -21,7 +21,7 @@ if(${PROTEUS_ENABLE_VITIS})
     add_executable(${app} custom_processing.cpp)
 
     target_link_libraries(
-      ${app} PRIVATE proteus opencv_imgcodecs opencv_imgproc opencv_core
+      ${app} PRIVATE proteus util opencv_imgcodecs opencv_imgproc opencv_core
     )
     target_include_directories(${app} PRIVATE ${PROTEUS_INCLUDE_DIRS})
   endforeach()
@@ -34,7 +34,7 @@ if(${PROTEUS_ENABLE_TFZENDNN})
   add_executable(tf_zendnn_client tf_zendnn_client.cpp)
 
   target_link_libraries(
-    tf_zendnn_client PRIVATE proteus opencv_imgcodecs opencv_imgproc
+    tf_zendnn_client PRIVATE proteus util opencv_imgcodecs opencv_imgproc
                              opencv_core
   )
   target_include_directories(tf_zendnn_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
@@ -44,7 +44,7 @@ if(${PROTEUS_ENABLE_PTZENDNN})
   add_executable(pt_zendnn_client pt_zendnn_client.cpp)
 
   target_link_libraries(
-    pt_zendnn_client PRIVATE proteus opencv_imgcodecs opencv_imgproc
+    pt_zendnn_client PRIVATE proteus util opencv_imgcodecs opencv_imgproc
                              opencv_core
   )
   target_include_directories(pt_zendnn_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
@@ -54,8 +54,8 @@ if(${PROTEUS_ENABLE_MIGRAPHX})
   add_executable(migraphx_client migraphx_client.cpp)
 
   target_link_libraries(
-    migraphx_client PRIVATE proteus opencv_imgcodecs opencv_imgproc opencv_core
-                            migraphx::c
+    migraphx_client PRIVATE proteus util opencv_imgcodecs opencv_imgproc
+                            opencv_core migraphx::c
   )
   target_include_directories(migraphx_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
 endif()

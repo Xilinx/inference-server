@@ -18,6 +18,7 @@ list(
          compression
          parse_env
          exec
+         read_nth_line
 )
 
 list(APPEND UTIL_OBJS)

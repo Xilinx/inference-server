@@ -15,18 +15,27 @@
 #ifndef GUARD_PROTEUS_UTIL_READ_NTH_LINE
 #define GUARD_PROTEUS_UTIL_READ_NTH_LINE
 
-#include <string>
+#include "proteus/util/read_nth_line.hpp"
+
+#include <fstream>  // for ifstream
 
 namespace proteus::util {
 
-/**
- * @brief This method will read the class file and returns class name
- *
- * @param filename: The location of the file containing class names
- * @param n: Nth value from the class file
- * @return std::string: Name of the class
- */
-std::string readNthLine(const std::string& filename, int n);
+std::string readNthLine(const std::string& filename, int N) {
+  std::ifstream in(filename);
+  std::string line;
+  // for performance, reserve some initial space in the string
+  const auto kDefaultLineLength = 100;
+  line.reserve(kDefaultLineLength);
+
+  // skip N lines
+  for (int i = 0; i < N; ++i) {
+    std::getline(in, line);
+  }
+
+  std::getline(in, line);
+  return line;
+}
 
 }  // namespace proteus::util
 
