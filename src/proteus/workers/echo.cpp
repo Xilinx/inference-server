@@ -36,8 +36,8 @@
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "proteus/util/thread.hpp"            // for setThreadName
 #include "proteus/workers/worker.hpp"         // for Worker
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 namespace proteus {
 
@@ -112,7 +112,7 @@ void Echo::doAcquire(RequestParameters* parameters) {
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {
-  setThreadName("Echo");
+  util::setThreadName("Echo");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

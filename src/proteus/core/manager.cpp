@@ -23,11 +23,11 @@
 #include <thread>   // for yield, thread
 #include <utility>  // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"           // for kMaxModelNameSize
-#include "proteus/core/exceptions.hpp"         // for invalid_argument
-#include "proteus/core/worker_info.hpp"        // for WorkerInfo
-#include "proteus/workers/worker.hpp"          // for Worker
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
+#include "proteus/build_options.hpp"     // for kMaxModelNameSize
+#include "proteus/core/exceptions.hpp"   // for invalid_argument
+#include "proteus/core/worker_info.hpp"  // for WorkerInfo
+#include "proteus/util/thread.hpp"       // for setThreadName
+#include "proteus/workers/worker.hpp"    // for Worker
 
 namespace proteus {
 
@@ -134,7 +134,7 @@ void Manager::shutdown() {
 
 void Manager::update_manager(UpdateCommandQueue* input_queue) {
   PROTEUS_LOG_DEBUG(logger_, "Starting the Manager update thread");
-  setThreadName("manager");
+  util::setThreadName("manager");
   std::shared_ptr<UpdateCommand> request;
   bool run = true;
   while (run) {

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <string>
 
-namespace proteus {
+namespace proteus::util {
 
 /**
  * @brief Checks if a string ends with another string
@@ -30,6 +30,6 @@ inline void toLower(std::string* str) {
                  [](unsigned char c) { return std::tolower(c); });
 }
 
-}  // namespace proteus
+}  // namespace proteus::util
 
 #endif  // GUARD_PROTEUS_HELPERS_STRING

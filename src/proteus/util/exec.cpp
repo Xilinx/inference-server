@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus_extensions/util/exec.hpp"
+#include "proteus/util/exec.hpp"
 
 #include <array>         // for array
 #include <cstdio>        // for pclose, fgets, popen, FILE
@@ -20,7 +20,7 @@
 #include <string>        // for string
 #include <system_error>  // for system_error
 
-namespace proteus {
+namespace proteus::util {
 
 // TODO(varunsh): avoid popen
 std::string exec(const char* cmd) {
@@ -37,4 +37,4 @@ std::string exec(const char* cmd) {
   return result;
 }
 
-}  // namespace proteus
+}  // namespace proteus::util

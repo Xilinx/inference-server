@@ -49,7 +49,7 @@
 #include "proteus/declarations.hpp"               // for BufferRawPtrs, Infe...
 #include "proteus/observation/logging.hpp"        // for Logger, Loggers
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
-#include "proteus_extensions/util/string.hpp"     // for toLower
+#include "proteus/util/string.hpp"                // for toLower
 
 namespace proteus {
 class CallDataModelInfer;
@@ -566,7 +566,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   auto* model = request_.mutable_name();
-  toLower(model);
+  util::toLower(model);
   try {
     ::proteus::modelLoad(*model, parameters.get());
   } catch (const runtime_error& e) {
@@ -584,7 +584,7 @@ CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelUnload, Unary) {
   auto* model = request_.mutable_name();
-  toLower(model);
+  util::toLower(model);
   ::proteus::modelUnload(*model);
   finish();
 }
@@ -594,7 +594,7 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   auto* model = request_.mutable_name();
-  toLower(model);
+  util::toLower(model);
 
   try {
     auto endpoint = ::proteus::workerLoad(*model, parameters.get());
@@ -612,7 +612,7 @@ CALLDATA_IMPL_END
 
 CALLDATA_IMPL(WorkerUnload, Unary) {
   auto* worker = request_.mutable_name();
-  toLower(worker);
+  util::toLower(worker);
   ::proteus::workerUnload(*worker);
   finish();
 }

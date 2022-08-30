@@ -32,6 +32,9 @@
 #include <vector>                 // for vector
 
 #include "proteus/proteus.hpp"  // for InferenceResponseFuture, terminate
+#include "proteus/util/pre_post/resnet50_postprocess.hpp"
+#include "proteus/util/pre_post/resnet50_preprocess.hpp"
+#include "proteus/util/read_nth_line.hpp"
 
 // // #include "migraphx/filesystem.hpp"
 // #pragma GCC diagnostic push
@@ -39,170 +42,6 @@
 // #pragma GCC diagnostic ignored "-Wpedantic"
 // #include "migraphx/migraphx.hpp"  // MIGraphX C++ API
 // #pragma GCC diagnostic pop
-/**
- * @brief This method will read the class file and returns class name
- *
- * @param filename: The location of the file containing class names
- * @param N: Nth value from the class file
- * @return std::string: Name of the class
- */
-std::string ReadNthLine(const std::string filename, int N) {
-  std::ifstream in(filename);
-  std::string line;
-  line.reserve(100);  // for performance
-  // skip N lines
-  for (int i = 0; i < N; ++i) std::getline(in, line);
-
-  std::getline(in, line);
-  return line;
-}
-
-/**
- * @brief Image preprocessing helper.  Crops the input `img` from center to a
- * specific dimension specified
- *
- * @param img: Image which needs to be cropped
- * @param height: height of the output image
- * @param width: width of the output image
- * @return cv::Mat: Image cropped to required shape
- */
-cv::Mat center_crop(cv::Mat img, int height, int width) {
-  const int offsetW = (img.cols - width) / 2;
-  const int offsetH = (img.rows - height) / 2;
-  const cv::Rect roi(offsetW, offsetH, width, height);
-  img = img(roi);
-  return img;
-}
-
-/**
- * @brief Utility function:  fetches an image or images from file and returns an
- * array that can be passed as data to the migraphx worker.
- *
- * @param paths
- * @param img_size
- * @param method
- * @return std::vector<std::vector<float>>
- */
-std::vector<std::vector<float>> preprocess(
-  std::filesystem::path const& image_filename, size_t batch_size,
-  size_t image_size) {
-  // placeholder
-  std::vector<std::vector<float>> outputs;
-  outputs.reserve(batch_size);
-
-  // load the image
-  auto img = cv::imread(image_filename.c_str());
-  if (img.empty()) {
-    std::cout << "Unable to load image " << image_filename.c_str() << std::endl;
-    exit(1);
-  }
-  //
-  // Preprocess
-  //
-  std::vector<float> output1;
-
-  cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
-  auto new_size = cv::Size(256, 256);
-  cv::resize(img, img, new_size, cv::INTER_LINEAR);
-  img = center_crop(img, image_size, image_size);
-  img.convertTo(img, CV_32FC3, 1.0 / 255.0);
-  img = img.isContinuous() ? img : img.clone();
-
-  const std::array mean = {0.485, 0.456, 0.406};
-  const std::array std = {0.229, 0.224, 0.225};
-
-  // Copy to the vector, normalizing each pixel
-  auto size = img.size[0] * img.size[1] * 3;
-  output1.resize(size);
-  for (size_t c = 0; c < 3; c++) {
-    for (size_t h = 0; h < image_size; h++) {
-      for (size_t w = 0; w < image_size; w++) {
-        output1[(c * image_size * image_size) + (h * image_size) + w] =
-          (img.at<cv::Vec3f>(h, w)[c] - mean.at(c)) / std.at(c);
-      }
-    }
-  }
-  for (size_t index = 0; index < batch_size; index++) {
-    outputs.emplace_back(output1);
-    // auto& output = outputs[index++];
-  }
-  std::cout << "preprocess() returning vector of "
-            << std::to_string(outputs.size()) << " images of "
-            << outputs[batch_size - 1].size() << std::endl;
-
-  return outputs;
-}
-
-/**
- * @brief Calculate softmax of the data.
- *         This is identical to processing in pt_zendnn_client.cpp
- *
- * @param data pointer to the raw data
- * @param size number of elements in the raw data
- * @param result pointer to store the computed results
- */
-void calc_softmax(const float* data, size_t size, double* result) {
-  double sum = 0;
-
-  auto max = data[0];
-  for (size_t i = 1; i < size; i++) {
-    if (data[i] > max) {
-      max = data[i];
-    }
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    result[i] = exp(data[i] - max);
-    sum += result[i];
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    result[i] /= sum;
-  }
-}
-
-/**
- * @brief After running softmax, get the labels associated with the top k
- * values. This is identical to processing in pt_zendnn_client.cpp
- *
- * @param d pointer to the data
- * @param size number of elements in the data
- * @param k number of top elements to return
- * @return std::vector<int>
- */
-std::vector<int> get_top_k(const double* d, int size, int k) {
-  std::priority_queue<std::pair<float, int>> q;
-
-  for (auto i = 0; i < size; ++i) {
-    q.push(std::pair<float, int>(d[i], i));
-  }
-  std::vector<int> topKIndex;
-  for (auto i = 0; i < k; ++i) {
-    std::pair<float, int> ki = q.top();
-    q.pop();
-    topKIndex.push_back(ki.second);
-  }
-  return topKIndex;
-}
-
-/**
- * @brief Perform postprocessing of the data. This is identical to processing in
- * pt_zendnn_client.cpp
- *
- * @param output output from Proteus
- * @param k number of top elements to return
- * @return std::vector<int>
- */
-std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  const auto* data = static_cast<float*>(output.getData());
-  auto size = output.getSize();
-
-  std::vector<double> softmax;
-  softmax.resize(size);
-
-  calc_softmax(data, size, softmax.data());
-  return get_top_k(softmax.data(), size, k);
-}
 
 /**
  * @brief user variables: update as needed!
@@ -214,7 +53,7 @@ struct Option {
   std::filesystem::path root = std::getenv("PROTEUS_ROOT");
 
   std::filesystem::path model =
-    root / "external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx";
+    root / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx";
   std::filesystem::path image_location =
     root / "tests/assets/dog-3619020_640.jpg";
 
@@ -250,7 +89,7 @@ int main(int argc, char* argv[]) {
   std::filesystem::path root(root_env);
 
   std::filesystem::path model =
-    root / "external/artifacts/migraphx/resnet50-v1-7/resnet50-v1-7.onnx";
+    root / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx";
   if (argc > 1) model = std::string(argv[1]);
 
   int batch_size(64);
@@ -260,6 +99,8 @@ int main(int argc, char* argv[]) {
   // The image file path is hardcoded.  For performance testing we'll just
   // process multiple copies of the same image.
   std::filesystem::path image_filename = options.image_location;
+  std::vector<std::string> paths;
+  paths.push_back(image_filename.string());
   std::cout << " input image is " << image_filename << "   batch size is "
             << std::to_string(batch_size) << std::endl;
 
@@ -287,7 +128,17 @@ int main(int argc, char* argv[]) {
   std::cout << "loaded worker name " << workerName << std::endl;
 
   // Load the image and make an array of copies
-  auto images = preprocess(image_filename, batch_size, 224);
+  proteus::util::Resnet50PreprocessOptions<float, 3> options_;
+  options_.normalize = true;
+  options_.order = proteus::util::ImageOrder::NCHW;
+  options_.mean = {0.485, 0.456, 0.406};
+  options_.std = {4.367, 4.464, 4.444};
+  options_.convert_color = true;
+  options_.color_code = cv::COLOR_BGR2RGB;
+  options_.convert_type = true;
+  options_.type = CV_32FC3;
+  options_.convert_scale = 1.0 / 255.0;
+  auto images = proteus::util::resnet50Preprocess(paths, options_);
 
   const std::initializer_list<uint64_t> shape = {
     3, static_cast<long unsigned>(options.input_size),
@@ -307,11 +158,12 @@ int main(int argc, char* argv[]) {
   // Parse the results and report the top K results
   auto outputs = results.getOutputs();
   for (auto& output : outputs) {
-    auto top_k = postprocess(output, options.topK);
+    auto top_k = proteus::util::resnet50Postprocess(
+      static_cast<float*>(output.getData()), output.getSize(), options.topK);
     std::cout << "Top " << options.topK << " classes:" << std::endl;
     for (int j = 0; j < options.topK; j++)
-      std::cout << j + 1 << ": Index: " << top_k[j]
-                << " :: Class: " << ReadNthLine(options.class_file, top_k[j])
+      std::cout << j + 1 << ": Index: " << top_k[j] << " :: Class: "
+                << proteus::util::readNthLine(options.class_file, top_k[j])
                 << std::endl;
   }
 

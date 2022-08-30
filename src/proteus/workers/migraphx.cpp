@@ -38,8 +38,8 @@
 #include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "proteus/util/thread.hpp"            // for setThreadName
 #include "proteus/workers/worker.hpp"         // for Worker
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 // opencv for debugging only --
 #include <migraphx/filesystem.hpp>
@@ -362,7 +362,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
   PROTEUS_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
 
   // std::shared_ptr<InferenceRequest> req;
-  setThreadName("Migraphx");
+  util::setThreadName("Migraphx");
 
   //
   //  Wait for requests from the batcher in an infinite loop.  This thread will

@@ -28,14 +28,14 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/fake_predict_api.hpp"   // for FakeInferenceRequest
-#include "proteus/core/interface.hpp"          // for Interface
-#include "proteus/core/predict_api.hpp"        // for InferenceResponsePromis...
-#include "proteus/observation/logging.hpp"     // for Logger, PROTEUS_LOG_DEBUG
-#include "proteus/observation/tracing.hpp"     // for Trace
-#include "proteus/util/queue.hpp"              // for BlockingConcurrentQueue
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
+#include "proteus/core/interface.hpp"         // for Interface
+#include "proteus/core/predict_api.hpp"       // for InferenceResponsePromis...
+#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_DEBUG
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/util/queue.hpp"             // for BlockingConcurrentQueue
+#include "proteus/util/thread.hpp"            // for setThreadName
 
 // IWYU pragma: no_forward_declare proteus::Buffer
 
@@ -99,7 +99,7 @@ void FakeInterface::errorHandler(const std::exception &e) {
 
 void Batcher::run(WorkerInfo *worker) {
   auto thread_name = "batch" + this->getName();
-  setThreadName(thread_name);
+  util::setThreadName(thread_name);
   InterfacePtr req;
   bool run = true;
 

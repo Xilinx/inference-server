@@ -38,7 +38,7 @@ endforeach()
 target_link_libraries(native INTERFACE batching)
 
 if(${PROTEUS_ENABLE_HTTP})
-  target_link_libraries(http_internal INTERFACE jsoncpp compression)
+  target_link_libraries(http_internal INTERFACE jsoncpp util)
   target_link_libraries(websocket INTERFACE Drogon::Drogon)
 endif()
 

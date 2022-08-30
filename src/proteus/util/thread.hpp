@@ -21,7 +21,7 @@
 #include <sys/prctl.h>
 #endif
 
-namespace proteus {
+namespace proteus::util {
 /**
  * @brief Attempt to set the calling thread's name. Note, this may or may not
  * succeed. If renaming is not possible, it should silently fail without error.
@@ -40,9 +40,9 @@ inline void setThreadName(const char* name) {
 
 /// string overload for setThreadName
 inline void setThreadName(const std::string& name) {
-  setThreadName(name.c_str());
+  util::setThreadName(name.c_str());
 }
 
-}  // namespace proteus
+}  // namespace proteus::util
 
 #endif  // GUARD_PROTEUS_HELPERS_THREAD

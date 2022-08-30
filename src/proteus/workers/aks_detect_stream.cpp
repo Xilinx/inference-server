@@ -39,18 +39,18 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"        // for BatchPtr, Batch, BatchP...
-#include "proteus/buffers/vector_buffer.hpp"   // for VectorBuffer
-#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"         // for DataType, DataType::STRING
-#include "proteus/core/predict_api.hpp"        // for InferenceResponse, Infe...
-#include "proteus/declarations.hpp"            // for BufferPtrs, InferenceRe...
-#include "proteus/observation/logging.hpp"     // for Logger
-#include "proteus/observation/tracing.hpp"     // for Trace
-#include "proteus/workers/worker.hpp"          // for Worker, kNumBufferAuto
-#include "proteus_extensions/util/base64.hpp"  // for base64_encode
-#include "proteus_extensions/util/parse_env.hpp"  // for autoExpandEnvironmentVa...
-#include "proteus_extensions/util/thread.hpp"     // for setThreadName
+#include "proteus/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
+#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "proteus/core/data_types.hpp"        // for DataType, DataType::STRING
+#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
+#include "proteus/declarations.hpp"           // for BufferPtrs, InferenceRe...
+#include "proteus/observation/logging.hpp"    // for Logger
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/util/base64.hpp"            // for base64_encode
+#include "proteus/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
+#include "proteus/util/thread.hpp"            // for setThreadName
+#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
 class AIGraph;
@@ -129,7 +129,7 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
-  autoExpandEnvironmentVariables(path);
+  util::autoExpandEnvironmentVariables(path);
   this->sysMan_->loadGraphs(path);
 
   auto graph_name = kGraphName;
@@ -147,7 +147,7 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
 }
 
 void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
-  setThreadName("AksDetectStream");
+  util::setThreadName("AksDetectStream");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -250,7 +250,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             std::vector<unsigned char> buf;
             cv::imencode(".jpg", frame, buf);
             const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-            std::string encoded = base64_encode(enc_msg, buf.size());
+            std::string encoded = util::base64_encode(enc_msg, buf.size());
             frames.push("data:image/jpg;base64," + encoded);
           }
           PROTEUS_LOG_INFO(logger, "Enqueuing in " + key);

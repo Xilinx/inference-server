@@ -44,9 +44,9 @@
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
 #include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
+#include "proteus/util/thread.hpp"            // for setThreadName
 #include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
-#include "proteus_extensions/util/parse_env.hpp"  // for autoExpandEnvironmentVa...
-#include "proteus_extensions/util/thread.hpp"     // for setThreadName
 
 namespace AKS {
 class AIGraph;
@@ -117,7 +117,7 @@ void Aks::doAcquire(RequestParameters* parameters) {
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
-  autoExpandEnvironmentVariables(path);
+  util::autoExpandEnvironmentVariables(path);
   this->sysMan_->loadGraphs(path);
 
   std::string graph_name = "graph_adder";
@@ -134,7 +134,7 @@ void Aks::doAcquire(RequestParameters* parameters) {
 }
 
 void Aks::doRun(BatchPtrQueue* input_queue) {
-  setThreadName("Aks");
+  util::setThreadName("Aks");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

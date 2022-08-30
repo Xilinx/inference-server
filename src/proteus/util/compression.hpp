@@ -17,6 +17,8 @@
 
 #include <string>
 
+namespace proteus::util {
+
 /**
  * @brief Inflate a deflated (i.e. compressed) argument with zlib. Taken from
  * https://stackoverflow.com/a/50082615
@@ -26,5 +28,7 @@
  * @return std::string the inflated string
  */
 std::string z_decompress(const char *str, int len);
+
+}  // namespace proteus::util
 
 #endif  // GUARD_PROTEUS_HELPERS_COMPRESSION

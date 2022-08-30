@@ -41,7 +41,7 @@
 #include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "proteus/observation/logging.hpp"        // for Logger
-#include "proteus_extensions/util/compression.hpp"  // for z_decompress
+#include "proteus/util/compression.hpp"           // for z_decompress
 
 namespace proteus {
 
@@ -546,7 +546,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
   PROTEUS_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
 
   // if it's still not valid, attempt to uncompress the body and convert to JSON
-  auto body_decompress = z_decompress(body.data(), body.length());
+  auto body_decompress = util::z_decompress(body.data(), body.length());
   success = reader->parse(body_decompress.data(),
                           body_decompress.data() + body_decompress.size(),
                           root.get(), &errors);

@@ -29,16 +29,16 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_METRICS
-#include "proteus/core/exceptions.hpp"         // for invalid_argument
-#include "proteus/core/interface.hpp"          // for Interface
-#include "proteus/core/predict_api.hpp"        // for RequestParameters
-#include "proteus/declarations.hpp"            // for InterfacePtr
-#include "proteus/observation/logging.hpp"     // for Logger, PROTEUS_LOG_DEBUG
-#include "proteus/observation/metrics.hpp"     // for Metrics, MetricCounterIDs
-#include "proteus/observation/tracing.hpp"     // for Trace
-#include "proteus/util/queue.hpp"              // for BlockingConcurrentQueue
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
+#include "proteus/core/exceptions.hpp"      // for invalid_argument
+#include "proteus/core/interface.hpp"       // for Interface
+#include "proteus/core/predict_api.hpp"     // for RequestParameters
+#include "proteus/declarations.hpp"         // for InterfacePtr
+#include "proteus/observation/logging.hpp"  // for Logger, PROTEUS_LOG_DEBUG
+#include "proteus/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
+#include "proteus/observation/tracing.hpp"  // for Trace
+#include "proteus/util/queue.hpp"           // for BlockingConcurrentQueue
+#include "proteus/util/thread.hpp"          // for setThreadName
 
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
@@ -49,7 +49,7 @@ namespace proteus {
 
 void SoftBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
-  setThreadName(thread_name);
+  util::setThreadName(thread_name);
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

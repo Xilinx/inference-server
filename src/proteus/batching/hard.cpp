@@ -25,14 +25,14 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_METRICS
-#include "proteus/core/exceptions.hpp"         // for invalid_argument
-#include "proteus/core/interface.hpp"          // for Interface
-#include "proteus/declarations.hpp"            // for InterfacePtr
-#include "proteus/observation/metrics.hpp"     // for Metrics, MetricCounterIDs
-#include "proteus/observation/tracing.hpp"     // for Trace
-#include "proteus/util/queue.hpp"              // for BlockingConcurrentQueue
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
+#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
+#include "proteus/core/exceptions.hpp"      // for invalid_argument
+#include "proteus/core/interface.hpp"       // for Interface
+#include "proteus/declarations.hpp"         // for InterfacePtr
+#include "proteus/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
+#include "proteus/observation/tracing.hpp"  // for Trace
+#include "proteus/util/queue.hpp"           // for BlockingConcurrentQueue
+#include "proteus/util/thread.hpp"          // for setThreadName
 
 // IWYU pragma: no_forward_declare proteus::Buffer
 
@@ -40,7 +40,7 @@ namespace proteus {
 
 void HardBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
-  setThreadName(thread_name);
+  util::setThreadName(thread_name);
   InterfacePtr req;
   bool run = true;
 

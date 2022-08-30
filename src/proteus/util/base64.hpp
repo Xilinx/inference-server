@@ -17,13 +17,13 @@
  * @brief Defines base64 encoding/decoding
  */
 
-#ifndef GUARD_PROTEUS_HELPERS_BASE64
-#define GUARD_PROTEUS_HELPERS_BASE64
+#ifndef GUARD_PROTEUS_UTIL_BASE64
+#define GUARD_PROTEUS_UTIL_BASE64
 
 #include <cstddef>  // for size_t
 #include <string>   // for string
 
-namespace proteus {
+namespace proteus::util {
 
 /**
  * @brief Decodes a base64-encoded string and returns it
@@ -58,6 +58,6 @@ std::string base64_encode(std::string in);
  * @return std::string encoded string
  */
 std::string base64_encode(const char* in, size_t in_len);
-}  // namespace proteus
+}  // namespace proteus::util
 
-#endif  // GUARD_PROTEUS_HELPERS_BASE64
+#endif  // GUARD_PROTEUS_UTIL_BASE64
