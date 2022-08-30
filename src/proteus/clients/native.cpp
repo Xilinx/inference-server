@@ -32,7 +32,7 @@
 #include "proteus/core/interface.hpp"           // for Interface
 #include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
 #include "proteus/observation/tracing.hpp"      // for startTrace, Trace
-#include "proteus_extensions/util/string.hpp"   // for toLower
+#include "proteus/util/string.hpp"              // for toLower
 
 namespace proteus {
 
@@ -48,7 +48,7 @@ ModelMetadata NativeClient::modelMetadata(const std::string& model) {
 
 void NativeClient::modelLoad(const std::string& model,
                              RequestParameters* parameters) {
-  auto model_lower = toLower(model);
+  auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
     RequestParameters params;
     ::proteus::modelLoad(model_lower, &params);
@@ -59,7 +59,7 @@ void NativeClient::modelLoad(const std::string& model,
 
 std::string NativeClient::workerLoad(const std::string& model,
                                      RequestParameters* parameters) {
-  auto model_lower = toLower(model);
+  auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
     RequestParameters params;
     return ::proteus::workerLoad(model_lower, &params);
@@ -95,12 +95,12 @@ InferenceResponse NativeClient::modelInfer(const std::string& model,
 }
 
 void NativeClient::modelUnload(const std::string& model) {
-  auto model_lower = toLower(model);
+  auto model_lower = util::toLower(model);
   ::proteus::modelUnload(model);
 }
 
 void NativeClient::workerUnload(const std::string& model) {
-  auto model_lower = toLower(model);
+  auto model_lower = util::toLower(model);
   ::proteus::workerUnload(model);
 }
 

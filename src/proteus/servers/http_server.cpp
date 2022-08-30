@@ -41,7 +41,7 @@
 #include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
 #include "proteus/observation/tracing.hpp"        // for startTrace, Trace
 #include "proteus/servers/websocket_server.hpp"   // for WebsocketServer
-#include "proteus_extensions/util/string.hpp"     // for toLower
+#include "proteus/util/string.hpp"                // for toLower
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;
@@ -279,7 +279,7 @@ void v2::ProteusHttpServer::modelLoad(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
-  auto model_lower = toLower(model);
+  auto model_lower = util::toLower(model);
 #ifdef PROTEUS_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
   trace->setAttribute("model", model_lower);
@@ -326,7 +326,7 @@ void v2::ProteusHttpServer::modelUnload(
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
-  auto model_lower = toLower(model);
+  auto model_lower = util::toLower(model);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", model_lower);
@@ -359,7 +359,7 @@ void v2::ProteusHttpServer::workerLoad(
     parameters = std::make_unique<RequestParameters>();
   }
 
-  auto worker_lower = toLower(worker);
+  auto worker_lower = util::toLower(worker);
 
 #ifdef PROTEUS_ENABLE_TRACING
   trace->setAttribute("model", worker_lower);
@@ -394,7 +394,7 @@ void v2::ProteusHttpServer::workerUnload(
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
-  auto worker_lower = toLower(worker);
+  auto worker_lower = util::toLower(worker);
 
   PROTEUS_LOG_INFO(logger_, "Received unload request is for " + worker_lower);
 

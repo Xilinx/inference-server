@@ -20,11 +20,19 @@ list(
          exec
 )
 
+list(APPEND UTIL_OBJS)
+
 foreach(target ${targets})
-  add_library(${target} STATIC ${target}.cpp)
+  add_library(${target} OBJECT ${target}.cpp)
   enable_ipo_on_target(${target})
   target_include_directories(${target} PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
+  list(APPEND UTIL_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
 target_link_libraries(base64 INTERFACE b64)
 target_link_libraries(compression INTERFACE z)
+
+add_library(util SHARED ${UTIL_OBJS})
+target_link_libraries(util PRIVATE ${targets})
+set_target_properties(util PROPERTIES OUTPUT_NAME proteus-util)

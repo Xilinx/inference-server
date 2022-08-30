@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus_extensions/util/parse_env.hpp"
+#include "proteus/util/parse_env.hpp"
 
 #include <cstdlib>  // for getenv
 #include <regex>    // for match_results<>::_Base_type, match_results, rege...
@@ -21,7 +21,7 @@
 
 // https://stackoverflow.com/a/23442780
 
-namespace proteus {
+namespace proteus::util {
 
 // Update the input string.
 void autoExpandEnvironmentVariables(std::string& text) {
@@ -41,4 +41,4 @@ std::string expandEnvironmentVariables(const std::string& input) {
   return text;
 }
 
-}  // namespace proteus
+}  // namespace proteus::util

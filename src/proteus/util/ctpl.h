@@ -32,7 +32,7 @@
 #include <utility>
 #include <vector>
 
-#include "proteus_extensions/util/thread.hpp"
+#include "proteus/util/thread.hpp"
 
 #ifndef _ctplThreadPoolLength_
 #define _ctplThreadPoolLength_ 100
@@ -195,7 +195,7 @@ class thread_pool {
     std::shared_ptr<std::atomic<bool>> flag(
       this->flags[i]);  // a copy of the shared ptr to the flag
     auto f = [this, i, flag /* a copy of the shared ptr to the flag */]() {
-      proteus::setThreadName("ctplPool");
+      proteus::util::setThreadName("ctplPool");
       std::atomic<bool> &_flag = *flag;
       std::function<void(int id)> *_f;
       bool isPop = this->q.try_dequeue(_f);

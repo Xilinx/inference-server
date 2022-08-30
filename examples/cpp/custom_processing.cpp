@@ -38,135 +38,8 @@
 #include "proteus/proteus.hpp"
 // -include:
 
-/**
- * @brief Perform preprocessing for the input images
- *
- * @param paths paths to images to preprocess
- * @return std::vector<std::vector<int8_t>> preprocessed image data
- */
-std::vector<std::vector<int8_t>> preprocess(
-  const std::vector<std::string>& paths) {
-  // update as needed!
-  const auto height = 224;
-  const auto width = 224;
-  const auto channels = 3;
-  std::string layout = "NHWC";
-  const int8_t fix_scale = 1;
-  const std::array<int8_t, 3> mean = {123, 107, 104};
-
-  std::vector<std::vector<int8_t>> outputs;
-  outputs.reserve(paths.size());
-
-  auto index = 0;
-  for (const auto& path : paths) {
-    auto img = cv::imread(path);
-
-    cv::Mat resizedImg = cv::Mat(height, width, CV_8SC3);
-    cv::resize(img, resizedImg, cv::Size(width, height));
-    auto size = resizedImg.size[0] * resizedImg.size[1] * channels;
-    outputs.emplace_back();
-    auto& output = outputs[index];
-    output.resize(size);
-
-    if (layout == "NCHW") {
-      for (int c = 0; c < channels; c++) {
-        for (int h = 0; h < height; h++) {
-          for (int w = 0; w < width; w++) {
-            output[(c * height * width) + (h * width) + w] =
-              (static_cast<int8_t>(resizedImg.at<cv::Vec3b>(h, w)[c]) -
-               mean.at(c)) *
-              fix_scale;
-          }
-        }
-      }
-    } else if (layout == "NHWC") {
-      for (int h = 0; h < height; h++) {
-        for (int w = 0; w < width; w++) {
-          for (int c = 0; c < channels; c++) {
-            output[(h * width * channels) + (w * channels) + c] =
-              (static_cast<int8_t>(resizedImg.at<cv::Vec3b>(h, w)[c]) -
-               mean.at(c)) *
-              fix_scale;
-          }
-        }
-      }
-    }
-    index++;
-  }
-  return outputs;
-}
-
-/**
- * @brief Calculate softmax of the data
- *
- * @tparam T the expected type of the data
- * @param data pointer to the raw data
- * @param size number of elements in the raw data
- * @param result pointer to store the computed results
- */
-template <typename T>
-void calc_softmax(const T* data, size_t size, double* result) {
-  double sum = 0;
-
-  auto max = data[0];
-  for (size_t i = 1; i < size; i++) {
-    if (data[i] > max) {
-      max = data[i];
-    }
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    result[i] = exp(data[i] - max);
-    sum += result[i];
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    result[i] /= sum;
-  }
-}
-
-/**
- * @brief After running softmax, get the labels associated with the top k values
- *
- * @param d pointer to the data
- * @param size number of elements in the data
- * @param k number of top elements to return
- * @return std::vector<int>
- */
-std::vector<int> get_top_k(const double* d, int size, int k) {
-  std::priority_queue<std::pair<float, int>> q;
-
-  for (auto i = 0; i < size; ++i) {
-    q.push(std::pair<float, int>(d[i], i));
-  }
-  std::vector<int> topKIndex;
-  for (auto i = 0; i < k; ++i) {
-    std::pair<float, int> ki = q.top();
-    q.pop();
-    topKIndex.push_back(ki.second);
-  }
-  return topKIndex;
-}
-
-/**
- * @brief Perform postprocessing of the data
- *
- * @tparam T the expected type of the data
- * @param output output from Proteus
- * @param k number of top elements to return
- * @return std::vector<int>
- */
-template <typename T>
-std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  const auto* data = static_cast<T*>(output.getData());
-  auto size = output.getSize();
-
-  std::vector<double> softmax;
-  softmax.resize(size, 0);
-
-  calc_softmax<T>(data, size, softmax.data());
-  return get_top_k(softmax.data(), size, k);
-}
+#include "proteus/util/pre_post/resnet50_postprocess.hpp"
+#include "proteus/util/pre_post/resnet50_preprocess.hpp"
 
 #ifdef ENABLE_GRPC
 constexpr auto GRPC_PORT = 50051;
@@ -206,8 +79,10 @@ proteus::InferenceResponse infer(const std::string& worker_name,
   return results;
 }
 
-std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  return postprocess<int32_t>(output, k);
+std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
+                             int k) {
+  return proteus::util::resnet50Postprocess(
+    static_cast<int32_t*>(output.getData()), output.getSize(), k);
 }
 #else
 std::string load(const std::string& path_to_xmodel) {
@@ -237,8 +112,10 @@ proteus::InferenceResponse infer(const std::string& worker_name,
   return response;
 }
 
-std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  return postprocess<int8_t>(output, k);
+std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
+                             int k) {
+  return proteus::util::resnet50Postprocess(
+    static_cast<int8_t*>(output.getData()), output.getSize(), k);
 }
 #endif
 
@@ -285,7 +162,12 @@ int main() {
   paths.reserve(request_num);
   paths.emplace_back(path_to_image);
 
-  auto images = preprocess(paths);
+  proteus::util::Resnet50PreprocessOptions<int8_t, 3> options;
+  options.order = proteus::util::ImageOrder::NHWC;
+  options.mean = {123, 107, 104};
+  options.std = {1, 1, 1};
+  options.normalize = true;
+  auto images = proteus::util::resnet50Preprocess(paths, options);
   // -prepare images:
 
   // +construct request:

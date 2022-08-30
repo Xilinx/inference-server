@@ -19,7 +19,7 @@ enable_ipo_on_target(proteus-server-exe)
 set_target_properties(proteus-server-exe PROPERTIES OUTPUT_NAME proteus-server)
 
 target_link_libraries(
-  proteus-server-exe PRIVATE batching clients core observation servers
+  proteus-server-exe PRIVATE batching clients core observation util servers
 )
 
 add_subdirectory(batching)
@@ -30,6 +30,7 @@ add_subdirectory(clients)
 add_subdirectory(core)
 add_subdirectory(observation)
 add_subdirectory(servers)
+add_subdirectory(util)
 add_subdirectory(workers)
 
 # Build and install the proteus library. The dual static/shared build process is
@@ -54,19 +55,23 @@ add_library(
   ${OBSERVATION_OBJS}
   ${SERVER_OBJS}
 )
-target_link_libraries(proteus PRIVATE batching clients core observation servers)
+target_link_libraries(
+  proteus PRIVATE batching clients core observation util servers
+)
 
 add_library(
   proteus-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
                  ${OBSERVATION_OBJS} ${SERVER_OBJS}
 )
-target_link_libraries(proteus-server PRIVATE batching core observation servers)
+target_link_libraries(
+  proteus-server PRIVATE batching core observation util servers
+)
 
 add_library(
   proteus-client ${TYPE} ${CLIENT_OPERATORS_OBJS} ${CLIENT_OBJS} ${CORE_OBJS}
                  ${OBSERVATION_OBJS}
 )
-target_link_libraries(proteus-client PRIVATE clients core observation)
+target_link_libraries(proteus-client PRIVATE clients core observation util)
 
 set(output_libraries proteus proteus-server proteus-client)
 foreach(lib ${output_libraries})
@@ -102,7 +107,7 @@ set(proteus_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/proteus"
 
 # cmake-format: off
 install(
-  TARGETS proteus proteus-client proteus-server
+  TARGETS proteus proteus-client proteus-server util
   EXPORT proteus_Targets
   RUNTIME COMPONENT proteus_Runtime
   LIBRARY COMPONENT proteus_Runtime

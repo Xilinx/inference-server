@@ -35,9 +35,9 @@
 #include "proteus/declarations.hpp"           // for BufferPtr, InferenceResp...
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "proteus/util/base64.hpp"            // for base64_encode
+#include "proteus/util/thread.hpp"            // for setThreadName
 #include "proteus/workers/worker.hpp"         // for Worker
-#include "proteus_extensions/util/base64.hpp"  // for base64_encode
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 namespace proteus {
 
@@ -107,7 +107,7 @@ void InvertVideo::doAcquire(RequestParameters* parameters) {
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
-  setThreadName("InvertVideo");
+  util::setThreadName("InvertVideo");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -174,7 +174,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
           cv::imencode(".jpg", frame, buf);
           const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
           std::string encoded =
-            "data:image/jpg;base64," + base64_encode(enc_msg, buf.size());
+            "data:image/jpg;base64," + util::base64_encode(enc_msg, buf.size());
 
           InferenceResponse resp;
           resp.setID(req->getID());

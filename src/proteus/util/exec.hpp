@@ -12,19 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_HELPERS_PARSE_ENV
-#define GUARD_PROTEUS_HELPERS_PARSE_ENV
+#ifndef GUARD_PROTEUS_UTIL_EXEC
+#define GUARD_PROTEUS_UTIL_EXEC
 
 #include <string>
 
-namespace proteus {
+namespace proteus::util {
 
-/// Expand any environment variables in the string in place
-void autoExpandEnvironmentVariables(std::string& text);
+/**
+ * @brief Execute an arbitrary command on the command line.
+ * Taken from https://stackoverflow.com/a/478960
+ *
+ * @param cmd command to run
+ * @return std::string output of the command (stdout)
+ */
+std::string exec(const char* cmd);
 
-// Expand any environment variables in the string and return a copy
-std::string expandEnvironmentVariables(const std::string& input);
+}  // namespace proteus::util
 
-}  // namespace proteus
-
-#endif  // GUARD_PROTEUS_HELPERS_PARSE_ENV
+#endif  // GUARD_PROTEUS_UTIL_EXEC

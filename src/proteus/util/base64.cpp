@@ -17,7 +17,7 @@
  * @brief Implements base64 encoding/decoding
  */
 
-#include "proteus_extensions/util/base64.hpp"
+#include "proteus/util/base64.hpp"
 
 #include <stdexcept>
 
@@ -27,7 +27,7 @@
 #include <b64/decode.h>
 #include <b64/encode.h>
 
-namespace proteus {
+namespace proteus::util {
 
 constexpr size_t minDecodeLength(size_t length) { return (length * 3 + 3) / 4; }
 
@@ -84,4 +84,4 @@ std::string base64_encode(const char* in, size_t in_length) {
   return s;
 }
 
-}  // namespace proteus
+}  // namespace proteus::util

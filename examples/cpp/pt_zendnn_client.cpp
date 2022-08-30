@@ -32,162 +32,9 @@
 #include <vector>                 // for vector
 
 #include "proteus/proteus.hpp"  // for InferenceResponseFuture, terminate
-
-/**
- * @brief This method will read the class file and returns class name
- *
- * @param filename: The location of the file containing class names
- * @param N: Nth value from the class file
- * @return std::string: Name of the class
- */
-std::string ReadNthLine(const std::string filename, int N) {
-  std::ifstream in(filename);
-  std::string line;
-  line.reserve(100);  // for performance
-  // skip N lines
-  for (int i = 0; i < N; ++i) std::getline(in, line);
-
-  std::getline(in, line);
-  return line;
-}
-
-/**
- * @brief Crops the input `img` from center to a specific dimension specified
- *
- * @param img: Image which needs to be cropped
- * @param height: height of the output image
- * @param width: width of the output image
- * @return cv::Mat: Image cropped to required shape
- */
-cv::Mat center_crop(cv::Mat img, int height, int width) {
-  const int offsetW = (img.cols - width) / 2;
-  const int offsetH = (img.rows - height) / 2;
-  const cv::Rect roi(offsetW, offsetH, width, height);
-  img = img(roi);
-  return img;
-}
-
-/**
- * @brief This image will load and preprocess the data according to
- * the input arguments
- *
- * @param paths: The location of the image to be loaded
- * @param img_size: The input height/width of the image
- * @return std::vector<std::vector<float>>: The preprocessed image
- */
-std::vector<std::vector<float>> preprocess(
-  const std::vector<std::string>& paths, int img_size,
-  std::string method = "default") {
-  // update as needed!
-
-  std::vector<std::vector<float>> outputs;
-  outputs.reserve(paths.size());
-
-  auto index = 0;
-  for (const auto& path : paths) {
-    auto img = cv::imread(path);
-    cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
-
-    outputs.emplace_back();
-    auto& output = outputs[index++];
-
-    if (!method.compare("default")) {
-      // Preprocess
-      auto new_size = cv::Size(256, 256);
-      cv::resize(img, img, new_size, cv::INTER_LINEAR);
-      img = center_crop(img, img_size, img_size);
-      img.convertTo(img, CV_32FC3, 1.0 / 255.0);
-      img = img.isContinuous() ? img : img.clone();
-
-      const std::array mean = {0.485, 0.456, 0.406};
-      const std::array std = {0.229, 0.224, 0.225};
-
-      // Copy to the vector
-      auto size = img.size[0] * img.size[1] * 3;
-      output.resize(size);
-      for (int c = 0; c < 3; c++) {
-        for (int h = 0; h < img_size; h++) {
-          for (int w = 0; w < img_size; w++) {
-            output[(c * img_size * img_size) + (h * img_size) + w] =
-              (img.at<cv::Vec3f>(h, w)[c] - mean.at(c)) / std.at(c);
-          }
-        }
-      }
-    } else {
-      std::cerr << "Preprocess algo " << method << " not implemented";
-      exit(0);
-    }
-  }
-  return outputs;
-}
-
-/**
- * @brief Calculate softmax of the data
- *
- * @param data pointer to the raw data
- * @param size number of elements in the raw data
- * @param result pointer to store the computed results
- */
-void calc_softmax(const float* data, size_t size, double* result) {
-  double sum = 0;
-
-  auto max = data[0];
-  for (size_t i = 1; i < size; i++) {
-    if (data[i] > max) {
-      max = data[i];
-    }
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    result[i] = exp(data[i] - max);
-    sum += result[i];
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    result[i] /= sum;
-  }
-}
-
-/**
- * @brief After running softmax, get the labels associated with the top k values
- *
- * @param d pointer to the data
- * @param size number of elements in the data
- * @param k number of top elements to return
- * @return std::vector<int>
- */
-std::vector<int> get_top_k(const double* d, int size, int k) {
-  std::priority_queue<std::pair<float, int>> q;
-
-  for (auto i = 0; i < size; ++i) {
-    q.push(std::pair<float, int>(d[i], i));
-  }
-  std::vector<int> topKIndex;
-  for (auto i = 0; i < k; ++i) {
-    std::pair<float, int> ki = q.top();
-    q.pop();
-    topKIndex.push_back(ki.second);
-  }
-  return topKIndex;
-}
-
-/**
- * @brief Perform postprocessing of the data
- *
- * @param output output from Proteus
- * @param k number of top elements to return
- * @return std::vector<int>
- */
-std::vector<int> postprocess(proteus::InferenceResponseOutput& output, int k) {
-  const auto* data = static_cast<float*>(output.getData());
-  auto size = output.getSize();
-
-  std::vector<double> softmax;
-  softmax.resize(size);
-
-  calc_softmax(data, size, softmax.data());
-  return get_top_k(softmax.data(), size, k);
-}
+#include "proteus/util/pre_post/resnet50_postprocess.hpp"
+#include "proteus/util/pre_post/resnet50_preprocess.hpp"
+#include "proteus/util/read_nth_line.hpp"
 
 /**
  * @brief The custom processing example demonstrates how to plug in custom pre-
@@ -260,7 +107,17 @@ int main() {
   if (!options.image_location.empty()) {
     std::vector<std::string> paths;
     paths.emplace_back(options.image_location);
-    auto images = preprocess(paths, options.input_size, options.resize_method);
+    proteus::util::Resnet50PreprocessOptions<float, 3> options_;
+    options_.normalize = true;
+    options_.order = proteus::util::ImageOrder::NCHW;
+    options_.mean = {0.485, 0.456, 0.406};
+    options_.std = {4.367, 4.464, 4.444};
+    options_.convert_color = true;
+    options_.color_code = cv::COLOR_BGR2RGB;
+    options_.convert_type = true;
+    options_.type = CV_32FC3;
+    options_.convert_scale = 1.0 / 255.0;
+    auto images = proteus::util::resnet50Preprocess(paths, options_);
 
     const std::initializer_list<uint64_t> shape = {
       3, static_cast<uint64_t>(options.input_size),
@@ -279,11 +136,12 @@ int main() {
 
     auto outputs = results.getOutputs();
     for (auto& output : outputs) {
-      auto top_k = postprocess(output, options.topK);
+      auto top_k = proteus::util::resnet50Postprocess(
+        static_cast<float*>(output.getData()), output.getSize(), options.topK);
       std::cout << "Top " << options.topK << " classes:" << std::endl;
       for (int j = 0; j < options.topK; j++)
-        std::cout << j + 1 << ": Index: " << top_k[j]
-                  << " :: Class: " << ReadNthLine(options.class_file, top_k[j])
+        std::cout << j + 1 << ": Index: " << top_k[j] << " :: Class: "
+                  << proteus::util::readNthLine(options.class_file, top_k[j])
                   << std::endl;
     }
   } else {

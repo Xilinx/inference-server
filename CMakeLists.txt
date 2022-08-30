@@ -221,7 +221,6 @@ endif()
 
 add_subdirectory(external)
 add_subdirectory(src/proteus)
-add_subdirectory(src/proteus_extensions)
 if(${PROTEUS_BUILD_EXAMPLES})
   add_subdirectory(examples/cpp)
 endif()

@@ -39,19 +39,19 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"        // for BatchPtr, Batch, BatchP...
-#include "proteus/buffers/vector_buffer.hpp"   // for VectorBuffer
-#include "proteus/build_options.hpp"           // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"         // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"        // for InferenceResponse, Infe...
-#include "proteus/declarations.hpp"            // for BufferPtrs, InferenceRe...
-#include "proteus/observation/logging.hpp"     // for Logger
-#include "proteus/observation/metrics.hpp"     // for Metrics, MetricSummaryIDs
-#include "proteus/observation/tracing.hpp"     // for Trace
-#include "proteus/workers/worker.hpp"          // for Worker, kNumBufferAuto
-#include "proteus_extensions/util/base64.hpp"  // for base64_decode
-#include "proteus_extensions/util/parse_env.hpp"  // for autoExpandEnvironmentVa...
-#include "proteus_extensions/util/thread.hpp"     // for setThreadName
+#include "proteus/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
+#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
+#include "proteus/declarations.hpp"           // for BufferPtrs, InferenceRe...
+#include "proteus/observation/logging.hpp"    // for Logger
+#include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
+#include "proteus/observation/tracing.hpp"    // for Trace
+#include "proteus/util/base64.hpp"            // for base64_decode
+#include "proteus/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
+#include "proteus/util/thread.hpp"            // for setThreadName
+#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
 class AIGraph;
@@ -136,7 +136,7 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
-  autoExpandEnvironmentVariables(path);
+  util::autoExpandEnvironmentVariables(path);
   this->sysMan_->loadGraphs(path);
 
   this->graph_ = this->sysMan_->getGraph(this->graphName_);
@@ -151,7 +151,7 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
 
 void ResNet50::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
-  setThreadName("ResNet50");
+  util::setThreadName("ResNet50");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -206,7 +206,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
                  input_buffer, input_size);
         } else if (input_dtype == DataType::STRING) {
           auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = base64_decode(idata, input_size);
+          auto decoded_str = util::base64_decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {

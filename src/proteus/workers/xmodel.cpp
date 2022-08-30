@@ -53,12 +53,12 @@
 #include "proteus/observation/logging.hpp"         // for Logger
 #include "proteus/observation/metrics.hpp"         // for Metrics, MetricCou...
 #include "proteus/observation/tracing.hpp"         // for Trace
+#include "proteus/util/ctpl.h"                     // for thread_pool
+#include "proteus/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "proteus/util/queue.hpp"                  // for BufferPtrsQueue
+#include "proteus/util/string.hpp"                 // for endsWith
+#include "proteus/util/thread.hpp"                 // for setThreadName
 #include "proteus/workers/worker.hpp"              // for Worker, kNumBuffer...
-#include "proteus_extensions/util/ctpl.h"          // for thread_pool
-#include "proteus_extensions/util/parse_env.hpp"   // for autoExpandEnvironm...
-#include "proteus_extensions/util/string.hpp"      // for endsWith
-#include "proteus_extensions/util/thread.hpp"      // for setThreadName
 
 uint64_t reduce_mult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
@@ -130,11 +130,11 @@ void XModel::doInit(RequestParameters* parameters) {
   auto path = kPath;
   if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-    if (!endsWith(path, ".xmodel")) {
+    if (!util::endsWith(path, ".xmodel")) {
       path += ".xmodel";
     }
   }
-  autoExpandEnvironmentVariables(path);
+  util::autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);
 
   std::vector<xir::Subgraph*> subgraphs =
@@ -224,7 +224,7 @@ void XModel::doAcquire(RequestParameters* parameters) {
 void XModel::doRun(BatchPtrQueue* input_queue) {
   std::atomic_int32_t pool_size = 0;
   const int max_pool_size = this->pool_.size() * 4;  // 4 is arbitrary
-  setThreadName("XModel");
+  util::setThreadName("XModel");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

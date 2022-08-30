@@ -42,9 +42,9 @@
 #include "proteus/observation/logging.hpp"    // for Logger
 #include "proteus/observation/metrics.hpp"    // for Metrics
 #include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "proteus/util/base64.hpp"            // for base64_decode, base64_en...
+#include "proteus/util/thread.hpp"            // for setThreadName
 #include "proteus/workers/worker.hpp"         // for Worker
-#include "proteus_extensions/util/base64.hpp"  // for base64_decode, base64_en...
-#include "proteus_extensions/util/thread.hpp"  // for setThreadName
 
 namespace {
 
@@ -144,7 +144,7 @@ void InvertImage::doAcquire(RequestParameters* parameters) {
 }
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
-  setThreadName("InvertImage");
+  util::setThreadName("InvertImage");
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -198,7 +198,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           output.setDatatype(DataType::UINT8);
         } else if (input_dtype == DataType::STRING) {
           auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = base64_decode(idata, input_size);
+          auto decoded_str = util::base64_decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img;
           try {
@@ -219,7 +219,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           std::vector<unsigned char> buf;
           cv::imencode(".jpg", img, buf);
           const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-          auto encoded = base64_encode(enc_msg, buf.size());
+          auto encoded = util::base64_encode(enc_msg, buf.size());
           std::vector<std::byte> buffer;
           buffer.resize(encoded.size());
           memcpy(buffer.data(), encoded.data(), encoded.length());

@@ -240,7 +240,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
-For src/proteus_extensions/util/ctpl.h
+For src/proteus/util/ctpl.h
 
 Copyright (C) 2014 by Vitaliy Vitsentiy
 Copyright (C) 2021 Xilinx Inc.
