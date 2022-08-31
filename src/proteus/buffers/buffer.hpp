@@ -23,11 +23,10 @@
 
 #include <cstddef>  // for size_t
 #include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uint...
+#include <cstring>  // for memcpy, size_t
 #include <string>   // for string
 
 namespace proteus {
-
-enum class Status;
 
 /**
  * @brief The base buffer class used in Proteus. Buffer implementations should
@@ -35,8 +34,6 @@ enum class Status;
  */
 class Buffer {
  public:
-  /// Construct a new Proteus Buffer object
-  Buffer() {}
   /// Destroy the Proteus Buffer object
   virtual ~Buffer() = default;
 
@@ -72,183 +69,27 @@ class Buffer {
    *
    * @param value value to write
    */
-  virtual size_t write(bool value, size_t offset);
+  template <typename T>
+  size_t write(T value, size_t offset) {
+    if constexpr (std::is_same_v<std::string, T>) {
+      // not quite sure what the best way to do this is. The commented out code
+      // is other attempts. This works but may be non-optimal.
+      char null_term = '\0';
+      std::copy(value.begin(), value.end(),
+                reinterpret_cast<char*>(this->data(offset)));
+      // strcpy(reinterpret_cast<char*>(static_cast<std::byte*>(this->data()) +
+      // this->write_counter_),
+      // value.c_str());
+      std::memcpy(static_cast<std::byte*>(this->data(offset)) + value.length(),
+                  &null_term, 1);
 
-  /**
-   * @brief Write a uint8_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(uint8_t value, size_t offset);
-
-  /**
-   * @brief Write a uint16_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(uint16_t value, size_t offset);
-
-  /**
-   * @brief Write a uint32_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(uint32_t value, size_t offset);
-
-  /**
-   * @brief Write a uint64_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(uint64_t value, size_t offset);
-
-  /**
-   * @brief Write a int8_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(int8_t value, size_t offset);
-
-  /**
-   * @brief Write a int16_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(int16_t value, size_t offset);
-
-  /**
-   * @brief Write a int32_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(int32_t value, size_t offset);
-
-  /**
-   * @brief Write a int64_t value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(int64_t value, size_t offset);
-
-  /**
-   * @brief Write a float value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(float value, size_t offset);
-
-  /**
-   * @brief Write a double value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(double value, size_t offset);
-
-  /**
-   * @brief Write a string value to the buffer
-   *
-   * @param value value to write
-   */
-  virtual size_t write(std::string value, size_t offset);
-
-  // /**
-  //  * @brief Read a bool value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, bool& value) = 0;
-
-  // /**
-  //  * @brief Read a uint8_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, uint8_t& value) = 0;
-
-  // /**
-  //  * @brief Read a uint16_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, uint16_t& value) = 0;
-
-  // /**
-  //  * @brief Read a uint32_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, uint32_t& value) = 0;
-
-  // /**
-  //  * @brief Read a uint64_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, uint64_t& value) = 0;
-
-  // /**
-  //  * @brief Read a int8_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, int8_t& value) = 0;
-
-  // /**
-  //  * @brief Read a int16_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, int16_t& value) = 0;
-
-  // /**
-  //  * @brief Read a int32_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, int32_t& value) = 0;
-
-  // /**
-  //  * @brief Read a int64_t value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, int64_t& value) = 0;
-
-  // /**
-  //  * @brief Read a float value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, float& value) = 0;
-
-  // /**
-  //  * @brief Read a double value from the buffer
-  //  *
-  //  * @param index address to read from
-  //  * @param value holds the read value if read is successful
-  //  * @return Status::kOK if successful
-  //  */
-  // virtual Status read(int index, double& value) = 0;
+      // this->write_counter_ += value.length() + 1;
+      return offset + value.length() + 1;
+    } else {
+      std::memcpy(this->data(offset), &value, sizeof(T));
+      return offset + sizeof(T);
+    }
+  }
 };
 
 }  // namespace proteus

@@ -195,6 +195,68 @@ class DataType {
   Value value_;
 };
 
+template <typename F, typename... Args>
+void switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
+  switch (type) {
+    case DataType::BOOL: {
+      f.template operator()<bool>(args...);
+      break;
+    }
+    case DataType::UINT8: {
+      f.template operator()<uint8_t>(args...);
+      break;
+    }
+    case DataType::UINT16: {
+      f.template operator()<uint16_t>(args...);
+      break;
+    }
+    case DataType::UINT32: {
+      f.template operator()<uint32_t>(args...);
+      break;
+    }
+    case DataType::UINT64: {
+      f.template operator()<uint64_t>(args...);
+      break;
+    }
+    case DataType::INT8: {
+      f.template operator()<int8_t>(args...);
+      break;
+    }
+    case DataType::INT16: {
+      f.template operator()<int16_t>(args...);
+      break;
+    }
+    case DataType::INT32: {
+      f.template operator()<int32_t>(args...);
+      break;
+    }
+    case DataType::INT64: {
+      f.template operator()<int64_t>(args...);
+      break;
+    }
+    case DataType::FP16: {
+      std::cout << "FP16 not supported\n";
+      break;
+    }
+    case DataType::FP32: {
+      f.template operator()<float>(args...);
+      break;
+    }
+    case DataType::FP64: {
+      f.template operator()<double>(args...);
+      break;
+    }
+    case DataType::STRING: {
+      f.template operator()<char>(args...);
+      break;
+    }
+    default:
+      // TODO(varunsh): what should we do here?
+      std::cout << "Unknown datatype\n";
+      break;
+  }
+}
+
 #ifdef PROTEUS_ENABLE_VITIS
 /**
  * @brief Given an XIR type, return the corresponding Proteus type
