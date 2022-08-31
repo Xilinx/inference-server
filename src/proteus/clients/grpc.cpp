@@ -41,6 +41,7 @@
 #include "proteus/core/data_types.hpp"  // for DataType, DataType::...
 #include "proteus/core/exceptions.hpp"  // for bad_status
 #include "proteus/declarations.hpp"     // for InferenceResponseOutput
+#include "proteus/util/traits.hpp"      // for is_any
 
 using grpc::ClientContext;
 using grpc::Status;
@@ -298,23 +299,58 @@ void GrpcClient::workerUnload(const std::string& worker) {
   }
 }
 
+struct AddDataToTensor {
+  template <typename T>
+  void operator()(const InferenceRequestInput& input,
+                  inference::ModelInferRequest_InferInputTensor* tensor) const {
+    const auto* data = static_cast<T*>(input.getData());
+    const auto size = input.getSize();
+    if constexpr (std::is_same_v<T, char>) {
+      auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
+      contents->Add(data);
+    } else {
+      auto* contents = [&]() {
+        if constexpr (std::is_same_v<T, bool>) {
+          return tensor->mutable_contents()->mutable_bool_contents();
+        } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, uint32_t>) {
+          return tensor->mutable_contents()->mutable_uint_contents();
+        } else if constexpr (std::is_same_v<T, uint64_t>) {
+          return tensor->mutable_contents()->mutable_uint64_contents();
+        } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
+          return tensor->mutable_contents()->mutable_int_contents();
+        } else if constexpr (std::is_same_v<T, int64_t>) {
+          return tensor->mutable_contents()->mutable_int64_contents();
+        } else if constexpr (util::is_any_v<T, float>) {
+          return tensor->mutable_contents()->mutable_fp32_contents();
+        } else if constexpr (std::is_same_v<T, double>) {
+          return tensor->mutable_contents()->mutable_fp64_contents();
+        } else {
+          static_assert(!sizeof(T), "Invalid type to AddDataToTensor");
+        }
+      }();
+      for (auto i = 0U; i < size; ++i) {
+        contents->Add(data[i]);
+      }
+    }
+  }
+};
+
 void mapRequestToProto(const InferenceRequest& request,
                        inference::ModelInferRequest& grpc_request) {
   grpc_request.set_id(request.getID());
 
-  auto* parameters = request.getParameters();
-  if (parameters != nullptr) {
+  if (const auto* parameters = request.getParameters(); parameters != nullptr) {
     auto params = parameters->data();
     auto* grpc_parameters = grpc_request.mutable_parameters();
     mapParametersToProto(params, grpc_parameters);
   }
 
-  auto inputs = request.getInputs();
+  const auto& inputs = request.getInputs();
   for (const auto& input : inputs) {
     auto* tensor = grpc_request.add_inputs();
 
     tensor->set_name(input.getName());
-    auto shape = input.getShape();
+    const auto& shape = input.getShape();
     auto size = 1U;
     for (const auto& index : shape) {
       tensor->add_shape(index);
@@ -325,114 +361,7 @@ void mapRequestToProto(const InferenceRequest& request,
     mapParametersToProto(input.getParameters()->data(),
                          tensor->mutable_parameters());
 
-    switch (input.getDatatype()) {
-      case DataType::BOOL: {
-        auto* data = static_cast<bool*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_bool_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT8: {
-        auto* data = static_cast<uint8_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT16: {
-        auto* data = static_cast<uint16_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT32: {
-        auto* data = static_cast<uint32_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_uint_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT64: {
-        auto* data = static_cast<uint64_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_uint64_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::INT8: {
-        auto* data = static_cast<int8_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_int_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::INT16: {
-        auto* data = static_cast<int16_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_int_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::INT32: {
-        auto* data = static_cast<int32_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_int_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::INT64: {
-        auto* data = static_cast<int64_t*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_int64_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        std::cout << "Writing FP16 not supported\n";
-        break;
-      }
-      case DataType::FP32: {
-        auto* data = static_cast<float*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_fp32_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::FP64: {
-        auto* data = static_cast<double*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_fp64_contents();
-        for (size_t i = 0; i < input.getSize(); i++) {
-          contents->Add(data[i]);
-        }
-        break;
-      }
-      case DataType::STRING: {
-        const auto* data = static_cast<char*>(input.getData());
-        auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
-        contents->Add(data);
-        // for(size_t i = 0; i < output.getSize(); i++){
-        //   contents->Add(data->data()[i]);
-        // }
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
+    switchOverTypes(AddDataToTensor(), input.getDatatype(), input, tensor);
   }
 
   // TODO(varunsh): skipping outputs for now
