@@ -92,13 +92,28 @@ void check_error(drogon::ReqResult result) {
   }
 }
 
-ServerMetadata HttpClient::serverMetadata() {
-  auto* client = this->impl_->getClient();
-
+drogon::HttpRequestPtr createGetRequest(const std::string& path,
+                                        const StringMap& headers) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::Get);
-  req->setPath("/v2");
-  addHeaders(req, headers_);
+  req->setPath(path);
+  addHeaders(req, headers);
+  return req;
+}
+
+drogon::HttpRequestPtr createPostRequest(const Json::Value& json,
+                                         const std::string& path,
+                                         const StringMap& headers) {
+  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
+  req->setMethod(drogon::Post);
+  req->setPath(path);
+  addHeaders(req, headers);
+  return req;
+}
+
+ServerMetadata HttpClient::serverMetadata() {
+  auto* client = this->impl_->getClient();
+  auto req = createGetRequest("/v2", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -118,12 +133,7 @@ ServerMetadata HttpClient::serverMetadata() {
 
 bool HttpClient::serverLive() {
   auto* client = this->impl_->getClient();
-
-  auto req = drogon::HttpRequest::newHttpRequest();
-  req->setMethod(drogon::Get);
-  auto path = "/v2/health/live";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createGetRequest("/v2/health/live", headers_);
 
   auto [result, response] = client->sendRequest(req);
   if (result != drogon::ReqResult::Ok) {
@@ -134,12 +144,7 @@ bool HttpClient::serverLive() {
 
 bool HttpClient::serverReady() {
   auto* client = this->impl_->getClient();
-
-  auto req = drogon::HttpRequest::newHttpRequest();
-  req->setMethod(drogon::Get);
-  auto path = "/v2/health/ready";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createGetRequest("/v2/health/ready", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -148,12 +153,7 @@ bool HttpClient::serverReady() {
 
 bool HttpClient::modelReady(const std::string& model) {
   auto* client = this->impl_->getClient();
-
-  auto req = drogon::HttpRequest::newHttpRequest();
-  req->setMethod(drogon::Get);
-  auto path = "/v2/models/" + model + "/ready";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createGetRequest("/v2/models/" + model + "/ready", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -162,11 +162,7 @@ bool HttpClient::modelReady(const std::string& model) {
 
 ModelMetadata HttpClient::modelMetadata(const std::string& model) {
   auto* client = this->impl_->getClient();
-  auto req = drogon::HttpRequest::newHttpRequest();
-  req->setMethod(drogon::Get);
-  auto path = "/v2/models/" + model;
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createGetRequest("/v2/models/" + model, headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -183,11 +179,8 @@ void HttpClient::modelLoad(const std::string& model,
     json = mapParametersToJson(parameters);
   }
 
-  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
-  req->setMethod(drogon::Post);
-  auto path = "/v2/repository/models/" + model + "/load";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createPostRequest(json, "/v2/repository/models/" + model + "/load",
+                               headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -200,11 +193,8 @@ void HttpClient::modelUnload(const std::string& model) {
   auto* client = this->impl_->getClient();
 
   Json::Value json;
-  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
-  req->setMethod(drogon::Post);
-  auto path = "/v2/repository/models/" + model + "/unload";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createPostRequest(
+    json, "/v2/repository/models/" + model + "/unload", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -223,11 +213,8 @@ std::string HttpClient::workerLoad(const std::string& model,
     json = mapParametersToJson(parameters);
   }
 
-  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
-  req->setMethod(drogon::Post);
-  auto path = "/v2/workers/" + model + "/load";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req =
+    createPostRequest(json, "/v2/workers/" + model + "/load", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -241,11 +228,8 @@ void HttpClient::workerUnload(const std::string& model) {
   auto* client = this->impl_->getClient();
 
   Json::Value json;
-  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
-  req->setMethod(drogon::Post);
-  auto path = "/v2/workers/" + model + "/unload";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req =
+    createPostRequest(json, "/v2/workers/" + model + "/unload", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -262,11 +246,7 @@ InferenceResponse runInference(drogon::HttpClient* client,
   assert(!request.getInputs().empty());
 
   auto json = mapRequestToJson(request);
-  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
-  req->setMethod(drogon::Post);
-  auto path = "/v2/models/" + model + "/infer";
-  req->setPath(path);
-  addHeaders(req, headers);
+  auto req = createPostRequest(json, "/v2/models/" + model + "/infer", headers);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -291,12 +271,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
 
 std::vector<std::string> HttpClient::modelList() {
   auto* client = this->impl_->getClient();
-
-  auto req = drogon::HttpRequest::newHttpRequest();
-  req->setMethod(drogon::Get);
-  const std::string path = "/v2/models";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createGetRequest("/v2/models", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
@@ -320,11 +295,7 @@ bool HttpClient::hasHardware(const std::string& name, int num) {
   Json::Value json;
   json["name"] = name;
   json["num"] = num;
-  auto req = drogon::HttpRequest::newHttpJsonRequest(json);
-  req->setMethod(drogon::Get);
-  const std::string path = "/v2/hardware";
-  req->setPath(path);
-  addHeaders(req, headers_);
+  auto req = createPostRequest(json, "/v2/hardware", headers_);
 
   auto [result, response] = client->sendRequest(req);
   check_error(result);
