@@ -201,7 +201,7 @@ if __name__ == "__main__":
         "--steps",
         type=int,
         required=False,
-        default=5,
+        default=1,
         help="Maximum number of images (steps * batch size) used for "
         "benchmarking (only used if image_location not provided)",
     )

@@ -27,8 +27,6 @@ std::vector<InferenceResponse> inferAsyncOrdered(
     q.push(client->modelInferAsync(model, request));
   }
 
-  std::cout << "Pushed all\n";
-
   const auto num_requests = requests.size();
   std::vector<InferenceResponse> responses;
   responses.reserve(num_requests);

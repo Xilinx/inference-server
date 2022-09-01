@@ -36,8 +36,8 @@
 #include <vector>                 // for vector
 
 #include "proteus/proteus.hpp"  // for InferenceResponseFuture, terminate
+#include "proteus/util/pre_post/image_preprocess.hpp"
 #include "proteus/util/pre_post/resnet50_postprocess.hpp"
-#include "proteus/util/pre_post/resnet50_preprocess.hpp"
 #include "proteus/util/read_nth_line.hpp"
 
 /**
@@ -63,7 +63,7 @@ struct Option {
   int inter_op = 64;
   int intra_op = 1;
   int warmup_step = 5;
-  int steps = 10;
+  int steps = 1;
   int topK = 5;
 } options;
 
@@ -109,15 +109,11 @@ int main() {
   if (!options.image_location.empty()) {
     std::vector<std::string> paths;
     paths.emplace_back(options.image_location);
-    proteus::util::Resnet50PreprocessOptions<float, 3> options_;
+    proteus::util::ImagePreprocessOptions<float, 3> options_;
     options_.convert_color = true;
     options_.color_code = cv::COLOR_BGR2RGB;
     options_.assign = true;
-    auto images = proteus::util::resnet50Preprocess(paths, options_);
-
-    for (auto i = 0; i < 10; i++) {
-      std::cout << images[0][i] << std::endl;
-    }
+    auto images = proteus::util::imagePreprocess(paths, options_);
 
     const std::initializer_list<uint64_t> shape = {
       static_cast<uint64_t>(options.input_size),

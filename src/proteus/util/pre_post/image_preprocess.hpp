@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_PRE_POST_RESNET50_PREPROCESS
-#define GUARD_PROTEUS_UTIL_PRE_POST_RESNET50_PREPROCESS
+#ifndef GUARD_PROTEUS_UTIL_PRE_POST_IMAGE_PREPROCESS
+#define GUARD_PROTEUS_UTIL_PRE_POST_IMAGE_PREPROCESS
 
 #include <array>
 #include <cassert>
@@ -33,7 +33,7 @@ enum class ImageOrder {
 };
 
 template <typename T, int C>
-struct Resnet50PreprocessOptions {
+struct ImagePreprocessOptions {
   int height = 224;
   int width = 224;
   int channels = C;
@@ -93,9 +93,9 @@ void normalize(const cv::Mat& img, ImageOrder order, T* output, const T* mean,
 }  // namespace detail
 
 template <typename T>
-std::vector<std::vector<T>> resnet50Preprocess(
+std::vector<std::vector<T>> imagePreprocess(
   const std::vector<std::string>& paths,
-  const Resnet50PreprocessOptions<T, 3>& options) {
+  const ImagePreprocessOptions<T, 3>& options) {
   std::vector<std::vector<T>> outputs;
   outputs.reserve(paths.size());
 
@@ -143,4 +143,4 @@ std::vector<std::vector<T>> resnet50Preprocess(
 
 }  // namespace proteus::util
 
-#endif  // GUARD_PROTEUS_UTIL_PRE_POST_RESNET50_PREPROCESS
+#endif  // GUARD_PROTEUS_UTIL_PRE_POST_IMAGE_PREPROCESS

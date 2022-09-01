@@ -68,7 +68,7 @@ class ProteusHttpServer
   ADD_METHOD_TO(ProteusHttpServer::getModelMetadata, "v2/models/{model}",
                 drogon::Get, drogon::Options);
   /// Register the getHardware endpoint
-  ADD_METHOD_TO(ProteusHttpServer::hasHardware, "v2/hardware", drogon::Get,
+  ADD_METHOD_TO(ProteusHttpServer::hasHardware, "v2/hardware", drogon::Post,
                 drogon::Options);
   /// Register the modelList endpoint
   ADD_METHOD_TO(ProteusHttpServer::modelList, "v2/models", drogon::Get,

@@ -32,8 +32,8 @@
 #include <vector>                 // for vector
 
 #include "proteus/proteus.hpp"  // for InferenceResponseFuture, terminate
+#include "proteus/util/pre_post/image_preprocess.hpp"
 #include "proteus/util/pre_post/resnet50_postprocess.hpp"
-#include "proteus/util/pre_post/resnet50_preprocess.hpp"
 #include "proteus/util/read_nth_line.hpp"
 
 // // #include "migraphx/filesystem.hpp"
@@ -67,7 +67,7 @@ struct Option {
 
   // values used in iterations and postprocessing
   int output_classes = 1000;
-  int steps = 10;
+  int steps = 1;
   int topK = 5;
 } options;
 
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
   std::cout << "loaded worker name " << workerName << std::endl;
 
   // Load the image and make an array of copies
-  proteus::util::Resnet50PreprocessOptions<float, 3> options_;
+  proteus::util::ImagePreprocessOptions<float, 3> options_;
   options_.normalize = true;
   options_.order = proteus::util::ImageOrder::NCHW;
   options_.mean = {0.485, 0.456, 0.406};
@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
   options_.convert_type = true;
   options_.type = CV_32FC3;
   options_.convert_scale = 1.0 / 255.0;
-  auto images = proteus::util::resnet50Preprocess(paths, options_);
+  auto images = proteus::util::imagePreprocess(paths, options_);
 
   const std::initializer_list<uint64_t> shape = {
     3, static_cast<long unsigned>(options.input_size),
@@ -172,7 +172,7 @@ int main(int argc, char* argv[]) {
   for (int step = 0; step < options.steps; step++) {
     for (auto i = 0; i < options.batch_size; i++) {
       proteus::InferenceRequest request;
-      request.addInputTensor(static_cast<void*>(images[i].data()), shape,
+      request.addInputTensor(static_cast<void*>(images[0].data()), shape,
                              proteus::DataType::FP32);
       auto results = client.modelInfer(workerName, request);
     }

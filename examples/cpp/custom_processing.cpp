@@ -38,8 +38,8 @@
 #include "proteus/proteus.hpp"
 // -include:
 
+#include "proteus/util/pre_post/image_preprocess.hpp"
 #include "proteus/util/pre_post/resnet50_postprocess.hpp"
-#include "proteus/util/pre_post/resnet50_preprocess.hpp"
 
 #ifdef ENABLE_GRPC
 constexpr auto GRPC_PORT = 50051;
@@ -162,12 +162,12 @@ int main() {
   paths.reserve(request_num);
   paths.emplace_back(path_to_image);
 
-  proteus::util::Resnet50PreprocessOptions<int8_t, 3> options;
+  proteus::util::ImagePreprocessOptions<int8_t, 3> options;
   options.order = proteus::util::ImageOrder::NHWC;
   options.mean = {123, 107, 104};
   options.std = {1, 1, 1};
   options.normalize = true;
-  auto images = proteus::util::resnet50Preprocess(paths, options);
+  auto images = proteus::util::imagePreprocess(paths, options);
   // -prepare images:
 
   // +construct request:
