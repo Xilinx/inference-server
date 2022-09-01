@@ -50,6 +50,7 @@
 #include "proteus/observation/logging.hpp"        // for Logger, Loggers
 #include "proteus/observation/tracing.hpp"        // for Trace, startTrace
 #include "proteus/util/string.hpp"                // for toLower
+#include "proteus/util/traits.hpp"                // for is_any
 
 namespace proteus {
 class CallDataModelInfer;
@@ -198,6 +199,26 @@ class CallDataServerStream : public CallData<RequestType, ReplyType> {
   ::grpc::ServerAsyncWriter<ReplyType> responder_;
 };
 
+struct WriteData {
+  template <typename T, typename Tensor>
+  void operator()(Buffer* buffer, Tensor* tensor, size_t offset,
+                  size_t size) const {
+    auto* contents = getTensorContents<T>(tensor);
+    if constexpr (util::is_any_v<T, bool, uint32_t, uint64_t, int32_t, int64_t,
+                                 float, double, char>) {
+      auto* dest = static_cast<std::byte*>(buffer->data(offset));
+      std::memcpy(dest, contents, size * sizeof(T));
+    } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, int8_t,
+                                        int16_t>) {
+      for (size_t i = 0; i < size; i++) {
+        offset = buffer->write(static_cast<T>(contents[i]), offset);
+      }
+    } else {
+      static_assert(!sizeof(T), "Invalid type to WriteData");
+    }
+  }
+};
+
 template <>
 class InferenceRequestInputBuilder<
   inference::ModelInferRequest_InferInputTensor> {
@@ -218,82 +239,8 @@ class InferenceRequestInputBuilder<
     auto size = input.getSize();
     auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
 
-    const auto tensor = req.contents();
-    switch (input.getDatatype()) {
-      case DataType::BOOL: {
-        std::memcpy(dest, tensor.bool_contents().data(), size * sizeof(char));
-        break;
-      }
-      case DataType::UINT8: {
-        const auto* value = tensor.uint_contents().data();
-        for (size_t i = 0; i < size; i++) {
-          dest[i] = static_cast<std::byte>(value[i]);
-        }
-        break;
-      }
-      case DataType::UINT16: {
-        const auto* value = tensor.uint_contents().data();
-        for (size_t i = 0; i < size; i++) {
-          std::memcpy(dest + i, value + i, sizeof(uint16_t));
-        }
-        break;
-      }
-      case DataType::UINT32: {
-        const auto value = tensor.uint_contents().data();
-        std::memcpy(dest, value, size * sizeof(uint32_t));
-        break;
-      }
-      case DataType::UINT64: {
-        std::memcpy(dest, tensor.uint64_contents().data(),
-                    size * sizeof(uint64_t));
-        break;
-      }
-      case DataType::INT8: {
-        const auto* value = tensor.int_contents().data();
-        for (size_t i = 0; i < size; i++) {
-          dest[i] = static_cast<std::byte>(value[i]);
-        }
-        break;
-      }
-      case DataType::INT16: {
-        const auto* value = tensor.int_contents().data();
-        for (size_t i = 0; i < size; i++) {
-          std::memcpy(dest + i, value + i, sizeof(int16_t));
-        }
-        break;
-      }
-      case DataType::INT32: {
-        std::memcpy(dest, tensor.int_contents().data(), size * sizeof(int32_t));
-        break;
-      }
-      case DataType::INT64: {
-        std::memcpy(dest, tensor.int64_contents().data(),
-                    size * sizeof(int64_t));
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        std::cout << "Writing FP16 not supported\n";
-        break;
-      }
-      case DataType::FP32: {
-        std::memcpy(dest, tensor.fp32_contents().data(), size * sizeof(float));
-        break;
-      }
-      case DataType::FP64: {
-        std::memcpy(dest, tensor.fp64_contents().data(), size * sizeof(double));
-        break;
-      }
-      case DataType::STRING: {
-        std::memcpy(dest, tensor.bytes_contents().data(),
-                    size * sizeof(std::byte));
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
+    switchOverTypes(WriteData(), input.getDatatype(), input_buffer, &req,
+                    offset, size);
 
     input.data_ = dest;
     return input;
@@ -441,7 +388,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
     return;
   }
   try {
-    mapResponsetoProto(response, calldata->getReply());
+    mapResponseToProto(response, calldata->getReply());
   } catch (const invalid_argument& e) {
     calldata->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
     return;

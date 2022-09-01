@@ -20,9 +20,12 @@
 #ifndef GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
 #define GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
 
+#include <map>
 #include <string>
 
+#include "proteus/core/interface.hpp"  // for Interface
 #include "proteus/core/predict_api_internal.hpp"
+#include "proteus/util/traits.hpp"  // for is_any
 
 namespace google::protobuf {
 template <typename T, typename U>
@@ -33,20 +36,84 @@ namespace inference {
 class InferParameter;
 class ModelInferResponse;
 class ModelMetadataResponse;
+class ModelInferRequest;
 }  // namespace inference
 
 namespace proteus {
 
+void mapParametersToProto(
+  const std::map<std::string, proteus::Parameter>& parameters,
+  google::protobuf::Map<std::string, inference::InferParameter>*
+    grpc_parameters);
 RequestParametersPtr mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params);
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
   RequestParameters& parameters);
-void mapResponsetoProto(InferenceResponse response,
+void mapRequestToProto(const InferenceRequest& request,
+                       inference::ModelInferRequest& grpc_request);
+void mapResponseToProto(InferenceResponse response,
                         inference::ModelInferResponse& reply);
+void mapProtoToResponse(const inference::ModelInferResponse& reply,
+                        InferenceResponse& response);
 
 void mapModelMetadataToProto(const ModelMetadata& metadata,
                              inference::ModelMetadataResponse& resp);
+
+template <typename T, typename Tensor>
+constexpr auto* getTensorContents(Tensor* tensor) {
+  if constexpr (std::is_same_v<T, bool>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().bool_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_bool_contents();
+    }
+  } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, uint32_t>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().uint_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_uint_contents();
+    }
+  } else if constexpr (std::is_same_v<T, uint64_t>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().uint64_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_uint64_contents();
+    }
+  } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().int_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_int_contents();
+    }
+  } else if constexpr (std::is_same_v<T, int64_t>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().int64_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_int64_contents();
+    }
+  } else if constexpr (util::is_any_v<T, float>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().fp32_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_fp32_contents();
+    }
+  } else if constexpr (std::is_same_v<T, double>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().fp64_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_fp64_contents();
+    }
+  } else if constexpr (std::is_same_v<T, char>) {
+    if constexpr (std::is_const_v<Tensor>) {
+      return tensor->contents().bytes_contents().data();
+    } else {
+      return tensor->mutable_contents()->mutable_bytes_contents();
+    }
+  } else {
+    static_assert(!sizeof(T), "Invalid type to AddDataToTensor");
+  }
+}
 
 }  // namespace proteus
 

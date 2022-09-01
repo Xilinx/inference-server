@@ -42,6 +42,7 @@
 #include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "proteus/observation/logging.hpp"        // for Logger
 #include "proteus/util/compression.hpp"           // for z_decompress
+#include "proteus/util/traits.hpp"                // for is_any
 
 namespace proteus {
 
@@ -92,19 +93,53 @@ Json::Value mapParametersToJson(RequestParameters *parameters) {
   return json;
 }
 
-template <typename T, typename Fn>
-void setOutputData(const Json::Value &json, InferenceResponseOutput *output,
-                   Fn f) {
-  std::vector<std::byte> data;
-  data.resize(json.size() * sizeof(T));
-  auto *ptr = data.data();
-  for (const auto &datum : json) {
-    auto raw_datum = static_cast<T>((datum.*f)());
-    memcpy(ptr, &raw_datum, sizeof(T));
-    ptr += sizeof(T);
+template <typename T>
+constexpr auto jsonValueToType(const Json::Value &datum) {
+  if constexpr (std::is_same_v<T, bool>) {
+    return datum.asBool();
+  } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, uint32_t>) {
+    return datum.asUInt();
+  } else if constexpr (std::is_same_v<T, uint64_t>) {
+    return datum.asUInt64();
+  } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
+    return datum.asInt();
+  } else if constexpr (std::is_same_v<T, int64_t>) {
+    return datum.asInt64();
+  } else if constexpr (util::is_any_v<T, float>) {
+    return datum.asFloat();
+  } else if constexpr (std::is_same_v<T, double>) {
+    return datum.asDouble();
+  } else if constexpr (std::is_same_v<T, char>) {
+    return datum.asString();
+  } else {
+    static_assert(!sizeof(T), "Invalid type to SetOutputData");
   }
-  output->setData(std::move(data));
 }
+
+struct SetOutputData {
+  template <typename T>
+  void operator()(const Json::Value &json,
+                  InferenceResponseOutput *output) const {
+    if constexpr (std::is_same_v<T, char>) {
+      assert(json.size() == 1);
+      auto str = json[0].asString();
+      std::vector<std::byte> data;
+      data.resize(str.length());
+      memcpy(data.data(), str.data(), str.length());
+      output->setData(std::move(data));
+    } else {
+      std::vector<std::byte> data;
+      data.resize(json.size() * sizeof(T));
+      auto *ptr = data.data();
+      for (const auto &datum : json) {
+        auto raw_datum = static_cast<T>(jsonValueToType<T>(datum));
+        memcpy(ptr, &raw_datum, sizeof(T));
+        ptr += sizeof(T);
+      }
+      output->setData(std::move(data));
+    }
+  }
+};
 
 InferenceResponse mapJsonToResponse(Json::Value *json) {
   InferenceResponse response;
@@ -126,82 +161,41 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
     }
     output.setShape(shape);
     const auto &json_data = json_output["data"];
-    switch (output.getDatatype()) {
-      case DataType::BOOL: {
-        setOutputData<bool>(json_data, &output, &Json::Value::asBool);
-        break;
-      }
-      case DataType::UINT8: {
-        setOutputData<uint8_t>(json_data, &output, &Json::Value::asUInt);
-        break;
-      }
-      case DataType::UINT16: {
-        setOutputData<uint16_t>(json_data, &output, &Json::Value::asUInt);
-        break;
-      }
-      case DataType::UINT32: {
-        setOutputData<uint32_t>(json_data, &output, &Json::Value::asUInt);
-        break;
-      }
-      case DataType::UINT64: {
-        setOutputData<uint64_t>(json_data, &output, &Json::Value::asUInt64);
-        break;
-      }
-      case DataType::INT8: {
-        setOutputData<int8_t>(json_data, &output, &Json::Value::asInt);
-        break;
-      }
-      case DataType::INT16: {
-        setOutputData<int16_t>(json_data, &output, &Json::Value::asInt);
-        break;
-      }
-      case DataType::INT32: {
-        setOutputData<int32_t>(json_data, &output, &Json::Value::asInt);
-        break;
-      }
-      case DataType::INT64: {
-        setOutputData<int64_t>(json_data, &output, &Json::Value::asInt64);
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        throw invalid_argument("Writing FP16 not supported at this time");
-      }
-      case DataType::FP32: {
-        setOutputData<float>(json_data, &output, &Json::Value::asFloat);
-        break;
-      }
-      case DataType::FP64: {
-        setOutputData<double>(json_data, &output, &Json::Value::asDouble);
-        break;
-      }
-      case DataType::STRING: {
-        assert(json_data.size() == 1);
-        auto str = json_data[0].asString();
-        std::vector<std::byte> data;
-        data.resize(str.length());
-        memcpy(data.data(), str.data(), str.length());
-        output.setData(std::move(data));
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
+    switchOverTypes(SetOutputData(), output.getDatatype(), json_data, &output);
     response.addOutput(output);
   }
 
   return response;
 }
 
-template <typename T, typename C = T>
-void setInputData(Json::Value &json, const InferenceRequestInput *input) {
-  auto *data = static_cast<T *>(input->getData());
-  for (size_t i = 0; i < input->getSize(); i++) {
-    json.append(static_cast<C>(data[i]));
+struct SetInputData {
+  template <typename T>
+  void operator()(Json::Value *json, void *src_data, size_t src_size) const {
+    auto *data = static_cast<T *>(src_data);
+    if constexpr (std::is_same_v<T, char>) {
+      std::string str{data, src_size};
+      json->append(str);
+    } else {
+      constexpr auto getData = [](const T *data_ptr, size_t index) {
+        if constexpr (std::is_same_v<T, uint64_t>) {
+          return static_cast<Json::UInt64>(data_ptr[index]);
+        } else if constexpr (std::is_same_v<T, int64_t>) {
+          return static_cast<Json::Int64>(data_ptr[index]);
+        } else if constexpr (util::is_any_v<T, bool, uint8_t, uint16_t,
+                                            uint32_t, int8_t, int16_t, int32_t,
+                                            float, double>) {
+          return data_ptr[index];
+        } else {
+          static_assert(!sizeof(T), "Invalid type to SetInputData");
+        }
+      };
+
+      for (auto i = 0U; i < src_size; ++i) {
+        json->append(getData(data, i));
+      }
+    }
   }
-}
+};
 
 Json::Value mapRequestToJson(const InferenceRequest &request) {
   Json::Value json;
@@ -224,67 +218,8 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
       json_input["shape"].append(static_cast<Json::UInt64>(index));
     }
     json_input["data"] = Json::arrayValue;
-    switch (input.getDatatype()) {
-      case DataType::BOOL: {
-        setInputData<bool>(json_input["data"], &input);
-        break;
-      }
-      case DataType::UINT8: {
-        setInputData<uint8_t>(json_input["data"], &input);
-        break;
-      }
-      case DataType::UINT16: {
-        setInputData<uint16_t>(json_input["data"], &input);
-        break;
-      }
-      case DataType::UINT32: {
-        setInputData<uint32_t>(json_input["data"], &input);
-        break;
-      }
-      case DataType::UINT64: {
-        setInputData<uint64_t, Json::UInt64>(json_input["data"], &input);
-        break;
-      }
-      case DataType::INT8: {
-        setInputData<int8_t>(json_input["data"], &input);
-        break;
-      }
-      case DataType::INT16: {
-        setInputData<int16_t>(json_input["data"], &input);
-        break;
-      }
-      case DataType::INT32: {
-        setInputData<int32_t>(json_input["data"], &input);
-        break;
-      }
-      case DataType::INT64: {
-        setInputData<int64_t, Json::Int64>(json_input["data"], &input);
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        std::cout << "Writing FP16 not supported\n";
-        break;
-      }
-      case DataType::FP32: {
-        setInputData<float>(json_input["data"], &input);
-        break;
-      }
-      case DataType::FP64: {
-        setInputData<double>(json_input["data"], &input);
-        break;
-      }
-      case DataType::STRING: {
-        const auto *data = static_cast<char *>(input.getData());
-        std::string str{data, input.getSize()};
-        json_input["data"].append(str);
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
+    switchOverTypes(SetInputData(), input.getDatatype(), &(json_input["data"]),
+                    input.getData(), input.getSize());
     json["inputs"].append(json_input);
   }
 
@@ -292,6 +227,18 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
 
   return json;
 }
+
+struct WriteData {
+  template <typename T>
+  size_t operator()(Buffer *buffer, const Json::Value &value,
+                    size_t offset) const {
+    if constexpr (std::is_same_v<T, char>) {
+      return buffer->write(jsonValueToType<T>(value), offset);
+    } else {
+      return buffer->write(static_cast<T>(jsonValueToType<T>(value)), offset);
+    }
+  }
+};
 
 template <>
 class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
@@ -335,62 +282,8 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
     auto data = req->get("data", Json::arrayValue);
     try {
       for (auto const &i : data) {
-        switch (input.dataType_) {
-          case DataType::BOOL:
-            offset = input_buffer->write(i.asBool(), offset);
-            break;
-          case DataType::UINT8:
-            offset =
-              input_buffer->write(static_cast<uint8_t>(i.asUInt()), offset);
-            break;
-          case DataType::UINT16:
-            offset =
-              input_buffer->write(static_cast<uint16_t>(i.asUInt()), offset);
-            break;
-          case DataType::UINT32:
-            offset =
-              input_buffer->write(static_cast<uint32_t>(i.asUInt()), offset);
-            break;
-          case DataType::UINT64:
-            offset =
-              input_buffer->write(static_cast<uint64_t>(i.asUInt64()), offset);
-            break;
-          case DataType::INT8:
-            offset =
-              input_buffer->write(static_cast<int8_t>(i.asInt()), offset);
-            break;
-          case DataType::INT16:
-            offset =
-              input_buffer->write(static_cast<int16_t>(i.asInt()), offset);
-            break;
-          case DataType::INT32:
-            offset =
-              input_buffer->write(static_cast<int32_t>(i.asInt()), offset);
-            break;
-          case DataType::INT64:
-            offset =
-              input_buffer->write(static_cast<int64_t>(i.asInt64()), offset);
-            break;
-          case DataType::FP16:
-            // FIXME(varunsh): this is not handled
-            PROTEUS_LOG_WARN(logger, "Writing FP16 not supported");
-            break;
-          case DataType::FP32:
-            offset =
-              input_buffer->write(static_cast<float>(i.asFloat()), offset);
-            break;
-          case DataType::FP64:
-            offset =
-              input_buffer->write(static_cast<double>(i.asDouble()), offset);
-            break;
-          case DataType::STRING:
-            offset = input_buffer->write(i.asString(), offset);
-            break;
-          default:
-            // TODO(varunsh): what should we do here?
-            PROTEUS_LOG_WARN(logger, "Unknown datatype");
-            break;
-        }
+        offset = switchOverTypes(WriteData(), input.dataType_, input_buffer, i,
+                                 offset);
       }
     } catch (const Json::LogicError &) {
       throw invalid_argument(
@@ -594,104 +487,8 @@ Json::Value parseResponse(InferenceResponse response) {
       json_output["shape"].append(static_cast<Json::UInt>(index));
     }
 
-    const auto output_size = output.getSize();
-    switch (output.getDatatype()) {
-      case DataType::BOOL: {
-        const auto *data = static_cast<bool *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT8: {
-        const auto *data = static_cast<uint8_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT16: {
-        const auto *data = static_cast<uint16_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT32: {
-        const auto *data = static_cast<uint32_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::UINT64: {
-        const auto *data = static_cast<uint64_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(static_cast<Json::UInt64>(data[i]));
-        }
-        break;
-      }
-      case DataType::INT8: {
-        const auto *data = static_cast<int8_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::INT16: {
-        const auto *data = static_cast<int16_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::INT32: {
-        const auto *data = static_cast<int32_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::INT64: {
-        const auto *data = static_cast<int64_t *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(static_cast<Json::Int64>(data[i]));
-        }
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        std::cout << "Writing FP16 not supported\n";
-        break;
-      }
-      case DataType::FP32: {
-        const auto *data = static_cast<float *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::FP64: {
-        const auto *data = static_cast<double *>(output.getData());
-        for (size_t i = 0; i < output_size; i++) {
-          json_output["data"].append(data[i]);
-        }
-        break;
-      }
-      case DataType::STRING: {
-        const auto *data = static_cast<char *>(output.getData());
-        std::string str{data, output.getSize()};
-        json_output["data"].append(str);
-        // for(size_t i = 0; i < output.getSize(); i++){
-        //   json_output["data"].append(data->data()[i]);
-        // }
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
+    switchOverTypes(SetInputData(), output.getDatatype(),
+                    &(json_output["data"]), output.getData(), output.getSize());
     ret["outputs"].append(json_output);
   }
   return ret;

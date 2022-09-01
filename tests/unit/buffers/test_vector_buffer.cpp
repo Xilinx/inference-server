@@ -29,6 +29,30 @@ constexpr auto kBufferSize = 10;
 // constexpr auto kDataSize = types::getSize(kDataType);
 constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
 
+struct WriteData {
+  template <typename T>
+  size_t operator()(Buffer* buffer, T value, size_t offset) const {
+    if constexpr (std::is_same_v<T, char>) {
+      (void)buffer, (void)value, (void)offset;
+      return offset;
+    } else {
+      return buffer->write(value, offset);
+    }
+  }
+};
+
+struct ReadData {
+  template <typename T>
+  void operator()(Buffer* buffer, size_t offset, T golden) const {
+    if constexpr (std::is_same_v<T, char>) {
+      (void)buffer, (void)offset, (void)golden;
+      FAIL() << "Unhandled datatype: char ";
+    } else {
+      EXPECT_EQ(*static_cast<T*>(buffer->data(offset)), golden);
+    }
+  }
+};
+
 class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
  public:
   UnitVectorBufferFixture() : buffer_(kBufferSize, GetParam()){};
@@ -37,44 +61,7 @@ class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
   void SetUp() override {
     size_t offset = 0;
     for (auto i = 0; i < kBufferSize; i++) {
-      switch (GetParam()) {
-        case DataType::BOOL:
-          offset = buffer_.write(false, offset);
-          break;
-        case DataType::UINT8:
-          offset = buffer_.write(static_cast<uint8_t>(0), offset);
-          break;
-        case DataType::UINT16:
-          offset = buffer_.write(static_cast<uint16_t>(0), offset);
-          break;
-        case DataType::UINT32:
-          offset = buffer_.write(static_cast<uint32_t>(0), offset);
-          break;
-        case DataType::UINT64:
-          offset = buffer_.write(static_cast<uint64_t>(0), offset);
-          break;
-        case DataType::INT8:
-          offset = buffer_.write(static_cast<int8_t>(0), offset);
-          break;
-        case DataType::INT16:
-          offset = buffer_.write(static_cast<int16_t>(0), offset);
-          break;
-        case DataType::INT32:
-          offset = buffer_.write(static_cast<int32_t>(0), offset);
-          break;
-        case DataType::INT64:
-          offset = buffer_.write(static_cast<int64_t>(0), offset);
-          break;
-        case DataType::FP32:
-          offset = buffer_.write(static_cast<float>(0), offset);
-          break;
-        case DataType::FP64:
-          offset = buffer_.write(static_cast<double>(0), offset);
-          break;
-        default:
-          FAIL() << "Unhandled datatype: " << GetParam();
-          break;
-      }
+      offset = switchOverTypes(WriteData(), GetParam(), &buffer_, i, offset);
     }
   }
 
@@ -86,66 +73,7 @@ class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
 TEST_P(UnitVectorBufferFixture, TestFixtureState) {
   auto datatype = GetParam();
   for (auto i = 0; i < kBufferSize; i++) {
-    switch (datatype) {
-      case DataType::BOOL: {
-        auto value = static_cast<bool*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, false);
-        break;
-      }
-      case DataType::UINT8: {
-        auto value = static_cast<uint8_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<uint8_t>(0));
-        break;
-      }
-      case DataType::UINT16: {
-        auto value = static_cast<uint16_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<uint16_t>(0));
-        break;
-      }
-      case DataType::UINT32: {
-        auto value = static_cast<uint32_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<uint32_t>(0));
-        break;
-      }
-      case DataType::UINT64: {
-        auto value = static_cast<uint64_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<uint64_t>(0));
-        break;
-      }
-      case DataType::INT8: {
-        auto value = static_cast<int8_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<int8_t>(0));
-        break;
-      }
-      case DataType::INT16: {
-        auto value = static_cast<int16_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<int16_t>(0));
-        break;
-      }
-      case DataType::INT32: {
-        auto value = static_cast<int32_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<int32_t>(0));
-        break;
-      }
-      case DataType::INT64: {
-        auto value = static_cast<uint16_t*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<uint16_t>(0));
-        break;
-      }
-      case DataType::FP32: {
-        auto value = static_cast<float*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<float>(0));
-        break;
-      }
-      case DataType::FP64: {
-        auto value = static_cast<double*>(buffer_.data(i * datatype.size()));
-        EXPECT_EQ(*value, static_cast<double>(0));
-        break;
-      }
-      default:
-        FAIL() << "Unhandled datatype: " << GetParam();
-        break;
-    }
+    switchOverTypes(ReadData(), datatype, &buffer_, i * datatype.size(), i);
   }
 }
 
