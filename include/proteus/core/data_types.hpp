@@ -20,6 +20,7 @@
 #ifndef GUARD_PROTEUS_CORE_DATA_TYPES
 #define GUARD_PROTEUS_CORE_DATA_TYPES
 
+#include <cassert>   // for assert
 #include <cstddef>   // for size_t
 #include <cstdint>   // for uint8_t, int16_t, int32_t
 #include <iostream>  // for ostream
@@ -196,42 +197,42 @@ class DataType {
 };
 
 template <typename F, typename... Args>
-void switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
+auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
   switch (type) {
     case DataType::BOOL: {
-      f.template operator()<bool>(args...);
+      return f.template operator()<bool>(args...);
       break;
     }
     case DataType::UINT8: {
-      f.template operator()<uint8_t>(args...);
+      return f.template operator()<uint8_t>(args...);
       break;
     }
     case DataType::UINT16: {
-      f.template operator()<uint16_t>(args...);
+      return f.template operator()<uint16_t>(args...);
       break;
     }
     case DataType::UINT32: {
-      f.template operator()<uint32_t>(args...);
+      return f.template operator()<uint32_t>(args...);
       break;
     }
     case DataType::UINT64: {
-      f.template operator()<uint64_t>(args...);
+      return f.template operator()<uint64_t>(args...);
       break;
     }
     case DataType::INT8: {
-      f.template operator()<int8_t>(args...);
+      return f.template operator()<int8_t>(args...);
       break;
     }
     case DataType::INT16: {
-      f.template operator()<int16_t>(args...);
+      return f.template operator()<int16_t>(args...);
       break;
     }
     case DataType::INT32: {
-      f.template operator()<int32_t>(args...);
+      return f.template operator()<int32_t>(args...);
       break;
     }
     case DataType::INT64: {
-      f.template operator()<int64_t>(args...);
+      return f.template operator()<int64_t>(args...);
       break;
     }
     case DataType::FP16: {
@@ -239,15 +240,15 @@ void switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
       break;
     }
     case DataType::FP32: {
-      f.template operator()<float>(args...);
+      return f.template operator()<float>(args...);
       break;
     }
     case DataType::FP64: {
-      f.template operator()<double>(args...);
+      return f.template operator()<double>(args...);
       break;
     }
     case DataType::STRING: {
-      f.template operator()<char>(args...);
+      return f.template operator()<char>(args...);
       break;
     }
     default:
@@ -255,6 +256,7 @@ void switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
       std::cout << "Unknown datatype\n";
       break;
   }
+  throw invalid_argument("Unknown datatype passed");
 }
 
 #ifdef PROTEUS_ENABLE_VITIS

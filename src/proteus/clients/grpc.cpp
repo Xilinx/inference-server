@@ -36,12 +36,12 @@
 #include <variant>        // for visit
 #include <vector>         // for vector
 
-#include "predict_api.grpc.pb.h"        // for GRPCInferenceService...
-#include "predict_api.pb.h"             // for RepeatedField, Infer...
+#include "predict_api.grpc.pb.h"  // for GRPCInferenceService...
+#include "predict_api.pb.h"       // for RepeatedField, Infer...
+#include "proteus/clients/grpc_internal.hpp"
 #include "proteus/core/data_types.hpp"  // for DataType, DataType::...
 #include "proteus/core/exceptions.hpp"  // for bad_status
 #include "proteus/declarations.hpp"     // for InferenceResponseOutput
-#include "proteus/util/traits.hpp"      // for is_any
 
 using grpc::ClientContext;
 using grpc::Status;
@@ -198,32 +198,6 @@ std::vector<std::string> GrpcClient::modelList() {
   throw bad_status(status.error_message());
 }
 
-// refer to cppreference for std::visit
-// helper type for the visitor #4
-template <class... Ts>
-struct overloaded : Ts... {
-  using Ts::operator()...;
-};
-// explicit deduction guide (not needed as of C++20)
-template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
-
-void mapParametersToProto(
-  const std::map<std::string, proteus::Parameter>& parameters,
-  google::protobuf::Map<std::string, inference::InferParameter>*
-    grpc_parameters) {
-  for (const auto& [key, value] : parameters) {
-    inference::InferParameter param;
-    std::visit(
-      overloaded{[&](bool arg) { param.set_bool_param(arg); },
-                 [&](double arg) { param.set_double_param(arg); },
-                 [&](int32_t arg) { param.set_int64_param(arg); },
-                 [&](const std::string& arg) { param.set_string_param(arg); }},
-      value);
-    grpc_parameters->insert({key, param});
-  }
-}
-
 void GrpcClient::modelLoad(const std::string& model,
                            RequestParameters* parameters) {
   inference::ModelLoadRequest request;
@@ -299,178 +273,6 @@ void GrpcClient::workerUnload(const std::string& worker) {
   }
 }
 
-struct AddDataToTensor {
-  template <typename T>
-  void operator()(const InferenceRequestInput& input,
-                  inference::ModelInferRequest_InferInputTensor* tensor) const {
-    const auto* data = static_cast<T*>(input.getData());
-    const auto size = input.getSize();
-    if constexpr (std::is_same_v<T, char>) {
-      auto* contents = tensor->mutable_contents()->mutable_bytes_contents();
-      contents->Add(data);
-    } else {
-      auto* contents = [&]() {
-        if constexpr (std::is_same_v<T, bool>) {
-          return tensor->mutable_contents()->mutable_bool_contents();
-        } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, uint32_t>) {
-          return tensor->mutable_contents()->mutable_uint_contents();
-        } else if constexpr (std::is_same_v<T, uint64_t>) {
-          return tensor->mutable_contents()->mutable_uint64_contents();
-        } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
-          return tensor->mutable_contents()->mutable_int_contents();
-        } else if constexpr (std::is_same_v<T, int64_t>) {
-          return tensor->mutable_contents()->mutable_int64_contents();
-        } else if constexpr (util::is_any_v<T, float>) {
-          return tensor->mutable_contents()->mutable_fp32_contents();
-        } else if constexpr (std::is_same_v<T, double>) {
-          return tensor->mutable_contents()->mutable_fp64_contents();
-        } else {
-          static_assert(!sizeof(T), "Invalid type to AddDataToTensor");
-        }
-      }();
-      for (auto i = 0U; i < size; ++i) {
-        contents->Add(data[i]);
-      }
-    }
-  }
-};
-
-void mapRequestToProto(const InferenceRequest& request,
-                       inference::ModelInferRequest& grpc_request) {
-  grpc_request.set_id(request.getID());
-
-  if (const auto* parameters = request.getParameters(); parameters != nullptr) {
-    auto params = parameters->data();
-    auto* grpc_parameters = grpc_request.mutable_parameters();
-    mapParametersToProto(params, grpc_parameters);
-  }
-
-  const auto& inputs = request.getInputs();
-  for (const auto& input : inputs) {
-    auto* tensor = grpc_request.add_inputs();
-
-    tensor->set_name(input.getName());
-    const auto& shape = input.getShape();
-    auto size = 1U;
-    for (const auto& index : shape) {
-      tensor->add_shape(index);
-      size *= index;
-    }
-    auto datatype = input.getDatatype();
-    tensor->set_datatype(datatype.str());
-    mapParametersToProto(input.getParameters()->data(),
-                         tensor->mutable_parameters());
-
-    switchOverTypes(AddDataToTensor(), input.getDatatype(), input, tensor);
-  }
-
-  // TODO(varunsh): skipping outputs for now
-}
-
-void mapPrototoResponse(const inference::ModelInferResponse& reply,
-                        InferenceResponse& response) {
-  response.setModel(reply.model_name());
-  response.setID(reply.id());
-
-  for (const auto& tensor : reply.outputs()) {
-    InferenceResponseOutput output;
-    output.setName(tensor.name());
-    output.setDatatype(DataType(tensor.datatype().c_str()));
-    std::vector<uint64_t> shape;
-    shape.reserve(tensor.shape_size());
-    auto size = 1U;
-    for (const auto& index : tensor.shape()) {
-      shape.push_back(static_cast<size_t>(index));
-      size *= index;
-    }
-    output.setShape(shape);
-    // TODO(varunsh): skipping parameters for now
-    std::vector<std::byte> data;
-    switch (output.getDatatype()) {
-      case DataType::BOOL: {
-        data.resize(size * sizeof(char));
-        std::memcpy(data.data(), tensor.contents().bool_contents().data(),
-                    size * sizeof(char));
-        output.setData(std::move(data));
-        break;
-      }
-      case DataType::UINT8:
-      case DataType::UINT16:
-      case DataType::UINT32: {
-        data.resize(size * sizeof(uint32_t));
-        std::memcpy(data.data(), tensor.contents().uint_contents().data(),
-                    size * sizeof(uint32_t));
-        output.setData(std::move(data));
-        output.setDatatype(DataType::UINT32);
-        break;
-      }
-      case DataType::UINT64: {
-        data.resize(size * sizeof(uint64_t));
-        std::memcpy(data.data(), tensor.contents().uint64_contents().data(),
-                    size * sizeof(uint64_t));
-        output.setData(std::move(data));
-        break;
-      }
-      case DataType::INT8:
-      case DataType::INT16:
-      case DataType::INT32: {
-        data.resize(size * sizeof(int32_t));
-        std::memcpy(data.data(), tensor.contents().int_contents().data(),
-                    size * sizeof(int32_t));
-        output.setData(std::move(data));
-        output.setDatatype(DataType::INT32);
-        break;
-      }
-      case DataType::INT64: {
-        data.resize(size * sizeof(int64_t));
-        std::memcpy(data.data(), tensor.contents().int64_contents().data(),
-                    size * sizeof(int64_t));
-        output.setData(std::move(data));
-        break;
-      }
-      case DataType::FP16: {
-        // FIXME(varunsh): this is not handled
-        std::cout << "Writing FP16 not supported\n";
-        break;
-      }
-      case DataType::FP32: {
-        data.resize(size * sizeof(float));
-        std::memcpy(data.data(), tensor.contents().fp32_contents().data(),
-                    size * sizeof(float));
-        output.setData(std::move(data));
-        break;
-      }
-      case DataType::FP64: {
-        data.resize(size * sizeof(double));
-        std::memcpy(data.data(), tensor.contents().fp64_contents().data(),
-                    size * sizeof(double));
-        output.setData(std::move(data));
-        break;
-      }
-      case DataType::STRING: {
-        data.resize(size * sizeof(std::byte));
-        std::memcpy(data.data(), tensor.contents().bytes_contents().data(),
-                    size * sizeof(std::byte));
-        output.setData(std::move(data));
-        break;
-      }
-      default:
-        // TODO(varunsh): what should we do here?
-        std::cout << "Unknown datatype\n";
-        break;
-    }
-
-    // auto data = std::make_shared<std::byte[]>(size);
-    // auto data = std::shared_ptr<std::byte>(new std::byte[size],
-    //                                        std::default_delete<std::byte[]>());
-    // std::memcpy(data.get(), tensor.contents().bool_contents().data(), size);
-    // auto data = std::make_shared<std::vector<uint64_t>>();
-    // data->push_back(tensor.contents().int64_contents(0));
-    // output.setData(std::reinterpret_pointer_cast<std::byte>(data));
-    response.addOutput(output);
-  }
-}
-
 InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
                                const std::string& model,
                                const InferenceRequest& request) {
@@ -489,7 +291,7 @@ InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
   }
 
   InferenceResponse response;
-  mapPrototoResponse(reply, response);
+  mapProtoToResponse(reply, response);
   return response;
 }
 
