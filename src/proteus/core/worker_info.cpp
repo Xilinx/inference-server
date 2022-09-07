@@ -1,4 +1,5 @@
 // Copyright 2021 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -94,6 +95,7 @@ WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
 }
 
 WorkerInfo::~WorkerInfo() {
+  batchers_.clear();
   for (const auto& [thread_id, worker] : workers_) {
     delete worker;  // NOLINT(cppcoreguidelines-owning-memory)
   }

@@ -1,4 +1,5 @@
 # Copyright 2021 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,10 @@
 
 import argparse
 import copy
-from enum import Enum, auto
 import functools
 import ipaddress
-import json
 import itertools
+import json
 import math
 import os
 import pathlib
@@ -27,18 +27,21 @@ import socket
 import statistics
 import subprocess
 import sys
+import time
+import urllib.parse
+from enum import Enum, auto
 from typing import Optional
 
-import proteus
-from proteus.server import Server
-from proteus.rest import Client
 import pytest_benchmark.utils
+import yaml
 from _pytest.mark import KeywordMatcher
 from _pytest.mark.expression import Expression
 from rich.console import Console
-from rich.table import Table
 from rich.progress import Progress
-import yaml
+from rich.table import Table
+
+import proteus
+import proteus.clients
 
 
 class Highlight(Enum):
@@ -634,13 +637,21 @@ def combine_wrk_stats(samples):
 
 
 def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
-    client = Client(config.http_address)
-    addr = socket.gethostbyname(config.http_address.split(":")[0])
+    client = proteus.clients.HttpClient(config.http_address)
+    parsed_url = urllib.parse.urlsplit(config.http_address)
+    hostname = parsed_url.hostname
+    addr = socket.gethostbyname(hostname)
     if not ipaddress.ip_address(addr).is_loopback:
-        assert client.server_live()
+        assert client.serverLive()
         server = None
     else:
-        server = Server()
+        if not client.serverLive():
+            server = proteus.servers.Server()
+            server.startHttp(parsed_url.port)
+            while not client.serverLive():
+                time.sleep(1)
+
+    assert client.serverLive()
     wrk_options = config.wrk
     with Progress() as progress:
         task0 = progress.add_task(
@@ -666,11 +677,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 else:
                     loads = [1]
 
-                if server is not None and config.start_server:
-                    server.start(True)
-                    client.wait_until_live()
-                else:
-                    assert client.server_live()
+                assert client.serverLive()
 
                 repeat_wrk_count = config.repeat
                 task1 = progress.add_task(
@@ -678,16 +685,17 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 )
                 for load in loads:
                     model = extra_info["model"]
-                    parameters = extra_info["parameters"]
-                    if parameters is None:
-                        parameters = {"share": False}
-                    else:
-                        parameters["share"] = False
+
+                    parameters = proteus.RequestParameters()
+                    if extra_info["parameters"] is not None:
+                        for key, value in extra_info["parameters"].items():
+                            parameters.put(key, value)
+                    parameters.put("share", False)
                     for _ in range(load):
-                        client.load(model, parameters)
-                    while not client.model_ready(model):
-                        pass
-                    infer_endpoint = client.get_address("infer", model)
+                        client.workerLoad(model, parameters)
+                    while not client.modelReady(model):
+                        time.sleep(1)
+                    infer_endpoint = f"{config.http_address}/v2/models/{model}/infer"
                     # print(f"Loading {load} copies of the {model} model")
                     total = (
                         len(wrk_options.threads)
@@ -741,13 +749,14 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                             benchmarks.add(wrk_benchmark)
                         progress.update(task2, advance=1)
                     for _ in range(load):
-                        client.unload(model)
+                        client.workerUnload(model)
+
+                    # wait until all models are unloaded
+                    while client.modelList():
+                        time.sleep(1)
 
                     progress.update(task1, advance=1)
 
-                if server is not None and config.start_server:
-                    server.stop()
-                    client.wait_until_stop()
             progress.update(task0, advance=1)
 
     return benchmarks
@@ -937,12 +946,14 @@ def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
 
 
 def pytest_benchmarks(config: Config, quiet=False):
-    hostname, port = config.http_address.split(":")
-    client = Client(config.http_address)
+    parsed_url = urllib.parse.urlsplit(config.http_address)
+    hostname = parsed_url.hostname
+    port = parsed_url.port
+    client = proteus.clients.HttpClient(config.http_address)
     addr = socket.gethostbyname(hostname)
-    if not ipaddress.ip_address(addr).is_loopback or not config.start_server:
+    if not ipaddress.ip_address(addr).is_loopback:
         try:
-            assert client.server_live()
+            assert client.serverLive()
         except proteus.exceptions.ConnectionError:
             print(
                 f"Cannot connect to HTTP server at {config.http_address}. Check the address or set it to start automatically"
