@@ -1,4 +1,5 @@
 // Copyright 2022 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,7 +48,8 @@ namespace proteus {
 
 class HttpClient : public Client {
  public:
-  HttpClient(std::string address, const StringMap& headers = {});
+  HttpClient(std::string address, const StringMap& headers = {},
+             int threads = 2);
   HttpClient(HttpClient const&);
   HttpClient& operator=(const HttpClient&) = delete;
   HttpClient(HttpClient&& other) noexcept;

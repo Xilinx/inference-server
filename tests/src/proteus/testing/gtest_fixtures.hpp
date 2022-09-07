@@ -1,4 +1,5 @@
 // Copyright 2022 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +26,10 @@ class BaseFixture : public testing::Test {
   proteus::Server server_;
 };
 
+template <typename T>
+class BaseFixtureWithParams : public BaseFixture,
+                              public testing::WithParamInterface<T> {};
+
 class GrpcFixture : public BaseFixture {
  protected:
   void SetUp() override {
@@ -42,6 +47,10 @@ class GrpcFixture : public BaseFixture {
   bool started_ = false;
 };
 
+template <typename T>
+class GrpcFixtureWithParams : public GrpcFixture,
+                              public testing::WithParamInterface<T> {};
+
 class HttpFixture : public BaseFixture {
  protected:
   void SetUp() override {
@@ -58,6 +67,10 @@ class HttpFixture : public BaseFixture {
   std::unique_ptr<proteus::HttpClient> client_;
   bool started_ = false;
 };
+
+template <typename T>
+class HttpFixtureWithParams : public HttpFixture,
+                              public testing::WithParamInterface<T> {};
 
 #define EXPECT_THROW_CHECK(statement, check, exception) \
   EXPECT_THROW(                                         \

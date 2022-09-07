@@ -1,4 +1,3 @@
-# Copyright 2022 Xilinx Inc.
 # Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-add_subdirectory(models)
+list(APPEND targets resnet50)
+
+foreach(target ${targets})
+  set(test testPerfModels${target})
+
+  add_executable(${test} ${target}.cpp)
+  target_include_directories(
+    ${test} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+  )
+  target_include_directories(${test} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_link_libraries(
+    ${test}
+    proteus
+    gtest
+    gtest_main
+    opencv_imgcodecs
+    opencv_imgproc
+    opencv_core
+  )
+
+  gtest_discover_tests(${test})
+endforeach()
