@@ -1,4 +1,5 @@
 // Copyright 2022 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -97,20 +98,8 @@ Server::Server() {
 }
 
 Server::~Server() {
-#ifdef PROTEUS_ENABLE_HTTP
-  if (impl_->http_started_) {
-    http::stop();
-    if (impl_->http_thread_.joinable()) {
-      impl_->http_thread_.join();
-    }
-  }
-#endif
-#ifdef PROTEUS_ENABLE_GRPC
-  if (impl_->grpc_started_) {
-    grpc::stop();
-  }
-
-#endif
+  stopHttp();
+  stopGrpc();
   terminate();
 }
 
@@ -123,11 +112,30 @@ void Server::startHttp([[maybe_unused]] uint16_t port) const {
 #endif
 }
 
+void Server::stopHttp() const {
+#ifdef PROTEUS_ENABLE_HTTP
+  if (impl_->http_started_) {
+    http::stop();
+    if (impl_->http_thread_.joinable()) {
+      impl_->http_thread_.join();
+    }
+  }
+#endif
+}
+
 void Server::startGrpc([[maybe_unused]] uint16_t port) const {
 #ifdef PROTEUS_ENABLE_HTTP
   if (!impl_->grpc_started_) {
     grpc::start(port);
     impl_->grpc_started_ = true;
+  }
+#endif
+}
+
+void Server::stopGrpc() const {
+#ifdef PROTEUS_ENABLE_GRPC
+  if (impl_->grpc_started_) {
+    grpc::stop();
   }
 #endif
 }

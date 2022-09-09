@@ -49,7 +49,7 @@ namespace proteus {
 class HttpClient : public Client {
  public:
   HttpClient(std::string address, const StringMap& headers = {},
-             int threads = 2);
+             int parallelism = 32);
   HttpClient(HttpClient const&);
   HttpClient& operator=(const HttpClient&) = delete;
   HttpClient(HttpClient&& other) noexcept;

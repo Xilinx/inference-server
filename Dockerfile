@@ -1,4 +1,5 @@
 # Copyright 2021 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -289,7 +290,7 @@ RUN apt-get update \
     # symlink libjsoncpp to json to maintain include compatibility with Drogon
     && cp -rfs /usr/include/jsoncpp/json/ /usr/include/ \
     # install drogon
-    && cd /tmp && git clone -b v1.7.5 https://github.com/an-tao/drogon \
+    && cd /tmp && git clone -b v1.8.0 https://github.com/an-tao/drogon \
     && cd drogon \
     && git submodule update --init --recursive \
     && mkdir -p build && cd build \
@@ -298,7 +299,7 @@ RUN apt-get update \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_ORM=OFF \
-        -DBUILD_DROGON_SHARED=ON \
+        -DBUILD_SHARED_LIBS=ON \
         -DBUILD_CTL=OFF \
     && make -j$(($(nproc) - 1)) \
     && make install \

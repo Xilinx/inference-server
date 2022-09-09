@@ -47,11 +47,12 @@ void addHeaders(drogon::HttpRequestPtr req, const StringMap& headers) {
 
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address, int threads) {
-    // arbitrarily use ratio of 4:1 between HttpClients and EventLoops
-    const auto kClientThreadRatio = 4;
+  explicit HttpClientImpl(const std::string& address, int parallelism)
+    : num_clients_(parallelism) {
+    // arbitrarily use ratio of 16:1 between HttpClients and EventLoops
+    const auto kClientThreadRatio = 16;
+    const auto threads = (parallelism / kClientThreadRatio) + 1;
 
-    num_clients_ = threads * kClientThreadRatio;
     loops_.reserve(threads);
     clients_.reserve(num_clients_);
     for (auto i = 0; i < threads; ++i) {
@@ -78,15 +79,16 @@ class HttpClient::HttpClientImpl {
 
  private:
   int counter_ = 0;
-  int num_clients_ = 4;
+  int num_clients_;
   std::vector<std::unique_ptr<trantor::EventLoopThread>> loops_;
   std::vector<drogon::HttpClientPtr> clients_;
 };
 
 HttpClient::HttpClient(std::string address, const StringMap& headers,
-                       int threads)
+                       int parallelism)
   : address_(std::move(address)), headers_(headers) {
-  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address_, threads);
+  this->impl_ =
+    std::make_unique<HttpClient::HttpClientImpl>(address_, parallelism);
 }
 
 HttpClient::HttpClient(const HttpClient& other)
