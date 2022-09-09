@@ -15,7 +15,7 @@
 list(APPEND targets resnet50)
 
 foreach(target ${targets})
-  set(test testPerfModels${target})
+  set(test test_PerfModels${target})
 
   add_executable(${test} ${target}.cpp)
   target_include_directories(
