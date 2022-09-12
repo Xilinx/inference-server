@@ -92,6 +92,12 @@ class PerfSoftBatcherFixture
     parameters.put("timeout", kTimeoutMs);
     parameters.put("batch_size", batch_size);
 
+    LogOptions options;
+    options.logger_name = "server";
+    options.console_enable = true;
+    options.file_enable = false;
+    initLogger(options);
+
     this->batcher_.emplace(&parameters);
     this->batcher_->setName("test");
     this->batcher_->setBatchSize(batch_size);

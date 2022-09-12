@@ -72,7 +72,8 @@ endfunction()
 function(proteus_add_unit_tests tests tests_libs)
   foreach(test lib_str IN ZIP_LISTS tests tests_libs)
 
-    string(REPLACE "~" ";" libs ${lib_str})
+    string(REPLACE " " "" libs_no_spaces ${lib_str})
+    string(REPLACE "~" ";" libs ${libs_no_spaces})
 
     proteus_add_unit_test(${test})
     proteus_get_test_target(target ${test})
