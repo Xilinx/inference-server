@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,41 +13,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets echo)
+list(APPEND tests echo)
 
 if(${PROTEUS_ENABLE_VITIS})
-  set(targets ${targets} xmodel)
+  set(tests ${tests} xmodel)
 endif()
 
 if(${PROTEUS_ENABLE_AKS})
-  set(targets ${targets} facedetect)
+  set(tests ${tests} facedetect)
 endif()
 
-foreach(target ${targets})
-  add_executable(test_${target} test_${target}.cpp)
+proteus_add_system_tests("${tests}")
+
+if(${PROTEUS_ENABLE_VITIS})
+  proteus_get_test_target(xmodel_target xmodel)
+  target_link_libraries(${xmodel_target} PRIVATE xir vart-runner)
+endif()
+
+if(${PROTEUS_ENABLE_AKS})
+  proteus_get_test_target(facedetect_target facedetect)
   target_link_libraries(
-    test_${target} PRIVATE proteus Threads::Threads gtest gtest_main
+    ${facedetect_target} PRIVATE opencv_core opencv_imgcodecs
   )
-  target_include_directories(
-    test_${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS}
-  )
-
-  gtest_discover_tests(test_${target})
-endforeach()
-
-if(${PROTEUS_ENABLE_VITIS})
-  target_link_libraries(test_xmodel PRIVATE xir vart-runner)
 endif()
 
-if(${PROTEUS_ENABLE_AKS})
-  target_link_libraries(test_facedetect PRIVATE opencv_core opencv_imgcodecs)
-endif()
-
-foreach(target ${targets})
-  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${target}.cpp)
-    add_executable(${target} ${target}.cpp)
+foreach(test ${tests})
+  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${test}.cpp)
+    proteus_get_test_target(target ${test} "exec")
+    proteus_get_test_target(test_target ${test})
+    add_executable(${target} ${test}.cpp)
     target_link_libraries(
-      ${target} PRIVATE $<TARGET_PROPERTY:test_${target},LINK_LIBRARIES>
+      ${target} PRIVATE $<TARGET_PROPERTY:${test_target},LINK_LIBRARIES>
     )
     target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
   endif()

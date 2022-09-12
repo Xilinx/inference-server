@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -90,7 +91,10 @@ def add_cpp_markers(items):
     for item in items:
         if not isinstance(item, CppItem):
             continue
-        source_path = str(item.fspath).replace(str(build_path), str(root_path)) + ".cpp"
+        test_dir = str(item.fspath).replace(str(build_path), str(root_path))
+        # this test naming syntax is defined in cmake/AddTest.cmake
+        test_file = "test_" + item.fspath.basename.split("-")[1]
+        source_path = test_dir.replace(item.fspath.basename, test_file) + ".cpp"
         if not os.path.exists(source_path):
             continue
         with open(source_path) as f:

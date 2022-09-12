@@ -1,4 +1,4 @@
-// Copyright 2022 Advanced Micro Devices Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ using ImagePreprocessOptions = proteus::util::ImagePreprocessOptions<T, C>;
 
 struct Workers {
   const fs::path kRoot{std::getenv("PROTEUS_ROOT")};
+  std::string extension;
   std::string name;
   fs::path graph;
 
@@ -56,6 +57,7 @@ struct Workers {
 
 struct PtzendnnWorker : public Workers {
   PtzendnnWorker() {
+    extension = "ptzendnn";
     name = "ptzendnn";
     graph = kRoot / "external/pytorch_models/resnet50_pretrained.pt";
 
@@ -77,6 +79,7 @@ struct PtzendnnWorker : public Workers {
 
 struct TfzendnnWorker : public Workers {
   TfzendnnWorker() {
+    extension = "tfzendnn";
     name = "tfzendnn";
     graph =
       kRoot / "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
@@ -110,6 +113,12 @@ template <class... Fs>
 Overload(Fs...) -> Overload<Fs...>;
 
 void test(proteus::Client* client, const Config& config, Workers* worker) {
+  auto metadata = client->serverMetadata();
+  if (metadata.extensions.find(worker->extension) ==
+      metadata.extensions.end()) {
+    GTEST_SKIP() << worker->extension << " support required but not found.\n";
+  }
+
   const fs::path kRoot{std::getenv("PROTEUS_ROOT")};
 
   const auto kImageLocation = kRoot / "tests/assets/dog-3619020_640.jpg";
@@ -196,6 +205,7 @@ const std::array<Workers*, 1> workers = {
   &tfzendnn};
 
 #ifdef PROTEUS_ENABLE_GRPC
+
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_P(PerfModelsResnetGrpcFixture, ModelInfer) {

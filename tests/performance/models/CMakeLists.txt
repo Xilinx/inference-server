@@ -1,4 +1,4 @@
-# Copyright 2022 Advanced Micro Devices Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,25 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets resnet50)
+list(APPEND tests resnet50)
 
-foreach(target ${targets})
-  set(test test_PerfModels${target})
-
-  add_executable(${test} ${target}.cpp)
-  target_include_directories(
-    ${test} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
-  )
-  target_include_directories(${test} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
+foreach(test ${tests})
+  proteus_add_system_test(${test})
+  proteus_get_test_target(target ${test})
   target_link_libraries(
-    ${test}
-    proteus
-    gtest
-    gtest_main
-    opencv_imgcodecs
-    opencv_imgproc
-    opencv_core
+    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
   )
-
-  gtest_discover_tests(${test})
 endforeach()

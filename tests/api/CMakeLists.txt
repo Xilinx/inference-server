@@ -1,4 +1,5 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,28 +14,15 @@
 # limitations under the License.
 
 list(
-  APPEND targets
-         test_model_infer
-         test_model_infer_async
-         test_model_list
-         test_model_ready
-         test_server_live
-         test_server_ready
-         test_model_metadata
+  APPEND tests
+         model_infer
+         model_infer_async
+         model_list
+         model_load
+         model_metadata
+         model_ready
+         server_live
+         server_ready
 )
 
-if(${PROTEUS_ENABLE_TFZENDNN})
-  list(APPEND targets test_model_load)
-endif()
-
-foreach(target ${targets})
-  add_executable(${target} ${target}.cpp)
-
-  target_include_directories(
-    ${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS}
-                      ${PROTEUS_TEST_INCLUDE_DIRS}
-  )
-  target_link_libraries(${target} PRIVATE proteus gtest gtest_main)
-
-  gtest_discover_tests(${target} DISCOVERY_TIMEOUT 30)
-endforeach()
+proteus_add_system_tests("${tests}")
