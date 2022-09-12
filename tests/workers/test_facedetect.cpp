@@ -19,7 +19,7 @@
 
 const int gold_response_size = 6;
 const float gold_response_output[gold_response_size] = {
-  -1, 0.9937100410461426, 268, 79.875, 156, 169.06874084472656,
+  -1, 0.9937100410461426, 268, 78.728, 158, 170.800,
 };
 
 std::string prepareDirectory() {
