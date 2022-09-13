@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +28,11 @@
 namespace proteus {
 
 void test(proteus::Client* client) {
+  auto metadata = client->serverMetadata();
+  if (metadata.extensions.find("tfzendnn") == metadata.extensions.end()) {
+    GTEST_SKIP() << "This test requires TF+ZenDNN support.";
+  }
+
   const std::string model = "mnist";
 
   EXPECT_TRUE(client->modelList().empty());

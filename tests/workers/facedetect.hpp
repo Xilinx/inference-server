@@ -1,4 +1,5 @@
 // Copyright 2021 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
              const std::string& workerName, FutureQueue& my_queue) {
   proteus::NativeClient client;
   for (int i = 0; i < count; i++) {
-    auto img = cv::imread(image_paths[start_index + i]);
+    auto img = cv::imread(image_paths[start_index]);
     auto shape = {static_cast<uint64_t>(img.size[0]),
                   static_cast<uint64_t>(img.size[1]),
                   static_cast<uint64_t>(img.channels())};

@@ -1,4 +1,3 @@
-# Copyright 2022 Xilinx, Inc.
 # Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(
-  APPEND tests
-         model_infer
-         model_infer_async
-         model_list
-         model_load
-         model_metadata
-         model_ready
-         server_live
-         server_ready
-)
+list(APPEND tests resnet50)
 
-proteus_add_system_tests("${tests}")
+foreach(test ${tests})
+  proteus_add_system_test(${test})
+  proteus_get_test_target(target ${test})
+  target_link_libraries(
+    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
+  )
+endforeach()

@@ -366,7 +366,8 @@ class Build:
         if args.lint:
             build_options += " -DPROTEUS_ENABLE_LINTING=ON"
 
-        if args.clean and build_dir.exists():
+        cmake_cache = build_dir / "CMakeCache.txt"
+        if args.clean and cmake_cache.exists():
             command = (
                 f"cmake --build {str(build_dir)} --target clean -- -j {args.threads}"
             )
@@ -377,7 +378,6 @@ class Build:
         if package_installed is None:
             args.regen = True
 
-        cmake_cache = build_dir / "CMakeCache.txt"
         if args.regen or (not build_dir.exists()) or (not cmake_cache.exists()):
             file = f"{str(build_dir)}/CMakeCache.txt"
             command = f"rm -f {str(cmake_cache)}"

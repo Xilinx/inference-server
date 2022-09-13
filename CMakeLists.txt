@@ -1,4 +1,5 @@
 # Copyright 2021 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,7 +79,7 @@ include(EnableIPO)
 include(AddOption)
 
 # check requirements
-find_package(Drogon)
+find_package(Drogon CONFIG)
 find_package(OpenCV)
 find_package(opentelemetry-cpp CONFIG)
 find_package(spdlog)

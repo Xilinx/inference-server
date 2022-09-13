@@ -65,10 +65,10 @@ class TestInferImageFacedetectDPUCADF8H:
         gold_response_output = [
             -1,
             0.9937100410461426,
-            268,
-            79.875,
-            156,
-            169.06874084472656,
+            266,
+            78.728,
+            158,
+            170.800,
         ]
 
         if check_asserts:

@@ -1,4 +1,5 @@
 // Copyright 2022 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,8 +23,13 @@
 
 class BaseFixture : public testing::Test {
  public:
-  proteus::Server server_;
+  inline static proteus::Server server_;
+  // proteus::Server server_;
 };
+
+template <typename T>
+class BaseFixtureWithParams : public BaseFixture,
+                              public testing::WithParamInterface<T> {};
 
 class GrpcFixture : public BaseFixture {
  protected:
@@ -42,9 +48,17 @@ class GrpcFixture : public BaseFixture {
   bool started_ = false;
 };
 
+template <typename T>
+class GrpcFixtureWithParams : public GrpcFixture,
+                              public testing::WithParamInterface<T> {};
+
 class HttpFixture : public BaseFixture {
  protected:
-  void SetUp() override {
+  // Drogon is using a singleton that doesn't work well being restarted so set
+  // it up once per suite. This also means we can't have multiple test suites in
+  // the same executable that use HTTP
+  static void SetUpTestSuite() {
+    // void SetUp() override {
     client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
       server_.startHttp(8998);
@@ -55,9 +69,23 @@ class HttpFixture : public BaseFixture {
     }
   }
 
-  std::unique_ptr<proteus::HttpClient> client_;
-  bool started_ = false;
+  static void TearDownTestSuite() {
+    // void TearDown() override {
+    if (started_) {
+      server_.stopHttp();
+    }
+    client_.reset(nullptr);
+  }
+
+  inline static std::unique_ptr<proteus::HttpClient> client_;
+  inline static bool started_ = false;
+  // std::unique_ptr<proteus::HttpClient> client_;
+  // bool started_ = false;
 };
+
+template <typename T>
+class HttpFixtureWithParams : public HttpFixture,
+                              public testing::WithParamInterface<T> {};
 
 #define EXPECT_THROW_CHECK(statement, check, exception) \
   EXPECT_THROW(                                         \

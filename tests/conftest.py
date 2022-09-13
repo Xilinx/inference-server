@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,6 +59,7 @@ def pytest_addoption(parser):
     parser.addoption("--fpgas", action="store", default="")
     parser.addoption("--benchmark", action="store", default="skip")
     parser.addoption("--perf", action="store", default="skip")
+    parser.addoption("--cpp", action="store", default="all")
 
     # TODO(varunsh): this is currently not exposed via the test runner script
     parser.addoption("--skip-extensions", nargs="+", default=[])
@@ -78,7 +80,7 @@ def get_http_addr(config):
     return f"{hostname}:{http_port}"
 
 
-def add_cpp_markers(items):
+def add_cpp_markers(items, cpp_mode):
     """
     For all the collected items, if the item is a C++ test, find its
     corresponding source file (assuming it has a matching name). If found,
@@ -86,11 +88,26 @@ def add_cpp_markers(items):
 
     Args:
         items (list): list of Nodes from pytest_collection_modifyitems
+        cpp_mode (str): skip | all | only
     """
     for item in items:
         if not isinstance(item, CppItem):
+            if cpp_mode == "only":
+                skip_bench = pytest.mark.skip(
+                    reason=f"Not a cpp test: use --cpp [all, skip] to run"
+                )
+                item.add_marker(skip_bench)
             continue
-        source_path = str(item.fspath).replace(str(build_path), str(root_path)) + ".cpp"
+        if cpp_mode == "skip":
+            skip_bench = pytest.mark.skip(
+                reason=f"A cpp test: use --cpp [all, only] to run"
+            )
+            item.add_marker(skip_bench)
+            continue
+        test_dir = str(item.fspath).replace(str(build_path), str(root_path))
+        # this test naming syntax is defined in cmake/AddTest.cmake
+        test_file = "test_" + item.fspath.basename.split("-")[1]
+        source_path = test_dir.replace(item.fspath.basename, test_file) + ".cpp"
         if not os.path.exists(source_path):
             continue
         with open(source_path) as f:
@@ -138,7 +155,7 @@ def pytest_collection_modifyitems(config, items):
     global http_server_addr
     global proteus_command
 
-    add_cpp_markers(items)
+    add_cpp_markers(items, config.getoption("--cpp"))
 
     client = proteus.clients.HttpClient(http_server_addr)
     if not client.serverLive():

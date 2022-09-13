@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,25 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets perf_soft)
+list(APPEND tests soft)
 
 list(
   APPEND
-    targets_libs
-    "$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~fake_observation~fake_manager~interface~predict_api~data_types~$<TARGET_OBJECTS:softBatcher>~vector_buffer~buffer~$<TARGET_OBJECTS:native_internal>"
+    tests_libs
+    "$<TARGET_OBJECTS:batcher>~fake_observation~fake_manager~interface\
+      ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~data_types\
+      ~$<TARGET_OBJECTS:softBatcher>~vector_buffer~buffer\
+      ~$<TARGET_OBJECTS:native_internal>"
 )
 
-foreach(target lib_str IN ZIP_LISTS targets targets_libs)
-  string(REPLACE "~" ";" libs ${lib_str})
-
-  add_executable(${target} ${target}.cpp)
-  target_include_directories(
-    ${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
-  )
-  target_include_directories(${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  target_link_libraries(
-    ${target} $<TARGET_OBJECTS:batcher> ${libs} gtest gtest_main
-  )
-
-  gtest_discover_tests(${target})
-endforeach()
+proteus_add_unit_tests("${tests}" "${tests_libs}")

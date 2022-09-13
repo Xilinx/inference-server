@@ -1,5 +1,6 @@
 ..
     Copyright 2021 Xilinx Inc.
+    Copyright 2022 Advanced Micro Devices Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -152,7 +153,7 @@ The following packages are installed from Github.
     :github:`cameron314/concurrentqueue`,1.0.3,Dual BSD-2/Boost + others,Statically linked by proteus-server for an efficient multi-producer queue\ :superscript:`a 0`
     :github:`jarro2783/cxxopts`,2.2.1,MIT,Statically linked by proteus-server for command-line argument parsing\ :superscript:`a 0`
     :github:`gdraheim/docker-systemctl-replacement`,1.5.4505,EUPL,Executable created by pyinstaller for starting XRM\ :superscript:`a 0`
-    :github:`drogonframework/drogon`,1.7.5,MIT,Dynamically linked by proteus-server for an HTTP and websocket server\ :superscript:`a 0`
+    :github:`drogonframework/drogon`,1.8.0,MIT,Dynamically linked by proteus-server for an HTTP and websocket server\ :superscript:`a 0`
     :github:`SpartanJ/efsw`,latest,MIT,Dynamically linked by proteus-server for directory monitoring\ :superscript:`a 0`
     :github:`FFmpeg/FFmpeg`,3.4.8,LGPL-2.1+ + others,Dynamically linked by proteus-server for video processing\ :superscript:`a 0`
     :github:`tschaub/gh-pages`,latest,MIT,Executable used to publish documentation to gh-pages branch\ :superscript:`d 0`

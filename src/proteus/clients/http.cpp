@@ -1,4 +1,5 @@
 // Copyright 2021 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 
 #include "proteus/clients/http.hpp"
 
+#include <drogon/HttpAppFramework.h>      // for HttpAppFramework, app
 #include <drogon/HttpClient.h>            // for HttpClient, HttpClientPtr
 #include <drogon/HttpRequest.h>           // for HttpRequest, HttpReques...
 #include <drogon/HttpResponse.h>          // for HttpResponse
@@ -26,9 +28,11 @@
 #include <json/value.h>                   // for Value, arrayValue, obje...
 #include <trantor/net/EventLoopThread.h>  // for EventLoopThread
 
+#include <atomic>
 #include <cassert>        // for assert
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for tuple_element<>::type
+#include <vector>
 
 #include "proteus/clients/http_internal.hpp"  // for mapParametersToJson
 #include "proteus/core/exceptions.hpp"        // for bad_status
@@ -43,26 +47,54 @@ void addHeaders(drogon::HttpRequestPtr req, const StringMap& headers) {
 
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address) {
-    loop_.run();
-    client_ = drogon::HttpClient::newHttpClient(address, loop_.getLoop());
+  explicit HttpClientImpl(const std::string& address, int parallelism)
+    : num_clients_(parallelism) {
+    // arbitrarily use ratio of 16:1 between HttpClients and EventLoops
+    const auto kClientThreadRatio = 16;
+    const auto threads = (parallelism / kClientThreadRatio) + 1;
+
+    loops_.reserve(threads);
+    clients_.reserve(num_clients_);
+    for (auto i = 0; i < threads; ++i) {
+      // need to use unique_ptr because EventLoopThreads are not moveable or
+      // copyable and so incompatible with std::vectors
+      const auto& loop =
+        loops_.emplace_back(std::make_unique<trantor::EventLoopThread>());
+      loop->run();
+    }
+    for (auto i = 0; i < num_clients_; ++i) {
+      const auto& loop = loops_[i % threads];
+      clients_.emplace_back(
+        drogon::HttpClient::newHttpClient(address, loop->getLoop()));
+    }
   }
 
-  drogon::HttpClient* getClient() { return client_.get(); }
+  drogon::HttpClient* getClient() {
+    const auto& client = clients_[counter_];
+    counter_ = (counter_ + 1) % num_clients_;
+    return client.get();
+  }
+
+  auto getClientNum() const { return num_clients_; }
 
  private:
-  trantor::EventLoopThread loop_;
-  drogon::HttpClientPtr client_;
+  int counter_ = 0;
+  int num_clients_;
+  std::vector<std::unique_ptr<trantor::EventLoopThread>> loops_;
+  std::vector<drogon::HttpClientPtr> clients_;
 };
 
-HttpClient::HttpClient(std::string address, const StringMap& headers)
+HttpClient::HttpClient(std::string address, const StringMap& headers,
+                       int parallelism)
   : address_(std::move(address)), headers_(headers) {
-  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address_);
+  this->impl_ =
+    std::make_unique<HttpClient::HttpClientImpl>(address_, parallelism);
 }
 
 HttpClient::HttpClient(const HttpClient& other)
   : address_(other.address_), headers_(other.headers_) {
-  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(address_);
+  this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(
+    address_, other.impl_->getClientNum());
 }
 
 HttpClient::HttpClient(HttpClient&& other) noexcept
@@ -239,15 +271,42 @@ void HttpClient::workerUnload(const std::string& model) {
   }
 }
 
-InferenceResponse runInference(drogon::HttpClient* client,
-                               const std::string& model,
-                               const InferenceRequest& request,
-                               const StringMap& headers) {
+auto createInferenceRequest(const std::string& model,
+                            const InferenceRequest& request,
+                            const StringMap& headers) {
   assert(!request.getInputs().empty());
 
   auto json = mapRequestToJson(request);
-  auto req = createPostRequest(json, "/v2/models/" + model + "/infer", headers);
+  return createPostRequest(json, "/v2/models/" + model + "/infer", headers);
+}
 
+InferenceResponseFuture HttpClient::modelInferAsync(
+  const std::string& model, const InferenceRequest& request) {
+  auto req = createInferenceRequest(model, request, headers_);
+  auto prom = std::make_shared<std::promise<proteus::InferenceResponse>>();
+  auto fut = prom->get_future();
+
+  auto* client = this->impl_->getClient();
+  client->sendRequest(
+    req, [prom = std::move(prom)](drogon::ReqResult result,
+                                  const drogon::HttpResponsePtr& response) {
+      check_error(result);
+      if (response->statusCode() != drogon::k200OK) {
+        throw bad_status(std::string(response->body()));
+      }
+
+      auto resp = response->jsonObject();
+      prom->set_value(mapJsonToResponse(resp.get()));
+    });
+
+  return fut;
+}
+
+InferenceResponse HttpClient::modelInfer(const std::string& model,
+                                         const InferenceRequest& request) {
+  auto req = createInferenceRequest(model, request, headers_);
+
+  auto* client = this->impl_->getClient();
   auto [result, response] = client->sendRequest(req);
   check_error(result);
   if (response->statusCode() != drogon::k200OK) {
@@ -256,17 +315,6 @@ InferenceResponse runInference(drogon::HttpClient* client,
 
   auto resp = response->jsonObject();
   return mapJsonToResponse(resp.get());
-}
-
-InferenceResponseFuture HttpClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) {
-  return std::async(runInference, this->impl_->getClient(), model, request,
-                    headers_);
-}
-
-InferenceResponse HttpClient::modelInfer(const std::string& model,
-                                         const InferenceRequest& request) {
-  return runInference(this->impl_->getClient(), model, request, headers_);
 }
 
 std::vector<std::string> HttpClient::modelList() {

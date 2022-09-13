@@ -1,4 +1,5 @@
 # Copyright 2021 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -299,6 +300,8 @@ RUN apt-get update \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_ORM=OFF \
         -DBUILD_DROGON_SHARED=ON \
+        # this is used instead of the above in 1.8.0+
+        # -DBUILD_SHARED_LIBS=ON \
         -DBUILD_CTL=OFF \
     && make -j$(($(nproc) - 1)) \
     && make install \

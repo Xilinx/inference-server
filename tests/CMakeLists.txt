@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2021 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +14,9 @@
 # limitations under the License.
 
 set(PROTEUS_TEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(PROTEUS_TEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+
+include(AddTest)
 
 add_subdirectory(api)
 add_subdirectory(models)

@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,19 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include(GoogleTest)
+list(APPEND tests inference_request_input request_parameters)
 
-list(APPEND targets inference_request_input request_parameters)
+list(APPEND tests_libs "predict_api" "predict_api")
 
-foreach(target ${targets})
-  add_executable(test_${target} test_${target}.cpp)
-  target_include_directories(
-    test_${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
-  )
-  target_include_directories(
-    test_${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS}
-  )
-  target_link_libraries(test_${target} predict_api gtest gtest_main)
-
-  gtest_discover_tests(test_${target})
-endforeach()
+proteus_add_unit_tests("${tests}" "${tests_libs}")
