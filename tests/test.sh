@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,6 +47,7 @@ CAPTURE=""
 BENCHMARK="skip"
 PERF="skip"
 SAVE_BENCHMARK=""
+CPP="all"
 
 root_path=$(realpath "$(dirname "$(realpath "$0")")/..")
 python_tests_path="${root_path}"/tests/
@@ -71,6 +73,7 @@ do
     -k                ) TESTS="$2"       ; shift 2 ;;
     -s                ) CAPTURE="-s"     ; shift 1 ;;
     --build           ) BUILD="$2"       ; shift 2 ;;
+    --cpp             ) CPP="$2"         ; shift 2 ;;
     -h | --help       ) usage            ; exit  0 ;;
     *) break ;;
   esac
@@ -128,11 +131,11 @@ if [[ $MODE == "tests" || $MODE == "all" ]]; then
   cd "$python_tests_path"
   if [[ -n $TESTS ]]; then
     pytest ${testpaths} $CAPTURE -ra --tb=short --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
-      $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet -k "$TESTS"
+      $FPGAS --benchmark $BENCHMARK --perf $PERF --cpp $CPP --benchmark-quiet -k "$TESTS"
     retval=$(($retval | $?))
   else
     pytest ${testpaths} $CAPTURE -ra --tb=short --hostname $HOSTNAME $PORT $SAVE_BENCHMARK \
-      $FPGAS --benchmark $BENCHMARK --perf $PERF --benchmark-quiet
+      $FPGAS --benchmark $BENCHMARK --perf $PERF --cpp $CPP --benchmark-quiet
     retval=$(($retval | $?))
   fi
 
