@@ -38,8 +38,9 @@ endforeach()
 target_link_libraries(native INTERFACE batching)
 
 if(${PROTEUS_ENABLE_HTTP})
-  target_link_libraries(http_internal INTERFACE jsoncpp util)
-  target_link_libraries(websocket INTERFACE Drogon::Drogon)
+  target_link_libraries(http_internal PRIVATE Drogon::Drogon INTERFACE util)
+  target_link_libraries(http PRIVATE Drogon::Drogon)
+  target_link_libraries(websocket PRIVATE Drogon::Drogon)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})

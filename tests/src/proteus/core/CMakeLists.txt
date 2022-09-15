@@ -35,10 +35,5 @@ foreach(target ${targets})
   list(APPEND CORE_OBJS $<TARGET_OBJECTS:fake_${target}>)
 endforeach()
 
-# target_link_libraries(predict_api INTERFACE jsoncpp)
-# target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
-# if(${PROTEUS_ENABLE_VITIS}) target_link_libraries(data_types INTERFACE xir)
-# endif()
-
 add_library(fake_core INTERFACE)
 target_link_libraries(fake_core INTERFACE ${CORE_OBJS} ${targets})

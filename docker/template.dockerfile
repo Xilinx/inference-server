@@ -1,5 +1,5 @@
-# Copyright 2021 Xilinx Inc.
-# Copyright 2022 Advanced Micro Devices Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 # limitations under the License.
 
 # the base image to use
-ARG BASE_IMAGE=ubuntu:18.04
+ARG BASE_IMAGE=$[BASE_IMAGE]
 # multi-stage builds place all things to copy in this location between stages
 ARG COPY_DIR=/root/deps
 # store install manifests for all built packages here for easy reference
-ARG MANIFESTS_DIR=${COPY_DIR}/usr/local/manifests
+ARG MANIFESTS_DIR=${COPY_DIR}/usr/local/share/manifests
 # the working directory is mounted here. Note, this assumption is made in other
 # files as well so just changing this value may not work
 ARG PROTEUS_ROOT=/workspace/proteus
@@ -60,29 +60,14 @@ ENV TZ=America/Los_Angeles
 ENV LANG=en_US.UTF-8
 ENV PROTEUS_ROOT=$PROTEUS_ROOT
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        locales \
-        sudo \
-        tzdata \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
+$[SET_LOCALE]
     # set up timezone
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    && dpkg-reconfigure --frontend noninteractive tzdata \
     # set up locale
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias $LANG
 
 # add a user
-RUN groupadd -g $GID -o $GNAME \
-    && useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME \
-    && passwd -d $UNAME \
-    && usermod -aG sudo $UNAME \
-    && echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
-    && usermod -aG $GNAME root
+$[ADD_USER]
 
 # this stage adds development tools such as compilers to the base image. It's
 # used as an ancestor for all development-related stages
@@ -91,31 +76,11 @@ FROM base AS dev_base
 ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
 
-# install a newer compiler for all development images
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        ca-certificates \
-        gcc \
-        git \
-        make \
-        # add the add-apt-repository command
-        software-properties-common \
-        # used to get packages
-        wget \
-    # install gcc-9 for a newer compiler
-    && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        gcc-9 \
-        g++-9 \
-    # link gcc-9 and g++-9 to gcc and g++
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \
-        --slave /usr/bin/g++ g++ /usr/bin/g++-9 \
-        --slave /usr/bin/gcov gcov /usr/bin/gcov-9 \
-    && apt-get -y purge --auto-remove software-properties-common \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+# install common dev tools
+$[ADD_DEV_TOOLS]
+
+# add a newer compiler if required
+$[ADD_COMPILER]
 
 # install Cmake 3.21.1
 RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
@@ -131,7 +96,7 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
 
 # this stage builds any common dependencies between the inference server and
 # any of the platforms. Using common packages between the two ensures version
-# compatibility. Note, some of the apt packages here are also used implicitly
+# compatibility. Note, some of the packages here are also used implicitly
 # by subsequent build stages
 FROM dev_base AS common_builder
 
@@ -142,18 +107,32 @@ WORKDIR /tmp
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
+# install other distro packages used by build stages
+$[INSTALL_BUILD_PACKAGES]
+
+# install extra optional distro packages
+$[INSTALL_OPTIONAL_BUILD_PACKAGES]
+
+# install Boost for VAI
+RUN wget --quiet https://boostorg.jfrog.io/artifactory/main/release/1.65.1/source/boost_1_65_1.tar.gz \
+    && tar -xzf boost_1_65_1.tar.gz \
+    && cd boost_1_65_1 \
+    # && PYTHON_ROOT=$(dirname $(find /usr/include -name pyconfig.h)) \
+    # && ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-root=${PYTHON_ROOT} \
+    && INSTALL_DIR=/tmp/installed \
+    && mkdir -p ${INSTALL_DIR} \
+    && ./bootstrap.sh --without-libraries=python --prefix=${INSTALL_DIR} \
+    && ./b2 install -j $(($(nproc) - 1)) \
+    && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed/\/usr\/local/' > ${MANIFESTS_DIR}/boost.txt \
+    # && CPLUS_INCLUDE_PATH=${PYTHON_ROOT} ./b2 install --with=all -j $(($(nproc) - 1)) \
+    && cp -rf ${INSTALL_DIR}/* /usr/local \
+    && cat ${MANIFESTS_DIR}/boost.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cd /tmp \
+    && rm -rf /tmp/*
+
 # install protobuf 3.19.4 for gRPC - Used by Vitis AI and onnx
 # onnx requires 3.19.4 due to Protobuf python
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        autoconf \
-        automake \
-        curl \
-        libtool \
-        unzip \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && VERSION=3.19.4 \
+RUN VERSION=3.19.4 \
     && wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
     && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
     && cd protobuf-${VERSION}/cmake \
@@ -165,10 +144,7 @@ RUN apt-get update \
     && rm -rf /tmp/*
 
 # install pybind11 2.9.1 - used by Vitis AI
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        python3-dev \
-    && VERSION=2.9.1 \
+RUN VERSION=2.9.1 \
     && wget https://github.com/pybind/pybind11/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd pybind11-${VERSION}/ \
@@ -178,17 +154,9 @@ RUN apt-get update \
     && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/pybind11.txt \
+    && cp install_manifest.txt ${MANIFESTS_DIR}/pybind11.txt \
     && cd /tmp \
     && rm -fr /tmp/*
-
-# install other apt packages used by build stages
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        checkinstall \
-        python3-pip \
-        python3-setuptools \
-        python3-wheel
 
 # this stage builds all the dependencies of the inference server to be copied
 # over
@@ -210,7 +178,7 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
         url="https://github.com/tianon/gosu/releases/download/1.12/gosu-arm64"; \
     else false; fi; \
-    wget -O gosu --progress=dot:mega ${url} \
+    wget -O gosu --quiet ${url} \
     && chmod 755 gosu \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp gosu ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
@@ -228,23 +196,8 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp git-lfs/git-lfs ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
 
-# install lcov 1.15 for test coverage measurement
-RUN wget --quiet https://github.com/linux-test-project/lcov/releases/download/v1.15/lcov-1.15.tar.gz \
-    && tar -xzf lcov-1.15.tar.gz \
-    && cd lcov-1.15 \
-    && checkinstall -y --pkgname lcov --pkgversion 1.15 --pkgrelease 1 make install \
-    && cd /tmp \
-    && dpkg -L lcov | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && dpkg -L lcov > ${MANIFESTS_DIR}/lcov.txt \
-    && rm -rf /tmp/*
-
 # install NodeJS 14.16.0 for web gui development
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        xz-utils \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         archive="node-v14.16.0-linux-x64.tar.xz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
         archive="node-v14.16.0-linux-arm64.tar.xz"; \
@@ -276,25 +229,40 @@ RUN wget --quiet https://github.com/cameron314/concurrentqueue/archive/refs/tags
     && cd /tmp \
     && rm -rf /tmp/*
 
+# install jsoncpp for Drogon
+RUN VERSION=1.7.4 \
+    && wget --quiet https://github.com/open-source-parsers/jsoncpp/archive/refs/tags/${VERSION}.tar.gz \
+    && tar -xzf ${VERSION}.tar.gz \
+    && cd jsoncpp-${VERSION} \
+    && cmake -S . -B build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_STATIC_LIBS=OFF \
+        -DJSONCPP_WITH_TESTS=OFF \
+        -DINCLUDE_INSTALL_DIR=/usr/local/include/jsoncpp \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp build/install_manifest.txt ${MANIFESTS_DIR}/jsoncpp.txt \
+    && cd /tmp \
+    && rm -rf /tmp/*
+
+# install c-ares for gRPC and Drogon
+RUN VERSION=1_14_0 \
+    && wget --quiet https://github.com/c-ares/c-ares/archive/refs/tags/cares-${VERSION}.tar.gz \
+    && tar -xzf cares-${VERSION}.tar.gz \
+    && cd c-ares-cares-${VERSION} \
+    && cmake -S . -B build \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp build/install_manifest.txt ${MANIFESTS_DIR}/c-ares.txt \
+    && cd /tmp \
+    && rm -rf /tmp/*
+
 # install drogon 1.7.5 for a http server
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        libbrotli-dev \
-        libjsoncpp-dev \
-        libc-ares-dev \
-        libssl-dev \
-        uuid-dev \
-        zlib1g-dev \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    # symlink libjsoncpp to json to maintain include compatibility with Drogon
-    && cp -rfs /usr/include/jsoncpp/json/ /usr/include/ \
-    # install drogon
-    && cd /tmp && git clone -b v1.7.5 https://github.com/an-tao/drogon \
+RUN git clone -b v1.7.5 https://github.com/an-tao/drogon \
     && cd drogon \
     && git submodule update --init --recursive \
-    && mkdir -p build && cd build \
-    && cmake .. \
+    && cmake -S . -B build \
         -DBUILD_EXAMPLES=OFF \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_BUILD_TYPE=Release \
@@ -303,14 +271,13 @@ RUN apt-get update \
         # this is used instead of the above in 1.8.0+
         # -DBUILD_SHARED_LIBS=ON \
         -DBUILD_CTL=OFF \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/drogon.txt \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp build/install_manifest.txt ${MANIFESTS_DIR}/drogon.txt \
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install libb64 2.0.0.1. The default version in apt adds linebreaks when encoding
+# install libb64 2.0.0.1
 RUN wget --quiet https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.tar.gz \
     && tar -xzf v2.0.0.1.tar.gz \
     && cd libb64-2.0.0.1 \
@@ -332,26 +299,23 @@ RUN wget --quiet https://github.com/google/googletest/archive/refs/tags/release-
     && rm -rf /tmp/*
 
 # install FFmpeg 3.4.8 for opencv
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        nasm \
-    && wget --quiet https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.gz \
+RUN wget --quiet https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.gz \
     && tar -xzf n3.4.8.tar.gz \
     && cd FFmpeg-n3.4.8 \
     && ./configure --disable-static --enable-shared --disable-doc \
     && make -j$(($(nproc) - 1)) \
-    && checkinstall -y --pkgname ffmpeg --pkgversion 3.4.8 --pkgrelease 1 make install \
+    && INSTALL_DIR=/tmp/installed \
+    && mkdir -p ${INSTALL_DIR} \
+    && make install DESTDIR=${INSTALL_DIR} \
+    && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/ffmpeg.txt \
+    && make install \
+    && cat ${MANIFESTS_DIR}/ffmpeg.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L ffmpeg | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && dpkg -L ffmpeg > ${MANIFESTS_DIR}/ffmpeg.txt \
     && rm -rf /tmp/*
 
 # install opencv 3.4.3 for image and video processing
 # pkg-config is needed to find ffmpeg
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        pkg-config \
-    && wget --quiet https://github.com/opencv/opencv/archive/3.4.3.tar.gz \
+RUN wget --quiet https://github.com/opencv/opencv/archive/3.4.3.tar.gz \
     && tar -xzf 3.4.3.tar.gz \
     && cd opencv-3.4.3 \
     && mkdir -p build \
@@ -360,7 +324,7 @@ RUN apt-get update \
     && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/opencv.txt \
+    && cp install_manifest.txt ${MANIFESTS_DIR}/opencv.txt \
     && cd /tmp \
     && rm -rf /tmp/*
 
@@ -407,12 +371,7 @@ RUN wget --quiet https://github.com/nlohmann/json/archive/refs/tags/v3.7.3.tar.g
     && rm -rf /tmp/*
 
 # install Apache Thrift 0.12.0 for running the jaeger exporter in opentelemetry
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        bison \
-        flex \
-        libboost-all-dev \
-    && VERSION=0.15.0 \
+RUN VERSION=0.15.0 \
     && cd /tmp && wget --quiet https://github.com/apache/thrift/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd thrift-${VERSION} \
@@ -434,10 +393,7 @@ RUN apt-get update \
     && rm -rf /tmp/*
 
 # install opentelemetry 1.1.0 for tracing
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        libcurl4-openssl-dev \
-    && VERSION=1.1.0 \
+RUN VERSION=1.1.0 \
     && wget https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd opentelemetry-cpp-${VERSION} \
@@ -453,38 +409,9 @@ RUN apt-get update \
     && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/opentelemetry.txt \
+    && cp install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \
     && cd /tmp \
     && rm -rf /tmp/*
-
-# install wrk for http benchmarking
-RUN wget --quiet https://github.com/wg/wrk/archive/refs/tags/4.1.0.tar.gz \
-    && tar -xzf 4.1.0.tar.gz \
-    && cd wrk-4.1.0 \
-    && make -j$(($(nproc) - 1)) \
-    && mkdir -p ${COPY_DIR}/usr/local/bin && cp wrk ${COPY_DIR}/usr/local/bin \
-    && rm -rf /tmp/*
-
-# install include-what-you-use 0.14
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        libclang-10-dev \
-        clang-10 \
-        llvm-10-dev \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && wget --quiet https://github.com/include-what-you-use/include-what-you-use/archive/refs/tags/0.14.tar.gz \
-    && tar -xzf 0.14.tar.gz \
-    && cd include-what-you-use-0.14 \
-    && mkdir build \
-    && cd build \
-    && cmake -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10 .. \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/include_what_you_use.txt \
-    && cd /tmp \
-    && rm -fr /tmp/*
 
 # install gRPC 1.44.0
 RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc/grpc \
@@ -531,6 +458,8 @@ RUN git clone https://github.com/SpartanJ/efsw.git \
 #     && cd /tmp \
 #     && rm -fr /tmp/*
 
+$[BUILD_OPTIONAL]
+
 #? This no longer seems needed but is kept around in case
 # Delete /usr/local/man which is a symlink and cannot be copied later by BuildKit.
 # Note: this works without BuildKit: https://github.com/docker/buildx/issues/150
@@ -565,29 +494,10 @@ RUN wget --quiet https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-
     && cat install_manifest.txt > ${MANIFESTS_DIR}/json-c.txt
 
 # Install XRT and XRM
-RUN apt-get update \
-    && if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
-        cd /tmp \
-        && wget --quiet -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202120.2.12.427_18.04-amd64-xrt.deb \
-        && wget --quiet -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202120.1.3.29_18.04-x86_64.deb \
-        && apt-get update -y \
-        && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-            ./xrt.deb \
-            ./xrm.deb \
-        # copy over debians to COPY_DIR so we can install them as debians in
-        # the final image. In particular, the same XRT needs to also be
-        # installed on the host and so a .deb allows for easy version control
-        && cp ./xrt.deb ${COPY_DIR} \
-        && cp ./xrm.deb ${COPY_DIR}; \
-    fi;
+$[INSTALL_XRT]
 
 # Install Vitis AI runtime and build dependencies
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        libgoogle-glog-dev \
-        libssl-dev \
-        pkg-config \
-    && git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
+RUN git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
     && export VITIS_ROOT=/tmp/Vitis-AI/src/Vitis-AI-Runtime/VART \
     && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
     cd ${VITIS_ROOT}/unilog \
@@ -615,7 +525,7 @@ RUN apt-get update \
     && sed -i '46i _global = nullptr;' ./src/AksTopContainer.cpp \
     && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
     && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/aks.txt
+    && cp install_manifest.txt ${MANIFESTS_DIR}/aks.txt
 
 RUN COMMIT=e5c51b541d5cbcf353d4165499103f5e6d7e7ea9 \
     && wget --quiet https://github.com/fpagliughi/sockpp/archive/${COMMIT}.tar.gz \
@@ -635,33 +545,9 @@ FROM dev_base AS vitis_installer_yes
 
 ARG COPY_DIR
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        # used by vitis ai runtime
-        libgoogle-glog-dev \
-        libboost-filesystem1.65.1 \
-        libboost-system1.65.1 \
-        libboost-serialization1.65.1 \
-        libboost-thread1.65.1 \
-        libboost1.65-dev \
-        # used to detect if ports are in use for XRM
-        net-tools \
-        # used by libunilog as a fallback to find glog
-        pkg-config \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY --from=vitis_builder ${COPY_DIR} /
 
-# install all the Vitis AI runtime libraries built from source as debians
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        /*.deb \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm /*.deb
+$[INSTALL_VITIS]
 
 FROM common_builder AS tfzendnn_builder
 
@@ -675,11 +561,7 @@ RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
 COPY $TFZENDNN_PATH /tmp/
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        zip unzip \
-    # Check to verify if package is TF+ZenDNN
-    && echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \
+RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \
     && unzip $(basename $TFZENDNN_PATH) \
     && cd $(basename ${TFZENDNN_PATH%.*}) \
     # To avoid protobuf version issues, create subfolder and copy include files
@@ -709,13 +591,7 @@ RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
 COPY $PTZENDNN_PATH /tmp/
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        zip \
-        unzip \
-    && cd /tmp/ \
-    # Check to verify if package is PT+ZenDNN
-    && echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \
+RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \
     && unzip $(basename $PTZENDNN_PATH) \
     && cd $(basename ${PTZENDNN_PATH%.*}) \
     # To avoid protobuf version issues, create subfolder and copy include files
@@ -725,16 +601,19 @@ RUN apt-get update \
     && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/ptzendnn.txt \
     && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/ptzendnn.txt
 
-# build jemalloc 5.3.0. Build uses autoconf and checkinstall implicitly
+# build jemalloc 5.3.0. Build uses autoconf implicitly
 RUN VERSION=5.3.0 \
     && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/${VERSION}.tar.gz \
     && tar -xzf ${VERSION}.tar.gz \
     && cd jemalloc-${VERSION} && ./autogen.sh \
     && make -j \
-    && checkinstall -y --pkgname jemalloc --pkgversion ${VERSION} --pkgrelease 1 make install \
+    && INSTALL_DIR=/tmp/installed \
+    && mkdir -p ${INSTALL_DIR} \
+    && make install DESTDIR=${INSTALL_DIR} \
+    && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
+    && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cd /tmp \
-    && dpkg -L jemalloc | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && dpkg -L jemalloc > ${MANIFESTS_DIR}/jemalloc.txt
+    && rm -rf /tmp/*
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 
@@ -762,37 +641,7 @@ RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 # ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
 #        for Release version, since it's set up differently than dev
 
-# The following apt packages are also required to install rocm/MIGraphX but have already
-# been installed by this Dockerfile:
-# python3-dev, build-essential, git, sudo, python3-pip
-
-# Install rbuild
-RUN echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main" > /etc/apt/sources.list.d/rocm.list \
-    && apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends\
-        aria2 \
-        half \
-        libnuma-dev \
-        libpython3.6-dev \
-        miopen-hip-dev \
-        rocblas-dev \
-        rocm-cmake \
-        rocm-dev \
-    && ln -s /opt/rocm-* /opt/rocm \
-    && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
-    && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
-    && ldconfig \
-    && pip3 install --no-cache-dir https://github.com/RadeonOpenCompute/rbuild/archive/f74d130aac0405c7e6bc759d331f913a7577bd54.tar.gz
-
-# Install MIGraphX from source
-RUN mkdir -p /migraphx \
-    && cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src \
-    && cd /migraphx/src  && git checkout cb18b0b5722373c49f5c257380af206e13344735 \
-    # disable building documentation and tests. Is there a better way?
-    && sed -i 's/^add_subdirectory(doc)/#&/' CMakeLists.txt \
-    && sed -i 's/^add_subdirectory(test)/#&/' CMakeLists.txt \
-    && rbuild package -d /migraphx/deps -B /migraphx/build --define "BUILD_TESTING=OFF" \
-    && cp /migraphx/build/*.deb ${COPY_DIR}
+$[BUILD_MIGRAPHX]
 
 # Alternative: install MIGraphX with package manager
 # RUN sudo apt update \
@@ -810,41 +659,7 @@ ARG COPY_DIR
 
 COPY --from=migraphx_builder ${COPY_DIR} /
 
-# install all .deb files from the builder
-RUN echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main" > /etc/apt/sources.list.d/rocm.list \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        python3-pip \
-        rsync \
-        # these packages are required to build with migraphx but don't get installed
-        # as dependencies. They also create /opt/rocm-* so we can make a symlink
-        # before installing migraphx
-        miopen-hip-dev \
-        rocm-device-libs \
-        rocblas-dev \
-        libnuma1 \
-    && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
-    && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
-    && ldconfig \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        /*.deb \
-    # having symlinks between rocm-* and rocm complicates building the production
-    # image so make /opt/rocm a real directory and move files over to it from
-    # /opt/rocm-* but add a symlink for /opt/rocm-* for compatibility
-    && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \
-    && rm -rf /opt/rocm \
-    && mkdir /opt/rocm \
-    && rsync -a $dir/* /opt/rocm/ \
-    && rm -rf $dir \
-    && ln -s /opt/rocm $dir \
-    # install .whl from the builder
-    && pip3 install --no-cache-dir /*.whl \
-    && rm -f /*.whl \
-    # clean up
-    && apt-get purge -y --auto-remove python3-pip rsync \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -f /*.deb
+$[INSTALL_MIGRAPHX_DEV]
 
 FROM common_builder AS builder_dev
 
@@ -857,18 +672,15 @@ SHELL ["/bin/bash", "-c"]
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR}
 
 # pyinstaller 4.6 has a bug https://github.com/pyinstaller/pyinstaller/issues/6331
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        zlib1g-dev \
-    && pip3 install --no-cache-dir "pyinstaller!=4.6" \
+RUN pip3 install --no-cache-dir "pyinstaller!=4.6" \
     # docker-systemctl-replacement v1.5.4504
     && cd /tmp && wget --quiet https://github.com/gdraheim/docker-systemctl-replacement/archive/refs/tags/v1.5.4505.tar.gz \
     && tar -xzf v1.5.4505.tar.gz \
     && cd docker-systemctl-replacement-1.5.4505 \
     && pyinstaller files/docker/systemctl3.py --onefile \
     && chmod a+x dist/systemctl3 \
-    && mkdir -p ${COPY_DIR}/bin/  \
-    && cp dist/systemctl3 ${COPY_DIR}/bin/systemctl \
+    && mkdir -p ${COPY_DIR}/usr/bin/  \
+    && cp dist/systemctl3 ${COPY_DIR}/usr/bin/systemctl \
     && rm -fr /tmp/*
 
 COPY . $PROTEUS_ROOT
@@ -889,51 +701,9 @@ ARG UNAME
 ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        # used for auto-completing bash commands
-        bash-completion \
-        curl \
-        make \
-        # used for git
-        gpg \
-        openssh-client \
-        python3 \
-        python3-dev \
-        # install documentation dependencies
-        doxygen \
-        graphviz \
-        # install debugging tools
-        gdb \
-        valgrind \
-        vim \
-        # used to turn absolute symlinks into relative ones
-        symlinks \
-        # used for code formatting and style
-        clang-format-10 \
-        clang-tidy-10 \
-        # used for json objects in proteus since it's also used in Drogon
-        libjsoncpp-dev \
-        # used for z compression in proteus
-        zlib1g-dev \
-        # used by drogon. It needs the -dev versions to pass Cmake
-        libbrotli-dev \
-        libc-ares-dev \
-        libssl-dev \
-        uuid-dev \
-    # symlink the versioned clang-*-10 executables to clang-*
-    && ln -s /usr/bin/clang-format-10 /usr/bin/clang-format \
-    && ln -s /usr/bin/clang-tidy-10 /usr/bin/clang-tidy \
-    # symlink libjsoncpp to json to maintain include compatibility with Drogon
-    && cp -rfs /usr/include/jsoncpp/json/ /usr/include/ \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+$[INSTALL_DEV_PACKAGES]
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        python3-pip \
-    && python3 -m pip install --upgrade --force-reinstall pip \
+RUN python3 -m pip install --upgrade --force-reinstall pip \
     && pip install --no-cache-dir \
         # install these first
         setuptools \
@@ -967,10 +737,7 @@ RUN apt-get update \
         rich \
         # used for Python bindings
         pybind11_mkdoc \
-        pybind11-stubgen \
-    # clean up
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+        pybind11-stubgen
 
 COPY --from=builder ${COPY_DIR} /
 COPY --from=common_builder ${COPY_DIR} /
@@ -1049,37 +816,7 @@ ARG COPY_DIR
 
 COPY --from=migraphx_builder ${COPY_DIR} /
 
-# install all .deb files from the builder
-RUN echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main" > /etc/apt/sources.list.d/rocm.list \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        rsync \
-        # these packages are required to build with migraphx but don't get installed
-        # as dependencies. They also create /opt/rocm-* so we can make a symlink
-        # before installing migraphx
-        miopen-hip-dev \
-        rocm-device-libs \
-        rocblas-dev \
-        libnuma1 \
-    && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
-    && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \
-    && ldconfig \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        /*.deb \
-    # having symlinks between rocm-* and rocm complicates building the production
-    # image so move files over to rocm/ but add a symlink for compatibility
-    && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \
-    && rm -rf /opt/rocm \
-    && mkdir /opt/rocm \
-    && rsync -a $dir/* /opt/rocm/ \
-    && rm -rf $dir \
-    && ln -s /opt/rocm $dir \
-    # clean up
-    && apt-get purge -y --auto-remove rsync \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -f /*.deb \
-    && rm -f /*.wheel
+$[INSTALL_MIGRAPHX_PROD]
 
 FROM migraphx_installer_prod_${ENABLE_MIGRAPHX} as prod
 
