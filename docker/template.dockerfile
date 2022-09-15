@@ -751,8 +751,7 @@ RUN git lfs install \
     && npm install -g gh-pages \
     && ldconfig
 
-ENTRYPOINT [ "/root/entrypoint.sh", "user"]
-CMD [ "/bin/bash" ]
+$[ENTRYPOINT_DEV]
 
 FROM ${DEV_BASE_IMAGE} AS builder_prod
 

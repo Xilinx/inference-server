@@ -101,17 +101,17 @@ else()
   )
 endif()
 
-# copy over Python package source files to the build tree
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/setup.py
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-)
+if(NOT SKBUILD)
+  # copy over Python package source files to the build tree
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/setup.py
+       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+  )
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src
+       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+  )
+endif()
 
-get_target_property(output_directory_2 proteus_py LIBRARY_OUTPUT_DIRECTORY)
-# i.e. if the regular CMake build is running
-if(NOT output_directory_2)
+if(NOT SKBUILD)
   execute_process(
     COMMAND ${Python_EXECUTABLE} -m site --user-site
     OUTPUT_VARIABLE PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE

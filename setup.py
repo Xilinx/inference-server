@@ -15,6 +15,7 @@
 import os
 
 import setuptools
+import skbuild
 
 version_path = os.getenv("PROTEUS_ROOT")
 if version_path:
@@ -24,17 +25,17 @@ if version_path:
 else:
     version = "0.0.0"
 
-setuptools.setup(
+skbuild.setup(
     name="proteus",
     version=version,
     license="Apache 2.0",
-    packages=setuptools.find_packages("src"),
+    packages=setuptools.find_packages("src/proteus/bindings/python/src"),
     install_requires=[
         "numpy",
         "opencv-python-headless",
     ],
     python_requires=">=3.6",
-    package_dir={"": "src"},
+    package_dir={"": "src/proteus/bindings/python/src"},
     package_data={
         "": [
             "*.pyi",

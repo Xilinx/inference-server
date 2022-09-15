@@ -14,7 +14,14 @@
 
 [build-system]
 requires = [
+    "scikit-build>=0.15.0",
     "setuptools",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+build = "cp36-manylinux_x86_64"
+
+[tool.cibuildwheel.linux]
+manylinux-x86_64-image = "varunsh/proteus-dev-ci:latest"
