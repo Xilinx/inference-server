@@ -105,52 +105,56 @@ set(proteus_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/proteus"
     CACHE STRING "Path to proteus CMake files"
 )
 
-# cmake-format: off
-install(
-  TARGETS proteus proteus-client proteus-server util
-  EXPORT proteus_Targets
-  RUNTIME COMPONENT proteus_Runtime
-  LIBRARY COMPONENT proteus_Runtime
-  NAMELINK_COMPONENT proteus_Development
-  ARCHIVE COMPONENT proteus_Development
-  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-)
-# cmake-format: on
+if(NOT SKBUILD)
 
-install(
-  TARGETS proteus-server-exe
-  EXPORT proteus_Server
-  RUNTIME COMPONENT proteus_Runtime
-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-)
+  # cmake-format: off
+  install(
+    TARGETS proteus proteus-client proteus-server util
+    EXPORT proteus_Targets
+    RUNTIME COMPONENT proteus_Runtime
+    LIBRARY COMPONENT proteus_Runtime
+    NAMELINK_COMPONENT proteus_Development
+    ARCHIVE COMPONENT proteus_Development
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  )
+  # cmake-format: on
 
-install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
-        COMPONENT proteus_Development
-)
+  install(
+    TARGETS proteus-server-exe
+    EXPORT proteus_Server
+    RUNTIME COMPONENT proteus_Runtime
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  )
 
-install(
-  EXPORT proteus_Targets
-  DESTINATION "${proteus_INSTALL_CMAKEDIR}"
-  NAMESPACE proteus::
-  FILE proteus-${type}-targets.cmake
-  COMPONENT proteus_Development
-)
+  install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
+          COMPONENT proteus_Development
+  )
 
-write_basic_package_version_file(
-  proteusConfigVersion.cmake COMPATIBILITY SameMajorVersion
-)
+  install(
+    EXPORT proteus_Targets
+    DESTINATION "${proteus_INSTALL_CMAKEDIR}"
+    NAMESPACE proteus::
+    FILE proteus-${type}-targets.cmake
+    COMPONENT proteus_Development
+  )
 
-install(FILES "${PROJECT_SOURCE_DIR}/cmake/proteusConfig.cmake"
-              "${CMAKE_CURRENT_BINARY_DIR}/proteusConfigVersion.cmake"
-        DESTINATION "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Development
-)
+  write_basic_package_version_file(
+    proteusConfigVersion.cmake COMPATIBILITY SameMajorVersion
+  )
 
-install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
-        COMPONENT proteus_Development
-)
+  install(
+    FILES "${PROJECT_SOURCE_DIR}/cmake/proteusConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/proteusConfigVersion.cmake"
+    DESTINATION "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Development
+  )
+
+  install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
+          COMPONENT proteus_Development
+  )
+endif()
 
 set(dependencies efsw::efsw protobuf::libprotobuf)
 set(deb_dependencies "")
@@ -204,32 +208,34 @@ if(${PROTEUS_ENABLE_METRICS})
   list(APPEND dependencies prometheus-cpp::core)
 endif()
 
-install(
-  IMPORTED_RUNTIME_ARTIFACTS
-  ${dependencies}
-  RUNTIME_DEPENDENCY_SET
-  proteus_Dependencies
-  LIBRARY
-  COMPONENT
-  proteus_Runtime
-  LIBRARY
-  DESTINATION
-  "${CMAKE_INSTALL_LIBDIR}"
-)
+if(NOT SKBUILD)
+  install(
+    IMPORTED_RUNTIME_ARTIFACTS
+    ${dependencies}
+    RUNTIME_DEPENDENCY_SET
+    proteus_Dependencies
+    LIBRARY
+    COMPONENT
+    proteus_Runtime
+    LIBRARY
+    DESTINATION
+    "${CMAKE_INSTALL_LIBDIR}"
+  )
 
-install(RUNTIME_DEPENDENCY_SET proteus_Dependencies DESTINATION
-        "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Runtime
-)
+  install(RUNTIME_DEPENDENCY_SET proteus_Dependencies DESTINATION
+          "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Runtime
+  )
+endif()
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_NAME "libproteus")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AMD Inference Server")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.rst")
-set(CPACK_PACKAGE_VENDOR "Xilinx Inc.")
+set(CPACK_PACKAGE_VENDOR "Advanced Micro Devices, Inc.")
 set(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_PROJECT_VERSION_PATCH})
-set(CPACK_PACKAGE_CONTACT "varunsh@amd.com")
+set(CPACK_PACKAGE_CONTACT "varun.sharma@amd.com")
 set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/proteus")
 set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.rst")
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")

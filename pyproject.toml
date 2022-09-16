@@ -22,6 +22,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 build = "cp36-manylinux_x86_64"
+build-verbosity = 1
 
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "varunsh/proteus-dev-ci:latest"
+repair-wheel-command = "auditwheel repair --plat linux_x86_64 -w {dest_dir} {wheel}"

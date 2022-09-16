@@ -703,41 +703,7 @@ SHELL ["/bin/bash", "-c"]
 
 $[INSTALL_DEV_PACKAGES]
 
-RUN python3 -m pip install --upgrade --force-reinstall pip \
-    && pip install --no-cache-dir \
-        # install these first
-        setuptools \
-        wheel \
-        # the sphinx theme has a bug with docutils>=0.17
-        "docutils<0.17" \
-    # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
-    && pip install --no-cache-dir --ignore-installed \
-        # install testing dependencies
-        pytest \
-        pytest-cpp \
-        pytest-xprocess \
-        requests \
-        # install documentation dependencies
-        breathe \
-        fastcov \
-        sphinx \
-        sphinx_copybutton \
-        sphinxcontrib-confluencebuilder \
-        sphinx-argparse \
-        sphinx-issues \
-        # install linting tools
-        black \
-        cpplint \
-        cmakelang  \
-        pre-commit \
-        # install opencv
-        opencv-python-headless \
-        # install benchmarking dependencies
-        pytest-benchmark \
-        rich \
-        # used for Python bindings
-        pybind11_mkdoc \
-        pybind11-stubgen
+$[INSTALL_PYTHON_PACKAGES]
 
 COPY --from=builder ${COPY_DIR} /
 COPY --from=common_builder ${COPY_DIR} /

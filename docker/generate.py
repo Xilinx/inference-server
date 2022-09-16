@@ -642,6 +642,48 @@ def install_migraphx_prod(manager: PackageManager):
     )
 
 
+def install_python_packages():
+    return textwrap.dedent(
+        """\
+        RUN python3 -m pip install --upgrade --force-reinstall pip \
+        && pip install --no-cache-dir \
+            # install these first
+            setuptools \
+            wheel \
+            # the sphinx theme has a bug with docutils>=0.17
+            "docutils<0.17" \
+        # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
+        && pip install --no-cache-dir --ignore-installed \
+            # install testing dependencies
+            pytest \
+            pytest-cpp \
+            pytest-xprocess \
+            requests \
+            # install documentation dependencies
+            breathe \
+            fastcov \
+            sphinx \
+            sphinx_copybutton \
+            sphinxcontrib-confluencebuilder \
+            sphinx-argparse \
+            sphinx-issues \
+            # install linting tools
+            black \
+            cpplint \
+            cmakelang  \
+            pre-commit \
+            # install opencv
+            opencv-python-headless \
+            # install benchmarking dependencies
+            pytest-benchmark \
+            rich \
+            # used for Python bindings
+            pybind11_mkdoc \
+            pybind11-stubgen
+        """
+    )
+
+
 def generate(args: argparse.Namespace):
     template = pathlib.Path(__file__).parent.resolve() / "template.dockerfile"
     with open(template, "r") as f:
@@ -690,6 +732,15 @@ def generate(args: argparse.Namespace):
     dockerfile = dockerfile.replace(
         "$[INSTALL_DEV_PACKAGES]", install_dev_packages(manager, args.core)
     )
+
+    if args.cibuildwheel:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_PYTHON_PACKAGES]", "# skipping python packages"
+        )
+    else:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_PYTHON_PACKAGES]", install_python_packages()
+        )
 
     dockerfile = dockerfile.replace("$[BUILD_MIGRAPHX]", build_migraphx(manager))
 

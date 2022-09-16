@@ -164,6 +164,8 @@ endif()
 # ${DURATION}) endif() target_compile_definitions(workerFake PRIVATE
 # DURATION=${DURATION}) unset(DURATION CACHE)
 
-install(TARGETS ${WORKER_TARGETS} LIBRARY COMPONENT proteus_Runtime
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-)
+if(NOT SKBUILD)
+  install(TARGETS ${WORKER_TARGETS} LIBRARY COMPONENT proteus_Runtime
+          LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  )
+endif()
