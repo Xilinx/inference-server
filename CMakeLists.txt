@@ -95,9 +95,9 @@ find_package(gRPC CONFIG)
 find_package(Doxygen)
 find_package(Sphinx)
 find_package(efsw)
-find_package(json-c)
+find_package(json-c QUIET)
 find_package(prometheus-cpp)
-find_package(sockpp)
+find_package(sockpp QUIET)
 
 find_package(xir QUIET)
 find_package(vart CONFIG COMPONENTS runner util QUIET)
@@ -153,6 +153,11 @@ if(${PROTEUS_ENABLE_REST} OR ${PROTEUS_ENABLE_METRICS})
   add_derived_option("ENABLE_HTTP" ON)
 else()
   add_derived_option("ENABLE_HTTP" OFF)
+endif()
+
+# override tracing option and disable it if building Python bindings
+if(SKBUILD)
+  set(PROTEUS_ENABLE_TRACING OFF)
 endif()
 
 configure_file(

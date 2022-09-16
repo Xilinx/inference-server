@@ -103,7 +103,7 @@ endif()
 
 if(NOT SKBUILD)
   # copy over Python package source files to the build tree
-  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/setup.py
+  file(COPY ${PROJECT_SOURCE_DIR}/setup.py
        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
   )
   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src

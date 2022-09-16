@@ -277,11 +277,11 @@ RUN git clone -b v1.7.5 https://github.com/an-tao/drogon \
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install libb64 2.0.0.1
+# install libb64 2.0.0.1 - fpic for cibuildwheel
 RUN wget --quiet https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.tar.gz \
     && tar -xzf v2.0.0.1.tar.gz \
     && cd libb64-2.0.0.1 \
-    && make -j$(($(nproc) - 1)) all_src \
+    && CFLAGS="-fpic" make -j$(($(nproc) - 1)) all_src \
     && mkdir -p ${COPY_DIR}/usr/local/lib && cp src/libb64.a ${COPY_DIR}/usr/local/lib \
     && mkdir -p ${COPY_DIR}/usr/local/include && cp -r include/b64 ${COPY_DIR}/usr/local/include \
     && rm -rf /tmp/*

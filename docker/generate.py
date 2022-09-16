@@ -445,7 +445,6 @@ def install_dev_packages(manager: PackageManager, core):
             zlib1g-dev \\
             # used by drogon. It needs the -dev versions to pass Cmake
             libbrotli-dev \\
-            libc-ares-dev \\
             libssl-dev \\
             uuid-dev \\
             {code_indent(optional_packages, 8)}"""
@@ -488,7 +487,6 @@ def install_dev_packages(manager: PackageManager, core):
             zlib-devel \\
             # used by drogon. It needs the -dev versions to pass Cmake
             brotli-devel \\
-            c-ares-devel \\
             openssl-devel \\
             uuid-devel \\
             {code_indent(optional_packages, 12)}"""
@@ -704,7 +702,11 @@ def generate(args: argparse.Namespace):
     )
 
     if args.cibuildwheel:
-        entrypoint = "# skipping entrypoint for cibuildwheel"
+        entrypoint = textwrap.dedent(
+            """\
+            # skipping entrypoint for cibuildwheel
+            ENV PROTEUS_ROOT=/project"""
+        )
     else:
         entrypoint = textwrap.dedent(
             """\
