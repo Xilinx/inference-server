@@ -336,7 +336,7 @@ def install_xrt(manager: PackageManager):
                 # the final image. In particular, the same XRT needs to also be
                 # installed on the host and so a .{manager.package} allows for easy version control
                 && cp ./xrt.{manager.package} ${{COPY_DIR}} \\
-                && cp ./xrm.{manager.package} ${{COPY_DIR}}; \\
+                && cp ./xrm.{manager.package} ${{COPY_DIR}} \\
                 # clean up
                 {code_indent(manager.clean, 16)} \\
             fi;"""
