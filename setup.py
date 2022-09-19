@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,6 +37,8 @@ skbuild.setup(
     ],
     python_requires=">=3.6",
     package_dir={"": "src/proteus/bindings/python/src"},
+    include_package_data=True,
+    cmake_install_dir="src/proteus/bindings/python/src/proteus",
     package_data={
         "": [
             "*.pyi",

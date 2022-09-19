@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -154,6 +155,8 @@ if(NOT SKBUILD)
   install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
           COMPONENT proteus_Development
   )
+else()
+  file(WRITE ${PROJECT_SOURCE_DIR}/tmp.cmake ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 set(dependencies efsw::efsw protobuf::libprotobuf)

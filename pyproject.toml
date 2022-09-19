@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2021 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,4 +27,7 @@ build-verbosity = 1
 
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "varunsh/proteus-dev-ci:latest"
-repair-wheel-command = "auditwheel repair --plat linux_x86_64 -w {dest_dir} {wheel}"
+repair-wheel-command = [
+    "export LD_LIBRARY_PATH=$(cat /project/tmp.cmake):$LD_LIBRARY_PATH",
+    "auditwheel repair -w {dest_dir} {wheel}"
+]
