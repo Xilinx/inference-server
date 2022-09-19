@@ -659,42 +659,42 @@ def install_migraphx_prod(manager: PackageManager):
 def install_python_packages():
     return textwrap.dedent(
         """\
-        RUN python3 -m pip install --upgrade --force-reinstall pip \
-        && pip install --no-cache-dir \
-            # install these first
-            setuptools \
-            wheel \
-            # the sphinx theme has a bug with docutils>=0.17
-            "docutils<0.17" \
-        # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
-        && pip install --no-cache-dir --ignore-installed \
-            # install testing dependencies
-            pytest \
-            pytest-cpp \
-            pytest-xprocess \
-            requests \
-            # install documentation dependencies
-            breathe \
-            fastcov \
-            sphinx \
-            sphinx_copybutton \
-            sphinxcontrib-confluencebuilder \
-            sphinx-argparse \
-            sphinx-issues \
-            # install linting tools
-            black \
-            cpplint \
-            cmakelang  \
-            pre-commit \
-            # install dependencies
-            opencv-python-headless \
-            scikit-build \
-            # install benchmarking dependencies
-            pytest-benchmark \
-            rich \
-            # used for Python bindings
-            pybind11_mkdoc \
-            pybind11-stubgen
+        RUN python3 -m pip install --upgrade --force-reinstall pip \\
+            && pip install --no-cache-dir \\
+                # install these first
+                setuptools \\
+                wheel \\
+                # the sphinx theme has a bug with docutils>=0.17
+                "docutils<0.17" \\
+            # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
+            && pip install --no-cache-dir --ignore-installed \\
+                # install testing dependencies
+                pytest \\
+                pytest-cpp \\
+                pytest-xprocess \\
+                requests \\
+                # install documentation dependencies
+                breathe \\
+                fastcov \\
+                sphinx \\
+                sphinx_copybutton \\
+                sphinxcontrib-confluencebuilder \\
+                sphinx-argparse \\
+                sphinx-issues \\
+                # install linting tools
+                black \\
+                cpplint \\
+                cmakelang  \\
+                pre-commit \\
+                # install dependencies
+                opencv-python-headless \\
+                scikit-build \\
+                # install benchmarking dependencies
+                pytest-benchmark \\
+                rich \\
+                # used for Python bindings
+                pybind11_mkdoc \\
+                pybind11-stubgen
         """
     )
 
