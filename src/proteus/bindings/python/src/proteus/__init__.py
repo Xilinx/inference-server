@@ -18,7 +18,7 @@ import multiprocessing as mp
 import sys
 import time
 
-from .lib64._proteus import *
+from ._proteus import *
 
 
 def _set_data(input_n, image):

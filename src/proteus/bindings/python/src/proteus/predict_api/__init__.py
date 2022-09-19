@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .lib64._proteus.predict_api import *
+from proteus._proteus.predict_api import *
 
 
 def get_data(request_input: InferenceRequestInput):

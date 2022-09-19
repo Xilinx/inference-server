@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .lib64._proteus.client_operators import *
+from proteus._proteus.client_operators import *

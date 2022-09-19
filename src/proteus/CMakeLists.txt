@@ -156,6 +156,10 @@ if(NOT SKBUILD)
           COMPONENT proteus_Development
   )
 else()
+  # auditwheel needs the location where the compiled libraries are found, which
+  # is CMAKE_CURRENT_BINARY_DIR. I can't install them because then they get
+  # included in the Python package so this file holds this directory which gets
+  # added to LD_LIBRARY_PATH before running auditwheel in cibuildwheel
   file(WRITE ${PROJECT_SOURCE_DIR}/tmp.cmake ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 

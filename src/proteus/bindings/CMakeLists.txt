@@ -1,4 +1,5 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +14,12 @@
 # limitations under the License.
 
 if(${PROTEUS_ENABLE_PYTHON_BINDINGS})
-  find_package(Python COMPONENTS Interpreter Development)
+  # manylinux builds don't include the Python library
+  if(SKBUILD)
+    find_package(Python COMPONENTS Interpreter Development.Module)
+  else()
+    find_package(Python COMPONENTS Interpreter Development)
+  endif()
   find_package(pybind11 CONFIG)
   if(${pybind11_FOUND} AND ${Python_FOUND})
     add_subdirectory(python)

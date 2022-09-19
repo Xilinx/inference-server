@@ -1,5 +1,5 @@
-# Copyright 2021 Xilinx Inc.
-# Copyright 2022 Advanced Micro Devices Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,8 +54,12 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
   set(CMAKE_CXX_LINKER_WRAPPER_FLAG "-Wl,")
   add_link_options("LINKER:--as-needed")
-  add_link_options("LINKER:--no-undefined")
-  add_link_options("LINKER:--no-allow-shlib-undefined")
+  if(NOT SKBUILD)
+    # For manylinux builds, the Python extension is intentionally not linked
+    # against Python at compile time so we need to allow undefined symbols
+    add_link_options("LINKER:--no-undefined")
+    add_link_options("LINKER:--no-allow-shlib-undefined")
+  endif()
   set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Coverage"
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
@@ -158,6 +162,7 @@ endif()
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)
   set(PROTEUS_ENABLE_TRACING OFF)
+  set(PROTEUS_BUILD_TESTING OFF)
 endif()
 
 configure_file(

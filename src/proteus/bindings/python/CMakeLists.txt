@@ -1,4 +1,5 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -133,7 +134,7 @@ include(CMakePackageConfigHelpers)
 install(
   TARGETS proteus_py
   LIBRARY COMPONENT proteus_Runtime
-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  LIBRARY DESTINATION .
 )
 # cmake-format: on
 
