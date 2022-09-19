@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -643,7 +644,7 @@ class Dockerize:
             "--dev-base",
             dest="dev_base",
             action="store",
-            help=f"Name of the image to use as dev image to build the production image.",
+            help="Name of the image to use as dev image to build the production image.",
             default="",
         )
         command_group.add_argument("-h", "--help", action="help", help=help_message)

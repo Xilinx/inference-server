@@ -110,9 +110,7 @@ if(NOT SKBUILD)
   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src
        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
   )
-endif()
 
-if(NOT SKBUILD)
   execute_process(
     COMMAND ${Python_EXECUTABLE} -m site --user-site
     OUTPUT_VARIABLE PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -123,7 +121,8 @@ if(NOT SKBUILD)
     TARGET proteus_py
     POST_BUILD
     COMMAND pip install --prefix ~/.local ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so
+            ${PY_USER_SITE_PACKAGES}/proteus
   )
 endif()
 
