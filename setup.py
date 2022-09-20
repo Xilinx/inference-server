@@ -13,19 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-The setup.py is used for local installation during development. It just installs
-the *.py files in src/ when invoked by CMake and not skbuild. It relies on CMake
-to copy over the pybind11 library to the site-packages.
-
-To build a distributable PyPi package, invoke skbuild from the top-level
-directory instead e.g.:
-    python3 -m pip wheel /some/dir --wheel-dir /another/dir --no-deps
-"""
-
 import os
+import pathlib
 
 import setuptools
+import skbuild
 
 version_path = os.getenv("PROTEUS_ROOT")
 if version_path:
@@ -35,17 +27,21 @@ if version_path:
 else:
     version = "0.0.0"
 
-setuptools.setup(
+package = pathlib.Path("src/proteus/bindings/python/src")
+
+skbuild.setup(
     name="proteus",
     version=version,
     license="Apache 2.0",
-    packages=setuptools.find_packages("src"),
+    packages=setuptools.find_packages(str(package)),
     install_requires=[
         "numpy",
         "opencv-python-headless",
     ],
     python_requires=">=3.6",
-    package_dir={"": "src"},
+    package_dir={"": str(package)},
+    include_package_data=True,
+    cmake_install_dir=str(package / "proteus"),
     package_data={
         "": [
             "*.pyi",

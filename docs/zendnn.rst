@@ -49,7 +49,11 @@ and Docker installed on your machine.
 
 2. Build the docker with TensorFlow/PyTorch+ZenDNN
 
-   To build docker image with TensorFlow/PyTorch+ZenDNN, use the command below:
+   To build docker image with TensorFlow/PyTorch+ZenDNN, use the commands below:
+
+   .. code-block:: console
+      # create a dockerfile
+      $ python3 docker/generate.py
 
    1. For TensorFlow
 

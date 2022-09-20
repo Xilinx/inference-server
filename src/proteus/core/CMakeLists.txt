@@ -33,7 +33,7 @@ endforeach()
 
 target_link_libraries(manager INTERFACE Threads::Threads)
 
-target_link_libraries(predict_api INTERFACE jsoncpp)
+target_link_libraries(api PRIVATE Jsoncpp_lib)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${PROTEUS_ENABLE_VITIS})
   target_link_libraries(data_types INTERFACE xir)

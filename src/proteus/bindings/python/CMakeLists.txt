@@ -1,4 +1,5 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,7 +55,8 @@ if(NOT EXISTS ${dummy_new_file})
   file(WRITE ${dummy_new_file} "")
 endif()
 execute_process(
-  COMMAND sh -c "pip list | grep proteus > /dev/null" RESULT_VARIABLE Result
+  COMMAND sh -c "python3 -c 'import proteus'" RESULT_VARIABLE Result
+  OUTPUT_QUIET ERROR_QUIET
 )
 if(${Result})
   # touch the file to modify it if pip fails to find the package
@@ -101,17 +103,15 @@ else()
   )
 endif()
 
-# copy over Python package source files to the build tree
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/setup.py
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-)
+if(NOT SKBUILD)
+  # copy over Python package source files to the build tree
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/setup.py
+       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+  )
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src
+       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+  )
 
-get_target_property(output_directory_2 proteus_py LIBRARY_OUTPUT_DIRECTORY)
-# i.e. if the regular CMake build is running
-if(NOT output_directory_2)
   execute_process(
     COMMAND ${Python_EXECUTABLE} -m site --user-site
     OUTPUT_VARIABLE PY_USER_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -122,7 +122,8 @@ if(NOT output_directory_2)
     TARGET proteus_py
     POST_BUILD
     COMMAND pip install --prefix ~/.local ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so ${PY_USER_SITE_PACKAGES}
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so
+            ${PY_USER_SITE_PACKAGES}/proteus
   )
 endif()
 
@@ -133,7 +134,7 @@ include(CMakePackageConfigHelpers)
 install(
   TARGETS proteus_py
   LIBRARY COMPONENT proteus_Runtime
-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  LIBRARY DESTINATION .
 )
 # cmake-format: on
 

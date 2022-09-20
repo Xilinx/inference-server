@@ -30,13 +30,15 @@ foreach(target ${targets})
   list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
+target_link_libraries(server PRIVATE Jsoncpp_lib)
+
 if(${PROTEUS_ENABLE_AKS})
   target_link_libraries(server INTERFACE aks)
 endif()
 
 if(${PROTEUS_ENABLE_REST})
-  target_link_libraries(http_server INTERFACE clients Drogon::Drogon)
-  target_link_libraries(websocket_server INTERFACE Drogon::Drogon)
+  target_link_libraries(http_server PUBLIC clients Drogon::Drogon)
+  target_link_libraries(websocket_server PUBLIC Drogon::Drogon)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})

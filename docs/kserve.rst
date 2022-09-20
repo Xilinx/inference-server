@@ -44,6 +44,8 @@ To build the production container [#f1]_:
 
 .. code-block:: console
 
+    # create a dockerfile
+    $ python3 docker/generate.py
     $ ./proteus dockerize --production
 
 Depending on what platforms you want to support, add the appropriate flags to enable ZenDNN or Vitis AI.

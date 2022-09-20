@@ -318,7 +318,7 @@ void v2::ProteusHttpServer::modelLoad(
 }
 
 void v2::ProteusHttpServer::modelUnload(
-  const HttpRequestPtr &req,
+  [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
   PROTEUS_LOG_INFO(logger_, "Received modelUnload request");
@@ -387,7 +387,7 @@ void v2::ProteusHttpServer::workerLoad(
 }
 
 void v2::ProteusHttpServer::workerUnload(
-  const HttpRequestPtr &req,
+  [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
 #ifdef PROTEUS_ENABLE_TRACING

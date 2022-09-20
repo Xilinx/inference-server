@@ -41,8 +41,13 @@ We require `BuildKit <https://docs.docker.com/develop/develop-images/build_enhan
 
 .. code-block:: console
 
+    # create a dockerfile
+    $ python3 docker/generate.py
+    # use the generated Dockerfile to build an image
     $ ./proteus dockerize
 
+The ``generate.py`` script is used to create a dockerfile in the root directory.
+Use ``--help`` to see configurable options for the ``generate.py`` script.
 By default, this builds the stable dev image as ``{username}/proteus-dev``.
 After the image is built, run the container:
 

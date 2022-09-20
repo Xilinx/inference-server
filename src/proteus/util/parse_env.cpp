@@ -30,7 +30,15 @@ void autoExpandEnvironmentVariables(std::string& text) {
   while (std::regex_search(text, match, env)) {
     const char* s = getenv(match[1].str().c_str());
     const std::string var(s == nullptr ? "" : s);
+#if _GLIBCXX_USE_CXX11_ABI == 0
+    auto start = text.begin();
+    std::advance(start, std::distance(text.cbegin(), match[0].first));
+    auto end = text.begin();
+    std::advance(end, std::distance(text.cbegin(), match[0].second));
+    text.replace(start, end, var);
+#else
     text.replace(match[0].first, match[0].second, var);
+#endif
   }
 }
 

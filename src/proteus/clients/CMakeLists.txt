@@ -38,8 +38,9 @@ endforeach()
 target_link_libraries(native INTERFACE batching)
 
 if(${PROTEUS_ENABLE_HTTP})
-  target_link_libraries(http_internal INTERFACE jsoncpp util)
-  target_link_libraries(websocket INTERFACE Drogon::Drogon)
+  target_link_libraries(http_internal PRIVATE Drogon::Drogon INTERFACE util)
+  target_link_libraries(http PRIVATE Drogon::Drogon)
+  target_link_libraries(websocket PRIVATE Drogon::Drogon)
 endif()
 
 if(${PROTEUS_ENABLE_GRPC})
@@ -49,7 +50,7 @@ if(${PROTEUS_ENABLE_GRPC})
   target_include_directories(
     grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )
-  target_link_libraries(grpc INTERFACE lib_grpc)
+  target_link_libraries(grpc PUBLIC lib_grpc)
 endif()
 
 add_library(clients STATIC ${CLIENT_OBJS})

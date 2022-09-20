@@ -22,6 +22,8 @@ external/artifacts
 external/repository
 private/
 src/proteus/bindings/python/dist
+_skbuild
+dist
 
 # files
 **/callgrind.out.*
