@@ -395,7 +395,11 @@ The complete script used here is available: <code class="file docutils literal n
 <p>We need to bring in the AMD Inference Server Python library.
 The library’s source code is in <code class="file docutils literal notranslate"><span class="pre">src/python</span></code> and it gets installed in the dev container on startup.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">import</span> <span class="nn">proteus</span>
+
 </pre></div>
 </div>
 </section>
@@ -443,7 +447,7 @@ We’ll use it to demonstrate the Python flow.</p>
 <p>Once the worker is ready, we can make an inference request to it.
 We construct a request that contains five integers and send it to AMD Inference Server.
 The <code class="docutils literal notranslate"><span class="pre">NumericalInferenceRequest</span></code> class is a helper class that simplifies creating a request in the right format.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">NumericalInferenceRequest</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 </pre></div>
@@ -503,7 +507,7 @@ If there are any loaded workers at this time, they will be cleaned up before shu
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on August 05, 2022.
+        Last updated on September 20, 2022.
       </span>
 
     </p>

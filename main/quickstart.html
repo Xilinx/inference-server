@@ -400,10 +400,15 @@ Production containers only contain the runtime dependencies of the <strong class
 The Docker image can also be built with various options to disable certain components.</p>
 <p>Currently, these images are not pre-built anywhere and so must be built by the user.
 We require <a class="reference external" href="https://docs.docker.com/develop/develop-images/build_enhancements/">BuildKit</a> to build the image so your Docker version should be at least 18.09.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>create a dockerfile
+<span class="gp">$ </span>python3 docker/generate.py
+<span class="gp"># </span>use the generated Dockerfile to build an image
+<span class="gp">$ </span>./proteus dockerize
 </pre></div>
 </div>
-<p>By default, this builds the stable dev image as <code class="docutils literal notranslate"><span class="pre">{username}/proteus-dev</span></code>.
+<p>The <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script is used to create a dockerfile in the root directory.
+Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see configurable options for the <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script.
+By default, this builds the stable dev image as <code class="docutils literal notranslate"><span class="pre">{username}/proteus-dev</span></code>.
 After the image is built, run the container:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus run --dev
 </pre></div>
@@ -494,7 +499,7 @@ $ proteus <span class="nb">test</span>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on August 05, 2022.
+        Last updated on September 20, 2022.
       </span>
 
     </p>

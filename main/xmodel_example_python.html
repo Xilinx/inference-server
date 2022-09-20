@@ -426,7 +426,7 @@ The parameter we add is to pass the path to the XModel that we want to use.</p>
 <p>Now, we can prepare our request.
 In this example, we use one image and duplicate it <em>batch_size</em> times so we can create one whole batch.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path_to_image</span><span class="p">)</span>
     <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 </pre></div>
@@ -438,13 +438,14 @@ In this example, we use one image and duplicate it <em>batch_size</em> times so 
 The <code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest</span></code> class is a helper class that simplifies creating a request in the right format.
 It accepts an image or a list of images and an optional boolean parameter that indicates whether the request should store the images directly as a tensor of RGB values.
 By default, images are saved as base64-encoded strings however the Xmodel worker requires that the data is a tensor so we add <em>True</em>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">request</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-<span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">getError</span><span class="p">()</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-    <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">proteus</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span>
-    <span class="n">recv_data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getInt8Data</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">getError</span><span class="p">()</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">proteus</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span>
+        <span class="n">recv_data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getInt8Data</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The data we receive from the response is a list of numbers.</p>
@@ -464,16 +465,17 @@ Similarly, post-processing can be added after the data is received.
 The pre- and post-processing functions used in this example can be seen in the source file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
 <span class="c1"># Construct the request and send it</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-<span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">getError</span><span class="p">()</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-    <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">proteus</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span>
-    <span class="n">recv_data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getInt8Data</span><span class="p">()</span>
-    <span class="c1"># Can optionally post-process the result</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">postprocess</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">k</span> <span class="o">==</span> <span class="n">gold_response_output</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">getError</span><span class="p">()</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">proteus</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span>
+        <span class="n">recv_data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getInt8Data</span><span class="p">()</span>
+        <span class="c1"># Can optionally post-process the result</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">postprocess</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">k</span> <span class="o">==</span> <span class="n">gold_response_output</span>
 </pre></div>
 </div>
 </section>
@@ -508,7 +510,7 @@ The pre- and post-processing functions used in this example can be seen in the s
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on August 05, 2022.
+        Last updated on September 20, 2022.
       </span>
 
     </p>

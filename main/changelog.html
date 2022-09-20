@@ -307,11 +307,16 @@ function OptanonWrapper() { }
 <li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -398,6 +403,22 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
+<li><p>Allow building Debian package (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/930fab2">&#64;930fab2</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> to the API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/2f4a6c2">&#64;2f4a6c2</a>)</p></li>
+</ul>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use input tensors in requests correctly (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/61">#61</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.2.0">0.2.0</a> - 2022-08-05<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<section id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
 <li><p>HTTP/REST C++ client (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/cbf33b8">&#64;cbf33b8</a>)</p></li>
 <li><p>gRPC API based on KServe v2 API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/37a6aad">&#64;37a6aad</a> and others)</p></li>
 <li><p>TensorFlow/Pytorch + ZenDNN backend (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/17">#17</a> and <a class="reference external" href="https://github.com/Xilinx/inference-server/pull/21">#21</a>)</p></li>
@@ -410,8 +431,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Pre-commit for style verification(<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/048bdd7">&#64;048bdd7</a>)</p></li>
 </ul>
 </section>
-<section id="changed">
-<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this heading">¶</a></h3>
+<section id="id4">
+<h3>Changed<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Use Pybind11 to create Python API (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/20">#20</a>)</p></li>
 <li><p>Two logs are created now: server and client</p></li>
@@ -420,6 +441,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Build AKS from source (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/e04890f">&#64;e04890f</a>)</p></li>
 <li><p>Use consistent custom exceptions (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/30">#30</a>)</p></li>
 <li><p>Update Docker build commands to opt-in to all backends (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/43">#43</a>)</p></li>
+<li><p>Renamed ‘modelLoad’ to ‘workerLoad’ and changed the behavior for ‘modelLoad’ (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/27">#27</a>)</p></li>
 </ul>
 </section>
 <section id="fixed">
@@ -436,10 +458,10 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
-<section id="id3">
-<h3>Added<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<section id="id5">
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h2>
+<section id="id6">
+<h3>Added<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Core inference server functionality</p></li>
 <li><p>Batching support</p></li>
@@ -486,7 +508,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on August 05, 2022.
+        Last updated on September 20, 2022.
       </span>
 
     </p>

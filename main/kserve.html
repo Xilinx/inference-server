@@ -403,7 +403,9 @@ The <a class="reference external" href="https://github.com/prometheus-operator/k
 <p>To use with KServe, we will need to build the production container.
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 To build the production container <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize --production
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>create a dockerfile
+<span class="gp">$ </span>python3 docker/generate.py
+<span class="gp">$ </span>./proteus dockerize --production
 </pre></div>
 </div>
 <p>Depending on what platforms you want to support, add the appropriate flags to enable ZenDNN or Vitis AI.
@@ -562,7 +564,7 @@ On that host:</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on August 05, 2022.
+        Last updated on September 20, 2022.
       </span>
 
     </p>

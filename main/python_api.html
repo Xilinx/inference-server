@@ -415,13 +415,35 @@ function OptanonWrapper() { }
 
 <dl class="py function">
 <dt class="sig sig-object py" id="proteus.mapTypeToXir">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapTypeToXir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_proteus.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xir.DataType</span></span></span><a class="headerlink" href="#proteus.mapTypeToXir" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapTypeToXir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xir.DataType</span></span></span><a class="headerlink" href="#proteus.mapTypeToXir" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="proteus.mapXirType">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapXirType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xir.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_proteus.DataType</span></span></span><a class="headerlink" href="#proteus.mapXirType" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapXirType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xir.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.DataType</span></span></span><a class="headerlink" href="#proteus.mapXirType" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.parallel_infer">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">parallel_infer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.parallel_infer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an inference to the server in parallel with n processes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>proteus.client</em>) – Client to make the inference with</p></li>
+<li><p><strong>model</strong> (<em>str</em>) – Name of the model/worker to make the inference</p></li>
+<li><p><strong>data</strong> (<em>list</em><em>[</em><em>np.ndarray</em><em>]</em>) – List of data to send</p></li>
+<li><p><strong>processes</strong> (<em>int</em>) – number of processes to use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Responses for each request</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[proteus.InferenceResponse]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <section id="clients">
 <h2>Clients<a class="headerlink" href="#clients" title="Permalink to this heading">¶</a></h2>
@@ -463,7 +485,7 @@ function OptanonWrapper() { }
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on August 05, 2022.
+        Last updated on September 20, 2022.
       </span>
 
     </p>
