@@ -659,7 +659,7 @@ def install_migraphx_prod(manager: PackageManager):
             # clean up
             && {manager.remove} \\
                 rsync \\
-            && {code_indent(manager.clean, 12)} \\
+            {code_indent(manager.clean, 12)} \\
             && rm -f /*.{manager.package}"""
     )
 

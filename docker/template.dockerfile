@@ -123,7 +123,7 @@ RUN wget --quiet https://boostorg.jfrog.io/artifactory/main/release/1.65.1/sourc
     && mkdir -p ${INSTALL_DIR} \
     && ./bootstrap.sh --without-libraries=python --prefix=${INSTALL_DIR} \
     && ./b2 install -j $(($(nproc) - 1)) \
-    && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed/\/usr\/local/' > ${MANIFESTS_DIR}/boost.txt \
+    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed/\/usr\/local/' > ${MANIFESTS_DIR}/boost.txt \
     # && CPLUS_INCLUDE_PATH=${PYTHON_ROOT} ./b2 install --with=all -j $(($(nproc) - 1)) \
     && cp -rf ${INSTALL_DIR}/* /usr/local \
     && cat ${MANIFESTS_DIR}/boost.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
@@ -307,7 +307,7 @@ RUN wget --quiet https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.g
     && INSTALL_DIR=/tmp/installed \
     && mkdir -p ${INSTALL_DIR} \
     && make install DESTDIR=${INSTALL_DIR} \
-    && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/ffmpeg.txt \
+    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/ffmpeg.txt \
     && cp -rP ${INSTALL_DIR}/* / \
     && cat ${MANIFESTS_DIR}/ffmpeg.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
     && cd /tmp \
@@ -610,7 +610,7 @@ RUN VERSION=5.3.0 \
     && INSTALL_DIR=/tmp/installed \
     && mkdir -p ${INSTALL_DIR} \
     && make install DESTDIR=${INSTALL_DIR} \
-    && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
+    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
     && cp -rP ${INSTALL_DIR}/* / \
     && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
     && cd /tmp \
