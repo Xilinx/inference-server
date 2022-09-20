@@ -151,6 +151,8 @@ def add_dev_tools(manager: PackageManager):
             && {manager.install} \\
                 ca-certificates \\
                 git \\
+                # need cc for libb64, and gcc gets installed by xrt as a dependency
+                gcc \\
                 make \\
                 # used to get packages
                 wget \\
@@ -172,6 +174,7 @@ def add_compiler(manager: PackageManager):
             gcc-9 \\
             g++-9 \\
         # link gcc-9 and g++-9 to gcc and g++
+        # cannot link cc and c++ as slaves if the gcc package is installed later
         && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 \\
             --slave /usr/bin/g++ g++ /usr/bin/g++-9 \\
             --slave /usr/bin/gcov gcov /usr/bin/gcov-9 \\
@@ -338,7 +341,7 @@ def install_xrt(manager: PackageManager):
                 && cp ./xrt.{manager.package} ${{COPY_DIR}} \\
                 && cp ./xrm.{manager.package} ${{COPY_DIR}} \\
                 # clean up
-                {code_indent(manager.clean, 16)} \\
+                {code_indent(manager.clean, 16)}; \\
             fi;"""
     )
 
@@ -351,10 +354,12 @@ def build_optional():
         RUN wget --quiet https://github.com/linux-test-project/lcov/releases/download/v1.15/lcov-1.15.tar.gz \\
             && tar -xzf lcov-1.15.tar.gz \\
             && cd lcov-1.15 \\
-            && checkinstall -y --pkgname lcov --pkgversion 1.15 --pkgrelease 1 make install \\
+            && INSTALL_DIR=/tmp/installed \\
+            && mkdir -p ${INSTALL_DIR} \\
+            && make install DESTDIR=${INSTALL_DIR} \\
+            && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/lcov.txt \\
+            && cat ${MANIFESTS_DIR}/lcov.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
             && cd /tmp \\
-            && dpkg -L lcov | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && dpkg -L lcov > ${MANIFESTS_DIR}/lcov.txt \\
             && rm -rf /tmp/*
 
         # install wrk for http benchmarking
@@ -608,7 +613,7 @@ def install_migraphx_dev(manager: PackageManager):
             && {manager.remove} \\
                 python3-pip \\
                 rsync \\
-            && {code_indent(manager.clean, 12)} \\
+            {code_indent(manager.clean, 12)} \\
             && rm -f /*.deb"""
     )
 
