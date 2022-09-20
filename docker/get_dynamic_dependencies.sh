@@ -33,6 +33,8 @@ ALL_ARGS=("$@")
 # get the current directory
 # DIR="$( cd "$( dirname "$0" )" && pwd )"
 
+manifests_dir=/usr/local/share/manifests
+
 save_data() {
   if [[ -n $DEPS_FILE ]]; then
     printf '%s\n' "$1" >> $DEPS_FILE
@@ -130,7 +132,7 @@ add_vitis_deps() {
   done
 
   for manifest in ${vitis_manifests[@]}; do
-    lib_paths=$(grep -F .so /usr/local/manifests/$manifest.txt)
+    lib_paths=$(grep -F .so ${manifests_dir}/$manifest.txt)
     for lib in ${lib_paths[@]}; do
       get_dependencies $lib
     done
@@ -190,7 +192,7 @@ add_other_bins() {
   # any other binary dependencies needed
 
   other_files=(
-    /bin/systemctl
+    /usr/bin/systemctl
   )
 
   for bin in ${other_files[@]}; do
@@ -199,10 +201,10 @@ add_other_bins() {
 }
 
 add_proteus_deps() {
-  if test -f /usr/local/manifests/proteus.txt; then
-    files=($(cat /usr/local/manifests/proteus.txt))
-  elif test -f /root/deps/usr/local/manifests/proteus.txt; then
-    files=($(cat /root/deps/usr/local/manifests/proteus.txt))
+  if test -f ${manifests_dir}/proteus.txt; then
+    files=($(cat ${manifests_dir}/proteus.txt))
+  elif test -f /root/deps${manifests_dir}/proteus.txt; then
+    files=($(cat /root/deps${manifests_dir}/proteus.txt))
   elif test -f /tmp/proteus/build/Release/install_manifest.txt; then
     files=($(cat /tmp/proteus/build/Release/install_manifest.txt))
   else

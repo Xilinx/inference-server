@@ -98,7 +98,7 @@ done
 
 
 # if the python package doesn't exist, do a build first for the BUILD variable
-if ! pip list | grep proteus &> /dev/null; then
+if ! python -c 'import proteus' &> /dev/null; then
   cd $root_path
   # use the lowercase value of BUILD as the flag to the build command
   ./proteus build --"${BUILD,,}" --regen --clean

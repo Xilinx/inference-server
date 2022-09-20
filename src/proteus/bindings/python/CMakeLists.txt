@@ -55,7 +55,8 @@ if(NOT EXISTS ${dummy_new_file})
   file(WRITE ${dummy_new_file} "")
 endif()
 execute_process(
-  COMMAND sh -c "pip list | grep proteus > /dev/null" RESULT_VARIABLE Result
+  COMMAND sh -c "python3 -c 'import proteus'" RESULT_VARIABLE Result
+  OUTPUT_QUIET ERROR_QUIET
 )
 if(${Result})
   # touch the file to modify it if pip fails to find the package

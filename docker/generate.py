@@ -291,7 +291,7 @@ def install_optional_build_packages(manager: PackageManager):
             """\
             RUN apt-get update \\
                 && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \\
-                    # used by include-what-you-use to build
+                    # used by include-what-you-use and pybind11_mkdoc
                     libclang-10-dev \\
                     clang-10 \\
                     llvm-10-dev \\
@@ -358,6 +358,7 @@ def build_optional():
             && mkdir -p ${INSTALL_DIR} \\
             && make install DESTDIR=${INSTALL_DIR} \\
             && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/lcov.txt \\
+            && cp -rP ${INSTALL_DIR}/* / \\
             && cat ${MANIFESTS_DIR}/lcov.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \\
             && cd /tmp \\
             && rm -rf /tmp/*
@@ -450,6 +451,7 @@ def install_dev_packages(manager: PackageManager, core):
         packages = textwrap.dedent(
             f"""\
             curl \\
+            file \\
             make \\
             openssh-client \\
             python3 \\
@@ -492,6 +494,7 @@ def install_dev_packages(manager: PackageManager, core):
         packages = textwrap.dedent(
             f"""\
             curl \\
+            file \\
             make \\
             openssh-clients \\
             python3 \\

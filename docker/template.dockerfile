@@ -308,7 +308,7 @@ RUN wget --quiet https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.g
     && mkdir -p ${INSTALL_DIR} \
     && make install DESTDIR=${INSTALL_DIR} \
     && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/ffmpeg.txt \
-    && make install \
+    && cp -rP ${INSTALL_DIR}/* / \
     && cat ${MANIFESTS_DIR}/ffmpeg.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
     && cd /tmp \
     && rm -rf /tmp/*
@@ -611,6 +611,7 @@ RUN VERSION=5.3.0 \
     && mkdir -p ${INSTALL_DIR} \
     && make install DESTDIR=${INSTALL_DIR} \
     && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
+    && cp -rP ${INSTALL_DIR}/* / \
     && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
     && cd /tmp \
     && rm -rf /tmp/*
