@@ -309,7 +309,7 @@ RUN wget --quiet https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.g
     && make install DESTDIR=${INSTALL_DIR} \
     && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/ffmpeg.txt \
     && make install \
-    && cat ${MANIFESTS_DIR}/ffmpeg.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cat ${MANIFESTS_DIR}/ffmpeg.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
     && cd /tmp \
     && rm -rf /tmp/*
 
@@ -611,7 +611,7 @@ RUN VERSION=5.3.0 \
     && mkdir -p ${INSTALL_DIR} \
     && make install DESTDIR=${INSTALL_DIR} \
     && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
-    && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
     && cd /tmp \
     && rm -rf /tmp/*
 
@@ -734,7 +734,7 @@ RUN ldconfig \
     && rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR} \
     # install libproteus.so
     && cd ${PROTEUS_ROOT} \
-    && ./proteus install --all \
+    && ./proteus install \
     && ./proteus install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && ./proteus install --get-manifest > ${MANIFESTS_DIR}/proteus.txt \
     # build the static GUI files

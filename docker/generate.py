@@ -358,7 +358,7 @@ def build_optional():
             && mkdir -p ${INSTALL_DIR} \\
             && make install DESTDIR=${INSTALL_DIR} \\
             && find ${INSTALL_DIR} -type f | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/lcov.txt \\
-            && cat ${MANIFESTS_DIR}/lcov.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
+            && cat ${MANIFESTS_DIR}/lcov.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \\
             && cd /tmp \\
             && rm -rf /tmp/*
 
