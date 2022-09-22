@@ -343,54 +343,47 @@ InferenceRequestPtr RequestBuilder::build(
 
   request->callback_ = nullptr;
 
-  for (auto const &i : inputs) {
-    if (!i.isObject()) {
+  assert(input_buffers.size() == inputs.size());
+  const auto input_num = input_buffers.size();
+  for (auto i = 0U; i < input_num; ++i) {
+    const auto &json_input = inputs[i];
+    if (!json_input.isObject()) {
       throw invalid_argument("At least one element in 'inputs' is not an obj");
     }
-    const auto &buffers = input_buffers;
-    auto index = 0;
-    for (const auto &buffer : buffers) {
-      auto &offset = input_offsets[index];
+    auto *buffer = input_buffers[i];
+    auto &offset = input_offsets[i];
+    auto input = InputBuilder::build(std::make_shared<Json::Value>(json_input),
+                                     buffer, offset);
+    offset += (input.getSize() * input.getDatatype().size());
 
-      auto input =
-        InputBuilder::build(std::make_shared<Json::Value>(i), buffer, offset);
-      offset += (input.getSize() * input.getDatatype().size());
-
-      request->inputs_.push_back(std::move(input));
-      index++;
-    }
+    request->inputs_.push_back(std::move(input));
   }
 
   // TODO(varunsh): output_offset is currently ignored! The size of the output
   // needs to come from the worker but we have no such information.
+  const auto output_num = output_buffers.size();
   if (req->isMember("outputs")) {
     auto outputs = req->get("outputs", Json::arrayValue);
-    for (auto const &i : outputs) {
-      const auto &buffers = output_buffers;
-      auto index = 0;
-      for (auto &buffer : buffers) {
-        auto &offset = output_offsets[index];
+    assert(output_buffers.size() == outputs.size());
+    for (auto i = 0U; i < output_num; ++i) {
+      const auto &json_output = outputs[i];
+      auto *buffer = output_buffers[i];
+      auto &offset = output_offsets[i];
 
-        auto output = OutputBuilder::build(std::make_shared<Json::Value>(i));
-        output.setData(static_cast<std::byte *>(buffer->data()) + offset);
-        request->outputs_.push_back(std::move(output));
-        // output += request->outputs_.back().getSize(); // see TODO
-        index++;
-      }
+      auto output =
+        OutputBuilder::build(std::make_shared<Json::Value>(json_output));
+      output.setData(static_cast<std::byte *>(buffer->data()) + offset);
+      request->outputs_.push_back(std::move(output));
+      // output += request->outputs_.back().getSize(); // see TODO
     }
   } else {
-    for (auto const &i : inputs) {
-      (void)i;  // suppress unused variable warning
-      const auto &buffers = output_buffers;
-      auto index = 0;
-      for (const auto &buffer : buffers) {
-        const auto &offset = output_offsets[index];
+    for (auto i = 0U; i < output_num; ++i) {
+      auto *buffer = output_buffers[i];
+      const auto &offset = output_offsets[i];
 
-        request->outputs_.emplace_back();
-        request->outputs_.back().setData(
-          static_cast<std::byte *>(buffer->data()) + offset);
-        index++;
-      }
+      request->outputs_.emplace_back();
+      request->outputs_.back().setData(
+        static_cast<std::byte *>(buffer->data()) + offset);
     }
   }
 

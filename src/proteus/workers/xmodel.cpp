@@ -1,4 +1,5 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2021 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,13 +77,7 @@ namespace workers {
  */
 class XModel : public Worker {
  public:
-  XModel() : Worker("XModel", "XModel") {
-    this->subgraph_ = nullptr;
-    this->input_type_ = DataType::UINT32;
-    this->input_size_ = 0;
-    this->output_type_ = DataType::UINT8;
-    this->output_size_ = 0;
-  }
+  XModel() : Worker("XModel", "XModel") {}
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
@@ -97,13 +92,11 @@ class XModel : public Worker {
   vart::RunnerExt* getRunner();
 
   std::unique_ptr<xir::Graph> graph_;
-  const xir::Subgraph* subgraph_;
+  const xir::Subgraph* subgraph_ = nullptr;
   std::string kernel_;
   std::unique_ptr<vart::Runner> runner_;
-  DataType input_type_;
-  uint32_t input_size_;
-  DataType output_type_;
-  uint32_t output_size_;
+  std::vector<DataType> output_type_;
+  std::vector<uint32_t> output_size_;
   ctpl::thread_pool pool_;
 };
 
@@ -137,10 +130,9 @@ void XModel::doInit(RequestParameters* parameters) {
   util::autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);
 
-  std::vector<xir::Subgraph*> subgraphs =
-    graph_->get_root_subgraph()->children_topological_sort();
-  auto dpu_graphs = std::vector<const xir::Subgraph*>();
-  for (auto* c : subgraphs) {
+  auto subgraphs = graph_->get_root_subgraph()->children_topological_sort();
+  std::vector<const xir::Subgraph*> dpu_graphs;
+  for (const auto* c : subgraphs) {
     // CHECK(c->has_attr("device"));
     auto device = c->get_attr<std::string>("device");
     if (device == "DPU") {
@@ -148,7 +140,11 @@ void XModel::doInit(RequestParameters* parameters) {
     }
   }
   // TODO(varunsh): we want to eventually support arbitrary numbers of dpu
-  // graphs
+  // graphs but may need model chaining for that
+  if (dpu_graphs.size() > 1) {
+    throw invalid_argument("Unsupported XModel with more than 1 DPU subgraph");
+  }
+
   this->subgraph_ = dpu_graphs[0];
   if (this->subgraph_->has_attr("dpu_fingerprint")) {
     const auto fingerprint =
@@ -157,28 +153,6 @@ void XModel::doInit(RequestParameters* parameters) {
   } else {
     this->kernel_ = this->subgraph_->get_attr<std::string>("kernel");
   }
-
-  runner_ = vart::Runner::create_runner(this->subgraph_, "run");
-  auto input_tensors = runner_->get_input_tensors();
-  auto input_shape =
-    input_tensors[0]->get_shape();  //! assuming only one tensor
-  input_type_ = mapXirToType(input_tensors[0]->get_data_type());
-  // +1 to skip the batch size
-  input_size_ = std::accumulate(input_shape.begin() + 1, input_shape.end(), 1,
-                                std::multiplies<>());
-  this->batch_size_ = input_shape[0];
-
-  auto output_tensors = runner_->get_output_tensors();
-  auto output_shape =
-    output_tensors[0]->get_shape();  //! assuming only one tensor
-  output_type_ = mapXirToType(output_tensors[0]->get_data_type());
-  // +1 to skip the batch size
-  output_size_ = std::accumulate(output_shape.begin() + 1, output_shape.end(),
-                                 1, std::multiplies<>());
-
-  this->metadata_.addInputTensor("input", this->input_type_, input_shape);
-  // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", this->output_type_, output_shape);
 }
 
 size_t XModel::doAllocate(size_t num) {
@@ -188,8 +162,13 @@ size_t XModel::doAllocate(size_t num) {
 
   for (size_t i = 0; i < buffer_num; i++) {
     BufferPtrs vec;
-    auto input_tensors = runner_->get_input_tensors();
-    for (const auto& tensor : input_tensors) {
+    auto input_tensors = subgraph_->get_sorted_input_tensors();
+    if (input_tensors.size() > 1) {
+      // rt-engine/vart does not support more than one input tensor
+      throw(
+        invalid_argument("Unsupported XModel with more than one input tensor"));
+    }
+    for (const auto* tensor : input_tensors) {
       auto input_shape = tensor->get_shape();
       auto input_type = tensor->get_data_type();
       vec.emplace_back(std::make_unique<VartTensorBuffer>(
@@ -199,8 +178,8 @@ size_t XModel::doAllocate(size_t num) {
   }
   for (size_t i = 0; i < buffer_num; i++) {
     BufferPtrs vec;
-    auto output_tensors = runner_->get_output_tensors();
-    for (const auto& tensor : output_tensors) {
+    auto output_tensors = subgraph_->get_sorted_output_tensors();
+    for (const auto* tensor : output_tensors) {
       auto input_shape = tensor->get_shape();
       auto input_type = tensor->get_data_type();
       vec.emplace_back(std::make_unique<VartTensorBuffer>(
@@ -219,6 +198,26 @@ void XModel::doAcquire(RequestParameters* parameters) {
     threads = parameters->get<int32_t>("threads");
   }
   this->pool_.resize(threads);
+
+  runner_ = vart::Runner::create_runner(this->subgraph_, "run");
+  auto input_tensors = runner_->get_input_tensors();
+  // assuming only one tensor as in doInit()
+  auto input_shape = input_tensors[0]->get_shape();
+  auto input_type = mapXirToType(input_tensors[0]->get_data_type());
+  this->batch_size_ = input_shape[0];
+  this->metadata_.addInputTensor("input", input_type, input_shape);
+
+  auto output_tensors = runner_->get_output_tensors();
+  for (const auto* tensor : output_tensors) {
+    auto output_shape = tensor->get_shape();
+    output_type_.emplace_back(mapXirToType(tensor->get_data_type()));
+    // +1 to skip the batch size
+    output_size_.emplace_back(std::accumulate(
+      output_shape.begin() + 1, output_shape.end(), 1, std::multiplies<>()));
+    // TODO(varunsh): what should we return here?
+    this->metadata_.addOutputTensor("output", output_type_.back(),
+                                    output_shape);
+  }
 }
 
 void XModel::doRun(BatchPtrQueue* input_queue) {
@@ -272,15 +271,10 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         outputsPtr.emplace_back(vart->getTensorBuffer());
       }
 
-      // FIXME(varunsh): there's a bug in rt-engine where calling sync_for_*()
-      // functions for DPUCADF8H results in wrong inferences. The bug has been
-      // identified and fixed so this check can be removed once it's live
-      if (this->kernel_ != "DPUCADF8H") {
-        for (auto* input : inputsPtr) {
-          const auto* tensor = input->get_tensor();
-          input->sync_for_write(
-            0, tensor->get_element_num() / (tensor->get_shape())[0]);
-        }
+      for (auto* input : inputsPtr) {
+        const auto* tensor = input->get_tensor();
+        input->sync_for_write(
+          0, tensor->get_element_num() / (tensor->get_shape())[0]);
       }
 
       futures.push(getRunner()->execute_async(inputsPtr, outputsPtr));
@@ -300,28 +294,25 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         getRunner()->wait(job_id.first, -1);
       }
 
-      if (this->kernel_ != "DPUCADF8H") {
-        for (auto* output : outputsPtr) {
-          const auto* tensor = output->get_tensor();
-          output->sync_for_read(
-            0, tensor->get_element_num() / (tensor->get_shape())[0]);
-        }
+      for (auto* output : outputsPtr) {
+        const auto* tensor = output->get_tensor();
+        output->sync_for_read(
+          0, tensor->get_element_num() / (tensor->get_shape())[0]);
       }
 
-      for (unsigned int k = 0; k < batch->size(); k++) {
+      const auto num_batches = batch->size();
+      for (unsigned int k = 0; k < num_batches; k++) {
         const auto& req = batch->getRequest(k);
         auto inputs = req->getInputs();
         auto outputs = req->getOutputs();
         auto& resp = responses[k];
 
-        auto tensor_count = 0U;
-        for (unsigned int i = 0; i < inputs.size(); i++) {
-          // TODO(varunsh): assuming 1 output tensor (per 1 input)!
-          auto* output_index = output_buffers[0]->data();
+        const auto num_outputs = outputs.size();
+        for (unsigned int i = 0; i < num_outputs; i++) {
+          auto* output_index = output_buffers[i]->data();
           InferenceResponseOutput output;
           auto output_tensors = getRunner()->get_output_tensors();
-          auto output_shape =
-            output_tensors[0]->get_shape();  //! assuming only one tensor
+          auto output_shape = output_tensors[i]->get_shape();
           std::vector<uint64_t> new_shape;
           new_shape.reserve(output_shape.size() - 1);
           for (size_t j = 0; j < output_shape.size() - 1; j++) {
@@ -329,26 +320,25 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           }
           output.setShape(new_shape);
 
-          output.setDatatype(this->output_type_);
+          output.setDatatype(this->output_type_[i]);
 
           std::vector<std::byte> buffer;
-          buffer.resize(this->output_size_ * sizeof(uint8_t));
+          buffer.resize(this->output_size_[i] * sizeof(uint8_t));
           memcpy(buffer.data(),
                  reinterpret_cast<int8_t*>(output_index) +
-                   (tensor_count * this->output_size_),
-                 this->output_size_ * sizeof(uint8_t));
+                   (i * this->output_size_[i]),
+                 this->output_size_[i] * sizeof(uint8_t));
           output.setData(std::move(buffer));
 
           std::string output_name = outputs[i].getName();
 
           if (output_name.empty()) {
-            output.setName(inputs[i].getName());
+            output.setName(inputs[0].getName());
           } else {
             output.setName(output_name);
           }
 
           resp.addOutput(output);
-          tensor_count++;
         }
 
 #ifdef PROTEUS_ENABLE_TRACING

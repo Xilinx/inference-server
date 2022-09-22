@@ -434,7 +434,7 @@ def install_dev_packages(manager: PackageManager, core):
                 # used for auto-completing bash commands
                     bash-completion \\
                     # used for git
-                    gpg \\
+                    gnupg2 \\
                     # install debugging tools
                     gdb \\
                     valgrind \\
@@ -477,7 +477,7 @@ def install_dev_packages(manager: PackageManager, core):
                 # used for auto-completing bash commands
                     bash-completion \\
                     # used for git
-                    gpg \\
+                    gnupg \\
                     # install debugging tools
                     gdb \\
                     valgrind \\
