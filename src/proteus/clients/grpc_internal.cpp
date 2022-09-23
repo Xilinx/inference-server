@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -114,6 +115,10 @@ struct AddDataToTensor {
     auto* contents = getTensorContents<T>(tensor);
     if constexpr (std::is_same_v<T, char>) {
       contents->Add(data);
+    } else if constexpr (std::is_same_v<T, fp16>) {
+      for (auto i = 0U; i < size; ++i) {
+        contents->Add(static_cast<float>(data[i]));
+      }
     } else {
       for (auto i = 0U; i < size; ++i) {
         contents->Add(data[i]);
@@ -175,6 +180,9 @@ struct SetOutputData {
       } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
         bytes_to_copy = size * sizeof(int32_t);
         output->setDatatype(DataType::INT32);
+      } else if constexpr (util::is_any_v<T, fp16>) {
+        bytes_to_copy = size * sizeof(float);
+        output->setDatatype(DataType::FP32);
       } else {
         bytes_to_copy = size * sizeof(T);
       }

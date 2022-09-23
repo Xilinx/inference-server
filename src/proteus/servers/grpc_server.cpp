@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -208,8 +209,8 @@ struct WriteData {
                                  float, double, char>) {
       auto* dest = static_cast<std::byte*>(buffer->data(offset));
       std::memcpy(dest, contents, size * sizeof(T));
-    } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, int8_t,
-                                        int16_t>) {
+    } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, int8_t, int16_t,
+                                        fp16>) {
       for (size_t i = 0; i < size; i++) {
         offset = buffer->write(static_cast<T>(contents[i]), offset);
       }
