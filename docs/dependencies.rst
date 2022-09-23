@@ -178,6 +178,17 @@ The following packages are installed from Github.
     :github:`Xilinx/Vitis-AI`,latest,Apache 2.0,VART is dynamically linked by proteus-server\ :superscript:`a 1`
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking proteus-server\ :superscript:`d 0`
 
+Others
+^^^^^^
+
+The following packages are installed from other online sources.
+
+.. csv-table::
+    :header: Name,Version,License,Usage
+    :widths: auto
+
+    `half <https://sourceforge.net/projects/half/>`__,2.2.0,MIT,Used for fp16 datatype
+
 Xilinx
 ^^^^^^
 
