@@ -25,14 +25,15 @@ sys.path.insert(0, os.path.join(root_path, "examples/python"))
 from utils.utils import postprocess, preprocess
 
 
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "TfZendnn"
+@pytest.mark.extensions(["tfzendnn"])
+@pytest.mark.usefixtures("load")
+class TestTfZendnn:
+    """
+    Test the TfZendnn worker
+    """
 
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {
+    model = "TfZendnn"
+    parameters = {
         "model": str(
             root_path / "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb"
         ),
@@ -44,14 +45,6 @@ def parameters_fixture():
         "intra_op": 1,
         "batch_size": 8,
     }
-
-
-@pytest.mark.extensions(["tfzendnn"])
-@pytest.mark.usefixtures("load")
-class TestTfZendnn:
-    """
-    Test the TfZendnn worker
-    """
 
     def send_request(self, request, check_asserts=True):
         """
@@ -67,7 +60,7 @@ class TestTfZendnn:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -114,10 +107,11 @@ class TestTfZendnn:
             assert (top_k == gold_response_output).all()
 
     @pytest.mark.benchmark(group="TfZendnn")
-    def test_benchmark_tfzendnn(self, benchmark, model_fixture, parameters_fixture):
+    def test_benchmark_tfzendnn(self, benchmark):
 
         batch_size = 16
-        input_size = parameters_fixture.get("input_size")
+        assert self.parameters is not None
+        input_size = self.parameters.get("input_size")
         images = np.random.uniform(
             0.0, 255.0, (batch_size, input_size, input_size, 3)
         ).astype(np.float32)
@@ -126,8 +120,8 @@ class TestTfZendnn:
         request = proteus.ImageInferenceRequest(images, True)
 
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

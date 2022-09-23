@@ -248,14 +248,19 @@ def server(xprocess):
 
 
 @pytest.fixture(scope="class")
-def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
+def load(request, rest_client, server):
+    test_model: str = request.cls.model
+    test_parameters: dict = request.cls.parameters
+
+    assert test_model
+
     parameters = proteus.RequestParameters()
-    if parameters_fixture is not None:
-        for key, value in parameters_fixture.items():
+    if test_parameters is not None:
+        for key, value in test_parameters.items():
             parameters.put(key, value)
 
-    response = rest_client.workerLoad(model_fixture, parameters)
-    request.cls.model = response
+    response = rest_client.workerLoad(test_model, parameters)
+    request.cls.endpoint = response
 
     while not rest_client.modelReady(response):
         time.sleep(1)

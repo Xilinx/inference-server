@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,16 +23,6 @@ from helper import root_path, run_benchmark
 import proteus
 
 
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "Xmodel"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return None
-
-
 @pytest.mark.extensions(["vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
@@ -39,6 +30,9 @@ class TestXmodel:
     """
     Test the Xmodel worker
     """
+
+    model = "Xmodel"
+    parameters = None
 
     def send_request(self, request, check_asserts=True):
         """
@@ -54,7 +48,7 @@ class TestXmodel:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -169,7 +163,7 @@ class TestXmodel:
             assert k == gold_response_output
 
     @pytest.mark.benchmark(group="xmodel")
-    def test_benchmark_xmodel(self, benchmark, model_fixture, parameters_fixture):
+    def test_benchmark_xmodel(self, benchmark):
         image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
         print(image_path)
 
@@ -193,8 +187,8 @@ class TestXmodel:
         request = proteus.ImageInferenceRequest(images, True)
 
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

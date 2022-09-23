@@ -69,26 +69,19 @@ def preprocess(img_data):
     return norm_img_data
 
 
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "Migraphx"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {
-        "model": str(
-            root_path / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
-        )
-    }
-
-
 @pytest.mark.extensions(["migraphx"])
 @pytest.mark.usefixtures("load")
 class TestMigraphx:
     """
     Test the Migraphx worker
     """
+
+    model = "Migraphx"
+    parameters = {
+        "model": str(
+            root_path / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
+        )
+    }
 
     def send_request(self, request, check_asserts=True):
         """
@@ -104,7 +97,7 @@ class TestMigraphx:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -154,25 +147,3 @@ class TestMigraphx:
             for i, top_k in enumerate(top_k_responses):
                 # Look for the top 5 categories (not underlying scores)
                 assert (top_k == gold_responses[i % image_num]).all()
-
-    @pytest.mark.benchmark(group="Migraphx")
-    def test_benchmark_Migraphx(self, benchmark, model_fixture, parameters_fixture):
-
-        batch_size = 1
-        input_size = parameters_fixture.get("input_size")
-        images = np.random.uniform(
-            0.0, 255.0, (batch_size, input_size, input_size, 3)
-        ).astype(np.float32)
-        images = [image for image in images]
-
-        request = proteus.ImageInferenceRequest(images, True)
-
-        options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
-            "type": "rest (pytest)",
-            "config": "N/A",
-        }
-        run_benchmark(
-            benchmark, "Migraphx", self.rest_client.modelInfer, request, **options
-        )

@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,19 +22,6 @@ from proteus.predict_api import InferenceRequest, InferenceRequestInput
 import proteus
 
 
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "AksDetectStream"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {
-        "aks_graph_name": "facedetect",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json",
-    }
-
-
 @pytest.mark.extensions(["aks", "vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
@@ -41,6 +29,12 @@ class TestFacedetectStream:
     """
     Test the streaming version of facedetect
     """
+
+    model = "AksDetectStream"
+    parameters = {
+        "aks_graph_name": "facedetect",
+        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json",
+    }
 
     def construct_request(self, requested_frames_count):
         video_path = str(root_path / "tests/assets/Physicsworks.ogv")
@@ -60,7 +54,7 @@ class TestFacedetectStream:
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 
-        self.ws_client.modelInferWs(self.model, request)
+        self.ws_client.modelInferWs(self.endpoint, request)
         response_str = self.ws_client.modelRecv()
         try:
             response = json.loads(response_str)

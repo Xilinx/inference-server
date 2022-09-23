@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +20,6 @@ from helper import root_path, run_benchmark
 import proteus
 
 
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "AksDetect"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {
-        "aks_graph_name": "facedetect",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json",
-    }
-
-
 @pytest.mark.extensions(["aks", "vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
@@ -39,6 +27,12 @@ class TestInferImageFacedetectDPUCADF8H:
     """
     Test the facedetect worker
     """
+
+    model = "AksDetect"
+    parameters = {
+        "aks_graph_name": "facedetect",
+        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json",
+    }
 
     def send_request(self, request, check_asserts=True):
         """
@@ -54,7 +48,7 @@ class TestInferImageFacedetectDPUCADF8H:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except proteus.ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -106,13 +100,11 @@ class TestInferImageFacedetectDPUCADF8H:
         self.send_request(request)
 
     @pytest.mark.benchmark(group="facedetect_dpucadf8h")
-    def test_benchmark_facedetect_dpucadf8h_1(
-        self, benchmark, model_fixture, parameters_fixture
-    ):
+    def test_benchmark_facedetect_dpucadf8h_1(self, benchmark):
         request = self.construct_request(False)
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

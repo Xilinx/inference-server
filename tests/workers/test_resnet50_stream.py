@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,16 +22,6 @@ from proteus.predict_api import InferenceRequest, InferenceRequestInput
 import proteus
 
 
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "Resnet50Stream"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return None
-
-
 @pytest.mark.extensions(["aks", "vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
@@ -38,6 +29,9 @@ class TestResnet50Stream:
     """
     Test the Resnet50Stream
     """
+
+    model = "Resnet50Stream"
+    parameters = None
 
     def construct_request(self, requested_frames_count):
         video_path = str(root_path / "tests/assets/Physicsworks.ogv")
@@ -57,7 +51,7 @@ class TestResnet50Stream:
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 
-        self.ws_client.modelInferWs(self.model, request)
+        self.ws_client.modelInferWs(self.endpoint, request)
         response_str = self.ws_client.modelRecv()
         response = json.loads(response_str)
 
