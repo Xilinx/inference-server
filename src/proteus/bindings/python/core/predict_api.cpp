@@ -215,6 +215,7 @@ void wrapPredictApi(py::module_ &m) {
     .def("setInt16Data", &setData<int16_t>, py::keep_alive<1, 2>())
     .def("setInt32Data", &setData<int32_t>, py::keep_alive<1, 2>())
     .def("setInt64Data", &setData<int64_t>, py::keep_alive<1, 2>())
+    .def("setFp16Data", &setData<proteus::fp16>, py::keep_alive<1, 2>())
     .def("setFp32Data", &setData<float>, py::keep_alive<1, 2>())
     .def("setFp64Data", &setData<double>, py::keep_alive<1, 2>())
     .def(
@@ -234,6 +235,7 @@ void wrapPredictApi(py::module_ &m) {
     .def("getInt16Data", &getData<int16_t>, py::keep_alive<0, 1>())
     .def("getInt32Data", &getData<int32_t>, py::keep_alive<0, 1>())
     .def("getInt64Data", &getData<int64_t>, py::keep_alive<0, 1>())
+    .def("getFp16Data", &getData<proteus::fp16>, py::keep_alive<0, 1>())
     .def("getFp32Data", &getData<float>, py::keep_alive<0, 1>())
     .def("getFp64Data", &getData<double>, py::keep_alive<0, 1>())
     .def("getStringData", &getData<char>, py::keep_alive<0, 1>())

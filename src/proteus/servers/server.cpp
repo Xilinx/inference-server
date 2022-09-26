@@ -124,7 +124,7 @@ void Server::stopHttp() const {
 }
 
 void Server::startGrpc([[maybe_unused]] uint16_t port) const {
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef PROTEUS_ENABLE_GRPC
   if (!impl_->grpc_started_) {
     grpc::start(port);
     impl_->grpc_started_ = true;

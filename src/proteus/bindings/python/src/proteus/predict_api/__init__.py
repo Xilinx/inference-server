@@ -39,7 +39,7 @@ def get_data(request_input: InferenceRequestInput):
     if datatype == DataType.INT64:
         return request_input.getInt64Data()
     if datatype == DataType.FP16:
-        raise NotImplementedError("FP16 datatype not supported")
+        return request_input.getFp16Data()
     if datatype == DataType.FP32:
         return request_input.getFp32Data()
     if datatype == DataType.FP64:

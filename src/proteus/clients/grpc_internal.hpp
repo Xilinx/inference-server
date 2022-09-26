@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -92,7 +93,7 @@ constexpr auto* getTensorContents(Tensor* tensor) {
     } else {
       return tensor->mutable_contents()->mutable_int64_contents();
     }
-  } else if constexpr (util::is_any_v<T, float>) {
+  } else if constexpr (util::is_any_v<T, fp16, float>) {
     if constexpr (std::is_const_v<Tensor>) {
       return tensor->contents().fp32_contents().data();
     } else {

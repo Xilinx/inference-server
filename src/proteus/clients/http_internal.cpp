@@ -105,7 +105,7 @@ constexpr auto jsonValueToType(const Json::Value &datum) {
     return datum.asInt();
   } else if constexpr (std::is_same_v<T, int64_t>) {
     return datum.asInt64();
-  } else if constexpr (util::is_any_v<T, float>) {
+  } else if constexpr (util::is_any_v<T, fp16, float>) {
     return datum.asFloat();
   } else if constexpr (std::is_same_v<T, double>) {
     return datum.asDouble();
@@ -185,6 +185,8 @@ struct SetInputData {
                                             uint32_t, int8_t, int16_t, int32_t,
                                             float, double>) {
           return data_ptr[index];
+        } else if constexpr (util::is_any_v<T, fp16>) {
+          return half_float::half_cast<float>(data_ptr[index]);
         } else {
           static_assert(!sizeof(T), "Invalid type to SetInputData");
         }

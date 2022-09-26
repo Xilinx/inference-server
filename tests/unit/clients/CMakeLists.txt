@@ -1,4 +1,4 @@
-# Copyright 2022 Xilinx, Inc.
+# Copyright 2021 Xilinx, Inc.
 # Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-add_subdirectory(buffers)
-add_subdirectory(clients)
-add_subdirectory(client_operators)
-add_subdirectory(core)
+if(${PROTEUS_ENABLE_GRPC})
+
+  list(APPEND tests grpc_internal)
+  list(APPEND tests_libs "grpc_internal~lib_grpc~predict_api~data_types")
+  proteus_add_unit_tests("${tests}" "${tests_libs}")
+
+  proteus_get_test_target(grpc_internal_target grpc_internal)
+  target_include_directories(
+    ${grpc_internal_target}
+    PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
+  )
+
+endif()

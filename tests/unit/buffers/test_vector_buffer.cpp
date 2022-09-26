@@ -31,24 +31,24 @@ constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
 
 struct WriteData {
   template <typename T>
-  size_t operator()(Buffer* buffer, T value, size_t offset) const {
+  size_t operator()(Buffer* buffer, int value, size_t offset) const {
     if constexpr (std::is_same_v<T, char>) {
       (void)buffer, (void)value, (void)offset;
       return offset;
     } else {
-      return buffer->write(value, offset);
+      return buffer->write(static_cast<T>(value), offset);
     }
   }
 };
 
 struct ReadData {
   template <typename T>
-  void operator()(Buffer* buffer, size_t offset, T golden) const {
+  void operator()(Buffer* buffer, size_t offset, int golden) const {
     if constexpr (std::is_same_v<T, char>) {
       (void)buffer, (void)offset, (void)golden;
       FAIL() << "Unhandled datatype: char ";
     } else {
-      EXPECT_EQ(*static_cast<T*>(buffer->data(offset)), golden);
+      EXPECT_EQ(*static_cast<T*>(buffer->data(offset)), static_cast<T>(golden));
     }
   }
 };
@@ -93,14 +93,13 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {
   }
 }
 
-// we exclude FP16 and STRING. FP16 isn't supported and STRING doesn't have
-// a defined size we can pre-allocate
+// we exclude STRING as it doesn't have a defined size we can pre-allocate
 DataType datatypes[] = {proteus::DataType::BOOL,   proteus::DataType::UINT8,
                         proteus::DataType::UINT16, proteus::DataType::UINT32,
                         proteus::DataType::UINT64, proteus::DataType::INT8,
                         proteus::DataType::INT16,  proteus::DataType::INT32,
-                        proteus::DataType::INT64,  proteus::DataType::FP32,
-                        proteus::DataType::FP64};
+                        proteus::DataType::INT64,  proteus::DataType::FP16,
+                        proteus::DataType::FP32,   proteus::DataType::FP64};
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitVectorBufferFixture,
                          testing::ValuesIn(datatypes));
 

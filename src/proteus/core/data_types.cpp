@@ -96,6 +96,7 @@ xir::DataType mapTypeToXir(DataType type) {
     case DataType::INT64:
       retval.type = xir::DataType::INT;
       break;
+    // case DataType::FP16 fall through to default handler
     case DataType::FP32:
     case DataType::FP64:
       retval.type = xir::DataType::FLOAT;

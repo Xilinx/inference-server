@@ -26,6 +26,7 @@
 #include <iostream>  // for ostream
 #include <string>    // for string
 
+#include "half/half.hpp"                // for half
 #include "proteus/build_options.hpp"    // for PROTEUS_ENABLE_VITIS
 #include "proteus/core/exceptions.hpp"  // for invalid_argument
 
@@ -45,6 +46,8 @@ constexpr unsigned int hash(const char* s, int off = 0) {
   return !s[off] ? 5381 : (hash(s, off + 1) * 33) ^ s[off];
 }
 }  // namespace detail
+
+using fp16 = half_float::half;
 
 /**
  * @brief Data types supported in Proteus
@@ -84,9 +87,6 @@ class DataType {
    * @return constexpr size_t
    */
   constexpr size_t size() const {
-    /// size of FP16 in bytes
-    constexpr auto kFp16Size = 2U;
-
     switch (value_) {
       case DataType::BOOL:
         return sizeof(bool);
@@ -107,7 +107,7 @@ class DataType {
       case DataType::INT64:
         return sizeof(int64_t);
       case DataType::FP16:
-        return kFp16Size;
+        return sizeof(fp16);
       case DataType::FP32:
         return sizeof(float);
       case DataType::FP64:
@@ -201,62 +201,46 @@ auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
   switch (type) {
     case DataType::BOOL: {
       return f.template operator()<bool>(args...);
-      break;
     }
     case DataType::UINT8: {
       return f.template operator()<uint8_t>(args...);
-      break;
     }
     case DataType::UINT16: {
       return f.template operator()<uint16_t>(args...);
-      break;
     }
     case DataType::UINT32: {
       return f.template operator()<uint32_t>(args...);
-      break;
     }
     case DataType::UINT64: {
       return f.template operator()<uint64_t>(args...);
-      break;
     }
     case DataType::INT8: {
       return f.template operator()<int8_t>(args...);
-      break;
     }
     case DataType::INT16: {
       return f.template operator()<int16_t>(args...);
-      break;
     }
     case DataType::INT32: {
       return f.template operator()<int32_t>(args...);
-      break;
     }
     case DataType::INT64: {
       return f.template operator()<int64_t>(args...);
-      break;
     }
     case DataType::FP16: {
-      std::cout << "FP16 not supported\n";
-      break;
+      return f.template operator()<fp16>(args...);
     }
     case DataType::FP32: {
       return f.template operator()<float>(args...);
-      break;
     }
     case DataType::FP64: {
       return f.template operator()<double>(args...);
-      break;
     }
     case DataType::STRING: {
       return f.template operator()<char>(args...);
-      break;
     }
     default:
-      // TODO(varunsh): what should we do here?
-      std::cout << "Unknown datatype\n";
-      break;
+      throw invalid_argument("Unknown datatype passed");
   }
-  throw invalid_argument("Unknown datatype passed");
 }
 
 #ifdef PROTEUS_ENABLE_VITIS
