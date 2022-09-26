@@ -445,10 +445,11 @@ RUN git clone https://github.com/SpartanJ/efsw.git \
     && cat install_manifest.txt > ${MANIFESTS_DIR}/efsw.txt \
     && cd /tmp && rm -fr /tmp/*
 
+# install half for FP16 data type
 RUN wget -O half_2.2.0.zip https://sourceforge.net/projects/half/files/latest/download \
     && unzip half_2.2.0.zip -d half \
-    && mkdir -p /usr/local/include/half \
-    && mv half/include/half.hpp /usr/local/include/half \
+    && mkdir -p ${COPY_DIR}/usr/local/include/half \
+    && mv half/include/half.hpp ${COPY_DIR}/usr/local/include/half \
     && cd /tmp && rm -fr /tmp/*
 
 # install doxygen 1.9.2
