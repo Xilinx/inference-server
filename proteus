@@ -702,54 +702,6 @@ class Dockerize:
 
 class Get:
     @staticmethod
-    def _download(args, url, tmp_dir, location, filename):
-        if args.dry_run:
-            print(f"Downloading {filename} from {url} to {location}")
-            return
-        with open(tmp_dir / filename, "wb") as f:
-            req = urllib.request.Request(url)
-            # need to specify the user-agent for accessing wikimedia
-            req.add_header("User-Agent", f"proteus {get_version()}")
-            response = urllib.request.urlopen(req)
-            f.write(response.read())
-
-        filepath = str(tmp_dir / filename)
-        if filename.endswith("tar.gz"):
-            tar_file = tarfile.open(filepath, mode="r:gz")
-            tar_file.extractall(location)
-        elif filename.endswith("zip"):
-            with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
-                zip_ref.extractall(str(tmp_dir))
-            model_path = str(tmp_dir / filename.split(".zip")[0] / "float/")
-            for filename in os.listdir(model_path):
-                modelname = (
-                    filename
-                    if filename.endswith("pb") or filename.endswith("pth")
-                    else None
-                )
-            if not os.path.exists(location):
-                os.makedirs(location)
-            shutil.move(
-                os.path.join(model_path, modelname),
-                os.path.join(location, modelname),
-            )
-            if modelname.endswith("pth"):
-                run_command(
-                    f"{sys.executable} -m pip install -r tools/zendnn/requirements.txt",
-                    args.dry_run,
-                )
-                import tools.zendnn.convert_to_torchscript as converter
-
-                converter_args = argparse.Namespace
-                converter_args.graph = os.path.join(location, modelname)
-                converter.main(converter_args)
-        else:
-            shutil.copy2(filepath, str(location / filename))
-            os.remove(filepath)
-        if not args.quiet:
-            print(f"Downloaded {url} to {str(location/filename)}")
-
-    @staticmethod
     def parse(args, unknown_args):
 
         reject_unknown_args(unknown_args)
@@ -768,69 +720,15 @@ class Get:
                 )
             )
 
-        test_asset_dir = Path.cwd() / "tests/assets"
-        artifact_dir = Path.cwd() / "external/artifacts"
-        tensorflow_models = Path.cwd() / "external/tensorflow_models"
-        repository = Path.cwd() / "external/repository"
-        pytorch_models = Path.cwd() / "external/pytorch_models"
-        migraphx_models = Path.cwd() / "external/artifacts/migraphx/resnet50v2"
-        alveo_dir = artifact_dir / "u200_u250"
-
-        tmp_dir = Path("/tmp/proteus_get")
-
-        alveo_dir.mkdir(exist_ok=True, parents=True)
-        tmp_dir.mkdir(exist_ok=True, parents=True)
-        repository.mkdir(exist_ok=True, parents=True)
-        migraphx_models.mkdir(exist_ok=True, parents=True)
-
-        files = {
-            test_asset_dir: [
-                "https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv",
-                "https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg",
-            ],
-            alveo_dir: [
-                "https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r2.5.0.tar.gz",
-                "https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r2.5.0.tar.gz",
-                "https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc_tf-u200-u250-r2.5.0.tar.gz",
-            ],
-            tmp_dir: [
-                "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
-            ],
-            tensorflow_models: [
-                "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
-            ],
-            migraphx_models: [
-                "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
-                "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
-            ],
-            pytorch_models: [
-                "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
-            ],
-        }
-
         if run_command("git lfs version", args.dry_run) is None:
             run_command("git lfs pull", args.dry_run)
         else:
             print("Git LFS not found, not automatically getting LFS artifacts")
 
-        for location, urls in files.items():
-            for url in urls:
-                if "www.xilinx.com/bin/public/openDownload" in url:
-                    search_str = "filename="
-                    filename = url[url.index(search_str) + len(search_str) :]
-                else:
-                    filename = os.path.basename(urllib.parse.urlparse(url).path)
-
-                Get._download(args, url, tmp_dir, location, filename)
-
         if not args.dry_run:
-            adas_webm = Path(tmp_dir / "adas_detection/video/adas.webm")
-            if adas_webm.exists():
-                shutil.move(str(adas_webm), str(test_asset_dir / "adas.webm"))
-            shutil.rmtree(str(tmp_dir))
+            import tests.download
 
-            with zipfile.ZipFile(str(test_asset_dir / "mnist.zip"), "r") as zip_ref:
-                zip_ref.extractall(str(repository))
+            tests.download.main()
 
     @classmethod
     def add(cls, parser):
@@ -842,10 +740,6 @@ class Get:
 
         command_group = subparser.add_argument_group("Options")
         command_group.add_argument("-h", "--help", action="help", help=help_message)
-
-        command_group.add_argument(
-            "-q", "--quiet", action="store_true", help="suppress prints"
-        )
 
         subparser.set_defaults(func=cls.parse)
 
