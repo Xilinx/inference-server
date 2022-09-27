@@ -307,16 +307,17 @@ function OptanonWrapper() { }
 <li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id2">0.2.0 - 2022-08-05</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -405,12 +406,24 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <ul class="simple">
 <li><p>Allow building Debian package (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/930fab2">&#64;930fab2</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> to the API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/2f4a6c2">&#64;2f4a6c2</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered</span></code> as a client operator for making inferences in parallel (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/66">#66</a>)</p></li>
+<li><p>Support building Python wheels with cibuildwheel (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/71">#71</a>)</p></li>
+<li><p>Support XModels with multiple output tensors (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/74">#74</a>)</p></li>
 </ul>
 </section>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
+<li><p>Refactor pre- and post-processing functions in C++ (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/42cf748">&#64;42cf748</a>)</p></li>
+<li><p>Templatize Dockerfile for different base images (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/71">#71</a>)</p></li>
+<li><p>Use multiple HTTP clients internally for parallel HTTP requests (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/66">#66</a>)</p></li>
+</ul>
+</section>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
 <li><p>Use input tensors in requests correctly (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/61">#61</a>)</p></li>
+<li><p>Fix bug with multiple input tensors (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/74">#74</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -444,8 +457,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Renamed ‘modelLoad’ to ‘workerLoad’ and changed the behavior for ‘modelLoad’ (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/27">#27</a>)</p></li>
 </ul>
 </section>
-<section id="fixed">
-<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this heading">¶</a></h3>
+<section id="id5">
+<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Get the right request size in the batcher when enqueuing with the C++ API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
 <li><p>Construct responses correctly in the XModel worker if there are multiple input buffers (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
@@ -458,10 +471,10 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 </section>
-<section id="id5">
-<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h2>
 <section id="id6">
-<h3>Added<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h2>
+<section id="id7">
+<h3>Added<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Core inference server functionality</p></li>
 <li><p>Batching support</p></li>
@@ -508,7 +521,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on September 20, 2022.
+        Last updated on September 27, 2022.
       </span>
 
     </p>

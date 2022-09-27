@@ -66,6 +66,7 @@ The following packages (and any dependencies) are installed from Ubuntu's reposi
     :ubuntupackages:`gcc`,4:7.4.0-1ubuntu2.3,GPL-2 + others,Executable used for compiling source code\ :superscript:`d 0`
     :ubuntupackages:`gdb`,8.1-0ubuntu3,LGPL-2.1+ + others,Executable used for debugging\ :superscript:`d 0`
     :ubuntupackages:`git`,1:2.17.1-1ubuntu0.8,GPL-2 + others,Executable used for source control\ :superscript:`d 0`
+    :ubuntupackages:`gnupg2`,2.2.4-1ubuntu1.6,GPL-3+ + others,Executable used for signing commits\ :superscript:`d 0`
     :ubuntupackages:`graphviz`,2.40.1-2,EPL-1.0 + others,Executable used to draw graphs in documentation\ :superscript:`d 0`
     :ubuntupackages:`libboost1.65-dev`,1.65.1+dfsg-0ubuntu5,Boost,Used to build AKS kernels\ :superscript:`a 1`
     :ubuntupackages:`libboost-filesystem1.65.1`,1.65.1+dfsg-0ubuntu5,Boost,Dynamically linked by AKS\ :superscript:`a 1`
@@ -176,6 +177,17 @@ The following packages are installed from Github.
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by proteus-server for logging\ :superscript:`a 0`
     :github:`Xilinx/Vitis-AI`,latest,Apache 2.0,VART is dynamically linked by proteus-server\ :superscript:`a 1`
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking proteus-server\ :superscript:`d 0`
+
+Others
+^^^^^^
+
+The following packages are installed from other online sources.
+
+.. csv-table::
+    :header: Name,Version,License,Usage
+    :widths: auto
+
+    `half <https://sourceforge.net/projects/half/>`__,2.2.0,MIT,Used for fp16 datatype
 
 Xilinx
 ^^^^^^
