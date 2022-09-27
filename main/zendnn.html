@@ -418,6 +418,10 @@ will be used for further setup.</p>
 </li>
 <li><p>Build the docker with TensorFlow/PyTorch+ZenDNN</p>
 <p>To build docker image with TensorFlow/PyTorch+ZenDNN, use the commands below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>create a dockerfile
+<span class="gp">$ </span>python3 docker/generate.py
+</pre></div>
+</div>
 <ol class="arabic">
 <li><p>For TensorFlow</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize --tfzendnn<span class="o">=</span>./local/path/to/TF_v2.9_ZenDNN_v3.3_C++_API.zip
