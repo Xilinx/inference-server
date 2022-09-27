@@ -15,6 +15,7 @@
 
 import json
 
+import proteus.testing
 import pytest
 from helper import root_path
 from proteus.predict_api import InferenceRequest, InferenceRequestInput
@@ -37,7 +38,8 @@ class TestFacedetectStream:
     }
 
     def construct_request(self, requested_frames_count):
-        video_path = str(root_path / "tests/assets/Physicsworks.ogv")
+        asset_key = "asset_Physicsworks.ogv"
+        video_path = proteus.testing.get_asset(asset_key)
 
         input_0 = InferenceRequestInput()
         input_0.name = "input0"

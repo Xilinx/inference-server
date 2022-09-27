@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #include "proteus/bindings/python/core/data_types.hpp"
 #include "proteus/bindings/python/core/predict_api.hpp"
 #include "proteus/bindings/python/servers/server.hpp"
+#include "proteus/bindings/python/testing/testing.hpp"
 #include "proteus/core/exceptions.hpp"
 
 namespace py = pybind11;
@@ -36,6 +38,7 @@ PYBIND11_MODULE(_proteus, m) {
     m.def_submodule("client_operators", "client operators documentation");
   py::module c = m.def_submodule("clients", "client documentation");
   py::module s = m.def_submodule("servers", "server documentation");
+  py::module t = m.def_submodule("testing", "testing documentation");
   m.doc() = "proteus inference library";
 
   py::register_exception<runtime_error>(m, "RuntimeError");
@@ -49,6 +52,7 @@ PYBIND11_MODULE(_proteus, m) {
   wrapWebSocketClient(c);
   wrapServer(s);
   wrapInferAsync(f);
+  wrapTesting(t);
 }
 
 }  // namespace proteus

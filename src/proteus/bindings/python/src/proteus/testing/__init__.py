@@ -1,4 +1,4 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-# add_subdirectory(buffers) add_subdirectory(clients)
-add_subdirectory(core)
-add_subdirectory(observation)
-# add_subdirectory(servers)
-add_subdirectory(testing)
-# add_subdirectory(workers)
+import pytest
+from proteus._proteus.testing import *
+
+import proteus
+
+
+def get_asset(asset: str):
+    try:
+        asset_path = getAsset(asset)
+    except proteus.RuntimeError:
+        pytest.skip(f"Asset {asset} cannot be found")
+    if not asset_path:
+        pytest.skip(f"Asset {asset_path} cannot be found")
+    return asset_path

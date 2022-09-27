@@ -16,6 +16,7 @@ import os
 import sys
 
 import numpy as np
+import proteus.testing
 import pytest
 from helper import root_path, run_benchmark
 
@@ -34,9 +35,7 @@ class TestTfZendnn:
 
     model = "TfZendnn"
     parameters = {
-        "model": str(
-            root_path / "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb"
-        ),
+        "model": proteus.testing.get_asset("tf_resnet50"),
         "input_node": "input",
         "output_node": "resnet_v1_50/predictions/Reshape_1",
         "input_size": 224,
@@ -85,7 +84,7 @@ class TestTfZendnn:
         """
         Send a request to tf model as tensor data
         """
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
+        image_path = proteus.testing.get_asset("asset_dog-3619020_640.jpg")
 
         preprocessing = {"input_size": 224, "resize_method": "crop"}
 

@@ -12,26 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/util/read_nth_line.hpp"
+/**
+ * @file
+ * @brief Defines the Python bindings for the testing headers
+ */
 
-#include <fstream>  // for ifstream
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_TESTING_TESTING
+#define GUARD_PROTEUS_BINDINGS_PYTHON_TESTING_TESTING
 
-namespace proteus::util {
-
-std::string readNthLine(const std::string& filename, int N) {
-  std::ifstream in(filename);
-  std::string line;
-  // for performance, reserve some initial space in the string
-  const auto kDefaultLineLength = 100;
-  line.reserve(kDefaultLineLength);
-
-  // skip N lines
-  for (int i = 0; i < N; ++i) {
-    std::getline(in, line);
-  }
-
-  std::getline(in, line);
-  return line;
+namespace pybind11 {
+class module_;
 }
 
-}  // namespace proteus::util
+void wrapTesting(pybind11::module_ &);
+
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_TESTING_TESTING

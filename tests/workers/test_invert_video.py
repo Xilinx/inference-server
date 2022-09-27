@@ -16,6 +16,7 @@
 import json
 
 import cv2
+import proteus.testing
 import pytest
 from helper import root_path
 from proteus.predict_api import InferenceRequest, InferenceRequestInput
@@ -70,7 +71,7 @@ class TestInvertVideo:
 
     def test_invert_video_0(self):
         requested_frames_count = 100
-        video_path = str(root_path / "tests/assets/Physicsworks.ogv")
+        video_path = proteus.testing.get_asset("asset_Physicsworks.ogv")
 
         self.construct_request(video_path, requested_frames_count)
         self.recv_frames(video_path, requested_frames_count)

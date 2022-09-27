@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,6 +47,10 @@ class external_error : public runtime_error {
 };
 
 class invalid_argument : public runtime_error {
+  using runtime_error::runtime_error;
+};
+
+class environment_not_set_error : public runtime_error {
   using runtime_error::runtime_error;
 };
 

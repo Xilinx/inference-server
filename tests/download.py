@@ -215,16 +215,16 @@ models = {
         "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
         onnx_dir / "resnet50v2",
     ),
-    "u250_mnist": LocalFile(str(test_assets_dir / "mnist.zip"), repository_dir),
-    "asset_physicsworks": File(
+    "tf_mnist": LocalFile(str(test_assets_dir / "mnist.zip"), repository_dir),
+    "asset_Physicsworks.ogv": File(
         "https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv",
         test_assets_dir,
     ),
-    "asset_girl": File(
+    "asset_girl-1867092_640.jpg": File(
         "https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg",
         test_assets_dir,
     ),
-    "asset_adas": File(
+    "asset_adas.webm": File(
         "https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz",
         test_assets_dir,
         downloader_adas,
@@ -244,7 +244,13 @@ def main():
     for key, model in models.items():
         model_paths[key] = download(model)
 
-    with open(artifact_dir / "models.txt", "w+") as f:
+    # add existing test assets to the assets list
+    for f in os.listdir(str(test_assets_dir)):
+        full_path = str(test_assets_dir / f)
+        if os.path.isfile(full_path):
+            model_paths[f"asset_{f}"] = full_path
+
+    with open(artifact_dir / "artifacts.txt", "w+") as f:
         for key, path in model_paths.items():
             f.write(f"{key}:{path}\n")
 

@@ -222,6 +222,7 @@ set(PROTEUS_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src
                          ${PROJECT_SOURCE_DIR}/include
 )
 set(PROTEUS_PUBLIC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
+set(PROTEUS_TEST_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/tests/src)
 
 if(${PROTEUS_ENABLE_LINTING})
   enable_cxx_linting()

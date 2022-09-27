@@ -12,26 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/util/read_nth_line.hpp"
+/**
+ * @file
+ * @brief Implements the Python bindings for the server.hpp header
+ */
 
-#include <fstream>  // for ifstream
+#include <pybind11/cast.h>      // for arg
+#include <pybind11/pybind11.h>  // for class_, init
+#include <pybind11/stl.h>       // IWYU pragma: keep
 
-namespace proteus::util {
+#include "proteus/bindings/python/helpers/docstrings.hpp"
+#include "proteus/testing/get_asset.hpp"
 
-std::string readNthLine(const std::string& filename, int N) {
-  std::ifstream in(filename);
-  std::string line;
-  // for performance, reserve some initial space in the string
-  const auto kDefaultLineLength = 100;
-  line.reserve(kDefaultLineLength);
+namespace py = pybind11;
 
-  // skip N lines
-  for (int i = 0; i < N; ++i) {
-    std::getline(in, line);
-  }
-
-  std::getline(in, line);
-  return line;
+void wrapTesting(py::module_ &m) {
+  m.def("getAsset", proteus::getAsset, py::arg("key"));
 }
-
-}  // namespace proteus::util

@@ -17,6 +17,7 @@ import sys
 
 import cv2
 import numpy as np
+import proteus.testing
 import pytest
 from helper import root_path, run_benchmark
 
@@ -77,11 +78,7 @@ class TestMigraphx:
     """
 
     model = "Migraphx"
-    parameters = {
-        "model": str(
-            root_path / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
-        )
-    }
+    parameters = {"model": proteus.testing.get_asset("onnx_resnet50")}
 
     def send_request(self, request, check_asserts=True):
         """
@@ -123,7 +120,7 @@ class TestMigraphx:
         Send a request to model as tensor data
         """
         image_paths = [
-            str(root_path / "tests/assets/dog-3619020_640.jpg"),
+            proteus.testing.get_asset("asset_dog-3619020_640.jpg"),
         ]
         gold_responses = [[259, 261, 157, 260, 154]]
         assert len(image_paths) == len(gold_responses)

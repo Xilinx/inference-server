@@ -1,4 +1,3 @@
-# Copyright 2021 Xilinx, Inc.
 # Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROTEUS_TEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(test_main STATIC test_main.cpp)
+target_link_libraries(test_main PUBLIC gtest)
 
-include(AddTest)
+list(APPEND files get_asset)
+list(APPEND targets)
 
-add_subdirectory(api)
-add_subdirectory(models)
-add_subdirectory(performance)
-add_subdirectory(src/proteus)
-add_subdirectory(unit)
-add_subdirectory(workers)
+foreach(file ${files})
+  set(target ${file})
+  add_library(${target} OBJECT ${file}.cpp)
+  target_include_directories(
+    ${target} PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS} ${PROTEUS_INCLUDE_DIRS}
+  )
+  enable_ipo_on_target(${target})
+
+  list(APPEND targets ${target} $<TARGET_OBJECTS:${target}>)
+endforeach()
+
+add_library(testing INTERFACE)
+target_link_libraries(testing INTERFACE ${targets})

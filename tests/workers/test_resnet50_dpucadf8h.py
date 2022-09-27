@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import numpy as np
+import proteus.testing
 import pytest
 from helper import root_path, run_benchmark
 
@@ -74,7 +75,7 @@ class TestInferImageResNet50DPUCADF8H:
         return response
 
     def construct_request(self, asTensor, batches=1):
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
+        image_path = proteus.testing.get_asset("asset_dog-3619020_640.jpg")
 
         # TODO(vishalk): AKS gives a segfault if batch != 4
         images = [image_path] * batches

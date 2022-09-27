@@ -17,6 +17,7 @@ import json
 import os
 
 import numpy as np
+import proteus.testing
 import pytest
 from helper import root_path, run_benchmark
 
@@ -93,7 +94,7 @@ class TestInferImageYoloV3DPUCADF8H:
         return response
 
     def construct_request(self, asTensor):
-        image_path = str(root_path / "tests/assets/bicycle-384566_640.jpg")
+        image_path = proteus.testing.get_asset("asset_bicycle-384566_640.jpg")
 
         batch = 1
         images = [image_path] * batch

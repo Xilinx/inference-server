@@ -12,26 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/util/read_nth_line.hpp"
+#ifndef GUARD_SRC_PROTEUS_TESTING_GET_ASSET
+#define GUARD_SRC_PROTEUS_TESTING_GET_ASSET
 
-#include <fstream>  // for ifstream
+#include <filesystem>
+#include <string>
 
-namespace proteus::util {
+namespace proteus {
 
-std::string readNthLine(const std::string& filename, int N) {
-  std::ifstream in(filename);
-  std::string line;
-  // for performance, reserve some initial space in the string
-  const auto kDefaultLineLength = 100;
-  line.reserve(kDefaultLineLength);
+std::string getAsset(const std::string& key);
 
-  // skip N lines
-  for (int i = 0; i < N; ++i) {
-    std::getline(in, line);
-  }
+}  // namespace proteus
 
-  std::getline(in, line);
-  return line;
-}
-
-}  // namespace proteus::util
+#endif  // GUARD_SRC_PROTEUS_TESTING_GET_ASSET

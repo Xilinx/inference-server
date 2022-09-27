@@ -23,15 +23,18 @@
 #include <vector>                 // for vector
 
 #include "proteus/proteus.hpp"                 // for InferenceRequestInput
+#include "proteus/testing/get_asset.hpp"       // for get_asset
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
 namespace proteus {
 
 void test(proteus::Client* client) {
-  auto metadata = client->serverMetadata();
-  if (metadata.extensions.find("tfzendnn") == metadata.extensions.end()) {
+  if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
+
+  const auto path = getAsset("asset_nine_9723.jpg");
+  getAsset("tf_mnist");
 
   const std::string model = "mnist";
 
@@ -40,8 +43,6 @@ void test(proteus::Client* client) {
   client->modelLoad(model, nullptr);
   EXPECT_TRUE(client->modelReady(model));
 
-  std::string path =
-    std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets/nine_9723.jpg";
   auto img = cv::imread(path);
   cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
   img.convertTo(img, CV_32FC3, 1.0 / 255.0);

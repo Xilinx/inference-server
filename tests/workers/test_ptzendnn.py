@@ -16,6 +16,7 @@ import os
 import sys
 
 import numpy as np
+import proteus.testing
 import pytest
 from helper import root_path, run_benchmark
 
@@ -34,7 +35,7 @@ class TestPtZendnn:
 
     model = "PtZendnn"
     parameters = {
-        "model": str(root_path / "external/pytorch_models/resnet50_pretrained.pt"),
+        "model": proteus.testing.get_asset("pt_resnet50"),
         "input_size": 224,
         "output_classes": 1000,
         "batch_size": 8,
@@ -79,7 +80,7 @@ class TestPtZendnn:
         """
         Send a request to pt model as tensor data
         """
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
+        image_path = proteus.testing.get_asset("asset_dog-3619020_640.jpg")
 
         preprocessing = {"input_size": 224}
 

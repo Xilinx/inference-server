@@ -1,4 +1,4 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-# add_subdirectory(buffers) add_subdirectory(clients)
-add_subdirectory(core)
-add_subdirectory(observation)
-# add_subdirectory(servers)
-add_subdirectory(testing)
-# add_subdirectory(workers)
+add_library(testing_py OBJECT testing.cpp)
+target_include_directories(
+  testing_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
+                     ${Python_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS}
+)
+target_link_libraries(testing_py PRIVATE ${Python_LIBRARIES} testing)
+add_dependencies(testing_py pybind11Mkdoc)
+
+set(TESTING_OBJS testing_py PARENT_SCOPE)

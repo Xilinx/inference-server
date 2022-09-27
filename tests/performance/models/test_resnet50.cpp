@@ -25,6 +25,7 @@
 
 #include "proteus/client_operators/infer_async.hpp"
 #include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
+#include "proteus/testing/get_asset.hpp"       // for get_asset
 #include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
 #include "proteus/util/ctpl.h"                 // for thread_pool
 #include "proteus/util/pre_post/image_preprocess.hpp"
@@ -113,15 +114,11 @@ template <class... Fs>
 Overload(Fs...) -> Overload<Fs...>;
 
 void test(proteus::Client* client, const Config& config, Workers* worker) {
-  auto metadata = client->serverMetadata();
-  if (metadata.extensions.find(worker->extension) ==
-      metadata.extensions.end()) {
+  if (!proteus::serverHasExtension(client, worker->extension)) {
     GTEST_SKIP() << worker->extension << " support required but not found.\n";
   }
 
-  const fs::path kRoot{std::getenv("PROTEUS_ROOT")};
-
-  const auto kImageLocation = kRoot / "tests/assets/dog-3619020_640.jpg";
+  const auto kImageLocation = proteus::getAsset("asset_dog-3619020_640.jpg");
   const auto kInputSize = 224;
   const auto kOutputClasses = 1000;
   const auto kBatchSize = config.batch_size;
