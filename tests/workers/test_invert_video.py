@@ -16,13 +16,14 @@
 import json
 
 import cv2
-import proteus.testing
 import pytest
-from helper import root_path
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 from test_invert_image import compare_jpgs
 
 import proteus
+import proteus.testing
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
+
+from helper import root_path
 
 
 @pytest.mark.usefixtures("load")
@@ -71,7 +72,7 @@ class TestInvertVideo:
 
     def test_invert_video_0(self):
         requested_frames_count = 100
-        video_path = proteus.testing.get_asset("asset_Physicsworks.ogv")
+        video_path = proteus.testing.get_path_to_asset("asset_Physicsworks.ogv")
 
         self.construct_request(video_path, requested_frames_count)
         self.recv_frames(video_path, requested_frames_count)

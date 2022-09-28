@@ -22,8 +22,8 @@
 #include <thread>                 // for yield
 #include <vector>                 // for vector
 
-#include "proteus/proteus.hpp"                 // for InferenceRequestInput
-#include "proteus/testing/get_asset.hpp"       // for get_asset
+#include "proteus/proteus.hpp"                    // for InferenceRequestInput
+#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
 #include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
 namespace proteus {
@@ -33,8 +33,8 @@ void test(proteus::Client* client) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
 
-  const auto path = getAsset("asset_nine_9723.jpg");
-  getAsset("tf_mnist");
+  const auto path = getPathToAsset("asset_nine_9723.jpg");
+  getPathToAsset("tf_mnist");
 
   const std::string model = "mnist";
 

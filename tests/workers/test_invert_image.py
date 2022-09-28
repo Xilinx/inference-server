@@ -20,11 +20,12 @@ import os
 
 import cv2
 import numpy as np
-import proteus.testing
 import pytest
-from helper import root_path, run_benchmark, run_benchmark_func
 
 import proteus
+import proteus.testing
+
+from helper import root_path, run_benchmark, run_benchmark_func
 
 
 def compare_jpgs(test_image, reference_image):
@@ -101,7 +102,7 @@ class TestInvertImage:
         return response
 
     def construct_request(self, asTensor):
-        image_path = proteus.testing.get_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
 
         request = proteus.ImageInferenceRequest(image_path, asTensor)
 

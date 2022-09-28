@@ -15,12 +15,13 @@
 
 import json
 
-import proteus.testing
 import pytest
-from helper import root_path
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 import proteus
+import proteus.testing
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
+
+from helper import root_path
 
 
 @pytest.mark.extensions(["aks", "vitis"])
@@ -35,7 +36,7 @@ class TestResnet50Stream:
     parameters = None
 
     def construct_request(self, requested_frames_count):
-        video_path = proteus.testing.get_asset("asset_Physicsworks.ogv")
+        video_path = proteus.testing.get_path_to_asset("asset_Physicsworks.ogv")
 
         input_0 = InferenceRequestInput()
         input_0.name = "input0"
@@ -64,10 +65,6 @@ class TestResnet50Stream:
             resp_str = self.ws_client.modelRecv()
             resp = json.loads(resp_str)
             data = resp["data"]["img"]
-            if len(data) > 50:
-                print(f"{i} got an image")
-            else:
-                print(resp)
             resp["data"]["img"].split(",")[1]
 
     def test_resnet50stream_0(self):

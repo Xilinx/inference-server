@@ -22,10 +22,10 @@
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
 #include "proteus/bindings/python/helpers/docstrings.hpp"
-#include "proteus/testing/get_asset.hpp"
+#include "proteus/testing/get_path_to_asset.hpp"
 
 namespace py = pybind11;
 
 void wrapTesting(py::module_ &m) {
-  m.def("getAsset", proteus::getAsset, py::arg("key"));
+  m.def("getPathToAsset", proteus::getPathToAsset, py::arg("key"));
 }

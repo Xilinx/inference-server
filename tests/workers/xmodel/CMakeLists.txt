@@ -12,22 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(test_main STATIC test_main.cpp)
-target_link_libraries(test_main PUBLIC gtest)
+set(tests resnet50)
+# list(APPEND tests resnet50)
 
-list(APPEND files get_path_to_asset)
-list(APPEND targets)
+proteus_add_system_tests("${tests}")
 
-foreach(file ${files})
-  set(target ${file})
-  add_library(${target} OBJECT ${file}.cpp)
-  target_include_directories(
-    ${target} PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS} ${PROTEUS_INCLUDE_DIRS}
-  )
-  enable_ipo_on_target(${target})
-
-  list(APPEND targets ${target} $<TARGET_OBJECTS:${target}>)
-endforeach()
-
-add_library(testing INTERFACE)
-target_link_libraries(testing INTERFACE ${targets})
+proteus_get_test_target(resnet50_target resnet50)
+target_link_libraries(
+  ${resnet50_target} PRIVATE xir vart-runner opencv_core opencv_imgproc
+                             opencv_imgcodecs
+)

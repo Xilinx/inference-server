@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/testing/get_asset.hpp"
+#include "proteus/testing/get_path_to_asset.hpp"
 
 #include <cassert>
 #include <fstream>
@@ -24,7 +24,7 @@ namespace fs = std::filesystem;
 
 namespace proteus {
 
-std::string getAsset(const std::string& key) {
+std::string getPathToAsset(const std::string& key) {
   const auto* root_env = std::getenv("PROTEUS_ROOT");
   if (root_env == nullptr) {
     throw environment_not_set_error("PROTEUS_ROOT not found in the env");

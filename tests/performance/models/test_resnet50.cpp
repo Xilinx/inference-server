@@ -24,10 +24,10 @@
 #include <vector>
 
 #include "proteus/client_operators/infer_async.hpp"
-#include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
-#include "proteus/testing/get_asset.hpp"       // for get_asset
-#include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
-#include "proteus/util/ctpl.h"                 // for thread_pool
+#include "proteus/proteus.hpp"  // for InferenceResponse, Grp...
+#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
+#include "proteus/testing/gtest_fixtures.hpp"     // for GrpcFixture
+#include "proteus/util/ctpl.h"                    // for thread_pool
 #include "proteus/util/pre_post/image_preprocess.hpp"
 
 namespace fs = std::filesystem;
@@ -118,7 +118,8 @@ void test(proteus::Client* client, const Config& config, Workers* worker) {
     GTEST_SKIP() << worker->extension << " support required but not found.\n";
   }
 
-  const auto kImageLocation = proteus::getAsset("asset_dog-3619020_640.jpg");
+  const auto kImageLocation =
+    proteus::getPathToAsset("asset_dog-3619020_640.jpg");
   const auto kInputSize = 224;
   const auto kOutputClasses = 1000;
   const auto kBatchSize = config.batch_size;

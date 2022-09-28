@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_SRC_PROTEUS_TESTING_GET_ASSET
-#define GUARD_SRC_PROTEUS_TESTING_GET_ASSET
+#ifndef GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET
+#define GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET
 
 #include <filesystem>
 #include <string>
 
 namespace proteus {
 
-std::string getAsset(const std::string& key);
+std::string getPathToAsset(const std::string& key);
 
 }  // namespace proteus
 
-#endif  // GUARD_SRC_PROTEUS_TESTING_GET_ASSET
+#endif  // GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET

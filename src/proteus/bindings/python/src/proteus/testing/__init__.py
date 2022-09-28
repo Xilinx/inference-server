@@ -13,14 +13,14 @@
 # limitations under the License.
 
 import pytest
-from proteus._proteus.testing import *
 
 import proteus
+from proteus._proteus.testing import *
 
 
-def get_asset(asset: str):
+def get_path_to_asset(asset: str):
     try:
-        asset_path = getAsset(asset)
+        asset_path = getPathToAsset(asset)
     except proteus.RuntimeError:
         pytest.skip(f"Asset {asset} cannot be found")
     if not asset_path:

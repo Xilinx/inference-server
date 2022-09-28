@@ -15,12 +15,13 @@
 
 import json
 
-import proteus.testing
 import pytest
-from helper import root_path
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 import proteus
+import proteus.testing
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
+
+from helper import root_path
 
 
 @pytest.mark.extensions(["aks", "vitis"])
@@ -39,7 +40,7 @@ class TestFacedetectStream:
 
     def construct_request(self, requested_frames_count):
         asset_key = "asset_Physicsworks.ogv"
-        video_path = proteus.testing.get_asset(asset_key)
+        video_path = proteus.testing.get_path_to_asset(asset_key)
 
         input_0 = InferenceRequestInput()
         input_0.name = "input0"

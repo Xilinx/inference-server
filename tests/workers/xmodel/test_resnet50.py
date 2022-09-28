@@ -17,11 +17,12 @@ import math
 
 import cv2
 import numpy as np
-import proteus.testing
 import pytest
-from helper import root_path, run_benchmark
 
 import proteus
+import proteus.testing
+
+from helper import run_benchmark
 
 
 @pytest.mark.extensions(["vitis"])
@@ -132,7 +133,7 @@ class TestXmodel:
         """
         Send a request to resnet50 as tensor data
         """
-        image_path = proteus.testing.get_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
 
         preprocessing = {
             "net_w": 224,
@@ -165,7 +166,7 @@ class TestXmodel:
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark):
-        image_path = proteus.testing.get_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
         print(image_path)
 
         preprocessing = {
