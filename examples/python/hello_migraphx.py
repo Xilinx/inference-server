@@ -253,6 +253,8 @@ def main(args):
 
     parameters = proteus.RequestParameters()
     parameters.put("model", modelname)
+    parameters.put("batch", 2)
+    parameters.put("timeout", 1000)
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.
     worker_name = client.workerLoad("Migraphx", parameters)
@@ -287,12 +289,22 @@ def main(args):
     #
     # create a multi-image inference request and send it
     #
-    images = [img2]
+    images = [img2, img2]
 
-    print("Creating inference request...")
-    request = proteus.ImageInferenceRequest(images, False)
-    response = client.modelInfer(worker_name, request)
-    assert not response.isError(), response.getError()
+    print("Creating inference request set...")
+    images = [proteus.ImageInferenceRequest(image) for image in images]
+
+    # This doesn't work because I can't create the Proteus class List:
+    # TypeError: inferAsyncOrderedBatched(): incompatible function arguments. The following argument types are supported:
+    # 1. (client: _proteus.clients.Client, model: str, requests: List[_proteus.predict_api.InferenceRequest], batch_sizes: int) -> List[_proteus.predict_api.InferenceResponse]
+    # print(type(client),"\n", type(worker_name), "\n",  type(images), "\n",  type(images[0]))
+    # responses = proteus.client_operators.inferAsyncOrderedBatched(client, worker_name, images)
+
+
+
+    responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)  
+    for response in responses:  
+        assert not response.isError(), response.getError()
 
     print("Client received inference reply.")
 
@@ -300,21 +312,22 @@ def main(args):
     with open(labels_file, "r") as json_data:
         labels = json.load(json_data)
 
-    for output in response.getOutputs():
-        assert output.datatype == proteus.DataType.FP32
-        recv_data = output.getFp32Data()
-        # the predicted category is the one with the highest match value
-        answer = np.argmax(recv_data)
-        print(
-            "client's analysis of result: best match category is ",
-            answer,
-            "  match value is ",
-            recv_data[answer],
-            ".  This is a picture of a ",
-            labels[answer],
-        )
+    for response in responses:  
+        for output in response.getOutputs():
+            assert output.datatype == proteus.DataType.FP32
+            recv_data = output.getFp32Data()
+            # the predicted category is the one with the highest match value
+            answer = np.argmax(recv_data)
+            print(
+                "client's analysis of result: best match category is ",
+                answer,
+                "  match value is ",
+                recv_data[answer],
+                ".  This is a picture of a ",
+                labels[answer],
+            )
 
-    run_migraphx(modelname, img2, labels)
+    # run_migraphx(modelname, img2, labels)
 
     print("Done")
 
