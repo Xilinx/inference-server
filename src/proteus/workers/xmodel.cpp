@@ -51,9 +51,7 @@
 #include "proteus/core/data_types.hpp"             // for mapXirType, DataType
 #include "proteus/core/predict_api.hpp"            // for InferenceResponse
 #include "proteus/declarations.hpp"                // for BufferPtrs, Infere...
-#include "proteus/observation/logging.hpp"         // for Logger
-#include "proteus/observation/metrics.hpp"         // for Metrics, MetricCou...
-#include "proteus/observation/tracing.hpp"         // for Trace
+#include "proteus/observation/observer.hpp"        // for Loggers, Metrics...
 #include "proteus/util/ctpl.h"                     // for thread_pool
 #include "proteus/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "proteus/util/queue.hpp"                  // for BufferPtrsQueue
@@ -261,6 +259,10 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       inputsPtr.reserve(input_buffers.size());
       auto& output_buffers = batch->getOutputBuffers();
       outputsPtr.reserve(output_buffers.size());
+
+      for (const auto& buffer : input_buffers) {
+        logTraceBuffer(getLogger(), buffer->data());
+      }
 
       for (const auto& buffer : input_buffers) {
         auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());

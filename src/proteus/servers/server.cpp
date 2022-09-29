@@ -50,13 +50,10 @@ void initializeServerLogging() {
     "server",  // logger_name
     getLogDirectory(),
     true,              // enable file logging
-    LogLevel::kDebug,  // file log level
+    LogLevel::kTrace,  // file log level
     true,              // enable console logging
     LogLevel::kWarn    // console log level
   };
-  initLogger(options);
-
-  options.logger_name = "client";
   initLogger(options);
 #endif
 }

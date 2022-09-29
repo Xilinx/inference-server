@@ -26,7 +26,8 @@
 
 #include "proteus/core/interface.hpp"  // for Interface
 #include "proteus/core/predict_api_internal.hpp"
-#include "proteus/util/traits.hpp"  // for is_any
+#include "proteus/observation/observer.hpp"  // for Observer
+#include "proteus/util/traits.hpp"           // for is_any
 
 namespace google::protobuf {
 template <typename T, typename U>
@@ -52,11 +53,12 @@ void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
   RequestParameters& parameters);
 void mapRequestToProto(const InferenceRequest& request,
-                       inference::ModelInferRequest& grpc_request);
+                       inference::ModelInferRequest& grpc_request,
+                       const Observer& observer);
 void mapResponseToProto(InferenceResponse response,
                         inference::ModelInferResponse& reply);
 void mapProtoToResponse(const inference::ModelInferResponse& reply,
-                        InferenceResponse& response);
+                        InferenceResponse& response, const Observer& observer);
 
 void mapModelMetadataToProto(const ModelMetadata& metadata,
                              inference::ModelMetadataResponse& resp);

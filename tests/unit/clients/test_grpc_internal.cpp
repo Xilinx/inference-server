@@ -17,6 +17,7 @@
 #include "gtest/gtest.h"  // for EXPECT_EQ, FAIL, UnitTest
 #include "predict_api.pb.h"
 #include "proteus/clients/grpc_internal.hpp"  // for mapRequestToProto
+#include "proteus/testing/observation.hpp"
 
 namespace proteus {
 
@@ -110,6 +111,10 @@ struct checkData {
 class Fixture : public testing::TestWithParam<DataType> {};
 
 TEST_P(Fixture, TestRequestToProto) {
+  initializeTestLogging();
+  Observer observer;
+  PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kTest});
+
   auto datatype = GetParam();
 
   // create an array large enough to hold any data type
@@ -123,7 +128,7 @@ TEST_P(Fixture, TestRequestToProto) {
   request.addInputTensor(input);
 
   inference::ModelInferRequest proto_request;
-  mapRequestToProto(request, proto_request);
+  mapRequestToProto(request, proto_request, observer);
 
   const auto& tensor = proto_request.inputs().at(0);
   switchOverTypes(checkData(), datatype, &tensor);

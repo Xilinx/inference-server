@@ -202,8 +202,8 @@ class CallDataServerStream : public CallData<RequestType, ReplyType> {
 
 struct WriteData {
   template <typename T, typename Tensor>
-  void operator()(Buffer* buffer, Tensor* tensor, size_t offset,
-                  size_t size) const {
+  void operator()(Buffer* buffer, Tensor* tensor, size_t offset, size_t size,
+                  const Observer& observer) const {
     auto* contents = getTensorContents<T>(tensor);
     if constexpr (util::is_any_v<T, bool, uint32_t, uint64_t, int32_t, int64_t,
                                  float, double, char>) {
@@ -212,6 +212,14 @@ struct WriteData {
     } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, int8_t, int16_t,
                                         fp16>) {
       for (size_t i = 0; i < size; i++) {
+#ifdef PROTEUS_ENABLE_LOGGING
+        if (const auto min_size = size > kNumTraceData ? kNumTraceData : size;
+            i < min_size) {
+          PROTEUS_LOG_TRACE(observer.logger,
+                            "Writing data to buffer: " +
+                              std::to_string(static_cast<T>(contents[i])));
+        }
+#endif
         offset = buffer->write(static_cast<T>(contents[i]), offset);
       }
     } else {
@@ -227,6 +235,12 @@ class InferenceRequestInputBuilder<
   static InferenceRequestInput build(
     const inference::ModelInferRequest_InferInputTensor& req,
     Buffer* input_buffer, size_t offset) {
+    Observer observer;
+    PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+
+    PROTEUS_LOG_TRACE(observer.logger,
+                      "Creating InferenceRequestInput from proto tensor");
+
     InferenceRequestInput input;
     input.name_ = req.name();
     input.shape_.reserve(req.shape_size());
@@ -239,9 +253,13 @@ class InferenceRequestInputBuilder<
 
     auto size = input.getSize();
     auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
+    PROTEUS_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
+                                         " elements of type " +
+                                         input.dataType_.str() + " to " +
+                                         util::addressToString(dest));
 
     switchOverTypes(WriteData(), input.getDatatype(), input_buffer, &req,
-                    offset, size);
+                    offset, size, observer);
 
     input.data_ = dest;
     return input;
@@ -314,6 +332,12 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
                                    std::vector<size_t>& input_offsets,
                                    const BufferRawPtrs& output_buffers,
                                    std::vector<size_t>& output_offsets) {
+    Observer observer;
+    PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+
+    PROTEUS_LOG_TRACE(observer.logger,
+                      "Creating InferenceRequest from proto tensor");
+
     auto request = std::make_shared<InferenceRequest>();
     const auto& grpc_request = req->getRequest();
 

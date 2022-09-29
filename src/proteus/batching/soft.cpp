@@ -154,7 +154,8 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
     } while (batch_size % this->batch_size_ != 0 && run);
 
     if (!batch->empty()) {
-      PROTEUS_LOG_DEBUG(logger, "Enqueuing batch for " + this->model_);
+      PROTEUS_LOG_DEBUG(logger, "Enqueuing batch for " + this->model_ +
+                                  " of size " + std::to_string(batch_size));
       this->output_queue_->enqueue(std::move(batch));
 #ifdef PROTEUS_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(

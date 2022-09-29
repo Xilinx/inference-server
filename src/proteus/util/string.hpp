@@ -17,6 +17,7 @@
 #define GUARD_PROTEUS_HELPERS_STRING
 
 #include <algorithm>
+#include <sstream>
 #include <string>
 
 namespace proteus::util {
@@ -68,6 +69,12 @@ inline std::string toLower(const std::string& str) {
 inline void toLower(std::string* str) {
   std::transform(str->begin(), str->end(), str->begin(),
                  [](unsigned char c) { return std::tolower(c); });
+}
+
+inline std::string addressToString(const void* ptr) {
+  std::ostringstream addr;
+  addr << ptr;
+  return addr.str();
 }
 
 }  // namespace proteus::util

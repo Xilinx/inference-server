@@ -139,7 +139,9 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
   bool run = true;
   while (run) {
     input_queue->wait_dequeue(request);
-    PROTEUS_LOG_DEBUG(logger_, "Got request in Manager update thread");
+    PROTEUS_LOG_DEBUG(logger_,
+                      "Got request in Manager update thread with ID " +
+                        std::to_string(static_cast<int>(request->cmd)));
     switch (request->cmd) {
       case UpdateCommandType::Shutdown:
         this->endpoints_.shutdown();

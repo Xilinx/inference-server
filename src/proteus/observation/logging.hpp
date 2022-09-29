@@ -30,7 +30,7 @@
 #ifndef NDEBUG
 // used for debug builds
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #else
 // used for release builds
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
@@ -49,17 +49,21 @@
   SPDLOG_LOGGER_WARN(logger.get(), message)
 #define PROTEUS_LOG_ERROR(logger, message) \
   SPDLOG_LOGGER_ERROR(logger.get(), message)
+
+#define PROTEUS_IF_LOGGING(args) args
 #else
 #define PROTEUS_LOG_TRACE(logger, message)
 #define PROTEUS_LOG_DEBUG(logger, message)
 #define PROTEUS_LOG_INFO(logger, message)
 #define PROTEUS_LOG_WARN(logger, message)
 #define PROTEUS_LOG_ERROR(logger, message)
+
+#define PROTEUS_IF_LOGGING(args)
 #endif
 
 namespace proteus {
 
-enum class Loggers { kServer, kClient };
+enum class Loggers { kServer, kClient, kTest };
 
 enum class LogLevel {
   kTrace,
@@ -86,8 +90,10 @@ struct LogOptions {
 
 class Logger {
  public:
+  Logger() = default;
   explicit Logger(Loggers name);
 
+  void set(Loggers name);
   spdlog::logger* get() const { return logger_.get(); }
 
  private:
