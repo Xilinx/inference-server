@@ -26,6 +26,7 @@
 #include "proteus/bindings/python/core/predict_api.hpp"
 #include "proteus/bindings/python/servers/server.hpp"
 #include "proteus/bindings/python/testing/testing.hpp"
+#include "proteus/bindings/python/util/util.hpp"
 #include "proteus/core/exceptions.hpp"
 
 namespace py = pybind11;
@@ -39,6 +40,7 @@ PYBIND11_MODULE(_proteus, m) {
   py::module c = m.def_submodule("clients", "client documentation");
   py::module s = m.def_submodule("servers", "server documentation");
   py::module t = m.def_submodule("testing", "testing documentation");
+  py::module u = m.def_submodule("util", "util documentation");
   m.doc() = "proteus inference library";
 
   py::register_exception<runtime_error>(m, "RuntimeError");
@@ -53,6 +55,7 @@ PYBIND11_MODULE(_proteus, m) {
   wrapServer(s);
   wrapInferAsync(f);
   wrapTesting(t);
+  wrapUtil(u);
 }
 
 }  // namespace proteus

@@ -1,4 +1,3 @@
-# Copyright 2021 Xilinx, Inc.
 # Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import math
-
-import cv2
-import numpy as np
 import pytest
 
 import proteus
 import proteus.testing
+import proteus.util.pre_post as pre_post
 
 from helper import run_benchmark
+
+
+def preprocess(paths):
+    options = pre_post.ImagePreprocessOptionsInt8()
+    options.order = pre_post.ImageOrder.NHWC
+    options.mean = [123, 107, 104]
+    options.std = [1, 1, 1]
+    options.normalize = True
+    return pre_post.imagePreprocessInt8(paths, options)
+
+
+def postprocess(output, k):
+    return pre_post.resnet50PostprocessInt8(output, k)
+
+
+def validate(responses):
+    golden = [259, 261, 260, 157, 230]
+    k = len(golden)
+
+    for response in responses:
+        assert not response.isError(), response.getError()
+        assert response.id == ""
+        assert response.model == "xmodel"
+        outputs = response.getOutputs()
+        assert len(outputs) == 1
+        for index, output in enumerate(outputs):
+            assert output.name == "input" + str(index)
+            assert output.datatype == proteus.DataType.INT8
+            assert output.parameters.empty()
+            top_categories = postprocess(output, k)
+            assert top_categories == golden
 
 
 @pytest.mark.extensions(["vitis"])
@@ -34,100 +61,7 @@ class TestXmodel:
     """
 
     model = "Xmodel"
-    parameters = None
-
-    def send_request(self, request, check_asserts=True):
-        """
-        Sends the given request to the server and asserts common checks
-
-        Args:
-            request (InferenceRequest): request to send to the server
-            image (np.ndarray): Golden image to check against
-            check_asserts (bool): Verify image against golden
-
-        Returns:
-            Response: Response as a dictionary
-        """
-
-        try:
-            response = self.rest_client.modelInfer(self.endpoint, request)
-        except ConnectionError:
-            pytest.fail(
-                "Connection to the proteus server ended without response!", False
-            )
-
-        num_inputs = len(request.getInputs())
-
-        if check_asserts:
-            assert not response.isError(), response.getError()
-            assert response.id == ""
-            assert response.model == "xmodel"
-            outputs = response.getOutputs()
-            assert len(outputs) == num_inputs
-            for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
-                # the default type out of tensors is int64 but doesn't look right...
-                # assert output.datatype == Datatype.INT64
-                assert output.datatype == proteus.DataType.INT8
-                assert output.parameters.empty()
-        return response
-
-    @staticmethod
-    def preprocess(images, preprocessing):
-        images_preprocessed = []
-
-        data_type = preprocessing["type"]
-        height = preprocessing["net_h"]
-        width = preprocessing["net_w"]
-        channels = preprocessing["net_c"]
-        layout = preprocessing["output_layout"]
-        fix_scale = preprocessing["fix_scale"]
-        mean = preprocessing["mean"]
-
-        for image in images:
-            image = image.astype(getattr(np, data_type))
-            image = cv2.resize(image, (height, width))
-            new_image = np.zeros(image.shape, dtype=np.int8)
-            if layout == "NCHW":  # image defaults to HWC
-                image = np.rollaxis(image, axis=2, start=0)  # reshape to CHW
-                for c in range(channels):
-                    for h in range(height):
-                        for w in range(width):
-                            new_image[c][h][w] = int(
-                                (image[c][h][w] - mean[c]) * fix_scale
-                            )
-
-            else:
-                for h in range(height):
-                    for w in range(width):
-                        for c in range(channels):
-                            new_image[h][w][c] = int(
-                                (image[h][w][c] - mean[c]) * fix_scale
-                            )
-            images_preprocessed.append(new_image)
-
-        return images_preprocessed
-
-    @staticmethod
-    def postprocess(data, k):
-        max_val = max(data)
-        softmax = [0] * len(data)
-
-        data_sum = 0
-        for i, val in enumerate(data):
-            softmax[i] = math.exp(val - max_val)
-            data_sum += softmax[i]
-
-        for i, val in enumerate(data):
-            softmax[i] /= data_sum
-
-        # get the top classifications
-        tmp = [
-            i[0] for i in sorted(enumerate(softmax), reverse=True, key=lambda x: x[1])
-        ]
-
-        # only return the top k
-        return tmp[:k]
+    parameters = {"model": proteus.testing.get_path_to_asset("u250_resnet50")}
 
     def test_xmodel_0(self):
         """
@@ -135,57 +69,16 @@ class TestXmodel:
         """
         image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
 
-        preprocessing = {
-            "net_w": 224,
-            "net_h": 224,
-            "net_c": 3,
-            "mean": [123, 107, 104],
-            "fix_scale": 1,
-            "output_layout": "NHWC",
-            "type": "uint8",
-        }
-
-        batch = 4
-        images = []
-        for _ in range(1):
-            image = cv2.imread(image_path)
-            images.append(image)
-
-        images = self.preprocess(images, preprocessing)
-        for _ in range(batch):
-            request = proteus.ImageInferenceRequest(images[0], True)
-            response = self.send_request(request)
-            outputs = response.getOutputs()
-            assert len(outputs) == 1
-            output = outputs[0]
-            assert output.datatype == proteus.DataType.INT8
-            data = output.getInt8Data()
-            k = self.postprocess(data, 5)
-            gold_response_output = [259, 261, 260, 157, 154]
-            assert k == gold_response_output
+        images = preprocess([image_path])
+        request = proteus.ImageInferenceRequest(images, True)
+        response = self.rest_client.modelInfer(self.endpoint, request)
+        validate([response])
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark):
         image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
-        print(image_path)
 
-        preprocessing = {
-            "net_w": 4,
-            "net_h": 4,
-            "net_c": 3,
-            "mean": [123, 107, 104],
-            "fix_scale": 1,
-            "output_layout": "NHWC",
-            "type": "uint8",
-        }
-
-        batch = 4
-        images = []
-        for _ in range(batch):
-            image = cv2.imread(image_path)
-            images.append(image)
-
-        images = self.preprocess(images, preprocessing)
+        images = preprocess([image_path])
         request = proteus.ImageInferenceRequest(images, True)
 
         options = {

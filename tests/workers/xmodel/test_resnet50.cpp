@@ -80,7 +80,7 @@ void test_0(Client* client) {
   }
 
   if (!client->hasHardware("DPUCADF8H", 1)) {
-    GTEST_SKIP() << "AAt least one DPUCADF8H required on the server";
+    GTEST_SKIP() << "At least one DPUCADF8H required on the server";
   }
 
   const auto kTestAsset = getPathToAsset("asset_dog-3619020_640.jpg");
@@ -103,19 +103,19 @@ void test_0(Client* client) {
 TEST_F(GrpcFixture, WorkersXmodelResnet50) { test_0(client_.get()); }
 #endif
 
-// // @pytest.mark.extensions(["vitis"])
-// // @pytest.mark.fpgas("DPUCADF8H", 1)
-// // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-// TEST_F(BaseFixture, WorkersXmodelResnet50) {
-//   NativeClient client;
-//   test_0(&client);
-// }
+// @pytest.mark.extensions(["vitis"])
+// @pytest.mark.fpgas("DPUCADF8H", 1)
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, WorkersXmodelResnet50) {
+  NativeClient client;
+  test_0(&client);
+}
 
-// #ifdef PROTEUS_ENABLE_HTTP
-// // @pytest.mark.extensions(["vitis"])
-// // @pytest.mark.fpgas("DPUCADF8H", 1)
-// // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-// TEST_F(HttpFixture, WorkersXmodelResnet50) { test_0(client_.get()); }
-// #endif
+#ifdef PROTEUS_ENABLE_HTTP
+// @pytest.mark.extensions(["vitis"])
+// @pytest.mark.fpgas("DPUCADF8H", 1)
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(HttpFixture, WorkersXmodelResnet50) { test_0(client_.get()); }
+#endif
 
 }  // namespace proteus

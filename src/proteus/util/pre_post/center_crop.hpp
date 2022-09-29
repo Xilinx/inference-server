@@ -28,7 +28,7 @@ namespace proteus::util {
  * @param width: width of the output image
  * @return cv::Mat: Image cropped to required shape
  */
-cv::Mat center_crop(cv::Mat img, int height, int width) {
+inline cv::Mat centerCrop(cv::Mat img, int height, int width) {
   const int offsetW = (img.cols - width) / 2;
   const int offsetH = (img.rows - height) / 2;
   const cv::Rect roi(offsetW, offsetH, width, height);

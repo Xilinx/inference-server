@@ -48,6 +48,7 @@ add_subdirectory(client_operators) # sets CLIENT_OPERATORS_OBJS
 add_subdirectory(clients) # sets CLIENT_OBJS
 add_subdirectory(servers) # sets SERVER_OBJS
 add_subdirectory(testing) # sets TESTING_OBJS
+add_subdirectory(util) # sets UTIL_OBJS
 
 # add this dummy file to add a dependency on the Pybind11 target so it runs if
 # the Proteus package isn't installed in pip
@@ -75,6 +76,7 @@ target_link_libraries(
           ${CLIENT_OBJS}
           ${SERVER_OBJS}
           ${TESTING_OBJS}
+          ${UTIL_OBJS}
 )
 set_target_properties(proteus_py PROPERTIES OUTPUT_NAME _proteus)
 

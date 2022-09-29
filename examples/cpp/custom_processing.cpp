@@ -82,7 +82,7 @@ proteus::InferenceResponse infer(const std::string& worker_name,
 std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
                              int k) {
   return proteus::util::resnet50Postprocess(
-    static_cast<int32_t*>(output.getData()), output.getSize(), k);
+    static_cast<int8_t*>(output.getData()), output.getSize(), k);
 }
 #else
 std::string load(const std::string& path_to_xmodel) {
