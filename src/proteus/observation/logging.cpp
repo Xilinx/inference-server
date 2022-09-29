@@ -95,6 +95,9 @@ void Logger::set(Loggers name) {
     case Loggers::kServer:
       logger_ = spdlog::get("server");
       break;
+    case Loggers::kTest:
+      logger_ = spdlog::get("test");
+      break;
     default:
       const auto name_str = std::to_string(static_cast<int>(name));
       throw invalid_argument("Unknown logger name: " + name_str);

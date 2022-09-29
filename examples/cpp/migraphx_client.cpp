@@ -53,7 +53,7 @@ struct Option {
   std::filesystem::path root = std::getenv("PROTEUS_ROOT");
 
   std::filesystem::path model =
-    root / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx";
+    root / "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx";
   std::filesystem::path image_location =
     root / "tests/assets/dog-3619020_640.jpg";
 
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
   std::filesystem::path root(root_env);
 
   std::filesystem::path model =
-    root / "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx";
+    root / "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx";
   if (argc > 1) model = std::string(argv[1]);
 
   int batch_size(64);

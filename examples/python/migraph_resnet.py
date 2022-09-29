@@ -121,7 +121,7 @@ def parse_args():
         type=str,
         required=False,
         default=os.path.join(
-            root, "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
+            root, "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx"
         ),
         help="Location of model file on server",
     )
@@ -130,7 +130,7 @@ def parse_args():
         "-v",
         type=str,
         required=False,
-        default=os.path.join(root, "external/artifacts/migraphx/ILSVRC2012_img_val"),
+        default=os.path.join(root, "external/artifacts/onnx/ILSVRC2012_img_val"),
         help="The directory containing validation images, such as the Imagenet validation set if available",
     )
     parser.add_argument(
