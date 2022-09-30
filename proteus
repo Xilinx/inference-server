@@ -831,7 +831,6 @@ class Get:
                 "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt",
                 "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx",
                 "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names",
-                # "https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/vision/python_yolov4/image_processing.py",
             ],
             pytorch_models: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"

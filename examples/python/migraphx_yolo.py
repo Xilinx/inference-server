@@ -25,12 +25,36 @@ Output shapes: (1, 52, 52, 3, 85) (1, 26, 26, 3, 85) (1, 13, 13, 3, 85)
 There are 3 output layers. For each layer, there are 255 outputs: 85 values per anchor, times 3 anchors.
 
 The 85 values of each anchor consists of 4 box coordinates describing the predicted bounding box (x, y, h, w), 1 object confidence, and 80 class confidences.
+
+If necessary, run this from the Proteus command line:
+pip3 install Pillow
+
 """
 # import migraphx    # redundant with proteus
+import os
+# The following packages aren't automatically installed in the dockerfile:
+try:
+    import scipy
+except ImportError:
+    os.system("pip3 install scipy")
+    import scipy
+
+try:
+    from PIL import Image
+except ImportError:
+    os.system("pip3 install Pillow")
+    from PIL import Image
+
+try:
+    import onnxruntime
+except ImportError:
+    os.system("pip3 install onnxruntime")
+    import onnxruntime
+
 import cv2
 import time
 import numpy as np
-from PIL import Image
+# from PIL import Image
 # from inspect import getmembers, isfunction
 
 import argparse

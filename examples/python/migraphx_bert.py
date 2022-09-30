@@ -12,6 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#####################################################################################
+# The MIT License (MIT)
+#
+# Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#####################################################################################
+
 '''
 Bert model client
 
@@ -41,29 +65,21 @@ cp /home/bpickrel/is-fork/inference-server/AMDMIGraphX/examples/nlp/python_bert_
 '''
 
 
-#####################################################################################
-# The MIT License (MIT)
-#
-# Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#####################################################################################
+import os
+try:
+    import tokenizers
+except ImportError:
+    os.system("pip3 install tokenizers==0.12.1")
+    import tokenizers
+
+try:
+    import onnxruntime
+except ImportError:
+    os.system("pip3 install onnxruntime")
+    import onnxruntime
+
+
+
 import proteus
 # from _proteus import *
 import numpy as np
@@ -192,7 +208,6 @@ for idx in range(0,2):
     request = proteus.predict_api.InferenceRequest()
 
     item = eval_examples[idx]   # class SquadExample
-    print(' retest with input buffers fix ')
 
     # add items to inference request
 
@@ -227,39 +242,9 @@ for idx in range(0,2):
     input_n.shape = (1,)
     input_n.setInt64Data( np.array([item.qas_id], dtype=np.int64))        
     request.addInputTensor(input_n)
-
-    # see external/artifacts/migraphx/bert_squad/bert-squad-migraphx.py
-        # result = model.run(
-        #     {
-        #         "unique_ids_raw_output___9:0": np.array([item.qas_id], dtype=np.int64),
-        #         "input_ids:0": input_ids[idx : idx + bs],
-        #         "input_mask:0": input_mask[idx : idx + bs],
-        #         "segment_ids:0": segment_ids[idx : idx + bs],
-        #     }
-        # )
-        # print("request is ready.  Sending...")
-        # response = client.modelInfer(worker_name, request)
-        # assert not response.isError(), response.getError()
-        # print("Client received inference reply.")
-    
-
-        # in_batch = result[1].get_shape().lens()[0]
-        # start_logits = [float(x) for x in result[1].tolist()]
-        # end_logits = [float(x) for x in result[0].tolist()]
-        # for i in range(0, in_batch):
-        #     unique_id = len(all_results)
-        #     all_results.append(
-        #         RawResult(
-        #             unique_id=unique_id, start_logits=start_logits, end_logits=end_logits
-        #         )
-        #     )
     requests.append(request)
 
-
-
-# requests=[requests[1]]
-print(requests)
-print('request is ready, size ', len(requests),  '.  Sending...')
+print('request batch is ready, size ', len(requests),  '.  Sending...')
 responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, requests)  
 print('responses received. ')
 
