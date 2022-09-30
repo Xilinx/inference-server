@@ -21,6 +21,8 @@
 #ifndef GUARD_PROTEUS_BUILD_OPTIONS_HPP
 #define GUARD_PROTEUS_BUILD_OPTIONS_HPP
 
+/// Enables Proteus's testing
+#cmakedefine PROTEUS_BUILD_TESTING
 /// Enables Proteus's rest endpoints for inference
 #cmakedefine PROTEUS_ENABLE_REST
 /// Enables Proteus's metric collection

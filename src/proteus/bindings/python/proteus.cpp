@@ -27,6 +27,7 @@
 #include "proteus/bindings/python/servers/server.hpp"
 #include "proteus/bindings/python/testing/testing.hpp"
 #include "proteus/bindings/python/util/util.hpp"
+#include "proteus/build_options.hpp"
 #include "proteus/core/exceptions.hpp"
 
 namespace py = pybind11;
@@ -54,7 +55,9 @@ PYBIND11_MODULE(_proteus, m) {
   wrapWebSocketClient(c);
   wrapServer(s);
   wrapInferAsync(f);
+#ifdef PROTEUS_BUILD_TESTING
   wrapTesting(t);
+#endif
   wrapUtil(u);
 }
 
