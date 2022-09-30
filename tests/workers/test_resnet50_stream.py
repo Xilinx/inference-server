@@ -36,7 +36,7 @@ class TestResnet50Stream:
     parameters = None
 
     def construct_request(self, requested_frames_count):
-        video_path = proteus.testing.get_path_to_asset("asset_Physicsworks.ogv")
+        video_path = proteus.testing.getPathToAsset("asset_Physicsworks.ogv")
 
         input_0 = InferenceRequestInput()
         input_0.name = "input0"

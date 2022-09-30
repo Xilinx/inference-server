@@ -61,13 +61,13 @@ class TestXmodel:
     """
 
     model = "Xmodel"
-    parameters = {"model": proteus.testing.get_path_to_asset("u250_resnet50")}
+    parameters = {"model": proteus.testing.getPathToAsset("u250_resnet50")}
 
     def test_xmodel_0(self):
         """
         Send a request to resnet50 as tensor data
         """
-        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         images = preprocess([image_path])
         request = proteus.ImageInferenceRequest(images, True)
@@ -76,7 +76,7 @@ class TestXmodel:
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark):
-        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         images = preprocess([image_path])
         request = proteus.ImageInferenceRequest(images, True)

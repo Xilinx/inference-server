@@ -95,7 +95,7 @@ class TestInferImageYoloV3DPUCADF8H:
         return response
 
     def construct_request(self, asTensor):
-        image_path = proteus.testing.get_path_to_asset("asset_bicycle-384566_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_bicycle-384566_640.jpg")
 
         batch = 1
         images = [image_path] * batch

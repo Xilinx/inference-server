@@ -36,7 +36,7 @@ class TestTfZendnn:
 
     model = "TfZendnn"
     parameters = {
-        "model": proteus.testing.get_path_to_asset("tf_resnet50"),
+        "model": proteus.testing.getPathToAsset("tf_resnet50"),
         "input_node": "input",
         "output_node": "resnet_v1_50/predictions/Reshape_1",
         "input_size": 224,
@@ -85,7 +85,7 @@ class TestTfZendnn:
         """
         Send a request to tf model as tensor data
         """
-        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         preprocessing = {"input_size": 224, "resize_method": "crop"}
 

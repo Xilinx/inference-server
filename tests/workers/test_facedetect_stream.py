@@ -40,7 +40,7 @@ class TestFacedetectStream:
 
     def construct_request(self, requested_frames_count):
         asset_key = "asset_Physicsworks.ogv"
-        video_path = proteus.testing.get_path_to_asset(asset_key)
+        video_path = proteus.testing.getPathToAsset(asset_key)
 
         input_0 = InferenceRequestInput()
         input_0.name = "input0"

@@ -36,7 +36,7 @@ class TestPtZendnn:
 
     model = "PtZendnn"
     parameters = {
-        "model": proteus.testing.get_path_to_asset("pt_resnet50"),
+        "model": proteus.testing.getPathToAsset("pt_resnet50"),
         "input_size": 224,
         "output_classes": 1000,
         "batch_size": 8,
@@ -81,7 +81,7 @@ class TestPtZendnn:
         """
         Send a request to pt model as tensor data
         """
-        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         preprocessing = {"input_size": 224}
 

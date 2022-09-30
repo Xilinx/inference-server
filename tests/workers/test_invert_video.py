@@ -72,7 +72,7 @@ class TestInvertVideo:
 
     def test_invert_video_0(self):
         requested_frames_count = 100
-        video_path = proteus.testing.get_path_to_asset("asset_Physicsworks.ogv")
+        video_path = proteus.testing.getPathToAsset("asset_Physicsworks.ogv")
 
         self.construct_request(video_path, requested_frames_count)
         self.recv_frames(video_path, requested_frames_count)

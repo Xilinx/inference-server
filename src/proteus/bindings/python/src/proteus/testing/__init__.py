@@ -12,17 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-
-import proteus
 from proteus._proteus.testing import *
-
-
-def get_path_to_asset(asset: str):
-    try:
-        asset_path = getPathToAsset(asset)
-    except proteus.RuntimeError:
-        pytest.skip(f"Asset {asset} cannot be found")
-    if not asset_path:
-        pytest.skip(f"Asset {asset_path} cannot be found")
-    return asset_path

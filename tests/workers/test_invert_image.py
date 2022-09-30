@@ -102,7 +102,7 @@ class TestInvertImage:
         return response
 
     def construct_request(self, asTensor):
-        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         request = proteus.ImageInferenceRequest(image_path, asTensor)
 

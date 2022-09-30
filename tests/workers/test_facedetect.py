@@ -87,7 +87,7 @@ class TestInferImageFacedetectDPUCADF8H:
         return response
 
     def construct_request(self, asTensor):
-        image_path = proteus.testing.get_path_to_asset("asset_girl-1867092_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_girl-1867092_640.jpg")
         batch = 1
         images = [image_path] * batch
         request = proteus.ImageInferenceRequest(images, asTensor)

@@ -76,7 +76,7 @@ class TestInferImageResNet50DPUCADF8H:
         return response
 
     def construct_request(self, asTensor, batches=1):
-        image_path = proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         # TODO(vishalk): AKS gives a segfault if batch != 4
         images = [image_path] * batches

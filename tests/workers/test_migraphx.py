@@ -79,7 +79,7 @@ class TestMigraphx:
     """
 
     model = "Migraphx"
-    parameters = {"model": proteus.testing.get_path_to_asset("onnx_resnet50")}
+    parameters = {"model": proteus.testing.getPathToAsset("onnx_resnet50")}
 
     def send_request(self, request, check_asserts=True):
         """
@@ -121,7 +121,7 @@ class TestMigraphx:
         Send a request to model as tensor data
         """
         image_paths = [
-            proteus.testing.get_path_to_asset("asset_dog-3619020_640.jpg"),
+            proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg"),
         ]
         gold_responses = [[259, 261, 157, 260, 154]]
         assert len(image_paths) == len(gold_responses)
