@@ -66,6 +66,7 @@ cp /home/bpickrel/is-fork/inference-server/AMDMIGraphX/examples/nlp/python_bert_
 
 
 import os
+# The following packages aren't automatically installed in the dockerfile:
 try:
     import tokenizers
 except ImportError:
