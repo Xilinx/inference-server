@@ -67,7 +67,7 @@ void initialize() {
   Manager::getInstance().init();
 
   ModelRepository::setRepository(std::string(std::getenv("PROTEUS_ROOT")) +
-                                 "/external/repository");
+                                 "/external/artifacts/repository");
 
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
