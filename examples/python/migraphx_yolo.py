@@ -38,8 +38,9 @@ import os
 import sys
 
 # the more/utilities directory is a local, temporary location for dev.
-sys.path.append('/workspace/proteus/external/artifacts/migraphx/more')
-from utilities import image_processing as ip
+# sys.path.append('/workspace/proteus/external/artifacts/migraphx/more')
+sys.path.append('/workspace/proteus/examples/python/utils')
+import yolo_image_processing as ip
 
 import time
 
@@ -49,12 +50,7 @@ import numpy as np
 import proteus
 import proteus.clients
 
-import migraphx # debug
 import onnxruntime as rt
-
-# The make_nxn and preprocess functions are based on an migraphx example at
-# AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
-# The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
 
 def read_class_names(class_file_name):
     '''loads class name from a file'''
@@ -63,32 +59,6 @@ def read_class_names(class_file_name):
         for ID, name in enumerate(data):
             names[ID] = name.strip('\n')
     return names
-
-def run_migraphx(model_name, img, labels):
-    """
-    Do a migraphx call directly for one image; compare results
-
-    Args:
-        model_name (str): path to the model
-        img (np.array): image to send
-        labels (dict): label strings for resnet
-    """
-    import migraphx
-
-    print("Beginning comparison run-->parsing the model for migraphx...")
-    model = migraphx.parse_onnx(model_name)
-    model.compile(migraphx.get_target("gpu"))
-    print("Ok.")
-
-    # img and img2 are already the correct shape for the Inf Server, but need another dimension for Python API migraphx
-    test_img = img
-    # add a 4th tensor dimension in first position, expected by migraphx
-    test_img = np.expand_dims(test_img, 0)
-
-    # Run the inference
-    results = model.run({"data": test_img})
-    detections = results
-    print("Output shape:", list(map(lambda detection: detection.shape, detections)))
 
 
 def parse_args():
@@ -128,7 +98,7 @@ def parse_args():
         "-i",
         type=str,
         required=False,
-        default=os.path.join(root, "external/artifacts/migraphx/more/utilities/input.jpg"),  # an outdoor crowd scene
+        default=os.path.join(root, "tests/assets/crowd.jpg"),  # an outdoor crowd scene from the COCO dataset (https://cocodataset.org/#explore)
         help="An image to try inference on.  Use git-lfs to pull image assets",
     )
 
@@ -139,7 +109,7 @@ def parse_args():
         required=False,
         default=os.path.join(
             root, "tests/assets/bicycle-384566_640.jpg"
-        ),  # a bicyclist
+        ),  # a bicyclist.  The model can't identify this
         help="A second image to try inference on",
     )
 
@@ -190,7 +160,7 @@ def main(args):
 
     # I found that allocation could fail with a large batch value of 64 and large (13) default buffer count in the migraphx worker
     # Beyond batch size 56, the worker seems to lock up while compiling the model
-    parameters.put("batch", 1)
+    parameters.put("batch", 2)
      
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.

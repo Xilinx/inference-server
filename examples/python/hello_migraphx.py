@@ -272,36 +272,13 @@ def main(args):
     img2 = img2.transpose(2, 0, 1)
     img2 = preprocess(img2)
 
-    # # for debug: redisplay the processed images
-    # display_img = img
-    # display_img = display_img.transpose(1, 2, 0)
-
-    # x = np.max(display_img) - np.min(display_img)
-    # renormalized_img = (display_img - np.min(display_img))*255/x
-    # cv2.imwrite('sample1.jpg', renormalized_img.astype(np.uint8))
-
-    # display_img2 = img2
-    # display_img2 = display_img2.transpose(1, 2, 0)
-    # x2 = np.max(display_img2) - np.min(display_img2)
-    # renormalized_img2 = (display_img2 - np.min(display_img2))*255/x2
-    # cv2.imwrite('sample2.jpg',  renormalized_img2.astype(np.uint8))
-
     #
-    # create a multi-image inference request and send it
+    # create multiple image inference requests and send them all together
     #
     images = [img2, img2]
 
     print("Creating inference request set...")
     images = [proteus.ImageInferenceRequest(image) for image in images]
-
-    # This doesn't work because I can't create the Proteus class List:
-    # TypeError: inferAsyncOrderedBatched(): incompatible function arguments. The following argument types are supported:
-    # 1. (client: _proteus.clients.Client, model: str, requests: List[_proteus.predict_api.InferenceRequest], batch_sizes: int) -> List[_proteus.predict_api.InferenceResponse]
-    # print(type(client),"\n", type(worker_name), "\n",  type(images), "\n",  type(images[0]))
-    # responses = proteus.client_operators.inferAsyncOrderedBatched(client, worker_name, images)
-
-
-
     responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)  
     for response in responses:  
         assert not response.isError(), response.getError()
@@ -327,6 +304,7 @@ def main(args):
                 labels[answer],
             )
 
+    # optional: make the same request to the migraphx API for comparison
     # run_migraphx(modelname, img2, labels)
 
     print("Done")

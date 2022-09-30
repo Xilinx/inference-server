@@ -181,7 +181,6 @@ all_results = []
 # input_n.shape = [*image.shape]  # Convert tuple to list
 # _set_data(input_n, image.flatten())
 
-# TODO:  Use proteus.client_operators.inferAsyncOrdered
 print('eval_ex -------------- ', len(eval_examples), bs, n)
 requests=[]
     

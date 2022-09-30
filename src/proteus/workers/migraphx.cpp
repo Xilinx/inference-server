@@ -62,7 +62,6 @@ class MIGraphXWorker : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
-  migraphx::program prog_;
 
  private:
   void doInit(RequestParameters* parameters) override;
@@ -75,19 +74,10 @@ class MIGraphXWorker : public Worker {
 
   // the model file to be loaded.  Supported types are *.onnx and *.mxr
   std::filesystem::path input_file_;
-
-  // Image properties are contained in the model
-  // unsigned output_classes_;
-  // unsigned image_width_, image_height_, image_channels_, image_size_;
-
-  // If we're using a model with one input, store its shape here.  If more than
-  // one, read their shapes from the model for eval.  (We don't do this
-  // for the single input case only because they're looked up by name, and
-  // single-input clients aren't guaranteed to give a correct name)
-  // migraphx::shape input_shape;
-
-  // Input / Output nodes
-  std::string input_node_, output_node_;
+  // The prog_ is populated by reading the model file and contains most of
+  // the worker's important info such as number, data types and sizes of 
+  // input and output buffers
+  migraphx::program prog_;
 
   // Enum-to-enum conversion to let us read data type from migraphx model.
   // The definitions are taken from the MIGraphX macro
@@ -213,17 +203,14 @@ std::stringstream smsg(msg);
                          onnx_path.c_str());
 
       migraphx::onnx_options onnx_opts;
-      // onnx_opts.set_input_parameter_shape("data", {2, 3, 224, 224}); //
-      // {todo:  read from user request here}  set_default_dim_value
       onnx_opts.set_default_dim_value(batch_size_);
       this->prog_ = migraphx::parse_onnx(onnx_path.c_str(), onnx_opts);
 
       auto param_shapes =
         prog_.get_parameter_shapes();  // program_parameter_shapes struct
-      // auto input = param_shapes.names().front();  // "data", not currently
-      // used
+
       PROTEUS_LOG_INFO(logger,
-                       std::string("migraphx worker ASDF loaded ONNX model file ") +
+                       std::string("migraphx worker loaded ONNX model file ") +
                          onnx_path.c_str());
 
       // Compile the model.  Hard-coded choices of offload_copy and gpu
@@ -285,10 +272,6 @@ std::stringstream smsg(msg);
   auto length = sh.lengths();
   migraphx::api::shapes output_shapes = prog_.get_output_shapes();
   this->batch_size_ = length[0];
-
-  // std::vector<size_t> output_lengths = output_shapes[0].lengths();
-  // output_classes_ = std::accumulate(
-  //   output_lengths.begin(), output_lengths.end(), 1, std::multiplies<size_t>());
 }
 
 /**
@@ -312,7 +295,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
   constexpr auto kBufferNum = 3U;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  // Allocate enough to hold buffer_num batches' worth of images.
+  // Allocate enough to hold buffer_num batches' worth of input sets.
   // Extra batches allow server to hold more requests at one time
   // todo:  this try/catch was observed to just get stuck when batch size
   // is too big (approx. 56 for Yolov4 model); how to catch the error?
@@ -346,15 +329,9 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
 
       // todo: test whether VectorBuffer::allocate() does this in the right order for multiple (kBufferNum) sets of buffers.
       // It wasn't designed to be called in a loop like this.  Using 1 in place of kBufferNum
-      // VectorBuffer::allocate(
-      //   this->input_buffers_, 1,
-      //   max_buffer,
-      //   DataType::UINT8);
-                             
-                             
                              
       buffer_vec.emplace_back(std::make_unique<VectorBuffer>(max_buffer, DataType::UINT8));
-  PROTEUS_LOG_INFO(logger, std::string("buffer_vec has size   ") +
+      PROTEUS_LOG_INFO(logger, std::string("buffer_vec has size   ") +
                              std::to_string(buffer_vec.size()) + " buffers");
     }
     this->input_buffers_->enqueue(std::move(buffer_vec));
@@ -394,11 +371,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 #endif
   PROTEUS_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
 
-util::setThreadName("Migraphx");
+  util::setThreadName("Migraphx");
 
-// stringstream used for formatting logger messages
-std::string msg;
-std::stringstream smsg(msg);
+  // stringstream used for formatting logger messages
+  std::string msg;
+  std::stringstream smsg(msg);
 
   //
   //  Wait for requests from the batcher in an infinite loop.  This thread will
@@ -437,11 +414,10 @@ std::stringstream smsg(msg);
       // model.
       auto param_shapes = prog_.get_parameter_shapes();
 
-      for ( auto aninput : inputs0 ){ // InferenceRequestInput
+      for (auto aninput : inputs0){ // InferenceRequestInput
         auto aname = aninput.getName();
         auto avShape = aninput.getShape();  // vector<int64>
 
-        // check that lengths() and type match
 
         // Look up the shape by name in the model, but if there's only 1 input then
         // the name in the request isn't required to match.
@@ -453,32 +429,31 @@ std::stringstream smsg(msg);
         
         if( toDataType(modelshape.type()) != aninput.getDatatype()){
           smsg.str("");
-smsg << "model and input data types don't match:   " << toDataType(modelshape.type()) << " vs " << aninput.getDatatype();
-PROTEUS_LOG_DEBUG(logger, smsg.str());
+          smsg << "Migraph worker model and input data types don't match:   " << toDataType(modelshape.type()) << " vs " << aninput.getDatatype();
+          throw(invalid_argument(smsg.str()));
         }
 
+        // check that lengths() and type match
         auto llen = modelshape.lengths();
-        // compare each dimension of shapes except the 0'th (batch size)
-        for(size_t ii = 1; ii < avShape.size(); ii++)
-        {  
-          if( avShape.size() != llen.size() ||    avShape[ii] != llen[ii])
-          {
-          smsg.str("");
-smsg << "model and input shapes don't match:   ";
-for(auto j : llen) smsg << j << ", ";
-smsg << " vs " ;
-for(auto j : avShape) smsg << j << ", ";
-PROTEUS_LOG_DEBUG(logger, smsg.str());
-// throw(invalid_argument(smsg.str()));
-          }
-        }
-
-PROTEUS_LOG_DEBUG(logger, (aname + "  is input name").c_str());
-
+        //    compare each dimension of shapes except the 0'th (batch size)
+        //  TODO: the following check works inconsistently between different example client scripts.
+        // It accepts inputs from the yolo script but rejects hello_migraphx.py inputs
+        // for(size_t ii = 1; ii < avShape.size(); ii++)
+        // {  
+        //   if( avShape.size() != llen.size() || avShape[ii] != llen[ii])
+        //   {
+        //     smsg.str("");
+        //     smsg << "Migraph worker model and input shapes don't match for input \"" << aname << "\":   ";
+        //     for(auto j : llen) smsg << j << ", ";
+        //     smsg << " vs " ;
+        //     for(auto j : avShape) smsg << j << ", ";
+        //     PROTEUS_LOG_DEBUG(logger, smsg.str());
+        //     throw invalid_argument(smsg.str());
+        //   }
+        // }
 
         auto aData = aninput.getData();  //  void *
         params.add(aname.c_str(), migraphx::argument(modelshape, aData));
-
       }
 
       // TODO: if there were fewer requests in the batch than the stated batch size,
@@ -585,14 +560,7 @@ PROTEUS_LOG_DEBUG(logger, (aname + "  is input name").c_str());
             buffer.resize(size_of_result);
             memcpy(buffer.data(), results, size_of_result);
             output.setData(std::move(buffer));
-
-            PROTEUS_LOG_DEBUG(logger, (std::string("Adding an output")));
-            smsg.str("dimensions: ");
-            for(auto a: lengths)
-              smsg << a << "  ";
-            PROTEUS_LOG_DEBUG(logger, smsg.str());
             resp.addOutput(output);
-          
           }
           // respond back to the client
           req->runCallbackOnce(resp);
