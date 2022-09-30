@@ -29,7 +29,8 @@ std::string getPathToAsset(const std::string& key) {
   if (root_env == nullptr) {
     throw environment_not_set_error("PROTEUS_ROOT not found in the env");
   }
-  const auto models_txt = fs::path(root_env) / "external/artifacts/assets.txt";
+  const fs::path root_path{root_env};
+  const auto models_txt = root_path / "external/artifacts/artifacts.txt";
 
   std::ifstream models_file;
   models_file.open(models_txt);
@@ -43,7 +44,7 @@ std::string getPathToAsset(const std::string& key) {
     if (util::startsWith(line, key)) {
       auto substrings = util::split(line, ":");
       assert(substrings.size() == 2);
-      return substrings[1];
+      return root_path / substrings[1];
     }
   }
   throw invalid_argument("Key not found in downloaded assets: " + key);

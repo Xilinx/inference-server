@@ -252,7 +252,9 @@ def main():
 
     with open(artifact_dir / "artifacts.txt", "w+") as f:
         for key, path in model_paths.items():
-            f.write(f"{key}:{path}\n")
+            # +1 to include the trailing /
+            relative_path = path[len(str(Path.cwd())) + 1 :]
+            f.write(f"{key}:{relative_path}\n")
 
     shutil.rmtree(tmp_dir)
 
