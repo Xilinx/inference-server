@@ -15,14 +15,15 @@
 
 import numpy as np
 import pytest
-from helper import run_benchmark
+
+import proteus
 from proteus.predict_api import (
     InferenceRequest,
     InferenceRequestInput,
     InferenceRequestOutput,
 )
 
-import proteus
+from helper import run_benchmark
 
 
 @pytest.mark.usefixtures("load")

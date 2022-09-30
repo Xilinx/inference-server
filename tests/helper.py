@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import json
-import pathlib
 import os
+import pathlib
 import re
 
 from proteus.predict_api import to_dict

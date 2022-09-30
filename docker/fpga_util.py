@@ -16,9 +16,9 @@
 
 import json
 import os
-from pathlib import Path
 import socket
 import sys
+from pathlib import Path
 
 
 class XRMClient:

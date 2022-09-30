@@ -32,6 +32,7 @@ Added
 - Add ``inferAsyncOrdered`` as a client operator for making inferences in parallel (:pr:`66`)
 - Support building Python wheels with cibuildwheel (:pr:`71`)
 - Support XModels with multiple output tensors (:pr:`74`)
+- Add FP16 support (:pr:`81`)
 
 Changed
 ^^^^^^^
@@ -39,12 +40,14 @@ Changed
 - Refactor pre- and post-processing functions in C++ (:commit:`42cf748`)
 - Templatize Dockerfile for different base images (:pr:`71`)
 - Use multiple HTTP clients internally for parallel HTTP requests (:pr:`66`)
+- Update test asset downloading (:pr:`81`)
 
 Fixed
 ^^^^^
 
 - Use input tensors in requests correctly (:pr:`61`)
 - Fix bug with multiple input tensors (:pr:`74`)
+- Align gRPC responses using non-gRPC-native data types with other input protocols (:pr:`81`)
 
 :github:`0.2.0 <Xilinx/inference-server/releases/tag/v0.2.0>` - 2022-08-05
 --------------------------------------------------------------------------

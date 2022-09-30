@@ -21,13 +21,14 @@ import subprocess
 import time
 
 import pytest
-from helper import build_path, kDefaultHttpPort, root_path, run_path
 from pytest_cpp.plugin import CppItem
 from xprocess import ProcessStarter
 
 import proteus
 import proteus.clients
 import proteus.servers
+
+from helper import build_path, kDefaultHttpPort, root_path, run_path
 
 proteus_command = []
 http_server_addr = ""
