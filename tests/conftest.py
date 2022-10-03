@@ -276,8 +276,8 @@ def load(request, server):
     while request.cls.rest_client.modelReady(response):
         time.sleep(1)
 
-    del request.cls.ws_client
-    del request.cls.rest_client
+    request.cls.ws_client = None
+    request.cls.rest_client = None
 
 
 def rest_client(request):
@@ -297,5 +297,5 @@ def assign_client(request):
 
     yield  # perform testing
 
-    del request.cls.rest_client
-    del request.cls.ws_client
+    request.cls.ws_client = None
+    request.cls.rest_client = None
