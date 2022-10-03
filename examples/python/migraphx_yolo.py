@@ -32,7 +32,7 @@ pip3 install Pillow
 """
 # import migraphx    # redundant with proteus
 import os
-# The following packages aren't automatically installed in the dockerfile:
+# The following packages aren't automatically installed in the docker image:
 try:
     import scipy
 except ImportError:
@@ -53,10 +53,6 @@ except ImportError:
 
 import cv2
 import time
-import numpy as np
-# from PIL import Image
-# from inspect import getmembers, isfunction
-
 import argparse
 import os
 import sys
@@ -243,7 +239,6 @@ def main(args):
     print("Done.")
     #
     #    Alan's related but not identical example is at https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb
-    
 
 if __name__ == "__main__":
     args = parse_args()

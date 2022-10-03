@@ -121,7 +121,7 @@ eval_examples = read_squad_examples(input_file=predict_file)
 max_seq_length = 256
 doc_stride = 128
 max_query_length = 64
-batch_size = 2
+batch_size = 13
 n_best_size = 20
 max_answer_length = 30
 

@@ -79,6 +79,14 @@ class MIGraphXWorker : public Worker {
   // input and output buffers
   migraphx::program prog_;
 
+  // flag to pad out a batch with dummy data.  Sending a batch of requests
+  // with uninitialized data may crash migraphx, depending on the model.
+  // If pad_batch_ is true, this worker will pad any unused request slots
+  // in a batch with dummy copies of the first request.
+  bool pad_batch_;
+  // Calculated sizes in bytes for each input tensor, by input name
+  std::map<std::string, size_t> input_sizes_;
+
   // Enum-to-enum conversion to let us read data type from migraphx model.
   // The definitions are taken from the MIGraphX macro
   // MIGRAPHX_SHAPE_VISIT_TYPES
@@ -123,6 +131,7 @@ std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
 void MIGraphXWorker::doInit(RequestParameters* parameters) {
   // default batch size; client may request a change
   batch_size_ = 64;
+  pad_batch_ = true;
 #ifdef PROTEUS_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -144,6 +153,9 @@ std::stringstream smsg(msg);
     // Client must try again.
     throw std::invalid_argument(
       "model file argument missing from model load request");
+  }
+  if (parameters->has("pad_batch")) {
+    this->pad_batch_ = parameters->get<bool>("pad_batch");
   }
 
   // Only load/compile the model once during the lifetime of the worker.
@@ -302,22 +314,21 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
 
   // Calculate the total number of bytes required for all inputs
   
-  size_t in_buffer_size{0};
-  (void)in_buffer_size;
   BufferPtrs buffer_vec;
 
   migraphx::program_parameter_shapes input_shapes = this->prog_.get_parameter_shapes();
 
-  // Work out the max. size of any input buffer, in bytes.  We'll allocate all of them the same size.
+  // Work out the max. size of any input buffer, in bytes.  We'll allocate all of them the same size
+  // in case a request puts them in mixed-up order.
   size_t max_buffer(0);
   for(auto aname :  input_shapes.names()){
-
     migraphx::shape ashape = input_shapes[aname];
     auto llen = ashape.lengths();
-    size_t this_input_size = std::accumulate(
-        llen.begin() + 1, llen.end(), 1, std::multiplies<size_t>());   // <== skip 0'th dimension, which is batch size
-    this_input_size *= (toDataType(ashape.type()).size());
-    max_buffer = std::max(max_buffer, this_input_size);
+    // size of the buffer needed for this input
+    auto asize = ashape.bytes();
+    // size of a single request input (divide by batch size)
+    input_sizes_[aname] = asize / *(ashape.lengths().begin());
+    max_buffer = std::max(max_buffer, asize);
   }
 
   // Now, allocate the input and output buffers.
@@ -455,9 +466,26 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
         auto aData = aninput.getData();  //  void *
         params.add(aname.c_str(), migraphx::argument(modelshape, aData));
       }
-
-      // TODO: if there were fewer requests in the batch than the stated batch size,
+      // If there were fewer requests in the batch than the stated batch size,
       // pad the various input tensors with copies of the 0'th request's data.
+
+      if(pad_batch_){
+        // for each named input channel
+        for (auto aninput : inputs0){
+          auto aname = aninput.getName();
+          // Look up the shape by name in the model, but if there's only 1 input then
+          // the name in the request isn't required to match.
+          if(inputs0.size() == 1){
+            aname = param_shapes.names().front();
+          }
+          migraphx::shape modelshape = param_shapes[aname.c_str()];
+          char * aData = static_cast<char *>(aninput.getData());
+          // For each empty slot in buffer, i.e. from end of real requests up to batch size
+          for(size_t reqIdx = batch->getRequests().size(); reqIdx < batch_size_; reqIdx++){
+            memcpy(aData + reqIdx*input_sizes_[aname], aData, input_sizes_[aname]);
+          }
+        }
+      }
 
       //
       // Run the inference
@@ -467,7 +495,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       PROTEUS_LOG_INFO(logger, "Beginning migraphx eval");
       std::chrono::time_point eval_tp =
         std::chrono::high_resolution_clock::now();
-      migraphx::api::arguments migraphx_output = this->prog_.eval(params);  // <==^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      migraphx::api::arguments migraphx_output = this->prog_.eval(params);
       auto eval_duration = 
         std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::high_resolution_clock::now() - eval_tp);
