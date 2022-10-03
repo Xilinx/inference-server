@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include "proteus/util/pre_post/center_crop.hpp"
+
 namespace proteus::util {
 
 enum class ImageOrder {
@@ -32,11 +34,20 @@ enum class ImageOrder {
   NCHW,
 };
 
+enum class ResizeAlgorithm {
+  Simple,
+  CenterCrop,
+  LetterBoxCrop,
+};
+
 template <typename T, int C>
 struct ImagePreprocessOptions {
   int height = 224;
   int width = 224;
   int channels = C;
+
+  bool resize = true;
+  ResizeAlgorithm resize_algorithm = ResizeAlgorithm::Simple;
 
   bool convert_color = false;
   cv::ColorConversionCodes color_code;
@@ -102,8 +113,6 @@ std::vector<std::vector<T>> imagePreprocess(
   const auto& height = options.height;
   const auto& width = options.width;
   const auto& channels = options.channels;
-  const auto& mean = options.mean;
-  const auto& std = options.std;
 
   constexpr auto C = 3;
   assert(channels == C);
@@ -112,13 +121,25 @@ std::vector<std::vector<T>> imagePreprocess(
   for (const auto& path : paths) {
     auto img = cv::imread(path);
     if (img.empty()) {
-      throw std::runtime_error(std::string("Unable to load image ") + path);
+      throw std::invalid_argument(std::string("Unable to load image ") + path);
     }
     if (options.convert_color) {
       cv::cvtColor(img, img, options.color_code);
     }
 
-    cv::resize(img, img, cv::Size(width, height), cv::INTER_LINEAR);
+    if (options.resize) {
+      switch (options.resize_algorithm) {
+        case ResizeAlgorithm::Simple:
+          cv::resize(img, img, cv::Size(width, height), cv::INTER_LINEAR);
+          break;
+        case ResizeAlgorithm::CenterCrop:
+          img = centerCrop(img, height, width);
+          break;
+        default:
+          throw std::invalid_argument("Unknown resize algorithm");
+      }
+    }
+
     if (options.convert_type) {
       img.convertTo(img, options.type, options.convert_scale);
     }
@@ -130,8 +151,9 @@ std::vector<std::vector<T>> imagePreprocess(
     output.resize(size);
 
     if (options.normalize) {
-      detail::normalize<T, C>(img, options.order, output.data(), mean.data(),
-                              std.data());
+      const auto* mean = options.mean.data();
+      const auto* std = options.std.data();
+      detail::normalize<T, C>(img, options.order, output.data(), mean, std);
     }
 
     if (options.assign) {

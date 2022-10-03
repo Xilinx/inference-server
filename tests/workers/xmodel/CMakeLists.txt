@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(tests resnet50)
+set(tests resnet50 yolov3)
 # list(APPEND tests resnet50)
 
 proteus_add_system_tests("${tests}")
 
-proteus_get_test_target(resnet50_target resnet50)
-target_link_libraries(
-  ${resnet50_target} PRIVATE xir vart-runner opencv_core opencv_imgproc
-                             opencv_imgcodecs
-)
+foreach(test ${tests})
+  proteus_get_test_target(target ${test})
+  target_link_libraries(
+    ${target} PRIVATE opencv_core opencv_imgproc opencv_imgcodecs
+  )
+endforeach()
