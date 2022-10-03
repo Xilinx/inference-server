@@ -19,7 +19,7 @@ import pytest
 import proteus
 
 
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestModelReady:
     """
     Base class for modelReady tests using the Python bindings

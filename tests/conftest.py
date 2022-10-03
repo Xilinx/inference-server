@@ -249,7 +249,7 @@ def server(xprocess):
 
 
 @pytest.fixture(scope="class")
-def load(request, rest_client, server):
+def load(request, server):
     test_model: str = request.cls.model
     test_parameters: dict = request.cls.parameters
 
@@ -260,30 +260,42 @@ def load(request, rest_client, server):
         for key, value in test_parameters.items():
             parameters.put(key, value)
 
-    response = rest_client.workerLoad(test_model, parameters)
+    request.cls.rest_client = rest_client(request)
+    request.cls.ws_client = ws_client(request)
+
+    response = request.cls.rest_client.workerLoad(test_model, parameters)
     request.cls.endpoint = response
 
-    while not rest_client.modelReady(response):
+    while not request.cls.rest_client.modelReady(response):
         time.sleep(1)
 
     yield  # perform testing
 
-    rest_client.modelUnload(response)
+    request.cls.rest_client.modelUnload(response)
+
+    while request.cls.rest_client.modelReady(response):
+        time.sleep(1)
+
+    del request.cls.ws_client
+    del request.cls.rest_client
 
 
-@pytest.fixture(scope="class")
 def rest_client(request):
     address = get_http_addr(request.config)
     return proteus.clients.HttpClient("http://" + address)
 
 
-@pytest.fixture(scope="class")
 def ws_client(request):
     address = get_http_addr(request.config)
     return proteus.clients.WebSocketClient("ws://" + address, "http://" + address)
 
 
-@pytest.fixture(autouse=True, scope="class")
-def assign_client(request, rest_client, ws_client):
-    request.cls.rest_client = rest_client
-    request.cls.ws_client = ws_client
+@pytest.fixture(scope="class")
+def assign_client(request):
+    request.cls.rest_client = rest_client(request)
+    request.cls.ws_client = ws_client(request)
+
+    yield  # perform testing
+
+    del request.cls.rest_client
+    del request.cls.ws_client

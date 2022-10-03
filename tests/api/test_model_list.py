@@ -17,7 +17,7 @@ import time
 import pytest
 
 
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestModelList:
     """
     Base class for the ModelList tests using the Python bindings

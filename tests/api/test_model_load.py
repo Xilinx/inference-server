@@ -20,7 +20,7 @@ import proteus
 
 
 # TODO(varunsh): update test to use modelLoad like C++ variant
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestLoad:
     """
     Base class for Echo worker tests

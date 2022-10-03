@@ -19,7 +19,7 @@ import pytest
 import proteus
 
 
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestLoad:
     """
     Base class for Echo worker tests
