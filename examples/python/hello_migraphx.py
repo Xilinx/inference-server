@@ -38,8 +38,8 @@ import proteus.clients
 
 # The make_nxn and preprocess functions are based on an migraphx example at
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
-# The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
-
+# The mean and standard dev. values used for this normalization are 
+# requirements of the Resnet50 model.
 
 def make_nxn(image, n):
     """
@@ -53,13 +53,13 @@ def make_nxn(image, n):
     height = image.shape[0]
     if height > width:
         dif = height - width
-        bar = dif // 2
-        square = image[(bar + (dif % 2)) : (height - bar), :]
+        cr = dif // 2
+        square = image[(cr + (dif % 2)) : (height - cr), :]
         return cv2.resize(square, (n, n))
     elif width > height:
         dif = width - height
-        bar = dif // 2
-        square = image[:, (bar + (dif % 2)) : (width - bar)]
+        cr = dif // 2
+        square = image[:, (cr + (dif % 2)) : (width - cr)]
         return cv2.resize(square, (n, n))
     else:
         return cv2.resize(image, (n, n))
@@ -91,8 +91,6 @@ def run_migraphx(model_name, img, labels):
         img (np.array): image to send
         labels (dict): label strings for resnet
     """
-    import migraphx
-
     print("Beginning comparison run-->parsing the model for migraphx...")
     model = migraphx.parse_onnx(model_name)
     model.compile(migraphx.get_target("gpu"))

@@ -43,7 +43,8 @@ This example contains Python commands necessary to bring up
 the migraphx worker and run a Bert language processing model.
 
 Notes to self:
-Read download instructions from Ted T. at https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/tree/develop/examples/nlp/python_bert_squad
+Read download instructions from Ted T. at 
+  https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/tree/develop/examples/nlp/python_bert_squad
 
 cd external/artifacts/migraphx/bert_squad
 pip3 install onnxruntime tokenizers==0.12.1
@@ -66,6 +67,7 @@ cp /home/bpickrel/is-fork/inference-server/AMDMIGraphX/examples/nlp/python_bert_
 
 
 import os
+import os.path
 # The following packages aren't automatically installed in the dockerfile:
 try:
     import tokenizers
@@ -83,15 +85,11 @@ except ImportError:
 
 import proteus
 # from _proteus import *
+import collections
+import sys
 import numpy as np
 import json
-import os.path
-import argparse
-import os
-import sys
 import time
-import tokenizers
-import collections
 base_dir="external/artifacts/migraphx/bert_squad"
 sys.path.append(base_dir)
 from run_onnx_squad import (
@@ -133,7 +131,6 @@ tokenizer = tokenizers.BertWordPieceTokenizer(vocab_file)
 input_ids, input_mask, segment_ids, extra_data = convert_examples_to_features(
     eval_examples, tokenizer, max_seq_length, doc_stride, max_query_length
 )
-print('line 115 convert yields  ', len(input_ids),'\n\n', input_ids[0].shape,'\n\n', input_mask[0].shape,'\n\n', segment_ids[0].shape,'\n\n')
 # extra_data[0] is a Feature
 
 #############################################################
@@ -185,29 +182,21 @@ ready = False
 while not ready:
     ready = client.modelReady(worker_name)
 
-# If we get here, the worker is capable of loading multi inputs
 print('Model loaded.')
-
 
 n = len(input_ids)
 bs = batch_size
 all_results = []
 
-
 # input_n.datatype = getattr(DataType, str(image.dtype).upper())
 # input_n.shape = [*image.shape]  # Convert tuple to list
 # _set_data(input_n, image.flatten())
 
-print('eval_ex -------------- ', len(eval_examples), bs, n)
 requests=[]
     
-# For now, should only submit a whole batch worth of requests at once.  The Inference Server might 
-# populate any dummies with junk data that would crash the worker
-
-for idx in range(0,2):
+for idx in range(0, n):
     # Create an InferenceRequest
     request = proteus.predict_api.InferenceRequest()
-
     item = eval_examples[idx]   # class SquadExample
 
     # add items to inference request
@@ -216,7 +205,6 @@ for idx in range(0,2):
     input_n.name = f"input_ids:0"
     input_n.datatype = proteus.DataType.INT64
     input_n.shape = (1, 256,)
-    # input_n.setInt64Data(input_ids[idx : idx + bs])
     input_n.setInt64Data(input_ids[idx : idx + bs])
     request.addInputTensor(input_n)
 
@@ -234,37 +222,39 @@ for idx in range(0,2):
     input_n.setInt64Data( segment_ids[idx : idx + bs])
     request.addInputTensor(input_n)
 
-    # This comes from the first argument; I think it's supposed to be output names 
+    # This comes from the first argument; I think it's supposed to be output names
     #       see https://onnxruntime.ai/docs/api/python/api_summary.html#load-and-run-a-model
     # item = eval_examples[idx]   # class SquadExample
     input_n = proteus.predict_api.InferenceRequestInput()
     input_n.name = f"unique_ids_raw_output___9:0"
     input_n.datatype = proteus.DataType.INT64
     input_n.shape = (1,)
-    input_n.setInt64Data( np.array([item.qas_id], dtype=np.int64))        
+    input_n.setInt64Data( np.array([item.qas_id], dtype=np.int64))
     request.addInputTensor(input_n)
     requests.append(request)
 
 print('request batch is ready, size ', len(requests),  '.  Sending...')
-responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, requests)  
+responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, requests)
 print('responses received. ')
 
+# TODO:  Parse and display results.  To do this, extract the inputs to the write_predictions()
+# call from responses.
+# output_dir = os.path.join(base_dir, "predictions")
+# os.makedirs(output_dir, exist_ok=True)
+# output_prediction_file = os.path.join(output_dir, "predictions.json")
+# output_nbest_file = os.path.join(output_dir, "nbest_predictions.json")
+# write_predictions(
+#     eval_examples,
+#     extra_data,
+#     all_results,
+#     n_best_size,
+#     max_answer_length,
+#     True,
+#     output_prediction_file,
+#     output_nbest_file,
+# )
 
-output_dir = os.path.join(base_dir, "predictions")
-os.makedirs(output_dir, exist_ok=True)
-output_prediction_file = os.path.join(output_dir, "predictions.json")
-output_nbest_file = os.path.join(output_dir, "nbest_predictions.json")
-write_predictions(
-    eval_examples,
-    extra_data,
-    all_results,
-    n_best_size,
-    max_answer_length,
-    True,
-    output_prediction_file,
-    output_nbest_file,
-)
-
-with open(output_prediction_file) as json_file:
-    test_data = json.load(json_file)
-    print(json.dumps(test_data, indent=2))
+# with open(output_prediction_file, "r") as json_file:
+#     test_data = json.load(json_file)
+#     print(json.dumps(test_data, indent=2))
+print('Done!')

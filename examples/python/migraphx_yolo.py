@@ -15,16 +15,19 @@
 """
 This example contains Python commands necessary to bring up
 the migraphx worker and run a Yolo classification model on some images.
-See  https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb for details.
+See  https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb
+for details.
 
 
 Outputs:  see https://github.com/onnx/models/tree/main/vision/object_detection_segmentation/yolov4 README
 
 Output shapes: (1, 52, 52, 3, 85) (1, 26, 26, 3, 85) (1, 13, 13, 3, 85)
 
-There are 3 output layers. For each layer, there are 255 outputs: 85 values per anchor, times 3 anchors.
+There are 3 output layers. For each layer, there are 255 outputs: 85 values per
+anchor, times 3 anchors.
 
-The 85 values of each anchor consists of 4 box coordinates describing the predicted bounding box (x, y, h, w), 1 object confidence, and 80 class confidences.
+The 85 values of each anchor consists of 4 box coordinates describing the predicted
+bounding box (x, y, h, w), 1 object confidence, and 80 class confidences.
 
 If necessary, run this from the Proteus command line:
 pip3 install Pillow
@@ -51,20 +54,15 @@ except ImportError:
     os.system("pip3 install onnxruntime")
     import onnxruntime
 
-import cv2
 import time
 import argparse
-import os
 import sys
+import cv2
 
 # the more/utilities directory is a local, temporary location for dev.
 # sys.path.append('/workspace/proteus/external/artifacts/migraphx/more')
 sys.path.append('/workspace/proteus/examples/python/utils')
 import yolo_image_processing as ip
-
-import time
-
-import cv2
 import numpy as np
 
 import proteus
@@ -137,12 +135,9 @@ def parse_args():
     return parser.parse_args()
 
 
-def main(args):
-
-    modelname = args.modelfile
-    imagename = args.image
-    imagename2 = args.image2
-    labels_file = args.labels
+def main(pargs):
+    modelname = pargs.modelfile
+    imagename = pargs.image
 
     client = proteus.clients.HttpClient("http://127.0.0.1:8998")
     print("waiting for server...", end="")
@@ -178,7 +173,8 @@ def main(args):
     parameters = proteus.RequestParameters()
     parameters.put("model", modelname)
 
-    # I found that allocation could fail with a large batch value of 64 and large (13) default buffer count in the migraphx worker
+    # I found that allocation could fail with a large batch value of 64 and large 
+    # (13) default buffer count in the migraphx worker
     # Beyond batch size 56, the worker seems to lock up while compiling the model
     parameters.put("batch", 2)
      
@@ -199,26 +195,27 @@ def main(args):
     print("Creating inference request set...")
     images = [proteus.ImageInferenceRequest(image) for image in images]
     responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)  
-    for response in responses:  
+    for response in responses:
         assert not response.isError(), response.getError()
 
     print("Client received inference reply.")
 
-    for it, response in enumerate(responses): 
+    for it, response in enumerate(responses):
         detections = []
         for out in response.getOutputs():
             assert out.datatype == proteus.DataType.FP32
-            print('output shape is  ', out.shape)    
+            print('output shape is  ', out.shape)
             this_detect = np.array(out.getFp32Data())
             newshape = out.shape
-            # add a 0'th dimension of 1, to make 5.  (the migraphx worker stripped off the batch size.)
+            # add a 0'th dimension of 1, to make 5.  (the migraphx worker stripped 
+            # off the batch size.)
             newshape.insert(0,1)
             this_detect = this_detect.reshape(newshape)
             detections.append(this_detect)
 
     #
     # Post-process the model outputs and display image with detection bounding boxes
-    #  
+    #
         ANCHORS = "external/artifacts/migraphx/more/utilities/yolov4_anchors.txt"
         STRIDES = [8, 16, 32]
         XYSCALE = [1.2, 1.1, 1.05]
@@ -238,7 +235,8 @@ def main(args):
         print("Your marked-up image is at " + output_name)
     print("Done.")
     #
-    #    Alan's related but not identical example is at https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb
+    #    Alan's related but not identical example is at 
+    # https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb
 
 if __name__ == "__main__":
     args = parse_args()
