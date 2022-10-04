@@ -1,16 +1,3 @@
-# Copyright 2022 Advanced Micro Devices, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 #####################################################################################
 # The MIT License (MIT)
@@ -41,27 +28,6 @@ Bert model client
 
 This example contains Python commands necessary to bring up
 the migraphx worker and run a Bert language processing model.
-
-Notes to self:
-Read download instructions from Ted T. at 
-  https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/tree/develop/examples/nlp/python_bert_squad
-
-cd external/artifacts/migraphx/bert_squad
-pip3 install onnxruntime tokenizers==0.12.1
-
-apt-get install unzip                        <== doesn't work in docker
-
-wget https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx
-wget -q https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
-unzip uncased_L-12_H-768_A-12.zip
-rm uncased_L-12_H-768_A-12.zip
-
-[in Docker]   pip3 install tokenizers
-
-[in bash ]
-cp /home/bpickrel/is-fork/inference-server/AMDMIGraphX/examples/nlp/python_bert_squad/requirements_bertsquad.txt  ~/is-fork/inference-server/external/artifacts/migraphx/bert_squad/
-cp /home/bpickrel/is-fork/inference-server/AMDMIGraphX/examples/nlp/python_bert_squad/run_onnx_squad.py ~/is-fork/inference-server/external/artifacts/migraphx/bert_squad/
-cp /home/bpickrel/is-fork/inference-server/AMDMIGraphX/examples/nlp/python_bert_squad/*.json  ~/is-fork/inference-server/external/artifacts/migraphx/bert_squad/
 
 '''
 
@@ -175,7 +141,7 @@ parameters.put("batch", batch_size)
 # worker type, or else create one and initialize it with the parameters.
 print('Requesting worker load with model ', modelname, '...')
 worker_name = client.workerLoad("Migraphx", parameters)
-print("ok.  Loaded and parsed worker ", worker_name)
+print("ok.  Loaded worker ", worker_name)
 
 # wait for the worker to load and compile model
 ready = False
