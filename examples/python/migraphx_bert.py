@@ -203,24 +203,43 @@ print('request batch is ready, size ', len(requests),  '.  Sending...')
 responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, requests)
 print('responses received. ')
 
-# TODO:  Parse and display results.  To do this, extract the inputs to the write_predictions()
-# call from responses.
-# output_dir = os.path.join(base_dir, "predictions")
-# os.makedirs(output_dir, exist_ok=True)
-# output_prediction_file = os.path.join(output_dir, "predictions.json")
-# output_nbest_file = os.path.join(output_dir, "nbest_predictions.json")
-# write_predictions(
-#     eval_examples,
-#     extra_data,
-#     all_results,
-#     n_best_size,
-#     max_answer_length,
-#     True,
-#     output_prediction_file,
-#     output_nbest_file,
-# )
+#
+# Parse and display results
+#
+for it, response in enumerate(responses):
+    unique_id = len(all_results)
 
-# with open(output_prediction_file, "r") as json_file:
-#     test_data = json.load(json_file)
-#     print(json.dumps(test_data, indent=2))
-print('Done!')
+    out0 = response.getOutputs()[0]
+    assert out0.datatype == proteus.DataType.FP32
+    end_logits = [float(x) for x in out0.getFp32Data().tolist()]
+
+    out1 = response.getOutputs()[1]
+    assert out1.datatype == proteus.DataType.FP32
+    start_logits = [float(x) for x in out1.getFp32Data().tolist()]
+
+    # The third output is a single int64, and is not used in this example.
+
+    all_results.append(
+        RawResult(unique_id=unique_id,
+                    start_logits=start_logits,
+                    end_logits=end_logits))
+
+output_dir = os.path.join(base_dir, "predictions")
+os.makedirs(output_dir, exist_ok=True)
+output_prediction_file = os.path.join(output_dir, "predictions.json")
+output_nbest_file = os.path.join(output_dir, "nbest_predictions.json")
+write_predictions(
+    eval_examples,
+    extra_data,
+    all_results,
+    n_best_size,
+    max_answer_length,
+    True,
+    output_prediction_file,
+    output_nbest_file,
+)
+
+with open(output_prediction_file, "r") as json_file:
+    test_data = json.load(json_file)
+    print(json.dumps(test_data, indent=2))
+print('Done! Your output file is ', output_prediction_file)
