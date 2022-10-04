@@ -207,22 +207,24 @@ print('responses received. ')
 # Parse and display results
 #
 for it, response in enumerate(responses):
+    # instead of reading the unique id from output, use 0, 1, ...
     unique_id = len(all_results)
 
+    # the migraphx worker doesn't support names for output channels,
+    # so we get them by position instead.
     out0 = response.getOutputs()[0]
     assert out0.datatype == proteus.DataType.FP32
-    end_logits = [float(x) for x in out0.getFp32Data().tolist()]
 
     out1 = response.getOutputs()[1]
     assert out1.datatype == proteus.DataType.FP32
-    start_logits = [float(x) for x in out1.getFp32Data().tolist()]
 
-    # The third output is a single int64, and is not used in this example.
-
+    # The third output ("unique_ids:0") is a single int64 which our example doesn't use.
+    # Put our results into a RawResult structure
     all_results.append(
         RawResult(unique_id=unique_id,
-                    start_logits=start_logits,
-                    end_logits=end_logits))
+                    start_logits=out1.getFp32Data(),
+                    end_logits=out0.getFp32Data()))
+
 
 output_dir = os.path.join(base_dir, "predictions")
 os.makedirs(output_dir, exist_ok=True)

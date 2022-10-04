@@ -348,16 +348,16 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
     }
     this->input_buffers_->enqueue(std::move(buffer_vec));
 
-    // Calculate output buffer size
+    // Calculate max. output buffer size
     size_t out_buffer_size{0};
     migraphx::shapes output_shapes = this->prog_.get_output_shapes();
     for (auto ash : output_shapes) {
-      size_t this_output_size = ash.bytes();
-      out_buffer_size += this_output_size;
+      out_buffer_size = std::max(out_buffer_size, ash.bytes());
     }
 
-    // Allocating all output buffers as one block seems to work fine
-    VectorBuffer::allocate(this->output_buffers_, buffer_num, out_buffer_size,
+    // Output buffers aren't used by the engine at time of writing this,
+    // but allocate them anyway. (Use number of outputs for kBufferNum)
+    VectorBuffer::allocate(this->output_buffers_, output_shapes.size(), out_buffer_size,
                            proteus::DataType::INT8);
   } catch (...) {
     PROTEUS_LOG_ERROR(
