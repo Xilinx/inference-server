@@ -58,7 +58,7 @@ coverage(){
   build_dir=${PROTEUS_ROOT}/build
 
   if [[ -n $GET ]]; then
-    ./proteus get
+    ./proteus get --all
   fi
 
   ./proteus build --coverage --regen --clean

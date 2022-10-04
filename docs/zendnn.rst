@@ -87,9 +87,9 @@ Run the command below to download ResNet50 TensorFlow and PyTorch models.
 
 .. code-block:: console
 
-   $ ./proteus get
+   $ ./proteus get --tfzendnn --ptzendnn
 
-The models downloaded will be available at :code:`./external/tensorflow_models.` and :code:`./external/pytorch_models`.
+The models downloaded will be available at :code:`./external/artifacts/tensorflow`. and :code:`./external/artifacts/pytorch`.
 
 Set Up Docker Container
 -----------------------

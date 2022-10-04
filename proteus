@@ -34,6 +34,8 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
+import tests.download
+
 
 def get_version():
     """
@@ -725,10 +727,7 @@ class Get:
         else:
             print("Git LFS not found, not automatically getting LFS artifacts")
 
-        if not args.dry_run:
-            import tests.download
-
-            tests.download.main()
+        tests.download.main(args)
 
     @classmethod
     def add(cls, parser):
@@ -738,8 +737,7 @@ class Get:
             add_help=False,
         )
 
-        command_group = subparser.add_argument_group("Options")
-        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        subparser = tests.download.get_parser(subparser)
 
         subparser.set_defaults(func=cls.parse)
 
