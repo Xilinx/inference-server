@@ -1,6 +1,4 @@
-
-#####################################################################################
-# The MIT License (MIT)
+# MIT License
 #
 # Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
 #
@@ -21,19 +19,19 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-#####################################################################################
 
-'''
+"""
 Bert model client
 
 This example contains Python commands necessary to bring up
 the migraphx worker and run a Bert language processing model.
 
-'''
+"""
 
 
 import os
 import os.path
+
 # The following packages aren't automatically installed in the dockerfile:
 try:
     import tokenizers
@@ -47,22 +45,24 @@ except ImportError:
     os.system("pip3 install onnxruntime")
     import onnxruntime
 
-
-
-import proteus
 # from _proteus import *
 import collections
-import sys
-import numpy as np
 import json
+import sys
 import time
-base_dir="external/artifacts/migraphx/bert_squad"
+
+import numpy as np
+
+import proteus
+
+base_dir = "external/artifacts/migraphx/bert_squad"
 sys.path.append(base_dir)
 from run_onnx_squad import (
+    convert_examples_to_features,
     read_squad_examples,
     write_predictions,
-    convert_examples_to_features,
 )
+
 # import migraphx
 
 
@@ -89,7 +89,9 @@ batch_size = 13
 n_best_size = 20
 max_answer_length = 30
 
-vocab_file = os.path.join(base_dir, os.path.join("uncased_L-12_H-768_A-12", "vocab.txt"))
+vocab_file = os.path.join(
+    base_dir, os.path.join("uncased_L-12_H-768_A-12", "vocab.txt")
+)
 tokenizer = tokenizers.BertWordPieceTokenizer(vocab_file)
 
 # Use convert_examples_to_features method from run_onnx_squad to get parameters from the input
@@ -136,10 +138,10 @@ parameters = proteus.RequestParameters()
 parameters.put("model", modelname)
 
 parameters.put("batch", batch_size)
-    
+
 # this call requests the server to either find a running instance of the named
 # worker type, or else create one and initialize it with the parameters.
-print('Requesting worker load with model ', modelname, '...')
+print("Requesting worker load with model ", modelname, "...")
 worker_name = client.workerLoad("Migraphx", parameters)
 print("ok.  Loaded worker ", worker_name)
 
@@ -148,7 +150,7 @@ ready = False
 while not ready:
     ready = client.modelReady(worker_name)
 
-print('Model loaded.')
+print("Model loaded.")
 
 n = len(input_ids)
 bs = batch_size
@@ -158,34 +160,43 @@ all_results = []
 # input_n.shape = [*image.shape]  # Convert tuple to list
 # _set_data(input_n, image.flatten())
 
-requests=[]
-    
+requests = []
+
 for idx in range(0, n):
     # Create an InferenceRequest
     request = proteus.predict_api.InferenceRequest()
-    item = eval_examples[idx]   # class SquadExample
+    item = eval_examples[idx]  # class SquadExample
 
     # add items to inference request
 
     input_n = proteus.predict_api.InferenceRequestInput()
     input_n.name = f"input_ids:0"
     input_n.datatype = proteus.DataType.INT64
-    input_n.shape = (1, 256,)
+    input_n.shape = (
+        1,
+        256,
+    )
     input_n.setInt64Data(input_ids[idx : idx + bs])
     request.addInputTensor(input_n)
 
     input_n = proteus.predict_api.InferenceRequestInput()
     input_n.name = f"input_mask:0"
     input_n.datatype = proteus.DataType.INT64
-    input_n.shape = (1, 256,)
-    input_n.setInt64Data( input_mask[idx : idx + bs])
+    input_n.shape = (
+        1,
+        256,
+    )
+    input_n.setInt64Data(input_mask[idx : idx + bs])
     request.addInputTensor(input_n)
 
     input_n = proteus.predict_api.InferenceRequestInput()
     input_n.name = f"segment_ids:0"
     input_n.datatype = proteus.DataType.INT64
-    input_n.shape = (1, 256,)
-    input_n.setInt64Data( segment_ids[idx : idx + bs])
+    input_n.shape = (
+        1,
+        256,
+    )
+    input_n.setInt64Data(segment_ids[idx : idx + bs])
     request.addInputTensor(input_n)
 
     # This comes from the first argument; I think it's supposed to be output names
@@ -195,13 +206,13 @@ for idx in range(0, n):
     input_n.name = f"unique_ids_raw_output___9:0"
     input_n.datatype = proteus.DataType.INT64
     input_n.shape = (1,)
-    input_n.setInt64Data( np.array([item.qas_id], dtype=np.int64))
+    input_n.setInt64Data(np.array([item.qas_id], dtype=np.int64))
     request.addInputTensor(input_n)
     requests.append(request)
 
-print('request batch is ready, size ', len(requests),  '.  Sending...')
+print("request batch is ready, size ", len(requests), ".  Sending...")
 responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, requests)
-print('responses received. ')
+print("responses received. ")
 
 #
 # Parse and display results
@@ -221,9 +232,12 @@ for it, response in enumerate(responses):
     # The third output ("unique_ids:0") is a single int64 which our example doesn't use.
     # Put our results into a RawResult structure
     all_results.append(
-        RawResult(unique_id=unique_id,
-                    start_logits=out1.getFp32Data(),
-                    end_logits=out0.getFp32Data()))
+        RawResult(
+            unique_id=unique_id,
+            start_logits=out1.getFp32Data(),
+            end_logits=out0.getFp32Data(),
+        )
+    )
 
 
 output_dir = os.path.join(base_dir, "predictions")
@@ -244,4 +258,4 @@ write_predictions(
 with open(output_prediction_file, "r") as json_file:
     test_data = json.load(json_file)
     print(json.dumps(test_data, indent=2))
-print('Done! Your output file is ', output_prediction_file)
+print("Done! Your output file is ", output_prediction_file)
