@@ -717,16 +717,23 @@ class Get:
         if filename.endswith("tar.gz"):
             tar_file = tarfile.open(filepath, mode="r:gz")
             tar_file.extractall(location)
+
         elif filename.endswith("zip"):
             with zipfile.ZipFile(str(tmp_dir / filename), "r") as zip_ref:
                 zip_ref.extractall(str(tmp_dir))
             model_path = str(tmp_dir / filename.split(".zip")[0] / "float/")
-            for filename in os.listdir(model_path):
-                modelname = (
-                    filename
-                    if filename.endswith("pb") or filename.endswith("pth")
-                    else None
-                )
+            if filename == "uncased_L-12_H-768_A-12.zip":
+                model_path = str(tmp_dir / filename.split(".zip")[0])
+                modelname = ('vocab.txt' )
+                # copy into a subdirectory with the zip name, as per usual zip file procedure
+                location = location / filename.split(".zip")[0]
+            else:
+                for filename in os.listdir(model_path):
+                    modelname = (
+                        filename
+                        if filename.endswith("pb") or filename.endswith("pth")
+                        else None
+                    )
             if not os.path.exists(location):
                 os.makedirs(location)
             shutil.move(
@@ -773,7 +780,10 @@ class Get:
         tensorflow_models = Path.cwd() / "external/tensorflow_models"
         repository = Path.cwd() / "external/repository"
         pytorch_models = Path.cwd() / "external/pytorch_models"
-        migraphx_models = Path.cwd() / "external/artifacts/migraphx/resnet50v2"
+        migraphx_resnet_models = artifact_dir / "migraphx/resnet50v2"
+        migraphx_bertsquad_models = artifact_dir / "migraphx/bert_squad"
+        migraphx_more_models  = artifact_dir / "migraphx/more"
+        migraphx_models_utilities  = artifact_dir / "migraphx/more/utilities"
         alveo_dir = artifact_dir / "u200_u250"
 
         tmp_dir = Path("/tmp/proteus_get")
@@ -781,7 +791,10 @@ class Get:
         alveo_dir.mkdir(exist_ok=True, parents=True)
         tmp_dir.mkdir(exist_ok=True, parents=True)
         repository.mkdir(exist_ok=True, parents=True)
-        migraphx_models.mkdir(exist_ok=True, parents=True)
+        migraphx_resnet_models.mkdir(exist_ok=True, parents=True)
+        migraphx_bertsquad_models.mkdir(exist_ok=True, parents=True)
+        migraphx_more_models.mkdir(exist_ok=True, parents=True)
+        migraphx_models_utilities.mkdir(exist_ok=True, parents=True)
 
         files = {
             test_asset_dir: [
@@ -799,9 +812,25 @@ class Get:
             tensorflow_models: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip"
             ],
-            migraphx_models: [
+            migraphx_resnet_models: [
                 "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
                 "https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt",
+            ],
+            migraphx_bertsquad_models: [
+                "https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx",
+                "https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/requirements_bertsquad.txt",
+                "https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py",
+                "https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json",
+                "https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs.json",
+                "https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip",
+            ],
+            migraphx_more_models: [
+ 
+            ],
+            migraphx_models_utilities: [
+                "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt",
+                "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx",
+                "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names",
             ],
             pytorch_models: [
                 "https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5.zip"
