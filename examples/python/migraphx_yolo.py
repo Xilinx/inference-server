@@ -67,8 +67,6 @@ import time
 
 import cv2
 
-# the more/utilities directory is a local, temporary location for dev.
-# sys.path.append('/workspace/proteus/external/artifacts/migraphx/more')
 sys.path.append("/workspace/proteus/examples/python/utils")
 import numpy as np
 import onnxruntime as rt
@@ -104,9 +102,7 @@ def parse_args():
         "-m",
         type=str,
         required=False,
-        default=os.path.join(
-            root, "external/artifacts/migraphx/more/utilities/yolov4.onnx"
-        ),
+        default=os.path.join(root, "external/artifacts/onnx/yolov4/yolov4.onnx"),
         help="Location of model file on server",
     )
 
@@ -115,9 +111,7 @@ def parse_args():
         "-l",
         type=str,
         required=False,
-        default=os.path.join(
-            root, "external/artifacts/migraphx/more/utilities/coco.names"
-        ),
+        default=os.path.join(root, "external/artifacts/onnx/yolov4/coco.names"),
         help="The file containing label names for the model's categories",
     )
 
@@ -228,7 +222,7 @@ def main(pargs):
         #
         # Post-process the model outputs and display image with detection bounding boxes
         #
-        ANCHORS = "external/artifacts/migraphx/more/utilities/yolov4_anchors.txt"
+        ANCHORS = "external/artifacts/onnx/yolov4/yolov4_anchors.txt"
         STRIDES = [8, 16, 32]
         XYSCALE = [1.2, 1.1, 1.05]
 
@@ -241,13 +235,11 @@ def main(pargs):
         image = ip.draw_bbox(
             original_image,
             bboxes,
-            "external/artifacts/migraphx/more/utilities/coco.names",
+            "external/artifacts/onnx/yolov4/coco.names",
         )
 
         image = Image.fromarray(image)
-        output_name = (
-            "external/artifacts/migraphx/more/utilities/yolo4_output" + str(it) + ".jpg"
-        )
+        output_name = "examples/python/yolo4_output" + str(it) + ".jpg"
         image.save(output_name)
 
         print("Your marked-up image is at " + output_name)

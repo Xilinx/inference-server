@@ -44,6 +44,9 @@ std::string getPathToAsset(const std::string& key) {
     if (util::startsWith(line, key)) {
       auto substrings = util::split(line, ":");
       assert(substrings.size() == 2);
+      if (substrings[1].empty()) {
+        throw invalid_argument("No path found for key: " + key);
+      }
       return root_path / substrings[1];
     }
   }

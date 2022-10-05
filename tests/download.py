@@ -191,19 +191,20 @@ def downloader_one_file_from_archive(
 ):
     downloader(archive_filepath, archive, tmp_dir)
     filepath = Path(tmp_dir / source_path)
-    if filepath.exists() and not location.exists():
-        shutil.move(str(filepath), str(location))
-    return str(location / filepath.name)
+    new_filepath = location / filepath.name
+    if filepath.exists() and not new_filepath.exists():
+        shutil.move(str(filepath), str(new_filepath))
+    return str(new_filepath)
 
 
 def downloader_adas(filepath: str, filename: Path, location: Path):
-    downloader_one_file_from_archive(
+    return downloader_one_file_from_archive(
         filepath, filename, location, "adas_detection/video/adas.webm"
     )
 
 
 def downloader_bert_vocab(filepath: str, filename: Path, location: Path):
-    downloader_one_file_from_archive(
+    return downloader_one_file_from_archive(
         filepath, filename, location, "uncased_L-12_H-768_A-12/vocab.txt"
     )
 

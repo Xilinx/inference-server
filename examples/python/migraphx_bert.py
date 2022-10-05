@@ -55,7 +55,7 @@ import numpy as np
 
 import proteus
 
-base_dir = "external/artifacts/migraphx/bert_squad"
+base_dir = "external/artifacts/onnx/bert"
 sys.path.append(base_dir)
 from run_onnx_squad import (
     convert_examples_to_features,
@@ -89,9 +89,7 @@ batch_size = 13
 n_best_size = 20
 max_answer_length = 30
 
-vocab_file = os.path.join(
-    base_dir, os.path.join("uncased_L-12_H-768_A-12", "vocab.txt")
-)
+vocab_file = os.path.join(base_dir, "vocab.txt")
 tokenizer = tokenizers.BertWordPieceTokenizer(vocab_file)
 
 # Use convert_examples_to_features method from run_onnx_squad to get parameters from the input

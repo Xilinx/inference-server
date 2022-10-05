@@ -161,7 +161,7 @@ if __name__ == "__main__":
         type=str,
         required=False,
         help="Full path to the input graph",
-        default=os.path.join(root, "external/pytorch_models/resnet50_pretrained.pt"),
+        default=os.path.join(root, "external/artifacts/pytorch/resnet50_pretrained.pt"),
     )
     parser.add_argument(
         "--image_location",
