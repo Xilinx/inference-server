@@ -32,6 +32,7 @@
 #include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
 #include "proteus/core/predict_api_internal.hpp"  // for RequestParameters
 #include "proteus/declarations.hpp"               // for InferenceResponseOu...
+#include "proteus/observation/observer.hpp"       // for kNumTraceData
 #include "proteus/util/traits.hpp"                // for is_any
 
 namespace proteus {
@@ -110,9 +111,11 @@ void mapParametersToProto(
 
 struct AddDataToTensor {
   template <typename T, typename Tensor>
-  void operator()(const void* source_data, size_t size, Tensor* tensor) const {
+  void operator()(const void* source_data, size_t size, Tensor* tensor,
+                  const Observer& observer) const {
     const auto* data = static_cast<const T*>(source_data);
     auto* contents = getTensorContents<T>(tensor);
+
     if constexpr (std::is_same_v<T, char>) {
       contents->Add(data);
     } else if constexpr (std::is_same_v<T, fp16>) {
@@ -121,6 +124,13 @@ struct AddDataToTensor {
       }
     } else {
       for (auto i = 0U; i < size; ++i) {
+#ifdef PROTEUS_ENABLE_LOGGING
+        const auto min_size = size > kNumTraceData ? kNumTraceData : size;
+        if (i < min_size) {
+          PROTEUS_LOG_TRACE(observer.logger, "Adding data to tensor: " +
+                                               std::to_string(data[i]));
+        }
+#endif
         contents->Add(data[i]);
       }
     }
@@ -128,7 +138,10 @@ struct AddDataToTensor {
 };
 
 void mapRequestToProto(const InferenceRequest& request,
-                       inference::ModelInferRequest& grpc_request) {
+                       inference::ModelInferRequest& grpc_request,
+                       [[maybe_unused]] const Observer& observer) {
+  PROTEUS_LOG_TRACE(observer.logger,
+                    "Mapping the InferenceRequest to proto object");
   grpc_request.set_id(request.getID());
 
   if (const auto* parameters = request.getParameters(); parameters != nullptr) {
@@ -154,7 +167,7 @@ void mapRequestToProto(const InferenceRequest& request,
                          tensor->mutable_parameters());
 
     switchOverTypes(AddDataToTensor(), input.getDatatype(), input.getData(),
-                    input.getSize(), tensor);
+                    input.getSize(), tensor, observer);
   }
 
   // TODO(varunsh): skipping outputs for now
@@ -162,39 +175,33 @@ void mapRequestToProto(const InferenceRequest& request,
 
 struct SetOutputData {
   template <typename T, typename Tensor>
-  void operator()(InferenceResponseOutput* output, size_t size,
-                  Tensor* tensor) const {
+  void operator()(InferenceResponseOutput* output, size_t size, Tensor* tensor,
+                  const Observer& observer) const {
     std::vector<std::byte> data;
+    const auto bytes_to_copy = size * sizeof(T);
+    data.resize(bytes_to_copy);
     const auto* contents = getTensorContents<T>(tensor);
     if constexpr (std::is_same_v<T, char>) {
-      data.resize(size * sizeof(std::byte));
       std::memcpy(data.data(), contents, size * sizeof(std::byte));
       output->setData(std::move(data));
     } else {
-      size_t bytes_to_copy;
-      if constexpr (std::is_same_v<T, bool>) {
-        bytes_to_copy = size * sizeof(bool);
-      } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, uint32_t>) {
-        bytes_to_copy = size * sizeof(uint32_t);
-        output->setDatatype(DataType::UINT32);
-      } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
-        bytes_to_copy = size * sizeof(int32_t);
-        output->setDatatype(DataType::INT32);
-      } else if constexpr (util::is_any_v<T, fp16>) {
-        bytes_to_copy = size * sizeof(float);
-        output->setDatatype(DataType::FP32);
+      if constexpr (util::is_any_v<T, int8_t, uint8_t, int16_t, uint16_t,
+                                   fp16>) {
+        for (auto i = 0U; i < size; ++i) {
+          std::memcpy(&(data[i * sizeof(T)]), &(contents[i]), sizeof(T));
+        }
       } else {
-        bytes_to_copy = size * sizeof(T);
+        std::memcpy(data.data(), contents, bytes_to_copy);
       }
-      data.resize(bytes_to_copy);
-      std::memcpy(data.data(), contents, bytes_to_copy);
       output->setData(std::move(data));
     }
+
+    logTraceBuffer(observer.logger, output->getData(), sizeof(T));
   }
 };
 
 void mapProtoToResponse(const inference::ModelInferResponse& reply,
-                        InferenceResponse& response) {
+                        InferenceResponse& response, const Observer& observer) {
   response.setModel(reply.model_name());
   response.setID(reply.id());
 
@@ -212,13 +219,18 @@ void mapProtoToResponse(const inference::ModelInferResponse& reply,
     output.setShape(shape);
     // TODO(varunsh): skipping parameters for now
     switchOverTypes(SetOutputData(), output.getDatatype(), &output, size,
-                    &tensor);
+                    &tensor, observer);
     response.addOutput(output);
   }
 }
 
 void mapResponseToProto(InferenceResponse response,
                         inference::ModelInferResponse& reply) {
+  Observer observer;
+  PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+
+  PROTEUS_LOG_TRACE(observer.logger,
+                    "Mapping the InferenceResponse to proto object");
   reply.set_model_name(response.getModel());
   reply.set_id(response.getID());
   auto outputs = response.getOutputs();
@@ -235,7 +247,7 @@ void mapResponseToProto(InferenceResponse response,
     }
 
     switchOverTypes(AddDataToTensor(), output.getDatatype(), output.getData(),
-                    output.getSize(), tensor);
+                    output.getSize(), tensor, observer);
   }
 }
 

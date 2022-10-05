@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,6 +46,8 @@ void wrapHttpClient(py::module_ &m) {
     .def("serverReady", &HttpClient::serverReady, DOCS(HttpClient, serverReady))
     .def("modelReady", &HttpClient::modelReady, py::arg("model"),
          DOCS(HttpClient, modelReady))
+    .def("modelMetadata", &HttpClient::modelMetadata, py::arg("model"),
+         DOCS(HttpClient, modelMetadata))
     .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
          py::arg("parameters") = proteus::RequestParameters(),
          DOCS(HttpClient, modelLoad))
@@ -57,6 +60,9 @@ void wrapHttpClient(py::module_ &m) {
          DOCS(HttpClient, workerUnload))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
          py::arg("request"), DOCS(HttpClient, modelInfer))
+    // cannot wrap future directly in Python
+    // .def("modelInferAsync", &HttpClient::modelInferAsync, py::arg("model"),
+    //      py::arg("request"), DOCS(HttpClient, modelInferAsync))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
     .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
          py::arg("num"), DOCS(HttpClient, modelList))

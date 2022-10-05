@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_READ_NTH_LINE
-#define GUARD_PROTEUS_UTIL_READ_NTH_LINE
-
 #include "proteus/util/read_nth_line.hpp"
 
 #include <fstream>  // for ifstream
@@ -38,5 +35,3 @@ std::string readNthLine(const std::string& filename, int N) {
 }
 
 }  // namespace proteus::util
-
-#endif  // GUARD_PROTEUS_UTIL_READ_NTH_LINE

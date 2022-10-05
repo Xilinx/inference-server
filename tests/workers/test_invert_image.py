@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,19 +21,11 @@ import os
 import cv2
 import numpy as np
 import pytest
-from helper import root_path, run_benchmark, run_benchmark_func
 
 import proteus
+import proteus.testing
 
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "InvertImage"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return None
+from helper import root_path, run_benchmark, run_benchmark_func
 
 
 def compare_jpgs(test_image, reference_image):
@@ -63,6 +56,9 @@ class TestInvertImage:
     Test the InvertImage worker
     """
 
+    model = "InvertImage"
+    parameters = None
+
     def send_request(self, request, image):
         """
         Sends the given request to the server and asserts common checks
@@ -77,7 +73,7 @@ class TestInvertImage:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -106,7 +102,7 @@ class TestInvertImage:
         return response
 
     def construct_request(self, asTensor):
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         request = proteus.ImageInferenceRequest(image_path, asTensor)
 
@@ -131,25 +127,21 @@ class TestInvertImage:
         self.send_request(request, image)
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_0(
-        self, benchmark, model_fixture, parameters_fixture
-    ):
+    def test_benchmark_invert_image_0(self, benchmark):
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }
         run_benchmark_func(benchmark, self.test_invert_image_0, **options)
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_0_request(
-        self, benchmark, model_fixture, parameters_fixture
-    ):
+    def test_benchmark_invert_image_0_request(self, benchmark):
         request, _ = self.construct_request(True)
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }
@@ -158,25 +150,21 @@ class TestInvertImage:
         )
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_1(
-        self, benchmark, model_fixture, parameters_fixture
-    ):
+    def test_benchmark_invert_image_1(self, benchmark):
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }
         run_benchmark_func(benchmark, self.test_invert_image_1, **options)
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_1_request(
-        self, benchmark, model_fixture, parameters_fixture
-    ):
+    def test_benchmark_invert_image_1_request(self, benchmark):
         request, _ = self.construct_request(False)
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

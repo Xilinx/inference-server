@@ -48,9 +48,6 @@ namespace proteus {
 
 RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
   auto parameters_ = std::make_shared<RequestParameters>();
-#ifdef PROTEUS_ENABLE_LOGGING
-  Logger logger{Loggers::kClient};
-#endif
   for (auto const &id : parameters.getMemberNames()) {
     if (parameters[id].isString()) {
       parameters_->put(id, parameters[id].asString());
@@ -61,7 +58,7 @@ RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
     } else if (parameters[id].isDouble()) {
       parameters_->put(id, parameters[id].asDouble());
     } else {
-      PROTEUS_LOG_WARN(logger, "Unknown parameter type, skipping");
+      throw invalid_argument("Unknown parameter type, skipping");
     }
   }
   return parameters_;

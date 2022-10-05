@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,22 +18,11 @@ import os
 
 import numpy as np
 import pytest
-from helper import root_path, run_benchmark
 
 import proteus
+import proteus.testing
 
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "AksDetect"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {
-        "aks_graph_name": "yolov3",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_proteus.json",
-    }
+from helper import root_path, run_benchmark
 
 
 @pytest.mark.extensions(["aks", "vitis"])
@@ -42,6 +32,12 @@ class TestInferImageYoloV3DPUCADF8H:
     """
     Test the yolov3 worker
     """
+
+    model = "AksDetect"
+    parameters = {
+        "aks_graph_name": "yolov3",
+        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_proteus.json",
+    }
 
     def send_request(self, request, check_asserts=True):
         """
@@ -57,7 +53,7 @@ class TestInferImageYoloV3DPUCADF8H:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except proteus.ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -99,7 +95,7 @@ class TestInferImageYoloV3DPUCADF8H:
         return response
 
     def construct_request(self, asTensor):
-        image_path = str(root_path / "tests/assets/bicycle-384566_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_bicycle-384566_640.jpg")
 
         batch = 1
         images = [image_path] * batch
@@ -115,13 +111,11 @@ class TestInferImageYoloV3DPUCADF8H:
         self.send_request(request)
 
     @pytest.mark.benchmark(group="yolov3_dpucadf8h")
-    def test_benchmark_yolov3_dpucadf8h_1(
-        self, benchmark, model_fixture, parameters_fixture
-    ):
+    def test_benchmark_yolov3_dpucadf8h_1(self, benchmark):
         request = self.construct_request(False)
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

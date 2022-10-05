@@ -1,26 +1,16 @@
-#####################################################################################
-# The MIT License (MIT)
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
-# Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#####################################################################################
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """
 This example contains Python commands necessary to bring up
@@ -48,8 +38,9 @@ import proteus.clients
 
 # The make_nxn and preprocess functions are based on an migraphx example at
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
-# The mean and standard dev. values used for this normalization are 
+# The mean and standard dev. values used for this normalization are
 # requirements of the Resnet50 model.
+
 
 def make_nxn(image, n):
     """
@@ -144,7 +135,7 @@ def parse_args():
         type=str,
         required=False,
         default=os.path.join(
-            root, "external/artifacts/migraphx/resnet50v2/resnet50-v2-7.onnx"
+            root, "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx"
         ),
         help="Location of model file on server",
     )
@@ -287,8 +278,8 @@ def main(args):
 
     print("Creating inference request set...")
     images = [proteus.ImageInferenceRequest(image) for image in images]
-    responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)  
-    for response in responses:  
+    responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)
+    for response in responses:
         assert not response.isError(), response.getError()
 
     print("Client received inference reply.")
@@ -297,7 +288,7 @@ def main(args):
     with open(labels_file, "r") as json_data:
         labels = json.load(json_data)
 
-    for response in responses:  
+    for response in responses:
         for output in response.getOutputs():
             assert output.datatype == proteus.DataType.FP32
             recv_data = output.getFp32Data()

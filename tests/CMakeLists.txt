@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROTEUS_TEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(PROTEUS_TEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(AddTest)

@@ -258,8 +258,8 @@ RUN VERSION=1_14_0 \
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install drogon 1.7.5 for a http server
-RUN git clone -b v1.7.5 https://github.com/an-tao/drogon \
+# install drogon 1.8.1 for a http server
+RUN git clone -b v1.8.1 https://github.com/an-tao/drogon \
     && cd drogon \
     && git submodule update --init --recursive \
     && cmake -S . -B build \
@@ -267,10 +267,12 @@ RUN git clone -b v1.7.5 https://github.com/an-tao/drogon \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_ORM=OFF \
-        -DBUILD_DROGON_SHARED=ON \
-        # this is used instead of the above in 1.8.0+
-        # -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_SHARED_LIBS=ON \
         -DBUILD_CTL=OFF \
+    # work-around trantor bug (https://github.com/an-tao/trantor/issues/229)
+    && sed -i '205{h;d};214G' ./trantor/trantor/net/inner/AresResolver.cc \
+    && sed -i '205{h;d};214G' ./trantor/trantor/net/inner/AresResolver.cc \
+    && sed -i '205{h;d};214G' ./trantor/trantor/net/inner/AresResolver.cc \
     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
     && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cp build/install_manifest.txt ${MANIFESTS_DIR}/drogon.txt \

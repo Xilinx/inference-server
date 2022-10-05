@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
 import time
+
+import pytest
 
 import proteus
 
 
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestModelReady:
     """
     Base class for modelReady tests using the Python bindings

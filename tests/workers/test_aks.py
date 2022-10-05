@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,28 +15,21 @@
 
 import numpy as np
 import pytest
+
+import proteus
 from proteus.predict_api import (
     InferenceRequest,
     InferenceRequestInput,
     InferenceResponse,
 )
 
-import proteus
-
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "aks"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {"batch_size": 1}
-
 
 @pytest.mark.usefixtures("load")
 @pytest.mark.extensions(["aks", "vitis"])
 class TestAks:
+    model = "aks"
+    parameters = {"batch_size": 1}
+
     def test_aks_0(self):
         numbers = [3.0]
         request = InferenceRequest()
@@ -50,7 +44,7 @@ class TestAks:
             request.addInputTensor(input_0)
         try:
             response: InferenceResponse = self.rest_client.modelInfer(
-                self.model, request
+                self.endpoint, request
             )
         except ConnectionError:
             pytest.fail(

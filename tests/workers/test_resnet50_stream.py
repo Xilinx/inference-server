@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,20 +16,12 @@
 import json
 
 import pytest
-from helper import root_path
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 import proteus
+import proteus.testing
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "Resnet50Stream"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return None
+from helper import root_path
 
 
 @pytest.mark.extensions(["aks", "vitis"])
@@ -39,8 +32,11 @@ class TestResnet50Stream:
     Test the Resnet50Stream
     """
 
+    model = "Resnet50Stream"
+    parameters = None
+
     def construct_request(self, requested_frames_count):
-        video_path = str(root_path / "tests/assets/Physicsworks.ogv")
+        video_path = proteus.testing.getPathToAsset("asset_Physicsworks.ogv")
 
         input_0 = InferenceRequestInput()
         input_0.name = "input0"
@@ -57,7 +53,7 @@ class TestResnet50Stream:
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 
-        self.ws_client.modelInferWs(self.model, request)
+        self.ws_client.modelInferWs(self.endpoint, request)
         response_str = self.ws_client.modelRecv()
         response = json.loads(response_str)
 
@@ -69,10 +65,6 @@ class TestResnet50Stream:
             resp_str = self.ws_client.modelRecv()
             resp = json.loads(resp_str)
             data = resp["data"]["img"]
-            if len(data) > 50:
-                print(f"{i} got an image")
-            else:
-                print(resp)
             resp["data"]["img"].split(",")[1]
 
     def test_resnet50stream_0(self):

@@ -14,20 +14,10 @@
 
 import numpy as np
 import pytest
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 import proteus
 import proteus.client_operators
-
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "echoMulti"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {"batch_size": 2, "timeout": 1000}
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 
 @pytest.mark.usefixtures("load")
@@ -35,6 +25,9 @@ class TestEchoMulti:
     """
     Test the EchoMulti worker
     """
+
+    model = "echoMulti"
+    parameters = {"batch_size": 2, "timeout": 1000}
 
     inputs = [[3], [2, 7]]
     golden_outputs = [[3], [2, 7, 3, 2], [7, 3, 2]]
@@ -74,7 +67,7 @@ class TestEchoMulti:
         requests = [request] * 2
         try:
             responses = proteus.client_operators.inferAsyncOrdered(
-                self.rest_client, self.model, requests
+                self.rest_client, self.endpoint, requests
             )
         except ConnectionError:
             pytest.fail(

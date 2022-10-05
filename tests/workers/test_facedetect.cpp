@@ -16,6 +16,7 @@
 
 #include "facedetect.hpp"  // IWYU pragma: associated
 #include "gtest/gtest.h"   // for Test, AssertionResult, EXPECT_EQ
+#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
 
 const int gold_response_size = 6;
 const float gold_response_output[gold_response_size] = {
@@ -26,8 +27,8 @@ std::string prepareDirectory() {
   fs::path temp_dir =
     fs::temp_directory_path() / "proteus/tests/cpp/native/facedetect";
   fs::create_directories(temp_dir);
-  auto src_file =
-    fs::path(std::getenv("PROTEUS_ROOT")) / "tests/assets/girl-1867092_640.jpg";
+  const auto src_file =
+    fs::path(proteus::getPathToAsset("asset_girl-1867092_640.jpg"));
   fs::copy_file(src_file, temp_dir / src_file.filename(),
                 fs::copy_options::skip_existing);
   return temp_dir;

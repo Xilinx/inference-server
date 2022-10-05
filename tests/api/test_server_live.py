@@ -15,7 +15,7 @@
 import pytest
 
 
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestServerLive:
     """
     Base class for serverLive tests using the Python bindings

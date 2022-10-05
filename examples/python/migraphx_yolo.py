@@ -1,7 +1,6 @@
-#####################################################################################
-# The MIT License (MIT)
+# MIT License
 #
-# Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (c) 2022 Advanced Micro Devices, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-#####################################################################################
 
 
 """
@@ -43,6 +41,7 @@ bounding box (x, y, h, w), 1 object confidence, and 80 class confidences.
 """
 # import migraphx    # redundant with proteus
 import os
+
 # The following packages aren't automatically installed in the docker image:
 try:
     import scipy
@@ -62,28 +61,27 @@ except ImportError:
     os.system("pip3 install onnxruntime")
     import onnxruntime
 
-import time
 import argparse
 import sys
+import time
+
 import cv2
 
-# the more/utilities directory is a local, temporary location for dev.
-# sys.path.append('/workspace/proteus/external/artifacts/migraphx/more')
-sys.path.append('/workspace/proteus/examples/python/utils')
-import yolo_image_processing as ip
+sys.path.append("/workspace/proteus/examples/python/utils")
 import numpy as np
+import onnxruntime as rt
+import yolo_image_processing as ip
 
 import proteus
 import proteus.clients
 
-import onnxruntime as rt
 
 def read_class_names(class_file_name):
-    '''loads class name from a file'''
+    """loads class name from a file"""
     names = {}
-    with open(class_file_name, 'r') as data:
+    with open(class_file_name, "r") as data:
         for ID, name in enumerate(data):
-            names[ID] = name.strip('\n')
+            names[ID] = name.strip("\n")
     return names
 
 
@@ -104,9 +102,7 @@ def parse_args():
         "-m",
         type=str,
         required=False,
-        default=os.path.join(
-            root, "external/artifacts/migraphx/more/utilities/yolov4.onnx"
-        ),
+        default=os.path.join(root, "external/artifacts/onnx/yolov4/yolov4.onnx"),
         help="Location of model file on server",
     )
 
@@ -115,7 +111,7 @@ def parse_args():
         "-l",
         type=str,
         required=False,
-        default=os.path.join(root, "external/artifacts/migraphx/more/utilities/coco.names"),
+        default=os.path.join(root, "external/artifacts/onnx/yolov4/coco.names"),
         help="The file containing label names for the model's categories",
     )
 
@@ -124,7 +120,9 @@ def parse_args():
         "-i",
         type=str,
         required=False,
-        default=os.path.join(root, "tests/assets/crowd.jpg"),  # an outdoor crowd scene from the COCO dataset (https://cocodataset.org/#explore)
+        default=os.path.join(
+            root, "tests/assets/crowd.jpg"
+        ),  # an outdoor crowd scene from the COCO dataset (https://cocodataset.org/#explore)
         help="An image to try inference on.  Use git-lfs to pull image assets",
     )
 
@@ -181,11 +179,11 @@ def main(pargs):
     parameters = proteus.RequestParameters()
     parameters.put("model", modelname)
 
-    # I found that allocation could fail with a large batch value of 64 and large 
+    # I found that allocation could fail with a large batch value of 64 and large
     # (13) default buffer count in the migraphx worker
     # Beyond batch size 56, the worker seems to lock up while compiling the model
     parameters.put("batch", 2)
-     
+
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.
     worker_name = client.workerLoad("Migraphx", parameters)
@@ -202,7 +200,7 @@ def main(pargs):
 
     print("Creating inference request set...")
     images = [proteus.ImageInferenceRequest(image) for image in images]
-    responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)  
+    responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)
     for response in responses:
         assert not response.isError(), response.getError()
 
@@ -212,19 +210,19 @@ def main(pargs):
         detections = []
         for out in response.getOutputs():
             assert out.datatype == proteus.DataType.FP32
-            print('output shape is  ', out.shape)
+            print("output shape is  ", out.shape)
             this_detect = np.array(out.getFp32Data())
             newshape = out.shape
-            # add a 0'th dimension of 1, to make 5.  (the migraphx worker stripped 
+            # add a 0'th dimension of 1, to make 5.  (the migraphx worker stripped
             # off the batch size.)
-            newshape.insert(0,1)
+            newshape.insert(0, 1)
             this_detect = this_detect.reshape(newshape)
             detections.append(this_detect)
 
-    #
-    # Post-process the model outputs and display image with detection bounding boxes
-    #
-        ANCHORS = "external/artifacts/migraphx/more/utilities/yolov4_anchors.txt"
+        #
+        # Post-process the model outputs and display image with detection bounding boxes
+        #
+        ANCHORS = "external/artifacts/onnx/yolov4/yolov4_anchors.txt"
         STRIDES = [8, 16, 32]
         XYSCALE = [1.2, 1.1, 1.05]
 
@@ -233,20 +231,24 @@ def main(pargs):
 
         pred_bbox = ip.postprocess_bbbox(detections, ANCHORS, STRIDES, XYSCALE)
         bboxes = ip.postprocess_boxes(pred_bbox, original_image_size, input_size, 0.25)
-        bboxes = ip.nms(bboxes, 0.213, method='nms')
-        image = ip.draw_bbox(original_image, bboxes, 'external/artifacts/migraphx/more/utilities/coco.names')
+        bboxes = ip.nms(bboxes, 0.213, method="nms")
+        image = ip.draw_bbox(
+            original_image,
+            bboxes,
+            "external/artifacts/onnx/yolov4/coco.names",
+        )
 
         image = Image.fromarray(image)
-        output_name = "external/artifacts/migraphx/more/utilities/yolo4_output" + str(it) + ".jpg"
+        output_name = "examples/python/yolo4_output" + str(it) + ".jpg"
         image.save(output_name)
 
         print("Your marked-up image is at " + output_name)
     print("Done.")
     #
-    #    Alan's related but not identical example is at 
+    #    Alan's related but not identical example is at
     # https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb
+
 
 if __name__ == "__main__":
     args = parse_args()
     main(args)
-    

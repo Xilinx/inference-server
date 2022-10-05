@@ -51,6 +51,7 @@ if(${PROTEUS_ENABLE_GRPC})
     grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )
   target_link_libraries(grpc PUBLIC lib_grpc)
+  target_link_libraries(grpc_internal PRIVATE observation)
 endif()
 
 add_library(clients STATIC ${CLIENT_OBJS})

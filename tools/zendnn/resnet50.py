@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import torch.nn as nn
 import torch
+import torch.nn as nn
 
 
 def conv3x3(in_planes, out_planes, stride=1):

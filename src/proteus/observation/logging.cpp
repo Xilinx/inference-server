@@ -30,6 +30,8 @@
 #include <string>    // for string, operator+, char...
 #include <vector>    // for vector
 
+#include "proteus/core/exceptions.hpp"
+
 namespace proteus {
 
 constexpr spdlog::level::level_enum getLevel(LogLevel level) {
@@ -83,11 +85,22 @@ void initLogger(const LogOptions& options) {
   spdlog::register_logger(logger);
 }
 
-Logger::Logger(Loggers name) {
-  if (name == Loggers::kClient) {
-    logger_ = spdlog::get("client");
-  } else {
-    logger_ = spdlog::get("server");
+Logger::Logger(Loggers name) { set(name); }
+
+void Logger::set(Loggers name) {
+  switch (name) {
+    case Loggers::kClient:
+      logger_ = spdlog::get("client");
+      break;
+    case Loggers::kServer:
+      logger_ = spdlog::get("server");
+      break;
+    case Loggers::kTest:
+      logger_ = spdlog::get("test");
+      break;
+    default:
+      const auto name_str = std::to_string(static_cast<int>(name));
+      throw invalid_argument("Unknown logger name: " + name_str);
   }
   assert(logger_ != nullptr);
 }

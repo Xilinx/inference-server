@@ -17,27 +17,14 @@ import sys
 
 import numpy as np
 import pytest
-from helper import root_path, run_benchmark
 
 import proteus
+import proteus.testing
+
+from helper import root_path, run_benchmark
 
 sys.path.insert(0, os.path.join(root_path, "examples/python"))
 from utils.utils import postprocess, preprocess_pt
-
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "PtZendnn"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return {
-        "model": str(root_path / "external/pytorch_models/resnet50_pretrained.pt"),
-        "input_size": 224,
-        "output_classes": 1000,
-        "batch_size": 8,
-    }
 
 
 @pytest.mark.extensions(["ptzendnn"])
@@ -46,6 +33,14 @@ class TestPtZendnn:
     """
     Test the PtZendnn worker
     """
+
+    model = "PtZendnn"
+    parameters = {
+        "model": proteus.testing.getPathToAsset("pt_resnet50"),
+        "input_size": 224,
+        "output_classes": 1000,
+        "batch_size": 8,
+    }
 
     def send_request(self, request, check_asserts=True):
         """
@@ -61,7 +56,7 @@ class TestPtZendnn:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -86,7 +81,7 @@ class TestPtZendnn:
         """
         Send a request to pt model as tensor data
         """
-        image_path = str(root_path / "tests/assets/dog-3619020_640.jpg")
+        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         preprocessing = {"input_size": 224}
 
@@ -107,10 +102,11 @@ class TestPtZendnn:
             assert (top_k == gold_response_output).all()
 
     @pytest.mark.benchmark(group="PtZendnn")
-    def test_benchmark_ptzendnn(self, benchmark, model_fixture, parameters_fixture):
+    def test_benchmark_ptzendnn(self, benchmark):
 
         batch_size = 16
-        input_size = parameters_fixture.get("input_size")
+        assert self.parameters is not None
+        input_size = self.parameters.get("input_size")
         images = np.random.uniform(
             0.0, 255.0, (batch_size, input_size, input_size, 3)
         ).astype(np.float32)
@@ -119,8 +115,8 @@ class TestPtZendnn:
         request = proteus.ImageInferenceRequest(images, True)
 
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,21 +17,13 @@ import json
 
 import cv2
 import pytest
-from helper import root_path
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 from test_invert_image import compare_jpgs
 
 import proteus
+import proteus.testing
+from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "InvertVideo"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return None
+from helper import root_path
 
 
 @pytest.mark.usefixtures("load")
@@ -38,6 +31,9 @@ class TestInvertVideo:
     """
     Test the InvertVideo
     """
+
+    model = "InvertVideo"
+    parameters = None
 
     def construct_request(self, video_path, requested_frames_count):
         input_0 = InferenceRequestInput()
@@ -49,14 +45,14 @@ class TestInvertVideo:
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
-        # request = WebsocketInferenceRequest(self.model, input_0)
+        # request = WebsocketInferenceRequest(self.endpoint, input_0)
         request = InferenceRequest()
         request.addInputTensor(input_0)
         parameters_2 = proteus.RequestParameters()
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 
-        self.ws_client.modelInferWs(self.model, request)
+        self.ws_client.modelInferWs(self.endpoint, request)
         response_str = self.ws_client.modelRecv()
         response = json.loads(response_str)
 
@@ -76,7 +72,7 @@ class TestInvertVideo:
 
     def test_invert_video_0(self):
         requested_frames_count = 100
-        video_path = str(root_path / "tests/assets/Physicsworks.ogv")
+        video_path = proteus.testing.getPathToAsset("asset_Physicsworks.ogv")
 
         self.construct_request(video_path, requested_frames_count)
         self.recv_frames(video_path, requested_frames_count)

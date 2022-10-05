@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,24 +15,15 @@
 
 import numpy as np
 import pytest
-from helper import run_benchmark
+
+import proteus
 from proteus.predict_api import (
     InferenceRequest,
     InferenceRequestInput,
     InferenceRequestOutput,
 )
 
-import proteus
-
-
-@pytest.fixture(scope="class")
-def model_fixture():
-    return "echo"
-
-
-@pytest.fixture(scope="class")
-def parameters_fixture():
-    return None
+from helper import run_benchmark
 
 
 @pytest.mark.usefixtures("load")
@@ -39,6 +31,9 @@ class TestEcho:
     """
     Test the Echo worker
     """
+
+    model = "echo"
+    parameters = None
 
     inputs = [3]
     golden_outputs = [4]
@@ -120,7 +115,7 @@ class TestEcho:
         """
 
         try:
-            response = self.rest_client.modelInfer(self.model, request)
+            response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
                 "Connection to the proteus server ended without response!", False
@@ -201,11 +196,11 @@ class TestEcho:
         self.send_request(request, add_id)
 
     @pytest.mark.benchmark(group="echo")
-    def test_benchmark_echo_0(self, benchmark, model_fixture, parameters_fixture):
+    def test_benchmark_echo_0(self, benchmark):
         request = self.construct_request(False, False, False)
         options = {
-            "model": model_fixture,
-            "parameters": parameters_fixture,
+            "model": self.model,
+            "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

@@ -21,13 +21,14 @@ import subprocess
 import time
 
 import pytest
-from helper import build_path, kDefaultHttpPort, root_path, run_path
 from pytest_cpp.plugin import CppItem
 from xprocess import ProcessStarter
 
 import proteus
 import proteus.clients
 import proteus.servers
+
+from helper import build_path, kDefaultHttpPort, root_path, run_path
 
 proteus_command = []
 http_server_addr = ""
@@ -248,36 +249,53 @@ def server(xprocess):
 
 
 @pytest.fixture(scope="class")
-def load(request, rest_client, model_fixture, parameters_fixture: dict, server):
+def load(request, server):
+    test_model: str = request.cls.model
+    test_parameters: dict = request.cls.parameters
+
+    assert test_model
+
     parameters = proteus.RequestParameters()
-    if parameters_fixture is not None:
-        for key, value in parameters_fixture.items():
+    if test_parameters is not None:
+        for key, value in test_parameters.items():
             parameters.put(key, value)
 
-    response = rest_client.workerLoad(model_fixture, parameters)
-    request.cls.model = response
+    request.cls.rest_client = rest_client(request)
+    request.cls.ws_client = ws_client(request)
 
-    while not rest_client.modelReady(response):
+    response = request.cls.rest_client.workerLoad(test_model, parameters)
+    request.cls.endpoint = response
+
+    while not request.cls.rest_client.modelReady(response):
         time.sleep(1)
 
     yield  # perform testing
 
-    rest_client.modelUnload(response)
+    request.cls.rest_client.modelUnload(response)
+
+    while request.cls.rest_client.modelReady(response):
+        time.sleep(1)
+
+    request.cls.ws_client = None
+    request.cls.rest_client = None
 
 
-@pytest.fixture(scope="class")
 def rest_client(request):
     address = get_http_addr(request.config)
     return proteus.clients.HttpClient("http://" + address)
 
 
-@pytest.fixture(scope="class")
 def ws_client(request):
     address = get_http_addr(request.config)
     return proteus.clients.WebSocketClient("ws://" + address, "http://" + address)
 
 
-@pytest.fixture(autouse=True, scope="class")
-def assign_client(request, rest_client, ws_client):
-    request.cls.rest_client = rest_client
-    request.cls.ws_client = ws_client
+@pytest.fixture(scope="class")
+def assign_client(request):
+    request.cls.rest_client = rest_client(request)
+    request.cls.ws_client = ws_client(request)
+
+    yield  # perform testing
+
+    request.cls.ws_client = None
+    request.cls.rest_client = None

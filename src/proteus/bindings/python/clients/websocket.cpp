@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,6 +49,8 @@ void wrapWebSocketClient(py::module_ &m) {
          DOCS(WebSocketClient, serverReady))
     .def("modelReady", &WebSocketClient::modelReady, py::arg("model"),
          DOCS(WebSocketClient, modelReady))
+    .def("modelMetadata", &WebSocketClient::modelMetadata, py::arg("model"),
+         DOCS(WebSocketClient, modelMetadata))
     .def("modelLoad", &WebSocketClient::modelLoad, py::arg("model"),
          py::arg("parameters") = proteus::RequestParameters(),
          DOCS(WebSocketClient, modelLoad))

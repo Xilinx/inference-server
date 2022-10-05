@@ -21,7 +21,7 @@ import proteus
 import proteus.predict_api
 
 
-@pytest.mark.usefixtures("server")
+@pytest.mark.usefixtures("server", "assign_client")
 class TestModelInfer:
     """
     Base class for the ModelInfer tests using the Python bindings

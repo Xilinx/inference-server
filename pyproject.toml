@@ -31,3 +31,7 @@ repair-wheel-command = [
     "export LD_LIBRARY_PATH=$(cat /project/tmp.cmake):$LD_LIBRARY_PATH",
     "auditwheel repair -w {dest_dir} {wheel}"
 ]
+
+[tool.isort]
+known_first_party = ["proteus"]
+known_local_folder=["helper"]

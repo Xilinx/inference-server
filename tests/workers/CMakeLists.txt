@@ -15,20 +15,11 @@
 
 list(APPEND tests echo)
 
-if(${PROTEUS_ENABLE_VITIS})
-  set(tests ${tests} xmodel)
-endif()
-
 if(${PROTEUS_ENABLE_AKS})
   set(tests ${tests} facedetect)
 endif()
 
 proteus_add_system_tests("${tests}")
-
-if(${PROTEUS_ENABLE_VITIS})
-  proteus_get_test_target(xmodel_target xmodel)
-  target_link_libraries(${xmodel_target} PRIVATE xir vart-runner)
-endif()
 
 if(${PROTEUS_ENABLE_AKS})
   proteus_get_test_target(facedetect_target facedetect)
@@ -48,3 +39,7 @@ foreach(test ${tests})
     target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
   endif()
 endforeach()
+
+if(${PROTEUS_ENABLE_VITIS})
+  add_subdirectory(xmodel)
+endif()

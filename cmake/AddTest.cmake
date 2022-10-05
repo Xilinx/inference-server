@@ -50,7 +50,7 @@ function(_proteus_add_test test type)
     message(FATAL_ERROR "Test type must be one of 'unit' or 'system'")
   endif()
 
-  target_link_libraries(${target} PRIVATE gtest gtest_main)
+  target_link_libraries(${target} PRIVATE test_main testing)
 
   gtest_discover_tests(${target} DISCOVERY_TIMEOUT 30)
 endfunction()
