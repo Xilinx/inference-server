@@ -1,16 +1,26 @@
-# Copyright 2022 Advanced Micro Devices, Inc.
+#####################################################################################
+# The MIT License (MIT)
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#####################################################################################
 
 """
 This example contains Python commands necessary to bring up
@@ -38,7 +48,8 @@ import proteus.clients
 
 # The make_nxn and preprocess functions are based on an migraphx example at
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
-# The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
+# The mean and standard dev. values used for this normalization are
+# requirements of the Resnet50 model.
 
 
 def make_nxn(image, n):
@@ -53,13 +64,13 @@ def make_nxn(image, n):
     height = image.shape[0]
     if height > width:
         dif = height - width
-        bar = dif // 2
-        square = image[(bar + (dif % 2)) : (height - bar), :]
+        cr = dif // 2
+        square = image[(cr + (dif % 2)) : (height - cr), :]
         return cv2.resize(square, (n, n))
     elif width > height:
         dif = width - height
-        bar = dif // 2
-        square = image[:, (bar + (dif % 2)) : (width - bar)]
+        cr = dif // 2
+        square = image[:, (cr + (dif % 2)) : (width - cr)]
         return cv2.resize(square, (n, n))
     else:
         return cv2.resize(image, (n, n))
@@ -91,8 +102,6 @@ def run_migraphx(model_name, img, labels):
         img (np.array): image to send
         labels (dict): label strings for resnet
     """
-    import migraphx
-
     print("Beginning comparison run-->parsing the model for migraphx...")
     model = migraphx.parse_onnx(model_name)
     model.compile(migraphx.get_target("gpu"))
@@ -253,6 +262,8 @@ def main(args):
 
     parameters = proteus.RequestParameters()
     parameters.put("model", modelname)
+    parameters.put("batch", 2)
+    parameters.put("timeout", 1000)
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.
     worker_name = client.workerLoad("Migraphx", parameters)
@@ -270,29 +281,16 @@ def main(args):
     img2 = img2.transpose(2, 0, 1)
     img2 = preprocess(img2)
 
-    # # for debug: redisplay the processed images
-    # display_img = img
-    # display_img = display_img.transpose(1, 2, 0)
-
-    # x = np.max(display_img) - np.min(display_img)
-    # renormalized_img = (display_img - np.min(display_img))*255/x
-    # cv2.imwrite('sample1.jpg', renormalized_img.astype(np.uint8))
-
-    # display_img2 = img2
-    # display_img2 = display_img2.transpose(1, 2, 0)
-    # x2 = np.max(display_img2) - np.min(display_img2)
-    # renormalized_img2 = (display_img2 - np.min(display_img2))*255/x2
-    # cv2.imwrite('sample2.jpg',  renormalized_img2.astype(np.uint8))
-
     #
-    # create a multi-image inference request and send it
+    # create multiple image inference requests and send them all together
     #
-    images = [img2]
+    images = [img2, img2]
 
-    print("Creating inference request...")
-    request = proteus.ImageInferenceRequest(images, False)
-    response = client.modelInfer(worker_name, request)
-    assert not response.isError(), response.getError()
+    print("Creating inference request set...")
+    images = [proteus.ImageInferenceRequest(image) for image in images]
+    responses = proteus.client_operators.inferAsyncOrdered(client, worker_name, images)
+    for response in responses:
+        assert not response.isError(), response.getError()
 
     print("Client received inference reply.")
 
@@ -300,21 +298,23 @@ def main(args):
     with open(labels_file, "r") as json_data:
         labels = json.load(json_data)
 
-    for output in response.getOutputs():
-        assert output.datatype == proteus.DataType.FP32
-        recv_data = output.getFp32Data()
-        # the predicted category is the one with the highest match value
-        answer = np.argmax(recv_data)
-        print(
-            "client's analysis of result: best match category is ",
-            answer,
-            "  match value is ",
-            recv_data[answer],
-            ".  This is a picture of a ",
-            labels[answer],
-        )
+    for response in responses:
+        for output in response.getOutputs():
+            assert output.datatype == proteus.DataType.FP32
+            recv_data = output.getFp32Data()
+            # the predicted category is the one with the highest match value
+            answer = np.argmax(recv_data)
+            print(
+                "client's analysis of result: best match category is ",
+                answer,
+                "  match value is ",
+                recv_data[answer],
+                ".  This is a picture of a ",
+                labels[answer],
+            )
 
-    run_migraphx(modelname, img2, labels)
+    # optional: make the same request to the migraphx API for comparison
+    # run_migraphx(modelname, img2, labels)
 
     print("Done")
 

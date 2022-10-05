@@ -1,19 +1,31 @@
-# Copyright 2022 Advanced Micro Devices, Inc.
+#####################################################################################
+# The MIT License (MIT)
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Copyright (c) 2015-2022 Advanced Micro Devices, Inc. All rights reserved.
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#####################################################################################
+
 
 """
-This example brings up the migraphx worker and runs a Resnet50 classification model on the official imagenet validation set (50,000 images).
+This example brings up the migraphx worker and runs a Resnet50 classification model
+on the official imagenet validation set (50,000 images).
 
 The model file and test data is not in the git repo. and must be fetched with git or
     proteus get or wget
@@ -36,13 +48,15 @@ import time
 
 import cv2
 import numpy as np
+import onnx
 
 import proteus
 import proteus.clients
 
 # The make_nxn and preprocess functions are based on an migraphx example at
 # AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
-# The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
+# The mean and standard dev. values used for this normalization are
+# requirements of the Resnet50 model.
 
 
 def make_nxn(image, n):
@@ -154,14 +168,14 @@ def parse_args():
     return parser.parse_args()
 
 
-def main(args):
+def main(pargs):
 
-    batch_size = args.batch_size
-    request_size = args.request_size
-    modelname = args.modelfile
-    validation_dir = args.validation_dir
-    validation_answers_file = os.path.join(validation_dir, args.groundtruth)
-    labels_file = args.labels
+    batch_size = pargs.batch_size
+    request_size = pargs.request_size
+    modelname = pargs.modelfile
+    validation_dir = pargs.validation_dir
+    validation_answers_file = os.path.join(validation_dir, pargs.groundtruth)
+    labels_file = pargs.labels
 
     client = proteus.clients.HttpClient("http://127.0.0.1:8998")
     print("waiting for server...", end="")
@@ -188,7 +202,6 @@ def main(args):
     #  We assume here that client is on the same file system as the server
     #  This code is applicable to any onnx model, but for resnet50 the required shape could have been hardcoded:   [1, 3, 224, 224]
     shape = []
-    import onnx
 
     print("Loading model to verify data shape...")
     model = onnx.load(modelname)
@@ -217,7 +230,7 @@ def main(args):
         print(
             "Unable to read the image dimensions from ",
             modelname,
-            ".  Expecting a 4-value shape tensor.",
+            ".  Expecting a 3- or 4-value shape tensor.",
         )
         sys.exit(-1)
 
@@ -252,8 +265,8 @@ def main(args):
     files = os.listdir(validation_dir)
     files.sort()
 
-    if args.groundtruth in files:
-        files.remove(args.groundtruth)
+    if pargs.groundtruth in files:
+        files.remove(pargs.groundtruth)
 
     # Read the "answers" file
     ground_truth = [None] * len(files)
@@ -265,9 +278,8 @@ def main(args):
 
     #
     #   Loop thru the image set, reading images and putting together inference requests in batches.
-    #   Then save the results and compare with ground truth
+    #   Then compare the results with ground truth
     #
-    results = [None] * len(files)
     correct_answers = 0
     wrong_answers = 0
 
@@ -276,7 +288,6 @@ def main(args):
     for file in files:
         filename = os.path.join(validation_dir, file)
         if os.path.isfile(filename) and filename.find(".JPEG") != -1:
-            print("file ", file)
             # Load a picture
             imgV = cv2.imread(filename).astype("float32")
             imgV = cv2.cvtColor(imgV, cv2.COLOR_BGR2RGB)
@@ -284,46 +295,51 @@ def main(args):
             #  Normalize values with values specific to Resnet50
             imgV = imgV.transpose(2, 0, 1)
             imgV = preprocess(imgV)
-            # images[index % request_size] = imgV
+            images[index % request_size] = imgV
             index = index + 1
-            print("processed so far: ", index, " of ", len(files))
-            print("Creating inference request with ", len(images), " items")
-            request = proteus.ImageInferenceRequest(imgV, False)
-            print("request is ready.  Sending...")
-            response = client.modelInfer(worker_name, request)
-            assert not response.isError(), response.getError()
-            print("Client received inference reply.")
-            j = 0
-            for output in response.getOutputs():
-                assert output.datatype == proteus.DataType.FP32
-                recv_data = output.getFp32Data()
-                # the predicted category is the one with the highest match value
-                answer = np.argmax(recv_data)
-                step_index = index - request_size + j + 1
-                print(
-                    "Reading result: best match category is ",
-                    answer,
-                    "  value is ",
-                    recv_data[answer],
-                    ".  This is a picture of a ",
-                    labels[answer],
-                    "    ground truth: ",
-                    ground_truth[step_index],
+            print("file ", file, "    Processed so far: ", index, " of ", len(files))
+
+            if index % request_size == 0:
+                imageReqs = [proteus.ImageInferenceRequest(image) for image in images]
+                print("Request is ready.  Sending ", len(images), " requests")
+                j = 0
+                responses = proteus.client_operators.inferAsyncOrdered(
+                    client, worker_name, imageReqs
                 )
-                if int(answer) == int(ground_truth[step_index]):
-                    correct_answers = correct_answers + 1.0
-                else:
-                    wrong_answers = wrong_answers + 1.0
-                j = j + 1
-            print(
-                "Correct: ",
-                correct_answers,
-                "  Wrong: ",
-                wrong_answers,
-                "    Accuracy: ",
-                correct_answers / (correct_answers + wrong_answers),
-            )
-            print("     ----------------------------------------")
+                for response in responses:
+                    assert not response.isError(), response.getError()
+
+                    print("Client received inference reply.")
+                    for output in response.getOutputs():
+                        assert output.datatype == proteus.DataType.FP32
+                        recv_data = output.getFp32Data()
+                        # the predicted category is the one with the highest match value
+                        answer = np.argmax(recv_data)
+                        step_index = index - request_size + j + 1
+                        print(
+                            "Reading result: best match category is ",
+                            answer,
+                            "  value is ",
+                            recv_data[answer],
+                            ".  This is a picture of a ",
+                            labels[answer],
+                            "    ground truth: ",
+                            ground_truth[step_index],
+                        )
+                        if int(answer) == int(ground_truth[step_index]):
+                            correct_answers = correct_answers + 1.0
+                        else:
+                            wrong_answers = wrong_answers + 1.0
+                    j = j + 1
+                print(
+                    "Correct: ",
+                    correct_answers,
+                    "  Wrong: ",
+                    wrong_answers,
+                    "    Accuracy: ",
+                    correct_answers / (correct_answers + wrong_answers),
+                )
+                print("     ----------------------------------------")
 
     print("Done")
 
