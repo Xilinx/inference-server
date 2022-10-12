@@ -70,7 +70,7 @@ GrpcClient::GrpcClient(const std::shared_ptr<::grpc::Channel>& channel) {
 
 GrpcClient::~GrpcClient() = default;
 
-ServerMetadata GrpcClient::serverMetadata() {
+ServerMetadata GrpcClient::serverMetadata() const {
   inference::ServerMetadataRequest request;
   inference::ServerMetadataResponse reply;
 
@@ -88,7 +88,7 @@ ServerMetadata GrpcClient::serverMetadata() {
   throw bad_status(status.error_message());
 }
 
-bool GrpcClient::serverLive() {
+bool GrpcClient::serverLive() const {
   inference::ServerLiveRequest request;
   inference::ServerLiveResponse reply;
 
@@ -106,7 +106,7 @@ bool GrpcClient::serverLive() {
   throw bad_status(status.error_message());
 }
 
-bool GrpcClient::serverReady() {
+bool GrpcClient::serverReady() const {
   inference::ServerReadyRequest request;
   inference::ServerReadyResponse reply;
 
@@ -121,7 +121,7 @@ bool GrpcClient::serverReady() {
   throw bad_status(status.error_message());
 }
 
-bool GrpcClient::modelReady(const std::string& model) {
+bool GrpcClient::modelReady(const std::string& model) const {
   inference::ModelReadyRequest request;
   inference::ModelReadyResponse reply;
 
@@ -164,7 +164,7 @@ ModelMetadata mapProtoToModelMetadata(
   return metadata;
 }
 
-ModelMetadata GrpcClient::modelMetadata(const std::string& model) {
+ModelMetadata GrpcClient::modelMetadata(const std::string& model) const {
   inference::ModelMetadataRequest request;
   inference::ModelMetadataResponse reply;
 
@@ -181,7 +181,7 @@ ModelMetadata GrpcClient::modelMetadata(const std::string& model) {
   throw bad_status(status.error_message());
 }
 
-std::vector<std::string> GrpcClient::modelList() {
+std::vector<std::string> GrpcClient::modelList() const {
   inference::ModelListRequest request;
   inference::ModelListResponse reply;
 
@@ -199,7 +199,7 @@ std::vector<std::string> GrpcClient::modelList() {
 }
 
 void GrpcClient::modelLoad(const std::string& model,
-                           RequestParameters* parameters) {
+                           RequestParameters* parameters) const {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -219,7 +219,7 @@ void GrpcClient::modelLoad(const std::string& model,
   }
 }
 
-void GrpcClient::modelUnload(const std::string& model) {
+void GrpcClient::modelUnload(const std::string& model) const {
   inference::ModelUnloadRequest request;
   inference::ModelUnloadResponse reply;
 
@@ -236,7 +236,7 @@ void GrpcClient::modelUnload(const std::string& model) {
 }
 
 std::string GrpcClient::workerLoad(const std::string& worker,
-                                   RequestParameters* parameters) {
+                                   RequestParameters* parameters) const {
   inference::WorkerLoadRequest request;
   inference::WorkerLoadResponse reply;
 
@@ -257,7 +257,7 @@ std::string GrpcClient::workerLoad(const std::string& worker,
   throw bad_status(status.error_message());
 }
 
-void GrpcClient::workerUnload(const std::string& worker) {
+void GrpcClient::workerUnload(const std::string& worker) const {
   inference::WorkerUnloadRequest request;
   inference::WorkerUnloadResponse reply;
 
@@ -299,16 +299,16 @@ InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
 }
 
 InferenceResponseFuture GrpcClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) {
+  const std::string& model, const InferenceRequest& request) const {
   return std::async(runInference, this->impl_->getStub(), model, request);
 }
 
-InferenceResponse GrpcClient::modelInfer(const std::string& model,
-                                         const InferenceRequest& request) {
+InferenceResponse GrpcClient::modelInfer(
+  const std::string& model, const InferenceRequest& request) const {
   return runInference(this->impl_->getStub(), model, request);
 }
 
-bool GrpcClient::hasHardware(const std::string& name, int num) {
+bool GrpcClient::hasHardware(const std::string& name, int num) const {
   inference::HasHardwareRequest grpc_request;
   inference::HasHardwareResponse reply;
 

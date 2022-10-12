@@ -151,7 +151,7 @@ WebSocketClient::WebSocketClient(const std::string& ws_address,
 
 WebSocketClient::~WebSocketClient() = default;
 
-void WebSocketClient::close() {
+void WebSocketClient::close() const {
   auto* client = this->impl_->getWsClient();
   if (auto connection = client->getConnection(); connection != nullptr) {
     connection->shutdown();
@@ -159,77 +159,77 @@ void WebSocketClient::close() {
   }
 }
 
-ServerMetadata WebSocketClient::serverMetadata() {
+ServerMetadata WebSocketClient::serverMetadata() const {
   auto* client = this->impl_->getHttpClient();
   return client->serverMetadata();
 }
 
-bool WebSocketClient::serverLive() {
+bool WebSocketClient::serverLive() const {
   auto* client = this->impl_->getHttpClient();
   return client->serverLive();
 }
 
-bool WebSocketClient::serverReady() {
+bool WebSocketClient::serverReady() const {
   auto* client = this->impl_->getHttpClient();
   return client->serverReady();
 }
 
-bool WebSocketClient::modelReady(const std::string& model) {
+bool WebSocketClient::modelReady(const std::string& model) const {
   auto* client = this->impl_->getHttpClient();
   return client->modelReady(model);
 }
 
-ModelMetadata WebSocketClient::modelMetadata(const std::string& model) {
+ModelMetadata WebSocketClient::modelMetadata(const std::string& model) const {
   auto* client = this->impl_->getHttpClient();
   return client->modelMetadata(model);
 }
 
 void WebSocketClient::modelLoad(const std::string& model,
-                                RequestParameters* parameters) {
+                                RequestParameters* parameters) const {
   auto* client = this->impl_->getHttpClient();
   client->modelLoad(model, parameters);
 }
 
-void WebSocketClient::modelUnload(const std::string& model) {
+void WebSocketClient::modelUnload(const std::string& model) const {
   auto* client = this->impl_->getHttpClient();
   client->modelUnload(model);
 }
 
 std::string WebSocketClient::workerLoad(const std::string& model,
-                                        RequestParameters* parameters) {
+                                        RequestParameters* parameters) const {
   auto* client = this->impl_->getHttpClient();
   return client->workerLoad(model, parameters);
 }
 
-void WebSocketClient::workerUnload(const std::string& model) {
+void WebSocketClient::workerUnload(const std::string& model) const {
   auto* client = this->impl_->getHttpClient();
   client->workerUnload(model);
 }
 
 InferenceResponseFuture WebSocketClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) {
+  const std::string& model, const InferenceRequest& request) const {
   auto* client = this->impl_->getHttpClient();
   return client->modelInferAsync(model, request);
 }
 
-InferenceResponse WebSocketClient::modelInfer(const std::string& model,
-                                              const InferenceRequest& request) {
+InferenceResponse WebSocketClient::modelInfer(
+  const std::string& model, const InferenceRequest& request) const {
   auto* client = this->impl_->getHttpClient();
   return client->modelInfer(model, request);
 }
 
-std::vector<std::string> WebSocketClient::modelList() {
+std::vector<std::string> WebSocketClient::modelList() const {
   auto* client = this->impl_->getHttpClient();
   return client->modelList();
 }
 
-bool WebSocketClient::hasHardware(const std::string& name, int num) {
+bool WebSocketClient::hasHardware(const std::string& name, int num) const {
   auto* client = this->impl_->getHttpClient();
   return client->hasHardware(name, num);
 }
 
 void WebSocketClient::modelInferWs(const std::string& model,
-                                   const InferenceRequest& request) {
+                                   const InferenceRequest& request) const {
   auto* client = this->impl_->getWsClient();
 
   auto json = mapRequestToJson(request);
@@ -247,6 +247,6 @@ void WebSocketClient::modelInferWs(const std::string& model,
   connection->send(message);
 }
 
-std::string WebSocketClient::modelRecv() { return impl_->recv(); }
+std::string WebSocketClient::modelRecv() const { return impl_->recv(); }
 
 }  // namespace proteus

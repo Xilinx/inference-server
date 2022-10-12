@@ -36,18 +36,18 @@
 
 namespace proteus {
 
-ServerMetadata NativeClient::serverMetadata() {
+ServerMetadata NativeClient::serverMetadata() const {
   return ::proteus::serverMetadata();
 }
-bool NativeClient::serverLive() { return true; }
-bool NativeClient::serverReady() { return true; }
+bool NativeClient::serverLive() const { return true; }
+bool NativeClient::serverReady() const { return true; }
 
-ModelMetadata NativeClient::modelMetadata(const std::string& model) {
+ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
   return ::proteus::modelMetadata(model);
 }
 
 void NativeClient::modelLoad(const std::string& model,
-                             RequestParameters* parameters) {
+                             RequestParameters* parameters) const {
   auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
     RequestParameters params;
@@ -58,7 +58,7 @@ void NativeClient::modelLoad(const std::string& model,
 }
 
 std::string NativeClient::workerLoad(const std::string& model,
-                                     RequestParameters* parameters) {
+                                     RequestParameters* parameters) const {
   auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
     RequestParameters params;
@@ -68,7 +68,7 @@ std::string NativeClient::workerLoad(const std::string& model,
 }
 
 InferenceResponseFuture NativeClient::modelInferAsync(
-  const std::string& workerName, const InferenceRequest& request) {
+  const std::string& workerName, const InferenceRequest& request) const {
 #ifdef PROTEUS_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
@@ -88,23 +88,23 @@ InferenceResponseFuture NativeClient::modelInferAsync(
   return future;
 }
 
-InferenceResponse NativeClient::modelInfer(const std::string& model,
-                                           const InferenceRequest& request) {
+InferenceResponse NativeClient::modelInfer(
+  const std::string& model, const InferenceRequest& request) const {
   auto future = modelInferAsync(model, request);
   return future.get();
 }
 
-void NativeClient::modelUnload(const std::string& model) {
+void NativeClient::modelUnload(const std::string& model) const {
   auto model_lower = util::toLower(model);
   ::proteus::modelUnload(model);
 }
 
-void NativeClient::workerUnload(const std::string& model) {
+void NativeClient::workerUnload(const std::string& model) const {
   auto model_lower = util::toLower(model);
   ::proteus::workerUnload(model);
 }
 
-bool NativeClient::modelReady(const std::string& model) {
+bool NativeClient::modelReady(const std::string& model) const {
   try {
     return ::proteus::modelReady(model);
   } catch (const invalid_argument&) {
@@ -112,11 +112,11 @@ bool NativeClient::modelReady(const std::string& model) {
   }
 }
 
-std::vector<std::string> NativeClient::modelList() {
+std::vector<std::string> NativeClient::modelList() const {
   return ::proteus::modelList();
 }
 
-bool NativeClient::hasHardware(const std::string& name, int num) {
+bool NativeClient::hasHardware(const std::string& name, int num) const {
   return ::proteus::hasHardware(name, num);
 }
 

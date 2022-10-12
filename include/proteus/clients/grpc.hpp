@@ -25,7 +25,7 @@
 #include <vector>  // for vector
 
 #include "proteus/clients/client.hpp"    // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
 
 namespace grpc {
 class Channel;
@@ -39,31 +39,31 @@ class GrpcClient : public Client {
   explicit GrpcClient(const std::shared_ptr<::grpc::Channel>& channel);
   ~GrpcClient() override;
 
-  ServerMetadata serverMetadata() override;
-  bool serverLive() override;
-  bool serverReady() override;
-  bool modelReady(const std::string& model) override;
-  ModelMetadata modelMetadata(const std::string& model) override;
+  ServerMetadata serverMetadata() const override;
+  bool serverLive() const override;
+  bool serverReady() const override;
+  bool modelReady(const std::string& model) const override;
+  ModelMetadata modelMetadata(const std::string& model) const override;
 
   void modelLoad(const std::string& model,
-                 RequestParameters* parameters) override;
-  void modelUnload(const std::string& model) override;
+                 RequestParameters* parameters) const override;
+  void modelUnload(const std::string& model) const override;
 
   InferenceResponse modelInfer(const std::string& model,
-                               const InferenceRequest& request) override;
+                               const InferenceRequest& request) const override;
   InferenceResponseFuture modelInferAsync(
-    const std::string& model, const InferenceRequest& request) override;
-  std::vector<std::string> modelList() override;
+    const std::string& model, const InferenceRequest& request) const override;
+  std::vector<std::string> modelList() const override;
   // int streamModelInferStart(const std::string& model,
   //                           const InferenceRequest& request,
-  //                           RequestParameters& metadata);
-  // bool streamModelInfer(int index, InferenceResponse& response);
+  //                           RequestParameters& metadata) const;
+  // bool streamModelInfer(int index, InferenceResponse& response) const;
 
   std::string workerLoad(const std::string& worker,
-                         RequestParameters* parameters) override;
-  void workerUnload(const std::string& worker) override;
+                         RequestParameters* parameters) const override;
+  void workerUnload(const std::string& worker) const override;
 
-  bool hasHardware(const std::string& name, int num) override;
+  bool hasHardware(const std::string& name, int num) const override;
 
  private:
   class GrpcClientImpl;
