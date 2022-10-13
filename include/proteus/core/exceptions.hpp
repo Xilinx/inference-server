@@ -34,6 +34,10 @@ class bad_status : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+class connection_error : public bad_status {
+  using bad_status::bad_status;
+};
+
 class file_not_found_error : public runtime_error {
   using runtime_error::runtime_error;
 };
