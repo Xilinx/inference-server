@@ -36,6 +36,7 @@ template <typename T>
 void addPreprocessOptions(const py::module& m, const char* name) {
   py::class_<ImagePreprocessOptions<T>>(m, name)
     .def(py::init<>())
+    .def_readwrite("assign", &ImagePreprocessOptions<T>::assign)
     .def_readwrite("height", &ImagePreprocessOptions<T>::height)
     .def_readwrite("width", &ImagePreprocessOptions<T>::width)
     .def_readwrite("channels", &ImagePreprocessOptions<T>::channels)

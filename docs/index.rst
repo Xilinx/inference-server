@@ -27,7 +27,8 @@
 
     quickstart
     hello_world_python
-    example_resnet50
+    example_resnet50_cpp
+    example_resnet50_python
 
 
 .. toctree::

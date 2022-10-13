@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
   assert(paths.size() == requests.size());
   const auto num_requests = requests.size();
 
-  std::cout << "Making inference...\n";
+  std::cout << "Making inferences...\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (auto i = 0U; i < num_requests; ++i) {
     const proteus::InferenceRequest& request = requests[i];

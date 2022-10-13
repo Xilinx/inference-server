@@ -57,11 +57,13 @@ Args parseArgs(int argc, char** argv) {
     ("input-size", "Size of the square image in pixels",
       cxxopts::value(args.input_size))
     ("input-node", "Name of the input node",
-      cxxopts::value(args.input_size))
+      cxxopts::value(args.input_node))
     ("output-node", "Name of the output node",
-      cxxopts::value(args.input_size))
+      cxxopts::value(args.output_node))
     ("top", "Number of top categories to print",
       cxxopts::value(args.top))
+    ("output-classes", "Number of output classes for this model",
+      cxxopts::value(args.output_classes))
     ("help", "Print help");
     // clang-format on
 

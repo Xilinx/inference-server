@@ -40,9 +40,12 @@ using Images = std::vector<std::vector<float>>;
 Images preprocess(const std::vector<std::string>& paths) {
   const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
   const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
+  const auto image_size = 224;
 
   proteus::util::ImagePreprocessOptions<float, 3> options;
   options.order = proteus::util::ImageOrder::NCHW;
+  options.height = image_size;
+  options.width = image_size;
   options.mean = mean;
   options.std = std;
   options.normalize = true;
