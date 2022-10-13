@@ -32,14 +32,18 @@ tidy=0
 run=0
 check=0
 
+# arbitrarily use half the available processes to run linting
+max_processes=$(( $(nproc) / 2 ))
+
 while true
 do
   case "$1" in
-    --iwyu      ) iwyu=1  ; shift 1 ;;
-    --tidy      ) tidy=1  ; shift 1 ;;
-    --run       ) run=1   ; shift 1 ;;
-    --check     ) check=1 ; shift 1 ;;
-    -h | --help ) usage   ; exit  0 ;;
+    --iwyu      ) iwyu=1           ; shift 1 ;;
+    --tidy      ) tidy=1           ; shift 1 ;;
+    --run       ) run=1            ; shift 1 ;;
+    --check     ) check=1          ; shift 1 ;;
+    -p          ) max_processes=$2 ; shift 2 ;;
+    -h | --help ) usage            ; exit  0 ;;
     *) break ;;
   esac
 done
@@ -54,13 +58,15 @@ if [[ $iwyu == 0 && $tidy == 0 ]]; then
     exit 1
 fi
 
-run_iwyu() {
+run() {
     source_file="$1"
+    linter="$2"
+    cmd="$3"
 
     echo $source_file
     # strip the root_dir from the source file path
     relative_path=${source_file##${root_dir}/}
-    cache_entry="$cache_dir/iwyu/$relative_path"
+    cache_entry="$cache_dir/$linter/$relative_path"
     new_hash=$(md5sum $source_file | cut -d ' ' -f 1)
     if [[ -f "$cache_entry" ]]; then
         old_hash=$(tail -n 1 $cache_entry)
@@ -69,30 +75,19 @@ run_iwyu() {
         fi
     fi
     mkdir -p $(dirname $cache_entry)
-    python3 /usr/local/bin/iwyu_tool.py -p ${build_dir} $source_file -- -Xiwyu --mapping_file=$root_dir/tools/.iwyu.json > $cache_entry 2>&1
+    $cmd > $cache_entry 2>&1
     echo $new_hash >> $cache_entry
+}
+
+run_iwyu() {
+    python3 /usr/local/bin/iwyu_tool.py -p ${build_dir} $source_file -- -Xiwyu --mapping_file=$root_dir/tools/.iwyu.json
 }
 
 run_tidy() {
-    source_file="$1"
-
-    echo $source_file
-    # strip the root_dir from the source file path
-    relative_path=${source_file##${root_dir}/}
-    cache_entry="$cache_dir/tidy/$relative_path"
-    new_hash=$(md5sum $source_file | cut -d ' ' -f 1)
-    if [[ -f "$cache_entry" ]]; then
-        old_hash=$(tail -n 1 $cache_entry)
-        if [[ $old_hash == $new_hash ]]; then
-            return
-        fi
-    fi
-    mkdir -p $(dirname $cache_entry)
-    clang-tidy -format-style=file -p=${build_dir} --extra-arg "-DCV_STATIC_ANALYSIS=0" $source_file > $cache_entry 2>&1
-    echo $new_hash >> $cache_entry
+    clang-tidy -format-style=file -p=${build_dir} --extra-arg "-DCV_STATIC_ANALYSIS=0" $source_file
 }
 
-run_check() {
+check() {
     source_file="$1"
     linter="$2"
 
@@ -127,6 +122,7 @@ fi
 cache_dir="$build_dir/lint_cache"
 mkdir -p "$cache_dir"
 
+echo "Finding source files..."
 source_files=()
 for directory in ${source_directories[@]}; do
     for extension in ${extensions[@]}; do
@@ -136,21 +132,29 @@ for directory in ${source_directories[@]}; do
     done
 done
 
+process_counter=0
 for source_file in ${source_files[@]}; do
     if [[ $run == 1 ]]; then
         if [[ $iwyu == 1 ]]; then
-            run_iwyu $source_file
+            run $source_file "iwyu" run_iwyu &
         fi
         if [[ $tidy == 1 ]]; then
-            run_tidy $source_file
+            run "$source_file" "tidy" run_tidy &
+        fi
+        process_counter=$(( process_counter + 1 ))
+        if [ "$process_counter" -ge "$max_processes" ]; then
+            wait
+            process_counter=0
         fi
     fi
     if [[ $check == 1 ]]; then
         if [[ $iwyu == 1 ]]; then
-            run_check $source_file iwyu
+            check $source_file iwyu
         fi
         if [[ $tidy == 1 ]]; then
-            run_check $source_file tidy
+            check $source_file tidy
         fi
     fi
 done
+
+wait
