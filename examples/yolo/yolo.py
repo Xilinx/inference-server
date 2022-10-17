@@ -25,7 +25,7 @@ def parse_args():
     Returns:
         argparse.Namespace: args
     """
-    parser = argparse.ArgumentParser(description="resnet50 example")
+    parser = argparse.ArgumentParser(description="yolov4 example")
 
     parser.add_argument(
         "--model",
@@ -40,9 +40,21 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--input-size",
+        default=416,
+        help="Size of the square image in pixels",
+    )
+
+    parser.add_argument(
         "--labels",
         default="",
         help="Path to the text file containing the labels on the client",
+    )
+
+    parser.add_argument(
+        "--anchors",
+        default="",
+        help="Path to the text file containing the anchors on the client",
     )
 
     parser.add_argument(
@@ -57,39 +69,9 @@ def parse_args():
         help="Port to use for gRPC server",
     )
 
-    parser.add_argument(
-        "--top",
-        default=5,
-        help="Number of top categories to print",
-    )
-
-    parser.add_argument(
-        "--input-size",
-        default=224,
-        help="Size of the square image in pixels",
-    )
-
-    parser.add_argument(
-        "--output-classes",
-        default=1000,
-        help="Number of output classes for this model",
-    )
-
-    parser.add_argument(
-        "--input-node",
-        default="",
-        help="Name of the input node",
-    )
-
-    parser.add_argument(
-        "--output-node",
-        default="",
-        help="Name of the output node",
-    )
-
     args = parser.parse_args()
 
-    if (not args.image) or (not args.model) or (not args.labels):
+    if (not args.image) or (not args.model) or (not args.labels) or (not args.anchors):
         root = os.getenv("PROTEUS_ROOT")
         if root is None:
             print("PROTEUS_ROOT is not defined in the environment")
@@ -99,15 +81,19 @@ def parse_args():
             print("     --image")
             print("     --model")
             print("     --labels")
+            print("     --anchors")
             sys.exit(1)
 
         if not args.image:
-            args.image = root + "/tests/assets/dog-3619020_640.jpg"
+            args.image = root + "/tests/assets/bicycle-384566_640.jpg"
 
         # args.model is unset and set by each example
 
         if not args.labels:
-            args.labels = root + "/examples/resnet50/imagenet_classes.txt"
+            args.labels = root + "/external/artifacts/onnx/yolov4/coco.names"
+
+        if not args.anchors:
+            args.anchors = root + "/external/artifacts/onnx/yolov4/yolov4_anchors.txt"
 
     return args
 
@@ -130,20 +116,3 @@ def resolve_image_paths(path: pathlib.Path):
     else:
         images.append(str(path))
     return images
-
-
-def print_label(indices, path_to_labels, name):
-    """
-    Print the labels associated with the given indices
-
-    Args:
-        indices (list[int]): Indices to print
-        path_to_labels (str | pathlib.Path): path to the labels text file
-        name (str): string identifier to print with the labels
-    """
-    with open(path_to_labels, "r") as f:
-        lines = f.readlines()
-
-    print(f"Top {len(indices)} classes for {name}:")
-    for index in indices:
-        print(f"  {lines[index].strip()}")

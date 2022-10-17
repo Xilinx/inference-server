@@ -21,7 +21,7 @@ These examples demonstrate how to make an inference using the ResNet50 model wit
 Introduction
 ^^^^^^^^^^^^
 
-ResNet50 is a classification model that accepts a single input tensor that conatins .
+ResNet50 is a classification model that accepts a single input tensor that contains the input image.
 For this image, it returns the probabilities that the image can be classified as any of its output classes.
 The number of output classes depends on the dataset that the network is trained on.
 In these examples, the default model is trained on the ImageNet dataset and has 1000 output classes.
@@ -34,11 +34,16 @@ The files in this set of examples are:
 ::
 
     examples/resnet50
-    ├── imagenet_classes.txt : The labels associated with the ImageNet dataset
+    ├── CMakeLists.txt
+    ├── imagenet_classes.txt
     ├── migraphx.cpp
+    ├── migraphx.py
     ├── ptzendnn.cpp
+    ├── ptzendnn.py
+    ├── README.rst
     ├── resnet50.hpp
     ├── resnet.py
     ├── tfzendnn.cpp
+    ├── tfzendnn.py
     ├── vitis.cpp
     └── vitis.py
