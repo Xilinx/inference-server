@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,37 +19,44 @@ to it over REST and parse the response. Look at the documentation for more
 detailed commentary on this example.
 """
 
-# fmt: off
-# +imports:
+# +imports
 from time import sleep
 
 import numpy as np
 
 import proteus
 
-# -imports:
-# fmt: on
+# -imports
 
 
-def NumericalInferenceRequest(data, datatype=proteus.DataType.UINT32):
-    if not isinstance(data, list):
-        data = [data]
+# +make request
+def make_request(data):
+    """
+    Make a request containing an integer
+
+    Args:
+        data (int): Data to send
+
+    Returns:
+        proteus.InferenceRequest: Request
+    """
     request = proteus.predict_api.InferenceRequest()
-    for index, datum in enumerate(data):
-        input_0 = proteus.predict_api.InferenceRequestInput()
-        input_0.name = f"input{index}"
-        input_0.setUint32Data(np.array([datum], np.uint32))
-        input_0.datatype = datatype
-        input_0.shape = [1]
-        request.addInputTensor(input_0)
+    input_0 = proteus.predict_api.InferenceRequestInput()
+    input_0.name = f"input0"
+    input_0.setUint32Data(np.array([data], np.uint32))
+    input_0.datatype = proteus.DataType.UINT32
+    input_0.shape = [1]
+    request.addInputTensor(input_0)
     return request
 
 
-# +main:
+# -make request
+
+
 def main():
-    # +create objects:
+    # +create objects
     client = proteus.clients.HttpClient("http://127.0.0.1:8998")
-    # -create objects:
+    # -create objects
 
     # +start server: if it's not already started, start it from Python
     start_server = not client.serverLive()
@@ -60,33 +68,30 @@ def main():
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
-    worker_name = client.workerLoad("Echo")
+    endpoint = client.workerLoad("echo")
 
     ready = False
     while not ready:
-        ready = client.modelReady(worker_name)
-    # -load worker:
+        ready = client.modelReady(endpoint)
+    # -load worker
 
     # +inference: construct the request and make the inference
-    data = [3]
-    request = NumericalInferenceRequest(data)
-    response = client.modelInfer(worker_name, request)
-    # -inference:
+    data = 3
+    request = make_request(data)
+    response = client.modelInfer(endpoint, request)
+    # -inference
 
     # +validate: check whether the inference succeeded by checking the response
     assert not response.isError(), response.getError()
     outputs = response.getOutputs()
-    assert len(outputs) == len(data)
-    for index, output in enumerate(outputs):
+    assert len(outputs) == 1
+    for output in outputs:
         recv_data = output.getUint32Data()
         assert len(recv_data) == 1
-        assert recv_data[0] == data[index] + 1
-    # -validate:
+        assert recv_data[0] == data + 1
+    # -validate
+    print("")
 
-    print("hello_world_rest.py: Passed")
-
-
-# -main:
 
 if __name__ == "__main__":
     main()

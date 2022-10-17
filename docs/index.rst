@@ -26,7 +26,7 @@
     :caption: Getting Started
 
     quickstart
-    hello_world_python
+    hello_world_echo
     example_resnet50_cpp
     example_resnet50_python
 
