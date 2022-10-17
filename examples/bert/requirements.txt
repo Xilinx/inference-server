@@ -1,0 +1,3 @@
+tokenizers==0.12.1
+onnxruntime
+six

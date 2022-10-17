@@ -266,3 +266,25 @@ def draw_bbox(image, bboxes, labels_file, show_label=True):
             )
 
     return image
+
+
+def image_postprocess(detections, original_image, args):
+    # Post-process the model outputs and display image with detection bounding boxes
+    STRIDES = [8, 16, 32]
+    XYSCALE = [1.2, 1.1, 1.05]
+
+    anchors = get_anchors(args.anchors)
+    STRIDES = np.array(STRIDES)
+
+    pred_bbox = postprocess_bbbox(detections, anchors, STRIDES, XYSCALE)
+
+    original_image_size = original_image.shape[:2]
+    bounding_boxes = postprocess_boxes(
+        pred_bbox, original_image_size, args.input_size, 0.25
+    )
+    bounding_boxes = nms(bounding_boxes, 0.213, method="nms")
+    return draw_bbox(
+        original_image,
+        bounding_boxes,
+        args.labels,
+    )

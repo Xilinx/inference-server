@@ -1,24 +1,16 @@
-# MIT License
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
-# Copyright (c) 2022 Advanced Micro Devices, Inc.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 
 """
@@ -103,7 +95,7 @@ def load(client, args):
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
-    # +load worker.  The only parameter the migraphx worker requires is the model file name.
+    # The only parameter the migraphx worker requires is the model file name.
     # batch and timeout are optional.
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
@@ -111,8 +103,8 @@ def load(client, args):
     parameters = proteus.RequestParameters()
     parameters.put("model", args.model)
 
-    # I found that allocation could fail with a large batch value of 64 and large
-    # (13) default buffer count in the migraphx worker
+    # bpickrel: I found that allocation could fail with a large batch value of 64
+    # and large (13) default buffer count in the migraphx worker
     # Beyond batch size 56, the worker seems to lock up while compiling the model
     parameters.put("batch", 2)
 
@@ -191,26 +183,7 @@ def main(args):
             this_detect = this_detect.reshape(newshape)
             detections.append(this_detect)
 
-        # Post-process the model outputs and display image with detection bounding boxes
-        STRIDES = [8, 16, 32]
-        XYSCALE = [1.2, 1.1, 1.05]
-
-        anchors = ip.get_anchors(args.anchors)
-        STRIDES = np.array(STRIDES)
-
-        pred_bbox = ip.postprocess_bbbox(detections, anchors, STRIDES, XYSCALE)
-
-        original_image = original_images[it]
-        original_image_size = original_image.shape[:2]
-        bounding_boxes = ip.postprocess_boxes(
-            pred_bbox, original_image_size, args.input_size, 0.25
-        )
-        bounding_boxes = ip.nms(bounding_boxes, 0.213, method="nms")
-        image = ip.draw_bbox(
-            original_image,
-            bounding_boxes,
-            args.labels,
-        )
+        image = ip.image_postprocess(detections, original_images[it], args)
 
         image = Image.fromarray(image)
         base_path = pathlib.Path(__file__).parent.resolve()
