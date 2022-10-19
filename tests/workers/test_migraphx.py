@@ -21,54 +21,50 @@ import pytest
 
 import proteus
 import proteus.testing
+import proteus.util.pre_post as pre_post
 
 from helper import root_path, run_benchmark
 
-sys.path.insert(0, os.path.join(root_path, "examples/python"))
-from utils.utils import postprocess
 
-# The make_nxn and preprocess functions are based on an migraphx example at
-# AMDMIGraphx/examples/vision/python_resnet50/resnet50_inference.ipynb
-# The mean and standard dev. values used for this normalization are requirements of the Resnet50 model.
-
-
-def make_nxn(image, n):
+def preprocess(paths):
     """
-    Crop an image to square and then resize to desired dimension n x n
-    """
-    width = image.shape[1]
-    height = image.shape[0]
-    if height > width:
-        dif = height - width
-        bar = dif // 2
-        square = image[(bar + (dif % 2)) : (height - bar), :]
-        return cv2.resize(square, (n, n))
-    elif width > height:
-        dif = width - height
-        bar = dif // 2
-        square = image[:, (bar + (dif % 2)) : (width - bar)]
-        return cv2.resize(square, (n, n))
-    else:
-        return cv2.resize(image, (n, n))
-
-
-def preprocess(img_data):
-    """
-    Normalize array values to the data type, mean and std. dev. required by Resnet50
+    Given a list of paths to images, preprocess the images and return them
 
     Args:
-        img_data (np.array): array in 3 dimensions [channels, rows, cols] with value range 0-255
-        The vectors are for RGB images, so images read with OpenCV must have channels
-        converted before calling.
+        paths (list[str]): Paths to images
+
     Returns:
-        Response: np.array
+        list[numpy.ndarray]: List of images
     """
-    mean_vec = np.array([0.406, 0.456, 0.485])
-    stddev_vec = np.array([0.225, 0.224, 0.229])
-    norm_img_data = np.zeros(img_data.shape).astype("float32")
-    for i in range(img_data.shape[0]):
-        norm_img_data[i, :, :] = (img_data[i, :, :] / 255 - mean_vec[i]) / stddev_vec[i]
-    return norm_img_data
+
+    options = pre_post.ImagePreprocessOptionsFloat()
+    options.order = pre_post.ImageOrder.NCHW
+    options.height = 224
+    options.width = 224
+    options.mean = [0.485, 0.456, 0.406]
+    options.std = [4.367, 4.464, 4.444]
+    options.normalize = True
+    options.convert_color = True
+    options.color_code = cv2.COLOR_BGR2RGB
+    options.convert_type = True
+    options.type = cv2.CV_32FC3
+    options.convert_scale = 1.0 / 255.0
+    return pre_post.imagePreprocessFloat(paths, options)
+
+
+def postprocess(output, k):
+    """
+    Postprocess the output data. For ResNet50, this includes performing a softmax
+    to determine the most probable classifications
+
+    Args:
+        output (proteus.InferenceResponseOutput): the output from the inference server
+        k (int): number of top categories to return
+
+    Returns:
+        list[int]: indices for the top k categories
+    """
+    return pre_post.resnet50PostprocessFloat(output, k)
 
 
 @pytest.mark.extensions(["migraphx"])
@@ -129,18 +125,13 @@ class TestMigraphx:
 
         request_num = num
         for i in range(request_num):
-            # Load a picture
-            img = cv2.imread(image_paths[i % image_num]).astype("float32")
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            # Crop to a square, resize
-            img = make_nxn(img, 224)
-            #  Normalize contents with values specific to Resnet50
-            img = img.transpose(2, 0, 1)
-            img = preprocess(img)
+            img = preprocess([image_paths[i % image_num]])[0]
 
             request = proteus.ImageInferenceRequest(img, True)
             response = self.send_request(request)
-            top_k_responses = postprocess(response, 5)
+            outputs = response.getOutputs()
+            assert len(outputs) == 1
+            top_k_responses = postprocess(outputs[0], 5)
 
             for i, top_k in enumerate(top_k_responses):
                 # Look for the top 5 categories (not underlying scores)

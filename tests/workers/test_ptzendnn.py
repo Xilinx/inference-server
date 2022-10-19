@@ -15,16 +15,53 @@
 import os
 import sys
 
+import cv2
 import numpy as np
 import pytest
 
 import proteus
 import proteus.testing
+import proteus.util.pre_post as pre_post
 
 from helper import root_path, run_benchmark
 
-sys.path.insert(0, os.path.join(root_path, "examples/python"))
-from utils.utils import postprocess, preprocess_pt
+
+def preprocess(paths):
+    """
+    Given a list of paths to images, preprocess the images and return them
+
+    Args:
+        paths (list[str]): Paths to images
+
+    Returns:
+        list[numpy.ndarray]: List of images
+    """
+    options = pre_post.ImagePreprocessOptionsFloat()
+    options.order = pre_post.ImageOrder.NCHW
+    options.mean = [0.485, 0.456, 0.406]
+    options.std = [4.367, 4.464, 4.444]
+    options.normalize = True
+    options.convert_color = True
+    options.color_code = cv2.COLOR_BGR2RGB
+    options.convert_type = True
+    options.type = cv2.CV_32FC3
+    options.convert_scale = 1.0 / 255.0
+    return pre_post.imagePreprocessFloat(paths, options)
+
+
+def postprocess(output, k):
+    """
+    Postprocess the output data. For ResNet50, this includes performing a softmax
+    to determine the most probable classifications
+
+    Args:
+        output (proteus.InferenceResponseOutput): the output from the inference server
+        k (int): number of top categories to return
+
+    Returns:
+        list[int]: indices for the top k categories
+    """
+    return pre_post.resnet50PostprocessFloat(output, k)
 
 
 @pytest.mark.extensions(["ptzendnn"])
@@ -83,43 +120,13 @@ class TestPtZendnn:
         """
         image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
-        preprocessing = {"input_size": 224}
-
         batch = num
-        images = []
-        for _ in range(batch):
-            images.append(
-                preprocess_pt(
-                    image_path,
-                    input_size=preprocessing["input_size"],
-                )
-            )
-        request = proteus.ImageInferenceRequest(images, True)
-        response = self.send_request(request)
-        top_k_responses = postprocess(response, 5)
-        gold_response_output = [259, 157, 152, 261, 154]
-        for top_k in top_k_responses:
-            assert (top_k == gold_response_output).all()
-
-    @pytest.mark.benchmark(group="PtZendnn")
-    def test_benchmark_ptzendnn(self, benchmark):
-
-        batch_size = 16
-        assert self.parameters is not None
-        input_size = self.parameters.get("input_size")
-        images = np.random.uniform(
-            0.0, 255.0, (batch_size, input_size, input_size, 3)
-        ).astype(np.float32)
-        images = [image for image in images]
-
-        request = proteus.ImageInferenceRequest(images, True)
-
-        options = {
-            "model": self.model,
-            "parameters": self.parameters,
-            "type": "rest (pytest)",
-            "config": "N/A",
-        }
-        run_benchmark(
-            benchmark, "PtZendnn", self.rest_client.modelInfer, request, **options
-        )
+        image_paths = [image_path] * batch
+        images = preprocess(image_paths)
+        for image in images:
+            request = proteus.ImageInferenceRequest(image, True)
+            response = self.send_request(request)
+            outputs = response.getOutputs()
+            top_k_responses = postprocess(outputs[0], 5)
+            gold_response_output = [259, 261, 260, 154, 157]
+            assert top_k_responses == gold_response_output
