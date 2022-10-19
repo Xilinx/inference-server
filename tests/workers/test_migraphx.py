@@ -133,6 +133,4 @@ class TestMigraphx:
             assert len(outputs) == 1
             top_k_responses = postprocess(outputs[0], 5)
 
-            for i, top_k in enumerate(top_k_responses):
-                # Look for the top 5 categories (not underlying scores)
-                assert (top_k == gold_responses[i % image_num]).all()
+            assert top_k_responses == gold_responses[i % image_num]

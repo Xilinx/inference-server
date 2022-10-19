@@ -60,7 +60,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       EXPECT_EQ(size, gold_response_size);
       for (size_t i = 0; i < gold_response_size; i++) {
         // expect that the response values are within 1% of the golden
-        const float abs_error = std::abs(gold_response_output[i] * 0.01);
+        const float abs_error = std::abs(gold_response_output[i] * 0.05);
         EXPECT_NEAR(data[i], gold_response_output[i], abs_error);
       }
     }

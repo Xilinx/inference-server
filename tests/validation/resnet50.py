@@ -29,10 +29,7 @@ Source of ground truth labels for validation set:
     https://github.com/mvermeulen/rocm-migraphx/tree/master/datasets/imagenet/val.txt
 """
 
-# python tests/validation/resnet50.py --validation-dir /imagenet/val_224x224/ --ground-truth /imagenet/val.txt --labels /workspace/proteus/examples/resnet50/imagenet_classes.txt --worker migraphx
-
 import argparse
-import json  # json for reading labels file
 import os
 import pathlib
 import sys
@@ -40,7 +37,6 @@ import time
 
 import cv2
 import numpy as np
-import onnx
 
 import proteus
 import proteus.clients
