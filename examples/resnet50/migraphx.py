@@ -122,7 +122,7 @@ def load(client, args):
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
-    # parameters that it pays attention to. Similarly, the batcher the worker is
+    # parameters that it pays attention to. Similarly, the batcher that the worker is
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
@@ -185,7 +185,7 @@ def main(args):
 
     assert len(paths) == len(requests)
     # +run inference
-    # migraphx.py
+    # in migraphx.py
     responses = proteus.client_operators.inferAsyncOrdered(client, endpoint, requests)
     print("Making inferences...")
     for image_path, response in zip(paths, responses):

@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument(
         "--model",
         default="",
-        help="Path to the resnet50 model on the server",
+        help="Path to the bert model on the server",
     )
 
     parser.add_argument(
@@ -73,7 +73,7 @@ def parse_args():
             print(" - pass all the following flags:")
             print("     --input")
             print("     --model")
-            print("     --labels")
+            print("     --vocab")
             sys.exit(1)
 
         # args.input is unset and set by each example

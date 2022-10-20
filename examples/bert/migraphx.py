@@ -41,7 +41,7 @@ try:
     import tokenizers
 except ImportError:
     print(
-        "Could not import one or more modules. Did you run 'pip install -r requirements.txt'?"
+        "Could not import one or more modules in bert. Did you run 'pip install -r requirements.txt'?"
     )
     sys.exit(1)
 
@@ -82,7 +82,7 @@ def load(client, args):
     # batch and timeout are optional.
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
-    # future use.  It will read the array dimensions and data type from the model.
+    # future use. It will read the array dimensions and data type from the model.
     parameters = proteus.RequestParameters()
     parameters.put("model", args.model)
 
@@ -109,7 +109,7 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         request = proteus.predict_api.InferenceRequest()
         item = eval_examples[idx]  # class SquadExample
 
-        # add items to inference request
+        # Depending on the model, it will require one or more input tensors. The values for name, datatype, shape will also be model-dependent.
 
         input_n = proteus.predict_api.InferenceRequestInput()
         input_n.name = f"input_ids:0"
@@ -168,6 +168,7 @@ def get_args():
 
     root = os.getenv("PROTEUS_ROOT")
 
+    # assign default values if these are unset
     if not args.model:
         args.model = root + "/external/artifacts/onnx/bert/bertsquad-10.onnx"
 

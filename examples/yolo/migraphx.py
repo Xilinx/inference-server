@@ -27,9 +27,16 @@ import pathlib
 import sys
 import time
 
-import cv2
-import numpy as np
-from PIL import Image
+try:
+    import cv2
+    import numpy as np
+    from PIL import Image
+except ImportError:
+    print(
+        "Could not import one or more modules in yolo. Did you run 'pip install -r requirements.txt'?"
+    )
+    sys.exit(1)
+
 
 import proteus
 import proteus.clients
@@ -91,7 +98,7 @@ def load(client, args):
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
-    # parameters that it pays attention to. Similarly, the batcher the worker is
+    # parameters that it pays attention to. Similarly, the batcher that the worker is
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 

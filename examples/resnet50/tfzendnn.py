@@ -111,7 +111,7 @@ def load(client, args):
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
-    # parameters that it pays attention to. Similarly, the batcher the worker is
+    # parameters that it pays attention to. Similarly, the batcher that the worker is
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 

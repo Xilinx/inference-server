@@ -32,11 +32,17 @@ https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/vision/
 
 import colorsys
 import random
+import sys
 
-import cv2
-import numpy as np
-from scipy import special
-
+try:
+    import cv2
+    import numpy as np
+    from scipy import special
+except ImportError:
+    print(
+        "Could not import one or more modules in yolo. Did you run 'pip install -r requirements.txt'?"
+    )
+    sys.exit(1)
 
 # this function is from tensorflow-yolov4-tflite/core/utils.py
 def image_preprocess(image, target_size, gt_boxes=None):

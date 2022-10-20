@@ -41,6 +41,7 @@ def make_request(data):
         proteus.InferenceRequest: Request
     """
     request = proteus.predict_api.InferenceRequest()
+    # each request has one or more input tensors, depending on the worker/model that's going to process it
     input_0 = proteus.predict_api.InferenceRequestInput()
     input_0.name = f"input0"
     input_0.setUint32Data(np.array([data], np.uint32))

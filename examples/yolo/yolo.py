@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument(
         "--model",
         default="",
-        help="Path to the resnet50 model on the server",
+        help="Path to the yolo model on the server",
     )
 
     parser.add_argument(
