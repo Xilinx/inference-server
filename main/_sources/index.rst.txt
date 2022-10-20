@@ -26,11 +26,10 @@
     :caption: Getting Started
 
     quickstart
-    hello_world_python
-    xmodel_example_python
-    xmodel_example_cpp
-    zendnn_examples
-    cli
+    hello_world_echo
+    example_resnet50_cpp
+    example_resnet50_python
+
 
 .. toctree::
     :maxdepth: 2
@@ -67,6 +66,7 @@
     rest
     cpp_api
     python_api
+    cli
 
 .. toctree::
     :maxdepth: 2

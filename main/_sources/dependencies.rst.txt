@@ -154,7 +154,7 @@ The following packages are installed from Github.
     :github:`cameron314/concurrentqueue`,1.0.3,Dual BSD-2/Boost + others,Statically linked by proteus-server for an efficient multi-producer queue\ :superscript:`a 0`
     :github:`jarro2783/cxxopts`,2.2.1,MIT,Statically linked by proteus-server for command-line argument parsing\ :superscript:`a 0`
     :github:`gdraheim/docker-systemctl-replacement`,1.5.4505,EUPL,Executable created by pyinstaller for starting XRM\ :superscript:`a 0`
-    :github:`drogonframework/drogon`,1.8.0,MIT,Dynamically linked by proteus-server for an HTTP and websocket server\ :superscript:`a 0`
+    :github:`drogonframework/drogon`,1.8.1,MIT,Dynamically linked by proteus-server for an HTTP and websocket server\ :superscript:`a 0`
     :github:`SpartanJ/efsw`,latest,MIT,Dynamically linked by proteus-server for directory monitoring\ :superscript:`a 0`
     :github:`FFmpeg/FFmpeg`,3.4.8,LGPL-2.1+ + others,Dynamically linked by proteus-server for video processing\ :superscript:`a 0`
     :github:`tschaub/gh-pages`,latest,MIT,Executable used to publish documentation to gh-pages branch\ :superscript:`d 0`
@@ -224,12 +224,16 @@ The following files are included in the AMD Inference Server repository under th
 
     bicycle-384566_640.jpg,`Pixabay <https://pixabay.com/photos/bicycle-bike-biking-sport-cycle-384566/>`__,`bicycle-384566_640.jpg <https://cdn.pixabay.com/photo/2014/07/05/08/18/bicycle-384566_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing\ :superscript:`d 0`
     CodeCoverage.cmake,:github:`bilke/cmake-modules`,`CodeCoverage.cmake <https://www.github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake>`__,BSD-3,CMake module for test coverage measurement\ :superscript:`d 0`
+    crowd.jpg,`Flickr <https://www.flickr.com/photos/mattmangum/2306189268/>`__,`2306189268_88cc86b30f_z.jpg <https://farm3.staticflickr.com/2009/2306189268_88cc86b30f_z.jpg>`__,`CC BY 2.0 <https://creativecommons.org/licenses/by/2.0/legalcode>`_,Used for testing\ :superscript:`d 0`
     ctpl.h,:github:`vit-vit/CTPL`,`ctpl.h <https://www.github.com/vit-vit/CTPL/blob/master/ctpl.h>`__,Apache 2.0,C++ Thread pool library\ :superscript:`a 0`
     dog-3619020_640.jpg,`Pixabay <https://pixabay.com/photos/dog-spitz-smile-ginger-home-pet-3619020/>`__,`dog-3619020_640.jpg <https://cdn.pixabay.com/photo/2018/08/20/14/08/dog-3619020_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing\ :superscript:`d 0`
     nine_9273.jpg,`Keras MNIST dataset <https://keras.io/api/datasets/mnist/>`__,?,`CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/legalcode>`__,Used for testing\ :superscript:`d 0`
-    proteusConfig.cmake,:github:`alexreinking/SharedStaticStarter`,`SomeLibConfig.cmake <https://www.github.com/alexreinking/SharedStaticStarter/blob/master/packaging/SomeLibConfig.cmake>`__,MIT,CMake module for installing libraries\ :superscript:`d 0`
+    proteusConfig.cmake,:github:`alexreinking/SharedStaticStarter`,`SomeLibConfig.cmake <https://www.github.com/alexreinking/SharedStaticStarter/blob/master/packaging/SomeLibConfig.cmake>`__,MIT,CMake module for installing libraries\ :superscript:`a 0`
+    migraphx_bert.py,:github:`ROCmSoftwarePlatform/AMDMIGraphX`,`bert-squad-migraphx.py <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/nlp/python_bert_squad/bert-squad-migraphx.py>`__,MIT,Python example for YoloV4 model\ :superscript:`d 0`
+    migraphx_yolo.py,:github:`ROCmSoftwarePlatform/AMDMIGraphX`,`yolov4_inference.ipynb <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb>`__,MIT,Python example for Bert model\ :superscript:`d 0`
     Queue.js,`Kate Rose Morley <https://code.iamkate.com/javascript/queues/>`__,`Queue.src.js <https://code.iamkate.com/javascript/queues/Queue.src.js>`__,`CC0 1.0 Universal <https://creativecommons.org/publicdomain/zero/1.0/legalcode>`__,JavaScript class for a queue\ :superscript:`d 0`
     sport-1284275_640.jpg,`Pixabay <https://pixabay.com/photos/sport-skateboard-skateboarding-fun-1284275/>`__,`sport-1284275_640.jpg <https://cdn.pixabay.com/photo/2016/03/27/21/05/sport-1284275_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing\ :superscript:`d 0`
+    yolo_image_processing.py,:github:`ROCmSoftwarePlatform/AMDMIGraphX`,`image_processing.py <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/image_processing.py>`__,MIT,Yolo post-processing\ :superscript:`d 0`
 
 Downloaded Files
 ----------------

@@ -81,9 +81,7 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Running a Vitis AI XModel (C++)" href="xmodel_example_cpp.html" />
-    <link rel="prev" title="Hello World (Python)" href="hello_world_python.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -263,20 +261,11 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="index.html">AMD Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hello_world_python.html">Hello World (Python)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Running a Vitis AI XModel (Python)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#user-variables">User variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#load-a-worker">Load a Worker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-images">Get Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#inference">Inference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-pre-and-post-processing">Adding pre- and post-processing</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="xmodel_example_cpp.html">Running a Vitis AI XModel (C++)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn_examples.html">ZenDNN Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
 <ul>
@@ -301,6 +290,7 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
@@ -386,7 +376,7 @@ function OptanonWrapper() { }
   <section id="running-a-vitis-ai-xmodel-python">
 <span id="xmodel-example-python"></span><h1>Running a Vitis AI XModel (Python)<a class="headerlink" href="#running-a-vitis-ai-xmodel-python" title="Permalink to this heading">¶</a></h1>
 <p>This example walks you through the process to make an inference request to a custom XModel in Python.
-If you haven’t already, make sure to go through the <a class="reference internal" href="hello_world_python.html#hello-world-python"><span class="std std-ref">Hello World (Python)</span></a> example first!
+If you haven’t already, make sure to go through the <a class="reference internal" href="hello_world_echo.html#hello-world-python"><span class="std std-ref">Hello World - Python</span></a> example first!
 We gloss over some of the details covered in the previous one.
 The complete script used here is available: <code class="file docutils literal notranslate"><span class="pre">examples/python/custom_processing.py</span></code>.</p>
 <section id="user-variables">
@@ -398,11 +388,6 @@ These variables are pulled out into a separate block to highlight them.</p>
 <li><p>XModel Path: The XModel you want to run should exist on a path where the server runs. Here, we use a ResNet50 model trained on the ImageNet dataset, which is an image classification model.</p></li>
 <li><p>Image Path: To test this model, we need to use an image. Here, we use a sample image included for testing. The image path is given relative to the AMD Inference Server repository.</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="n">path_to_xmodel</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{PROTEUS_ROOT}</span><span class="s2">/external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel&quot;</span>
-    <span class="n">path_to_image</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="s2">&quot;/tests/assets/dog-3619020_640.jpg&quot;</span>
-</pre></div>
-</div>
 </section>
 <section id="load-a-worker">
 <h2>Load a Worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
@@ -411,26 +396,11 @@ To make an inference request to a custom XModel, we use the <strong>Xmodel</stro
 Some workers accept load-time parameters to configure different options.
 The <strong>Xmodel</strong> worker is one such worker.
 The parameter we add is to pass the path to the XModel that we want to use.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
-<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">path_to_xmodel</span><span class="p">)</span>
-<span class="n">worker_name</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="s2">&quot;Xmodel&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-
-<span class="n">ready</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="k">while</span> <span class="ow">not</span> <span class="n">ready</span><span class="p">:</span>
-    <span class="n">ready</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelReady</span><span class="p">(</span><span class="n">worker_name</span><span class="p">)</span>
-</pre></div>
-</div>
 </section>
 <section id="get-images">
 <h2>Get Images<a class="headerlink" href="#get-images" title="Permalink to this heading">¶</a></h2>
 <p>Now, we can prepare our request.
 In this example, we use one image and duplicate it <em>batch_size</em> times so we can create one whole batch.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path_to_image</span><span class="p">)</span>
-    <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-</pre></div>
-</div>
 </section>
 <section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h2>
@@ -438,16 +408,6 @@ In this example, we use one image and duplicate it <em>batch_size</em> times so 
 The <code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest</span></code> class is a helper class that simplifies creating a request in the right format.
 It accepts an image or a list of images and an optional boolean parameter that indicates whether the request should store the images directly as a tensor of RGB values.
 By default, images are saved as base64-encoded strings however the Xmodel worker requires that the data is a tensor so we add <em>True</em>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
-    <span class="n">request</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">getError</span><span class="p">()</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">proteus</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span>
-        <span class="n">recv_data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getInt8Data</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>The data we receive from the response is a list of numbers.</p>
 </section>
 <section id="adding-pre-and-post-processing">
@@ -457,27 +417,9 @@ For this model, we do need to apply pre- and post-processing to get accurate cla
 To double-check our inference, we can check it against what we expect to receive.
 For this test image and XModel, the top-5 classifications expected are listed.
 259 is the most probable and this index corresponds to <em>Pomeranian</em> in the ImageNet labels.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gold_response_output</span> <span class="o">=</span> <span class="p">[</span><span class="mi">259</span><span class="p">,</span> <span class="mi">261</span><span class="p">,</span> <span class="mi">260</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">154</span><span class="p">]</span>
-</pre></div>
-</div>
 <p>For pre-processing, you can add custom logic to perform the necessary actions to the images prior to constructing the request.
 Similarly, post-processing can be added after the data is received.
 The pre- and post-processing functions used in this example can be seen in the source file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-<span class="c1"># Construct the request and send it</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
-    <span class="n">request</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">(),</span> <span class="n">response</span><span class="o">.</span><span class="n">getError</span><span class="p">()</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">proteus</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span>
-        <span class="n">recv_data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getInt8Data</span><span class="p">()</span>
-        <span class="c1"># Can optionally post-process the result</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="n">postprocess</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">k</span> <span class="o">==</span> <span class="n">gold_response_output</span>
-</pre></div>
-</div>
 </section>
 </section>
 
@@ -495,22 +437,13 @@ The pre- and post-processing functions used in this example can be seen in the s
 
 	  <!-- Sphinx Page Footer block -->
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="xmodel_example_cpp.html" class="btn btn-neutral float-right" title="Running a Vitis AI XModel (C++)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="hello_world_python.html" class="btn btn-neutral float-left" title="Hello World (Python)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on September 27, 2022.
+        Last updated on October 20, 2022.
       </span>
 
     </p>

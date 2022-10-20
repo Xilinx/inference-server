@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -79,8 +80,10 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-    <link rel="index" title="Index" href="#" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running ResNet50 - C++" href="example_resnet50_cpp.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -260,9 +263,18 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="index.html">AMD Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hello World - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#import-the-library">Import the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-our-client-and-server-objects">Create our client and server objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#is-amd-inference-server-already-running">Is AMD Inference Server already running?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inference">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#validate-the-response">Validate the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clean-up">Clean up</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
@@ -305,6 +317,11 @@ function OptanonWrapper() { }
 
             
 			
+			<p class="caption"><span class="caption-text">This Page</span></p>
+				<ul class="current">
+				  <li class="toctree-l1"><a href="_sources/hello_world_echo.rst.txt"
+						rel="nofollow">Show Source</a></li>
+				</ul>
           
         </div>
         
@@ -348,12 +365,14 @@ function OptanonWrapper() { }
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Index</li>
+      <li>Hello World - Python</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/hello_world_echo.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -365,82 +384,66 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- <a href="#I"><strong>I</strong></a>
- | <a href="#M"><strong>M</strong></a>
- | <a href="#P"><strong>P</strong></a>
- | <a href="#R"><strong>R</strong></a>
- 
-</div>
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.ImageInferenceRequest">ImageInferenceRequest() (in module proteus)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="M">M</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.mapTypeToXir">mapTypeToXir() (in module proteus)</a>
-</li>
-      <li><a href="python_api.html#proteus.mapXirType">mapXirType() (in module proteus)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
-
-      <ul>
-        <li><a href="python_api.html#module-proteus">proteus</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="P">P</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.parallel_infer">parallel_infer() (in module proteus)</a>
-</li>
-      <li>
-    proteus
-
-      <ul>
-        <li><a href="python_api.html#module-proteus">module</a>
-</li>
-      </ul></li>
-      <li><a href="cpp_api.html#_CPPv47proteus">proteus (C++ type)</a>, <a href="cpp_api.html#_CPPv47proteus">[1]</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImplE">proteus::GrpcClient::GrpcClientImpl (C++ class)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl7getStubEv">proteus::GrpcClient::GrpcClientImpl::getStub (C++ function)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE">proteus::GrpcClient::GrpcClientImpl::GrpcClientImpl (C++ function)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl5stub_E">proteus::GrpcClient::GrpcClientImpl::stub_ (C++ member)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE">proteus::mapProtoToModelMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest">proteus::runInference (C++ function)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.RuntimeError">RuntimeError</a>
-</li>
-  </ul></td>
-</tr></table>
-
+  <section id="hello-world-python">
+<span id="id1"></span><h1>Hello World - Python<a class="headerlink" href="#hello-world-python" title="Permalink to this heading">¶</a></h1>
+<p>AMD Inference Server’s Python API allows you to start the server and send requests to it from Python.
+This example walks you through how to start the server and use Python to send requests to a simple model.
+The complete script used here is available in the repository.</p>
+<section id="import-the-library">
+<h2>Import the library<a class="headerlink" href="#import-the-library" title="Permalink to this heading">¶</a></h2>
+<p>You need to bring in the AMD Inference Server Python library to use the API.
+The Python library is based on the Inference Server’s C++ API and it gets installed in the dev container when you build the project.
+You can also install it using a pre-built wheel.</p>
+</section>
+<section id="create-our-client-and-server-objects">
+<h2>Create our client and server objects<a class="headerlink" href="#create-our-client-and-server-objects" title="Permalink to this heading">¶</a></h2>
+<p>We assume that the server will be running locally with the default HTTP port and pass that to the client.
+This example assumes that the server will be running locally with the default HTTP port.
+Since you’ll be using HTTP/REST to communicate with the server, you should create an <cite>HttpClient</cite> using the address of the server as the argument.</p>
+</section>
+<section id="is-amd-inference-server-already-running">
+<h2>Is AMD Inference Server already running?<a class="headerlink" href="#is-amd-inference-server-already-running" title="Permalink to this heading">¶</a></h2>
+<p>If the server is already started externally, you don’t want to start it again.
+You can see if the server is live using the client object.
+If it’s not live, then you can start the server from Python by instantiating the <code class="docutils literal notranslate"><span class="pre">Server</span></code> object.
+Depending on what protocol you’re using to communicate with the server, that protocol may need to be started on the server.
+The server will remain active as long as the server object stays in scope.</p>
+</section>
+<section id="load-a-worker">
+<h2>Load a worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
+<p>Inference requests in AMD Inference Server are made to workers.
+Workers are started as threads in AMD Inference Server and have a defined lifecycle.
+Before making an inference request to a worker, it must first be loaded.
+Loading a worker returns an endpoint that the client should use for future operations.</p>
+<p>This worker, Echo, is a simple example worker that accepts an integer as input, adds one to it and returns the sum.</p>
+</section>
+<section id="inference">
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h2>
+<p>Once the worker is ready, you can make an inference request to it.
+To do so, first construct a request.
+We construct a request that contains an integer and send it to AMD Inference Server.</p>
+<p>To make a request, you need to create, at minimum, a <code class="docutils literal notranslate"><span class="pre">proteus.InferenceRequest</span></code> object and add <code class="docutils literal notranslate"><span class="pre">proteus.InferenceRequestInput</span></code> objects to it.
+Each input object represents an input tensor for the request and has a number of metadata attributes associated with it such as a name, datatype, and shape.
+This format is based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>.
+For images, there’s also a helper method called <code class="docutils literal notranslate"><span class="pre">proteus.ImageInferenceRequest</span></code> that you can use to create requests.
+It’s used in the ResNet50 Python examples.</p>
+</section>
+<section id="validate-the-response">
+<h2>Validate the response<a class="headerlink" href="#validate-the-response" title="Permalink to this heading">¶</a></h2>
+<p>After making the inference, you should check what the response was.
+First, make sure the inference didn’t fail by checking if the response is erroneous.
+Then, you can get the outputs and examine them.
+The format and contents of the output data will depend on the worker and model used for inference.
+In this case, the Echo worker returns a single output tensor back with one integer that should be one larger than what was sent.
+The assertions here check these cases.</p>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">¶</a></h2>
+<p>Workers that are loaded in AMD Inference Server will persist until the server shuts down or they’re explicitly unloaded.
+While it’s not shown here, the Python API provides an <code class="docutils literal notranslate"><span class="pre">unload()</span></code> method for this purpose.
+As the script ends, the Server object’s destructor will clean up any active workers on the server and it will shut down</p>
+</section>
+</section>
 
 
            </div>
@@ -455,6 +458,15 @@ function OptanonWrapper() { }
 
 
 	  <!-- Sphinx Page Footer block -->
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="example_resnet50_cpp.html" class="btn btn-neutral float-right" title="Running ResNet50 - C++" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

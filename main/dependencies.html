@@ -264,11 +264,9 @@ function OptanonWrapper() { }
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hello_world_python.html">Hello World (Python)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="xmodel_example_python.html">Running a Vitis AI XModel (Python)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="xmodel_example_cpp.html">Running a Vitis AI XModel (C++)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn_examples.html">ZenDNN Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
 <ul>
@@ -293,6 +291,7 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
@@ -825,7 +824,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p>Executable created by pyinstaller for starting XRM<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/drogonframework/drogon">drogonframework/drogon</a></p></td>
-<td><p>1.8.0</p></td>
+<td><p>1.8.1</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by proteus-server for an HTTP and websocket server<sup>a 0</sup></p></td>
 </tr>
@@ -1038,41 +1037,65 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p>BSD-3</p></td>
 <td><p>CMake module for test coverage measurement<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p>ctpl.h</p></td>
+<tr class="row-even"><td><p>crowd.jpg</p></td>
+<td><p><a class="reference external" href="https://www.flickr.com/photos/mattmangum/2306189268/">Flickr</a></p></td>
+<td><p><a class="reference external" href="https://farm3.staticflickr.com/2009/2306189268_88cc86b30f_z.jpg">2306189268_88cc86b30f_z.jpg</a></p></td>
+<td><p><a class="reference external" href="https://creativecommons.org/licenses/by/2.0/legalcode">CC BY 2.0</a></p></td>
+<td><p>Used for testing<sup>d 0</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p>ctpl.h</p></td>
 <td><p><a class="reference external" href="https://github.com/vit-vit/CTPL">vit-vit/CTPL</a></p></td>
 <td><p><a class="reference external" href="https://www.github.com/vit-vit/CTPL/blob/master/ctpl.h">ctpl.h</a></p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>C++ Thread pool library<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p>dog-3619020_640.jpg</p></td>
+<tr class="row-even"><td><p>dog-3619020_640.jpg</p></td>
 <td><p><a class="reference external" href="https://pixabay.com/photos/dog-spitz-smile-ginger-home-pet-3619020/">Pixabay</a></p></td>
 <td><p><a class="reference external" href="https://cdn.pixabay.com/photo/2018/08/20/14/08/dog-3619020_640.jpg">dog-3619020_640.jpg</a></p></td>
 <td><p><a class="reference external" href="https://pixabay.com/service/license/">Pixabay License</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p>nine_9273.jpg</p></td>
+<tr class="row-odd"><td><p>nine_9273.jpg</p></td>
 <td><p><a class="reference external" href="https://keras.io/api/datasets/mnist/">Keras MNIST dataset</a></p></td>
 <td><p>?</p></td>
 <td><p><a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC BY-SA 3.0</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p>proteusConfig.cmake</p></td>
+<tr class="row-even"><td><p>proteusConfig.cmake</p></td>
 <td><p><a class="reference external" href="https://github.com/alexreinking/SharedStaticStarter">alexreinking/SharedStaticStarter</a></p></td>
 <td><p><a class="reference external" href="https://www.github.com/alexreinking/SharedStaticStarter/blob/master/packaging/SomeLibConfig.cmake">SomeLibConfig.cmake</a></p></td>
 <td><p>MIT</p></td>
-<td><p>CMake module for installing libraries<sup>d 0</sup></p></td>
+<td><p>CMake module for installing libraries<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p>Queue.js</p></td>
+<tr class="row-odd"><td><p>migraphx_bert.py</p></td>
+<td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/nlp/python_bert_squad/bert-squad-migraphx.py">bert-squad-migraphx.py</a></p></td>
+<td><p>MIT</p></td>
+<td><p>Python example for YoloV4 model<sup>d 0</sup></p></td>
+</tr>
+<tr class="row-even"><td><p>migraphx_yolo.py</p></td>
+<td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb">yolov4_inference.ipynb</a></p></td>
+<td><p>MIT</p></td>
+<td><p>Python example for Bert model<sup>d 0</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p>Queue.js</p></td>
 <td><p><a class="reference external" href="https://code.iamkate.com/javascript/queues/">Kate Rose Morley</a></p></td>
 <td><p><a class="reference external" href="https://code.iamkate.com/javascript/queues/Queue.src.js">Queue.src.js</a></p></td>
 <td><p><a class="reference external" href="https://creativecommons.org/publicdomain/zero/1.0/legalcode">CC0 1.0 Universal</a></p></td>
 <td><p>JavaScript class for a queue<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p>sport-1284275_640.jpg</p></td>
+<tr class="row-even"><td><p>sport-1284275_640.jpg</p></td>
 <td><p><a class="reference external" href="https://pixabay.com/photos/sport-skateboard-skateboarding-fun-1284275/">Pixabay</a></p></td>
 <td><p><a class="reference external" href="https://cdn.pixabay.com/photo/2016/03/27/21/05/sport-1284275_640.jpg">sport-1284275_640.jpg</a></p></td>
 <td><p><a class="reference external" href="https://pixabay.com/service/license/">Pixabay License</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p>yolo_image_processing.py</p></td>
+<td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
+<td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/image_processing.py">image_processing.py</a></p></td>
+<td><p>MIT</p></td>
+<td><p>Yolo post-processing<sup>d 0</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -1166,7 +1189,7 @@ In the tables below, note the following symbols to indicate where a package (or 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on September 27, 2022.
+        Last updated on October 20, 2022.
       </span>
 
     </p>

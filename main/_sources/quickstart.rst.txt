@@ -88,7 +88,7 @@ For running tests and certain examples, you may need to get artifacts such as te
 
 .. code-block:: console
 
-    $ proteus get
+    $ proteus get --all
 
 You must abide by the license agreements of these files, if you choose to download them.
 

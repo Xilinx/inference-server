@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		
+		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -79,8 +80,10 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-    <link rel="index" title="Index" href="#" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Factors" href="performance_factors.html" />
+    <link rel="prev" title="Running ResNet50 - C++" href="example_resnet50_cpp.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -260,11 +263,20 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="index.html">AMD Inference Server</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running ResNet50 - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#include-the-module">Include the module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
 <ul>
@@ -305,6 +317,11 @@ function OptanonWrapper() { }
 
             
 			
+			<p class="caption"><span class="caption-text">This Page</span></p>
+				<ul class="current">
+				  <li class="toctree-l1"><a href="_sources/example_resnet50_python.rst.txt"
+						rel="nofollow">Show Source</a></li>
+				</ul>
           
         </div>
         
@@ -348,12 +365,14 @@ function OptanonWrapper() { }
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Index</li>
+      <li>Running ResNet50 - Python</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/example_resnet50_python.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -365,82 +384,145 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- <a href="#I"><strong>I</strong></a>
- | <a href="#M"><strong>M</strong></a>
- | <a href="#P"><strong>P</strong></a>
- | <a href="#R"><strong>R</strong></a>
- 
+  <section id="running-resnet50-python">
+<h1>Running ResNet50 - Python<a class="headerlink" href="#running-resnet50-python" title="Permalink to this heading">¶</a></h1>
+<p>This page walks you through the Python versions of the ResNet50 examples.
+You can see the full source files used here in the repository for more details.</p>
+<p>The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
+You should read the C++ version of this documentation to better compare these two.</p>
+<p>In the dev container, the Python library is automatically built and installed as part of the CMake build process.
+You may also install the Python library by installing a wheel.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These examples are intended to demonstrate the API and how to communicate with the server.
+They are not intended to show the most optimal performance for each backend.</p>
 </div>
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.ImageInferenceRequest">ImageInferenceRequest() (in module proteus)</a>
-</li>
-  </ul></td>
-</tr></table>
+<section id="include-the-module">
+<h2>Include the module<a class="headerlink" href="#include-the-module" title="Permalink to this heading">¶</a></h2>
+<p>You can include the Python library by importing the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> module.
+The different submodules are imported by default but you can include them manually as well.
+These explicit imports can help IDEs resolve Python imports for autocompletion.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">proteus</span>
+<span class="kn">import</span> <span class="nn">proteus.clients</span>
+<span class="kn">import</span> <span class="nn">proteus.servers</span>
+<span class="kn">import</span> <span class="nn">proteus.util.pre_post</span> <span class="k">as</span> <span class="nn">pre_post</span>
 
-<h2 id="M">M</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.mapTypeToXir">mapTypeToXir() (in module proteus)</a>
-</li>
-      <li><a href="python_api.html#proteus.mapXirType">mapXirType() (in module proteus)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
+</pre></div>
+</div>
+</section>
+<section id="start-the-server">
+<h2>Start the server<a class="headerlink" href="#start-the-server" title="Permalink to this heading">¶</a></h2>
+<p>This example assumes that the server is not running elsewhere and starts it locally from Python instead.
+Creating the <code class="docutils literal notranslate"><span class="pre">proteus.servers.Server</span></code> object starts the inference server backend and it stays alive as long as the object remains in scope.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">Server</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the object’s methods.</p>
+<p>For example, if you were using HTTP/REST:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server</span><span class="o">.</span><span class="n">startHttp</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">http_port</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the server is already running somewhere, you don’t need to do this.</p>
+</section>
+<section id="create-the-client-object">
+<h2>Create the client object<a class="headerlink" href="#create-the-client-object" title="Permalink to this heading">¶</a></h2>
+<p>As in C++, you can create a client in Python corresponding to the protocol you want to use to talk to the server.</p>
+</section>
+<section id="load-a-worker">
+<h2>Load a worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
+<p>Once the server is ready, you have to load a worker to handle your request.
+This worker, and any load-time parameters it accepts, are backend-specific.
+After loading the worker, you get back an endpoint string that you use to make requests to this worker.
+If a worker is already ready on the server or you already have an endpoint, then you don’t need to do this.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
+<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="s2">&quot;xmodel&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After loading a worker, make sure it’s ready before attempting to make an inference.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">ready</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">ready</span><span class="p">:</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelReady</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="prepare-images">
+<h2>Prepare images<a class="headerlink" href="#prepare-images" title="Permalink to this heading">¶</a></h2>
+<p>Depending on the model, you may need to perform some preprocessing of the data before making an inference request.
+For ResNet50, this preprocessing generally consists of resizing the image, normalizing its values, and possibly converting types but its exact implementation depends on the model and on what the worker expects.
+The implementations of the preprocessing functions can be seen in the examples’ sources and they differ for each backend.</p>
+<p>In these examples, you can pass a path to an image or to a directory to the executable.
+This single path gets converted to a List of paths containing just the path you passed in or paths to all the files in the directory you passed in and its passed to the <code class="docutils literal notranslate"><span class="pre">preprocess</span></code> function.
+The file at each path is opened as a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array and stored in a List that the preprocess function returns.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">paths</span> <span class="o">=</span> <span class="n">resolve_image_paths</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">image</span><span class="p">))</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="construct-requests">
+<h2>Construct requests<a class="headerlink" href="#construct-requests" title="Permalink to this heading">¶</a></h2>
+<p>Using the images after preprocessing, you can construct requests to the inference server.
+Each image is constructed into an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> using the <code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest</span></code> helper function.
+This function accepts a single <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array or a list of <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, where each array represents an input tensor.
+The ResNet50 model only accepts a single input tensor so a single image is enough.
+This function infers the shape and datatype of the image using the properties stored in the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">construct_requests</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct requests for the inference server from the input images. For ResNet50,</span>
+<span class="sd">    a valid request includes a single input tensor containing a square image.</span>
 
-      <ul>
-        <li><a href="python_api.html#module-proteus">proteus</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
+<span class="sd">    Args:</span>
+<span class="sd">        images (list[numpy.ndarray]): the input images</span>
 
-<h2 id="P">P</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.parallel_infer">parallel_infer() (in module proteus)</a>
-</li>
-      <li>
-    proteus
+<span class="sd">    Returns:</span>
+<span class="sd">        list[proteus.InferenceRequest]: the requests</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">requests</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">requests</span>
 
-      <ul>
-        <li><a href="python_api.html#module-proteus">module</a>
-</li>
-      </ul></li>
-      <li><a href="cpp_api.html#_CPPv47proteus">proteus (C++ type)</a>, <a href="cpp_api.html#_CPPv47proteus">[1]</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImplE">proteus::GrpcClient::GrpcClientImpl (C++ class)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl7getStubEv">proteus::GrpcClient::GrpcClientImpl::getStub (C++ function)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE">proteus::GrpcClient::GrpcClientImpl::GrpcClientImpl (C++ function)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus10GrpcClient14GrpcClientImpl5stub_E">proteus::GrpcClient::GrpcClientImpl::stub_ (C++ member)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE">proteus::mapProtoToModelMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_api.html#_CPPv4N7proteus12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest">proteus::runInference (C++ function)</a>
-</li>
-  </ul></td>
-</tr></table>
 
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.RuntimeError">RuntimeError</a>
-</li>
-  </ul></td>
-</tr></table>
+</pre></div>
+</div>
+</section>
+<section id="make-an-inference">
+<h2>Make an inference<a class="headerlink" href="#make-an-inference" title="Permalink to this heading">¶</a></h2>
+<p>There are multiple ways of making a request to the inference server, some of which are used in the different implementations of these examples.
+Before processing the response, you should verify it’s not an error.</p>
+<p>Then, you can examine the outputs and, depending on the model, postprocess the results.
+For ResNet50, the raw results from the inference server lists the probabilities for each output class.
+The postprocessing identifies the highest probability classes and the top few of these are printed using the labels file to map the indices to a human-readable name.</p>
+<p>Here are some examples of making an inference used in these examples:</p>
+<p>This is the simplest way to make an inference: a blocking single inference where you loop through all the requests and make requests to the server one at a time.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># in vitis.py</span>
+<span class="k">for</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">request</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">requests</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">()</span>
 
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">top_indices</span> <span class="o">=</span> <span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+    <span class="n">print_label</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">image_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are also some helper methods that wrap the basic inference APIs provided by the client.
+The <code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered</span></code> method accepts a list of requests, makes all the requests asynchronously using the C++ <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> API, waits until each request completes, and then returns a list of responses.
+If there are multiple requests sent in this way, they may be batched together by the server.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># in migraphx.py</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">client_operators</span><span class="o">.</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">requests</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Making inferences...&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">()</span>
+
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">top_indices</span> <span class="o">=</span> <span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+    <span class="n">print_label</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">image_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 
 
            </div>
@@ -455,6 +537,15 @@ function OptanonWrapper() { }
 
 
 	  <!-- Sphinx Page Footer block -->
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="performance_factors.html" class="btn btn-neutral float-right" title="Factors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="example_resnet50_cpp.html" class="btn btn-neutral float-left" title="Running ResNet50 - C++" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
