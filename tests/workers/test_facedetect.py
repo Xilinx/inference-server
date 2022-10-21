@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import math
+
 import numpy as np
 import pytest
 
@@ -83,7 +85,10 @@ class TestInferImageFacedetectDPUCADF8H:
                 assert len(data) == len(
                     gold_response_output
                 ), f"{len(data)} != {len(gold_response_output)}"
-                np.testing.assert_almost_equal(gold_response_output, data, 2)
+                for datum, golden in zip(data, gold_response_output):
+                    # expect that the response values are within 5% of the golden
+                    abs_error = abs(golden * 0.05)
+                    assert math.isclose(datum, golden, abs_tol=abs_error)
         return response
 
     def construct_request(self, asTensor):

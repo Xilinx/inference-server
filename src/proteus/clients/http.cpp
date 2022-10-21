@@ -113,14 +113,10 @@ void check_error(drogon::ReqResult result) {
     case ReqResult::Ok:
       break;
     case ReqResult::BadServerAddress:
-      error_msg = "Cannot connect to the server";
-      break;
+      throw connection_error{"Cannot connect to the server"};
     default:
-      error_msg =
-        "Request error code: " + std::to_string(static_cast<int>(result));
-  }
-  if (!error_msg.empty()) {
-    throw bad_status(error_msg);
+      throw bad_status{"Request error code: " +
+                       std::to_string(static_cast<int>(result))};
   }
 }
 
@@ -143,7 +139,7 @@ drogon::HttpRequestPtr createPostRequest(const Json::Value& json,
   return req;
 }
 
-ServerMetadata HttpClient::serverMetadata() {
+ServerMetadata HttpClient::serverMetadata() const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2", headers_);
 
@@ -163,7 +159,7 @@ ServerMetadata HttpClient::serverMetadata() {
   return metadata;
 }
 
-bool HttpClient::serverLive() {
+bool HttpClient::serverLive() const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2/health/live", headers_);
 
@@ -174,7 +170,7 @@ bool HttpClient::serverLive() {
   return response->statusCode() == drogon::k200OK;
 }
 
-bool HttpClient::serverReady() {
+bool HttpClient::serverReady() const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2/health/ready", headers_);
 
@@ -183,7 +179,7 @@ bool HttpClient::serverReady() {
   return response->statusCode() == drogon::k200OK;
 }
 
-bool HttpClient::modelReady(const std::string& model) {
+bool HttpClient::modelReady(const std::string& model) const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2/models/" + model + "/ready", headers_);
 
@@ -192,7 +188,7 @@ bool HttpClient::modelReady(const std::string& model) {
   return response->statusCode() == drogon::k200OK;
 }
 
-ModelMetadata HttpClient::modelMetadata(const std::string& model) {
+ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2/models/" + model, headers_);
 
@@ -203,7 +199,7 @@ ModelMetadata HttpClient::modelMetadata(const std::string& model) {
 }
 
 void HttpClient::modelLoad(const std::string& model,
-                           RequestParameters* parameters) {
+                           RequestParameters* parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
@@ -221,7 +217,7 @@ void HttpClient::modelLoad(const std::string& model,
   }
 }
 
-void HttpClient::modelUnload(const std::string& model) {
+void HttpClient::modelUnload(const std::string& model) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json;
@@ -237,7 +233,7 @@ void HttpClient::modelUnload(const std::string& model) {
 }
 
 std::string HttpClient::workerLoad(const std::string& model,
-                                   RequestParameters* parameters) {
+                                   RequestParameters* parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
@@ -256,7 +252,7 @@ std::string HttpClient::workerLoad(const std::string& model,
   return std::string(response->body());
 }
 
-void HttpClient::workerUnload(const std::string& model) {
+void HttpClient::workerUnload(const std::string& model) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json;
@@ -281,7 +277,7 @@ auto createInferenceRequest(const std::string& model,
 }
 
 InferenceResponseFuture HttpClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) {
+  const std::string& model, const InferenceRequest& request) const {
   auto req = createInferenceRequest(model, request, headers_);
   auto prom = std::make_shared<std::promise<proteus::InferenceResponse>>();
   auto fut = prom->get_future();
@@ -302,8 +298,8 @@ InferenceResponseFuture HttpClient::modelInferAsync(
   return fut;
 }
 
-InferenceResponse HttpClient::modelInfer(const std::string& model,
-                                         const InferenceRequest& request) {
+InferenceResponse HttpClient::modelInfer(
+  const std::string& model, const InferenceRequest& request) const {
   auto req = createInferenceRequest(model, request, headers_);
 
   auto* client = this->impl_->getClient();
@@ -317,7 +313,7 @@ InferenceResponse HttpClient::modelInfer(const std::string& model,
   return mapJsonToResponse(resp.get());
 }
 
-std::vector<std::string> HttpClient::modelList() {
+std::vector<std::string> HttpClient::modelList() const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2/models", headers_);
 
@@ -337,7 +333,7 @@ std::vector<std::string> HttpClient::modelList() {
   return models;
 }
 
-bool HttpClient::hasHardware(const std::string& name, int num) {
+bool HttpClient::hasHardware(const std::string& name, int num) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json;

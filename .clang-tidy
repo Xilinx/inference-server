@@ -181,8 +181,6 @@ CheckOptions:
     value: camelBack
   - key:   readability-identifier-naming.PublicMemberCase
     value: lower_case
-  - key:   readability-identifier-naming.PublicMemberSuffix
-    value: _
   - key:   readability-identifier-naming.PublicMethodCase
     value: camelBack
   - key:   readability-identifier-naming.ScopedEnumConstantCase

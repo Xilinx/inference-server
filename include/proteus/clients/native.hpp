@@ -24,7 +24,7 @@
 #include <vector>  // for vector
 
 #include "proteus/clients/client.hpp"    // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
 #include "proteus/declarations.hpp"      // for InferenceResponseFuture
 
 // IWYU pragma: no_forward_declare proteus::RequestParameters
@@ -33,18 +33,18 @@ namespace proteus {
 
 class NativeClient : public Client {
  public:
-  ServerMetadata serverMetadata() override;
-  bool serverLive() override;
-  bool serverReady() override;
+  ServerMetadata serverMetadata() const override;
+  bool serverLive() const override;
+  bool serverReady() const override;
 
   /**
    * @brief Check if a worker is ready
    *
    * @param worker name of the worker to check if ready
    */
-  bool modelReady(const std::string& model) override;
+  bool modelReady(const std::string& model) const override;
 
-  ModelMetadata modelMetadata(const std::string& model) override;
+  ModelMetadata modelMetadata(const std::string& model) const override;
 
   /**
    * @brief Load a worker
@@ -55,16 +55,16 @@ class NativeClient : public Client {
    * requests
    */
   void modelLoad(const std::string& model,
-                 RequestParameters* parameters) override;
+                 RequestParameters* parameters) const override;
   /**
    * @brief Unload a worker
    *
    * @param worker name of the worker to unload
    */
-  void modelUnload(const std::string& model) override;
+  void modelUnload(const std::string& model) const override;
 
   InferenceResponse modelInfer(const std::string& model,
-                               const InferenceRequest& request) override;
+                               const InferenceRequest& request) const override;
   /**
    * @brief Enqueue an inference request to Proteus
    *
@@ -73,14 +73,15 @@ class NativeClient : public Client {
    * @return InferenceResponseFuture a future to get the results of the request
    */
   InferenceResponseFuture modelInferAsync(
-    const std::string& workerName, const InferenceRequest& request) override;
-  std::vector<std::string> modelList() override;
+    const std::string& workerName,
+    const InferenceRequest& request) const override;
+  std::vector<std::string> modelList() const override;
 
   std::string workerLoad(const std::string& worker,
-                         RequestParameters* parameters) override;
-  void workerUnload(const std::string& worker) override;
+                         RequestParameters* parameters) const override;
+  void workerUnload(const std::string& worker) const override;
 
-  bool hasHardware(const std::string& name, int num) override;
+  bool hasHardware(const std::string& name, int num) const override;
 };
 
 }  // namespace proteus

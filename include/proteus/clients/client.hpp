@@ -32,33 +32,35 @@ class Client {
  public:
   virtual ~Client() = default;
 
-  virtual ServerMetadata serverMetadata() = 0;
-  virtual bool serverLive() = 0;
-  virtual bool serverReady() = 0;
-  virtual bool modelReady(const std::string& model) = 0;
-  virtual ModelMetadata modelMetadata(const std::string& model) = 0;
+  virtual ServerMetadata serverMetadata() const = 0;
+  virtual bool serverLive() const = 0;
+  virtual bool serverReady() const = 0;
+  virtual bool modelReady(const std::string& model) const = 0;
+  virtual ModelMetadata modelMetadata(const std::string& model) const = 0;
 
   virtual void modelLoad(const std::string& model,
-                         RequestParameters* parameters) = 0;
-  virtual void modelUnload(const std::string& model) = 0;
+                         RequestParameters* parameters) const = 0;
+  virtual void modelUnload(const std::string& model) const = 0;
 
-  virtual InferenceResponse modelInfer(const std::string& model,
-                                       const InferenceRequest& request) = 0;
+  virtual InferenceResponse modelInfer(
+    const std::string& model, const InferenceRequest& request) const = 0;
   virtual InferenceResponseFuture modelInferAsync(
-    const std::string& model, const InferenceRequest& request) = 0;
-  virtual std::vector<std::string> modelList() = 0;
+    const std::string& model, const InferenceRequest& request) const = 0;
+  virtual std::vector<std::string> modelList() const = 0;
 
   virtual std::string workerLoad(const std::string& worker,
-                                 RequestParameters* parameters) = 0;
-  virtual void workerUnload(const std::string& worker) = 0;
+                                 RequestParameters* parameters) const = 0;
+  virtual void workerUnload(const std::string& worker) const = 0;
 
-  virtual bool hasHardware(const std::string& name, int num) = 0;
+  virtual bool hasHardware(const std::string& name, int num) const = 0;
 
  protected:
   Client();
 };
 
-bool serverHasExtension(Client* client, const std::string& extension);
+bool serverHasExtension(const Client* client, const std::string& extension);
+void waitUntilServerReady(const Client* client);
+void waitUntilModelReady(const Client* client, const std::string& model);
 
 }  // namespace proteus
 

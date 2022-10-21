@@ -143,13 +143,13 @@ if [[ $MODE == "tests" || $MODE == "all" ]]; then
 fi
 
 if [[ $MODE == "examples" || $MODE == "all" ]]; then
-  for file in $(find $examples_path/python -type f -print); do
+  for file in $(find $examples_path -type f -print); do
     if [[ $file == *.py ]]; then
       python3 $(realpath $file)
     fi
   done
 
-  for file in $(find $root_path/build/$BUILD/examples/cpp -type f -print); do
+  for file in $(find $root_path/build/$BUILD/examples -type f -print); do
     real_file=$(realpath $file)
     if [ -x $real_file ]; then
       $real_file

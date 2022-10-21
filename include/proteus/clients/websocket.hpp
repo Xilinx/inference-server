@@ -25,7 +25,7 @@
 #include <vector>  // for vector
 
 #include "proteus/clients/client.hpp"    // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
 
 namespace proteus {
 
@@ -36,31 +36,32 @@ class WebSocketClient : public Client {
                   const std::string& http_address);
   ~WebSocketClient();
 
-  ServerMetadata serverMetadata() override;
-  bool serverLive() override;
-  bool serverReady() override;
-  bool modelReady(const std::string& model) override;
-  ModelMetadata modelMetadata(const std::string& model) override;
+  ServerMetadata serverMetadata() const override;
+  bool serverLive() const override;
+  bool serverReady() const override;
+  bool modelReady(const std::string& model) const override;
+  ModelMetadata modelMetadata(const std::string& model) const override;
 
   void modelLoad(const std::string& model,
-                 RequestParameters* parameters) override;
-  void modelUnload(const std::string& model) override;
+                 RequestParameters* parameters) const override;
+  void modelUnload(const std::string& model) const override;
   InferenceResponse modelInfer(const std::string& model,
-                               const InferenceRequest& request) override;
+                               const InferenceRequest& request) const override;
   InferenceResponseFuture modelInferAsync(
-    const std::string& model, const InferenceRequest& request) override;
-  std::vector<std::string> modelList() override;
+    const std::string& model, const InferenceRequest& request) const override;
+  std::vector<std::string> modelList() const override;
 
   std::string workerLoad(const std::string& worker,
-                         RequestParameters* parameters) override;
-  void workerUnload(const std::string& worker) override;
+                         RequestParameters* parameters) const override;
+  void workerUnload(const std::string& worker) const override;
 
-  bool hasHardware(const std::string& name, int num) override;
+  bool hasHardware(const std::string& name, int num) const override;
 
-  void modelInferWs(const std::string& model, const InferenceRequest& request);
-  // TODO(varunsh): change to InferenceReponse
-  std::string modelRecv();
-  void close();
+  void modelInferWs(const std::string& model,
+                    const InferenceRequest& request) const;
+  // TODO(varunsh) const: change to InferenceReponse
+  std::string modelRecv() const;
+  void close() const;
 
  private:
   class WebSocketClientImpl;

@@ -50,7 +50,9 @@ struct ImagePreprocessOptions {
   ResizeAlgorithm resize_algorithm = ResizeAlgorithm::Simple;
 
   bool convert_color = false;
-  cv::ColorConversionCodes color_code;
+  // this should be cv::ColorConversionCodes but we can't bind it to Python
+  // conveniently
+  int color_code;
 
   bool convert_type = false;
   int type = 0;

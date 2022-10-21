@@ -36,9 +36,28 @@ void initializeClientLogging() {
 
 Client::Client() { initializeClientLogging(); }
 
-bool serverHasExtension(Client* client, const std::string& extension) {
+bool serverHasExtension(const Client* client, const std::string& extension) {
   auto metadata = client->serverMetadata();
   return metadata.extensions.find(extension) != metadata.extensions.end();
+}
+
+void waitUntilServerReady(const Client* client) {
+  bool ready = false;
+  while (!ready) {
+    try {
+      ready = client->serverReady();
+    } catch (const proteus::connection_error&) {
+      // ignore connection errors
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+  }
+}
+
+void waitUntilModelReady(const Client* client, const std::string& model) {
+  bool ready = false;
+  while (!ready) {
+    ready = client->modelReady(model);
+  }
 }
 
 }  // namespace proteus

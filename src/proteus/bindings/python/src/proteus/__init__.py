@@ -49,13 +49,13 @@ def _set_data(input_n, image):
     return input_n
 
 
-def ImageInferenceRequest(images, asTensor=False):
+def ImageInferenceRequest(images, asTensor=True):
     """
     Construct a request from an image or list of images
 
     Args:
         images (image): Images may be numpy arrays or filepaths or a list of these
-        asTensor (bool, optional): Send data as a tensor or as base64-encoded string. Defaults to False.
+        asTensor (bool, optional): Send data as a tensor or as base64-encoded string. Defaults to True.
 
     Raises:
         TypeError: Raised if an unknown image format is passed
