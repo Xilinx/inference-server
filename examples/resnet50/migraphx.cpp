@@ -140,9 +140,17 @@ std::string load(const proteus::Client* client, const Args& args) {
 
   // +load
   proteus::RequestParameters parameters;
-  // batcher timeout value in milliseconds
-  const auto timeout_ms = 1000;
+  const auto timeout_ms = 1000;  // batcher timeout value in milliseconds
+  const auto batch_size = 2;
+
+  // Required: specifies path to the model on the server for it to open
   parameters.put("model", args.path_to_model);
+  // Optional: request a particular batch size to be sent to the backend. The
+  // server will attempt to coalesce incoming requests into a single batch of
+  // this size and pass it all to the backend.
+  parameters.put("batch", batch_size);
+  // Optional: specifies how long the batcher should wait for more requests
+  // before sending the batch on
   parameters.put("timeout", timeout_ms);
   std::string endpoint = client->workerLoad("migraphx", &parameters);
   // -load

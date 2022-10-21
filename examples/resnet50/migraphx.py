@@ -127,9 +127,17 @@ def load(client, args):
     # be specified.
 
     parameters = proteus.RequestParameters()
-    # batcher timeout value in milliseconds
-    timeout_ms = 1000
+    timeout_ms = 1000  # batcher timeout value in milliseconds
+    batch_size = 2
+
+    # Required: specifies path to the model on the server for it to open
     parameters.put("model", args.model)
+    # Optional: request a particular batch size to be sent to the backend. The
+    # server will attempt to coalesce incoming requests into a single batch of
+    # this size and pass it all to the backend.
+    parameters.put("batch", batch_size)
+    # Optional: specifies how long the batcher should wait for more requests before
+    # sending the batch on
     parameters.put("timeout", timeout_ms)
     endpoint = client.workerLoad("migraphx", parameters)
     return endpoint

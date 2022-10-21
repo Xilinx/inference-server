@@ -24,6 +24,10 @@
 This example demonstrates how you can use the MIGraphX backend to run inference
 on an AMD GPU with a BERT ONNX model.
 
+This example, as compared to the ResNet50 one, is very similar. However, the Bert
+model has multiple inputs and outputs unlike ResNet50 and the requests are
+constructed manually rather than with the ImageInferenceRequest helper method.
+
 This example is based on a similar example in MIGraphX:
 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/nlp/python_bert_squad/bert-squad-migraphx.py
 """
@@ -109,7 +113,9 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         request = proteus.predict_api.InferenceRequest()
         item = eval_examples[idx]  # class SquadExample
 
-        # Depending on the model, it will require one or more input tensors. The values for name, datatype, shape will also be model-dependent.
+        # Depending on the model, it will require one or more input tensors
+        # The values for name, datatype, shape will also be model-dependent
+        # For MIGraphX, the names for each input tensor are meaningful
 
         input_n = proteus.predict_api.InferenceRequestInput()
         input_n.name = f"input_ids:0"

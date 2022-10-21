@@ -18,6 +18,9 @@ This example demonstrates how you can use the MIGraphX backend to run inference
 on an AMD GPU with a YOLOv4 ONNX model. Look at the documentation online for
 discussion around this example.
 
+This example, as compared to the ResNet50 one, is very similar. However, the YOLO
+model has multiple outputs unlike ResNet50's single output tensor.
+
 This example is based on a similar example in MIGraphX:
 https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb
 """
@@ -180,6 +183,7 @@ def main(args):
         assert not response.isError(), response.getError()
 
         detections = []
+        # YOLO produces multiple output tensors and so they all need to be processed
         for out in response.getOutputs():
             assert out.datatype == proteus.DataType.FP32
             this_detect = np.array(out.getFp32Data())
