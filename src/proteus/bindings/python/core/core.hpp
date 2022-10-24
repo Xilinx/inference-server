@@ -30,8 +30,10 @@ void wrapDataType(pybind11::module_ &);
 void wrapTypeMaps(pybind11::module_ &);
 void wrapRequestParameters(pybind11::module_ &);
 void wrapPredictApi(pybind11::module_ &);
+void wrapExceptions(pybind11::module_ &);
 
 void wrapCore(pybind11::module_ &m) {
+  wrapExceptions(m);
   wrapDataType(m);
   wrapTypeMaps(m);
   wrapRequestParameters(m);

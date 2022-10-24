@@ -34,8 +34,10 @@ void wrapServer(py::module_ &m) {
     .def(py::init<>(), DOCS(Server, Server))
     .def("startHttp", &Server::startHttp, py::arg("port"),
          DOCS(Server, startHttp))
+    .def("stopHttp", &Server::stopHttp, DOCS(Server, stopHttp))
     .def("startGrpc", &Server::startGrpc, py::arg("port"),
-         DOCS(Server, startGrpc));
+         DOCS(Server, startGrpc))
+    .def("stopGrpc", &Server::stopGrpc, DOCS(Server, stopGrpc));
 }
 
 }  // namespace proteus

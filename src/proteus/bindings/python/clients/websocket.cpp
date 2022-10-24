@@ -58,12 +58,18 @@ void wrapWebSocketClient(py::module_ &m) {
          DOCS(WebSocketClient, modelUnload))
     .def("modelInfer", &WebSocketClient::modelInfer, py::arg("model"),
          py::arg("request"), DOCS(WebSocketClient, modelInfer))
+    // cannot wrap future directly in Python
+    // .def("modelInferAsync", &WebSocketClient::modelInferAsync,
+    // py::arg("model"),
+    //      py::arg("request"), DOCS(WebSocketClient, modelInferAsync))
     .def("modelInferWs", &WebSocketClient::modelInferWs, py::arg("model"),
          py::arg("request"), DOCS(WebSocketClient, modelInferWs))
     .def("modelRecv", &WebSocketClient::modelRecv,
          DOCS(WebSocketClient, modelRecv))
     .def("modelList", &WebSocketClient::modelList,
          DOCS(WebSocketClient, modelList))
+    .def("hasHardware", &WebSocketClient::hasHardware, py::arg("name"),
+         py::arg("num"), DOCS(WebSocketClient, hasHardware))
     .def("close", &WebSocketClient::close, DOCS(WebSocketClient, close));
 }
 

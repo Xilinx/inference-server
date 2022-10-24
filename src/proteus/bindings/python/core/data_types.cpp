@@ -42,6 +42,7 @@ void wrapDataType(py::module_& m) {
   auto value = py::enum_<DataType::Value>(datatype, "Value");
 
   datatype.def(py::init<>())
+    .def(py::init<>())
     .def(py::init<const char*>())
     .def(py::init<DataType::Value>())
     .def_property_readonly_static("BOOL",

@@ -25,7 +25,7 @@ from time import sleep
 
 # +import
 import proteus
-import proteus.util.pre_post as pre_post
+import proteus.pre_post as pre_post
 
 # -import
 

@@ -38,10 +38,10 @@ void wrapHttpClient(py::module_ &m) {
 
   py::class_<HttpClient, proteus::Client>(m, "HttpClient")
     .def(py::init<const std::string &,
-                  const std::unordered_map<std::string, std::string>>(),
+                  const std::unordered_map<std::string, std::string>, int>(),
          py::arg("address"),
          py::arg("headers") = std::unordered_map<std::string, std::string>(),
-         DOCS(HttpClient, HttpClient))
+         py::arg("parallelism") = 32, DOCS(HttpClient, HttpClient))
     .def("serverMetadata", &HttpClient::serverMetadata,
          DOCS(HttpClient, serverMetadata))
     .def("serverLive", &HttpClient::serverLive, DOCS(HttpClient, serverLive))
@@ -67,7 +67,7 @@ void wrapHttpClient(py::module_ &m) {
     //      py::arg("request"), DOCS(HttpClient, modelInferAsync))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
     .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
-         py::arg("num"), DOCS(HttpClient, modelList))
+         py::arg("num"), DOCS(HttpClient, hasHardware))
     .def(py::pickle(
       [](const HttpClient &p) {  // __getstate__
         return py::make_tuple(p.getAddress(), p.getHeaders());

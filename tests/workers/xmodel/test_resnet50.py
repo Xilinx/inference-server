@@ -15,8 +15,8 @@
 import pytest
 
 import proteus
+import proteus.pre_post as pre_post
 import proteus.testing
-import proteus.util.pre_post as pre_post
 
 from helper import run_benchmark
 

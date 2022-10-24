@@ -62,8 +62,7 @@ auto imagePreprocess(const std::vector<std::string>& paths,
 }
 
 void wrapPrePost(py::module_& m) {
-  py::module pre_post = m.def_submodule("pre_post", "pre_post documentation");
-  pre_post.def(
+  m.def(
     "resnet50PostprocessInt8",
     [](const InferenceResponseOutput& output, int k) {
       return pre_post::resnet50Postprocess<int8_t>(
@@ -72,7 +71,7 @@ void wrapPrePost(py::module_& m) {
 
     ,
     py::arg("output"), py::arg("k"));
-  pre_post.def(
+  m.def(
     "resnet50PostprocessFloat",
     [](const InferenceResponseOutput& output, int k) {
       return pre_post::resnet50Postprocess<float>(
@@ -80,17 +79,17 @@ void wrapPrePost(py::module_& m) {
     },
     py::arg("output"), py::arg("k"));
 
-  py::enum_<pre_post::ImageOrder>(pre_post, "ImageOrder")
+  py::enum_<pre_post::ImageOrder>(m, "ImageOrder")
     .value("NHWC", pre_post::ImageOrder::NHWC)
     .value("NCHW", pre_post::ImageOrder::NCHW);
 
-  addPreprocessOptions<int8_t>(pre_post, "ImagePreprocessOptionsInt8");
-  addPreprocessOptions<float>(pre_post, "ImagePreprocessOptionsFloat");
+  addPreprocessOptions<int8_t>(m, "ImagePreprocessOptionsInt8");
+  addPreprocessOptions<float>(m, "ImagePreprocessOptionsFloat");
 
-  pre_post.def("imagePreprocessInt8", &imagePreprocess<int8_t>,
-               py::arg("paths"), py::arg("options"));
-  pre_post.def("imagePreprocessFloat", &imagePreprocess<float>,
-               py::arg("paths"), py::arg("options"));
+  m.def("imagePreprocessInt8", &imagePreprocess<int8_t>, py::arg("paths"),
+        py::arg("options"));
+  m.def("imagePreprocessFloat", &imagePreprocess<float>, py::arg("paths"),
+        py::arg("options"));
 }
 
 }  // namespace proteus

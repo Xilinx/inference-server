@@ -39,7 +39,7 @@ import cv2
 import numpy as np
 
 import proteus
-import proteus.util.pre_post as pre_post
+import proteus.pre_post as pre_post
 
 
 def preprocess(paths):

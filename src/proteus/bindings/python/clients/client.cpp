@@ -29,6 +29,12 @@ namespace proteus {
 void wrapClient(py::module_ &m) {
   py::class_<Client> client{m, "Client"};
 
+  m.def("serverHasExtension", &serverHasExtension, py::arg("client"),
+        py::arg("extension"));
+  m.def("waitUntilServerReady", &waitUntilServerReady, py::arg("client"));
+  m.def("waitUntilModelReady", &waitUntilModelReady, py::arg("client"),
+        py::arg("model"));
+
   m.def("inferAsyncOrdered", &inferAsyncOrdered, py::arg("client"),
         py::arg("model"), py::arg("requests"));
   m.def("inferAsyncOrderedBatched", &inferAsyncOrderedBatched,

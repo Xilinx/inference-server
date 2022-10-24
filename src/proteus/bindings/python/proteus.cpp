@@ -26,7 +26,6 @@
 #include "proteus/bindings/python/servers/servers.hpp"
 #include "proteus/bindings/python/testing/testing.hpp"
 #include "proteus/build_options.hpp"
-#include "proteus/core/exceptions.hpp"
 
 namespace py = pybind11;
 
@@ -36,8 +35,6 @@ PYBIND11_MODULE(_proteus, m) {
   py::module t = m.def_submodule("testing", "testing documentation");
   py::module p = m.def_submodule("pre_post", "pre/post documentation");
   m.doc() = "proteus inference library";
-
-  py::register_exception<runtime_error>(m, "RuntimeError");
 
   wrapCore(m);
   wrapClients(m);
