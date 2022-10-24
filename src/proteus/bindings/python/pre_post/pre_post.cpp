@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the Python bindings for the server.hpp header
+ * @brief Implements the Python bindings for pre_post
  */
 
 #include <pybind11/cast.h>  // for arg
@@ -24,13 +24,15 @@
 
 #include "proteus/bindings/python/helpers/docstrings.hpp"
 #include "proteus/core/predict_api.hpp"
-#include "proteus/util/pre_post/image_preprocess.hpp"
-#include "proteus/util/pre_post/resnet50_postprocess.hpp"
+#include "proteus/pre_post/image_preprocess.hpp"
+#include "proteus/pre_post/resnet50_postprocess.hpp"
 
 namespace py = pybind11;
 
+namespace proteus {
+
 template <typename T>
-using ImagePreprocessOptions = proteus::util::ImagePreprocessOptions<T, 3>;
+using ImagePreprocessOptions = pre_post::ImagePreprocessOptions<T, 3>;
 
 template <typename T>
 void addPreprocessOptions(const py::module& m, const char* name) {
@@ -54,17 +56,17 @@ void addPreprocessOptions(const py::module& m, const char* name) {
 template <typename T>
 auto imagePreprocess(const std::vector<std::string>& paths,
                      const ImagePreprocessOptions<T>& options) {
-  auto images = proteus::util::imagePreprocess(paths, options);
+  auto images = pre_post::imagePreprocess(paths, options);
   py::array_t<T> ret = py::cast(images);
   return ret;
 }
 
-void wrapUtil(py::module_& m) {
+void wrapPrePost(py::module_& m) {
   py::module pre_post = m.def_submodule("pre_post", "pre_post documentation");
   pre_post.def(
     "resnet50PostprocessInt8",
-    [](const proteus::InferenceResponseOutput& output, int k) {
-      return proteus::util::resnet50Postprocess<int8_t>(
+    [](const InferenceResponseOutput& output, int k) {
+      return pre_post::resnet50Postprocess<int8_t>(
         static_cast<int8_t*>(output.getData()), output.getSize(), k);
     }
 
@@ -72,15 +74,15 @@ void wrapUtil(py::module_& m) {
     py::arg("output"), py::arg("k"));
   pre_post.def(
     "resnet50PostprocessFloat",
-    [](const proteus::InferenceResponseOutput& output, int k) {
-      return proteus::util::resnet50Postprocess<float>(
+    [](const InferenceResponseOutput& output, int k) {
+      return pre_post::resnet50Postprocess<float>(
         static_cast<float*>(output.getData()), output.getSize(), k);
     },
     py::arg("output"), py::arg("k"));
 
-  py::enum_<proteus::util::ImageOrder>(pre_post, "ImageOrder")
-    .value("NHWC", proteus::util::ImageOrder::NHWC)
-    .value("NCHW", proteus::util::ImageOrder::NCHW);
+  py::enum_<pre_post::ImageOrder>(pre_post, "ImageOrder")
+    .value("NHWC", pre_post::ImageOrder::NHWC)
+    .value("NCHW", pre_post::ImageOrder::NCHW);
 
   addPreprocessOptions<int8_t>(pre_post, "ImagePreprocessOptionsInt8");
   addPreprocessOptions<float>(pre_post, "ImagePreprocessOptionsFloat");
@@ -90,3 +92,5 @@ void wrapUtil(py::module_& m) {
   pre_post.def("imagePreprocessFloat", &imagePreprocess<float>,
                py::arg("paths"), py::arg("options"));
 }
+
+}  // namespace proteus

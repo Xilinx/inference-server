@@ -107,7 +107,7 @@ if(NOT SKBUILD)
 
   # cmake-format: off
   install(
-    TARGETS proteus proteus-client proteus-server util
+    TARGETS proteus proteus-client proteus-server
     EXPORT proteus_Targets
     RUNTIME COMPONENT proteus_Runtime
     LIBRARY COMPONENT proteus_Runtime

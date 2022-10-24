@@ -22,9 +22,9 @@
 
 #include "proteus/bindings/python/clients/clients.hpp"
 #include "proteus/bindings/python/core/core.hpp"
+#include "proteus/bindings/python/pre_post/pre_post.hpp"
 #include "proteus/bindings/python/servers/servers.hpp"
 #include "proteus/bindings/python/testing/testing.hpp"
-#include "proteus/bindings/python/util/util.hpp"
 #include "proteus/build_options.hpp"
 #include "proteus/core/exceptions.hpp"
 
@@ -34,7 +34,7 @@ namespace proteus {
 
 PYBIND11_MODULE(_proteus, m) {
   py::module t = m.def_submodule("testing", "testing documentation");
-  py::module u = m.def_submodule("util", "util documentation");
+  py::module p = m.def_submodule("pre_post", "pre/post documentation");
   m.doc() = "proteus inference library";
 
   py::register_exception<runtime_error>(m, "RuntimeError");
@@ -45,7 +45,7 @@ PYBIND11_MODULE(_proteus, m) {
 #ifdef PROTEUS_BUILD_TESTING
   wrapTesting(t);
 #endif
-  wrapUtil(u);
+  wrapPrePost(p);
 }
 
 }  // namespace proteus

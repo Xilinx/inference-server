@@ -12,5 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import proteus
-from proteus._proteus.util import *
+add_library(pre_post_py OBJECT pre_post.cpp)
+target_include_directories(
+  pre_post_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
+                      ${Python_INCLUDE_DIRS}
+)
+target_link_libraries(
+  pre_post_py PRIVATE ${Python_LIBRARIES} opencv_core opencv_imgproc
+                      opencv_imgcodecs
+)
+add_dependencies(pre_post_py pybind11Mkdoc)
+
+set(PRE_POST_OBJS pre_post_py PARENT_SCOPE)

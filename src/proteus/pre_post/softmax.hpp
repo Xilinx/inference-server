@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_PRE_POST_SOFTMAX
-#define GUARD_PROTEUS_UTIL_PRE_POST_SOFTMAX
+#ifndef GUARD_PROTEUS_PRE_POST_SOFTMAX
+#define GUARD_PROTEUS_PRE_POST_SOFTMAX
 
 #include <cstddef>
 
-namespace proteus::util {
+namespace proteus::pre_post {
 
 /**
  * @brief Calculate softmax of the data
@@ -48,6 +48,6 @@ void calc_softmax(const T* data, size_t size, double* result) {
   }
 }
 
-}  // namespace proteus::util
+}  // namespace proteus::pre_post
 
-#endif  // GUARD_PROTEUS_UTIL_PRE_POST_SOFTMAX
+#endif  // GUARD_PROTEUS_PRE_POST_SOFTMAX

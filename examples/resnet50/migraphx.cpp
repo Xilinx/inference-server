@@ -34,10 +34,10 @@
 #include <string>               // for string
 #include <vector>               // for vector
 
-#include "proteus/proteus.hpp"                             // for InferenceR...
-#include "proteus/util/pre_post/image_preprocess.hpp"      // for ImagePrepr...
-#include "proteus/util/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
-#include "resnet50.hpp"                                    // for Args, pars...
+#include "proteus/pre_post/image_preprocess.hpp"      // for ImagePrepr...
+#include "proteus/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
+#include "proteus/proteus.hpp"                        // for InferenceR...
+#include "resnet50.hpp"                               // for Args, pars...
 
 namespace fs = std::filesystem;
 
@@ -58,8 +58,8 @@ Images preprocess(const std::vector<std::string>& paths) {
   // this example uses a custom image preprocessing function. You may use any
   // preprocessing logic or skip it entirely if your input data is already
   // preprocessed.
-  proteus::util::ImagePreprocessOptions<float, 3> options;
-  options.order = proteus::util::ImageOrder::NCHW;
+  proteus::pre_post::ImagePreprocessOptions<float, 3> options;
+  options.order = proteus::pre_post::ImageOrder::NCHW;
   options.height = image_size;
   options.width = image_size;
   options.mean = mean;
@@ -70,7 +70,7 @@ Images preprocess(const std::vector<std::string>& paths) {
   options.convert_type = true;
   options.type = CV_32FC3;
   options.convert_scale = 1.0 / 255.0;
-  return proteus::util::imagePreprocess(paths, options);
+  return proteus::pre_post::imagePreprocess(paths, options);
 }
 
 /**
@@ -83,7 +83,7 @@ Images preprocess(const std::vector<std::string>& paths) {
  */
 std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
                              int k) {
-  return proteus::util::resnet50Postprocess(
+  return proteus::pre_post::resnet50Postprocess(
     static_cast<const float*>(output.getData()), output.getSize(), k);
 }
 

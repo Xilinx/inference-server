@@ -16,27 +16,27 @@
 #include <vector>
 
 #include "proteus/clients/client.hpp"
+#include "proteus/pre_post/image_preprocess.hpp"
+#include "proteus/pre_post/resnet50_postprocess.hpp"
 #include "proteus/testing/get_path_to_asset.hpp"
 #include "proteus/testing/gtest_fixtures.hpp"
-#include "proteus/util/pre_post/image_preprocess.hpp"
-#include "proteus/util/pre_post/resnet50_postprocess.hpp"
 
 namespace proteus {
 
 using Images = std::vector<std::vector<int8_t>>;
 
 Images preprocess(const std::vector<std::string>& paths) {
-  proteus::util::ImagePreprocessOptions<int8_t, 3> options;
-  options.order = proteus::util::ImageOrder::NHWC;
+  proteus::pre_post::ImagePreprocessOptions<int8_t, 3> options;
+  options.order = proteus::pre_post::ImageOrder::NHWC;
   options.mean = {123, 107, 104};
   options.std = {1, 1, 1};
   options.normalize = true;
-  return util::imagePreprocess(paths, options);
+  return pre_post::imagePreprocess(paths, options);
 }
 
 std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
                              int k) {
-  return proteus::util::resnet50Postprocess(
+  return proteus::pre_post::resnet50Postprocess(
     static_cast<int8_t*>(output.getData()), output.getSize(), k);
 }
 

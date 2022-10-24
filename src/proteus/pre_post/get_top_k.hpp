@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_PRE_POST_GET_TOP_K
-#define GUARD_PROTEUS_UTIL_PRE_POST_GET_TOP_K
+#ifndef GUARD_PROTEUS_PRE_POST_GET_TOP_K
+#define GUARD_PROTEUS_PRE_POST_GET_TOP_K
 
 #include <queue>
 #include <vector>
 
-namespace proteus::util {
+namespace proteus::pre_post {
 
 /**
  * @brief After running softmax, get the labels associated with the top k values
@@ -45,6 +45,6 @@ std::vector<int> get_top_k(const double* d, size_t size, int k) {
   return topKIndex;
 }
 
-}  // namespace proteus::util
+}  // namespace proteus::pre_post
 
-#endif  // GUARD_PROTEUS_UTIL_PRE_POST_GET_TOP_K
+#endif  // GUARD_PROTEUS_PRE_POST_GET_TOP_K

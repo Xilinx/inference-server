@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_PRE_POST_CENTER_CROP
-#define GUARD_PROTEUS_UTIL_PRE_POST_CENTER_CROP
+#ifndef GUARD_PROTEUS_PRE_POST_CENTER_CROP
+#define GUARD_PROTEUS_PRE_POST_CENTER_CROP
 
 #include <opencv2/core.hpp>  // for cv::Mat
 
-namespace proteus::util {
+namespace proteus::pre_post {
 
 /**
  * @brief Image preprocessing helper.  Crops the input `img` from center to a
@@ -36,6 +36,6 @@ inline cv::Mat centerCrop(cv::Mat img, int height, int width) {
   return img;
 }
 
-}  // namespace proteus::util
+}  // namespace proteus::pre_post
 
-#endif  // GUARD_PROTEUS_UTIL_PRE_POST_CENTER_CROP
+#endif  // GUARD_PROTEUS_PRE_POST_CENTER_CROP

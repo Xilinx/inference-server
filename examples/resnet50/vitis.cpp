@@ -38,8 +38,8 @@
 #include "proteus/proteus.hpp"
 // -include:
 
-#include "proteus/util/pre_post/image_preprocess.hpp"
-#include "proteus/util/pre_post/resnet50_postprocess.hpp"
+#include "proteus/pre_post/image_preprocess.hpp"
+#include "proteus/pre_post/resnet50_postprocess.hpp"
 #include "resnet50.hpp"
 
 namespace fs = std::filesystem;
@@ -60,12 +60,12 @@ Images preprocess(const std::vector<std::string>& paths) {
   // this example uses a custom image preprocessing function. You may use any
   // preprocessing logic or skip it entirely if your input data is already
   // preprocessed.
-  proteus::util::ImagePreprocessOptions<int8_t, 3> options;
-  options.order = proteus::util::ImageOrder::NHWC;
+  proteus::pre_post::ImagePreprocessOptions<int8_t, 3> options;
+  options.order = proteus::pre_post::ImageOrder::NHWC;
   options.mean = mean;
   options.std = std;
   options.normalize = true;
-  return proteus::util::imagePreprocess(paths, options);
+  return proteus::pre_post::imagePreprocess(paths, options);
 }
 
 /**
@@ -78,7 +78,7 @@ Images preprocess(const std::vector<std::string>& paths) {
  */
 std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
                              int k) {
-  return proteus::util::resnet50Postprocess(
+  return proteus::pre_post::resnet50Postprocess(
     static_cast<const int8_t*>(output.getData()), output.getSize(), k);
 }
 
