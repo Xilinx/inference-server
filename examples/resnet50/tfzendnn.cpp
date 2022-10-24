@@ -28,6 +28,7 @@
 #include <iostream>             // for operator<<
 #include <memory>               // for allocator
 #include <opencv2/imgproc.hpp>  // for COLOR_BGR2RGB
+#include <optional>             // for optional
 #include <ratio>                // for milli
 #include <string>               // for string
 #include <vector>               // for vector
@@ -171,21 +172,17 @@ int main(int argc, char* argv[]) {
 
   Args args = getArgs(argc, argv);
 
-  proteus::Server server;
-#ifdef PROTEUS_ENABLE_GRPC
-  // +start protocol
-  server.startGrpc(args.grpc_port);
-  // -start protocol
-#else
-  std::cerr << "gRPC is not enabled. Please recompile the library with it "
-            << "enabled to run this example.\n";
-  exit(1);
-#endif
-
   // +create client
   // tfzendnn.cpp
   const auto grpc_port_str = std::to_string(args.grpc_port);
   proteus::GrpcClient client{"127.0.0.1:" + grpc_port_str};
+
+  std::optional<proteus::Server> server;
+  if (!client.serverLive()) {
+    std::cout << "No server detected. Starting locally...\n";
+    server.emplace();
+    server.value().startGrpc(args.grpc_port);
+  }
 
   std::cout << "Waiting until the server is ready...\n";
   proteus::waitUntilServerReady(&client);

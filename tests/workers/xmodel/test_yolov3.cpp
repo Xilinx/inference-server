@@ -15,7 +15,6 @@
 #include <string>
 #include <vector>
 
-#include "proteus/client_operators/infer_async.hpp"
 #include "proteus/clients/client.hpp"
 #include "proteus/testing/get_path_to_asset.hpp"
 #include "proteus/testing/gtest_fixtures.hpp"

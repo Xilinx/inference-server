@@ -17,14 +17,25 @@
  * @brief Defines the objects for Python bindings
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_PREDICT_API
-#define GUARD_PROTEUS_BINDINGS_PYTHON_PREDICT_API
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS
+#define GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS
 
 namespace pybind11 {
 class module_;
+}  // namespace pybind11
+
+namespace proteus {
+
+void wrapClient(pybind11::module_ &);
+void wrapHttpClient(pybind11::module_ &);
+void wrapWebSocketClient(pybind11::module_ &);
+
+void wrapClients(pybind11::module_ &m) {
+  wrapClient(m);
+  wrapHttpClient(m);
+  wrapWebSocketClient(m);
 }
 
-void wrapRequestParameters(pybind11::module_ &);
-void wrapPredictApi(pybind11::module_ &);
+}  // namespace proteus
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_PREDICT_API
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS

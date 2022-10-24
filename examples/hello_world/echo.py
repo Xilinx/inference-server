@@ -40,9 +40,9 @@ def make_request(data):
     Returns:
         proteus.InferenceRequest: Request
     """
-    request = proteus.predict_api.InferenceRequest()
+    request = proteus.InferenceRequest()
     # each request has one or more input tensors, depending on the worker/model that's going to process it
-    input_0 = proteus.predict_api.InferenceRequestInput()
+    input_0 = proteus.InferenceRequestInput()
     input_0.name = f"input0"
     input_0.setUint32Data(np.array([data], np.uint32))
     input_0.datatype = proteus.DataType.UINT32
@@ -56,13 +56,13 @@ def make_request(data):
 
 def main():
     # +create objects
-    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
+    client = proteus.HttpClient("http://127.0.0.1:8998")
     # -create objects
 
     # +start server: if it's not already started, start it from Python
     start_server = not client.serverLive()
     if start_server:
-        server = proteus.servers.Server()
+        server = proteus.Server()
         server.startHttp(8998)
         while not client.serverLive():
             sleep(1)

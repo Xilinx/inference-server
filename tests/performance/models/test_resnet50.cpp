@@ -23,7 +23,6 @@
 #include <string>
 #include <vector>
 
-#include "proteus/client_operators/infer_async.hpp"
 #include "proteus/proteus.hpp"  // for InferenceResponse, Grp...
 #include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
 #include "proteus/testing/gtest_fixtures.hpp"     // for GrpcFixture

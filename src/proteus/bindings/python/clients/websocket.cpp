@@ -32,7 +32,7 @@ class DataType;
 
 namespace py = pybind11;
 
-using proteus::DataType;
+namespace proteus {
 
 void wrapWebSocketClient(py::module_ &m) {
   using proteus::WebSocketClient;
@@ -66,3 +66,5 @@ void wrapWebSocketClient(py::module_ &m) {
          DOCS(WebSocketClient, modelList))
     .def("close", &WebSocketClient::close, DOCS(WebSocketClient, close));
 }
+
+}  // namespace proteus

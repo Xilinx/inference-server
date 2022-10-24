@@ -34,6 +34,8 @@
 
 namespace py = pybind11;
 
+namespace proteus {
+
 void wrapRequestParameters(py::module_ &m) {
   using proteus::RequestParameters;
 
@@ -183,12 +185,6 @@ void setData(proteus::InferenceRequestInput &self, py::array_t<T> &b) {
 }
 
 void wrapPredictApi(py::module_ &m) {
-  using proteus::InferenceRequest;
-  using proteus::InferenceRequestInput;
-  using proteus::InferenceRequestOutput;
-  using proteus::InferenceResponse;
-  using proteus::ServerMetadata;
-
   py::class_<ServerMetadata>(m, "ServerMetadata")
     .def(py::init<>(), DOCS(ServerMetadata))
     .def_readwrite("name", &ServerMetadata::name, DOCS(ServerMetadata, name))
@@ -378,3 +374,5 @@ void wrapPredictApi(py::module_ &m) {
     .def("setReady", &ModelMetadata::setReady, DOCS(ModelMetadata, setReady))
     .def("isReady", &ModelMetadata::isReady, DOCS(ModelMetadata, isReady));
 }
+
+}  // namespace proteus

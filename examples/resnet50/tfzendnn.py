@@ -26,9 +26,6 @@ from time import sleep
 import cv2
 
 import proteus
-import proteus.client_operators
-import proteus.clients
-import proteus.servers
 import proteus.util.pre_post as pre_post
 
 # isort: split
@@ -91,7 +88,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.client.Client): the client object
+        client (proteus.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -155,11 +152,11 @@ def get_args():
 def main(args):
     print("Running the TF+ZenDNN example for ResNet50 in Python")
 
-    server = proteus.servers.Server()
+    server = proteus.Server()
     print("Waiting until the server is ready...")
     server.startHttp(args.http_port)
 
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     ready = False
     while not ready:
         try:

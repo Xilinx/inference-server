@@ -31,6 +31,8 @@
 
 namespace py = pybind11;
 
+namespace proteus {
+
 void wrapHttpClient(py::module_ &m) {
   using proteus::HttpClient;
 
@@ -77,3 +79,5 @@ void wrapHttpClient(py::module_ &m) {
         return {t[0].cast<std::string>(), t[1].cast<proteus::StringMap>()};
       }));
 }
+
+}  // namespace proteus

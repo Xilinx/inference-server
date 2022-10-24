@@ -70,9 +70,9 @@ def ImageInferenceRequest(images, asTensor=True):
 
     if not isinstance(images, list):
         images = [images]
-    request = predict_api.InferenceRequest()
+    request = InferenceRequest()
     for index, image in enumerate(images):
-        input_n = predict_api.InferenceRequestInput()
+        input_n = InferenceRequestInput()
         input_n.name = f"input{index}"
         if isinstance(image, str):
             if asTensor:
@@ -133,13 +133,13 @@ def parallel_infer(client, model, data, processes):
 
 
 def start_http_client_server(address: str, extension=None):
-    client = clients.HttpClient(address)
+    client = HttpClient(address)
     port = address.split(":")[-1]
 
     # if it's not already started, start it here
     start_server = not client.serverLive()
     if start_server:
-        server = servers.Server()
+        server = Server()
         server.startHttp(int(port))
         while not client.serverLive():
             time.sleep(1)
@@ -153,3 +153,71 @@ def start_http_client_server(address: str, extension=None):
             sys.exit(0)
 
     return client, server
+
+
+def _get_data(request_input: InferenceRequestInput):
+    datatype = request_input.datatype
+    if datatype == DataType.BOOL:
+        raise NotImplementedError("Bool datatype not supported")
+    if datatype == DataType.UINT8:
+        return request_input.getUint8Data()
+    if datatype == DataType.UINT16:
+        return request_input.getUint16Data()
+    if datatype == DataType.UINT32:
+        return request_input.getUint32Data()
+    if datatype == DataType.UINT64:
+        return request_input.getUint64Data()
+    if datatype == DataType.INT8:
+        return request_input.getInt8Data()
+    if datatype == DataType.INT16:
+        return request_input.getInt16Data()
+    if datatype == DataType.INT32:
+        return request_input.getInt32Data()
+    if datatype == DataType.INT64:
+        return request_input.getInt64Data()
+    if datatype == DataType.FP16:
+        return request_input.getFp16Data()
+    if datatype == DataType.FP32:
+        return request_input.getFp32Data()
+    if datatype == DataType.FP64:
+        return request_input.getFp64Data()
+    if datatype == DataType.STRING:
+        return request_input.getStringData()
+    raise NotImplementedError(f"{datatype.str()} not supported")
+
+
+def inference_request_to_dict(request: InferenceRequest):
+    import numpy as np
+
+    req = {}
+    if request.id:
+        req["id"] = request.id
+    if request.parameters:
+        for key, value in request.parameters:
+            req[key] = value
+    req["inputs"] = []
+    inputs = request.getInputs()
+    for inp in inputs:
+        new_input = {}
+        new_input["name"] = inp.name
+        new_input["shape"] = inp.shape
+        new_input["datatype"] = inp.datatype.str()
+        if inp.parameters:
+            for key, value in inp.parameters:
+                new_input[key] = value
+        data = _get_data(inp)
+        if isinstance(data, np.ndarray):
+            data = data.tolist()
+        new_input["data"] = data
+        req["inputs"].append(new_input)
+    outputs = request.getOutputs()
+    if outputs:
+        req["outputs"] = []
+        for output in outputs:
+            new_output = {}
+            new_output["name"] = output.name
+            if output.parameters:
+                for key, value in output.parameters:
+                    new_output[key] = value
+            req["outputs"].append(new_output)
+    return req

@@ -25,8 +25,6 @@ from pytest_cpp.plugin import CppItem
 from xprocess import ProcessStarter
 
 import proteus
-import proteus.clients
-import proteus.servers
 
 from helper import build_path, kDefaultHttpPort, root_path, run_path
 
@@ -48,7 +46,7 @@ def pytest_sessionstart(session):
     addr = socket.gethostbyname(session.config.getoption("hostname"))
     ip_addr = ipaddress.ip_address(addr)
     if not ip_addr.is_loopback:
-        client = proteus.clients.HttpClient(http_server_addr)
+        client = proteus.HttpClient(http_server_addr)
         if not client.serverLive():
             pytest.exit(f"No HTTP server found at {http_server_addr}", returncode=1)
 
@@ -158,11 +156,11 @@ def pytest_collection_modifyitems(config, items):
 
     add_cpp_markers(items, config.getoption("--cpp"))
 
-    client = proteus.clients.HttpClient(http_server_addr)
+    client = proteus.HttpClient(http_server_addr)
     if not client.serverLive():
-        server = proteus.servers.Server()
+        server = proteus.Server()
         server.startHttp(8998)
-        client = proteus.clients.HttpClient("http://127.0.0.1:8998")
+        client = proteus.HttpClient("http://127.0.0.1:8998")
         while not client.serverLive():
             time.sleep(1)
 
@@ -183,7 +181,7 @@ def pytest_collection_modifyitems(config, items):
     else:
         fpgas_avail = {}
 
-    client = proteus.clients.HttpClient(http_server_addr)
+    client = proteus.HttpClient(http_server_addr)
     for item in items:
         for mark in item.iter_markers(name="fpgas"):
             fpga_i = mark.args[0]
@@ -221,7 +219,7 @@ def server(xprocess):
     global http_server_addr
     global proteus_command
 
-    client = proteus.clients.HttpClient(http_server_addr)
+    client = proteus.HttpClient(http_server_addr)
     if not client.serverLive():
 
         class Starter(ProcessStarter):
@@ -282,12 +280,12 @@ def load(request, server):
 
 def rest_client(request):
     address = get_http_addr(request.config)
-    return proteus.clients.HttpClient("http://" + address)
+    return proteus.HttpClient("http://" + address)
 
 
 def ws_client(request):
     address = get_http_addr(request.config)
-    return proteus.clients.WebSocketClient("ws://" + address, "http://" + address)
+    return proteus.WebSocketClient("ws://" + address, "http://" + address)
 
 
 @pytest.fixture(scope="class")

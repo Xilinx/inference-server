@@ -42,7 +42,6 @@ except ImportError:
 
 
 import proteus
-import proteus.clients
 
 # isort: split
 
@@ -152,11 +151,11 @@ def get_args():
 def main(args):
     print("Running the MIGraphX example for Yolo in Python")
 
-    server = proteus.servers.Server()
+    server = proteus.Server()
     print("Waiting until the server is ready...")
     server.startHttp(args.http_port)
 
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     ready = False
     while not ready:
         try:
@@ -174,7 +173,7 @@ def main(args):
 
     print("Creating inference requests...")
     requests = [proteus.ImageInferenceRequest(image) for image in images]
-    responses = proteus.client_operators.inferAsyncOrdered(client, endpoint, requests)
+    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
     print("Client received inference reply")
 
     assert len(responses) == len(original_images)

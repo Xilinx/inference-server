@@ -25,8 +25,6 @@ from time import sleep
 
 # +import
 import proteus
-import proteus.clients
-import proteus.servers
 import proteus.util.pre_post as pre_post
 
 # -import
@@ -96,7 +94,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.client.Client): the client object
+        client (proteus.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -154,7 +152,7 @@ def main(args):
     print("Running the Vitis example for ResNet50 in Python")
 
     # +initialize
-    server = proteus.servers.Server()
+    server = proteus.Server()
     # -initialize
     print("Waiting until the server is ready...")
     # +start protocol
@@ -162,7 +160,7 @@ def main(args):
     # -start protocol
 
     # + create client
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     # - create client
     ready = False
     while not ready:

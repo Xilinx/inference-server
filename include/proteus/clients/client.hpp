@@ -62,6 +62,13 @@ bool serverHasExtension(const Client* client, const std::string& extension);
 void waitUntilServerReady(const Client* client);
 void waitUntilModelReady(const Client* client, const std::string& model);
 
+std::vector<InferenceResponse> inferAsyncOrdered(
+  Client* client, const std::string& model,
+  const std::vector<InferenceRequest>& requests);
+std::vector<InferenceResponse> inferAsyncOrderedBatched(
+  Client* client, const std::string& model,
+  const std::vector<InferenceRequest>& requests, size_t batch_size);
+
 }  // namespace proteus
 
 #endif  // GUARD_PROTEUS_CLIENTS_CLIENT

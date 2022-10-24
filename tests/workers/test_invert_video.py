@@ -21,7 +21,6 @@ from test_invert_image import compare_jpgs
 
 import proteus
 import proteus.testing
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 from helper import root_path
 
@@ -36,7 +35,7 @@ class TestInvertVideo:
     parameters = None
 
     def construct_request(self, video_path, requested_frames_count):
-        input_0 = InferenceRequestInput()
+        input_0 = proteus.InferenceRequestInput()
         input_0.name = "input0"
         input_0.datatype = proteus.DataType.STRING
         input_0.setStringData(video_path)
@@ -45,8 +44,7 @@ class TestInvertVideo:
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
-        # request = WebsocketInferenceRequest(self.endpoint, input_0)
-        request = InferenceRequest()
+        request = proteus.InferenceRequest()
         request.addInputTensor(input_0)
         parameters_2 = proteus.RequestParameters()
         parameters_2.put("key", "0")

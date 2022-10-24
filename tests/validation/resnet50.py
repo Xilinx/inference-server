@@ -39,8 +39,6 @@ import cv2
 import numpy as np
 
 import proteus
-import proteus.clients
-import proteus.testing
 import proteus.util.pre_post as pre_post
 
 
@@ -69,11 +67,11 @@ def main(args):
     labels_file = args.labels
     worker = args.worker
 
-    client = proteus.clients.HttpClient("http://127.0.0.1:8998")
+    client = proteus.HttpClient("http://127.0.0.1:8998")
     print("waiting for server...", end="")
     start_server = not client.serverLive()
     if start_server:
-        server = proteus.servers.Server()
+        server = proteus.Server()
         server.startHttp(8998)
         while not client.serverLive():
             time.sleep(1)
@@ -149,9 +147,7 @@ def main(args):
             imageReqs = [proteus.ImageInferenceRequest(image) for image in images]
             print("Request is ready.  Sending ", len(images), " requests")
             j = 0
-            responses = proteus.client_operators.inferAsyncOrdered(
-                client, endpoint, imageReqs
-            )
+            responses = proteus.inferAsyncOrdered(client, endpoint, imageReqs)
             for response in responses:
                 assert not response.isError(), response.getError()
 

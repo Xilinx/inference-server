@@ -17,7 +17,7 @@ import os
 import pathlib
 import re
 
-from proteus.predict_api import to_dict
+from proteus import inference_request_to_dict
 
 root = os.getenv("PROTEUS_ROOT")
 if root is None:
@@ -68,7 +68,7 @@ def run_benchmark_func(benchmark, func, **kwargs):
 
 
 def run_benchmark(benchmark, benchmark_name, func, request, **kwargs):
-    write_lua(benchmark_name, json.dumps(to_dict(request)))
+    write_lua(benchmark_name, json.dumps(inference_request_to_dict(request)))
     benchmark.extra_info["lua"] = benchmark_name
     benchmark.extra_info["model"] = kwargs["model"]
     for key, value in kwargs.items():

@@ -16,8 +16,6 @@ import numpy as np
 import pytest
 
 import proteus
-import proteus.client_operators
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 
 @pytest.mark.usefixtures("load")
@@ -41,9 +39,9 @@ class TestEchoMulti:
             dict: The constructed request
         """
 
-        request = InferenceRequest()
+        request = proteus.InferenceRequest()
         for i in cls.inputs:
-            input_0 = InferenceRequestInput()
+            input_0 = proteus.InferenceRequestInput()
             input_0.name = "echoMulti0"
             input_0.datatype = proteus.DataType.UINT32
             input_0.shape = [len(i)]
@@ -66,7 +64,7 @@ class TestEchoMulti:
 
         requests = [request] * 2
         try:
-            responses = proteus.client_operators.inferAsyncOrdered(
+            responses = proteus.inferAsyncOrdered(
                 self.rest_client, self.endpoint, requests
             )
         except ConnectionError:

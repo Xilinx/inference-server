@@ -27,9 +27,9 @@
 
 namespace py = pybind11;
 
-void wrapServer(py::module_ &m) {
-  using proteus::Server;
+namespace proteus {
 
+void wrapServer(py::module_ &m) {
   py::class_<Server>(m, "Server")
     .def(py::init<>(), DOCS(Server, Server))
     .def("startHttp", &Server::startHttp, py::arg("port"),
@@ -37,3 +37,5 @@ void wrapServer(py::module_ &m) {
     .def("startGrpc", &Server::startGrpc, py::arg("port"),
          DOCS(Server, startGrpc));
 }
+
+}  // namespace proteus

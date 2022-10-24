@@ -44,7 +44,6 @@ add_custom_target(
 )
 
 add_subdirectory(core) # sets CORE_OBJS
-add_subdirectory(client_operators) # sets CLIENT_OPERATORS_OBJS
 add_subdirectory(clients) # sets CLIENT_OBJS
 add_subdirectory(servers) # sets SERVER_OBJS
 if(${PROTEUS_BUILD_TESTING})
@@ -70,14 +69,8 @@ endif()
 pybind11_add_module(proteus_py MODULE proteus.cpp ${dummy_new_file})
 target_include_directories(proteus_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
 target_link_libraries(
-  proteus_py
-  PRIVATE proteus
-          ${Python_LIBRARIES}
-          ${CORE_OBJS}
-          ${CLIENT_OPERATORS_OBJS}
-          ${CLIENT_OBJS}
-          ${SERVER_OBJS}
-          ${UTIL_OBJS}
+  proteus_py PRIVATE proteus ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS}
+                     ${SERVER_OBJS} ${UTIL_OBJS}
 )
 if(${PROTEUS_BUILD_TESTING})
   target_link_libraries(proteus_py PRIVATE ${TESTING_OBJS})

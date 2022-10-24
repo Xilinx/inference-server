@@ -12,19 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND TARGETS http websocket)
+list(APPEND targets client)
 
-list(APPEND LINK_TARGETS client_py)
+if(${PROTEUS_ENABLE_HTTP})
+  list(APPEND targets http websocket)
+endif()
 
-add_library(client_py OBJECT client.cpp)
-target_include_directories(
-  client_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
-                    ${Python_INCLUDE_DIRS}
-)
-target_link_libraries(client_py PRIVATE ${Python_LIBRARIES})
-add_dependencies(client_py pybind11Mkdoc)
-
-foreach(target ${TARGETS})
+foreach(target ${targets})
   add_library(${target}_py OBJECT ${target}.cpp)
   target_include_directories(
     ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
@@ -38,8 +32,5 @@ foreach(target ${TARGETS})
 
   set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)
 endforeach()
-
-# target_link_libraries(data_types_py PRIVATE
-# /usr/lib/python3/dist-packages/xir.cpython-36m-x86_64-linux-gnu.so)
 
 set(CLIENT_OBJS ${LINK_TARGETS} PARENT_SCOPE)

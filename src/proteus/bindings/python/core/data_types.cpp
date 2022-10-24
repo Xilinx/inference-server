@@ -35,7 +35,7 @@
 
 namespace py = pybind11;
 
-using proteus::DataType;
+namespace proteus {
 
 void wrapDataType(py::module_& m) {
   auto datatype = py::class_<DataType>(m, "DataType");
@@ -114,3 +114,5 @@ void wrapTypeMaps([[maybe_unused]] py::module_& m) {
   m.def("mapTypeToXir", proteus::mapTypeToXir, py::arg("type"));
 #endif
 }
+
+}  // namespace proteus
