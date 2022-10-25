@@ -82,6 +82,16 @@ def load(client, args):
         str: endpoint
     """
 
+    # Depending on how the server is compiled, it may or may not have support
+    # for a particular backend. This guard checks to make sure the server does
+    # support the requested backend. If you already know it's supported, you can
+    # skip this check.
+    if not proteus.serverHasExtension(client, "migraphx"):
+        print(
+            "MIGraphX is not enabled. Please recompile with it enabled to run this example"
+        )
+        sys.exit(0)
+
     # The only parameter the migraphx worker requires is the model file name.
     # batch and timeout are optional.
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
@@ -97,9 +107,7 @@ def load(client, args):
     endpoint = client.workerLoad("migraphx", parameters)
 
     # wait for the worker to load and compile model
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
+    proteus.waitUntilModelReady(client, endpoint)
 
     return endpoint
 
@@ -197,8 +205,7 @@ def main(args):
     if start_server:
         server = proteus.Server()
         server.startHttp(args.http_port)
-        while not client.serverLive():
-            time.sleep(1)
+    proteus.waitUntilServerReady(client)
     print("OK. Connected.")
 
     print("Loading worker...")

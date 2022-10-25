@@ -20,6 +20,8 @@
 #ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS
 #define GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS
 
+#include "proteus/build_options.hpp"
+
 namespace pybind11 {
 class module_;
 }  // namespace pybind11
@@ -27,13 +29,25 @@ class module_;
 namespace proteus {
 
 void wrapClient(pybind11::module_ &);
+void wrapNativeClient(pybind11::module_ &);
+#ifdef PROTEUS_ENABLE_HTTP
 void wrapHttpClient(pybind11::module_ &);
 void wrapWebSocketClient(pybind11::module_ &);
+#endif
+#ifdef PROTEUS_ENABLE_GRPC
+void wrapGrpcClient(pybind11::module_ &);
+#endif
 
 void wrapClients(pybind11::module_ &m) {
   wrapClient(m);
+  wrapNativeClient(m);
+#ifdef PROTEUS_ENABLE_HTTP
   wrapHttpClient(m);
   wrapWebSocketClient(m);
+#endif
+#ifdef PROTEUS_ENABLE_GRPC
+  wrapGrpcClient(m);
+#endif
 }
 
 }  // namespace proteus

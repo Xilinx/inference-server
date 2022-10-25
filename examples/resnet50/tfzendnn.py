@@ -99,12 +99,11 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    metadata = client.serverMetadata()
-    if "tfzendnn" not in metadata.extensions:
+    if not proteus.serverHasExtension(client, "tfzendnn"):
         print(
             "TF+ZenDNN is not enabled. Please recompile with it enabled to run this example"
         )
-        sys.exit(1)
+        sys.exit(0)
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
@@ -119,6 +118,7 @@ def load(client, args):
     parameters.put("input_node", args.input_node)
     parameters.put("output_node", args.output_node)
     endpoint = client.workerLoad("tfzendnn", parameters)
+    proteus.waitUntilModelReady(client, endpoint)
     return endpoint
 
 
@@ -154,23 +154,13 @@ def main(args):
 
     server = proteus.Server()
     print("Waiting until the server is ready...")
-    server.startHttp(args.http_port)
+    server.startGrpc(args.grpc_port)
 
-    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
-    ready = False
-    while not ready:
-        try:
-            ready = client.serverReady()
-        except proteus.RuntimeError:
-            pass
-        sleep(1)
+    client = proteus.GrpcClient(f"127.0.0.1:{args.grpc_port}")
+    proteus.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
-
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
 
     paths = resolve_image_paths(pathlib.Path(args.image))
 

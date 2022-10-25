@@ -105,12 +105,11 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    metadata = client.serverMetadata()
-    if "vitis" not in metadata.extensions:
+    if not proteus.serverHasExtension(client, "vitis"):
         print(
             "Vitis AI is not enabled. Please recompile with it enabled to run this example"
         )
-        sys.exit(1)
+        sys.exit(0)
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
@@ -162,21 +161,13 @@ def main(args):
     # + create client
     client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     # - create client
-    ready = False
-    while not ready:
-        try:
-            ready = client.serverReady()
-        except proteus.RuntimeError:
-            pass
-        sleep(1)
+    proteus.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
 
     # +wait model ready
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
+    proteus.waitUntilModelReady(client, endpoint)
     # -wait model ready
 
     # +prepare images

@@ -12,10 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets client)
+list(APPEND targets client native)
 
 if(${PROTEUS_ENABLE_HTTP})
   list(APPEND targets http websocket)
+endif()
+
+if(${PROTEUS_ENABLE_GRPC})
+  list(APPEND targets grpc)
 endif()
 
 foreach(target ${targets})

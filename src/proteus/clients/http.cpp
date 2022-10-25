@@ -112,8 +112,18 @@ void check_error(drogon::ReqResult result) {
   switch (result) {
     case ReqResult::Ok:
       break;
+    case ReqResult::BadResponse:
+      throw bad_status{"Bad response"};
+    case ReqResult::NetworkFailure:
+      throw bad_status{"Network failure"};
     case ReqResult::BadServerAddress:
       throw connection_error{"Cannot connect to the server"};
+    case ReqResult::Timeout:
+      throw bad_status{"Timeout"};
+    case ReqResult::HandshakeError:
+      throw bad_status{"Handshake error"};
+    case ReqResult::InvalidCertificate:
+      throw bad_status{"Invalid certificate"};
     default:
       throw bad_status{"Request error code: " +
                        std::to_string(static_cast<int>(result))};

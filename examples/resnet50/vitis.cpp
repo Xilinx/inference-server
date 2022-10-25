@@ -30,6 +30,7 @@
 #include <iostream>          // for operator<<
 #include <memory>            // for allocator
 #include <opencv2/core.hpp>  // for int8_t
+#include <optional>          // for optional
 #include <ratio>             // for milli
 #include <string>            // for string
 #include <vector>            // for vector
@@ -125,7 +126,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   if (!serverHasExtension(client, "vitis")) {
     std::cerr << "Vitis AI is not enabled. Please recompile with it enabled to "
                  "run this example\n";
-    exit(1);
+    exit(0);
   }
 
   // Load-time parameters are used to pass one-time information to the batcher
@@ -170,27 +171,25 @@ int main(int argc, char* argv[]) {
 
   Args args = getArgs(argc, argv);
 
-  // +initialize:
-  proteus::Server server;
-  // -initialize:
-#ifdef PROTEUS_ENABLE_REST
-  // +start protocol:
-  server.startHttp(args.http_port);
-  // -start protocol:
-#else
-  std::cerr << "HTTP/REST is not enabled. Please recompile with it enabled to "
-            << "run this example.\n";
-  exit(1);
-#endif
-
   // +create client:
   // vitis.cpp
   const auto http_port_str = std::to_string(args.http_port);
   proteus::HttpClient client{"http://127.0.0.1:" + http_port_str};
+  // -create client:
+
+  // +initialize:
+  std::optional<proteus::Server> server;
+  // -initialize:
+  // +start protocol:
+  if (!client.serverLive()) {
+    std::cout << "No server detected. Starting locally...\n";
+    server.emplace();
+    server.value().startHttp(args.http_port);
+  }
+  // -start protocol:
 
   std::cout << "Waiting until the server is ready...\n";
   proteus::waitUntilServerReady(&client);
-  // -create client:
 
   std::cout << "Loading worker...\n";
   std::string endpoint = load(&client, args);

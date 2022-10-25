@@ -146,6 +146,7 @@ if [[ $MODE == "examples" || $MODE == "all" ]]; then
   for file in $(find $examples_path -type f -print); do
     if [[ $file == *.py ]]; then
       python3 $(realpath $file)
+      echo ""
     fi
   done
 
@@ -153,6 +154,7 @@ if [[ $MODE == "examples" || $MODE == "all" ]]; then
     real_file=$(realpath $file)
     if [ -x $real_file ]; then
       $real_file
+      echo ""
     fi
   done
 fi

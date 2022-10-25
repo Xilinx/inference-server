@@ -64,16 +64,12 @@ def main():
     if start_server:
         server = proteus.Server()
         server.startHttp(8998)
-        while not client.serverLive():
-            sleep(1)
+    proteus.waitUntilServerReady(client)
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
     endpoint = client.workerLoad("echo")
-
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
+    proteus.waitUntilModelReady(client, endpoint)
     # -load worker
 
     # +inference: construct the request and make the inference

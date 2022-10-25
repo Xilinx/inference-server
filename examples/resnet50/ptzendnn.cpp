@@ -126,7 +126,7 @@ std::string load(const proteus::Client* client, const Args& args) {
     std::cerr
       << "PT+ZenDNN is not enabled. Please recompile with it enabled to "
       << "run this example\n";
-    exit(1);
+    exit(0);
   }
 
   // Load-time parameters are used to pass one-time information to the batcher
@@ -169,11 +169,11 @@ int main(int argc, char* argv[]) {
 
   Args args = getArgs(argc, argv);
 
-  proteus::Server server;
-
   // +create client
   // ptzendnn.cpp
   proteus::NativeClient client;
+
+  proteus::Server server;
 
   std::cout << "Waiting until the server is ready...\n";
   proteus::waitUntilServerReady(&client);

@@ -30,6 +30,7 @@
 #include <memory>               // for allocator
 #include <opencv2/core.hpp>     // for CV_32FC3
 #include <opencv2/imgproc.hpp>  // for COLOR_BGR2RGB
+#include <optional>             // for optional
 #include <ratio>                // for milli
 #include <string>               // for string
 #include <vector>               // for vector
@@ -128,7 +129,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   if (!serverHasExtension(client, "migraphx")) {
     std::cerr << "MIGraphX is not enabled. Please recompile with it enabled to "
               << "run this example\n";
-    exit(1);
+    exit(0);
   }
 
   // Load-time parameters are used to pass one-time information to the batcher
@@ -152,6 +153,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   // before sending the batch on
   parameters.put("timeout", timeout_ms);
   std::string endpoint = client->workerLoad("migraphx", &parameters);
+  proteus::waitUntilModelReady(client, endpoint);
   // -load
   return endpoint;
 }
@@ -183,17 +185,15 @@ int main(int argc, char* argv[]) {
 
   Args args = getArgs(argc, argv);
 
-  proteus::Server server;
-#ifdef PROTEUS_ENABLE_REST
-  server.startHttp(args.http_port);
-#else
-  std::cerr << "HTTP/REST is not enabled. Please recompile the library with it "
-            << "enabled to run this example.\n";
-  exit(1);
-#endif
-
   const auto http_port_str = std::to_string(args.http_port);
   proteus::HttpClient client{"http://127.0.0.1:" + http_port_str};
+
+  std::optional<proteus::Server> server;
+  if (!client.serverLive()) {
+    std::cout << "No server detected. Starting locally...\n";
+    server.emplace();
+    server.value().startHttp(args.http_port);
+  }
 
   std::cout << "Waiting until the server is ready...\n";
   proteus::waitUntilServerReady(&client);

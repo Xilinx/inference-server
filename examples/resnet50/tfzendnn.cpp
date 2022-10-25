@@ -116,7 +116,7 @@ std::string load(const proteus::Client* client, const Args& args) {
     std::cerr
       << "TF+ZenDNN is not enabled. Please recompile with it enabled to "
       << "run this example\n";
-    exit(1);
+    exit(0);
   }
 
   // Load-time parameters are used to pass one-time information to the batcher
@@ -133,6 +133,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   parameters.put("input_node", args.input_node);
   parameters.put("output_node", args.output_node);
   std::string endpoint = client->workerLoad("tfzendnn", &parameters);
+  proteus::waitUntilModelReady(client, endpoint);
   // -load
   return endpoint;
 }
