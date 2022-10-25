@@ -150,17 +150,17 @@ def get_args():
 def main(args):
     print("Running the Vitis example for ResNet50 in Python")
 
-    # +initialize
-    server = proteus.Server()
-    # -initialize
-    print("Waiting until the server is ready...")
-    # +start protocol
-    server.startHttp(args.http_port)
-    # -start protocol
-
     # + create client
     client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     # - create client
+    if not client.serverLive():
+        # +initialize
+        server = proteus.Server()
+        # -initialize
+        # +start protocol
+        server.startHttp(args.http_port)
+        # -start protocol
+    print("Waiting until the server is ready...")
     proteus.waitUntilServerReady(client)
 
     print("Loading worker...")

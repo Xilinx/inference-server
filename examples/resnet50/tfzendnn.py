@@ -152,11 +152,11 @@ def get_args():
 def main(args):
     print("Running the TF+ZenDNN example for ResNet50 in Python")
 
-    server = proteus.Server()
-    print("Waiting until the server is ready...")
-    server.startGrpc(args.grpc_port)
-
     client = proteus.GrpcClient(f"127.0.0.1:{args.grpc_port}")
+    if not client.serverLive():
+        server = proteus.Server()
+        server.startGrpc(args.grpc_port)
+    print("Waiting until the server is ready...")
     proteus.waitUntilServerReady(client)
 
     print("Loading worker...")

@@ -149,9 +149,8 @@ def main(args):
 
     server = proteus.Server()
     print("Waiting until the server is ready...")
-    server.startHttp(args.http_port)
 
-    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    client = proteus.NativeClient()
     proteus.waitUntilServerReady(client)
 
     print("Loading worker...")

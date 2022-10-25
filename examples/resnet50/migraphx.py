@@ -162,11 +162,11 @@ def get_args():
 def main(args):
     print("Running the MIGraphX example for ResNet50 in Python")
 
-    server = proteus.Server()
-    print("Waiting until the server is ready...")
-    server.startHttp(args.http_port)
-
     client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    if not client.serverLive():
+        server = proteus.Server()
+        server.startHttp(args.http_port)
+    print("Waiting until the server is ready...")
     proteus.waitUntilServerReady(client)
 
     print("Loading worker...")
