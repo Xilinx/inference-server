@@ -17,11 +17,6 @@ import numpy as np
 import pytest
 
 import proteus
-from proteus.predict_api import (
-    InferenceRequest,
-    InferenceRequestInput,
-    InferenceResponse,
-)
 
 
 @pytest.mark.usefixtures("load")
@@ -32,18 +27,18 @@ class TestAks:
 
     def test_aks_0(self):
         numbers = [3.0]
-        request = InferenceRequest()
+        request = proteus.InferenceRequest()
         request.id = "hello_world"
 
         for num in numbers:
-            input_0 = InferenceRequestInput()
+            input_0 = proteus.InferenceRequestInput()
             input_0.name = "aks"
             input_0.setFp32Data(np.asarray([num], np.float))
             input_0.shape = [1]
             input_0.datatype = proteus.DataType.FP32
             request.addInputTensor(input_0)
         try:
-            response: InferenceResponse = self.rest_client.modelInfer(
+            response: proteus.InferenceResponse = self.rest_client.modelInfer(
                 self.endpoint, request
             )
         except ConnectionError:

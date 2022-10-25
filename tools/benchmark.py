@@ -41,7 +41,6 @@ from rich.progress import Progress
 from rich.table import Table
 
 import proteus
-import proteus.clients
 
 
 class Highlight(Enum):
@@ -637,7 +636,7 @@ def combine_wrk_stats(samples):
 
 
 def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
-    client = proteus.clients.HttpClient(config.http_address)
+    client = proteus.HttpClient(config.http_address)
     parsed_url = urllib.parse.urlsplit(config.http_address)
     hostname = parsed_url.hostname
     addr = socket.gethostbyname(hostname)
@@ -646,7 +645,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
         server = None
     else:
         if not client.serverLive():
-            server = proteus.servers.Server()
+            server = proteus.Server()
             server.startHttp(parsed_url.port)
             while not client.serverLive():
                 time.sleep(1)
@@ -949,12 +948,12 @@ def pytest_benchmarks(config: Config, quiet=False):
     parsed_url = urllib.parse.urlsplit(config.http_address)
     hostname = parsed_url.hostname
     port = parsed_url.port
-    client = proteus.clients.HttpClient(config.http_address)
+    client = proteus.HttpClient(config.http_address)
     addr = socket.gethostbyname(hostname)
     if not ipaddress.ip_address(addr).is_loopback:
         try:
             assert client.serverLive()
-        except proteus.exceptions.ConnectionError:
+        except proteus.ConnectionError:
             print(
                 f"Cannot connect to HTTP server at {config.http_address}. Check the address or set it to start automatically"
             )

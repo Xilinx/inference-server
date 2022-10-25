@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_PRE_POST_IMAGE_PREPROCESS
-#define GUARD_PROTEUS_UTIL_PRE_POST_IMAGE_PREPROCESS
+#ifndef GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS
+#define GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS
 
 #include <array>
 #include <cassert>
@@ -25,9 +25,9 @@
 #include <string>
 #include <vector>
 
-#include "proteus/util/pre_post/center_crop.hpp"
+#include "proteus/pre_post/center_crop.hpp"
 
-namespace proteus::util {
+namespace proteus::pre_post {
 
 enum class ImageOrder {
   NHWC,
@@ -165,6 +165,6 @@ std::vector<std::vector<T>> imagePreprocess(
   return outputs;
 }
 
-}  // namespace proteus::util
+}  // namespace proteus::pre_post
 
-#endif  // GUARD_PROTEUS_UTIL_PRE_POST_IMAGE_PREPROCESS
+#endif  // GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS

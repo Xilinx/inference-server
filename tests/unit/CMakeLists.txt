@@ -16,5 +16,4 @@
 add_subdirectory(batching)
 add_subdirectory(buffers)
 add_subdirectory(clients)
-add_subdirectory(client_operators)
 add_subdirectory(core)

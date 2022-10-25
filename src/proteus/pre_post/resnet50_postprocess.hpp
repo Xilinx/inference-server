@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_PRE_POST_RESNET50_POSTPROCESS
-#define GUARD_PROTEUS_UTIL_PRE_POST_RESNET50_POSTPROCESS
+#ifndef GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS
+#define GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS
 
 #include <vector>
 
-#include "proteus/util/pre_post/get_top_k.hpp"
-#include "proteus/util/pre_post/softmax.hpp"
+#include "proteus/pre_post/get_top_k.hpp"
+#include "proteus/pre_post/softmax.hpp"
 
-namespace proteus::util {
+namespace proteus::pre_post {
 
 /**
  * @brief Perform postprocessing of the data
@@ -39,6 +39,6 @@ std::vector<int> resnet50Postprocess(const T* data, size_t size, int k) {
   return get_top_k(softmax.data(), size, k);
 }
 
-}  // namespace proteus::util
+}  // namespace proteus::pre_post
 
-#endif  // GUARD_PROTEUS_UTIL_PRE_POST_RESNET50_POSTPROCESS
+#endif  // GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS

@@ -17,11 +17,6 @@ import numpy as np
 import pytest
 
 import proteus
-from proteus.predict_api import (
-    InferenceRequest,
-    InferenceRequestInput,
-    InferenceRequestOutput,
-)
 
 from helper import run_benchmark
 
@@ -54,7 +49,7 @@ class TestEcho:
             dict: The constructed request
         """
 
-        input_0 = InferenceRequestInput()
+        input_0 = proteus.InferenceRequestInput()
         input_0.name = "echo"
         input_0.datatype = proteus.DataType.UINT32
         input_0.shape = [1]
@@ -64,7 +59,7 @@ class TestEcho:
             parameters.put("key", "value")
             input_0.parameters = parameters
 
-        request = InferenceRequest()
+        request = proteus.InferenceRequest()
         for _ in range(multiplier):
             request.addInputTensor(input_0)
 
@@ -80,7 +75,7 @@ class TestEcho:
         return request
 
     @staticmethod
-    def add_outputs(request: InferenceRequest, add_parameters):
+    def add_outputs(request: proteus.InferenceRequest, add_parameters):
         """
         Add output tensors to the request. This is optional.
 
@@ -91,7 +86,7 @@ class TestEcho:
         Returns:
             dict: Updated request
         """
-        output_0 = InferenceRequestOutput()
+        output_0 = proteus.InferenceRequestOutput()
         output_0.name = "echo"
         if add_parameters:
             parameters = proteus.RequestParameters()

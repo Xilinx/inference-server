@@ -13,4 +13,4 @@
 # limitations under the License.
 
 import proteus
-from proteus._proteus.util.pre_post import *
+from proteus._proteus.pre_post import *

@@ -26,7 +26,6 @@ target_link_libraries(
 add_subdirectory(batching)
 add_subdirectory(bindings)
 add_subdirectory(buffers)
-add_subdirectory(client_operators)
 add_subdirectory(clients)
 add_subdirectory(core)
 add_subdirectory(observation)
@@ -49,7 +48,6 @@ add_library(
   proteus
   ${TYPE}
   ${BATCHING_OBJS}
-  ${CLIENT_OPERATORS_OBJS}
   ${CLIENT_OBJS}
   ${CORE_OBJS}
   ${HELPER_OBJS}
@@ -69,8 +67,7 @@ target_link_libraries(
 )
 
 add_library(
-  proteus-client ${TYPE} ${CLIENT_OPERATORS_OBJS} ${CLIENT_OBJS} ${CORE_OBJS}
-                 ${OBSERVATION_OBJS}
+  proteus-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
 )
 target_link_libraries(proteus-client PRIVATE clients core observation util)
 
@@ -110,7 +107,7 @@ if(NOT SKBUILD)
 
   # cmake-format: off
   install(
-    TARGETS proteus proteus-client proteus-server util
+    TARGETS proteus proteus-client proteus-server
     EXPORT proteus_Targets
     RUNTIME COMPONENT proteus_Runtime
     LIBRARY COMPONENT proteus_Runtime

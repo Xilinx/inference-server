@@ -1,4 +1,4 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,32 @@
 
 /**
  * @file
- * @brief Defines the objects for Python bindings
+ * @brief Defines the objects for Python bindings for the core
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_DATA_TYPES
-#define GUARD_PROTEUS_BINDINGS_PYTHON_DATA_TYPES
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE
+#define GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE
 
 namespace pybind11 {
 class module_;
-}
+}  // namespace pybind11
+
+namespace proteus {
 
 void wrapDataType(pybind11::module_ &);
 void wrapTypeMaps(pybind11::module_ &);
+void wrapRequestParameters(pybind11::module_ &);
+void wrapPredictApi(pybind11::module_ &);
+void wrapExceptions(pybind11::module_ &);
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_DATA_TYPES
+void wrapCore(pybind11::module_ &m) {
+  wrapExceptions(m);
+  wrapDataType(m);
+  wrapTypeMaps(m);
+  wrapRequestParameters(m);
+  wrapPredictApi(m);
+}
+
+}  // namespace proteus
+
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE

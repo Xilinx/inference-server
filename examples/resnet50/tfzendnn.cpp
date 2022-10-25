@@ -28,14 +28,15 @@
 #include <iostream>             // for operator<<
 #include <memory>               // for allocator
 #include <opencv2/imgproc.hpp>  // for COLOR_BGR2RGB
+#include <optional>             // for optional
 #include <ratio>                // for milli
 #include <string>               // for string
 #include <vector>               // for vector
 
-#include "proteus/proteus.hpp"                             // for InferenceR...
-#include "proteus/util/pre_post/image_preprocess.hpp"      // for ImagePrepr...
-#include "proteus/util/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
-#include "resnet50.hpp"                                    // for Args, pars...
+#include "proteus/pre_post/image_preprocess.hpp"      // for ImagePrepr...
+#include "proteus/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
+#include "proteus/proteus.hpp"                        // for InferenceR...
+#include "resnet50.hpp"                               // for Args, pars...
 
 namespace fs = std::filesystem;
 
@@ -52,11 +53,11 @@ Images preprocess(const std::vector<std::string>& paths) {
   // this example uses a custom image preprocessing function. You may use any
   // preprocessing logic or skip it entirely if your input data is already
   // preprocessed.
-  proteus::util::ImagePreprocessOptions<float, 3> options;
+  proteus::pre_post::ImagePreprocessOptions<float, 3> options;
   options.convert_color = true;
   options.color_code = cv::COLOR_BGR2RGB;
   options.assign = true;
-  return proteus::util::imagePreprocess(paths, options);
+  return proteus::pre_post::imagePreprocess(paths, options);
 }
 
 /**
@@ -69,7 +70,7 @@ Images preprocess(const std::vector<std::string>& paths) {
  */
 std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
                              int k) {
-  return proteus::util::resnet50Postprocess(
+  return proteus::pre_post::resnet50Postprocess(
     static_cast<const float*>(output.getData()), output.getSize(), k);
 }
 
@@ -115,7 +116,7 @@ std::string load(const proteus::Client* client, const Args& args) {
     std::cerr
       << "TF+ZenDNN is not enabled. Please recompile with it enabled to "
       << "run this example\n";
-    exit(1);
+    exit(0);
   }
 
   // Load-time parameters are used to pass one-time information to the batcher
@@ -132,6 +133,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   parameters.put("input_node", args.input_node);
   parameters.put("output_node", args.output_node);
   std::string endpoint = client->workerLoad("tfzendnn", &parameters);
+  proteus::waitUntilModelReady(client, endpoint);
   // -load
   return endpoint;
 }
@@ -171,21 +173,17 @@ int main(int argc, char* argv[]) {
 
   Args args = getArgs(argc, argv);
 
-  proteus::Server server;
-#ifdef PROTEUS_ENABLE_GRPC
-  // +start protocol
-  server.startGrpc(args.grpc_port);
-  // -start protocol
-#else
-  std::cerr << "gRPC is not enabled. Please recompile the library with it "
-            << "enabled to run this example.\n";
-  exit(1);
-#endif
-
   // +create client
   // tfzendnn.cpp
   const auto grpc_port_str = std::to_string(args.grpc_port);
   proteus::GrpcClient client{"127.0.0.1:" + grpc_port_str};
+
+  std::optional<proteus::Server> server;
+  if (!client.serverLive()) {
+    std::cout << "No server detected. Starting locally...\n";
+    server.emplace();
+    server.value().startGrpc(args.grpc_port);
+  }
 
   std::cout << "Waiting until the server is ready...\n";
   proteus::waitUntilServerReady(&client);

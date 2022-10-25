@@ -35,13 +35,14 @@
 
 namespace py = pybind11;
 
-using proteus::DataType;
+namespace proteus {
 
 void wrapDataType(py::module_& m) {
   auto datatype = py::class_<DataType>(m, "DataType");
   auto value = py::enum_<DataType::Value>(datatype, "Value");
 
   datatype.def(py::init<>())
+    .def(py::init<>())
     .def(py::init<const char*>())
     .def(py::init<DataType::Value>())
     .def_property_readonly_static("BOOL",
@@ -114,3 +115,5 @@ void wrapTypeMaps([[maybe_unused]] py::module_& m) {
   m.def("mapTypeToXir", proteus::mapTypeToXir, py::arg("type"));
 #endif
 }
+
+}  // namespace proteus

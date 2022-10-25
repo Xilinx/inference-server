@@ -42,7 +42,6 @@ except ImportError:
 
 
 import proteus
-import proteus.clients
 
 # isort: split
 
@@ -92,12 +91,11 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    metadata = client.serverMetadata()
-    if "migraphx" not in metadata.extensions:
+    if not proteus.serverHasExtension(client, "migraphx"):
         print(
             "MIGraphX is not enabled. Please recompile with it enabled to run this example"
         )
-        sys.exit(1)
+        sys.exit(0)
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
@@ -123,9 +121,7 @@ def load(client, args):
     endpoint = client.workerLoad("migraphx", parameters)
 
     # wait for the worker to load and compile model
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
+    proteus.waitUntilModelReady(client, endpoint)
 
     return endpoint
 
@@ -152,18 +148,13 @@ def get_args():
 def main(args):
     print("Running the MIGraphX example for Yolo in Python")
 
-    server = proteus.servers.Server()
+    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    if not client.serverLive():
+        print("No server detected. Starting locally...")
+        server = proteus.Server()
+        server.startHttp(args.http_port)
     print("Waiting until the server is ready...")
-    server.startHttp(args.http_port)
-
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
-    ready = False
-    while not ready:
-        try:
-            ready = client.serverReady()
-        except proteus.RuntimeError:
-            pass
-        time.sleep(1)
+    proteus.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
@@ -174,7 +165,7 @@ def main(args):
 
     print("Creating inference requests...")
     requests = [proteus.ImageInferenceRequest(image) for image in images]
-    responses = proteus.client_operators.inferAsyncOrdered(client, endpoint, requests)
+    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
     print("Client received inference reply")
 
     assert len(responses) == len(original_images)

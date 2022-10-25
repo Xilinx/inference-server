@@ -18,7 +18,6 @@ import numpy as np
 import pytest
 
 import proteus
-import proteus.predict_api
 
 
 @pytest.mark.usefixtures("server", "assign_client")
@@ -35,10 +34,10 @@ class TestModelInfer:
         endpoint = self.rest_client.workerLoad("echo")
         assert endpoint == "echo"
 
-        input_data = proteus.predict_api.InferenceRequestInput()
+        input_data = proteus.InferenceRequestInput()
         input_data.shape = [1]
         input_data.setUint32Data(np.array([1], np.uint32))
-        request = proteus.predict_api.InferenceRequest()
+        request = proteus.InferenceRequest()
         request.addInputTensor(input_data)
 
         response = self.rest_client.modelInfer(endpoint, request)

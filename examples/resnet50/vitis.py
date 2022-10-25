@@ -25,9 +25,7 @@ from time import sleep
 
 # +import
 import proteus
-import proteus.clients
-import proteus.servers
-import proteus.util.pre_post as pre_post
+import proteus.pre_post as pre_post
 
 # -import
 
@@ -96,7 +94,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.client.Client): the client object
+        client (proteus.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -107,12 +105,11 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    metadata = client.serverMetadata()
-    if "vitis" not in metadata.extensions:
+    if not proteus.serverHasExtension(client, "vitis"):
         print(
             "Vitis AI is not enabled. Please recompile with it enabled to run this example"
         )
-        sys.exit(1)
+        sys.exit(0)
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
@@ -153,32 +150,24 @@ def get_args():
 def main(args):
     print("Running the Vitis example for ResNet50 in Python")
 
-    # +initialize
-    server = proteus.servers.Server()
-    # -initialize
-    print("Waiting until the server is ready...")
-    # +start protocol
-    server.startHttp(args.http_port)
-    # -start protocol
-
     # + create client
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     # - create client
-    ready = False
-    while not ready:
-        try:
-            ready = client.serverReady()
-        except proteus.RuntimeError:
-            pass
-        sleep(1)
+    if not client.serverLive():
+        # +initialize
+        server = proteus.Server()
+        # -initialize
+        # +start protocol
+        server.startHttp(args.http_port)
+        # -start protocol
+    print("Waiting until the server is ready...")
+    proteus.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
 
     # +wait model ready
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
+    proteus.waitUntilModelReady(client, endpoint)
     # -wait model ready
 
     # +prepare images

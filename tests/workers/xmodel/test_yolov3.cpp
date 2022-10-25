@@ -15,23 +15,22 @@
 #include <string>
 #include <vector>
 
-#include "proteus/client_operators/infer_async.hpp"
 #include "proteus/clients/client.hpp"
+#include "proteus/pre_post/image_preprocess.hpp"
+#include "proteus/pre_post/resnet50_postprocess.hpp"
 #include "proteus/testing/get_path_to_asset.hpp"
 #include "proteus/testing/gtest_fixtures.hpp"
-#include "proteus/util/pre_post/image_preprocess.hpp"
-#include "proteus/util/pre_post/resnet50_postprocess.hpp"
 
 namespace proteus {
 
 using Images = std::vector<std::vector<float>>;
 
 Images preprocess(const std::vector<std::string>& paths) {
-  proteus::util::ImagePreprocessOptions<float, 3> options;
+  proteus::pre_post::ImagePreprocessOptions<float, 3> options;
   options.height = 416;
   options.width = 416;
 
-  options.resize_algorithm = util::ResizeAlgorithm::CenterCrop;
+  options.resize_algorithm = pre_post::ResizeAlgorithm::CenterCrop;
 
   options.convert_color = true;
   options.color_code = cv::COLOR_BGR2RGB;
@@ -41,10 +40,10 @@ Images preprocess(const std::vector<std::string>& paths) {
   options.convert_scale = 1 / 255.0;
 
   options.normalize = true;
-  options.order = proteus::util::ImageOrder::NHWC;
+  options.order = proteus::pre_post::ImageOrder::NHWC;
   options.mean = {0, 0, 0};
   options.std = {1, 1, 1};
-  return util::imagePreprocess(paths, options);
+  return pre_post::imagePreprocess(paths, options);
 }
 
 void postprocess(const proteus::InferenceResponseOutput& output) {

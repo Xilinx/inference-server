@@ -36,6 +36,8 @@ Manager::Manager() {
   init();
 }
 
+Manager::~Manager() { shutdown(); }
+
 void Manager::init() {
   // default constructed threads are not joinable
   if (!update_thread_.joinable()) {
@@ -125,9 +127,9 @@ std::vector<std::string> Manager::getWorkerEndpoints() {
 // TODO(varunsh): if multiple commands sent post-shutdown, they will linger
 // in the queue and may cause problems
 void Manager::shutdown() {
-  auto request = std::make_shared<UpdateCommand>(UpdateCommandType::Shutdown);
-  this->update_queue_->enqueue(request);
   if (this->update_thread_.joinable()) {
+    auto request = std::make_shared<UpdateCommand>(UpdateCommandType::Shutdown);
+    this->update_queue_->enqueue(request);
     this->update_thread_.join();
   }
 }

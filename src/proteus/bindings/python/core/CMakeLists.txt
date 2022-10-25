@@ -16,6 +16,16 @@ list(APPEND TARGETS predict_api data_types)
 
 list(APPEND LINK_TARGETS)
 
+add_library(exceptions_py OBJECT exceptions.cpp)
+target_include_directories(
+  exceptions_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
+                        ${Python_INCLUDE_DIRS}
+)
+target_link_libraries(exceptions_py PRIVATE ${Python_LIBRARIES})
+add_dependencies(exceptions_py pybind11Mkdoc)
+
+set(LINK_TARGETS ${LINK_TARGETS} exceptions_py)
+
 foreach(target ${TARGETS})
   add_library(${target}_py OBJECT ${target}.cpp)
   target_include_directories(
@@ -30,8 +40,5 @@ foreach(target ${TARGETS})
 
   set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)
 endforeach()
-
-# target_link_libraries(data_types_py PRIVATE
-# /usr/lib/python3/dist-packages/xir.cpython-36m-x86_64-linux-gnu.so)
 
 set(CORE_OBJS ${LINK_TARGETS} PARENT_SCOPE)

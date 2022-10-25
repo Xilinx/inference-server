@@ -34,7 +34,7 @@ endforeach()
 target_link_libraries(base64 INTERFACE b64)
 target_link_libraries(compression INTERFACE z)
 
-add_library(util SHARED ${UTIL_OBJS})
+add_library(util STATIC ${UTIL_OBJS})
 target_link_libraries(util PRIVATE ${targets})
 set_target_properties(util PROPERTIES OUTPUT_NAME proteus-util)
 set_target_properties(

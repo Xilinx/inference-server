@@ -16,7 +16,7 @@
 #include <iostream>
 
 #include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
-#include "proteus/client_operators/infer_async.hpp"
+#include "proteus/clients/client.hpp"
 #include "proteus/clients/native.hpp"
 #include "proteus/core/predict_api.hpp"
 #include "proteus/testing/gtest_fixtures.hpp"  // for BaseFixture

@@ -14,16 +14,20 @@
 
 /**
  * @file
- * @brief Defines the Python bindings for the testing headers
+ * @brief Defines the Python bindings for pre_post
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_UTIL_UTIL
-#define GUARD_PROTEUS_BINDINGS_PYTHON_UTIL_UTIL
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST
+#define GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST
 
 namespace pybind11 {
 class module_;
 }
 
-void wrapUtil(pybind11::module_ &);
+namespace proteus {
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_UTIL_UTIL
+void wrapPrePost(pybind11::module_ &);
+
+}  // namespace proteus
+
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST

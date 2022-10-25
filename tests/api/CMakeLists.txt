@@ -15,6 +15,7 @@
 
 list(
   APPEND tests
+         infer_async
          model_infer
          model_infer_async
          model_list

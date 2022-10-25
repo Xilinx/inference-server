@@ -19,7 +19,6 @@ import pytest
 
 import proteus
 import proteus.testing
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
 
 from helper import root_path
 
@@ -38,7 +37,7 @@ class TestResnet50Stream:
     def construct_request(self, requested_frames_count):
         video_path = proteus.testing.getPathToAsset("asset_Physicsworks.ogv")
 
-        input_0 = InferenceRequestInput()
+        input_0 = proteus.InferenceRequestInput()
         input_0.name = "input0"
         input_0.datatype = proteus.DataType.STRING
         input_0.setStringData(video_path)
@@ -47,7 +46,7 @@ class TestResnet50Stream:
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
-        request = InferenceRequest()
+        request = proteus.InferenceRequest()
         request.addInputTensor(input_0)
         parameters_2 = proteus.RequestParameters()
         parameters_2.put("key", "0")

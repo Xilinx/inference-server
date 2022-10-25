@@ -34,6 +34,8 @@
 
 namespace py = pybind11;
 
+namespace proteus {
+
 void wrapRequestParameters(py::module_ &m) {
   using proteus::RequestParameters;
 
@@ -169,6 +171,16 @@ void wrapRequestParameters(py::module_ &m) {
 //     };
 // }} // namespace pybind11::detail
 
+void wrapServerMetadata(py::module_ &m) {
+  py::class_<ServerMetadata>(m, "ServerMetadata")
+    .def(py::init<>(), DOCS(ServerMetadata))
+    .def_readwrite("name", &ServerMetadata::name, DOCS(ServerMetadata, name))
+    .def_readwrite("version", &ServerMetadata::version,
+                   DOCS(ServerMetadata, version))
+    .def_readwrite("extensions", &ServerMetadata::extensions,
+                   DOCS(ServerMetadata, extensions));
+}
+
 template <typename T>
 py::array_t<T> getData(const proteus::InferenceRequestInput &self) {
   auto *data = static_cast<T *>(self.getData());
@@ -182,21 +194,7 @@ void setData(proteus::InferenceRequestInput &self, py::array_t<T> &b) {
   self.setData(static_cast<void *>(const_cast<T *>(b.data())));
 }
 
-void wrapPredictApi(py::module_ &m) {
-  using proteus::InferenceRequest;
-  using proteus::InferenceRequestInput;
-  using proteus::InferenceRequestOutput;
-  using proteus::InferenceResponse;
-  using proteus::ServerMetadata;
-
-  py::class_<ServerMetadata>(m, "ServerMetadata")
-    .def(py::init<>(), DOCS(ServerMetadata))
-    .def_readwrite("name", &ServerMetadata::name, DOCS(ServerMetadata, name))
-    .def_readwrite("version", &ServerMetadata::version,
-                   DOCS(ServerMetadata, version))
-    .def_readwrite("extensions", &ServerMetadata::extensions,
-                   DOCS(ServerMetadata, extensions));
-
+void wrapInferenceRequestInput(py::module_ &m) {
   auto setShape =
     static_cast<void (InferenceRequestInput::*)(const std::vector<uint64_t> &)>(
       &InferenceRequestInput::setShape);
@@ -254,7 +252,9 @@ void wrapPredictApi(py::module_ &m) {
                   ")";
          })
     .def("__str__", &proteus::to_string<InferenceRequestInput>);
+}
 
+void wrapInferenceRequestOutput(py::module_ &m) {
   py::class_<InferenceRequestOutput>(m, "InferenceRequestOutput")
     .def(py::init<>(), DOCS(InferenceRequestOutput))
     .def_property("name", &InferenceRequestOutput::getName,
@@ -267,12 +267,9 @@ void wrapPredictApi(py::module_ &m) {
       (void)self;
       return "InferenceRequestOutput\n";
     });
-  // .def("__str__", [](const InferenceRequestOutput& self) {
-  //   std::ostringstream os;
-  //   os << self;
-  //   return os.str();
-  // });
+}
 
+void wrapInferenceResponse(py::module_ &m) {
   py::class_<InferenceResponse>(m, "InferenceResponse")
     .def(py::init<>(), DOCS(InferenceResponse, InferenceResponse))
     .def(py::init<const std::string &>(),
@@ -304,7 +301,9 @@ void wrapPredictApi(py::module_ &m) {
            return "InferenceResponse\n";
          })
     .def("__str__", &proteus::to_string<InferenceResponse>);
+}
 
+void wrapInferenceRequest(py::module_ &m) {
   auto addInputTensor =
     static_cast<void (InferenceRequest::*)(InferenceRequestInput)>(
       &InferenceRequest::addInputTensor);
@@ -339,13 +338,9 @@ void wrapPredictApi(py::module_ &m) {
       (void)self;
       return "InferenceRequest";
     });
-  // .def("__str__", [](const InferenceRequest& self) {
-  //   std::ostringstream os;
-  //   os << self;
-  //   return os.str();
-  // });
+}
 
-  using proteus::ModelMetadataTensor;
+void wrapModelMetadata(py::module_ &m) {
   py::class_<ModelMetadataTensor>(m, "ModelMetadataTensor")
     .def(
       py::init<const std::string &, proteus::DataType, std::vector<uint64_t>>(),
@@ -357,19 +352,18 @@ void wrapPredictApi(py::module_ &m) {
     .def("getShape", &ModelMetadataTensor::getShape,
          DOCS(ModelMetadataTensor, getShape));
 
-  using proteus::ModelMetadata;
-  auto addInputTensor2 = static_cast<void (ModelMetadata::*)(
+  auto addInputTensor = static_cast<void (ModelMetadata::*)(
     const std::string &, proteus::DataType, std::vector<int>)>(
     &ModelMetadata::addInputTensor);
-  auto addOutputTensor2 = static_cast<void (ModelMetadata::*)(
+  auto addOutputTensor = static_cast<void (ModelMetadata::*)(
     const std::string &, proteus::DataType, std::vector<int>)>(
     &ModelMetadata::addOutputTensor);
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),
          DOCS(ModelMetadata, ModelMetadata))
-    .def("addInputTensor", addInputTensor2, py::keep_alive<1, 2>(),
+    .def("addInputTensor", addInputTensor, py::keep_alive<1, 2>(),
          DOCS(ModelMetadata, addInputTensor))
-    .def("addOutputTensor", addOutputTensor2, py::arg("name"),
+    .def("addOutputTensor", addOutputTensor, py::arg("name"),
          py::arg("datatype"), py::arg("shape"), py::keep_alive<1, 2>(),
          DOCS(ModelMetadata, addOutputTensor))
     .def_property("name", &ModelMetadata::getName, &ModelMetadata::setName)
@@ -378,3 +372,14 @@ void wrapPredictApi(py::module_ &m) {
     .def("setReady", &ModelMetadata::setReady, DOCS(ModelMetadata, setReady))
     .def("isReady", &ModelMetadata::isReady, DOCS(ModelMetadata, isReady));
 }
+
+void wrapPredictApi(py::module_ &m) {
+  wrapServerMetadata(m);
+  wrapInferenceRequestInput(m);
+  wrapInferenceRequestOutput(m);
+  wrapInferenceResponse(m);
+  wrapInferenceRequest(m);
+  wrapModelMetadata(m);
+}
+
+}  // namespace proteus

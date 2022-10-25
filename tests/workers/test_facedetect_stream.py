@@ -19,9 +19,6 @@ import pytest
 
 import proteus
 import proteus.testing
-from proteus.predict_api import InferenceRequest, InferenceRequestInput
-
-from helper import root_path
 
 
 @pytest.mark.extensions(["aks", "vitis"])
@@ -42,7 +39,7 @@ class TestFacedetectStream:
         asset_key = "asset_Physicsworks.ogv"
         video_path = proteus.testing.getPathToAsset(asset_key)
 
-        input_0 = InferenceRequestInput()
+        input_0 = proteus.InferenceRequestInput()
         input_0.name = "input0"
         input_0.datatype = proteus.DataType.STRING
         input_0.setStringData(video_path)
@@ -51,7 +48,7 @@ class TestFacedetectStream:
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
-        request = InferenceRequest()
+        request = proteus.InferenceRequest()
         request.addInputTensor(input_0)
         parameters_2 = proteus.RequestParameters()
         parameters_2.put("key", "0")

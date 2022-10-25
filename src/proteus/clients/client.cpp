@@ -15,6 +15,8 @@
 
 #include "proteus/clients/client.hpp"
 
+#include <queue>
+
 #include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
 #include "proteus/observation/logging.hpp"  // for getLogDirectory, initLogger
 
@@ -58,6 +60,61 @@ void waitUntilModelReady(const Client* client, const std::string& model) {
   while (!ready) {
     ready = client->modelReady(model);
   }
+}
+
+std::vector<InferenceResponse> inferAsyncOrdered(
+  Client* client, const std::string& model,
+  const std::vector<InferenceRequest>& requests) {
+  std::queue<InferenceResponseFuture> q;
+  for (const auto& request : requests) {
+    q.push(client->modelInferAsync(model, request));
+  }
+
+  const auto num_requests = requests.size();
+  std::vector<InferenceResponse> responses;
+  responses.reserve(num_requests);
+  for (auto i = 0U; i < num_requests; ++i) {
+    auto& future = q.front();
+    responses.push_back(future.get());
+    q.pop();
+  }
+  return responses;
+}
+
+std::vector<InferenceResponse> inferAsyncOrderedBatched(
+  Client* client, const std::string& model,
+  const std::vector<InferenceRequest>& requests, size_t batch_size) {
+  auto num_requests = requests.size();
+  std::vector<InferenceResponse> responses;
+  responses.reserve(num_requests);
+  auto start_index = 0U;
+  std::queue<InferenceResponseFuture> q;
+
+  while (start_index + batch_size < num_requests) {
+    for (auto i = start_index; i < batch_size; ++i) {
+      q.push(client->modelInferAsync(model, requests[i]));
+    }
+
+    for (auto i = 0U; i < batch_size; ++i) {
+      auto& future = q.front();
+      responses.push_back(future.get());
+      q.pop();
+    }
+    start_index += batch_size;
+  }
+
+  if (start_index != num_requests) {
+    for (auto i = start_index; i < num_requests; ++i) {
+      q.push(client->modelInferAsync(model, requests[i]));
+    }
+
+    for (auto i = 0U; i < num_requests - start_index; ++i) {
+      auto& future = q.front();
+      responses.push_back(future.get());
+      q.pop();
+    }
+  }
+  return responses;
 }
 
 }  // namespace proteus

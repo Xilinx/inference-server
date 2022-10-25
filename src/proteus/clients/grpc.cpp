@@ -118,6 +118,9 @@ bool GrpcClient::serverReady() const {
   if (status.ok()) {
     return reply.ready();
   }
+  if (status.error_code() == ::grpc::StatusCode::UNAVAILABLE) {
+    throw connection_error(status.error_message());
+  }
   throw bad_status(status.error_message());
 }
 

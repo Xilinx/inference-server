@@ -20,11 +20,26 @@
 #include "proteus/clients/client.hpp"
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>  // IWYU pragma: keep
 
 namespace py = pybind11;
 
-void wrapClient(py::module_ &m) {
-  using proteus::Client;
+namespace proteus {
 
-  py::class_<Client>(m, "Client");
+void wrapClient(py::module_ &m) {
+  py::class_<Client> client{m, "Client"};
+
+  m.def("serverHasExtension", &serverHasExtension, py::arg("client"),
+        py::arg("extension"));
+  m.def("waitUntilServerReady", &waitUntilServerReady, py::arg("client"));
+  m.def("waitUntilModelReady", &waitUntilModelReady, py::arg("client"),
+        py::arg("model"));
+
+  m.def("inferAsyncOrdered", &inferAsyncOrdered, py::arg("client"),
+        py::arg("model"), py::arg("requests"));
+  m.def("inferAsyncOrderedBatched", &inferAsyncOrderedBatched,
+        py::arg("client"), py::arg("model"), py::arg("requests"),
+        py::arg("batch_sizes"));
 }
+
+}  // namespace proteus

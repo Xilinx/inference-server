@@ -145,7 +145,7 @@ class Manager {
   /// Construct a new Manager object
   Manager();
   /// Destroy the Manager object
-  ~Manager() = default;
+  ~Manager();
 
   /**
    * @brief The Endpoints class is a helper class to bundle up all the worker

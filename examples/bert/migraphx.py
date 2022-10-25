@@ -75,12 +75,22 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.client.Client): the client object
+        client (proteus.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
         str: endpoint
     """
+
+    # Depending on how the server is compiled, it may or may not have support
+    # for a particular backend. This guard checks to make sure the server does
+    # support the requested backend. If you already know it's supported, you can
+    # skip this check.
+    if not proteus.serverHasExtension(client, "migraphx"):
+        print(
+            "MIGraphX is not enabled. Please recompile with it enabled to run this example"
+        )
+        sys.exit(0)
 
     # The only parameter the migraphx worker requires is the model file name.
     # batch and timeout are optional.
@@ -97,9 +107,7 @@ def load(client, args):
     endpoint = client.workerLoad("migraphx", parameters)
 
     # wait for the worker to load and compile model
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
+    proteus.waitUntilModelReady(client, endpoint)
 
     return endpoint
 
@@ -110,14 +118,14 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
     requests = []
     for idx in range(0, n):
         # Create an InferenceRequest
-        request = proteus.predict_api.InferenceRequest()
+        request = proteus.InferenceRequest()
         item = eval_examples[idx]  # class SquadExample
 
         # Depending on the model, it will require one or more input tensors
         # The values for name, datatype, shape will also be model-dependent
         # For MIGraphX, the names for each input tensor are meaningful
 
-        input_n = proteus.predict_api.InferenceRequestInput()
+        input_n = proteus.InferenceRequestInput()
         input_n.name = f"input_ids:0"
         input_n.datatype = proteus.DataType.INT64
         input_n.shape = (
@@ -127,7 +135,7 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         input_n.setInt64Data(input_ids[idx : idx + batch_size])
         request.addInputTensor(input_n)
 
-        input_n = proteus.predict_api.InferenceRequestInput()
+        input_n = proteus.InferenceRequestInput()
         input_n.name = f"input_mask:0"
         input_n.datatype = proteus.DataType.INT64
         input_n.shape = (
@@ -137,7 +145,7 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         input_n.setInt64Data(input_mask[idx : idx + batch_size])
         request.addInputTensor(input_n)
 
-        input_n = proteus.predict_api.InferenceRequestInput()
+        input_n = proteus.InferenceRequestInput()
         input_n.name = f"segment_ids:0"
         input_n.datatype = proteus.DataType.INT64
         input_n.shape = (
@@ -150,7 +158,7 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         # This comes from the first argument; I think it's supposed to be output names
         #       see https://onnxruntime.ai/docs/api/python/api_summary.html#load-and-run-a-model
         # item = eval_examples[idx]   # class SquadExample
-        input_n = proteus.predict_api.InferenceRequestInput()
+        input_n = proteus.InferenceRequestInput()
         input_n.name = f"unique_ids_raw_output___9:0"
         input_n.datatype = proteus.DataType.INT64
         input_n.shape = (1,)
@@ -191,14 +199,13 @@ def main(args):
     print("Running the MIGraphX example for Bert in Python")
 
     # connect to the server
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
     print("Waiting for server...", end="")
     start_server = not client.serverLive()
     if start_server:
-        server = proteus.servers.Server()
+        server = proteus.Server()
         server.startHttp(args.http_port)
-        while not client.serverLive():
-            time.sleep(1)
+    proteus.waitUntilServerReady(client)
     print("OK. Connected.")
 
     print("Loading worker...")
@@ -225,7 +232,7 @@ def main(args):
     )
 
     print(f"Sending {len(requests)} request(s)...")
-    responses = proteus.client_operators.inferAsyncOrdered(client, endpoint, requests)
+    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
     print("Client received inference reply")
 
     print("Postprocessing...")

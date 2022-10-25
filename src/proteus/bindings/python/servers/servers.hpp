@@ -1,4 +1,4 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,13 +17,19 @@
  * @brief Defines the Python bindings for the server.hpp header
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVER
-#define GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVER
+#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS
+#define GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS
 
 namespace pybind11 {
 class module_;
 }
 
-void wrapServer(pybind11::module_ &);
+namespace proteus {
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVER
+void wrapServer(pybind11::module_&);
+
+void wrapServers(pybind11::module_& m) { wrapServer(m); }
+
+}  // namespace proteus
+
+#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS

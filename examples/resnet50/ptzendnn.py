@@ -26,10 +26,7 @@ from time import sleep
 import cv2
 
 import proteus
-import proteus.client_operators
-import proteus.clients
-import proteus.servers
-import proteus.util.pre_post as pre_post
+import proteus.pre_post as pre_post
 
 # isort: split
 
@@ -97,7 +94,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.client.Client): the client object
+        client (proteus.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -107,13 +104,11 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-
-    metadata = client.serverMetadata()
-    if "ptzendnn" not in metadata.extensions:
+    if not proteus.serverHasExtension(client, "ptzendnn"):
         print(
             "PT+ZenDNN is not enabled. Please recompile with it enabled to run this example"
         )
-        sys.exit(1)
+        sys.exit(0)
 
     # Load-time parameters are used to pass one-time information to the batcher
     # and worker as it starts up. Each worker can choose to define its own
@@ -126,6 +121,7 @@ def load(client, args):
     parameters.put("input_size", args.input_size)
     parameters.put("output_classes", args.output_classes)
     endpoint = client.workerLoad("ptzendnn", parameters)
+    proteus.waitUntilModelReady(client, endpoint)
     return endpoint
 
 
@@ -151,25 +147,14 @@ def get_args():
 def main(args):
     print("Running the PT+ZenDNN example for ResNet50 in Python")
 
-    server = proteus.servers.Server()
+    server = proteus.Server()
     print("Waiting until the server is ready...")
-    server.startHttp(args.http_port)
 
-    client = proteus.clients.HttpClient(f"http://127.0.0.1:{args.http_port}")
-    ready = False
-    while not ready:
-        try:
-            ready = client.serverReady()
-        except proteus.RuntimeError:
-            pass
-        sleep(1)
+    client = proteus.NativeClient()
+    proteus.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
-
-    ready = False
-    while not ready:
-        ready = client.modelReady(endpoint)
 
     paths = resolve_image_paths(pathlib.Path(args.image))
 
@@ -178,7 +163,7 @@ def main(args):
     requests = construct_requests(images)
 
     assert len(paths) == len(requests)
-    responses = proteus.client_operators.inferAsyncOrdered(client, endpoint, requests)
+    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
     print("Making inferences...")
     for image_path, response in zip(paths, responses):
         assert not response.isError()

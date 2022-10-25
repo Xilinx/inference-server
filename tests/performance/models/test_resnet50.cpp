@@ -23,12 +23,11 @@
 #include <string>
 #include <vector>
 
-#include "proteus/client_operators/infer_async.hpp"
+#include "proteus/pre_post/image_preprocess.hpp"
 #include "proteus/proteus.hpp"  // for InferenceResponse, Grp...
 #include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
 #include "proteus/testing/gtest_fixtures.hpp"     // for GrpcFixture
 #include "proteus/util/ctpl.h"                    // for thread_pool
-#include "proteus/util/pre_post/image_preprocess.hpp"
 
 namespace fs = std::filesystem;
 
@@ -44,7 +43,7 @@ struct Config {
 };
 
 template <typename T, int C>
-using ImagePreprocessOptions = proteus::util::ImagePreprocessOptions<T, C>;
+using ImagePreprocessOptions = proteus::pre_post::ImagePreprocessOptions<T, C>;
 
 struct Workers {
   const fs::path kRoot{std::getenv("PROTEUS_ROOT")};
@@ -64,9 +63,9 @@ struct PtzendnnWorker : public Workers {
 
     parameters.put("model", graph.string());
 
-    proteus::util::ImagePreprocessOptions<float, 3> options;
+    proteus::pre_post::ImagePreprocessOptions<float, 3> options;
     options.normalize = true;
-    options.order = proteus::util::ImageOrder::NCHW;
+    options.order = proteus::pre_post::ImageOrder::NCHW;
     options.mean = {0.485, 0.456, 0.406};
     options.std = {4.367, 4.464, 4.444};
     options.convert_color = true;
@@ -91,7 +90,7 @@ struct TfzendnnWorker : public Workers {
     parameters.put("inter_op", 64);
     parameters.put("intra_op", 1);
 
-    proteus::util::ImagePreprocessOptions<float, 3> options;
+    proteus::pre_post::ImagePreprocessOptions<float, 3> options;
     options.convert_color = true;
     options.color_code = cv::COLOR_BGR2RGB;
     options.assign = true;
@@ -144,7 +143,7 @@ void test(proteus::Client* client, const Config& config, Workers* worker) {
   std::visit(
     Overload{
       [&](const ImagePreprocessOptions<float, 3>& options_) {
-        auto images = proteus::util::imagePreprocess(paths, options_);
+        auto images = proteus::pre_post::imagePreprocess(paths, options_);
         request.addInputTensor(images[0].data(), {3, kInputSize, kInputSize},
                                proteus::DataType::FLOAT32);
       },
