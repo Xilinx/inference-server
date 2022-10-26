@@ -227,7 +227,7 @@ if(NOT SKBUILD)
   )
 
   install(RUNTIME_DEPENDENCY_SET proteus_Dependencies DESTINATION
-          "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Runtime
+          "${CMAKE_INSTALL_LIBDIR}" COMPONENT proteus_Runtime
   )
 endif()
 
