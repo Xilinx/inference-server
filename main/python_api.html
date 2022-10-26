@@ -64,6 +64,7 @@ function OptanonWrapper() { }
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
     
@@ -292,6 +293,21 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proteus.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#clients">Clients</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#rest">REST</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#websocket">Websocket</a></li>
@@ -384,6 +400,36 @@ function OptanonWrapper() { }
             
   <section id="module-proteus">
 <span id="python-api"></span><h1>Python API<a class="headerlink" href="#module-proteus" title="Permalink to this heading">¶</a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="proteus.BadStatus">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">BadStatus</span></span><a class="headerlink" href="#proteus.BadStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="proteus.ConnectionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ConnectionError</span></span><a class="headerlink" href="#proteus.ConnectionError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="proteus.EnvironmentNotSetError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">EnvironmentNotSetError</span></span><a class="headerlink" href="#proteus.EnvironmentNotSetError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="proteus.ExternalError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ExternalError</span></span><a class="headerlink" href="#proteus.ExternalError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="proteus.FileNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">FileNotFoundError</span></span><a class="headerlink" href="#proteus.FileNotFoundError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="proteus.FileReadError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">FileReadError</span></span><a class="headerlink" href="#proteus.FileReadError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="proteus.ImageInferenceRequest">
 <span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
@@ -408,18 +454,23 @@ function OptanonWrapper() { }
 </dd></dl>
 
 <dl class="py exception">
+<dt class="sig sig-object py" id="proteus.InvalidArgumentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">InvalidArgumentError</span></span><a class="headerlink" href="#proteus.InvalidArgumentError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
 <dt class="sig sig-object py" id="proteus.RuntimeError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">RuntimeError</span></span><a class="headerlink" href="#proteus.RuntimeError" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="proteus.mapTypeToXir">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapTypeToXir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xir.DataType</span></span></span><a class="headerlink" href="#proteus.mapTypeToXir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="proteus.inferAsyncOrdered">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">inferAsyncOrdered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceRequest</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceResponse</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proteus.inferAsyncOrdered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="proteus.mapXirType">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapXirType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xir.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.DataType</span></span></span><a class="headerlink" href="#proteus.mapXirType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="proteus.inferAsyncOrderedBatched">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">inferAsyncOrderedBatched</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceRequest</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceResponse</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proteus.inferAsyncOrderedBatched" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -443,6 +494,21 @@ function OptanonWrapper() { }
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.serverHasExtension">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">serverHasExtension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.serverHasExtension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.waitUntilModelReady">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">waitUntilModelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.waitUntilModelReady" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="proteus.waitUntilServerReady">
+<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">waitUntilServerReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.waitUntilServerReady" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <section id="clients">
 <h2>Clients<a class="headerlink" href="#clients" title="Permalink to this heading">¶</a></h2>
@@ -484,7 +550,7 @@ function OptanonWrapper() { }
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 20, 2022.
+        Last updated on October 26, 2022.
       </span>
 
     </p>

@@ -64,6 +64,7 @@ function OptanonWrapper() { }
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
     
@@ -403,9 +404,7 @@ They are not intended to show the most optimal performance for each backend.</p>
 The different submodules are imported by default but you can include them manually as well.
 These explicit imports can help IDEs resolve Python imports for autocompletion.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">proteus</span>
-<span class="kn">import</span> <span class="nn">proteus.clients</span>
-<span class="kn">import</span> <span class="nn">proteus.servers</span>
-<span class="kn">import</span> <span class="nn">proteus.util.pre_post</span> <span class="k">as</span> <span class="nn">pre_post</span>
+<span class="kn">import</span> <span class="nn">proteus.pre_post</span> <span class="k">as</span> <span class="nn">pre_post</span>
 
 </pre></div>
 </div>
@@ -414,7 +413,7 @@ These explicit imports can help IDEs resolve Python imports for autocompletion.<
 <h2>Start the server<a class="headerlink" href="#start-the-server" title="Permalink to this heading">¶</a></h2>
 <p>This example assumes that the server is not running elsewhere and starts it locally from Python instead.
 Creating the <code class="docutils literal notranslate"><span class="pre">proteus.servers.Server</span></code> object starts the inference server backend and it stays alive as long as the object remains in scope.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">Server</span><span class="p">()</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">Server</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the object’s methods.</p>
@@ -440,9 +439,7 @@ If a worker is already ready on the server or you already have an endpoint, then
 </pre></div>
 </div>
 <p>After loading a worker, make sure it’s ready before attempting to make an inference.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">ready</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="k">while</span> <span class="ow">not</span> <span class="n">ready</span><span class="p">:</span>
-    <span class="n">ready</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modelReady</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -510,7 +507,7 @@ The postprocessing identifies the highest probability classes and the top few of
 The <code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered</span></code> method accepts a list of requests, makes all the requests asynchronously using the C++ <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> API, waits until each request completes, and then returns a list of responses.
 If there are multiple requests sent in this way, they may be batched together by the server.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># in migraphx.py</span>
-<span class="n">responses</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">client_operators</span><span class="o">.</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">requests</span><span class="p">)</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">requests</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Making inferences...&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
     <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">()</span>
@@ -553,7 +550,7 @@ If there are multiple requests sent in this way, they may be batched together by
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 20, 2022.
+        Last updated on October 26, 2022.
       </span>
 
     </p>

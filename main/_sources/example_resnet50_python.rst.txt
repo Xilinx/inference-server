@@ -51,7 +51,7 @@ Creating the ``proteus.servers.Server`` object starts the inference server backe
     :start-after: +initialize
     :end-before: -initialize
     :language: py
-    :dedent: 4
+    :dedent: 8
 
 Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the object's methods.
 
@@ -61,7 +61,7 @@ For example, if you were using HTTP/REST:
     :start-after: +start protocol
     :end-before: -start protocol
     :language: py
-    :dedent: 4
+    :dedent: 8
 
 If the server is already running somewhere, you don't need to do this.
 

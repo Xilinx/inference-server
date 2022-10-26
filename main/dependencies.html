@@ -64,6 +64,7 @@ function OptanonWrapper() { }
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
     
@@ -430,6 +431,9 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><sup>3</sup></p></td>
 <td><p>Used if PT+ZenDNN is added</p></td>
 </tr>
+<tr class="row-even"><td><p><sup>4</sup></p></td>
+<td><p>Used if MIGraphX is added</p></td>
+</tr>
 </tbody>
 </table>
 <section id="base-image">
@@ -548,82 +552,87 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p>MIT + others</p></td>
 <td><p>Dynamically linked by proteus-server and Drogon<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libssl-dev">libssl-dev</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libnuma1">libnuma1</a></p></td>
+<td><p>2.0.11-2.1</p></td>
+<td><p>LGPL-2</p></td>
+<td><p>Dependency of migraphx<sup>a 4</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libssl-dev">libssl-dev</a></p></td>
 <td><p>1.1.1-1ubuntu2.1~18.04.13</p></td>
 <td><p>Dual OpenSSL/SSLeay</p></td>
 <td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/locales">locales</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/locales">locales</a></p></td>
 <td><p>2.27-3ubuntu1.2</p></td>
 <td><p>GPL-2 + others</p></td>
 <td><p>Executable used to set locale<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/make">make</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/make">make</a></p></td>
 <td><p>4.1-9.1ubuntu1</p></td>
 <td><p>GPL-3+</p></td>
 <td><p>Executable used to build executables<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/net-tools">net-tools</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/net-tools">net-tools</a></p></td>
 <td><p>1.60+git20161116.90da8a0-1ubuntu1</p></td>
 <td><p>GPL-2+</p></td>
 <td><p>Executable used to query used ports<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/openssh-client">openssh-client</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/openssh-client">openssh-client</a></p></td>
 <td><p>1:7.6p1-4ubuntu0.5</p></td>
 <td><p>OpenSSH + others</p></td>
 <td><p>Executable used for remote connections<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/pkg-config">pkg-config</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/pkg-config">pkg-config</a></p></td>
 <td><p>0.29.1-0ubuntu2</p></td>
 <td><p>GPL-2+</p></td>
 <td><p>Executable used for configuring unilog<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3">python3</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3">python3</a></p></td>
 <td><p>3.6.5-3</p></td>
 <td><p>PSF License</p></td>
 <td><p>Executable used for scripting and testing proteus-server<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3-dev">python3-dev</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3-dev">python3-dev</a></p></td>
 <td><p>3.6.7-1~18.04</p></td>
 <td><p>PSF License</p></td>
 <td><p>Used to build Python bindings<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/sudo">sudo</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/sudo">sudo</a></p></td>
 <td><p>1.8.21p2-3ubuntu1.4</p></td>
 <td><p>ISC license + others</p></td>
 <td><p>Executable used to grant elevated permissions to the user<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/symlinks">symlinks</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/symlinks">symlinks</a></p></td>
 <td><p>1.4-3build1</p></td>
 <td><p>Freely distributable</p></td>
 <td><p>Executable used to convert absolute symlinks to relative ones<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/tzdata">tzdata</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/tzdata">tzdata</a></p></td>
 <td><p>2021a-0ubuntu0.18.04</p></td>
 <td><p>Public Domain</p></td>
 <td><p>Used for setting the timezone<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/uuid-dev">uuid-dev</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/uuid-dev">uuid-dev</a></p></td>
 <td><p>2.31.1-0.4ubuntu3.7</p></td>
 <td><p>GPL-2+ + others</p></td>
 <td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/valgrind">valgrind</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/valgrind">valgrind</a></p></td>
 <td><p>1:3.13.0-2ubuntu2</p></td>
 <td><p>GPL-2+ + others</p></td>
 <td><p>Executable used for for debugging<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/vim">vim</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/vim">vim</a></p></td>
 <td><p>2:8.0.1453-1ubuntu1.4</p></td>
 <td><p>Vim + others</p></td>
 <td><p>Executable used for text editing in terminal<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/wget">wget</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/wget">wget</a></p></td>
 <td><p>1.19.4-1ubuntu2.2</p></td>
 <td><p>GPL-3 with OpenSSL exception</p></td>
 <td><p>Executable used to retrieve files from the internet<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/zlib1g-dev">zlib1g-dev</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/zlib1g-dev">zlib1g-dev</a></p></td>
 <td><p>1:1.2.11.dfsg-0ubuntu2</p></td>
 <td><p>Zlib</p></td>
 <td><p>Dynamically linked by proteus-server<sup>a 0</sup></p></td>
@@ -652,6 +661,21 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p>9.4.0-1ubuntu1~18.04</p></td>
 <td><p>GPL-3 + others</p></td>
 <td><p>Executable used for compiling source code<sup>d 0</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/">miopen-hip-dev</a></p></td>
+<td><p>2.15.0.50000-49</p></td>
+<td><p>MIT</p></td>
+<td><p>Used for fp16 datatype<sup>a 4</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/">rocblas-dev</a></p></td>
+<td><p>2.42.0.50000-49</p></td>
+<td><p>MIT</p></td>
+<td><p>Used for fp16 datatype<sup>a 4</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/">rocm-device-libs</a></p></td>
+<td><p>1.0.0.50000-49</p></td>
+<td><p>MIT</p></td>
+<td><p>Dependency of migraphx<sup>a 4</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -888,52 +912,57 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p>GPL-2</p></td>
 <td><p>Executable used for test coverage measurement<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/nodejs/node">nodejs/node</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
+<td><p>cb18b0b</p></td>
+<td><p>MIT</p></td>
+<td><p>Dynamically linked by proteus-server for AMD GPU support<sup>a 4</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/nodejs/node">nodejs/node</a></p></td>
 <td><p>14.16.0</p></td>
 <td><p>MIT + others</p></td>
 <td><p>Executable used for web GUI development<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/opencv/opencv">opencv/opencv</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/opencv/opencv">opencv/opencv</a></p></td>
 <td><p>3.4.3</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Dynamically linked by proteus-server for image and video processing<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">open-telemetry/opentelemetry-cpp</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">open-telemetry/opentelemetry-cpp</a></p></td>
 <td><p>1.1.0</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Dynamically linked by proteus-server<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/pybind/pybind11">pybind/pybind11</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/pybind/pybind11">pybind/pybind11</a></p></td>
 <td><p>2.9.1</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Headers used to build Python bindings<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">jupp0r/prometheus-cpp</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">jupp0r/prometheus-cpp</a></p></td>
 <td><p>0.12.2</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by proteus-server for metrics<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/protocolbuffers/protobuf">protocolbuffers/protobuf</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/protocolbuffers/protobuf">protocolbuffers/protobuf</a></p></td>
 <td><p>3.19.4</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Dynamically linked by proteus-server and Vitis libraries<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/fpagliughi/sockpp">fpagliughi/sockpp</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/fpagliughi/sockpp">fpagliughi/sockpp</a></p></td>
 <td><p>e5c51b5</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Dynamically linked by proteus-server <sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/gabime/spdlog">gabime/spdlog</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/gabime/spdlog">gabime/spdlog</a></p></td>
 <td><p>1.8.2</p></td>
 <td><p>MIT</p></td>
 <td><p>Statically linked by proteus-server for logging<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Xilinx/Vitis-AI">Xilinx/Vitis-AI</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Xilinx/Vitis-AI">Xilinx/Vitis-AI</a></p></td>
 <td><p>latest</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>VART is dynamically linked by proteus-server<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/wg/wrk">wg/wrk</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/wg/wrk">wg/wrk</a></p></td>
 <td><p>4.1.0</p></td>
 <td><p>modified Apache 2.0</p></td>
 <td><p>Executable used for benchmarking proteus-server<sup>d 0</sup></p></td>
@@ -1112,9 +1141,9 @@ In the tables below, note the following symbols to indicate where a package (or 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r1.4.0.tar.gz">densebox_320_320-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
-<td><p>Apache 2.0</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv">Physicsworks.ogv</a></p></td>
+<td><p><a class="reference external" href="https://commons.wikimedia.org/wiki/File:Physicsworks.ogv">Wikimedia</a></p></td>
+<td><p><a class="reference external" href="https://creativecommons.org/licenses/by/3.0/legalcode">CC Attribution 3.0 Unported</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg">girl-1867092_640.jpg</a></p></td>
@@ -1122,40 +1151,75 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p><a class="reference external" href="https://pixabay.com/service/license/">Pixabay License</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv">Physicsworks.ogv</a></p></td>
-<td><p><a class="reference external" href="https://commons.wikimedia.org/wiki/File:Physicsworks.ogv">Wikimedia</a></p></td>
-<td><p><a class="reference external" href="https://creativecommons.org/licenses/by/3.0/legalcode">CC Attribution 3.0 Unported</a></p></td>
-<td><p>Used for testing<sup>d 0</sup></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip">pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz">vitis_ai_runtime_r1.3.0_image_video.tar.gz</a></p></td>
 <td><p>Xilinx Inc.</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Used for testing<sup>d 3</sup></p></td>
+<td><p>Used for testing<sup>d 0</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r1.4.0.tar.gz">densebox_320_320-u200-u250-r1.4.0.tar.gz</a></p></td>
+<td><p>Xilinx Inc.</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz">resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz</a></p></td>
 <td><p>Xilinx Inc.</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Used for testing<sup>d 0</sup></p></td>
+<td><p>Used for testing<sup>d 1</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc-u200-u250-r1.4.0.tar.gz">yolov3_voc-u200-u250-r1.4.0.tar.gz</a></p></td>
+<td><p>Xilinx Inc.</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 1</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip">pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip</a></p></td>
+<td><p>Xilinx Inc.</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 3</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip">tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip</a></p></td>
 <td><p>Xilinx Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 2</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz">vitis_ai_runtime_r1.3.0_image_video.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<tr class="row-even"><td><p><cite>resnet50-v2-7.onnx &lt;https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx&gt;</cite></p></td>
+<td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Used for testing<sup>d 0</sup></p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=yolov3_adas_pruned_0_9-u200-u250-r1.4.0.tar.gz">yolov3_adas_pruned_0_9-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
-<td><p>Apache 2.0</p></td>
-<td><p>Used for testing<sup>d 0</sup></p></td>
+<tr class="row-odd"><td><p><cite>val.txt &lt;https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt&gt;</cite></p></td>
+<td><p>AMD Inc.</p></td>
+<td><p>?</p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc-u200-u250-r1.4.0.tar.gz">yolov3_voc-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<tr class="row-even"><td><p><cite>yolov4_anchors.txt &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt&gt;</cite></p></td>
+<td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Used for testing<sup>d 0</sup></p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>yolov4.onnx &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx&gt;</cite></p></td>
+<td><p>ONNX</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>coco.names &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names&gt;</cite></p></td>
+<td><p>ONNX</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>bertsquad-10.onnx &lt;https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx&gt;</cite></p></td>
+<td><p>ONNX</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>run_onnx_squad &lt;https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py&gt;</cite></p></td>
+<td><p>AMD Inc.</p></td>
+<td><p>Apache 2.0</p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>inputs_amd.json &lt;https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json&gt;</cite></p></td>
+<td><p>AMD Inc.</p></td>
+<td><p>MIT</p></td>
+<td><p>Used for testing<sup>d 4</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -1189,7 +1253,7 @@ In the tables below, note the following symbols to indicate where a package (or 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 20, 2022.
+        Last updated on October 26, 2022.
       </span>
 
     </p>

@@ -1,6 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
-    Copyright 2022 Advanced Micro Devices Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ In the tables below, note the following symbols to indicate where a package (or 
     :superscript:`1`,Used if Vitis AI is added
     :superscript:`2`,Used if TF+ZenDNN is added
     :superscript:`3`,Used if PT+ZenDNN is added
+    :superscript:`4`,Used if MIGraphX is added
 
 Base Image
 ^^^^^^^^^^
@@ -78,6 +79,7 @@ The following packages (and any dependencies) are installed from Ubuntu's reposi
     :ubuntupackages:`libgoogle-glog-dev`,0.3.5-1,BSD-3,Dynamically linked by VART\ :superscript:`a 1`
     :ubuntupackages:`libjson-c-dev`,0.12.1-1.3ubuntu0.3,MIT,Dynamically linked by rt-engine\ :superscript:`a 1`
     :ubuntupackages:`libjsoncpp-dev`,1.7.4-3,MIT + others,Dynamically linked by proteus-server and Drogon\ :superscript:`a 0`
+    :ubuntupackages:`libnuma1`,2.0.11-2.1,LGPL-2,Dependency of migraphx\ :superscript:`a 4`
     :ubuntupackages:`libssl-dev`,1.1.1-1ubuntu2.1~18.04.13,Dual OpenSSL/SSLeay,Dynamically linked by Drogon\ :superscript:`a 0`
     :ubuntupackages:`locales`,2.27-3ubuntu1.2,GPL-2 + others,Executable used to set locale\ :superscript:`a 0`
     :ubuntupackages:`make`,4.1-9.1ubuntu1,GPL-3+,Executable used to build executables\ :superscript:`d 0`
@@ -106,6 +108,9 @@ The following packages (and any dependencies) are installed from a Personal Pack
 
     `gcc-9 <https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test>`__,9.4.0-1ubuntu1~18.04,GPL-3 + others,Executable used for compiling source code\ :superscript:`d 0`
     `g++-9 <https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test>`__,9.4.0-1ubuntu1~18.04,GPL-3 + others,Executable used for compiling source code\ :superscript:`d 0`
+    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.0/>`__,2.15.0.50000-49,MIT,Used for fp16 datatype\ :superscript:`a 4`
+    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.0/>`__,2.42.0.50000-49,MIT,Used for fp16 datatype\ :superscript:`a 4`
+    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.0/>`__,1.0.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
 
 PyPI
 ^^^^
@@ -167,6 +172,7 @@ The following packages are installed from Github.
     :github:`json-c/json-c`,0.15,MIT,Dynamically linked by Vitis libraries\ :superscript:`a 1`
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by proteus-server for base64 codec\ :superscript:`a 0`
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement\ :superscript:`d 0`
+    :github:`ROCmSoftwarePlatform/AMDMIGraphX`,cb18b0b,MIT,Dynamically linked by proteus-server for AMD GPU support\ :superscript:`a 4`
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development\ :superscript:`d 0`
     :github:`opencv/opencv`,3.4.3,Apache 2.0,Dynamically linked by proteus-server for image and video processing\ :superscript:`a 0`
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by proteus-server\ :superscript:`a 0`
@@ -244,12 +250,19 @@ The following files can be optionally downloaded by scripts and may be needed by
     :header: Name,Source,License,Usage
     :widths: auto
 
-    :xilinxdownload:`densebox_320_320-u200-u250-r1.4.0.tar.gz <densebox_320_320-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
-    `girl-1867092_640.jpg <https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg>`__,`Pixabay <https://pixabay.com/photos/girl-model-portrait-smile-smiling-1867092/>`__,`Pixabay License <https://pixabay.com/service/license/>`__,Used for testing\ :superscript:`d 0`
     `Physicsworks.ogv <https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv>`__,`Wikimedia <https://commons.wikimedia.org/wiki/File:Physicsworks.ogv>`__,`CC Attribution 3.0 Unported <https://creativecommons.org/licenses/by/3.0/legalcode>`__,Used for testing\ :superscript:`d 0`
-    :xilinxdownload:`pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip <pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 3`
-    :xilinxdownload:`resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz <resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
-    :xilinxdownload:`tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip <tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 2`
+    `girl-1867092_640.jpg <https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg>`__,`Pixabay <https://pixabay.com/photos/girl-model-portrait-smile-smiling-1867092/>`__,`Pixabay License <https://pixabay.com/service/license/>`__,Used for testing\ :superscript:`d 0`
     :xilinxdownload:`vitis_ai_runtime_r1.3.0_image_video.tar.gz <vitis_ai_runtime_r1.3.0_image_video.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
-    :xilinxdownload:`yolov3_adas_pruned_0_9-u200-u250-r1.4.0.tar.gz <yolov3_adas_pruned_0_9-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
-    :xilinxdownload:`yolov3_voc-u200-u250-r1.4.0.tar.gz <yolov3_voc-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
+    :xilinxdownload:`densebox_320_320-u200-u250-r1.4.0.tar.gz <densebox_320_320-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxdownload:`resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz <resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxdownload:`yolov3_voc-u200-u250-r1.4.0.tar.gz <yolov3_voc-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxdownload:`pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip <pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 3`
+    :xilinxdownload:`tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip <tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 2`
+    `resnet50-v2-7.onnx <https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    `val.txt <https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt>`,AMD Inc.,?,Used for testing\ :superscript:`d 4`
+    `yolov4_anchors.txt <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    `yolov4.onnx <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    `coco.names <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    `bertsquad-10.onnx <https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    `run_onnx_squad <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py>`,AMD Inc.,Apache 2.0,Used for testing\ :superscript:`d 4`
+    `inputs_amd.json <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json>`,AMD Inc.,MIT,Used for testing\ :superscript:`d 4`
