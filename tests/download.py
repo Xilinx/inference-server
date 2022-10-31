@@ -144,6 +144,23 @@ def download_http(model: Model):
     return new_file
 
 
+def get_new_file(model, old_files, new_files):
+    # if there are no new files, try to see if we can get the downloaded file
+    if not new_files:
+        for file in old_files:
+            # for single downloaded files, the file itself will be in the list
+            if file.endswith(str(model.filename)):
+                return file
+        raise ValueError(f"No new downloaded model could be found in {model.location}")
+    if len(new_files) == 1:
+        return new_files[0]
+    for file in new_files:
+        # check if file ends with any of the supported model file endings
+        if file.endswith(tuple(model.models)):
+            return file
+    raise ValueError(f"No new downloaded model could be found in {model.location}")
+
+
 def download(model: Model, args: argparse.Namespace):
     print(f"Downloading {model.url} to {model.location}")
     if args.dry_run:
@@ -170,20 +187,7 @@ def download(model: Model, args: argparse.Namespace):
     else:
         new_files = [file for file in files if file not in old_files]
 
-    # if there are no new files, try to see if we can get the downloaded file
-    if not new_files:
-        for file in old_files:
-            # for single downloaded files, the file itself will be in the list
-            if file.endswith(str(model.filename)):
-                return file
-        raise ValueError(f"No new downloaded model could be found in {model.location}")
-    if len(new_files) == 1:
-        return new_files[0]
-    for file in new_files:
-        # check if file ends with any of the supported model file endings
-        if file.endswith(tuple(model.models)):
-            return file
-    raise ValueError(f"No new downloaded model could be found in {model.location}")
+    return get_new_file(model, old_files, new_files)
 
 
 def downloader_one_file_from_archive(

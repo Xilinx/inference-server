@@ -264,6 +264,7 @@ def install_build_packages(manager):
             libcurl-devel \\
             # used by Vitis AI
             glog-devel \\
+            gflags-devel \\
             # used by Drogon and Vitis AI
             openssl-devel \\
             # used by TF/PT ZenDNN building
