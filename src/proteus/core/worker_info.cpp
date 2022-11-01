@@ -126,22 +126,32 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   try {
     auto buffer_num = worker->allocate(kNumBufferAuto);
     this->buffer_num_ += buffer_num;
+  } catch (const std::exception& e) {
+    if (workers_.empty()) {
+      this->batchers_.clear();
+    }
+    throw external_error(e.what());
   } catch (...) {
     if (workers_.empty()) {
       this->batchers_.clear();
     }
-    throw;
+    throw runtime_error("Unknown error occurred");
   }
   this->max_buffer_num_ =
     max_buffers == UINT_MAX ? UINT_MAX : this->max_buffer_num_ + max_buffers;
 
   try {
     worker->acquire(parameters);
+  } catch (const std::exception& e) {
+    if (workers_.empty()) {
+      this->batchers_.clear();
+    }
+    throw external_error(e.what());
   } catch (...) {
     if (workers_.empty()) {
       this->batchers_.clear();
     }
-    throw;
+    throw runtime_error("Unknown error occurred");
   }
 
   for (const auto& batcher : this->batchers_) {

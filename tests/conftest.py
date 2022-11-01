@@ -24,41 +24,13 @@ import pytest
 from pytest_cpp.plugin import CppItem
 from xprocess import ProcessStarter
 
-import proteus
-
 from helper import build_path, kDefaultHttpPort, root_path, run_path
-
-proteus_command = []
-http_server_addr = ""
-
-
-@pytest.hookimpl
-def pytest_sessionstart(session):
-    global proteus_command
-    global http_server_addr
-
-    proteus_command = [str(run_path)]
-    http_port = session.config.getoption("--http_port")
-    proteus_command.extend(["--http-port", str(http_port)])
-    proteus_command.extend(["--model-repository", root_path / "external/repository"])
-
-    http_server_addr = "http://" + get_http_addr(session.config)
-    addr = socket.gethostbyname(session.config.getoption("hostname"))
-    ip_addr = ipaddress.ip_address(addr)
-    if not ip_addr.is_loopback:
-        client = proteus.HttpClient(http_server_addr)
-        if not client.serverLive():
-            pytest.exit(f"No HTTP server found at {http_server_addr}", returncode=1)
 
 
 @pytest.hookimpl
 def pytest_addoption(parser):
     parser.addoption("--hostname", action="store", default="127.0.0.1")
     parser.addoption("--http_port", action="store", default=kDefaultHttpPort)
-    parser.addoption("--fpgas", action="store", default="")
-    parser.addoption("--benchmark", action="store", default="skip")
-    parser.addoption("--perf", action="store", default="skip")
-    parser.addoption("--cpp", action="store", default="all")
 
     # TODO(varunsh): this is currently not exposed via the test runner script
     parser.addoption("--skip-extensions", nargs="+", default=[])
@@ -91,18 +63,8 @@ def add_cpp_markers(items, cpp_mode):
     """
     for item in items:
         if not isinstance(item, CppItem):
-            if cpp_mode == "only":
-                skip_bench = pytest.mark.skip(
-                    reason=f"Not a cpp test: use --cpp [all, skip] to run"
-                )
-                item.add_marker(skip_bench)
             continue
-        if cpp_mode == "skip":
-            skip_bench = pytest.mark.skip(
-                reason=f"A cpp test: use --cpp [all, only] to run"
-            )
-            item.add_marker(skip_bench)
-            continue
+        item.add_marker(pytest.mark.cpp())
         test_dir = str(item.fspath).replace(str(build_path), str(root_path))
         # this test naming syntax is defined in cmake/AddTest.cmake
         test_file = "test_" + item.fspath.basename.split("-")[1]
@@ -151,10 +113,13 @@ def filter_tests(items, mode, label):
 
 
 def pytest_collection_modifyitems(config, items):
-    global http_server_addr
-    global proteus_command
+    import proteus
 
-    add_cpp_markers(items, config.getoption("--cpp"))
+    http_address = get_http_addr(config)
+    http_server_addr = "http://" + http_address
+
+    # add_cpp_markers(items, config.getoption("--cpp"))
+    add_cpp_markers(items, "all")
 
     client = proteus.HttpClient(http_server_addr)
     if not client.serverLive():
@@ -164,22 +129,7 @@ def pytest_collection_modifyitems(config, items):
         while not client.serverLive():
             time.sleep(1)
 
-    filter_tests(items, config.getoption("--benchmark"), "benchmark")
-    filter_tests(items, config.getoption("--perf"), "perf")
-
-    fpgas_option = str(config.getoption("--fpgas"))
-    if fpgas_option:
-        fpga_arg: str = fpgas_option
-        try:
-            # parse --fpga options from DPUCADF8H:1,DPUCAHX8H:2... to {"DPUCADF8H": 1, "DPUCAHX8H": 2, ...}
-            fpgas_avail = dict(
-                (fpga[0], int(fpga[1]))
-                for fpga in [x.split(":") for x in fpga_arg.split(",")]
-            )
-        except:
-            fpgas_avail = {}
-    else:
-        fpgas_avail = {}
+    fpgas_avail = {}
 
     client = proteus.HttpClient(http_server_addr)
     for item in items:
@@ -192,7 +142,7 @@ def pytest_collection_modifyitems(config, items):
                     fpgas_avail[fpga_i] = fpga_num_i
                 if fpga_i not in fpgas_avail or fpga_num_i > fpgas_avail[fpga_i]:
                     skip_fpga = pytest.mark.skip(
-                        reason=f"Needs {fpga_num_i} {fpga_i} FPGA(s). Use --fpgas {fpga_i}:{fpga_num_i} to specify"
+                        reason=f"Needs {fpga_num_i} {fpga_i} FPGA(s) but not found on the server"
                     )
                     item.add_marker(skip_fpga)
 
@@ -215,12 +165,17 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(scope="class")
-def server(xprocess):
-    global http_server_addr
-    global proteus_command
+def server(xprocess, request):
+    import proteus
 
-    client = proteus.HttpClient(http_server_addr)
-    if not client.serverLive():
+    address = get_http_addr(request.config)
+    client = proteus.HttpClient("http://" + address)
+    try:
+        ready = client.serverReady()
+    except proteus.ConnectionError:
+        ready = False
+
+    if not ready:
 
         class Starter(ProcessStarter):
             pattern = "HTTP server starting at port"
@@ -228,10 +183,15 @@ def server(xprocess):
             terminate_on_interrupt = True
 
             def startup_check(self):
-                while not client.serverLive():
-                    time.sleep(1)
+                proteus.waitUntilServerReady(client)
                 return True
 
+            proteus_command = [str(run_path)]
+            http_port = request.config.getoption("--http_port")
+            proteus_command.extend(["--http-port", str(http_port)])
+            proteus_command.extend(
+                ["--model-repository", root_path / "external/artifacts/repository"]
+            )
             args = proteus_command
 
         xprocess.ensure("server", Starter)
@@ -248,6 +208,8 @@ def server(xprocess):
 
 @pytest.fixture(scope="class")
 def load(request, server):
+    import proteus
+
     test_model: str = request.cls.model
     test_parameters: dict = request.cls.parameters
 
@@ -279,13 +241,37 @@ def load(request, server):
 
 
 def rest_client(request):
+    import proteus
+
     address = get_http_addr(request.config)
     return proteus.HttpClient("http://" + address)
 
 
 def ws_client(request):
+    import proteus
+
     address = get_http_addr(request.config)
     return proteus.WebSocketClient("ws://" + address, "http://" + address)
+
+
+# we can eventually parameterize the clients with a fixture like this
+# @pytest.fixture(scope="class")
+# def client(request):
+#     import proteus
+
+#     http_address = get_http_addr(request.config)
+#     if request.param == "http":
+#         http_client = proteus.HttpClient("http://" + http_address)
+#         if not http_client.serverLive():
+#             pytest.skip("HTTP client could not connect to server")
+#         return http_client
+#     elif request.param == "websocket":
+#         websocket_client = proteus.WebSocketClient("ws://" + http_address, "http://" + http_address)
+#         if not websocket_client.serverLive():
+#             pytest.skip("Websocket client could not connect to server")
+#         return websocket_client
+#     else:
+#         raise ValueError(f"Unknown value for client: {request.param}")
 
 
 @pytest.fixture(scope="class")
