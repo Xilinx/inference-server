@@ -59,6 +59,10 @@ def run_tests(args: argparse.Namespace, unknown_args: list):
         str(root / "tests"),
         "-ra",
         "--tb=short",
+        "--http-port",
+        str(args.http_port),
+        "--hostname",
+        args.hostname,
     ]
 
     marker_filter = get_default_markers(args, unknown_args)

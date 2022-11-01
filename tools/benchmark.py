@@ -960,7 +960,7 @@ def pytest_benchmarks(config: Config, quiet=False):
             sys.exit(1)
     cmd = (
         os.getenv("PROTEUS_ROOT")
-        + f"/tests/test.sh --benchmark only --hostname {hostname} --http_port {port}"
+        + f"/tests/test.sh --benchmark only --hostname {hostname} --http-port {port}"
     )
     if config.benchmarks:
         cmd += f' -k "{config.benchmarks}"'

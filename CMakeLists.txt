@@ -166,7 +166,6 @@ endif()
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)
   set(PROTEUS_ENABLE_TRACING OFF)
-  set(PROTEUS_BUILD_TESTING OFF)
 endif()
 
 configure_file(

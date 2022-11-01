@@ -21,8 +21,11 @@ import subprocess
 import time
 
 import pytest
+import yaml
 from pytest_cpp.plugin import CppItem
 from xprocess import ProcessStarter
+
+import proteus
 
 from helper import build_path, kDefaultHttpPort, root_path, run_path
 
@@ -30,7 +33,8 @@ from helper import build_path, kDefaultHttpPort, root_path, run_path
 @pytest.hookimpl
 def pytest_addoption(parser):
     parser.addoption("--hostname", action="store", default="127.0.0.1")
-    parser.addoption("--http_port", action="store", default=kDefaultHttpPort)
+    parser.addoption("--http-port", action="store", default=kDefaultHttpPort)
+    parser.addoption("--runtime-config", action="store", default="./tests/conf.yaml")
 
     # TODO(varunsh): this is currently not exposed via the test runner script
     parser.addoption("--skip-extensions", nargs="+", default=[])
@@ -113,8 +117,6 @@ def filter_tests(items, mode, label):
 
 
 def pytest_collection_modifyitems(config, items):
-    import proteus
-
     http_address = get_http_addr(config)
     http_server_addr = "http://" + http_address
 
@@ -166,8 +168,6 @@ def pytest_collection_modifyitems(config, items):
 
 @pytest.fixture(scope="class")
 def server(xprocess, request):
-    import proteus
-
     address = get_http_addr(request.config)
     client = proteus.HttpClient("http://" + address)
     try:
@@ -187,7 +187,7 @@ def server(xprocess, request):
                 return True
 
             proteus_command = [str(run_path)]
-            http_port = request.config.getoption("--http_port")
+            http_port = request.config.getoption("--http-port")
             proteus_command.extend(["--http-port", str(http_port)])
             proteus_command.extend(
                 ["--model-repository", root_path / "external/artifacts/repository"]
@@ -208,8 +208,6 @@ def server(xprocess, request):
 
 @pytest.fixture(scope="class")
 def load(request, server):
-    import proteus
-
     test_model: str = request.cls.model
     test_parameters: dict = request.cls.parameters
 
@@ -241,15 +239,11 @@ def load(request, server):
 
 
 def rest_client(request):
-    import proteus
-
     address = get_http_addr(request.config)
     return proteus.HttpClient("http://" + address)
 
 
 def ws_client(request):
-    import proteus
-
     address = get_http_addr(request.config)
     return proteus.WebSocketClient("ws://" + address, "http://" + address)
 
@@ -257,8 +251,6 @@ def ws_client(request):
 # we can eventually parameterize the clients with a fixture like this
 # @pytest.fixture(scope="class")
 # def client(request):
-#     import proteus
-
 #     http_address = get_http_addr(request.config)
 #     if request.param == "http":
 #         http_client = proteus.HttpClient("http://" + http_address)
@@ -283,3 +275,12 @@ def assign_client(request):
 
     request.cls.ws_client = None
     request.cls.rest_client = None
+
+
+@pytest.fixture(scope="session")
+def runtime_config(request):
+    config_file_path = request.config.getoption("runtime_config")
+    with open(config_file_path, "r") as f:
+        config = yaml.safe_load(f)
+        assert isinstance(config, dict)
+        yield config
