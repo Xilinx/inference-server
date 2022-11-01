@@ -96,9 +96,9 @@ def main(args: argparse.Namespace, unknown_args: list):
     # strip any quotes around arguments
     unknown_args = [x.strip('"') for x in unknown_args]
 
-    if args.mode in ["test", "all"]:
+    if args.mode in ["tests", "all"]:
         run_tests(args, unknown_args)
-    elif args.mode in ["examples", "all"]:
+    if args.mode in ["examples", "all"]:
         run_examples(args, unknown_args)
 
 

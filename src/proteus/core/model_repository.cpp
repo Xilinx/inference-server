@@ -24,6 +24,7 @@
 #include <thread>      // for sleep_for
 
 #include "model_config.pb.h"                // for Config, InferP...
+#include "proteus/core/api.hpp"             // for modelLoad
 #include "proteus/core/exceptions.hpp"      // for file_not_found...
 #include "proteus/core/manager.hpp"         // for Manager
 #include "proteus/core/predict_api.hpp"     // for RequestParameters
@@ -75,6 +76,10 @@ void ModelRepository::setRepository(const std::string& repository) {
   repo_.setRepository(repository);
 }
 
+void ModelRepository::enableRepositoryMonitoring(bool use_polling) {
+  repo_.enableRepositoryMonitoring(use_polling);
+}
+
 void ModelRepository::ModelRepositoryImpl::setRepository(
   const std::string& repository_path) {
   repository_ = repository_path;
@@ -101,16 +106,18 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   inference::Config config;
 
   int fileDescriptor = open(config_path.c_str(), O_RDONLY);
-
+  Logger logger{Loggers::kServer};
   if (fileDescriptor < 0) {
-    throw file_not_found_error("Config file could not be opened");
+    throw file_not_found_error("Config file " + config_path.string() +
+                               " could not be opened");
   }
 
   google::protobuf::io::FileInputStream fileInput(fileDescriptor);
   fileInput.SetCloseOnDelete(true);
 
   if (!google::protobuf::TextFormat::Parse(&fileInput, &config)) {
-    throw file_read_error("Config file could not be parsed");
+    throw file_read_error("Config file " + config_path.string() +
+                          " could not be parsed");
   }
 
   const auto& inputs = config.inputs();
@@ -135,6 +142,10 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
 
   if (config.platform() == "tensorflow_graphdef") {
     parameters->put("worker", "tfzendnn");
+  } else if (config.platform() == "pytorch_torchscript") {
+    parameters->put("worker", "ptzendnn");
+  } else if (config.platform() == "onnx_onnxv1") {
+    parameters->put("worker", "migraphx");
   } else if (config.platform() == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
   } else {
@@ -192,6 +203,27 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       break;
     default:
       PROTEUS_LOG_ERROR(logger, "Should never happen");
+  }
+}
+
+void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
+  bool use_polling) {
+  file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
+  listener_ = std::make_unique<proteus::UpdateListener>();
+
+  file_watcher_->addWatch(repository_.string(), listener_.get(), true);
+  file_watcher_->watch();
+
+  Logger logger{Loggers::kServer};
+  for (const auto& path : fs::directory_iterator(repository_)) {
+    if (path.is_directory()) {
+      auto model = path.path().filename();
+      try {
+        modelLoad(model, nullptr);
+      } catch (const proteus::runtime_error&) {
+        PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
+      }
+    }
   }
 }
 

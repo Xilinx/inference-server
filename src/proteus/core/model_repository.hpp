@@ -36,6 +36,7 @@ class ModelRepository {
                         RequestParameters* parameters);
 
   static void setRepository(const std::string& repository);
+  static void enableRepositoryMonitoring(bool use_polling);
 
  private:
   class ModelRepositoryImpl {
@@ -45,8 +46,12 @@ class ModelRepository {
 
     void setRepository(const std::string& repository);
 
+    void enableRepositoryMonitoring(bool use_polling);
+
    private:
     std::filesystem::path repository_;
+    std::unique_ptr<efsw::FileWatcher> file_watcher_;
+    std::unique_ptr<UpdateListener> listener_;
   };
 
   inline static ModelRepositoryImpl repo_;

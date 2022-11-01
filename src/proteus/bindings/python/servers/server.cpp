@@ -19,9 +19,10 @@
 
 #include "proteus/servers/server.hpp"
 
-#include <pybind11/cast.h>      // for arg
-#include <pybind11/pybind11.h>  // for class_, init
-#include <pybind11/stl.h>       // IWYU pragma: keep
+#include <pybind11/cast.h>            // for arg
+#include <pybind11/pybind11.h>        // for class_, init
+#include <pybind11/stl.h>             // IWYU pragma: keep
+#include <pybind11/stl/filesystem.h>  // for filesystem
 
 #include "proteus/bindings/python/helpers/docstrings.hpp"
 
@@ -37,7 +38,11 @@ void wrapServer(py::module_ &m) {
     .def("stopHttp", &Server::stopHttp, DOCS(Server, stopHttp))
     .def("startGrpc", &Server::startGrpc, py::arg("port"),
          DOCS(Server, startGrpc))
-    .def("stopGrpc", &Server::stopGrpc, DOCS(Server, stopGrpc));
+    .def("stopGrpc", &Server::stopGrpc, DOCS(Server, stopGrpc))
+    .def("setModelRepository", &Server::setModelRepository, py::arg("path"),
+         DOCS(Server, setModelRepository))
+    .def("enableRepositoryMonitoring", &Server::enableRepositoryMonitoring,
+         py::arg("use_polling"), DOCS(Server, enableRepositoryMonitoring));
 }
 
 }  // namespace proteus

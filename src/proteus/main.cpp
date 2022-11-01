@@ -103,29 +103,11 @@ int main(int argc, char* argv[]) {
 
   proteus::Logger logger{proteus::Loggers::kServer};
 
-  proteus::ModelRepository::setRepository(model_repository);
+  server.setModelRepository(model_repository);
   PROTEUS_LOG_INFO(logger, "Using model repository: " + model_repository);
 
-  std::unique_ptr<efsw::FileWatcher> file_watcher;
-  std::unique_ptr<proteus::UpdateListener> listener;
   if (enable_repository_watcher) {
-    file_watcher = std::make_unique<efsw::FileWatcher>(use_polling_watcher);
-    listener = std::make_unique<proteus::UpdateListener>();
-
-    file_watcher->addWatch(model_repository, listener.get(), true);
-    file_watcher->watch();
-
-    proteus::NativeClient client;
-    for (const auto& path : fs::directory_iterator(model_repository)) {
-      if (path.is_directory()) {
-        auto model = path.path().filename();
-        try {
-          client.modelLoad(model, nullptr);
-        } catch (const proteus::runtime_error&) {
-          PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
-        }
-      }
-    }
+    server.enableRepositoryMonitoring(use_polling_watcher);
   }
 
 #ifdef PROTEUS_ENABLE_GRPC

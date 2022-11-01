@@ -23,8 +23,18 @@
 
 class BaseFixture : public testing::Test {
  public:
+  // because of the session scoped HTTP fixture, the server needs to be static
   inline static proteus::Server server_;
-  // proteus::Server server_;
+
+ protected:
+  void SetUp() override {
+    const auto* root = std::getenv("PROTEUS_ROOT");
+    if (root == nullptr) {
+      throw proteus::environment_not_set_error("PROTEUS_ROOT is not set");
+    }
+    server_.setModelRepository(std::string{root} +
+                               "/external/artifacts/repository");
+  }
 };
 
 template <typename T>
@@ -36,6 +46,7 @@ class GrpcFixture : public BaseFixture {
   void SetUp() override {
     client_ = std::make_unique<proteus::GrpcClient>("localhost:50051");
     if (!client_->serverLive()) {
+      BaseFixture::SetUp();
       server_.startGrpc(50051);
       started_ = true;
       while (!client_->serverLive()) {
