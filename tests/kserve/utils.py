@@ -43,14 +43,22 @@ def get_cluster_ip():
     return os.environ.get("KSERVE_INGRESS_HOST_PORT", cluster_ip)
 
 
-def predict_str(
+def predict(
     service_name,
-    input_json,
+    data,
     namespace,
     protocol_version="v1",
     version=constants.KSERVE_V1BETA1_VERSION,
     model_name=None,
 ):
+
+    if isinstance(data, dict):
+        input_json = json.dumps(data)
+    elif isinstance(data, os.PathLike):
+        with open(data, "r") as f:
+            input_json = json.dumps(json.load(f))
+    else:
+        raise ValueError("Unknown data passed to predict")
     kfs_client = KServeClient(
         config_file=os.environ.get("KUBECONFIG", "~/.kube/config")
     )
@@ -81,24 +89,3 @@ def predict_str(
     )
     preds = json.loads(response.content.decode("utf-8"))
     return preds
-
-
-def predict(
-    service_name,
-    input_json,
-    namespace,
-    protocol_version="v1",
-    version=constants.KSERVE_V1BETA1_VERSION,
-    model_name=None,
-):
-    with open(input_json) as json_file:
-        data = json.load(json_file)
-
-        return predict_str(
-            service_name=service_name,
-            input_json=json.dumps(data),
-            namespace=namespace,
-            protocol_version=protocol_version,
-            version=version,
-            model_name=model_name,
-        )

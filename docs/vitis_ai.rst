@@ -32,5 +32,19 @@ You can use ``xbutil validate --device <device id>`` to confirm that your FPGA i
 If this executable is not on your PATH, it should be in ``/opt/xilinx/xrt/bin``.
 
 You will also need the XCLBINs corresponding to your card on the host.
-By default, these will be placed in ``/opt/xilinx/overlaybins`` and will be mounted into the container if using Docker with the ``proteus`` script.
-The ``XLNX_VART_FIRMWARE`` environment variable should point to the directory containing the XCLBINs needed for your FPGA.
+By default, these will be placed in ``/opt/xilinx/overlaybins`` and will be mounted into the development container if using Docker with the ``proteus`` script.
+The ``XLNX_VART_FIRMWARE`` environment variable in the container should point to the directory containing the XCLBINs needed for your FPGA.
+
+Build an image
+--------------
+
+To build an image with Vitis AI enabled, you need to add the following flag ``--vitis`` to the ``proteus dockerize`` command.
+For example:
+
+.. code-block:: console
+
+    # build the dev image $(whoami)/proteus-dev-vitis:latest
+    $ ./proteus dockerize --vitis --suffix="-vitis"
+
+    # build the production image $(whoami)/proteus-vitis:latest
+    $ ./proteus dockerize --vitis --suffix="-vitis" --production

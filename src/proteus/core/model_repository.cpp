@@ -219,7 +219,8 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
     if (path.is_directory()) {
       auto model = path.path().filename();
       try {
-        modelLoad(model, nullptr);
+        RequestParameters params;
+        proteus::modelLoad(model, &params);
       } catch (const proteus::runtime_error&) {
         PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
       }

@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2021 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,27 +19,34 @@
 KServe
 ======
 
-The AMD Inference Server can be used with `KServe <https://github.com/kserve/kserve>`__ to deploy the server on a Kubernetes cluster.
+You can use the AMD Inference Server with `KServe <https://github.com/kserve/kserve>`__ to deploy the server on a Kubernetes cluster.
 
-Setting up KServe
------------------
+Set up Kubernetes and KServe
+----------------------------
+
+To use KServe, you will need a Kubernetes cluster.
+There are many ways to set up and configure a Kubernetes cluster depending on your use cases.
+Instructions for installing and configuring Kubernetes are out of this scope.
 
 Install KServe using the `instructions <https://kserve.github.io/website/admin/serverless/>`__ provided by KServe.
 We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
-Once KServe is installed, verify basic functionality of the cluster using the `basic tutorial <https://kserve.github.io/website/get_started/first_isvc/>`__ provided by KServe.
+Once KServe is installed, verify basic functionality of the cluster using KServe's `basic tutorial <https://kserve.github.io/website/get_started/first_isvc/>`__.
 If this succeeds, KServe should be installed correctly.
+KServe installation help and debugging are also out of scope for these instructions.
+If you run into problems, reach out to the KServe project.
 
 If you want to use FPGAs for your inferences, install the `Xilinx FPGA Kubernetes plugin <https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-fpga-device-plugin>`__.
 This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.
-You may also wish to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
+
+You may also want to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
 Refer to the documentation for these respective projects on installation details.
-The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`__ project may be a good starting point to install some of these tools.
+The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`__ project is a good starting point to install some of these tools.
 
 
-Building the Server
--------------------
+Build the AMD Inference Server Image
+------------------------------------
 
-To use with KServe, we will need to build the production container.
+To use with KServe, you will need to build or pull the production container.
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 To build the production container [#f1]_:
 
@@ -46,87 +54,41 @@ To build the production container [#f1]_:
 
     # create a dockerfile
     $ python3 docker/generate.py
-    $ ./proteus dockerize --production
+    $ ./proteus dockerize --production [platform flags]
 
-Depending on what platforms you want to support, add the appropriate flags to enable ZenDNN or Vitis AI.
+Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI`, :ref:`ZenDNN` or MIGraphX.
 Refer to the help or the platform documentation for more information on how to build the right image.
-At this time, enabling :ref:`ZenDNN <zendnn>` is recommended.
 The resulting image must be pushed to a Docker registry.
 If you don't have access to one, you can start a local registry using `these instructions <https://docs.docker.com/registry/deploying/>`__ from Docker.
 Make sure to set up a secure registry if you need access to the registry from more than one host.
-Once the image is pushed to the registry, verify that it can be pulled with Docker from all hosts in the Kubernetes cluster.
 
-Starting the Service
---------------------
-
-Services in Kubernetes can be started with YAML configuration files.
-KServe provides two CRDs that we will use: ``InferenceService`` and ``TrainedModel``.
-A sample configuration file to start the Inference Server is provided below:
-
-.. code-block:: yaml
-
-    ---
-    apiVersion: serving.kserve.io/v1beta1
-    kind: InferenceService
-    metadata: null
-    annotations:
-      autoscaling.knative.dev/target: '5'
-    labels:
-      controller-tools.k8s.io: '1.0'
-      app: example-amdserver-multi-isvc
-    name: example-amdserver-multi-isvc
-    spec: null
-    predictor:
-      containers:
-        - name: custom
-          image: 'registry/image:version'
-          env:
-            - name: MULTI_MODEL_SERVER
-              value: 'true'
-          args:
-            - proteus-server
-            - '--http-port=8080'
-            - '--grpc-port=9000'
-          ports:
-            - containerPort: 8080
-              protocol: TCP
-            - containerPort: 9000
-              protocol: TCP
-    ---
-
-Some comments about this configuration file:
-
-#. The autoscaling target defines how the service should be autoscaled in response to incoming requests. The value of 5 indicates that additional containers should be deployed when the number of concurrent requests exceeds 5.
-#. The image string should point to image in the registry that you created earlier. In some cases, Kubernetes may fail to pull the image, even if it's tagged with the right version due to some issues with mapping the version to the image. In these cases, you can use the SHA value of the image directly to skip this lookup. In this case, the image string would be ``registry/image@sha256:<SHA>``.
-
-This service can be deployed on the cluster using:
+To push the image to the registry, re-tag the image with the registry and push it.
+For example, if you're using the local registry approach from above, the registry name would be ``localhost:5000`` by default.
 
 .. code-block:: console
 
-    $ kubectl apply -f <path to yaml file>
+    docker tag $(whoami)/<image> <registry>/<image> && docker push <registry>/<image>
 
-Next, we will deploy the model we want to run.
-This use case takes advantage of the multi-model serving feature of KServe.
+Once the image is pushed to the registry, verify that it can be pulled with Docker from all nodes in the Kubernetes cluster.
+In some cases, Kubernetes may fail to pull the image, even if it's tagged with the right version due to some issues with mapping the version to the image.
+If you run into this issue, you can use the SHA value of the image directly to skip this lookup.
+In that case, the image string you would use in the YAML configuration files would be of the form ``<registry>/<image>@sha256:<SHA>``.
+The SHA is visible when you push the image to the registry or you can get it by inspecting the image:
 
-.. code-block:: yaml
+.. code-block:: console
 
-    ---
-    apiVersion: "serving.kserve.io/v1alpha1"
-    kind: TrainedModel
-    metadata:
-      name: mnist
-    spec:
-      inferenceService: example-amdserver-multi-isvc
-      model:
-        framework: tensorflow
-        storageUri: url/to/model
-        memory: 1Gi
-    ---
+    docker inspect --format='{{index .RepoDigests 0}}' <registry>/<image>
 
-The string passed to the ``name`` field is significant and identifies the model name.
-It will be used as the endpoint to make requests.
-The string passed to ``inferenceService`` should match the name used in the InferenceServer YAML.
-The model should be stored in a cloud storage location compatible with KServe and it should have the following structure:
+Start an inference service
+--------------------------
+
+Services in Kubernetes can be started with YAML configuration files.
+To add a service to your cluster, create the configuration file and use ``kubectl apply -f <path to yaml file>``.
+KServe provides a number of Custom Resource Definitions (CRDs) that you can use to serve inferences with the AMD Inference Server.
+The current recommended approach from KServe is to use the ``ServingRuntime`` method.
+
+As you start an inference service, you will need models to serve.
+The model format for the AMD Inference Server is the following:
 
 .. code-block:: text
 
@@ -136,14 +98,200 @@ The model should be stored in a cloud storage location compatible with KServe an
     │  │  ├─ saved_model.x
     │  ├─ config.pbtxt
 
-The names for the files (``saved_model.x`` and ``config.pbtxt``) must match as above.
-The file extension for ``tfzendnn_graphdef`` and ``vitis_xmodel`` models should be ``.pb`` and ``.xmodel``, respectively.
+The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server.
+This name is used to name the endpoint used to make inference requests to.
+Under this directory, there must be a directory named ``1/`` containing the model file itself and a text file named ``config.pbtxt``.
+The model file must be named ``saved_model`` and the file extension depends on the type of the model.
+The ``config.pbtxt`` file contains metadata for the model.
+Consider this example of an MNIST TensorFlow model:
 
-As before, we can deploy this using:
+.. code-block:: text
 
-.. code-block:: console
+    name: "mnist"
+    platform: "tensorflow_graphdef"
+    inputs [
+      {
+        name: "images_in"
+        datatype: "FP32"
+        shape: [28,28,1]
+      }
+    ]
+    outputs [
+      {
+        name: "flatten/Reshape"
+        datatype: "FP32"
+        shape: [10]
+      }
+    ]
 
-    $ kubectl apply -f <path to yaml file>
+The name must match the name of the model directory, i.e. ``model_a``.
+The platform identifies the type of the model and determines the file extension of the model file.
+The supported platforms are:
+
+.. csv-table::
+    :header: Platform,Model file extension
+    :widths: 90, 10
+    :width: 22em
+
+    ``tensorflow_graphdef``,``.pb``
+    ``pytorch_torchscript``,``.pt``
+    ``vitis_xmodel``,``.xmodel``
+    ``onnx_onnxv1``,``.onnx``
+
+The inputs and outputs define the list of input and output tensors for the model.
+The names of the tensors may be significant if the platform needs them to perform inference.
+
+You can put the model up on any of the cloud storage platforms that KServe supports like GCS, S3 and HTTP.
+If you use HTTP, the model should be zipped.
+Other archive formats such as ``.tar.gz`` may not work as expected.
+Wherever you store it, the URI will be needed to start inference services.
+
+Serving Runtime
+^^^^^^^^^^^^^^^
+
+KServe defines two CRDs called ``ServingRuntime`` and ``ClusterServingRuntime``, where the only difference is that the former is namespace-scoped and the latter is cluster-scoped.
+You can see more information about these CRDs in `KServe's documentation <https://kserve.github.io/website/0.9/modelserving/servingruntimes/`__.
+The AMD Inference Server is not included by default in the standard KServe installation but you can add the runtime to your cluster.
+A sample ``ClusterServingRuntime`` definition is provided below.
+
+.. code-block:: yaml
+
+    ---
+    apiVersion: serving.kserve.io/v1alpha1
+    kind: ClusterServingRuntime
+    metadata:
+      # this is the name of the runtime to add
+      name: kserve-amdserver
+    spec:
+      supportedModelFormats:
+        # depending on the image you're using, and which platforms are added,
+        # the supported formats could be different. For example, this assumes
+        # that a ZenDNN image was created with both TF+ZenDNN and PT+ZenDNN
+        # support
+        - name: tensorflow
+          version: "2"
+        - name: pytorch
+          version: "1"
+      protocolVersions:
+        # depending on the image you're using, it may not support both HTTP/REST
+        # and gRPC, respectively. By default, both protocols are supported.
+        - v2
+        - grpc-v2
+      containers:
+        - name: kserve-container
+          # provide the image name. The usual rules around images apply (see
+          # above in the section "Build the AMD Inference Server Image")
+          image: <your image>
+          # when the image starts, it will automatically launch the server
+          # executable with the following arguments. While the ports used by
+          # the server are configurable, there are some assumptions in KServe
+          # with the default port values so it is recommended to not change them
+          args:
+            - proteus-server
+            - --model-repository=/mnt/models
+            - --enable-repository-watcher
+            - --grpc-port=9000
+            - --http-port=8080
+          # the resources allowed to the service. If the image needs access to
+          # hardware like FPGAs or GPUs, then those resources need to be added
+          # here so Kubernetes can schedule pods on the appropriate nodes.
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+
+Adding a ``ClusterServingRuntime`` or a ``ServingRuntime`` is a one-time action per cluster.
+Once it's added, you can launch inference services using the runtime like:
+
+.. code-block:: yaml
+
+    ---
+    apiVersion: "serving.kserve.io/v1beta1"
+    kind: InferenceService
+    metadata:
+      annotations:
+        # The autoscaling target defines how the service should be auto-scale in
+        # response to incoming requests. The value of 5 indicates that
+        # additional containers should be deployed when the number of concurrent
+        # requests exceeds 5.
+        autoscaling.knative.dev/target: "5"
+      labels:
+        controller-tools.k8s.io: "1.0"
+        app: example-amdserver-runtime-isvc
+      name: example-amdserver-runtime-isvc
+    spec:
+      predictor:
+        model:
+          modelFormat:
+            name: tensorflow
+          storageUri: url/to/model
+          # while it's optional for KServe, the runtime should be explicitly
+          # specified to make sure the runtime you've added for the AMD Inference
+          # Server is used
+          runtime: kserve-amdserver
+
+Custom container
+^^^^^^^^^^^^^^^^
+
+This approach uses an older method of starting inference services using the ``InferenceService`` and ``TrainedModel`` CRDs, where you start a custom container directly and add models to it.
+Initially, no models are loaded on the server as it uses the multi-model serving mechanism of KServe that was a precursor to ModelMesh to support inference servers running multiple models.
+Once an ``InferenceService`` is up, you can load models to it by applying one or more ``TrainedModel`` CRDs.
+Each such load adds a model to the server and makes it available for inference requests.
+A sample YAML file is provided below.
+
+.. code-block:: yaml
+
+    ---
+    apiVersion: serving.kserve.io/v1beta1
+    kind: InferenceService
+    metadata: null
+    annotations:
+      # The autoscaling target defines how the service should be auto-scaled in
+      # response to incoming requests. The value of 5 indicates that additional
+      # containers should be deployed when the number of concurrent requests
+      # exceeds 5.
+      autoscaling.knative.dev/target: '5'
+    labels:
+      controller-tools.k8s.io: '1.0'
+      app: example-amdserver-multi-isvc
+    name: example-amdserver-multi-isvc
+    spec: null
+    predictor:
+      containers:
+        - name: custom
+          image: <your image>
+          env:
+            - name: MULTI_MODEL_SERVER
+              value: 'true'
+          args:
+            - proteus-server
+            - --model-repository=/mnt/models
+            - --http-port=8080
+            - --grpc-port=9000
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 9000
+              protocol: TCP
+    ---
+    apiVersion: "serving.kserve.io/v1alpha1"
+    kind: TrainedModel
+    metadata:
+      # this name is significant and must match the top-level directory in the
+      # downloaded model at the storageUri. This string becomes the endpoint u
+      # used to make inferences
+      name: <name of the model>
+    spec:
+      # the name used here must match an existing InferenceService to load
+      # this TrainedModel to
+      inferenceService: example-amdserver-multi-isvc
+      model:
+        framework: tensorflow
+        storageUri: url/to/model
+        memory: 1Gi
 
 Making Requests
 ---------------
@@ -154,7 +302,7 @@ This use case may be needed if your cluster doesn't have a load-balancer and/or 
 
 Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`.
 The request will be routed to the server and the response will be returned.
-
+You can see some examples of using the KServe Python API to make requests in the `tests <https://github.com/Xilinx/inference-server/tree/main/tests/kserve>`__.
 
 .. [#f1] Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).
 

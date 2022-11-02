@@ -19,6 +19,7 @@ import pytest
 kubernetes = pytest.importorskip("kubernetes")
 np = pytest.importorskip("numpy")
 kserve = pytest.importorskip("kserve")
+cv2 = pytest.importorskip("cv2")
 from kserve import (
     KServeClient,
     V1alpha1ModelSpec,
@@ -41,6 +42,7 @@ from kubernetes.client import (
 )
 from utils import get_cluster_ip, predict
 
+import proteus
 import proteus.testing
 
 
@@ -50,9 +52,8 @@ def kserve_client():
 
 
 @pytest.fixture
-def create_inference_service(kserve_client, runtime_config):
+def container_isvc(runtime_config):
     container = runtime_config["kserve"]["zendnn_container"]
-    namespace = runtime_config["kserve"]["namespace"]
 
     # Define an inference service
     predictor = V1beta1PredictorSpec(
@@ -75,13 +76,73 @@ def create_inference_service(kserve_client, runtime_config):
             ),
         ],
     )
+    return predictor
+
+
+@pytest.fixture
+def runtime_isvc(runtime_config):
+    runtime = runtime_config["kserve"]["runtime"]
+    storage_uri = runtime_config["kserve"]["mnist_model"]
+
+    predictor = V1beta1PredictorSpec(
+        min_replicas=1,
+        model=V1beta1ModelSpec(
+            model_format=V1beta1ModelFormat(
+                name="tensorflow",
+            ),
+            runtime=runtime,
+            storage_uri=storage_uri,
+            ports=[V1ContainerPort(protocol="TCP", container_port=8080)],
+        ),
+    )
+    return predictor, "mnist"
+
+
+@pytest.fixture
+def create_runtime_isvc(kserve_client, runtime_config, runtime_isvc):
+    namespace = runtime_config["kserve"]["namespace"]
+
+    predictor, model = runtime_isvc
+
+    service_name = f"isvc-amdserver-runtime"
+    isvc = V1beta1InferenceService(
+        api_version=constants.KSERVE_V1BETA1,
+        kind=constants.KSERVE_KIND,
+        metadata=kubernetes.client.V1ObjectMeta(name=service_name, namespace=namespace),
+        spec=V1beta1InferenceServiceSpec(predictor=predictor),
+    )
+
+    kserve_client.create(isvc)
+    print("created kserve service")
+    kserve_client.wait_isvc_ready(service_name, namespace=namespace)
+    print("service ready")
+
+    cluster_ip = get_cluster_ip()
+    kserve_client.wait_model_ready(
+        service_name,
+        model,
+        isvc_namespace=namespace,
+        isvc_version=constants.KSERVE_V1BETA1_VERSION,
+        protocol_version="v2",
+        cluster_ip=cluster_ip,
+    )
+    print("model ready")
+
+    yield service_name, model
+
+    kserve_client.delete(service_name, namespace)
+
+
+@pytest.fixture
+def create_container_isvc(kserve_client, runtime_config, container_isvc):
+    namespace = runtime_config["kserve"]["namespace"]
 
     service_name = f"isvc-amdserver-mms"
     isvc = V1beta1InferenceService(
         api_version=constants.KSERVE_V1BETA1,
         kind=constants.KSERVE_KIND,
         metadata=kubernetes.client.V1ObjectMeta(name=service_name, namespace=namespace),
-        spec=V1beta1InferenceServiceSpec(predictor=predictor),
+        spec=V1beta1InferenceServiceSpec(predictor=container_isvc),
     )
 
     kserve_client.create(isvc)
@@ -95,11 +156,11 @@ def create_inference_service(kserve_client, runtime_config):
 
 
 @pytest.fixture
-def create_trained_model(kserve_client, create_inference_service, runtime_config):
+def create_trained_model(kserve_client, create_container_isvc, runtime_config):
     storage_uri = runtime_config["kserve"]["mnist_model"]
     namespace = runtime_config["kserve"]["namespace"]
 
-    service_name = create_inference_service
+    service_name = create_container_isvc
 
     model_names = [
         "mnist",
@@ -145,15 +206,60 @@ def create_trained_model(kserve_client, create_inference_service, runtime_config
     print("deleted trainedmodel(s)")
 
 
+def make_request():
+    image_path = proteus.testing.getPathToAsset("asset_nine_9723.jpg")
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    image = image.astype(np.float32)
+    image *= 1.0 / 255.0
+
+    input_0 = proteus.InferenceRequestInput()
+    input_0.name = "input-0"
+    input_0.datatype = proteus.DataType.FP32
+    input_0.shape = [28, 28, 1]
+    input_0.setFp32Data(image)
+
+    request = proteus.InferenceRequest()
+    request.addInputTensor(input_0)
+
+    return proteus.inference_request_to_dict(request)
+
+
 def test_mms_amdserver_kserve(
-    runtime_config, create_inference_service, create_trained_model
+    runtime_config, create_container_isvc, create_trained_model
 ):
     namespace = runtime_config["kserve"]["namespace"]
 
-    service_name = create_inference_service
+    service_name = create_container_isvc
     model_names = create_trained_model
 
-    data = proteus.testing.getPathToAsset("asset_mnist_v2.json")
+    data = make_request()
+
+    print("making prediction")
+    responses = [
+        predict(
+            service_name,
+            data,
+            namespace,
+            model_name=model_name,
+            protocol_version="v2",
+        )
+        for model_name in model_names
+    ]
+    print("made prediction")
+
+    assert np.argmax(responses[0]["outputs"][0]["data"]) == 9
+
+
+def test_runtime_amdserver_kserve(
+    runtime_config,
+    create_runtime_isvc,
+):
+    namespace = runtime_config["kserve"]["namespace"]
+
+    service_name, model_name = create_runtime_isvc
+    model_names = [model_name]
+
+    data = make_request()
 
     print("making prediction")
     responses = [

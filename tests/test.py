@@ -18,7 +18,10 @@ import os
 import pathlib
 import subprocess
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    pytest = None
 
 
 def get_root():
@@ -46,6 +49,9 @@ def get_default_markers(args, unknown_args):
 
 
 def run_tests(args: argparse.Namespace, unknown_args: list):
+    if pytest is None:
+        raise ImportError("pytest could not be imported")
+
     root = get_root()
     build_config_file = root / "build/config.txt"
     try:
