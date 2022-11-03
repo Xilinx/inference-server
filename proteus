@@ -883,16 +883,29 @@ class Make:
         subparser.set_defaults(func=cls.parse)
 
 
+def _add_to_command(command, key, value):
+    def add_key(command, key, value):
+        if isinstance(value, str):
+            command += f"--{key} {value} "
+        elif value:
+            command += f"--{key} "
+        return command
+
+    if isinstance(value, list):
+        for item in value:
+            command = add_key(command, key, item)
+    else:
+        command = add_key(command, key, value)
+    return command
+
+
 class Run:
     @staticmethod
     def dict_to_flags(flags: dict):
         command = ""
         for key, value in flags.items():
-            if not value:
-                continue
             if isinstance(value, list):
-                for item in value:
-                    command += f"--{key} {item} "
+                command = _add_to_command(command, key, value)
             elif isinstance(value, dict):
                 items = []
                 for _, value_2 in value.items():
@@ -900,12 +913,9 @@ class Run:
                         items.extend(value_2)
                     else:
                         items.append(value_2)
-                for item in items:
-                    command += f"--{key} {item} "
-            elif value is True:
-                command += f"--{key} "
+                command = _add_to_command(command, key, items)
             else:
-                command += f"--{key} {value} "
+                command = _add_to_command(command, key, value)
         return command
 
     @staticmethod
@@ -976,6 +986,7 @@ class Run:
 
         if args.interactive is not None:
             flags["interactive"] = args.interactive
+            flags["tty"] = args.interactive
 
         if args.net_host is not None:
             flags["publish"] = False
