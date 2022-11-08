@@ -26,6 +26,7 @@ from pathlib import Path
 
 tmp_dir = Path("/tmp/proteus_get")
 artifact_dir = Path.cwd() / "external/artifacts"
+repository_metadata_dir = Path.cwd() / "external/repository_metadata"
 u250_dir = artifact_dir / "u200_u250"
 tensorflow_dir = artifact_dir / "tensorflow"
 pytorch_dir = artifact_dir / "pytorch"
@@ -59,11 +60,11 @@ class Model:
     # file endings used to find supported models
     models = ["pt", "pb", "xmodel", "onnx"]
 
-    def __init__(self, url: str, location: Path, download_func=None):
+    def __init__(self, url: str, location: Path, download_func=downloader):
         self.url = url
         self.location = location
         self.filename = get_filename_from_url(url)
-        self.downloader = downloader if download_func is None else download_func
+        self.downloader = download_func
 
     def download(self, filepath: str, filename: Path, location: Path):
         self.downloader(filepath, filename, location)
@@ -161,6 +162,39 @@ def get_new_file(model, old_files, new_files):
     raise ValueError(f"No new downloaded model could be found in {model.location}")
 
 
+def create_package(model_file: str, metadata: Path):
+    with open(metadata, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if line.startswith("name:"):
+                # assume name is of the form 'name: "name"'
+                name = line.split(":")[1].strip().strip('"')
+            if line.startswith("platform:"):
+                platform = line.split(":")[1].strip().strip('"')
+
+    if platform == "vitis_xmodel":
+        extension = "xmodel"
+    elif platform == "tensorflow_graphdef":
+        extension = "pb"
+    elif platform == "pytorch_torchscript":
+        extension = "pt"
+    elif platform == "onnx_onnxv1":
+        extension = "onnx"
+    else:
+        print(
+            f"Skipping making a repository package for {model_file} because it's using an unsupported platform: {platform}"
+        )
+        return
+
+    print("  Creating repository package for this file")
+    os.makedirs(repository_dir / name, exist_ok=True)
+    shutil.copyfile(metadata, repository_dir / name / "config.pbtxt")
+    os.makedirs(repository_dir / name / "1", exist_ok=True)
+    shutil.copyfile(
+        model_file, repository_dir / name / "1" / ("saved_model." + extension)
+    )
+
+
 def download(model: Model, args: argparse.Namespace):
     print(f"Downloading {model.url} to {model.location}")
     if args.dry_run:
@@ -187,7 +221,14 @@ def download(model: Model, args: argparse.Namespace):
     else:
         new_files = [file for file in files if file not in old_files]
 
-    return get_new_file(model, old_files, new_files)
+    new_file = get_new_file(model, old_files, new_files)
+
+    metadata_file = str(new_file).replace(f"{str(artifact_dir)}/", "").replace("/", "_")
+    metadata_file_path = repository_metadata_dir / (metadata_file + ".pbtxt")
+    if metadata_file_path.exists():
+        create_package(new_file, metadata_file_path)
+
+    return new_file
 
 
 def downloader_one_file_from_archive(
