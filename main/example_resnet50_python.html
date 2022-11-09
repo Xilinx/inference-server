@@ -83,7 +83,7 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Factors" href="performance_factors.html" />
+    <link rel="next" title="AKS" href="aks.html" />
     <link rel="prev" title="Running ResNet50 - C++" href="example_resnet50_cpp.html" /> 
 	</head>
 	<body>
@@ -279,10 +279,6 @@ function OptanonWrapper() { }
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -290,18 +286,26 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -426,6 +430,9 @@ Creating the <code class="docutils literal notranslate"><span class="pre">proteu
 <section id="create-the-client-object">
 <h2>Create the client object<a class="headerlink" href="#create-the-client-object" title="Permalink to this heading">¶</a></h2>
 <p>As in C++, you can create a client in Python corresponding to the protocol you want to use to talk to the server.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://127.0.0.1:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">http_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="load-a-worker">
 <h2>Load a worker<a class="headerlink" href="#load-a-worker" title="Permalink to this heading">¶</a></h2>
@@ -537,7 +544,7 @@ If there are multiple requests sent in this way, they may be batched together by
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="performance_factors.html" class="btn btn-neutral float-right" title="Factors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="aks.html" class="btn btn-neutral float-right" title="AKS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="example_resnet50_cpp.html" class="btn btn-neutral float-left" title="Running ResNet50 - C++" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -550,7 +557,7 @@ If there are multiple requests sent in this way, they may be batched together by
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

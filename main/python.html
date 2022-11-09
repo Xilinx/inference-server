@@ -270,10 +270,6 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -281,38 +277,53 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.mapTypeToXir"><code class="docutils literal notranslate"><span class="pre">mapTypeToXir()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.mapXirType"><code class="docutils literal notranslate"><span class="pre">mapXirType()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#clients">Clients</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rest">REST</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#websocket">Websocket</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-the-python-library">Install the Python library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-wheels">Build wheels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-proteus">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.mapTypeToXir"><code class="docutils literal notranslate"><span class="pre">mapTypeToXir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.mapXirType"><code class="docutils literal notranslate"><span class="pre">mapXirType()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proteus.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clients">Clients</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#http-rest">HTTP/REST</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#websocket">Websocket</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -335,7 +346,7 @@ function OptanonWrapper() { }
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/python_api.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/python.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -381,13 +392,13 @@ function OptanonWrapper() { }
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Python API</li>
+      <li>Python</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/python_api.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/python.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -400,8 +411,53 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="module-proteus">
-<span id="python-api"></span><h1>Python API<a class="headerlink" href="#module-proteus" title="Permalink to this heading">¶</a></h1>
+  <section id="python">
+<h1>Python<a class="headerlink" href="#python" title="Permalink to this heading">¶</a></h1>
+<p>The Python library for the AMD Inference Server allows you to communicate with the server using Python.</p>
+<section id="install-the-python-library">
+<h2>Install the Python library<a class="headerlink" href="#install-the-python-library" title="Permalink to this heading">¶</a></h2>
+<p>The Python library is built and installed in the development container as part of the regular CMake build.
+To install it outside Docker or in different containers, you need to install a precompiled wheel.
+Currently, these wheels are not available on Pip and must be built locally.</p>
+<section id="build-wheels">
+<h3>Build wheels<a class="headerlink" href="#build-wheels" title="Permalink to this heading">¶</a></h3>
+<p>You can build wheels for the Python library to make a precompiled package that can be installed in any Linux host, container or environment.
+It is recommended to perform the following steps on a fresh clone of the inference server repository.
+These instructions assume you’re only building wheels for x86_64 Linux with CPython.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a Dockerfile that defines an image for building wheels</span>
+./docker/generate.py --cibuildwheel --base-image<span class="o">=</span>quay.io/pypa/manylinux2014_x86_64 --base-image-type yum
+
+<span class="c1"># build the image. You should add some suffix to differentiate this image</span>
+<span class="c1"># from the regular image</span>
+./proteus dockerize --suffix<span class="o">=</span><span class="s2">&quot;-ci&quot;</span>
+
+<span class="c1"># this will build an image with the name $(whoami)/proteus-dev-ci:latest</span>
+<span class="c1"># if you&#39;re not building wheels on the same host, you will need to upload</span>
+<span class="c1"># this image to a Docker registry</span>
+
+<span class="c1"># on a host where your image exists or can be pulled</span>
+<span class="nb">export</span> <span class="nv">CIBW_MANYLINUX_X86_64_IMAGE</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>/proteus-dev-ci:latest
+
+pip install cibuildwheel
+
+<span class="c1"># you can edit pyproject.toml to control which wheels to build or just use the defaults</span>
+
+cibuildwheel --platform linux
+
+<span class="c1"># your built wheels will be in ./wheelhouse</span>
+</pre></div>
+</div>
+<p>After following these instructions, your built wheels will be in <code class="docutils literal notranslate"><span class="pre">./wheelhouse/</span></code>.
+The names on the wheels indicate the Python version they are compatible with.
+For example, <code class="docutils literal notranslate"><span class="pre">cp37</span></code> in the name indicates that it’s compatible with CPython 3.7.
+You can install these wheels in a virtual environment, Conda environment, a container or on a bare host.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install &lt;path/to/wheel&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="module-proteus">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-proteus" title="Permalink to this heading">¶</a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="proteus.BadStatus">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">BadStatus</span></span><a class="headerlink" href="#proteus.BadStatus" title="Permalink to this definition">¶</a></dt>
@@ -523,12 +579,151 @@ function OptanonWrapper() { }
 <dd></dd></dl>
 
 <section id="clients">
-<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this heading">¶</a></h2>
-<section id="rest">
-<h3>REST<a class="headerlink" href="#rest" title="Permalink to this heading">¶</a></h3>
+<h3>Clients<a class="headerlink" href="#clients" title="Permalink to this heading">¶</a></h3>
+<section id="http-rest">
+<h4>HTTP/REST<a class="headerlink" href="#http-rest" title="Permalink to this heading">¶</a></h4>
+<dl class="py class">
+<dt class="sig sig-object py" id="proteus.HttpClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">HttpClient</span></span><a class="headerlink" href="#proteus.HttpClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.hasHardware">
+<span class="sig-name descname"><span class="pre">hasHardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.HttpClient.hasHardware" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.modelInfer">
+<span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.InferenceRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.InferenceResponse</span></span></span><a class="headerlink" href="#proteus.HttpClient.modelInfer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.modelList">
+<span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proteus.HttpClient.modelList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.modelLoad">
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">proteus._proteus.HttpClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">proteus._proteus.RequestParameters</span> <span class="pre">=</span> <span class="pre">RequestParameters(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.HttpClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.modelMetadata">
+<span class="sig-name descname"><span class="pre">modelMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.ModelMetadata</span></span></span><a class="headerlink" href="#proteus.HttpClient.modelMetadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.modelReady">
+<span class="sig-name descname"><span class="pre">modelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.HttpClient.modelReady" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.modelUnload">
+<span class="sig-name descname"><span class="pre">modelUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.HttpClient.modelUnload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.serverLive">
+<span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.HttpClient.serverLive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.serverMetadata">
+<span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.ServerMetadata</span></span></span><a class="headerlink" href="#proteus.HttpClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.serverReady">
+<span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.HttpClient.serverReady" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.workerLoad">
+<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">proteus._proteus.HttpClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">proteus._proteus.RequestParameters</span> <span class="pre">=</span> <span class="pre">RequestParameters(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.HttpClient.workerLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.HttpClient.workerUnload">
+<span class="sig-name descname"><span class="pre">workerUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.HttpClient" title="proteus._proteus.HttpClient"><span class="pre">proteus._proteus.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.HttpClient.workerUnload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="websocket">
-<h3>Websocket<a class="headerlink" href="#websocket" title="Permalink to this heading">¶</a></h3>
+<h4>Websocket<a class="headerlink" href="#websocket" title="Permalink to this heading">¶</a></h4>
+<dl class="py class">
+<dt class="sig sig-object py" id="proteus.WebSocketClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">WebSocketClient</span></span><a class="headerlink" href="#proteus.WebSocketClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.hasHardware">
+<span class="sig-name descname"><span class="pre">hasHardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.hasHardware" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelInfer">
+<span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.InferenceRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.InferenceResponse</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelInfer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelInferWs">
+<span class="sig-name descname"><span class="pre">modelInferWs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.InferenceRequest</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelInferWs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelList">
+<span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelLoad">
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">proteus._proteus.WebSocketClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">proteus._proteus.RequestParameters</span> <span class="pre">=</span> <span class="pre">RequestParameters(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.WebSocketClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelMetadata">
+<span class="sig-name descname"><span class="pre">modelMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.ModelMetadata</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelMetadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelReady">
+<span class="sig-name descname"><span class="pre">modelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelReady" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelRecv">
+<span class="sig-name descname"><span class="pre">modelRecv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelRecv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.modelUnload">
+<span class="sig-name descname"><span class="pre">modelUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.modelUnload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.serverLive">
+<span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.serverLive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.serverMetadata">
+<span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.ServerMetadata</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="proteus.WebSocketClient.serverReady">
+<span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#proteus.WebSocketClient" title="proteus._proteus.WebSocketClient"><span class="pre">proteus._proteus.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.WebSocketClient.serverReady" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 </section>
 </section>
@@ -562,7 +757,7 @@ function OptanonWrapper() { }
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 03, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

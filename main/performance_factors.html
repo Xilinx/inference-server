@@ -83,8 +83,8 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="AKS" href="aks.html" />
-    <link rel="prev" title="Running ResNet50 - Python" href="example_resnet50_python.html" /> 
+    <link rel="next" title="REST Endpoints" href="rest.html" />
+    <link rel="prev" title="KServe" href="kserve.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -270,6 +270,24 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Factors</a><ul>
@@ -284,25 +302,11 @@ function OptanonWrapper() { }
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -417,7 +421,7 @@ Depending on your hardware and demand, you may get better performance by changin
 There are a few ways to do this.
 For benchmarking, use <code class="docutils literal notranslate"><span class="pre">wrk</span></code> or other HTTP benchmarking executables that ensure maximum throughput.
 If making requests from Python, use <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> or similar packages to make asynchronous requests instead of the <code class="docutils literal notranslate"><span class="pre">requests</span></code> package.
-AMD Inference Server’s Python API provides <code class="xref py py-meth docutils literal notranslate"><span class="pre">infer()</span></code> for synchronous requests and <code class="xref py py-meth docutils literal notranslate"><span class="pre">infers()</span></code> for asynchronous requests with the <code class="xref py py-class docutils literal notranslate"><span class="pre">RestClient</span></code> class.</p>
+AMD Inference Server’s Python API provides <a class="reference internal" href="python.html#proteus.HttpClient.modelInfer" title="proteus.HttpClient.modelInfer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">modelInfer()</span></code></a> for synchronous requests with the <a class="reference internal" href="python.html#proteus.HttpClient" title="proteus.HttpClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">HttpClient</span></code></a> class.</p>
 <p>For C++ applications, the same principle holds.
 Using multiple threads to enqueue and dequeue requests to AMD Inference Server allows for higher throughput.
 One example of how to do this is in the following snippet:</p>
@@ -487,7 +491,7 @@ However, workers can be manually duplicated for increased throughput.
 All workers accept the <code class="docutils literal notranslate"><span class="pre">share</span></code> load-time parameter.
 This parameter is assumed to be true if unspecified but it can be set to false to force AMD Inference Server to allocate a new worker.
 Each of these workers will share a common batcher, which will push requests to a task queue for the workers in the group.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RestClient</span><span class="p">(</span><span class="s2">&quot;127.0.0.1:8998&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;127.0.0.1:8998&quot;</span><span class="p">)</span>
 
 <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;share&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 
@@ -503,7 +507,7 @@ However, consuming more CUs does not necessarily improve performance if data can
 Efficient use of these runners requires parallel request submissions.
 The Xmodel worker supports this with the <code class="docutils literal notranslate"><span class="pre">threads</span></code> load-time parameter, which controls how many threads exist to push work to the runner.
 Thus, you may need to load multiple Xmodel workers to allocate sufficient hardware on the machine and then further run each worker with multiple threads to push data to each CU for the best performance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RestClient</span><span class="p">(</span><span class="s2">&quot;127.0.0.1:8998&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;127.0.0.1:8998&quot;</span><span class="p">)</span>
 
 <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;threads&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
 
@@ -534,10 +538,10 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="aks.html" class="btn btn-neutral float-right" title="AKS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rest.html" class="btn btn-neutral float-right" title="REST Endpoints" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="example_resnet50_python.html" class="btn btn-neutral float-left" title="Running ResNet50 - Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="kserve.html" class="btn btn-neutral float-left" title="KServe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -547,7 +551,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

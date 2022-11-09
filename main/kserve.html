@@ -83,8 +83,8 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Vitis AI" href="vitis_ai.html" />
-    <link rel="prev" title="Tracing" href="tracing.html" /> 
+    <link rel="next" title="Factors" href="performance_factors.html" />
+    <link rel="prev" title="Docker" href="docker.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -270,36 +270,44 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">KServe</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-kserve">Setting up KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-the-server">Building the Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starting-the-service">Starting the Service</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#making-requests">Making Requests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a></li>
-</ul>
-</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">KServe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-an-inference-service">Start an inference service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#serving-runtime">Serving Runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-container">Custom container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#making-requests">Making Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -385,47 +393,201 @@ function OptanonWrapper() { }
             
   <section id="kserve">
 <span id="id1"></span><h1>KServe<a class="headerlink" href="#kserve" title="Permalink to this heading">¶</a></h1>
-<p>The AMD Inference Server can be used with <a class="reference external" href="https://github.com/kserve/kserve">KServe</a> to deploy the server on a Kubernetes cluster.</p>
-<section id="setting-up-kserve">
-<h2>Setting up KServe<a class="headerlink" href="#setting-up-kserve" title="Permalink to this heading">¶</a></h2>
+<p>You can use the AMD Inference Server with <a class="reference external" href="https://github.com/kserve/kserve">KServe</a> to deploy the server on a Kubernetes cluster.</p>
+<section id="set-up-kubernetes-and-kserve">
+<h2>Set up Kubernetes and KServe<a class="headerlink" href="#set-up-kubernetes-and-kserve" title="Permalink to this heading">¶</a></h2>
+<p>To use KServe, you will need a Kubernetes cluster.
+There are many ways to set up and configure a Kubernetes cluster depending on your use cases.
+Instructions for installing and configuring Kubernetes are out of this scope.</p>
 <p>Install KServe using the <a class="reference external" href="https://kserve.github.io/website/admin/serverless/">instructions</a> provided by KServe.
 We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
-Once KServe is installed, verify basic functionality of the cluster using the <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">basic tutorial</a> provided by KServe.
-If this succeeds, KServe should be installed correctly.</p>
+Once KServe is installed, verify basic functionality of the cluster using KServe’s <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">basic tutorial</a>.
+If this succeeds, KServe should be installed correctly.
+KServe installation help and debugging are also out of scope for these instructions.
+If you run into problems, reach out to the KServe project.</p>
 <p>If you want to use FPGAs for your inferences, install the <a class="reference external" href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-fpga-device-plugin">Xilinx FPGA Kubernetes plugin</a>.
-This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.
-You may also wish to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
+This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.</p>
+<p>You may also want to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
 Refer to the documentation for these respective projects on installation details.
-The <a class="reference external" href="https://github.com/prometheus-operator/kube-prometheus/">kube-prometheus</a> project may be a good starting point to install some of these tools.</p>
+The <a class="reference external" href="https://github.com/prometheus-operator/kube-prometheus/">kube-prometheus</a> project is a good starting point to install some of these tools.</p>
 </section>
-<section id="building-the-server">
-<h2>Building the Server<a class="headerlink" href="#building-the-server" title="Permalink to this heading">¶</a></h2>
-<p>To use with KServe, we will need to build the production container.
-The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
-To build the production container <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>create a dockerfile
-<span class="gp">$ </span>python3 docker/generate.py
-<span class="gp">$ </span>./proteus dockerize --production
+<section id="get-or-build-the-amd-inference-server-image">
+<h2>Get or build the AMD Inference Server Image<a class="headerlink" href="#get-or-build-the-amd-inference-server-image" title="Permalink to this heading">¶</a></h2>
+<p>To use with KServe, you will need to pull or <span class="xref std std-ref">build the production container &lt;docker:Build the production Docker image</span>.
+Once you have it somewhere, make sure you can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">&lt;image&gt;</span></code> on all the nodes in the Kubernetes cluster to get the image.</p>
+</section>
+<section id="start-an-inference-service">
+<h2>Start an inference service<a class="headerlink" href="#start-an-inference-service" title="Permalink to this heading">¶</a></h2>
+<p>Services in Kubernetes can be started with YAML configuration files.
+To add a service to your cluster, create the configuration file and use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-f</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">yaml</span> <span class="pre">file&gt;</span></code>.
+KServe provides a number of Custom Resource Definitions (CRDs) that you can use to serve inferences with the AMD Inference Server.
+The current recommended approach from KServe is to use the <code class="docutils literal notranslate"><span class="pre">ServingRuntime</span></code> method.</p>
+<p>As you start an inference service, you will need models to serve.
+The model format for the AMD Inference Server is the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/
+├─ model_a/
+│  ├─ 1/
+│  │  ├─ saved_model.x
+│  ├─ config.pbtxt
 </pre></div>
 </div>
-<p>Depending on what platforms you want to support, add the appropriate flags to enable ZenDNN or Vitis AI.
-Refer to the help or the platform documentation for more information on how to build the right image.
-At this time, enabling <span class="xref std std-ref">ZenDNN</span> is recommended.
-The resulting image must be pushed to a Docker registry.
-If you don’t have access to one, you can start a local registry using <a class="reference external" href="https://docs.docker.com/registry/deploying/">these instructions</a> from Docker.
-Make sure to set up a secure registry if you need access to the registry from more than one host.
-Once the image is pushed to the registry, verify that it can be pulled with Docker from all hosts in the Kubernetes cluster.</p>
+<p>The model name, <code class="docutils literal notranslate"><span class="pre">model_a</span></code> in this template, must be unique among the models loaded on a particular server.
+This name is used to name the endpoint used to make inference requests to.
+Under this directory, there must be a directory named <code class="docutils literal notranslate"><span class="pre">1/</span></code> containing the model file itself and a text file named <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code>.
+The model file must be named <code class="docutils literal notranslate"><span class="pre">saved_model</span></code> and the file extension depends on the type of the model.
+The <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code> file contains metadata for the model.
+Consider this example of an MNIST TensorFlow model:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>name: &quot;mnist&quot;
+platform: &quot;tensorflow_graphdef&quot;
+inputs [
+  {
+    name: &quot;images_in&quot;
+    datatype: &quot;FP32&quot;
+    shape: [28,28,1]
+  }
+]
+outputs [
+  {
+    name: &quot;flatten/Reshape&quot;
+    datatype: &quot;FP32&quot;
+    shape: [10]
+  }
+]
+</pre></div>
+</div>
+<p>The name must match the name of the model directory, i.e. <code class="docutils literal notranslate"><span class="pre">model_a</span></code>.
+The platform identifies the type of the model and determines the file extension of the model file.
+The supported platforms are:</p>
+<table class="docutils align-default" style="width: 22em">
+<colgroup>
+<col style="width: 90%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>Model file extension</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tensorflow_graphdef</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.pb</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pytorch_torchscript</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.pt</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">vitis_xmodel</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.xmodel</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">onnx_onnxv1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.onnx</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The inputs and outputs define the list of input and output tensors for the model.
+The names of the tensors may be significant if the platform needs them to perform inference.</p>
+<p>You can put the model up on any of the cloud storage platforms that KServe supports like GCS, S3 and HTTP.
+If you use HTTP, the model should be zipped.
+Other archive formats such as <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> may not work as expected.
+Wherever you store it, the URI will be needed to start inference services.</p>
+<section id="serving-runtime">
+<h3>Serving Runtime<a class="headerlink" href="#serving-runtime" title="Permalink to this heading">¶</a></h3>
+<p>KServe defines two CRDs called <code class="docutils literal notranslate"><span class="pre">ServingRuntime</span></code> and <code class="docutils literal notranslate"><span class="pre">ClusterServingRuntime</span></code>, where the only difference is that the former is namespace-scoped and the latter is cluster-scoped.
+You can see more information about these CRDs in <a class="reference external" href="https://kserve.github.io/website/0.9/modelserving/servingruntimes/">KServe’s documentation</a>.
+The AMD Inference Server is not included by default in the standard KServe installation but you can add the runtime to your cluster.
+A sample <code class="docutils literal notranslate"><span class="pre">ClusterServingRuntime</span></code> definition is provided below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serving.kserve.io/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterServingRuntime</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># this is the name of the runtime to add</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-amdserver</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">supportedModelFormats</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># depending on the image you&#39;re using, and which platforms are added,</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># the supported formats could be different. For example, this assumes</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># that a ZenDNN image was created with both TF+ZenDNN and PT+ZenDNN</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># support</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytorch</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">protocolVersions</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># depending on the image you&#39;re using, it may not support both HTTP/REST</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># and gRPC, respectively. By default, both protocols are supported.</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grpc-v2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-container</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># provide the image name. The usual rules around images apply (see</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># above in the section &quot;Build the AMD Inference Server Image&quot;)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your image&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># when the image starts, it will automatically launch the server</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># executable with the following arguments. While the ports used by</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># the server are configurable, there are some assumptions in KServe</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># with the default port values so it is recommended to not change them</span><span class="w"></span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus-server</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--enable-repository-watcher</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># the resources allowed to the service. If the image needs access to</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># hardware like FPGAs or GPUs, then those resources need to be added</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># here so Kubernetes can schedule pods on the appropriate nodes.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span><span class="w"></span>
+<span class="w">        </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Adding a <code class="docutils literal notranslate"><span class="pre">ClusterServingRuntime</span></code> or a <code class="docutils literal notranslate"><span class="pre">ServingRuntime</span></code> is a one-time action per cluster.
+Once it’s added, you can launch inference services using the runtime like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1beta1&quot;</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># The autoscaling target defines how the service should be auto-scale in</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># response to incoming requests. The value of 5 indicates that</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># additional containers should be deployed when the number of concurrent</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># requests exceeds 5.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-runtime-isvc</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-runtime-isvc</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">predictor</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">modelFormat</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span><span class="w"></span>
+<span class="w">      </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/model</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># while it&#39;s optional for KServe, the runtime should be explicitly</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># specified to make sure the runtime you&#39;ve added for the AMD Inference</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Server is used</span><span class="w"></span>
+<span class="w">      </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-amdserver</span><span class="w"></span>
+</pre></div>
+</div>
 </section>
-<section id="starting-the-service">
-<h2>Starting the Service<a class="headerlink" href="#starting-the-service" title="Permalink to this heading">¶</a></h2>
-<p>Services in Kubernetes can be started with YAML configuration files.
-KServe provides two CRDs that we will use: <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> and <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code>.
-A sample configuration file to start the Inference Server is provided below:</p>
+<section id="custom-container">
+<h3>Custom container<a class="headerlink" href="#custom-container" title="Permalink to this heading">¶</a></h3>
+<p>This approach uses an older method of starting inference services using the <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> and <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code> CRDs, where you start a custom container directly and add models to it.
+Initially, no models are loaded on the server as it uses the multi-model serving mechanism of KServe that was a precursor to ModelMesh to support inference servers running multiple models.
+Once an <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> is up, you can load models to it by applying one or more <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code> CRDs.
+Each such load adds a model to the server and makes it available for inference requests.
+A sample YAML file is provided below.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
 <span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serving.kserve.io/v1beta1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"></span>
 <span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># The autoscaling target defines how the service should be auto-scaled in</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># response to incoming requests. The value of 5 indicates that additional</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># containers should be deployed when the number of concurrent requests</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># exceeds 5.</span><span class="w"></span>
 <span class="w">  </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;5&#39;</span><span class="w"></span>
 <span class="nt">labels</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span><span class="w"></span>
@@ -435,78 +597,48 @@ A sample configuration file to start the Inference Server is provided below:</p>
 <span class="nt">predictor</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span><span class="w"></span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;registry/image:version&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your image&gt;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTI_MODEL_SERVER</span><span class="w"></span>
 <span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus-server</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--http-port=8080&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--grpc-port=9000&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span><span class="w"></span>
 <span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span><span class="w"></span>
 <span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9000</span><span class="w"></span>
 <span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
 <span class="nn">---</span><span class="w"></span>
-</pre></div>
-</div>
-<p>Some comments about this configuration file:</p>
-<ol class="arabic simple">
-<li><p>The autoscaling target defines how the service should be autoscaled in response to incoming requests. The value of 5 indicates that additional containers should be deployed when the number of concurrent requests exceeds 5.</p></li>
-<li><p>The image string should point to image in the registry that you created earlier. In some cases, Kubernetes may fail to pull the image, even if it’s tagged with the right version due to some issues with mapping the version to the image. In these cases, you can use the SHA value of the image directly to skip this lookup. In this case, the image string would be <code class="docutils literal notranslate"><span class="pre">registry/image&#64;sha256:&lt;SHA&gt;</span></code>.</p></li>
-</ol>
-<p>This service can be deployed on the cluster using:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -f &lt;path to yaml file&gt;
-</pre></div>
-</div>
-<p>Next, we will deploy the model we want to run.
-This use case takes advantage of the multi-model serving feature of KServe.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
 <span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1alpha1&quot;</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TrainedModel</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mnist</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># this name is significant and must match the top-level directory in the</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># downloaded model at the storageUri. This string becomes the endpoint u</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># used to make inferences</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name of the model&gt;</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># the name used here must match an existing InferenceService to load</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># this TrainedModel to</span><span class="w"></span>
 <span class="w">  </span><span class="nt">inferenceService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span><span class="w"></span>
 <span class="w">  </span><span class="nt">model</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span><span class="w"></span>
 <span class="w">    </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/model</span><span class="w"></span>
 <span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
-<span class="nn">---</span><span class="w"></span>
 </pre></div>
 </div>
-<p>The string passed to the <code class="docutils literal notranslate"><span class="pre">name</span></code> field is significant and identifies the model name.
-It will be used as the endpoint to make requests.
-The string passed to <code class="docutils literal notranslate"><span class="pre">inferenceService</span></code> should match the name used in the InferenceServer YAML.
-The model should be stored in a cloud storage location compatible with KServe and it should have the following structure:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/
-├─ model_a/
-│  ├─ 1/
-│  │  ├─ saved_model.x
-│  ├─ config.pbtxt
-</pre></div>
-</div>
-<p>The names for the files (<code class="docutils literal notranslate"><span class="pre">saved_model.x</span></code> and <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code>) must match as above.
-The file extension for <code class="docutils literal notranslate"><span class="pre">tfzendnn_graphdef</span></code> and <code class="docutils literal notranslate"><span class="pre">vitis_xmodel</span></code> models should be <code class="docutils literal notranslate"><span class="pre">.pb</span></code> and <code class="docutils literal notranslate"><span class="pre">.xmodel</span></code>, respectively.</p>
-<p>As before, we can deploy this using:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -f &lt;path to yaml file&gt;
-</pre></div>
-</div>
+</section>
 </section>
 <section id="making-requests">
 <h2>Making Requests<a class="headerlink" href="#making-requests" title="Permalink to this heading">¶</a></h2>
 <p>The method by which you communicate with your service depends on your Kubernetes cluster configuration.
 For example, one way to make requests is to <a class="reference external" href="https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports">get the address of the INGRESS_HOST and INGRESS_PORT</a>, and then make requests to this URL by setting the <code class="docutils literal notranslate"><span class="pre">Host</span></code> header on all requests to your targeted service.
 This use case may be needed if your cluster doesn’t have a load-balancer and/or DNS enabled.</p>
-<p>Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the <cite>KServe Python API &lt;https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/&gt;</cite>.
-The request will be routed to the server and the response will be returned.</p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="f1" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
-<p>Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you’re targeting in <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/</span></code>.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren’t searched).</p>
-</aside>
-</aside>
+<p>Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the <a class="reference external" href="https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/">KServe Python API</a>.
+The request will be routed to the server and the response will be returned.
+You can see some examples of using the KServe Python API to make requests in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/tests/kserve">tests</a>.</p>
 </section>
 <section id="debugging">
 <h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h2>
@@ -521,14 +653,14 @@ These logs may have helpful error messages.</p>
 The easiest way to do this is with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script in the inference server repository.
 You’ll need to first connect to the node where the container is running.
 On that host:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this lists the running Inference Server containers
-<span class="gp">$ </span>proteus list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this lists the running Inference Server containers</span>
+proteus list
 
-<span class="gp"># </span>get the container ID of the container you want to connect to
+<span class="c1"># get the container ID of the container you want to connect to</span>
 
-<span class="gp"># </span>provide the ID as an argument to the attach <span class="nb">command</span> to open a bash shell
-<span class="gp"># </span><span class="k">in</span> the container
-<span class="gp">$ </span>proteus attach -n &lt;container ID&gt;
+<span class="c1"># provide the ID as an argument to the attach command to open a bash shell</span>
+<span class="c1"># in the container</span>
+proteus attach -n &lt;container ID&gt;
 </pre></div>
 </div>
 <p>Once in the container, you can find the running <code class="docutils literal notranslate"><span class="pre">proteus-server</span></code> executable and then follow the regular debugging guide to debug the inference server.</p>
@@ -551,10 +683,10 @@ On that host:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vitis_ai.html" class="btn btn-neutral float-right" title="Vitis AI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="performance_factors.html" class="btn btn-neutral float-right" title="Factors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="tracing.html" class="btn btn-neutral float-left" title="Tracing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="docker.html" class="btn btn-neutral float-left" title="Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -564,7 +696,7 @@ On that host:</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

@@ -268,10 +268,6 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -279,18 +275,26 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -384,31 +388,31 @@ function OptanonWrapper() { }
 <li><p>RAM: 12x 8 GB 2666 MHz DDR4</p></li>
 </ul>
 <p>Running GET requests on the v2 endpoint:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./build/bin/wrk -t32 -c400 -d10s http://127.0.0.1:8501/v2
-Running 10s <span class="nb">test</span> @ http://127.0.0.1:8501/v2
-    <span class="m">32</span> threads and <span class="m">400</span> connections
-    Thread Stats   Avg      Stdev     Max   +/- Stdev
-        Latency     <span class="m">1</span>.13ms  <span class="m">321</span>.66us  <span class="m">13</span>.19ms   <span class="m">80</span>.47%
-        Req/Sec    <span class="m">10</span>.64k     <span class="m">1</span>.41k   <span class="m">23</span>.01k    <span class="m">82</span>.76%
-    <span class="m">3417779</span> requests <span class="k">in</span> <span class="m">10</span>.10s, <span class="m">655</span>.15MB <span class="nb">read</span>
-Requests/sec: <span class="m">338412</span>.42
-Transfer/sec:     <span class="m">64</span>.87MB
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./build/bin/wrk -t32 -c400 -d10s http://127.0.0.1:8501/v2
+<span class="go">Running 10s test @ http://127.0.0.1:8501/v2</span>
+<span class="go">    32 threads and 400 connections</span>
+<span class="go">    Thread Stats   Avg      Stdev     Max   +/- Stdev</span>
+<span class="go">        Latency     1.13ms  321.66us  13.19ms   80.47%</span>
+<span class="go">        Req/Sec    10.64k     1.41k   23.01k    82.76%</span>
+<span class="go">    3417779 requests in 10.10s, 655.15MB read</span>
+<span class="go">Requests/sec: 338412.42</span>
+<span class="go">Transfer/sec:     64.87MB</span>
 </pre></div>
 </div>
 <p>Running POST requests on v2/models/echo/infer:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat tmp.lua
-wrk.method <span class="o">=</span> <span class="s2">&quot;POST&quot;</span>
-wrk.body <span class="o">=</span> <span class="s1">&#39;{&quot;id&quot;: &quot;hello_world&quot;, &quot;parameters&quot;: {&quot;key3&quot;: &quot;value3&quot;}, &quot;inputs&quot;: [{&quot;name&quot;: &quot;echo&quot;, &quot;shape&quot;: [1], &quot;datatype&quot;: [1], &quot;parameters&quot;: {&quot;key&quot;: &quot;value&quot;}, &quot;data&quot;: [2]}], &quot;outputs&quot;: [{&quot;name&quot;: &quot;echo&quot;, &quot;parameters&quot;: {&quot;key2&quot;: &quot;value2&quot;}}]}&#39;</span>
-wrk.headers<span class="o">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;application/json&quot;</span>
-$ ./build/bin/wrk -t32 -c400 -d10s -s tmp.lua http://127.0.0.1:8501/v2/models/echo/infer
-Running 10s <span class="nb">test</span> @ http://127.0.0.1:8501/v2/models/echo/infer
-<span class="m">32</span> threads and <span class="m">400</span> connections
-Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    <span class="m">12</span>.56ms    <span class="m">8</span>.09ms <span class="m">198</span>.78ms   <span class="m">90</span>.32%
-    Req/Sec     <span class="m">1</span>.01k   <span class="m">196</span>.68     <span class="m">5</span>.22k    <span class="m">88</span>.09%
-<span class="m">323168</span> requests <span class="k">in</span> <span class="m">10</span>.10s, <span class="m">53</span>.63MB <span class="nb">read</span>
-Requests/sec:  <span class="m">32002</span>.39
-Transfer/sec:      <span class="m">5</span>.31MB
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat tmp.lua
+<span class="go">wrk.method = &quot;POST&quot;</span>
+<span class="go">wrk.body = &#39;{&quot;id&quot;: &quot;hello_world&quot;, &quot;parameters&quot;: {&quot;key3&quot;: &quot;value3&quot;}, &quot;inputs&quot;: [{&quot;name&quot;: &quot;echo&quot;, &quot;shape&quot;: [1], &quot;datatype&quot;: [1], &quot;parameters&quot;: {&quot;key&quot;: &quot;value&quot;}, &quot;data&quot;: [2]}], &quot;outputs&quot;: [{&quot;name&quot;: &quot;echo&quot;, &quot;parameters&quot;: {&quot;key2&quot;: &quot;value2&quot;}}]}&#39;</span>
+<span class="go">wrk.headers[&quot;Content-Type&quot;] = &quot;application/json&quot;</span>
+<span class="gp">$ </span>./build/bin/wrk -t32 -c400 -d10s -s tmp.lua http://127.0.0.1:8501/v2/models/echo/infer
+<span class="go">Running 10s test @ http://127.0.0.1:8501/v2/models/echo/infer</span>
+<span class="go">32 threads and 400 connections</span>
+<span class="go">Thread Stats   Avg      Stdev     Max   +/- Stdev</span>
+<span class="go">    Latency    12.56ms    8.09ms 198.78ms   90.32%</span>
+<span class="go">    Req/Sec     1.01k   196.68     5.22k    88.09%</span>
+<span class="go">323168 requests in 10.10s, 53.63MB read</span>
+<span class="go">Requests/sec:  32002.39</span>
+<span class="go">Transfer/sec:      5.31MB</span>
 </pre></div>
 </div>
 <p>These are the results of running AKS resnet50 worker in various configurations.
@@ -468,7 +472,7 @@ We have not measured the browser performance.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

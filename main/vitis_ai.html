@@ -84,7 +84,7 @@ function OptanonWrapper() { }
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ZenDNN" href="zendnn.html" />
-    <link rel="prev" title="KServe" href="kserve.html" /> 
+    <link rel="prev" title="Tracing" href="tracing.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -270,10 +270,6 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -281,21 +277,30 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Vitis AI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-the-host">Setting up the host</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-an-image">Build an image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -394,8 +399,20 @@ You also don’t need XRM on the host if you’re using Docker but you do otherw
 You can use <code class="docutils literal notranslate"><span class="pre">xbutil</span> <span class="pre">validate</span> <span class="pre">--device</span> <span class="pre">&lt;device</span> <span class="pre">id&gt;</span></code> to confirm that your FPGA is ready to use.
 If this executable is not on your PATH, it should be in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/xrt/bin</span></code>.</p>
 <p>You will also need the XCLBINs corresponding to your card on the host.
-By default, these will be placed in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins</span></code> and will be mounted into the container if using Docker with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script.
-The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> environment variable should point to the directory containing the XCLBINs needed for your FPGA.</p>
+By default, these will be placed in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins</span></code> and will be mounted into the development container if using Docker with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script.
+The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> environment variable in the container should point to the directory containing the XCLBINs needed for your FPGA.</p>
+</section>
+<section id="build-an-image">
+<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this heading">¶</a></h2>
+<p>To build an image with Vitis AI enabled, you need to add the following flag <code class="docutils literal notranslate"><span class="pre">--vitis</span></code> to the <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span></code> command.
+For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># build the dev image $(whoami)/proteus-dev-vitis:latest</span>
+./proteus dockerize --vitis --suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span>
+
+<span class="c1"># build the production image $(whoami)/proteus-vitis:latest</span>
+./proteus dockerize --vitis --suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span> --production
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -418,7 +435,7 @@ The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMW
         <a href="zendnn.html" class="btn btn-neutral float-right" title="ZenDNN" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="kserve.html" class="btn btn-neutral float-left" title="KServe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="tracing.html" class="btn btn-neutral float-left" title="Tracing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -428,7 +445,7 @@ The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMW
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

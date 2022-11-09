@@ -267,10 +267,6 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -278,18 +274,26 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -374,6 +378,7 @@ function OptanonWrapper() { }
  | <a href="#C"><strong>C</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -385,7 +390,7 @@ function OptanonWrapper() { }
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.BadStatus">BadStatus</a>
+      <li><a href="python.html#proteus.BadStatus">BadStatus</a>
 </li>
   </ul></td>
 </tr></table>
@@ -393,7 +398,11 @@ function OptanonWrapper() { }
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.ConnectionError">ConnectionError</a>
+      <li><a href="python.html#proteus.WebSocketClient.close">close() (proteus.WebSocketClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#proteus.ConnectionError">ConnectionError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -401,11 +410,11 @@ function OptanonWrapper() { }
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.EnvironmentNotSetError">EnvironmentNotSetError</a>
+      <li><a href="python.html#proteus.EnvironmentNotSetError">EnvironmentNotSetError</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.ExternalError">ExternalError</a>
+      <li><a href="python.html#proteus.ExternalError">ExternalError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -413,11 +422,27 @@ function OptanonWrapper() { }
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.FileNotFoundError">FileNotFoundError</a>
+      <li><a href="python.html#proteus.FileNotFoundError">FileNotFoundError</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.FileReadError">FileReadError</a>
+      <li><a href="python.html#proteus.FileReadError">FileReadError</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#proteus.HttpClient.hasHardware">hasHardware() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.hasHardware">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#proteus.HttpClient">HttpClient (class in proteus)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -425,15 +450,15 @@ function OptanonWrapper() { }
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.ImageInferenceRequest">ImageInferenceRequest() (in module proteus)</a>
+      <li><a href="python.html#proteus.ImageInferenceRequest">ImageInferenceRequest() (in module proteus)</a>
 </li>
-      <li><a href="python_api.html#proteus.inferAsyncOrdered">inferAsyncOrdered() (in module proteus)</a>
+      <li><a href="python.html#proteus.inferAsyncOrdered">inferAsyncOrdered() (in module proteus)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.inferAsyncOrderedBatched">inferAsyncOrderedBatched() (in module proteus)</a>
+      <li><a href="python.html#proteus.inferAsyncOrderedBatched">inferAsyncOrderedBatched() (in module proteus)</a>
 </li>
-      <li><a href="python_api.html#proteus.InvalidArgumentError">InvalidArgumentError</a>
+      <li><a href="python.html#proteus.InvalidArgumentError">InvalidArgumentError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -441,11 +466,57 @@ function OptanonWrapper() { }
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#proteus.mapTypeToXir">mapTypeToXir() (in module proteus)</a>
+</li>
+      <li><a href="python.html#proteus.mapXirType">mapXirType() (in module proteus)</a>
+</li>
+      <li><a href="python.html#proteus.HttpClient.modelInfer">modelInfer() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.modelInfer">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#proteus.WebSocketClient.modelInferWs">modelInferWs() (proteus.WebSocketClient method)</a>
+</li>
+      <li><a href="python.html#proteus.HttpClient.modelList">modelList() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.modelList">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#proteus.HttpClient.modelLoad">modelLoad() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.modelLoad">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#proteus.HttpClient.modelMetadata">modelMetadata() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.modelMetadata">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#proteus.HttpClient.modelReady">modelReady() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.modelReady">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#proteus.WebSocketClient.modelRecv">modelRecv() (proteus.WebSocketClient method)</a>
+</li>
+      <li><a href="python.html#proteus.HttpClient.modelUnload">modelUnload() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.modelUnload">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
       <li>
     module
 
       <ul>
-        <li><a href="python_api.html#module-proteus">proteus</a>
+        <li><a href="python.html#module-proteus">proteus</a>
 </li>
       </ul></li>
   </ul></td>
@@ -454,13 +525,13 @@ function OptanonWrapper() { }
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.parallel_infer">parallel_infer() (in module proteus)</a>
+      <li><a href="python.html#proteus.parallel_infer">parallel_infer() (in module proteus)</a>
 </li>
       <li>
     proteus
 
       <ul>
-        <li><a href="python_api.html#module-proteus">module</a>
+        <li><a href="python.html#module-proteus">module</a>
 </li>
       </ul></li>
       <li><a href="cpp_api.html#_CPPv47proteus">proteus (C++ type)</a>, <a href="cpp_api.html#_CPPv47proteus">[1]</a>
@@ -485,7 +556,7 @@ function OptanonWrapper() { }
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.RuntimeError">RuntimeError</a>
+      <li><a href="python.html#proteus.RuntimeError">RuntimeError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -493,19 +564,45 @@ function OptanonWrapper() { }
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.serverHasExtension">serverHasExtension() (in module proteus)</a>
+      <li><a href="python.html#proteus.serverHasExtension">serverHasExtension() (in module proteus)</a>
 </li>
+      <li><a href="python.html#proteus.HttpClient.serverLive">serverLive() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.serverLive">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#proteus.HttpClient.serverMetadata">serverMetadata() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.serverMetadata">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#proteus.HttpClient.serverReady">serverReady() (proteus.HttpClient method)</a>
+
+      <ul>
+        <li><a href="python.html#proteus.WebSocketClient.serverReady">(proteus.WebSocketClient method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.waitUntilModelReady">waitUntilModelReady() (in module proteus)</a>
+      <li><a href="python.html#proteus.waitUntilModelReady">waitUntilModelReady() (in module proteus)</a>
+</li>
+      <li><a href="python.html#proteus.waitUntilServerReady">waitUntilServerReady() (in module proteus)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#proteus.waitUntilServerReady">waitUntilServerReady() (in module proteus)</a>
+      <li><a href="python.html#proteus.WebSocketClient">WebSocketClient (class in proteus)</a>
+</li>
+      <li><a href="python.html#proteus.HttpClient.workerLoad">workerLoad() (proteus.HttpClient method)</a>
+</li>
+      <li><a href="python.html#proteus.HttpClient.workerUnload">workerUnload() (proteus.HttpClient method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -531,7 +628,7 @@ function OptanonWrapper() { }
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

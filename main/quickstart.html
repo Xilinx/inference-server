@@ -276,10 +276,6 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -287,18 +283,26 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -400,13 +404,11 @@ Production containers only contain the runtime dependencies of the <strong class
 The Docker image can also be built with various options to disable certain components.</p>
 <p>Currently, these images are not pre-built anywhere and so must be built by the user.
 We require <a class="reference external" href="https://docs.docker.com/develop/develop-images/build_enhancements/">BuildKit</a> to build the image so your Docker version should be at least 18.09.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>create a dockerfile
-<span class="gp">$ </span>python3 docker/generate.py
-<span class="gp"># </span>use the generated Dockerfile to build an image
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
 <span class="gp">$ </span>./proteus dockerize
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script is used to create a dockerfile in the root directory.
+<p>The <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script is used to create a dockerfile in the root directory, which is then used by the <code class="docutils literal notranslate"><span class="pre">dockerize</span></code> command.
 Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see configurable options for the <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script.
 By default, this builds the stable dev image as <code class="docutils literal notranslate"><span class="pre">{username}/proteus-dev</span></code>.
 After the image is built, run the container:</p>
@@ -449,21 +451,21 @@ Subsequent builds can omit <code class="xref std std-option docutils literal not
 <h2>Running the AMD Inference Server<a class="headerlink" href="#running-the-amd-inference-server" title="Permalink to this heading">¶</a></h2>
 <p>Once the server is built, start the server to begin serving requests.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># start proteus-server in the background</span>
-$ proteus start <span class="p">&amp;</span>
+proteus start <span class="p">&amp;</span>
 
 <span class="c1"># test that the server is ready. The server returns status 200 OK on success</span>
-$ curl -I http://localhost:8998/v2/health/ready
+curl -I http://localhost:8998/v2/health/ready
 
 <span class="c1"># the server can now accept requests over REST/gRPC</span>
 
 <span class="c1"># shutdown the server</span>
-$ <span class="nb">kill</span> -2 <span class="k">$(</span>pidof proteus-server<span class="k">)</span>
+<span class="nb">kill</span> -2 <span class="k">$(</span>pidof proteus-server<span class="k">)</span>
 </pre></div>
 </div>
 <p>You can also try running the test suite.
 You may need to get testing artifacts (see above) and have cloned the repository with Git LFS enabled.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this will start the server and test the REST API from Python.</span>
-$ proteus <span class="nb">test</span>
+proteus <span class="nb">test</span>
 </pre></div>
 </div>
 <p>Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.</p>
@@ -499,7 +501,7 @@ $ proteus <span class="nb">test</span>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 26, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

@@ -83,8 +83,8 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Command-Line Interface" href="cli.html" />
-    <link rel="prev" title="C++ API" href="cpp_api.html" /> 
+    <link rel="next" title="KServe" href="kserve.html" />
+    <link rel="prev" title="ZenDNN" href="zendnn.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -270,10 +270,6 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a></li>
@@ -281,42 +277,35 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#push-to-a-registry">Push to a registry</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-the-image-for-docker-deployment">Prepare the image for Docker deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-the-container">Start the container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-request">Make a request</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.mapTypeToXir"><code class="docutils literal notranslate"><span class="pre">mapTypeToXir()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.mapXirType"><code class="docutils literal notranslate"><span class="pre">mapXirType()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#proteus.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#clients">Clients</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rest">REST</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#websocket">Websocket</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
@@ -335,7 +324,7 @@ function OptanonWrapper() { }
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/python_api.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/docker.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -381,13 +370,13 @@ function OptanonWrapper() { }
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Python API</li>
+      <li>Docker</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/python_api.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/docker.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -400,136 +389,104 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="module-proteus">
-<span id="python-api"></span><h1>Python API<a class="headerlink" href="#module-proteus" title="Permalink to this heading">¶</a></h1>
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.BadStatus">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">BadStatus</span></span><a class="headerlink" href="#proteus.BadStatus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.ConnectionError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ConnectionError</span></span><a class="headerlink" href="#proteus.ConnectionError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.EnvironmentNotSetError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">EnvironmentNotSetError</span></span><a class="headerlink" href="#proteus.EnvironmentNotSetError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.ExternalError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ExternalError</span></span><a class="headerlink" href="#proteus.ExternalError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.FileNotFoundError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">FileNotFoundError</span></span><a class="headerlink" href="#proteus.FileNotFoundError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.FileReadError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">FileReadError</span></span><a class="headerlink" href="#proteus.FileReadError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.ImageInferenceRequest">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a request from an image or list of images</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> (<em>image</em>) – Images may be numpy arrays or filepaths or a list of these</p></li>
-<li><p><strong>asTensor</strong> (<em>bool</em><em>, </em><em>optional</em>) – Send data as a tensor or as base64-encoded string. Defaults to True.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>TypeError</strong> – Raised if an unknown image format is passed</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Request object</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>InferenceRequest</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.InvalidArgumentError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">InvalidArgumentError</span></span><a class="headerlink" href="#proteus.InvalidArgumentError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="proteus.RuntimeError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">RuntimeError</span></span><a class="headerlink" href="#proteus.RuntimeError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.inferAsyncOrdered">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">inferAsyncOrdered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceRequest</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceResponse</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proteus.inferAsyncOrdered" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.inferAsyncOrderedBatched">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">inferAsyncOrderedBatched</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceRequest</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">proteus._proteus.InferenceResponse</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#proteus.inferAsyncOrderedBatched" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.mapTypeToXir">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapTypeToXir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xir.DataType</span></span></span><a class="headerlink" href="#proteus.mapTypeToXir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.mapXirType">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">mapXirType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xir.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">proteus._proteus.DataType</span></span></span><a class="headerlink" href="#proteus.mapXirType" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.parallel_infer">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">parallel_infer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proteus.parallel_infer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make an inference to the server in parallel with n processes</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>client</strong> (<em>proteus.client</em>) – Client to make the inference with</p></li>
-<li><p><strong>model</strong> (<em>str</em>) – Name of the model/worker to make the inference</p></li>
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>np.ndarray</em><em>]</em>) – List of data to send</p></li>
-<li><p><strong>processes</strong> (<em>int</em>) – number of processes to use</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Responses for each request</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list[proteus.InferenceResponse]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.serverHasExtension">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">serverHasExtension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#proteus.serverHasExtension" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.waitUntilModelReady">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">waitUntilModelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.waitUntilModelReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="proteus.waitUntilServerReady">
-<span class="sig-prename descclassname"><span class="pre">proteus.</span></span><span class="sig-name descname"><span class="pre">waitUntilServerReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">proteus._proteus.Client</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#proteus.waitUntilServerReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<section id="clients">
-<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this heading">¶</a></h2>
-<section id="rest">
-<h3>REST<a class="headerlink" href="#rest" title="Permalink to this heading">¶</a></h3>
+  <section id="docker">
+<span id="id1"></span><h1>Docker<a class="headerlink" href="#docker" title="Permalink to this heading">¶</a></h1>
+<p>You can use the AMD Inference Server with Docker to deploy the server.
+For more powerful and easier to use deployments, consider using <a class="reference internal" href="kserve.html#kserve"><span class="std std-ref">KServe</span></a>.</p>
+<section id="build-the-production-docker-image">
+<h2>Build the production Docker image<a class="headerlink" href="#build-the-production-docker-image" title="Permalink to this heading">¶</a></h2>
+<p>The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
+It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
+To build the production container <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
+<span class="gp">$ </span>./proteus dockerize --production <span class="o">[</span>platform flags<span class="o">]</span>
+</pre></div>
+</div>
+<p>Depending on what platforms you want to support, add the appropriate flags to enable <span class="xref std std-ref">Vitis AI</span>, <span class="xref std std-ref">ZenDNN</span> or MIGraphX.
+Refer to the help or the platform documentation for more information on how to build the right image.</p>
+<section id="push-to-a-registry">
+<h3>Push to a registry<a class="headerlink" href="#push-to-a-registry" title="Permalink to this heading">¶</a></h3>
+<p>In some use cases, for example with Kubernetes or KServe, the image must be pushed to a Docker registry before it can be used.
+If you don’t have access to one, you can start a local registry using <a class="reference external" href="https://docs.docker.com/registry/deploying/">these instructions</a> from Docker.
+Make sure to set up a secure registry if you need access to the registry from more than one host.</p>
+<p>To push the image to the registry, re-tag the image with the registry and push it.
+For example, if you’re using the local registry approach from above, the registry name would be <code class="docutils literal notranslate"><span class="pre">localhost:5000</span></code> by default.
+By default, using <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span> <span class="pre">...</span></code> will build an image of the form <code class="docutils literal notranslate"><span class="pre">$(whoami)/&lt;image&gt;</span></code>, which is what the code snippet uses below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker tag <span class="k">$(</span>whoami<span class="k">)</span>/&lt;image&gt; &lt;registry&gt;/&lt;image&gt; <span class="o">&amp;&amp;</span> docker push &lt;registry&gt;/&lt;image&gt;
+</pre></div>
+</div>
+<p>Once the image is pushed to the registry, verify that it can be pulled with Docker from all nodes in the Kubernetes cluster.
+In some cases, Kubernetes may fail to pull the image, even if it’s tagged with the right version due to some issues with mapping the version to the image.
+If you run into this issue, you can use the SHA value of the image directly to skip this lookup.
+In that case, the image string you would use in the YAML configuration files would be of the form <code class="docutils literal notranslate"><span class="pre">&lt;registry&gt;/&lt;image&gt;&#64;sha256:&lt;SHA&gt;</span></code>.
+The SHA is visible when you push the image to the registry or you can get it by inspecting the image:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker inspect --format<span class="o">=</span><span class="s1">&#39;{{index .RepoDigests 0}}&#39;</span> &lt;registry&gt;/&lt;image&gt;
+</pre></div>
+</div>
 </section>
-<section id="websocket">
-<h3>Websocket<a class="headerlink" href="#websocket" title="Permalink to this heading">¶</a></h3>
 </section>
+<section id="prepare-the-image-for-docker-deployment">
+<h2>Prepare the image for Docker deployment<a class="headerlink" href="#prepare-the-image-for-docker-deployment" title="Permalink to this heading">¶</a></h2>
+<p>Once you build the basic production image or pull a pre-built version, you need to prepare it before it can be deployed on Docker.
+While the image has the dependencies needed to run the server, there are no models present and the default environment may not be appropriate.
+You need to modify this image for the use case that you’re targeting.
+There are multiple ways of modifying an existing Docker image that are well-documented online and functionally equivalent.
+For example, one approach is using a Dockerfile to build a new image:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">&lt;image&gt;</span>
+
+<span class="k">COPY</span><span class="w"> </span>/some/path/in/Docker/build/tree /some/path/in/the/image
+<span class="k">ENV</span><span class="w"> </span><span class="nv">SomeVariable</span><span class="o">=</span>SomeValue
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;proteus-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">&lt;more</span><span class="w"> </span><span class="err">argume</span><span class="kc">nts</span><span class="err">?&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In this case, you can build and save a new image that includes the models you want to serve.
+Depending on the platform, you may need to include other files as well that the platform runtime needs.
+As with the production image, this image may need to be <span class="xref std std-ref">pushed to a registry server</span> for your use case.</p>
+<p>Note that the command that the image will run can also be overridden at the command-line when starting the container.
+So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.</p>
+</section>
+<section id="start-the-container">
+<h2>Start the container<a class="headerlink" href="#start-the-container" title="Permalink to this heading">¶</a></h2>
+<p>You can start the production container with docker as any other container.
+You will need to pass along any devices that you want to enable in your container and expose ports to access the server.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run <span class="o">[</span>--device ...<span class="o">]</span> <span class="o">[</span>--publish ...<span class="o">]</span> &lt;image&gt;
+</pre></div>
+</div>
+<p>By default, the production container will start the server executable and it will continue to run after the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command.
+But before it can serve requests, you need to load the models that you added into the image.
+The easiest way to communicate with the server is using the <a class="reference internal" href="python.html#install-the-python-library"><span class="std std-ref">Python library</span></a>.
+You can install it locally or use it in the development container to load the workers on the server.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">proteus</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;http://hostname:port&quot;</span><span class="p">)</span>
+
+<span class="c1"># depending on the model, you need to use the appropriate worker</span>
+<span class="n">worker_name</span> <span class="o">=</span> <span class="s2">&quot;migraphx&quot;</span>
+
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
+<span class="c1"># specifies the path to the model on the server for it to open</span>
+<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/model&quot;</span><span class="p">)</span>
+
+<span class="c1"># workers may accept other parameters at load-time. Refer to worker documentation</span>
+
+<span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+<span class="n">proteus</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Clients that make requests to this worker will need the endpoint to talk it.</p>
+</section>
+<section id="make-a-request">
+<h2>Make a request<a class="headerlink" href="#make-a-request" title="Permalink to this heading">¶</a></h2>
+<p>As in the <span class="xref std std-ref">Python examples</span>, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
+Unlike these examples, you can skip ahead to making the request for inference because the server is already started and the worker is ready to serve your request.
+Once you have it, you can use <code class="docutils literal notranslate"><span class="pre">modelInfer</span></code> to make the request.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you’re targeting in <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/</span></code>.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren’t searched).</p>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -549,10 +506,10 @@ function OptanonWrapper() { }
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="cli.html" class="btn btn-neutral float-right" title="Command-Line Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="kserve.html" class="btn btn-neutral float-right" title="KServe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="cpp_api.html" class="btn btn-neutral float-left" title="C++ API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="zendnn.html" class="btn btn-neutral float-left" title="ZenDNN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -562,7 +519,7 @@ function OptanonWrapper() { }
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 03, 2022.
+        Last updated on November 09, 2022.
       </span>
 
     </p>

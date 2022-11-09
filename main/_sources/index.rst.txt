@@ -30,14 +30,6 @@
     example_resnet50_cpp
     example_resnet50_python
 
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Getting Performance
-
-    performance_factors
-
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -48,7 +40,6 @@
     benchmarking
     metrics
     tracing
-    kserve
 
 .. toctree::
     :maxdepth: 2
@@ -61,11 +52,26 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
+    :caption: Deployment
+
+    docker
+    kserve
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Getting Performance
+
+    performance_factors
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
     :caption: User API libraries
 
     rest
     cpp_api
-    python_api
+    python
     cli
 
 .. toctree::
