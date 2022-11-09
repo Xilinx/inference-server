@@ -20,7 +20,7 @@ We use `BATS <https://github.com/bats-core/bats-core>`__ to test shell scripts.
 
 To use:
 
-.. code-block:: console
+.. code-block:: bash
 
     # from the repository root
     mkdir -p ./tests/shell/test_helper

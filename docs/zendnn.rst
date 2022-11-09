@@ -53,7 +53,6 @@ and Docker installed on your machine.
 
    .. code-block:: console
 
-      # create a dockerfile
       $ python3 docker/generate.py
 
    1. For TensorFlow

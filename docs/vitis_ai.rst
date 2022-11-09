@@ -1,5 +1,6 @@
 ..
-    Copyright 2022 Xilinx Inc.
+    Copyright 2022 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -41,10 +42,10 @@ Build an image
 To build an image with Vitis AI enabled, you need to add the following flag ``--vitis`` to the ``proteus dockerize`` command.
 For example:
 
-.. code-block:: console
+.. code-block:: bash
 
     # build the dev image $(whoami)/proteus-dev-vitis:latest
-    $ ./proteus dockerize --vitis --suffix="-vitis"
+    ./proteus dockerize --vitis --suffix="-vitis"
 
     # build the production image $(whoami)/proteus-vitis:latest
-    $ ./proteus dockerize --vitis --suffix="-vitis" --production
+    ./proteus dockerize --vitis --suffix="-vitis" --production

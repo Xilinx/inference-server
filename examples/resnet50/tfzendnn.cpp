@@ -179,11 +179,13 @@ int main(int argc, char* argv[]) {
   proteus::GrpcClient client{"127.0.0.1:" + grpc_port_str};
 
   std::optional<proteus::Server> server;
+  // +start protocol
   if (!client.serverLive()) {
     std::cout << "No server detected. Starting locally...\n";
     server.emplace();
     server.value().startGrpc(args.grpc_port);
   }
+  // -start protocol:
 
   std::cout << "Waiting until the server is ready...\n";
   proteus::waitUntilServerReady(&client);

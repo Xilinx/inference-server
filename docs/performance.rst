@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ These tests are run on an unloaded machine with the following specs:
 
 Running GET requests on the v2 endpoint:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ ./build/bin/wrk -t32 -c400 -d10s http://127.0.0.1:8501/v2
     Running 10s test @ http://127.0.0.1:8501/v2
@@ -40,7 +41,7 @@ Running GET requests on the v2 endpoint:
 
 Running POST requests on v2/models/echo/infer:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ cat tmp.lua
     wrk.method = "POST"

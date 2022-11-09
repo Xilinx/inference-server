@@ -150,9 +150,9 @@ def get_args():
 def main(args):
     print("Running the Vitis example for ResNet50 in Python")
 
-    # + create client
+    # +create client
     client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
-    # - create client
+    # -create client
     if not client.serverLive():
         # +initialize
         server = proteus.Server()

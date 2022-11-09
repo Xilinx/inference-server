@@ -35,7 +35,7 @@ If this succeeds, KServe should be installed correctly.
 KServe installation help and debugging are also out of scope for these instructions.
 If you run into problems, reach out to the KServe project.
 
-If you want to use FPGAs for your inferences, install the `Xilinx FPGA Kubernetes plugin <https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-fpga-device-plugin>`__.
+If you want to use FPGAs for your inferences, install the `Xilinx FPGA Kubernetes plugin <https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin>`__.
 This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.
 
 You may also want to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
@@ -43,41 +43,11 @@ Refer to the documentation for these respective projects on installation details
 The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`__ project is a good starting point to install some of these tools.
 
 
-Build the AMD Inference Server Image
-------------------------------------
+Get or build the AMD Inference Server Image
+-------------------------------------------
 
-To use with KServe, you will need to build or pull the production container.
-The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
-To build the production container [#f1]_:
-
-.. code-block:: console
-
-    # create a dockerfile
-    $ python3 docker/generate.py
-    $ ./proteus dockerize --production [platform flags]
-
-Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI`, :ref:`ZenDNN` or MIGraphX.
-Refer to the help or the platform documentation for more information on how to build the right image.
-The resulting image must be pushed to a Docker registry.
-If you don't have access to one, you can start a local registry using `these instructions <https://docs.docker.com/registry/deploying/>`__ from Docker.
-Make sure to set up a secure registry if you need access to the registry from more than one host.
-
-To push the image to the registry, re-tag the image with the registry and push it.
-For example, if you're using the local registry approach from above, the registry name would be ``localhost:5000`` by default.
-
-.. code-block:: console
-
-    docker tag $(whoami)/<image> <registry>/<image> && docker push <registry>/<image>
-
-Once the image is pushed to the registry, verify that it can be pulled with Docker from all nodes in the Kubernetes cluster.
-In some cases, Kubernetes may fail to pull the image, even if it's tagged with the right version due to some issues with mapping the version to the image.
-If you run into this issue, you can use the SHA value of the image directly to skip this lookup.
-In that case, the image string you would use in the YAML configuration files would be of the form ``<registry>/<image>@sha256:<SHA>``.
-The SHA is visible when you push the image to the registry or you can get it by inspecting the image:
-
-.. code-block:: console
-
-    docker inspect --format='{{index .RepoDigests 0}}' <registry>/<image>
+To use with KServe, you will need to pull or :ref:`build the production container <docker:Build the production Docker image`.
+Once you have it somewhere, make sure you can use ``docker pull <image>`` on all the nodes in the Kubernetes cluster to get the image.
 
 Start an inference service
 --------------------------
@@ -150,7 +120,7 @@ Serving Runtime
 ^^^^^^^^^^^^^^^
 
 KServe defines two CRDs called ``ServingRuntime`` and ``ClusterServingRuntime``, where the only difference is that the former is namespace-scoped and the latter is cluster-scoped.
-You can see more information about these CRDs in `KServe's documentation <https://kserve.github.io/website/0.9/modelserving/servingruntimes/`__.
+You can see more information about these CRDs in `KServe's documentation <https://kserve.github.io/website/0.9/modelserving/servingruntimes/>`__.
 The AMD Inference Server is not included by default in the standard KServe installation but you can add the runtime to your cluster.
 A sample ``ClusterServingRuntime`` definition is provided below.
 
@@ -300,11 +270,9 @@ The method by which you communicate with your service depends on your Kubernetes
 For example, one way to make requests is to `get the address of the INGRESS_HOST and INGRESS_PORT <https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports>`__, and then make requests to this URL by setting the ``Host`` header on all requests to your targeted service.
 This use case may be needed if your cluster doesn't have a load-balancer and/or DNS enabled.
 
-Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`.
+Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`__.
 The request will be routed to the server and the response will be returned.
 You can see some examples of using the KServe Python API to make requests in the `tests <https://github.com/Xilinx/inference-server/tree/main/tests/kserve>`__.
-
-.. [#f1] Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).
 
 Debugging
 ---------
@@ -323,15 +291,15 @@ The easiest way to do this is with the ``proteus`` script in the inference serve
 You'll need to first connect to the node where the container is running.
 On that host:
 
-.. code-block:: console
+.. code-block:: bash
 
     # this lists the running Inference Server containers
-    $ proteus list
+    proteus list
 
     # get the container ID of the container you want to connect to
 
     # provide the ID as an argument to the attach command to open a bash shell
     # in the container
-    $ proteus attach -n <container ID>
+    proteus attach -n <container ID>
 
 Once in the container, you can find the running ``proteus-server`` executable and then follow the regular debugging guide to debug the inference server.

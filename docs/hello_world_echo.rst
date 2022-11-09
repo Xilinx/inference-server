@@ -30,9 +30,9 @@ You need to bring in the AMD Inference Server Python library to use the API.
 The Python library is based on the Inference Server's C++ API and it gets installed in the dev container when you build the project.
 You can also install it using a pre-built wheel.
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
-    :start-after: +imports:
-    :end-before: -imports:
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +imports
+    :end-before: -imports
 
 Create our client and server objects
 ------------------------------------
@@ -42,9 +42,9 @@ This example assumes that the server will be running locally with the default HT
 Since you'll be using HTTP/REST to communicate with the server, you should create an `HttpClient` using the address of the server as the argument.
 
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
-    :start-after: +create objects:
-    :end-before: -create objects:
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +create objects
+    :end-before: -create objects
     :dedent: 4
 
 Is AMD Inference Server already running?
@@ -56,9 +56,9 @@ If it's not live, then you can start the server from Python by instantiating the
 Depending on what protocol you're using to communicate with the server, that protocol may need to be started on the server.
 The server will remain active as long as the server object stays in scope.
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
-    :start-after: +start server:
-    :end-before: -start server:
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +start server
+    :end-before: -start server
     :dedent: 4
 
 Load a worker
@@ -71,9 +71,9 @@ Loading a worker returns an endpoint that the client should use for future opera
 
 This worker, Echo, is a simple example worker that accepts an integer as input, adds one to it and returns the sum.
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
-    :start-after: +load worker:
-    :end-before: -load worker:
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +load worker
+    :end-before: -load worker
     :dedent: 4
 
 Inference
@@ -83,9 +83,9 @@ Once the worker is ready, you can make an inference request to it.
 To do so, first construct a request.
 We construct a request that contains an integer and send it to AMD Inference Server.
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
-    :start-after: +inference:
-    :end-before: -inference:
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +inference
+    :end-before: -inference
     :dedent: 4
 
 To make a request, you need to create, at minimum, a ``proteus.InferenceRequest`` object and add ``proteus.InferenceRequestInput`` objects to it.
@@ -94,7 +94,7 @@ This format is based on :github:`KServe's v2 specification <kserve/kserve/blob/m
 For images, there's also a helper method called ``proteus.ImageInferenceRequest`` that you can use to create requests.
 It's used in the ResNet50 Python examples.
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
+.. literalinclude:: ../examples/hello_world/echo.py
     :start-after: +make request
     :end-before: -make request
 
@@ -108,9 +108,9 @@ The format and contents of the output data will depend on the worker and model u
 In this case, the Echo worker returns a single output tensor back with one integer that should be one larger than what was sent.
 The assertions here check these cases.
 
-.. literalinclude:: ../examples/python/hello_world_rest.py
-    :start-after: +validate:
-    :end-before: -validate:
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +validate
+    :end-before: -validate
     :dedent: 4
 
 Clean up

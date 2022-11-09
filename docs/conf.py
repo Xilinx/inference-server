@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,8 +80,6 @@ confluence_server_url = "https://confluence.xilinx.com/"
 # sphinx.ext.autodoc configuration
 # prefix all generated labels with the document
 autosectionlabel_prefix_document = True
-# only auto label top-level headings
-autosectionlabel_maxdepth = 1
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {

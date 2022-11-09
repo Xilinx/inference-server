@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,7 +55,7 @@ For REST requests, make asynchronous requests so sequential requests don't block
 There are a few ways to do this.
 For benchmarking, use ``wrk`` or other HTTP benchmarking executables that ensure maximum throughput.
 If making requests from Python, use ``aiohttp`` or similar packages to make asynchronous requests instead of the ``requests`` package.
-AMD Inference Server's Python API provides :py:meth:`~proteus.rest.Client.infer` for synchronous requests and :py:meth:`~proteus.rest.Client.infers` for asynchronous requests with the :py:class:`RestClient <proteus.rest.Client>` class.
+AMD Inference Server's Python API provides :py:meth:`~proteus.HttpClient.modelInfer` for synchronous requests with the :py:class:`HttpClient <proteus.HttpClient>` class.
 
 For C++ applications, the same principle holds.
 Using multiple threads to enqueue and dequeue requests to AMD Inference Server allows for higher throughput.
@@ -131,7 +132,7 @@ Each of these workers will share a common batcher, which will push requests to a
 
 .. code-block:: python
 
-    client = proteus.RestClient("127.0.0.1:8998")
+    client = proteus.HttpClient("127.0.0.1:8998")
 
     parameters = {"share": False}
 
@@ -149,7 +150,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
 
 .. code-block:: python
 
-    client = proteus.RestClient("127.0.0.1:8998")
+    client = proteus.HttpClient("127.0.0.1:8998")
 
     parameters = {"threads": 5}
 
