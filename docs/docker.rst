@@ -26,7 +26,7 @@ Build the production Docker image
 
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
-To build the production container [#f1]_:
+To build the production container:
 
 .. code-block:: console
 
@@ -127,5 +127,3 @@ Make a request
 As in the :ref:`Python examples <example_resnet50_python:running resnet50 - python>`, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
 Unlike these examples, you can skip ahead to making the request for inference because the server is already started and the worker is ready to serve your request.
 Once you have it, you can use ``modelInfer`` to make the request.
-
-.. [#f1] Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).

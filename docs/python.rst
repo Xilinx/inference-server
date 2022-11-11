@@ -71,20 +71,4 @@ API
 ---
 
 .. automodule:: proteus
-    :members:
     :imported-members:
-
-Clients
-^^^^^^^
-
-HTTP/REST
-"""""""""
-
-.. autoclass:: proteus.HttpClient
-    :members:
-
-Websocket
-"""""""""
-
-.. autoclass:: proteus.WebSocketClient
-    :members:

@@ -723,10 +723,20 @@ class Get:
                 )
             )
 
-        if run_command("git lfs version", args.dry_run) is None:
-            run_command("git lfs pull", args.dry_run)
-        else:
-            print("Git LFS not found, not automatically getting LFS artifacts")
+        if run_command("git lfs version", args.dry_run, False, True) is not None:
+            print(
+                "Install Git LFS and run the following commands in the repo before continuing:"
+            )
+            print("  $ git lfs install")
+            print("  $ git lfs pull")
+            sys.exit(1)
+
+        # use the size of mnist.zip as a proxy to see if git lfs pull has been called
+        if os.path.getsize(Path.cwd() / "tests/assets/mnist.zip") < 1024:
+            print("Git LFS detected but you haven't pulled the LFS artifacts:")
+            print("  $ git lfs install")
+            print("  $ git lfs pull")
+            sys.exit(1)
 
         tests.download.main(args)
 

@@ -78,8 +78,31 @@ confluence_ask_password = True
 confluence_server_url = "https://confluence.xilinx.com/"
 
 # sphinx.ext.autodoc configuration
+autodoc_default_options = {
+    "members": True,
+    "special-members": "__init__",
+    "undoc-members": True,
+}
+
+
+def hide_private_module(app, what, name, obj, options, signature, return_annotation):
+    if signature is not None:
+        new_signature = signature.replace("proteus._proteus", "proteus")
+    else:
+        new_signature = signature
+
+    if return_annotation is not None:
+        new_return = return_annotation.replace("proteus._proteus", "proteus")
+    else:
+        new_return = return_annotation
+
+    return (new_signature, new_return)
+
+
+# sphinx.ext.autosectionlabel configuration
 # prefix all generated labels with the document
 autosectionlabel_prefix_document = True
+
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
@@ -103,6 +126,10 @@ nitpicky = True
 
 # number all figures with captions
 numfig = True
+
+rst_prolog = """
+.. include:: links.rst
+"""
 
 # Configure 'Edit on GitHub' extension
 edit_on_github_project = "Xilinx/inference-server"
@@ -133,3 +160,7 @@ if os.path.exists("./_themes/xilinx"):
 html_static_path = ["_static"]
 
 html_last_updated_fmt = "%B %d, %Y"
+
+
+def setup(app):
+    app.connect("autodoc-process-signature", hide_private_module)

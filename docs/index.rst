@@ -47,6 +47,7 @@
     :hidden:
     :caption: Platforms
 
+    migraphx
     vitis_ai
     zendnn
 
@@ -90,6 +91,7 @@
 
     roadmap
     changelog
+    glossary
     dependencies
 
 .. Docs

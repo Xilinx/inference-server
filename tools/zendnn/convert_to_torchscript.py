@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+1. Load ResNet50 architecture from tools/zendnn/resnet50.py file.
+2. Load the downloaded weights to the model.
+3. Do a jit trace of model.
+4. Save the traced TorchScript model to the same location with .pt extension.
+"""
+
 import argparse
 import os
 
