@@ -1,5 +1,5 @@
 ..
-    Copyright 2021 Advanced Micro Devices, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,14 +26,14 @@ Build the production Docker image
 
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
-To build the production container [#f1]_:
+To build the production container:
 
 .. code-block:: console
 
     $ python3 docker/generate.py
     $ ./proteus dockerize --production [platform flags]
 
-Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI`, :ref:`ZenDNN` or MIGraphX.
+Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI <vitis_ai:vitis ai>`, :ref:`ZenDNN <zendnn:zendnn>` or :ref:`MIGraphX <migraphx:migraphx>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
 
 Push to a registry
@@ -71,17 +71,16 @@ There are multiple ways of modifying an existing Docker image that are well-docu
 For example, one approach is using a Dockerfile to build a new image:
 
 .. code-block:: dockerfile
-    :force:
 
     FROM <image>
 
     COPY /some/path/in/Docker/build/tree /some/path/in/the/image
     ENV SomeVariable=SomeValue
-    CMD ["proteus-server", <more arguments?>]
+    CMD ["proteus-server", "<more arguments?>"]
 
 In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
-As with the production image, this image may need to be :ref:`pushed to a registry server <Push to a registry>` for your use case.
+As with the production image, this image may need to be :ref:`pushed to a registry server <docker:push to a registry>` for your use case.
 
 Note that the command that the image will run can also be overridden at the command-line when starting the container.
 So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.
@@ -125,8 +124,6 @@ Clients that make requests to this worker will need the endpoint to talk it.
 Make a request
 --------------
 
-As in the :ref:`Python examples <Running ResNet50 - Python>`, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
+As in the :ref:`Python examples <example_resnet50_python:running resnet50 - python>`, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
 Unlike these examples, you can skip ahead to making the request for inference because the server is already started and the worker is ready to serve your request.
 Once you have it, you can use ``modelInfer`` to make the request.
-
-.. [#f1] Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you're targeting in ``./external/overlaybins/``.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the ``XLNX_VART_FIRMWARE`` variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren't searched).

@@ -83,7 +83,7 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Dependencies" href="dependencies.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
     <link rel="prev" title="Roadmap" href="roadmap.html" /> 
 	</head>
 	<body>
@@ -280,6 +280,7 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
@@ -326,6 +327,7 @@ function OptanonWrapper() { }
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -414,6 +416,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Support building Python wheels with cibuildwheel (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/71">#71</a>)</p></li>
 <li><p>Support XModels with multiple output tensors (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/74">#74</a>)</p></li>
 <li><p>Add FP16 support (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/76">#76</a>)</p></li>
+<li><p>Add more documentation (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/85">#85</a>)</p></li>
+<li><p>Add Python bindings for gRPC and Native clients (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
 </ul>
 </section>
 <section id="changed">
@@ -423,6 +427,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Templatize Dockerfile for different base images (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/71">#71</a>)</p></li>
 <li><p>Use multiple HTTP clients internally for parallel HTTP requests (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/66">#66</a>)</p></li>
 <li><p>Update test asset downloading (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/81">#81</a>)</p></li>
+<li><p>Reimplement and align examples across platforms (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/85">#85</a>)</p></li>
+<li><p>Reorganize Python library (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
 </ul>
 </section>
 <section id="fixed">
@@ -431,6 +437,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Use input tensors in requests correctly (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/61">#61</a>)</p></li>
 <li><p>Fix bug with multiple input tensors (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/74">#74</a>)</p></li>
 <li><p>Align gRPC responses using non-gRPC-native data types with other input protocols (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/81">#81</a>)</p></li>
+<li><p>Fix the Manager’s destructor (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
+<li><p>Fix using <code class="docutils literal notranslate"><span class="pre">--no-user-config</span></code> with <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">run</span></code> (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/89">#89</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -459,7 +467,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Logging macro is now <code class="docutils literal notranslate"><span class="pre">PROTEUS_LOG_*</span></code></p></li>
 <li><p>Loading workers is now case-insensitive (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/14ed4ef">&#64;14ed4ef</a> and <a class="reference external" href="https://github.com/Xilinx/inference-server/commit/90a51ae">&#64;90a51ae</a>)</p></li>
 <li><p>Build AKS from source (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/e04890f">&#64;e04890f</a>)</p></li>
-<li><p>Use consistent custom exceptions (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/30">#30</a>)</p></li>
+<li><p>Use consistent custom exceptions (<a class="reference external" href="https://github.com/Xilinx/inference-server/issues/30">#30</a>)</p></li>
 <li><p>Update Docker build commands to opt-in to all backends (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/43">#43</a>)</p></li>
 <li><p>Renamed ‘modelLoad’ to ‘workerLoad’ and changed the behavior for ‘modelLoad’ (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/27">#27</a>)</p></li>
 </ul>
@@ -515,7 +523,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dependencies.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="roadmap.html" class="btn btn-neutral float-left" title="Roadmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -528,7 +536,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

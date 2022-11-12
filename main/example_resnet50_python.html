@@ -289,6 +289,7 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
@@ -317,6 +318,7 @@ function OptanonWrapper() { }
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -430,7 +432,8 @@ Creating the <code class="docutils literal notranslate"><span class="pre">proteu
 <section id="create-the-client-object">
 <h2>Create the client object<a class="headerlink" href="#create-the-client-object" title="Permalink to this heading">¶</a></h2>
 <p>As in C++, you can create a client in Python corresponding to the protocol you want to use to talk to the server.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;http://127.0.0.1:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">http_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server_addr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">ip</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">http_port</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="n">server_addr</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -557,7 +560,7 @@ If there are multiple requests sent in this way, they may be batched together by
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

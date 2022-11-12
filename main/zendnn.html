@@ -280,12 +280,18 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ZenDNN</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setup-and-build">Setup and Build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-objects-models-images">Get objects (models/images)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#set-up-docker-container">Set Up Docker Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-an-image">Build an image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-zendnn-packages">Download the ZenDNN packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-the-image">Build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-assets-and-models">Get assets and models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#freezing-pytorch-models">Freezing PyTorch models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-tests">Run Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tune-performance">Tune performance</a></li>
 </ul>
 </li>
 </ul>
@@ -314,6 +320,7 @@ function OptanonWrapper() { }
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -386,129 +393,60 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="zendnn">
-<h1>ZenDNN<a class="headerlink" href="#zendnn" title="Permalink to this heading">¶</a></h1>
-<p>AMD Inference Server is integrated with
-<a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN</a> optimized libraries.
-Currently, the AMD Inference Server supports the ZenDNN optimized for
-TensorFlow and PyTorch.
+  <section id="id1">
+<h1>ZenDNN<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<p>AMD Inference Server is integrated with <a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN</a> optimized libraries for running inference on AMD EPYC processors with TensorFlow and PyTorch.
 Check the <a class="reference internal" href="zendnn_examples.html#zendnn-examples"><span class="std std-ref">examples</span></a> to see how to use ZenDNN with the Inference Server.</p>
-<p>For ZenDNN performance, please refer to TensorFlow + ZenDNN and
-PyTorch + ZenDNN User Guide available at the <a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN AMD Developer</a> site.</p>
-<section id="setup-and-build">
-<h2>Setup and Build<a class="headerlink" href="#setup-and-build" title="Permalink to this heading">¶</a></h2>
-<p>To use Inference Server enabled with TensorFlow/PyTorch+ZenDNN, you’ll need Git
-and Docker installed on your machine.</p>
-<ol class="arabic">
-<li><p>Download C++ package for TensorFlow/PyTorch+ZenDNN</p>
-<ol class="arabic">
-<li><p>Go to <a class="reference external" href="https://developer.amd.com/zendnn/">https://developer.amd.com/zendnn/</a></p></li>
-<li><p>Download the file</p>
+<section id="build-an-image">
+<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this heading">¶</a></h2>
+<p>To build an image with TensorFlow/Pytorch + ZenDNN enabled, you need to download the ZenDNN libraries and then build the image by pointing the build script to the location of these downloaded packages.</p>
+<section id="download-the-zendnn-packages">
+<h3>Download the ZenDNN packages<a class="headerlink" href="#download-the-zendnn-packages" title="Permalink to this heading">¶</a></h3>
+<p>You can download the TF+ZenDNN and/or PT+ZenDNN packages from the <a class="reference external" href="https://developer.amd.com/zendnn/#download">ZenDNN developer downloads</a>.
+Before downloading these packages, you will be required to read and agree to the End User License Agreement (EULA).</p>
 <ol class="arabic simple">
-<li><p>For TensorFlow: TF_v2.9_ZenDNN_v3.3_C++_API.zip</p></li>
-<li><p>For PyTorch: PT_v1.11.0_ZenDNN_v3.3_C++_API.zip</p></li>
+<li><p>For TensorFlow: download <code class="docutils literal notranslate"><span class="pre">TF_v2.9_ZenDNN_v3.3_C++_API.zip</span></code></p></li>
+<li><p>For PyTorch: download <code class="docutils literal notranslate"><span class="pre">PT_v1.11.0_ZenDNN_v3.3_C++_API.zip</span></code></p></li>
 </ol>
-</li>
-<li><p>For download, you will be required to sign a EULA. Please read
-through carefully and click on accept to download the package.</p></li>
-<li><p>Copy the downloaded package within the repository. This package
-will be used for further setup.</p>
+<p>You can download one or both, depending on what you want to enable.</p>
+</section>
+<section id="build-the-image">
+<h3>Build the image<a class="headerlink" href="#build-the-image" title="Permalink to this heading">¶</a></h3>
+<p>After downloading the packages, place them in the root of the repository.
+To build an image with ZenDNN enabled, you need to add the the appropriate flag(s) to the <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the Dockerfile</span>
+python3 docker/generate.py
+
+<span class="c1"># build the dev image $(whoami)/proteus-dev-zendnn:latest</span>
+./proteus dockerize --tfzendnn<span class="o">=</span>./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn<span class="o">=</span>./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix<span class="o">=</span><span class="s2">&quot;-zendnn&quot;</span>
+
+<span class="c1"># build the production image $(whoami)/proteus-zendnn:latest</span>
+./proteus dockerize --tfzendnn<span class="o">=</span>./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn<span class="o">=</span>./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix<span class="o">=</span><span class="s2">&quot;-zendnn&quot;</span> --production
+</pre></div>
+</div>
+<p>You can choose to build a image with just TF+ZenDNN or just PT+ZenDNN by only passing the appropriate flag.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The package will be needed by the Docker build process so it must be in a location that is not excluded in the <code class="docutils literal notranslate"><span class="pre">.dockerignore</span></code> file such as the root of the repository.</p>
+<p>The downloaded ZenDNN packages will be used by the Docker build process so they must be in the inference server repository directory and in a location that is not excluded by the <code class="docutils literal notranslate"><span class="pre">.dockerignore</span></code> file.
+These instructions suggest using the repository root but any path that meets this criteria will work.</p>
 </div>
-</li>
-</ol>
-</li>
-<li><p>Build the docker with TensorFlow/PyTorch+ZenDNN</p>
-<p>To build docker image with TensorFlow/PyTorch+ZenDNN, use the commands below:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
-</pre></div>
-</div>
-<ol class="arabic">
-<li><p>For TensorFlow</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize --tfzendnn<span class="o">=</span>./local/path/to/TF_v2.9_ZenDNN_v3.3_C++_API.zip
-</pre></div>
-</div>
-</li>
-<li><p>For PyTorch</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus dockerize --ptzendnn<span class="o">=</span>./local/path/to/PT_v1.11.0_ZenDNN_v3.3_C++_API.zip
-</pre></div>
-</div>
-</li>
-</ol>
-<p>This will build a docker image with all the dependencies required for
-the AMD Inference Server and setup TensorFlow/PyTorch+ZenDNN within the
-image for further usage.</p>
-</li>
-</ol>
 </section>
-<section id="get-objects-models-images">
-<h2>Get objects (models/images)<a class="headerlink" href="#get-objects-models-images" title="Permalink to this heading">¶</a></h2>
-<p>Run the following command to get some <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">lfs</span></code> assets for examples/tests.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git lfs fetch --all
-<span class="gp">$ </span>git lfs pull
-</pre></div>
-</div>
-<p>To run the examples and test cases, we need to download some models.
-Run the command below to download ResNet50 TensorFlow and PyTorch models.</p>
+</section>
+<section id="get-assets-and-models">
+<h2>Get assets and models<a class="headerlink" href="#get-assets-and-models" title="Permalink to this heading">¶</a></h2>
+<p>You can download the assets and models used for tests and examples with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus get --tfzendnn --ptzendnn
 </pre></div>
 </div>
-<p>The models downloaded will be available at <code class="code docutils literal notranslate"><span class="pre">./external/artifacts/tensorflow</span></code>. and <code class="code docutils literal notranslate"><span class="pre">./external/artifacts/pytorch</span></code>.</p>
 </section>
-<section id="set-up-docker-container">
-<h2>Set Up Docker Container<a class="headerlink" href="#set-up-docker-container" title="Permalink to this heading">¶</a></h2>
-<ol class="arabic">
-<li><p>Run the container</p>
-<p>By default, the stable dev docker image is built and to run the
-container, use the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus run --dev
-</pre></div>
-</div>
-</li>
-<li><p>Build AMD Inference Server</p>
-<p>Now that the environment is setup within the docker container, we
-need to build the Inference Server. The below command will build the
-stable debug build of the AMD Inference Server.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus build --debug
-</pre></div>
-</div>
-<p>NOTE: If you are switching containers, and build folder already exits
-in the inference-server folder, please use <code class="code docutils literal notranslate"><span class="pre">--regen</span> <span class="pre">--clean</span></code> flags to
-regenerate CMakeFiles and do a clean build to avoid any issues.</p>
-</li>
-<li><p>For PyTorch+ZenDNN only
-We need to convert the downloaded PyTorch eager model to TorchScript
-Model (<a class="reference external" href="https://pytorch.org/tutorials/advanced/cpp_export.html#converting-to-torch-script-via-tracing">Exporting to TorchScript docs</a>).</p>
-<p>To convert the model to TorchScript model, follow the steps.</p>
-<ol class="arabic">
-<li><p>We will need to use the PyTorch python API. Install requirements with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip3 install -r tools/zendnn/requirements.txt
-</pre></div>
-</div>
-</li>
-<li><p>To convert the model to TorchScript Model do:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python tools/zendnn/convert_to_torchscript.py --graph external/pytorch_models/resnet50_pretrained.pth
-</pre></div>
-</div>
-<p>The script will do the following:</p>
-<ol class="arabic simple">
-<li><p>Load ResNet50 architecture from tools/zendnn/resnet50.py file.</p></li>
-<li><p>Load the downloaded weights to the model.</p></li>
-<li><p>Do a jit trace of model.</p></li>
-<li><p>Save the traced TorchScript model to the same location with .pt extension.</p></li>
-</ol>
-</li>
-</ol>
-<p>The converted TorchScript model will be used by the examples and tests.
-For more info on TorchScript models, please visit <a class="reference external" href="https://pytorch.org/tutorials/advanced/cpp_export.html">PyTorch docs</a>.</p>
-</li>
-</ol>
+<section id="freezing-pytorch-models">
+<h2>Freezing PyTorch models<a class="headerlink" href="#freezing-pytorch-models" title="Permalink to this heading">¶</a></h2>
+<p>To use with the AMD Inference Server, you need to <a class="reference external" href="https://pytorch.org/tutorials/advanced/cpp_export.html#step-1-converting-your-pytorch-model-to-torch-script">convert downloaded PyTorch Eager models to TorchScript</a>.</p>
 </section>
 <section id="run-tests">
 <h2>Run Tests<a class="headerlink" href="#run-tests" title="Permalink to this heading">¶</a></h2>
-<p>To verify the working of TensorFlow+ZenDNN in the AMD Inference Server, run a sample test case. This test will load a model and run with a sample image and assert the output.</p>
+<p>To verify the working of TF/PT + ZenDNN in the AMD Inference Server, run a sample test case.
+This test will load a model and run with a sample image and assert the output.</p>
 <ol class="arabic">
 <li><p>For TensorFlow + ZenDNN</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus <span class="nb">test</span> -k tfzendnn
@@ -521,6 +459,10 @@ For more info on TorchScript models, please visit <a class="reference external" 
 </div>
 </li>
 </ol>
+</section>
+<section id="tune-performance">
+<h2>Tune performance<a class="headerlink" href="#tune-performance" title="Permalink to this heading">¶</a></h2>
+<p>For tuning ZenDNN performance, you can refer to the TensorFlow + ZenDNN and PyTorch + ZenDNN <a class="reference external" href="https://developer.amd.com/zendnn/#userguide">user guides</a>.</p>
 </section>
 </section>
 
@@ -553,7 +495,7 @@ For more info on TorchScript models, please visit <a class="reference external" 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

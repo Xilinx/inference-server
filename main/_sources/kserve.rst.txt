@@ -35,7 +35,7 @@ If this succeeds, KServe should be installed correctly.
 KServe installation help and debugging are also out of scope for these instructions.
 If you run into problems, reach out to the KServe project.
 
-If you want to use FPGAs for your inferences, install the `Xilinx FPGA Kubernetes plugin <https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-fpga-device-plugin>`__.
+If you want to use FPGAs for your inferences, install the `Xilinx FPGA Kubernetes plugin <https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin>`__.
 This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.
 
 You may also want to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
@@ -46,7 +46,7 @@ The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`_
 Get or build the AMD Inference Server Image
 -------------------------------------------
 
-To use with KServe, you will need to pull or :ref:`build the production container <docker:Build the production Docker image`.
+To use with KServe, you will need to pull or :ref:`build the production container <docker:build the production docker image`.
 Once you have it somewhere, make sure you can use ``docker pull <image>`` on all the nodes in the Kubernetes cluster to get the image.
 
 Start an inference service

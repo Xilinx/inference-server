@@ -280,6 +280,7 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
@@ -319,6 +320,7 @@ function OptanonWrapper() { }
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -405,7 +407,7 @@ Once KServe is installed, verify basic functionality of the cluster using KServe
 If this succeeds, KServe should be installed correctly.
 KServe installation help and debugging are also out of scope for these instructions.
 If you run into problems, reach out to the KServe project.</p>
-<p>If you want to use FPGAs for your inferences, install the <a class="reference external" href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-fpga-device-plugin">Xilinx FPGA Kubernetes plugin</a>.
+<p>If you want to use FPGAs for your inferences, install the <a class="reference external" href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin">Xilinx FPGA Kubernetes plugin</a>.
 This plugin adds FPGAs as a resource for Kubernetes so you can request them when launching services on your cluster.</p>
 <p>You may also want to install monitoring and tracing tools such as Prometheus, Jaeger, and Grafana to your Kubernetes cluster.
 Refer to the documentation for these respective projects on installation details.
@@ -413,7 +415,7 @@ The <a class="reference external" href="https://github.com/prometheus-operator/k
 </section>
 <section id="get-or-build-the-amd-inference-server-image">
 <h2>Get or build the AMD Inference Server Image<a class="headerlink" href="#get-or-build-the-amd-inference-server-image" title="Permalink to this heading">¶</a></h2>
-<p>To use with KServe, you will need to pull or <span class="xref std std-ref">build the production container &lt;docker:Build the production Docker image</span>.
+<p>To use with KServe, you will need to pull or <span class="xref std std-ref">build the production container &lt;docker:build the production docker image</span>.
 Once you have it somewhere, make sure you can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">&lt;image&gt;</span></code> on all the nodes in the Kubernetes cluster to get the image.</p>
 </section>
 <section id="start-an-inference-service">
@@ -696,7 +698,7 @@ proteus attach -n &lt;container ID&gt;
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

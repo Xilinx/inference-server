@@ -84,7 +84,7 @@ function OptanonWrapper() { }
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ZenDNN" href="zendnn.html" />
-    <link rel="prev" title="Tracing" href="tracing.html" /> 
+    <link rel="prev" title="MIGraphX" href="migraphx.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -280,9 +280,16 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Vitis AI</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-host">Setting up the host</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-the-host-and-fpgas">Set up the host and FPGAs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#software">Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shell">Shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xclbins">XCLBINs</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#build-an-image">Build an image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-assets-and-models">Get assets and models</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
@@ -312,6 +319,7 @@ function OptanonWrapper() { }
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -386,31 +394,55 @@ function OptanonWrapper() { }
             
   <section id="vitis-ai">
 <h1>Vitis AI<a class="headerlink" href="#vitis-ai" title="Permalink to this heading">¶</a></h1>
-<p>Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
-These instructions assume an Alveo card.
-If using a different card, follow the appropriate instructions for your card.</p>
-<section id="setting-up-the-host">
-<h2>Setting up the host<a class="headerlink" href="#setting-up-the-host" title="Permalink to this heading">¶</a></h2>
-<p>Follow the instructions on <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup/alveo">setting up Alveo cards</a>.
-In essence, you will need to program the shell and platform on the FPGA.
-You will also need to install XRT.
-If you’re using Docker, the XRT version on the host should match the one installed in the Docker container.
-You also don’t need XRM on the host if you’re using Docker but you do otherwise.
-You can use <code class="docutils literal notranslate"><span class="pre">xbutil</span> <span class="pre">validate</span> <span class="pre">--device</span> <span class="pre">&lt;device</span> <span class="pre">id&gt;</span></code> to confirm that your FPGA is ready to use.
+<p>Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.</p>
+<section id="set-up-the-host-and-fpgas">
+<h2>Set up the host and FPGAs<a class="headerlink" href="#set-up-the-host-and-fpgas" title="Permalink to this heading">¶</a></h2>
+<p>The details for setting up your host are available online in the <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup">Vitis AI</a> repository.
+These instructions will depend on whether you are using <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup/alveo">Alveo cards</a> or <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup/vck5000">VCK5000</a>.
+In essence, you will need to install software, program the shell on the FPGA(s) and download XCLBINs.</p>
+<section id="software">
+<h3>Software<a class="headerlink" href="#software" title="Permalink to this heading">¶</a></h3>
+<p>You need to install the Xilinx Runtime (XRT) to communicate with the FPGA over PCIe.
+The XRT version on the host should match the one installed in the container where the server will be running.
+The Xilinx Resource Manager (XRM) is not needed on the host because it is already installed in the container.</p>
+</section>
+<section id="shell">
+<h3>Shell<a class="headerlink" href="#shell" title="Permalink to this heading">¶</a></h3>
+<p>The Vitis AI repository contains scripts to install packages and flash the shell on your FPGA.
+They use XRT to program the FPGA.
+In most cases, flashing the shell will be a one-time act as it is persistent.
+However, for some FPGAs such as the Alveo U250, there is an intermediate second shell that must be reprogrammed after every power cycle.
+Follow the instructions in the scripts to install the secondary shell.</p>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">xbutil</span> <span class="pre">validate</span> <span class="pre">--device</span> <span class="pre">&lt;device</span> <span class="pre">id&gt;</span></code> to confirm that your FPGA is ready to use.
 If this executable is not on your PATH, it should be in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/xrt/bin</span></code>.</p>
-<p>You will also need the XCLBINs corresponding to your card on the host.
-By default, these will be placed in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins</span></code> and will be mounted into the development container if using Docker with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script.
-The <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> environment variable in the container should point to the directory containing the XCLBINs needed for your FPGA.</p>
+</section>
+<section id="xclbins">
+<h3>XCLBINs<a class="headerlink" href="#xclbins" title="Permalink to this heading">¶</a></h3>
+<p>The XCLBINs define the DPU that will run on the FPGA.
+By default, these are installed in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins/&lt;DPU&gt;/*</span></code>
+The environment variable <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> must be set where the inference server is running to point to the directory where the XCLBINs for your FPGA are.
+You can mount this directory in your container to enable it to access these files.
+Alternatively, you can also copy XCLBINs directly into the container as well.</p>
+</section>
 </section>
 <section id="build-an-image">
 <h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this heading">¶</a></h2>
-<p>To build an image with Vitis AI enabled, you need to add the following flag <code class="docutils literal notranslate"><span class="pre">--vitis</span></code> to the <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span></code> command.
-For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># build the dev image $(whoami)/proteus-dev-vitis:latest</span>
+<p>To build an image with Vitis AI enabled, you need to add the <code class="docutils literal notranslate"><span class="pre">--vitis</span></code> to the <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the Dockerfile</span>
+python3 docker/generate.py
+
+<span class="c1"># build the dev image $(whoami)/proteus-dev-vitis:latest</span>
 ./proteus dockerize --vitis --suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span>
 
 <span class="c1"># build the production image $(whoami)/proteus-vitis:latest</span>
 ./proteus dockerize --vitis --suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span> --production
+</pre></div>
+</div>
+</section>
+<section id="get-assets-and-models">
+<h2>Get assets and models<a class="headerlink" href="#get-assets-and-models" title="Permalink to this heading">¶</a></h2>
+<p>You can download the assets and models used for tests and examples with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus get --vitis
 </pre></div>
 </div>
 </section>
@@ -435,7 +467,7 @@ For example:</p>
         <a href="zendnn.html" class="btn btn-neutral float-right" title="ZenDNN" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="tracing.html" class="btn btn-neutral float-left" title="Tracing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="migraphx.html" class="btn btn-neutral float-left" title="MIGraphX" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -445,7 +477,7 @@ For example:</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

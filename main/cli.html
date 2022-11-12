@@ -280,6 +280,7 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
@@ -366,6 +367,7 @@ function OptanonWrapper() { }
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -774,14 +776,14 @@ The documentation for the options available in this Python script can be seen he
 <section id="test">
 <h3>test<a class="headerlink" href="#test" title="Permalink to this heading">¶</a></h3>
 <p>Run the test suite with pytest. All unknown arguments are passed to pytest</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">tests</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="Options_repeat10">
 <h4>Options<a class="headerlink" href="#Options_repeat10" title="Permalink to this heading">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--mode</kbd></dt>
-<dd><p>Possible choices: tests, all, examples</p>
+<dd><p>Possible choices: examples, tests, all</p>
 <p>Type of tests to run. Defaults to tests</p>
 <p>Default: “tests”</p>
 </dd>
@@ -802,17 +804,17 @@ The documentation for the options available in this Python script can be seen he
 <p>Default: “Debug”</p>
 </dd>
 <dt><kbd>--benchmark</kbd></dt>
-<dd><p>Possible choices: skip, only, all</p>
+<dd><p>Possible choices: only, skip, all</p>
 <p>Run benchmark tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--perf</kbd></dt>
-<dd><p>Possible choices: skip, only, all</p>
+<dd><p>Possible choices: only, skip, all</p>
 <p>Run perf tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--cpp</kbd></dt>
-<dd><p>Possible choices: skip, only, all</p>
+<dd><p>Possible choices: only, skip, all</p>
 <p>Run cpp tests. Defaults to all. Ignored if -m is specified</p>
 <p>Default: “all”</p>
 </dd>
@@ -883,7 +885,7 @@ The documentation for the options available in this Python script can be seen he
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

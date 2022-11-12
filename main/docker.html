@@ -280,6 +280,7 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
 </ul>
@@ -317,6 +318,7 @@ function OptanonWrapper() { }
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
@@ -397,12 +399,12 @@ For more powerful and easier to use deployments, consider using <a class="refere
 <h2>Build the production Docker image<a class="headerlink" href="#build-the-production-docker-image" title="Permalink to this heading">¶</a></h2>
 <p>The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
-To build the production container <a class="footnote-reference brackets" href="#f1" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>:</p>
+To build the production container:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
 <span class="gp">$ </span>./proteus dockerize --production <span class="o">[</span>platform flags<span class="o">]</span>
 </pre></div>
 </div>
-<p>Depending on what platforms you want to support, add the appropriate flags to enable <span class="xref std std-ref">Vitis AI</span>, <span class="xref std std-ref">ZenDNN</span> or MIGraphX.
+<p>Depending on what platforms you want to support, add the appropriate flags to enable <a class="reference internal" href="vitis_ai.html#vitis-ai"><span class="std std-ref">Vitis AI</span></a>, <a class="reference internal" href="zendnn.html#id1"><span class="std std-ref">ZenDNN</span></a> or <a class="reference internal" href="migraphx.html#migraphx"><span class="std std-ref">MIGraphX</span></a>.
 Refer to the help or the platform documentation for more information on how to build the right image.</p>
 <section id="push-to-a-registry">
 <h3>Push to a registry<a class="headerlink" href="#push-to-a-registry" title="Permalink to this heading">¶</a></h3>
@@ -436,12 +438,12 @@ For example, one approach is using a Dockerfile to build a new image:</p>
 
 <span class="k">COPY</span><span class="w"> </span>/some/path/in/Docker/build/tree /some/path/in/the/image
 <span class="k">ENV</span><span class="w"> </span><span class="nv">SomeVariable</span><span class="o">=</span>SomeValue
-<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;proteus-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">&lt;more</span><span class="w"> </span><span class="err">argume</span><span class="kc">nts</span><span class="err">?&gt;</span><span class="p">]</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;proteus-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&lt;more arguments?&gt;&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
-As with the production image, this image may need to be <span class="xref std std-ref">pushed to a registry server</span> for your use case.</p>
+As with the production image, this image may need to be <a class="reference internal" href="#push-to-a-registry"><span class="std std-ref">pushed to a registry server</span></a> for your use case.</p>
 <p>Note that the command that the image will run can also be overridden at the command-line when starting the container.
 So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.</p>
 </section>
@@ -478,15 +480,9 @@ You can install it locally or use it in the development container to load the wo
 </section>
 <section id="make-a-request">
 <h2>Make a request<a class="headerlink" href="#make-a-request" title="Permalink to this heading">¶</a></h2>
-<p>As in the <span class="xref std std-ref">Python examples</span>, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
+<p>As in the <a class="reference internal" href="example_resnet50_python.html#running-resnet50-python"><span class="std std-ref">Python examples</span></a>, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
 Unlike these examples, you can skip ahead to making the request for inference because the server is already started and the worker is ready to serve your request.
 Once you have it, you can use <code class="docutils literal notranslate"><span class="pre">modelInfer</span></code> to make the request.</p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="f1" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
-<p>Before building the production container for FPGAs, make sure you have all the xclbins for the FPGAs platforms you’re targeting in <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/</span></code>.The contents of this directory will be copied into the production container so these are available to the final image. In addition, you may need to update the value of the <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> variable in the Dockerfile to point to the path containing your xclbins (it should point to the actual directory containing these files as nested directories aren’t searched).</p>
-</aside>
-</aside>
 </section>
 </section>
 
@@ -519,7 +515,7 @@ Once you have it, you can use <code class="docutils literal notranslate"><span c
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 09, 2022.
+        Last updated on November 11, 2022.
       </span>
 
     </p>

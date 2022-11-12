@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 Tracing
 =======
 
-AMD Inference Server reports request tracing using `Jaeger <https://jaegertracing.io/>`__ and they allow users to see how requests move through the system in real-time.
+AMD Inference Server reports request tracing using `Jaeger <https://www.jaegertracing.io/>`__ and they allow users to see how requests move through the system in real-time.
 
 Quickstart
 ----------
