@@ -51,12 +51,12 @@ void wrapHttpClient(py::module_ &m) {
     .def("modelMetadata", &HttpClient::modelMetadata, py::arg("model"),
          DOCS(HttpClient, modelMetadata))
     .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = proteus::RequestParameters(),
+         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
          DOCS(HttpClient, modelLoad))
     .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
          DOCS(HttpClient, modelUnload))
     .def("workerLoad", &HttpClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = proteus::RequestParameters(),
+         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
          DOCS(HttpClient, workerLoad))
     .def("workerUnload", &HttpClient::workerUnload, py::arg("model"),
          DOCS(HttpClient, workerUnload))

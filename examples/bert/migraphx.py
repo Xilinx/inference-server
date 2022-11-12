@@ -199,12 +199,15 @@ def main(args):
     print("Running the MIGraphX example for Bert in Python")
 
     # connect to the server
-    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    server_addr = f"http://{args.ip}:{args.http_port}"
+    client = proteus.HttpClient(server_addr)
     print("Waiting for server...", end="")
-    start_server = not client.serverLive()
-    if start_server:
+    # start it locally if it doesn't already up if the IP address is the localhost
+    if args.ip == "127.0.0.1" and not client.serverLive():
         server = proteus.Server()
         server.startHttp(args.http_port)
+    elif not client.serverLive():
+        raise ConnectionError(f"Could not connect to server at {server_addr}")
     proteus.waitUntilServerReady(client)
     print("OK. Connected.")
 

@@ -166,7 +166,6 @@ endif()
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)
   set(PROTEUS_ENABLE_TRACING OFF)
-  set(PROTEUS_BUILD_TESTING OFF)
 endif()
 
 configure_file(
@@ -193,8 +192,9 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     NAME
     coverage # New target name
     EXECUTABLE
-    ${PROJECT_SOURCE_DIR}/tests/test.sh
+    python3
     EXECUTABLE_ARGS
+    ${PROJECT_SOURCE_DIR}/tests/test.py
     --mode
     tests
     --build

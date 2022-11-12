@@ -1,4 +1,4 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[pytest]
-filterwarnings = ignore::DeprecationWarning
-markers =
-    timeout(time): add a timeout value for this test
-    fpgas(name, num): indicates type and minimum number of FPGAs needed for this test
-    benchmark: indicates a benchmark test with logging output
-    perf: indicates a benchmark test with logging output
-    extensions([names]): indicates a test that uses extensions
-    cpp: indicates a test is in C++
-
-# pytest-cpp options
-cpp_files = test_* perf_*
+name: "resnet50-onnx"
+platform: "onnx_onnxv1"
+inputs [
+    {
+    name: "input"
+    datatype: "FP32"
+    shape: [224,224,3]
+    }
+]
+outputs [
+    {
+    name: "output"
+    datatype: "FP32"
+    shape: [1000]
+    }
+]

@@ -1,0 +1,40 @@
+# Copyright 2022 Advanced Micro Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#* This configuration file defines specific variables that are needed by some
+#* tests but cannot be hard-coded in the test(s) itself because they will vary
+#* depending on who's running the tests.
+
+#* The easiest way to use this file is to duplicate it in this directory and
+#* rename it "conf.yaml". By default, the test script will look for a
+#* configuration file with that name here so you don't need to do anything more
+#* but you can also specify a custom path to the config file using the
+#* --runtime-config flag to pytest.
+
+---
+kserve:
+  # the Kubernetes namespace to use for running tests. It must exist prior to running tests
+  namespace: ""
+  # storage URI for the MNIST model (tfzendnn)
+  mnist_model: ""
+  # storage URI for the ResNet50 onnx model (migraphx)
+  resnet50_onnx_model: ""
+  # the container to use for ZenDNN-related tests
+  image_zendnn: ""
+  # the container to use for MIGraphX-related tests
+  image_migraphx: ""
+  # KServe ClusterServingRuntime for ZenDNN
+  runtime_zendnn: ""
+  # KServe ClusterServingRuntime for MIGraphX
+  runtime_migraphx: ""

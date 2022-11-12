@@ -1,5 +1,5 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,24 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Python API
-==========
+Glossary
+========
 
-.. automodule:: proteus
-    :members:
-    :imported-members:
+    Xilinx Runtime
+        An open-source standardized software interface that facilitates communication between the application code and the accelerated-kernels deployed on the reconfigurable portion of PCIe-based Alveo accelerator cards, Zynq-7000, Zynq UltraScale+ MPSoC based embedded platforms or Versal ACAPs.
 
-Clients
--------
-
-REST
-^^^^
-
-.. automodule:: proteus.rest
-    :members:
-
-Websocket
-^^^^^^^^^
-
-.. automodule:: proteus.websocket
-    :members:
+    XRT
+        See "Xilinx Runtime"

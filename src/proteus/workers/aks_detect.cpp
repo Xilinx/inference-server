@@ -139,6 +139,9 @@ struct DetectResponse {
 };
 
 void AksDetect::doAcquire(RequestParameters* parameters) {
+#ifdef PROTEUS_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
   auto kPath =
     std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_proteus.json");
 
@@ -148,7 +151,12 @@ void AksDetect::doAcquire(RequestParameters* parameters) {
   }
   util::autoExpandEnvironmentVariables(path);
 
-  this->sysMan_->loadGraphs(path);
+  try {
+    this->sysMan_->loadGraphs(path);
+  } catch (const std::exception& e) {
+    PROTEUS_LOG_ERROR(logger, e.what());
+    throw;
+  }
 
   this->graph_ = this->sysMan_->getGraph(this->graphName_);
 

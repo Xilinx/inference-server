@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -30,6 +31,33 @@
     example_resnet50_cpp
     example_resnet50_python
 
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Using AMD Inference Server
+
+    aks
+    logging
+    benchmarking
+    metrics
+    tracing
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Platforms
+
+    migraphx
+    vitis_ai
+    zendnn
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Deployment
+
+    docker
+    kserve
 
 .. toctree::
     :maxdepth: 2
@@ -41,31 +69,11 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Using AMD Inference Server
-
-    aks
-    logging
-    benchmarking
-    metrics
-    tracing
-    kserve
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Platforms
-
-    vitis_ai
-    zendnn
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
     :caption: User API libraries
 
     rest
     cpp_api
-    python_api
+    python
     cli
 
 .. toctree::
@@ -83,6 +91,7 @@
 
     roadmap
     changelog
+    glossary
     dependencies
 
 .. Docs

@@ -31,10 +31,11 @@
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #endif
 
+namespace fs = std::filesystem;
+
 namespace proteus {
 
-class Server::ServerImpl {
- public:
+struct Server::ServerImpl {
 #ifdef PROTEUS_ENABLE_HTTP
   bool http_started_ = false;
   std::thread http_thread_;
@@ -65,9 +66,6 @@ void initialize() {
 #endif
 
   Manager::getInstance().init();
-
-  ModelRepository::setRepository(std::string(std::getenv("PROTEUS_ROOT")) +
-                                 "/external/artifacts/repository");
 
 #ifdef PROTEUS_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
@@ -135,6 +133,14 @@ void Server::stopGrpc() const {
     grpc::stop();
   }
 #endif
+}
+
+void Server::setModelRepository(const fs::path& path) const {
+  ModelRepository::setRepository(path.string());
+}
+
+void Server::enableRepositoryMonitoring(bool use_polling) const {
+  ModelRepository::enableRepositoryMonitoring(use_polling);
 }
 
 }  // namespace proteus

@@ -35,6 +35,7 @@ import zipfile
 from pathlib import Path
 
 import tests.download
+import tests.test
 
 
 def get_version():
@@ -722,10 +723,20 @@ class Get:
                 )
             )
 
-        if run_command("git lfs version", args.dry_run) is None:
-            run_command("git lfs pull", args.dry_run)
-        else:
-            print("Git LFS not found, not automatically getting LFS artifacts")
+        if run_command("git lfs version", args.dry_run, False, True) is not None:
+            print(
+                "Install Git LFS and run the following commands in the repo before continuing:"
+            )
+            print("  $ git lfs install")
+            print("  $ git lfs pull")
+            sys.exit(1)
+
+        # use the size of mnist.zip as a proxy to see if git lfs pull has been called
+        if os.path.getsize(Path.cwd() / "tests/assets/mnist.zip") < 1024:
+            print("Git LFS detected but you haven't pulled the LFS artifacts:")
+            print("  $ git lfs install")
+            print("  $ git lfs pull")
+            sys.exit(1)
 
         tests.download.main(args)
 
@@ -1162,22 +1173,23 @@ class Start:
 class Test:
     @staticmethod
     def parse(args, unknown_args):
-
-        if "--help" in unknown_args or "-h" in unknown_args:
-            out = subprocess.check_output(["./tests/test.sh", "--help"]).decode("utf-8")
-            print(out)
-            return
-
-        command = "./tests/test.sh " + " ".join(unknown_args)
-        run_command(command, args.dry_run)
+        try:
+            import proteus
+        except ImportError:
+            run_command(
+                f"./proteus build --{args.build.lower()} --regen --clean", args.dry_run
+            )
+        tests.test.main(args, unknown_args)
 
     @classmethod
     def add(cls, parser):
         subparser = parser.add_parser(
             "test",
-            help="Run Proteus's test suite. All arguments are passed to the test script.",
+            help="Run the test suite with pytest. All unknown arguments are passed to pytest",
             add_help=False,
         )
+
+        subparser = tests.test.get_parser(subparser)
 
         subparser.set_defaults(func=cls.parse)
 

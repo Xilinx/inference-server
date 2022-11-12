@@ -58,6 +58,12 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--ip",
+        default="127.0.0.1",
+        help="IP to use for server",
+    )
+
+    parser.add_argument(
         "--http-port",
         default=8998,
         help="Port to use for HTTP server",

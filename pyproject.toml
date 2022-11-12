@@ -24,7 +24,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 build = ["*-manylinux_x86_64"]
-skip = ["pp*"]
+# there's some issues with Python 11 and numpy
+skip = ["pp*", "cp311-manylinux_x86_64"]
 
 [tool.cibuildwheel.linux]
 repair-wheel-command = [
@@ -34,4 +35,4 @@ repair-wheel-command = [
 
 [tool.isort]
 known_first_party = ["proteus"]
-known_local_folder=["helper"]
+known_local_folder=["helper", "utils", "fixtures"]

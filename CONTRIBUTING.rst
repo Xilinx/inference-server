@@ -1,5 +1,3 @@
-.. _contributing:
-
 Contributing
 ============
 
@@ -82,3 +80,37 @@ Style Guide
 ``pre-commit`` is used to enforce style and is included in the development container.
 Install it with ``pre-commit install`` to configure the pre-commit hook.
 Add tests to validate your changes.
+
+Documentation
+^^^^^^^^^^^^^
+
+The documentation for the AMD Inference Server is written in reStructuredText and is located in the ``docs/`` directory.
+If you are unfamiliar with reStructuredText, check out a `basic tutorial <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html>`_
+
+Admonitions
+"""""""""""
+
+Admonition boxes can be used to highlight and draw attention to points.
+They should be used sparingly to avoid distracting the reader.
+While reStructuredText supports many types of admonitions, the following groups of admonitions share the same coloring style in our theme.
+
+* Blue: note, admonition
+* Green: hint, important, tip
+* Yellow: attention, caution, warning
+* Red: danger, error
+
+For maintaining visual consistency, admonitions in the same class should convey the same relative importance.
+
+.. list-table::
+    :header-rows: 1
+
+    * - Admonition
+      - Usage
+    * - Blue
+      - Contains useful non-essential information and does not suggest an action for the reader to take
+    * - Green
+      - Contains useful information or suggests an action for the reader to take
+    * - Yellow
+      - Contains important information or highlights unexpected side effects of events
+    * - Red
+      - Contains critical information

@@ -137,11 +137,21 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 # cmake-format: off
-install(
-  TARGETS proteus_py
-  LIBRARY COMPONENT proteus_Runtime
-  LIBRARY DESTINATION .
-)
+# it's possible that the SKBUILD version doesn't need the library installed at
+# . but it needs to be verified. If so, this if-else can be removed
+if(SKBUILD)
+  install(
+    TARGETS proteus_py
+    LIBRARY COMPONENT proteus_Runtime
+    LIBRARY DESTINATION .
+  )
+else()
+  install(
+    TARGETS proteus_py
+    LIBRARY COMPONENT proteus_Runtime
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  )
+endif()
 # cmake-format: on
 
 # we need to run this after the pip install above

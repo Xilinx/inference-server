@@ -17,6 +17,7 @@
 #define GUARD_PROTEUS_SERVERS_SERVER
 
 #include <cstdint>
+#include <filesystem>
 #include <memory>
 
 namespace proteus {
@@ -31,8 +32,11 @@ class Server {
   void startGrpc(uint16_t port) const;
   void stopGrpc() const;
 
+  void setModelRepository(const std::filesystem::path& path) const;
+  void enableRepositoryMonitoring(bool use_polling) const;
+
  private:
-  class ServerImpl;
+  struct ServerImpl;
   std::unique_ptr<ServerImpl> impl_;
 };
 

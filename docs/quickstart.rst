@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -37,16 +38,14 @@ Production containers only contain the runtime dependencies of the :program:`pro
 The Docker image can also be built with various options to disable certain components.
 
 Currently, these images are not pre-built anywhere and so must be built by the user.
-We require `BuildKit <https://docs.docker.com/develop/develop-images/build_enhancements/>`__ to build the image so your Docker version should be at least 18.09.
+We require `BuildKit <https://docs.docker.com/build/>`__ to build the image so your Docker version should be at least 18.09.
 
 .. code-block:: console
 
-    # create a dockerfile
     $ python3 docker/generate.py
-    # use the generated Dockerfile to build an image
     $ ./proteus dockerize
 
-The ``generate.py`` script is used to create a dockerfile in the root directory.
+The ``generate.py`` script is used to create a dockerfile in the root directory, which is then used by the ``dockerize`` command.
 Use ``--help`` to see configurable options for the ``generate.py`` script.
 By default, this builds the stable dev image as ``{username}/proteus-dev``.
 After the image is built, run the container:
@@ -70,24 +69,24 @@ Note, in general, you should not use ``sudo`` to run ``proteus`` commands.
 
 .. code-block:: console
 
-    $ proteus build --all
+    $ proteus build
 
 The build command builds :program:`proteus-server` as well as the AKS kernels and documentation.
 By default, this will be the debug version.
 
-AKS is the :ref:`AI Kernel Scheduler <AKS>` that may be used in the AMD Inference Server.
-The AKS kernels need to be built prior to starting the server and requesting inferences from a worker that uses AKS.
-Subsequent builds can omit :option:`--all` to skip rebuilding the AKS kernels.
-
-.. attention:: When starting new containers or switching to different ones after having run build once, you may need to run ``proteus build --regen --clean`` initially. New containers mount the working directory and so stale artifacts from previous builds may be present. These two flags delete the CMake cache and do a clean build, respectively.
+.. tip:: When starting new containers or switching to different ones after having run build once, you may need to run ``proteus build --regen --clean`` initially. New containers mount the working directory and so stale artifacts from previous builds may be present. These two flags delete the CMake cache and do a clean build, respectively.
 
 Getting Artifacts
 -----------------
 
 For running tests and certain examples, you may need to get artifacts such as test images and XModels.
+You need to install `Git LFS <https://git-lfs.github.com/>`__ to get these assets.
+You can download all files, as shown below with the ``--all`` flag, or download platform-specific files.
+Use ``--help`` to see the options available.
 
 .. code-block:: console
 
+    $ git lfs pull
     $ proteus get --all
 
 You must abide by the license agreements of these files, if you choose to download them.
@@ -100,22 +99,22 @@ Once the server is built, start the server to begin serving requests.
 .. code-block:: bash
 
     # start proteus-server in the background
-    $ proteus start &
+    proteus start &
 
     # test that the server is ready. The server returns status 200 OK on success
-    $ curl -I http://localhost:8998/v2/health/ready
+    curl -I http://localhost:8998/v2/health/ready
 
     # the server can now accept requests over REST/gRPC
 
     # shutdown the server
-    $ kill -2 $(pidof proteus-server)
+    kill -2 $(pidof proteus-server)
 
 You can also try running the test suite.
-You may need to get testing artifacts (see above) and have cloned the repository with Git LFS enabled.
+Make sure you have the relevant test artifacts as described in the previous section.
 
 .. code-block:: bash
 
     # this will start the server and test the REST API from Python.
-    $ proteus test
+    proteus test
 
 Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.

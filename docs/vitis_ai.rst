@@ -1,5 +1,6 @@
 ..
-    Copyright 2022 Xilinx Inc.
+    Copyright 2022 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,20 +18,63 @@ Vitis AI
 ========
 
 Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
-These instructions assume an Alveo card.
-If using a different card, follow the appropriate instructions for your card.
 
-Setting up the host
--------------------
+Set up the host and FPGAs
+-------------------------
 
-Follow the instructions on :github:`setting up Alveo cards <Xilinx/Vitis-AI/tree/master/setup/alveo>`.
-In essence, you will need to program the shell and platform on the FPGA.
-You will also need to install XRT.
-If you're using Docker, the XRT version on the host should match the one installed in the Docker container.
-You also don't need XRM on the host if you're using Docker but you do otherwise.
+The details for setting up your host are available online in the :github:`Vitis AI <Xilinx/Vitis-AI/tree/master/setup>` repository.
+These instructions will depend on whether you are using :github:`Alveo cards <Xilinx/Vitis-AI/tree/master/setup/alveo>` or :github:`VCK5000 <Xilinx/Vitis-AI/tree/master/setup/vck5000>`.
+In essence, you will need to install software, program the shell on the FPGA(s) and download XCLBINs.
+
+Software
+^^^^^^^^
+
+You need to install the Xilinx Runtime (XRT) to communicate with the FPGA over PCIe.
+The XRT version on the host should match the one installed in the container where the server will be running.
+The Xilinx Resource Manager (XRM) is not needed on the host because it is already installed in the container.
+
+Shell
+^^^^^
+
+The Vitis AI repository contains scripts to install packages and flash the shell on your FPGA.
+They use XRT to program the FPGA.
+In most cases, flashing the shell will be a one-time act as it is persistent.
+However, for some FPGAs such as the Alveo U250, there is an intermediate second shell that must be reprogrammed after every power cycle.
+Follow the instructions in the scripts to install the secondary shell.
+
 You can use ``xbutil validate --device <device id>`` to confirm that your FPGA is ready to use.
 If this executable is not on your PATH, it should be in ``/opt/xilinx/xrt/bin``.
 
-You will also need the XCLBINs corresponding to your card on the host.
-By default, these will be placed in ``/opt/xilinx/overlaybins`` and will be mounted into the container if using Docker with the ``proteus`` script.
-The ``XLNX_VART_FIRMWARE`` environment variable should point to the directory containing the XCLBINs needed for your FPGA.
+XCLBINs
+^^^^^^^
+
+The XCLBINs define the DPU that will run on the FPGA.
+By default, these are installed in ``/opt/xilinx/overlaybins/<DPU>/*``
+The environment variable ``XLNX_VART_FIRMWARE`` must be set where the inference server is running to point to the directory where the XCLBINs for your FPGA are.
+You can mount this directory in your container to enable it to access these files.
+Alternatively, you can also copy XCLBINs directly into the container as well.
+
+Build an image
+--------------
+
+To build an image with Vitis AI enabled, you need to add the ``--vitis`` to the ``proteus dockerize`` command:
+
+.. code-block:: bash
+
+    # create the Dockerfile
+    python3 docker/generate.py
+
+    # build the dev image $(whoami)/proteus-dev-vitis:latest
+    ./proteus dockerize --vitis --suffix="-vitis"
+
+    # build the production image $(whoami)/proteus-vitis:latest
+    ./proteus dockerize --vitis --suffix="-vitis" --production
+
+Get assets and models
+---------------------
+
+You can download the assets and models used for tests and examples with:
+
+.. code-block:: console
+
+    $ ./proteus get --vitis

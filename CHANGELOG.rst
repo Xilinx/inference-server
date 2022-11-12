@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -33,6 +34,8 @@ Added
 - Support building Python wheels with cibuildwheel (:pr:`71`)
 - Support XModels with multiple output tensors (:pr:`74`)
 - Add FP16 support (:pr:`76`)
+- Add more documentation (:pr:`85`)
+- Add Python bindings for gRPC and Native clients (:pr:`88`)
 
 Changed
 ^^^^^^^
@@ -41,6 +44,8 @@ Changed
 - Templatize Dockerfile for different base images (:pr:`71`)
 - Use multiple HTTP clients internally for parallel HTTP requests (:pr:`66`)
 - Update test asset downloading (:pr:`81`)
+- Reimplement and align examples across platforms (:pr:`85`)
+- Reorganize Python library (:pr:`88`)
 
 Fixed
 ^^^^^
@@ -48,6 +53,8 @@ Fixed
 - Use input tensors in requests correctly (:pr:`61`)
 - Fix bug with multiple input tensors (:pr:`74`)
 - Align gRPC responses using non-gRPC-native data types with other input protocols (:pr:`81`)
+- Fix the Manager's destructor (:pr:`88`)
+- Fix using ``--no-user-config`` with ``proteus run`` (:pr:`89`)
 
 :github:`0.2.0 <Xilinx/inference-server/releases/tag/v0.2.0>` - 2022-08-05
 --------------------------------------------------------------------------
@@ -74,7 +81,7 @@ Changed
 - Logging macro is now ``PROTEUS_LOG_*``
 - Loading workers is now case-insensitive (:commit:`14ed4ef` and :commit:`90a51ae`)
 - Build AKS from source (:commit:`e04890f`)
-- Use consistent custom exceptions (:pr:`30`)
+- Use consistent custom exceptions (:issue:`30`)
 - Update Docker build commands to opt-in to all backends (:pr:`43`)
 - Renamed 'modelLoad' to 'workerLoad' and changed the behavior for 'modelLoad' (:pr:`27`)
 

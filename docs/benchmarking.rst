@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,9 +19,9 @@ Benchmarking
 
 AMD Inference Server can be benchmarked from the command-line using the benchmarking utility.
 
-.. code-block:: bash
+.. code-block:: console
 
-    proteus benchmark
+    $ proteus benchmark
 
 This command calls the benchmarking Python script in ``tools/``, which will read ``benchmark.yml`` for the configuration and run the configurations specified.
 Each configuration is run a number of times and the results are analyzed and printed to the terminal.
