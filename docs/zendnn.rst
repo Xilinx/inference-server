@@ -76,7 +76,8 @@ To use with the AMD Inference Server, you need to `convert downloaded PyTorch Ea
 Run Tests
 ---------
 
-To verify the working of TensorFlow+ZenDNN in the AMD Inference Server, run a sample test case. This test will load a model and run with a sample image and assert the output.
+To verify the working of TF/PT + ZenDNN in the AMD Inference Server, run a sample test case.
+This test will load a model and run with a sample image and assert the output.
 
 1. For TensorFlow + ZenDNN
 

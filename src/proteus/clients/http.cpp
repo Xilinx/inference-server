@@ -173,7 +173,8 @@ bool HttpClient::serverLive() const {
   auto* client = this->impl_->getClient();
   auto req = createGetRequest("/v2/health/live", headers_);
 
-  auto [result, response] = client->sendRequest(req);
+  // arbitrarily setting a 10 second timeout
+  auto [result, response] = client->sendRequest(req, 10.0);
   if (result != drogon::ReqResult::Ok) {
     return false;
   }

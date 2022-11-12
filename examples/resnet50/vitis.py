@@ -151,15 +151,19 @@ def main(args):
     print("Running the Vitis example for ResNet50 in Python")
 
     # +create client
-    client = proteus.HttpClient(f"http://127.0.0.1:{args.http_port}")
+    server_addr = f"http://{args.ip}:{args.http_port}"
+    client = proteus.HttpClient(server_addr)
     # -create client
-    if not client.serverLive():
+    # start it locally if it doesn't already up if the IP address is the localhost
+    if args.ip == "127.0.0.1" and not client.serverLive():
         # +initialize
         server = proteus.Server()
         # -initialize
         # +start protocol
         server.startHttp(args.http_port)
         # -start protocol
+    elif not client.serverLive():
+        raise ConnectionError(f"Could not connect to server at {server_addr}")
     print("Waiting until the server is ready...")
     proteus.waitUntilServerReady(client)
 

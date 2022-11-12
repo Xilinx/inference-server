@@ -152,10 +152,14 @@ def get_args():
 def main(args):
     print("Running the TF+ZenDNN example for ResNet50 in Python")
 
-    client = proteus.GrpcClient(f"127.0.0.1:{args.grpc_port}")
-    if not client.serverLive():
+    server_addr = f"{args.ip}:{args.grpc_port}"
+    client = proteus.GrpcClient(server_addr)
+    # start it locally if it doesn't already up if the IP address is the localhost
+    if args.ip == "127.0.0.1" and not client.serverLive():
         server = proteus.Server()
         server.startGrpc(args.grpc_port)
+    elif not client.serverLive():
+        raise ConnectionError(f"Could not connect to server at {server_addr}")
     print("Waiting until the server is ready...")
     proteus.waitUntilServerReady(client)
 

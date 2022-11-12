@@ -28,5 +28,13 @@ kserve:
   namespace: ""
   # storage URI for the MNIST model (tfzendnn)
   mnist_model: ""
+  # storage URI for the ResNet50 onnx model (migraphx)
+  resnet50_onnx_model: ""
   # the container to use for ZenDNN-related tests
-  zendnn_container: ""
+  image_zendnn: ""
+  # the container to use for MIGraphX-related tests
+  image_migraphx: ""
+  # KServe ClusterServingRuntime for ZenDNN
+  runtime_zendnn: ""
+  # KServe ClusterServingRuntime for MIGraphX
+  runtime_migraphx: ""

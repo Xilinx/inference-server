@@ -120,27 +120,27 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
                           " could not be parsed");
   }
 
-  const auto& inputs = config.inputs();
-  // currently supporting one input tensor
-  for (const auto& input : inputs) {
-    parameters->put("input_node", input.name());
-    const auto& shape = input.shape();
-    // ZenDNN assumes square image in HWC format
-    parameters->put("input_size", static_cast<int>(shape.at(0)));
-    parameters->put("image_channels",
-                    static_cast<int>(shape.at(shape.size() - 1)));
-  }
-
-  const auto& outputs = config.outputs();
-  // currently supporting one output tensor
-  for (const auto& output : outputs) {
-    parameters->put("output_node", output.name());
-    const auto& shape = output.shape();
-    // ZenDNN assumes [X] classes as output
-    parameters->put("output_classes", static_cast<int>(shape.at(0)));
-  }
-
   if (config.platform() == "tensorflow_graphdef") {
+    const auto& inputs = config.inputs();
+    // currently supporting one input tensor
+    for (const auto& input : inputs) {
+      parameters->put("input_node", input.name());
+      const auto& shape = input.shape();
+      // ZenDNN assumes square image in HWC format
+      parameters->put("input_size", static_cast<int>(shape.at(0)));
+      parameters->put("image_channels",
+                      static_cast<int>(shape.at(shape.size() - 1)));
+    }
+
+    const auto& outputs = config.outputs();
+    // currently supporting one output tensor
+    for (const auto& output : outputs) {
+      parameters->put("output_node", output.name());
+      const auto& shape = output.shape();
+      // ZenDNN assumes [X] classes as output
+      parameters->put("output_classes", static_cast<int>(shape.at(0)));
+    }
+
     parameters->put("worker", "tfzendnn");
   } else if (config.platform() == "pytorch_torchscript") {
     parameters->put("worker", "ptzendnn");
@@ -149,7 +149,7 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   } else if (config.platform() == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
   } else {
-    throw invalid_argument("Unknown platform");
+    throw invalid_argument("Unknown platform: " + config.platform());
   }
 
   mapProtoToParameters2(config.parameters(), parameters);

@@ -46,7 +46,7 @@ The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`_
 Get or build the AMD Inference Server Image
 -------------------------------------------
 
-To use with KServe, you will need to pull or :ref:`build the production container <docker:Build the production Docker image`.
+To use with KServe, you will need to pull or :ref:`build the production container <docker:build the production docker image`.
 Once you have it somewhere, make sure you can use ``docker pull <image>`` on all the nodes in the Kubernetes cluster to get the image.
 
 Start an inference service

@@ -33,7 +33,7 @@ To build the production container:
     $ python3 docker/generate.py
     $ ./proteus dockerize --production [platform flags]
 
-Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI`, :ref:`ZenDNN` or MIGraphX.
+Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI <vitis_ai:vitis ai>`, :ref:`ZenDNN <zendnn:zendnn>` or :ref:`MIGraphX <migraphx:migraphx>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
 
 Push to a registry
@@ -80,7 +80,7 @@ For example, one approach is using a Dockerfile to build a new image:
 
 In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
-As with the production image, this image may need to be :ref:`pushed to a registry server <Push to a registry>` for your use case.
+As with the production image, this image may need to be :ref:`pushed to a registry server <docker:push to a registry>` for your use case.
 
 Note that the command that the image will run can also be overridden at the command-line when starting the container.
 So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.

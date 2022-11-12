@@ -35,4 +35,4 @@ repair-wheel-command = [
 
 [tool.isort]
 known_first_party = ["proteus"]
-known_local_folder=["helper"]
+known_local_folder=["helper", "utils", "fixtures"]
