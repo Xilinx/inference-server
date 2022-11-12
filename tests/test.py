@@ -183,4 +183,5 @@ def get_parser(parser=None):
 if __name__ == "__main__":
     parser = get_parser()
     args, unknown_args = parser.parse_known_args()
+    args.dry_run = False
     main(args, unknown_args)

@@ -959,8 +959,9 @@ def pytest_benchmarks(config: Config, quiet=False):
             )
             sys.exit(1)
     cmd = (
-        os.getenv("PROTEUS_ROOT")
-        + f"/tests/test.sh --benchmark only --hostname {hostname} --http-port {port}"
+        "python3 "
+        + os.getenv("PROTEUS_ROOT")
+        + f"/tests/test.py --benchmark only --hostname {hostname} --http-port {port}"
     )
     if config.benchmarks:
         cmd += f' -k "{config.benchmarks}"'

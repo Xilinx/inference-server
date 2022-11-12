@@ -192,8 +192,9 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     NAME
     coverage # New target name
     EXECUTABLE
-    ${PROJECT_SOURCE_DIR}/tests/test.sh
+    python3
     EXECUTABLE_ARGS
+    ${PROJECT_SOURCE_DIR}/tests/test.py
     --mode
     tests
     --build
