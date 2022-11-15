@@ -82,18 +82,19 @@ In this case, you can build and save a new image that includes the models you wa
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
 As with the production image, this image may need to be :ref:`pushed to a registry server <docker:push to a registry>` for your use case.
 
-Note that the command that the image will run can also be overridden at the command-line when starting the container.
-So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.
+Note that the command that the image will run and the environment can also be overridden at the command-line when starting the container.
+Therefore, an alternative approach to building a new image is to mount the needed files as volumes when starting the container and set the environment then.
 
 Start the container
 -------------------
 
-You can start the production container with docker as any other container.
+You can start the production container with ``docker`` as any other container.
 You will need to pass along any devices that you want to enable in your container and expose ports to access the server.
+Look at the ``docker run`` documentation for more information about what flags can be passed.
 
 .. code-block:: console
 
-    $ docker run [--device ...] [--publish ...] <image>
+    $ docker run [--device ...] [--publish ...] [--volume ...] [--env ...] <image>
 
 By default, the production container will start the server executable and it will continue to run after the ``docker run`` command.
 But before it can serve requests, you need to load the models that you added into the image.

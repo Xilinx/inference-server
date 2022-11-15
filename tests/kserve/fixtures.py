@@ -28,14 +28,14 @@ import utils
 
 @pytest.fixture
 def create_runtime_isvc(request, runtime_config):
-    runtime_key, model_name, storage_uri = request.param
+    runtime_key, model_name, storage_uri, model_format = request.param
 
     namespace = runtime_config["kserve"]["namespace"]
     runtime = runtime_config["kserve"][runtime_key]
     storage_uri = runtime_config["kserve"][storage_uri]
 
     model = model_name
-    predictor = utils.get_runtime_predictor(runtime, storage_uri)
+    predictor = utils.get_runtime_predictor(runtime, storage_uri, model_format)
 
     service_name = f"isvc-amdserver-runtime"
     isvc = V1beta1InferenceService(
@@ -75,13 +75,13 @@ def create_runtime_isvc(request, runtime_config):
 
 @pytest.fixture
 def create_container_isvc(request, runtime_config):
-    image_key = request.param
+    image_key, resources = request.param
 
     namespace = runtime_config["kserve"]["namespace"]
     image = runtime_config["kserve"][image_key]
 
     service_name = f"isvc-amdserver-mms"
-    predictor = utils.get_container_predictor(image)
+    predictor = utils.get_container_predictor(image, resources)
     isvc = V1beta1InferenceService(
         api_version=kserve.constants.KSERVE_V1BETA1,
         kind=kserve.constants.KSERVE_KIND,

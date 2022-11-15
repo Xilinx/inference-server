@@ -63,7 +63,7 @@ def validate(responses):
 @pytest.mark.parametrize(
     "create_trained_model", [("mnist", "mnist_model")], indirect=True
 )
-@pytest.mark.parametrize("create_container_isvc", ["image_zendnn"], indirect=True)
+@pytest.mark.parametrize("create_container_isvc", [("image_zendnn", {})], indirect=True)
 def test_mms_mnist_kserve(runtime_config, create_container_isvc, create_trained_model):
     namespace = runtime_config["kserve"]["namespace"]
 
@@ -75,7 +75,9 @@ def test_mms_mnist_kserve(runtime_config, create_container_isvc, create_trained_
 
 
 @pytest.mark.parametrize(
-    "create_runtime_isvc", [("runtime_zendnn", "mnist", "mnist_model")], indirect=True
+    "create_runtime_isvc",
+    [("runtime_zendnn", "mnist", "mnist_model", "tensorflow")],
+    indirect=True,
 )
 def test_runtime_mnist_kserve(
     runtime_config,

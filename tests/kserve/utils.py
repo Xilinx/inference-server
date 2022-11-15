@@ -49,7 +49,10 @@ def get_cluster_ip():
     return os.environ.get("KSERVE_INGRESS_HOST_PORT", cluster_ip)
 
 
-def get_container_predictor(image):
+def get_container_predictor(image, resources):
+    limits = {"cpu": "1", "memory": "2Gi"}
+    limits.update(resources)
+
     # Define an inference service
     predictor = kserve.V1beta1PredictorSpec(
         min_replicas=1,
@@ -60,11 +63,12 @@ def get_container_predictor(image):
                 args=[
                     "proteus-server",
                     "--http-port=8080",
+                    "--grpc-port=9000",
                     "--model-repository=/mnt/models",
                 ],
                 resources=kubernetes.client.V1ResourceRequirements(
-                    requests={"cpu": "50m", "memory": "128Mi"},
-                    limits={"cpu": "100m", "memory": "1024Mi"},
+                    requests={"cpu": "1", "memory": "2Gi"},
+                    limits=limits,
                 ),
                 env=[
                     kubernetes.client.V1EnvVar(name="MULTI_MODEL_SERVER", value="true")
@@ -74,18 +78,20 @@ def get_container_predictor(image):
                         container_port=8080, protocol="TCP"
                     )
                 ],
+                # KServe seems to reject livenessProbe, readinessProbe, startupProbe
+                # type arguments but it's possible I misconfigured them
             ),
         ],
     )
     return predictor
 
 
-def get_runtime_predictor(runtime, storage_uri):
+def get_runtime_predictor(runtime, storage_uri, model_format):
     predictor = kserve.V1beta1PredictorSpec(
         min_replicas=1,
         model=kserve.V1beta1ModelSpec(
             model_format=kserve.V1beta1ModelFormat(
-                name="tensorflow",
+                name=model_format,
             ),
             runtime=runtime,
             storage_uri=storage_uri,

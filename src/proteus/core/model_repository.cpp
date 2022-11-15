@@ -221,8 +221,9 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
       try {
         RequestParameters params;
         proteus::modelLoad(model, &params);
-      } catch (const proteus::runtime_error&) {
-        PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
+      } catch (const proteus::runtime_error& e) {
+        PROTEUS_LOG_INFO(logger,
+                         "Error loading " + model.string() + ": " + e.what());
       }
     }
   }
