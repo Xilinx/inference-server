@@ -13,13 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _docker:
-
 Docker
 ======
 
 You can use the AMD Inference Server with Docker to deploy the server.
-For more powerful and easier to use deployments, consider using :ref:`KServe <kserve>`.
+For more powerful and easier to use deployments, consider using :ref:`KServe <kserve:KServe>`.
 
 Build the production Docker image
 ---------------------------------
@@ -31,10 +29,15 @@ To build the production container:
 .. code-block:: console
 
     $ python3 docker/generate.py
-    $ ./proteus dockerize --production [platform flags]
+    $ ./proteus dockerize --production <platform flags>
 
 Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI <vitis_ai:vitis ai>`, :ref:`ZenDNN <zendnn:zendnn>` or :ref:`MIGraphX <migraphx:migraphx>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
+
+.. important::
+
+    Some platforms require additional steps before building the Docker image with them enabled.
+    Look at the platform-specific documentation for more information about how to build images for a given platform.
 
 Push to a registry
 ^^^^^^^^^^^^^^^^^^
