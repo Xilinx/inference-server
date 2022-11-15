@@ -392,7 +392,7 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <section id="docker">
-<span id="id1"></span><h1>Docker<a class="headerlink" href="#docker" title="Permalink to this heading">¶</a></h1>
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this heading">¶</a></h1>
 <p>You can use the AMD Inference Server with Docker to deploy the server.
 For more powerful and easier to use deployments, consider using <a class="reference internal" href="kserve.html#kserve"><span class="std std-ref">KServe</span></a>.</p>
 <section id="build-the-production-docker-image">
@@ -401,11 +401,16 @@ For more powerful and easier to use deployments, consider using <a class="refere
 It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
 To build the production container:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
-<span class="gp">$ </span>./proteus dockerize --production <span class="o">[</span>platform flags<span class="o">]</span>
+<span class="gp">$ </span>./proteus dockerize --production &lt;platform flags&gt;
 </pre></div>
 </div>
 <p>Depending on what platforms you want to support, add the appropriate flags to enable <a class="reference internal" href="vitis_ai.html#vitis-ai"><span class="std std-ref">Vitis AI</span></a>, <a class="reference internal" href="zendnn.html#id1"><span class="std std-ref">ZenDNN</span></a> or <a class="reference internal" href="migraphx.html#migraphx"><span class="std std-ref">MIGraphX</span></a>.
 Refer to the help or the platform documentation for more information on how to build the right image.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Some platforms require additional steps before building the Docker image with them enabled.
+Look at the platform-specific documentation for more information about how to build images for a given platform.</p>
+</div>
 <section id="push-to-a-registry">
 <h3>Push to a registry<a class="headerlink" href="#push-to-a-registry" title="Permalink to this heading">¶</a></h3>
 <p>In some use cases, for example with Kubernetes or KServe, the image must be pushed to a Docker registry before it can be used.
@@ -444,14 +449,15 @@ For example, one approach is using a Dockerfile to build a new image:</p>
 <p>In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
 As with the production image, this image may need to be <a class="reference internal" href="#push-to-a-registry"><span class="std std-ref">pushed to a registry server</span></a> for your use case.</p>
-<p>Note that the command that the image will run can also be overridden at the command-line when starting the container.
-So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.</p>
+<p>Note that the command that the image will run and the environment can also be overridden at the command-line when starting the container.
+Therefore, an alternative approach to building a new image is to mount the needed files as volumes when starting the container and set the environment then.</p>
 </section>
 <section id="start-the-container">
 <h2>Start the container<a class="headerlink" href="#start-the-container" title="Permalink to this heading">¶</a></h2>
-<p>You can start the production container with docker as any other container.
-You will need to pass along any devices that you want to enable in your container and expose ports to access the server.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run <span class="o">[</span>--device ...<span class="o">]</span> <span class="o">[</span>--publish ...<span class="o">]</span> &lt;image&gt;
+<p>You can start the production container with <code class="docutils literal notranslate"><span class="pre">docker</span></code> as any other container.
+You will need to pass along any devices that you want to enable in your container and expose ports to access the server.
+Look at the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> documentation for more information about what flags can be passed.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run <span class="o">[</span>--device ...<span class="o">]</span> <span class="o">[</span>--publish ...<span class="o">]</span> <span class="o">[</span>--volume ...<span class="o">]</span> <span class="o">[</span>--env ...<span class="o">]</span> &lt;image&gt;
 </pre></div>
 </div>
 <p>By default, the production container will start the server executable and it will continue to run after the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command.
@@ -515,7 +521,7 @@ Once you have it, you can use <code class="docutils literal notranslate"><span c
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 11, 2022.
+        Last updated on November 15, 2022.
       </span>
 
     </p>

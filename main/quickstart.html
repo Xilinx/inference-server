@@ -266,10 +266,18 @@ function OptanonWrapper() { }
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#build-or-get-the-docker-image">Build or Get the Docker Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-the-amd-inference-server">Building the AMD Inference Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#getting-artifacts">Getting Artifacts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-the-amd-inference-server">Running the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-or-get-the-docker-image">Build or get the Docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launch-the-server">Launch the server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development">Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Build or get the Docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-test-artifacts">Getting test artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-the-amd-inference-server">Running the AMD Inference Server</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a></li>
@@ -390,58 +398,103 @@ function OptanonWrapper() { }
             
   <section id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">¶</a></h1>
-<p>The easiest way to use the AMD Inference Server is to run it inside a Docker container.
-For these instructions, you’ll need Git, Python3, and <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>.
-Also ensure that you set up your host appropriately depending on which platform(s) you are using (e.g. <a class="reference internal" href="vitis_ai.html#vitis-ai"><span class="std std-ref">Vitis AI</span></a>).
-The helper script used for most of the commands here is <code class="file docutils literal notranslate"><span class="pre">proteus</span></code>: a Python script with many helpful options.
+<p>The easiest way to use the AMD Inference Server is to run it inside a <a class="reference external" href="https://docs.docker.com/get-docker/">Docker container</a>.
+There are two modes of operation: development and deployment.
+If you are just interested in deploying the server to serve inferences, then consider the deployment instructions.
+For testing, debugging, and experimentation, you will need to follow the development instructions.</p>
+<p>Ensure that you set up your host appropriately depending on which platform(s) you are using.
+The helper script used for many of the commands here is <code class="file docutils literal notranslate"><span class="pre">proteus</span></code>: a Python script with many helpful options.
 The most up-to-date documentation for this script can be seen with <a class="reference internal" href="cli.html#command-line-interface"><span class="std std-ref">online</span></a> or on the terminal with <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code>.
 You can also use <code class="xref std std-option docutils literal notranslate"><span class="pre">--dry-run</span></code> before any command to see the underlying commands the script is running.</p>
-<p>Some options also require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a>.
-Running tests requires using Git LFS when cloning this repository to get testing assets.</p>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this heading">¶</a></h2>
+<p>For deployment, the container for the AMD Inference server only contains the runtime dependencies of the server to minimize image size.
+The deployment container, also referred to as the production container, contains a precompiled binary for the server that automatically starts when the container starts.</p>
 <section id="build-or-get-the-docker-image">
-<h2>Build or Get the Docker Image<a class="headerlink" href="#build-or-get-the-docker-image" title="Permalink to this heading">¶</a></h2>
-<p>We can build several types of containers.
-Development (dev) containers are intended for working on the AMD Inference Server or applications that link to the AMD Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start.
-Production containers only contain the runtime dependencies of the <strong class="program">proteus-server</strong> executable and automatically run the executable when they start.
-The Docker image can also be built with various options to disable certain components.</p>
-<p>Currently, these images are not pre-built anywhere and so must be built by the user.
-We require <a class="reference external" href="https://docs.docker.com/build/">BuildKit</a> to build the image so your Docker version should be at least 18.09.</p>
+<h3>Build or get the Docker image<a class="headerlink" href="#build-or-get-the-docker-image" title="Permalink to this heading">¶</a></h3>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span></code> to get the production container from a Docker registry if it’s already built.</p>
+<p>To build from source, you will need Docker 18.09 or newer because you need to enable <a class="reference external" href="https://docs.docker.com/build/">BuildKit</a> to build the image.
+Look at the instructions for <a class="reference internal" href="docker.html#build-the-production-docker-image"><span class="std std-ref">building the production container</span></a> for more information.</p>
+</section>
+<section id="launch-the-server">
+<h3>Launch the server<a class="headerlink" href="#launch-the-server" title="Permalink to this heading">¶</a></h3>
+<p>Your chosen deployment method determines how to start the server.</p>
+<p>If you want to launch it as a bare Docker container, follow the <a class="reference internal" href="docker.html#prepare-the-image-for-docker-deployment"><span class="std std-ref">Docker instructions</span></a>.
+This has the fewest external dependencies but requires more manual work to set up the image.</p>
+<p>If you want to use the AMD Inference Server with <a class="reference external" href="https://kserve.github.io/website/master/">KServe</a>, follow the <a class="reference internal" href="kserve.html#start-an-inference-service"><span class="std std-ref">KServe instructions</span></a>.
+KServe is an open-source project for model serving in production on Kubernetes.
+Using this deployment method requires a working Kubernetes cluster with KServe installed.</p>
+</section>
+</section>
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Permalink to this heading">¶</a></h2>
+<p>For development, the container for the AMD Inference server contains the build-time dependencies needed to compile and test the inference server.
+However, the development container, also referred to as the dev container, does not contain the inference server source code.
+The expected workflow is that you mount the source code into the container.</p>
+<p>For development, your host needs Git, Python3, and <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>.
+Some tests require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a> as well.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/Xilinx/inference-server.git
+</pre></div>
+</div>
+<p>Tests and examples need assets like images and videos to run.
+Some of these files are stored in <a class="reference external" href="https://git-lfs.github.com/">Git LFS</a>.
+Depending on your host, these files may be automatically downloaded with the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code>.
+If some of the files in <code class="docutils literal notranslate"><span class="pre">tests/assets</span></code> are very small (less than 300 bytes), then you haven’t downloaded these Git LFS artifacts.
+From your host or after entering the dev container, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">lfs</span> <span class="pre">pull</span></code> to get these files.</p>
+<section id="id2">
+<h3>Build or get the Docker image<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span></code> to get the dev container from a Docker registry if it’s already built.</p>
+<p>To build from source, you will need Docker 18.09 or newer because you need to enable <a class="reference external" href="https://docs.docker.com/build/">BuildKit</a> to build the image.
+After cloning the repository, enter the directory and run:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
-<span class="gp">$ </span>./proteus dockerize
+<span class="gp">$ </span>./proteus dockerize &lt;platform flags&gt;
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script is used to create a dockerfile in the root directory, which is then used by the <code class="docutils literal notranslate"><span class="pre">dockerize</span></code> command.
 Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see configurable options for the <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script.
-By default, this builds the stable dev image as <code class="docutils literal notranslate"><span class="pre">{username}/proteus-dev</span></code>.
+If you want to enable any platforms, pass the appropriate flags.
+Look at the platform-specific documentation for more information about these flags.</p>
+<p>By default, this builds the dev image as <code class="docutils literal notranslate"><span class="pre">&lt;username&gt;/proteus-dev:latest</span></code>.
 After the image is built, run the container:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus run --dev
 </pre></div>
 </div>
-<p>This command runs the <code class="docutils literal notranslate"><span class="pre">{username}/proteus-dev:latest</span></code> image, which corresponds to the latest local dev image.
-The dev container will mount the working directory into <code class="file docutils literal notranslate"><span class="pre">/workspace/proteus/</span></code>, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
-These details are the <code class="xref std std-option docutils literal notranslate"><span class="pre">--dev</span></code> profile.
+<p>This command runs the <code class="docutils literal notranslate"><span class="pre">&lt;username&gt;/proteus-dev:latest</span></code> image, which corresponds to the latest local dev image.
+The <code class="docutils literal notranslate"><span class="pre">--dev</span></code> preset will mount the working directory into <code class="file docutils literal notranslate"><span class="pre">/workspace/proteus/</span></code>, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
 Some options may be overridden on the command-line (use <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code> to see the options).
-If you’d like to enable <a class="reference internal" href="zendnn.html#id1"><span class="std std-ref">TF+ZenDNN or PT+ZenDNN</span></a> support in the container, pass the appropriate flag to the <code class="xref std std-option docutils literal notranslate"><span class="pre">dockerize</span></code> command.</p>
+By default, it will open a Bash shell in this container and show you a splash screen to show that you’ve entered the container.</p>
 </section>
-<section id="building-the-amd-inference-server">
-<h2>Building the AMD Inference Server<a class="headerlink" href="#building-the-amd-inference-server" title="Permalink to this heading">¶</a></h2>
+<section id="compiling-the-amd-inference-server">
+<h3>Compiling the AMD Inference Server<a class="headerlink" href="#compiling-the-amd-inference-server" title="Permalink to this heading">¶</a></h3>
 <p>These commands are all run inside the dev container.
-Here, <code class="file docutils literal notranslate"><span class="pre">./proteus</span></code> is aliased to <strong class="command">proteus</strong>.
-Note, in general, you should not use <code class="docutils literal notranslate"><span class="pre">sudo</span></code> to run <code class="docutils literal notranslate"><span class="pre">proteus</span></code> commands.</p>
+Here, <code class="file docutils literal notranslate"><span class="pre">./proteus</span></code> is aliased to <strong class="command">proteus</strong>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>proteus build
 </pre></div>
 </div>
-<p>The build command builds <strong class="program">proteus-server</strong> as well as the AKS kernels and documentation.
-By default, this will be the debug version.</p>
+<p>The build command builds the <strong class="program">proteus-server</strong> executable.
+By default, this will be the debug version.
+You can pass flags to <code class="docutils literal notranslate"><span class="pre">build</span></code> to control the compile options.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>When starting new containers or switching to different ones after having run build once, you may need to run <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">build</span> <span class="pre">--regen</span> <span class="pre">--clean</span></code> initially. New containers mount the working directory and so stale artifacts from previous builds may be present. These two flags delete the CMake cache and do a clean build, respectively.</p>
+<p>When starting new containers or switching to different ones after having run build once, you may need to run <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">build</span> <span class="pre">--regen</span> <span class="pre">--clean</span></code> initially.
+New containers mount the working directory and so stale artifacts from previous builds may be present.
+These two flags delete the CMake cache and do a clean build, respectively.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In general, you should not use <code class="docutils literal notranslate"><span class="pre">sudo</span></code> to run <code class="docutils literal notranslate"><span class="pre">proteus</span></code> commands.
+Some commands create files in your working directory and using <code class="docutils literal notranslate"><span class="pre">sudo</span></code> creates files with mixed permissions in your container and host and will even fail in some cases.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">build</span></code> will also install the server’s Python library in the dev container.
+You can use it from Python in the container after importing it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">proteus</span>
+</pre></div>
 </div>
 </section>
-<section id="getting-artifacts">
-<h2>Getting Artifacts<a class="headerlink" href="#getting-artifacts" title="Permalink to this heading">¶</a></h2>
-<p>For running tests and certain examples, you may need to get artifacts such as test images and XModels.
-You need to install <a class="reference external" href="https://git-lfs.github.com/">Git LFS</a> to get these assets.
+<section id="getting-test-artifacts">
+<h3>Getting test artifacts<a class="headerlink" href="#getting-test-artifacts" title="Permalink to this heading">¶</a></h3>
+<p>For running tests and certain examples, you need to get models and other files.
+Make sure you have <a class="reference external" href="https://git-lfs.github.com/">Git LFS</a> installed.
 You can download all files, as shown below with the <code class="docutils literal notranslate"><span class="pre">--all</span></code> flag, or download platform-specific files.
 Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see the options available.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git lfs pull
@@ -451,27 +504,33 @@ Use <code class="docutils literal notranslate"><span class="pre">--help</span></
 <p>You must abide by the license agreements of these files, if you choose to download them.</p>
 </section>
 <section id="running-the-amd-inference-server">
-<h2>Running the AMD Inference Server<a class="headerlink" href="#running-the-amd-inference-server" title="Permalink to this heading">¶</a></h2>
+<h3>Running the AMD Inference Server<a class="headerlink" href="#running-the-amd-inference-server" title="Permalink to this heading">¶</a></h3>
 <p>Once the server is built, start the server to begin serving requests.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># start proteus-server in the background</span>
-proteus start <span class="p">&amp;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># start the server</span>
+proteus start
+
+<span class="c1"># this command will block and the server will idle for requests</span>
+<span class="c1"># from a new terminal, you can send it requests</span>
 
 <span class="c1"># test that the server is ready. The server returns status 200 OK on success</span>
 curl -I http://localhost:8998/v2/health/ready
 
 <span class="c1"># the server can now accept requests over REST/gRPC</span>
 
-<span class="c1"># shutdown the server</span>
-<span class="nb">kill</span> -2 <span class="k">$(</span>pidof proteus-server<span class="k">)</span>
+<span class="c1"># shutdown the server using Ctrl+C</span>
 </pre></div>
 </div>
+<p>The <a class="reference internal" href="rest.html#rest-endpoints"><span class="std std-ref">REST endpoints</span></a> available to the server are based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>.
+While using REST directly works, the Python API is an easier way to communicate with the server.</p>
 <p>You can also try running the test suite.
+The suite is run using PyTest and you can optionally pass Pytest options to the command to filter and choose which tests to run.
 Make sure you have the relevant test artifacts as described in the previous section.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this will start the server and test the REST API from Python.</span>
 proteus <span class="nb">test</span>
 </pre></div>
 </div>
 <p>Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.</p>
+</section>
 </section>
 </section>
 
@@ -504,7 +563,7 @@ proteus <span class="nb">test</span>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 11, 2022.
+        Last updated on November 15, 2022.
       </span>
 
     </p>
