@@ -22,13 +22,13 @@
 #include <thread>                 // for yield
 #include <vector>                 // for vector
 
-#include "proteus/proteus.hpp"                    // for InferenceRequestInput
-#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
+#include "amdinfer/amdinfer.hpp"                   // for InferenceRequestInput
+#include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
-namespace proteus {
+namespace amdinfer {
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
@@ -82,7 +82,7 @@ void test(proteus::Client* client) {
   }
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, mnist) { test(client_.get()); }
@@ -95,10 +95,10 @@ TEST_F(BaseFixture, mnist) {
   test(&client);
 }
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, mnist) { test(client_.get()); }
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer

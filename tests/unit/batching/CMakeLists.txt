@@ -27,4 +27,4 @@ list(
       $<TARGET_OBJECTS:native_internal>"
 )
 
-proteus_add_unit_tests("${tests}" "${tests_libs}")
+amdinfer_add_unit_tests("${tests}" "${tests_libs}")

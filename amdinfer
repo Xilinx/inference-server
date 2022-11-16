@@ -1,0 +1,1369 @@
+#!/usr/bin/env python3
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import argparse
+import getpass
+import glob
+import importlib
+import json
+import multiprocessing as mp
+import os
+import pty
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+import tarfile
+import textwrap
+import urllib.error
+import urllib.request
+import zipfile
+from pathlib import Path
+
+import tests.download
+import tests.test
+
+
+def get_version():
+    """
+    Read the VERSION file and return as a string
+
+    Returns:
+        str: VERSION
+    """
+    version_file = Path(__file__).parent.resolve() / "VERSION"
+    with open(version_file, "r") as f:
+        return f.readline().strip()
+
+
+help_message = "show this help message and exit"
+
+
+# https://stackoverflow.com/a/34736291/13621369
+class NegateAction(argparse.Action):
+    def __init__(
+        self,
+        option_strings,
+        dest,
+        const=True,
+        default=None,
+        required=False,
+        help=None,
+        metavar=None,
+    ):
+        super().__init__(
+            option_strings=option_strings,
+            dest=dest,
+            nargs=0,
+            const=const,
+            default=default,
+            required=required,
+            help=help,
+        )
+
+    def __call__(self, parser, ns, values, option):
+        setattr(ns, self.dest, option[2:4] != "no")
+
+
+def get_build_config(dir):
+    build_config_file = Path(f"{dir}/config.txt")
+    try:
+        with open(build_config_file, "r") as f:
+            build_config = f.readline().strip()
+    except FileNotFoundError:
+        build_config = None
+
+    if build_config:
+        build_options_file = Path(f"{dir}/{build_config}/config.txt")
+        try:
+            with open(build_options_file, "r") as f:
+                build_options_str = f.readline().strip()
+                build_options = (
+                    build_options_str.split(" ") if build_options_str else []
+                )
+        except FileNotFoundError:
+            build_options = None
+    else:
+        build_options = None
+
+    return (build_config_file, build_config, build_options)
+
+
+def run_tty_command(command: str, dry_run: bool):
+    if dry_run:
+        print(command)
+        return
+    status = pty.spawn(shlex.split(command))
+
+    if os.WIFSIGNALED(status):
+        exit_code = -os.WTERMSIG(status)
+    elif os.WIFEXITED(status):
+        exit_code = os.WEXITSTATUS(status)
+    elif os.WIFSTOPPED(status):
+        exit_code = -os.WSTOPSIG(status)
+    else:
+        raise RuntimeError("Unknown exception")
+
+    if exit_code != 0:
+        sys.exit(exit_code)
+
+
+def run_command(command: str, dry_run: bool, exit_on_error=True, quiet=False):
+    if dry_run:
+        print(command)
+        return
+
+    try:
+        if quiet:
+            subprocess.check_call(
+                shlex.split(command),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        else:
+            subprocess.check_call(
+                shlex.split(command), stdout=sys.stdout, stderr=subprocess.STDOUT
+            )
+    except subprocess.CalledProcessError as error:
+        if exit_on_error:
+            sys.exit(error.returncode)
+        else:
+            return error.returncode
+
+
+def run_shell_command(command: str, dry_run: bool):
+    if dry_run:
+        print(command)
+        return
+
+    subprocess.call(command, shell=True)
+
+
+class WriteComposeFile:
+    @staticmethod
+    def get_devices():
+        devices = []
+
+        # used for FPGAs
+        files = glob.glob("/dev/xclmgmt*")
+        for file in files:
+            devices.append(f"{file}")
+        # used for GPUs
+        if os.path.exists("/dev/kfd"):
+            devices.append("/dev/kfd")
+        # used for GPUs and FPGAs (?)
+        if os.path.exists("/dev/dri"):
+            devices.append("/dev/dri")
+
+        return devices
+
+    @staticmethod
+    def get_user_configs():
+        configs = []
+
+        user_config = Path.home() / ".gitconfig"
+        if user_config.exists():
+            configs.append(f"{str(user_config)}:/home/amdinfer-user/.gitconfig:ro")
+
+        global_config = Path("/etc/gitconfig")
+        if global_config.exists():
+            configs.append(f"{str(global_config)}:/etc/gitconfig:ro")
+
+        ssh = Path.home() / ".ssh"
+        if ssh.exists():
+            configs.append(f"{str(ssh)}:/home/amdinfer-user/.ssh:ro")
+
+        gpg = Path.home() / ".gnupg"
+        if gpg.exists():
+            configs.append(f"{str(gpg)}:/home/amdinfer-user/.gnupg:rw")
+
+        return configs
+
+    @staticmethod
+    def get_xclbins():
+        xclbins = []
+
+        path = Path("/opt/xilinx/overlaybins")
+        if path.exists():
+            xclbins.append(f"{str(path)}:{str(path)}:ro")
+
+        return xclbins
+
+    @classmethod
+    def merge(cls, base, supplement):
+        for key in supplement.keys():
+            if key in base:
+                if isinstance(base[key], list):
+                    if isinstance(supplement[key], list):
+                        base[key].extend(supplement[key])
+                    else:
+                        base[key].append(supplement[key])
+                elif isinstance(base[key], dict):
+                    cls.merge(base[key], supplement[key])
+                else:
+                    base[key] = supplement[key]
+            else:
+                base[key] = supplement[key]
+
+    @staticmethod
+    def set_or_extend(dictionary, key, value):
+        if key in dictionary:
+            if isinstance(dictionary[key], list):
+                if isinstance(value, list):
+                    dictionary[key].extend(value)
+                else:
+                    dictionary[key].append(value)
+            else:
+                dictionary[key] = value
+
+    @classmethod
+    def write(cls, args: argparse.Namespace, profile: str):
+        try:
+            import yaml
+        except ImportError:
+            raise argparse.ArgumentError(
+                None,
+                "The yaml package is required for this command but could not be imported.",
+            )
+
+        with open(f"docker-compose.base.yml", "r") as f:
+            config = yaml.safe_load(f)
+
+        with open(f"docker-compose.{profile}.yml", "r") as f:
+            supplement = yaml.safe_load(f)
+
+        cls.merge(config, supplement)
+
+        for service in config["services"]:
+            if args.devices:
+                cls.set_or_extend(
+                    config["services"][service], "devices", cls.get_devices()
+                )
+
+        if args.dry_run:
+            print(json.dumps(config, indent=2))
+        else:
+            with open("docker-compose.yml", "w") as f:
+                yaml.dump(config, f)
+
+
+def reject_unknown_args(unknown_args):
+    if unknown_args:
+        unknown_arguments = " ".join(unknown_args)
+        raise argparse.ArgumentError(
+            None, f"Unknown argument(s) passed: {unknown_arguments}"
+        )
+
+
+class Attach:
+    @staticmethod
+    def parse(args, unknown_args):
+        reject_unknown_args(unknown_args)
+
+        cmd = f"docker ps --filter status=running --filter 'label=project=amdinfer' --latest --quiet"
+        if args.name is None:
+            try:
+                latest_container = (
+                    subprocess.check_output(shlex.split(cmd)).decode("utf-8").strip()
+                )
+            except FileNotFoundError:
+                print("Docker not found, cannot attach to a container")
+                sys.exit(1)
+        else:
+            latest_container = args.name
+
+        if latest_container == "":
+            print(
+                "Failed to find a container to attach to automatically. Use --name to specify one"
+            )
+            if not args.dry_run:
+                sys.exit(1)
+            sys.exit(0)
+
+        columns, lines = shutil.get_terminal_size()
+
+        command = f"docker exec -it --user amdinfer-user -e COLUMNS={columns} -e LINES={lines} {latest_container} /bin/bash"
+        run_tty_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "attach", help="Attach to a running container", add_help=False
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument(
+            "name",
+            action="store",
+            default=None,
+            nargs="?",
+            help="name of the container to attach to. Defaults to latest running container",
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        subparser.set_defaults(func=cls.parse)
+
+
+class Benchmark:
+    @staticmethod
+    def parse(args, unknown_args):
+        unknown_commands = " ".join(unknown_args)
+        command = f"python3 tools/benchmark.py {unknown_commands}"
+        run_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "benchmark", help="Run the benchmarks", add_help=False
+        )
+        subparser.set_defaults(func=cls.parse)
+
+
+class Build:
+    @staticmethod
+    def parse(args, unknown_args: list):
+        unknown_args.sort()
+
+        (
+            build_config_file,
+            old_build_config,
+            old_build_options,
+        ) = get_build_config(args.dir)
+        if old_build_options is not None and unknown_args != old_build_options:
+            args.regen = True
+
+        if old_build_config is None:
+            old_build_config = "Debug"
+            args.regen = True
+            if not args.dry_run:
+                os.makedirs(os.path.dirname(build_config_file), exist_ok=True)
+                os.makedirs(
+                    os.path.dirname(build_config_file) + "/" + old_build_config,
+                    exist_ok=True,
+                )
+            else:
+                print(f"Making directories: {str(build_config_file)}")
+                print(f"Making directories: {str(build_config_file/old_build_config)}")
+
+        if args.config is None:
+            args.config = old_build_config.strip()
+
+        build_options_file = f"{args.dir}/{args.config}/config.txt"
+
+        build_dir = Path(f"{args.dir}/{args.config}")
+        # build_dir.mkdir(parents=True, exist_ok=True)
+
+        build_options = " ".join(unknown_args)
+        if args.lint:
+            build_options += " -DAMDINFER_ENABLE_LINTING=ON"
+
+        cmake_cache = build_dir / "CMakeCache.txt"
+        if args.clean and cmake_cache.exists():
+            command = (
+                f"cmake --build {str(build_dir)} --target clean -- -j {args.threads}"
+            )
+            run_command(command, args.dry_run)
+
+        # if the package isn't importable, then we need to delete the CMake cache so the package can be installed by the build
+        package_installed = importlib.util.find_spec("amdinfer")
+        if package_installed is None:
+            args.regen = True
+
+        if args.regen or (not build_dir.exists()) or (not cmake_cache.exists()):
+            file = f"{str(build_dir)}/CMakeCache.txt"
+            command = f"rm -f {str(cmake_cache)}"
+            if args.dry_run:
+                print(command)
+            else:
+                try:
+                    os.remove(file)
+                except OSError:
+                    pass
+            command = f'cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
+                -DCMAKE_BUILD_TYPE:STRING={args.config} -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc \
+                -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -H{Path.cwd()} -B{str(build_dir)} \
+                -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" -G "Unix Makefiles" {build_options}'
+            run_command(command, args.dry_run)
+
+        if args.dry_run:
+            print(f"Saving {args.config} to {str(build_config_file)}")
+            print(f"Saving {build_options} to {str(build_options_file)}")
+        else:
+            with open(build_config_file, "w") as f:
+                f.write(args.config)
+            with open(build_options_file, "w") as f:
+                f.write(build_options)
+
+        command = f"cmake --build {str(build_dir)} --target all -- -j {args.threads}"
+        run_command(command, args.dry_run)
+
+        path = f"{args.dir}/workers"
+        if args.dry_run:
+            print(f"mkdir -p {path}")
+        else:
+            Path(path).mkdir(parents=True, exist_ok=True)
+
+        shared_libs = " ".join(glob.glob(f"{str(build_dir)}/src/amdinfer/workers/*.so"))
+        command = f"cp -fs {shared_libs} {path}/"
+        run_command(command, args.dry_run)
+        command = f"symlinks -rc {path}"
+        run_command(command, args.dry_run, quiet=True)
+        if not args.dry_run:
+            print("")
+            print("======================")
+            print(f"Built {args.config} version")
+            print("======================")
+
+        if args.all:
+            args.jobs = mp.cpu_count()
+            Make.parse(args, ["extra"])
+            Make.parse(args, ["doxygen"])
+            Make.parse(args, ["sphinx"])
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "build", help="Build the amdinfer project", add_help=False
+        )
+
+        command_group = subparser.add_mutually_exclusive_group()
+        command_group.add_argument(
+            "--coverage",
+            dest="config",
+            action="store_const",
+            const="Coverage",
+            help="build the coverage configuration",
+        )
+        command_group.add_argument(
+            "--debug",
+            dest="config",
+            action="store_const",
+            const="Debug",
+            help="build the debug configuration",
+        )
+        command_group.add_argument(
+            "--release",
+            dest="config",
+            action="store_const",
+            const="Release",
+            help="build the release configuration",
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument(
+            "-a",
+            "--all",
+            action="store_true",
+            help="Build additional optional targets",
+        )
+        command_group.add_argument(
+            "-c",
+            "--clean",
+            action="store_true",
+            help="clean prior to building",
+        )
+        command_group.add_argument(
+            "-d",
+            "--dir",
+            action="store",
+            help="root path to place the build tree. Defaults to ./build",
+            default=str(Path.cwd() / "build"),
+        )
+        command_group.add_argument(
+            "-l",
+            "--lint",
+            action="store_true",
+            help="Enable build-time linting in CMake. Defaults to false",
+        )
+        command_group.add_argument(
+            "-r",
+            "--regen",
+            action="store_true",
+            help="Delete the CMakeCache and regenerate",
+        )
+        command_group.add_argument(
+            "-t",
+            "--threads",
+            action="store",
+            help="number of threads for Make (defaults to number of processors)",
+            default=mp.cpu_count(),
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        subparser.set_defaults(func=cls.parse)
+
+
+class Clean:
+    @staticmethod
+    def parse(args, unknown_args):
+        commands = [
+            "rm -f docker-compose.devices.yml",
+            "rm -f docker-compose.yml",
+            "rm -f include/amdinfer/build_options.hpp",
+            "rm -f src/amdinfer/version.hpp",
+            "rm -f tools/benchmark.yml",
+            "rm -rf external/aks/graph_zoo",
+            "rm -rf external/aks/kernel_src",
+            "rm -rf external/aks/kernel_zoo",
+            "rm -f external/aks/cmake-kernels.sh",
+            "rm -rf external/aks/libs",
+        ]
+        if args.gui:
+            commands.extend(
+                [
+                    "rm -rf src/gui/node_modules",
+                    "rm -rf src/gui/public/coverage",
+                    "rm -rf src/gui/public/doxygen",
+                    "rm -rf src/gui/public/sphinx",
+                    "rm -f src/gui/src/build_options.ts",
+                ]
+            )
+        if args.artifacts:
+            commands.append("rm -rf external/artifacts/*")
+
+        command = "; ".join(commands)
+        run_command(command, args.dry_run)
+
+        command = "find . -name build -type d -exec rm -r {} +"
+        run_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "clean",
+            help="Delete all generated files, restoring the repo to clean state",
+            add_help=False,
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument(
+            "--artifacts",
+            action="store_true",
+            help="Delete downloaded artifacts",
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        command_group.add_argument(
+            "--no-gui",
+            dest="gui",
+            action="store_false",
+            help="Don't clean web GUI/nodeJS related files",
+        )
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Dockerize:
+    @staticmethod
+    def parse(args, unknown_args):
+
+        unknown_arguments = " ".join(unknown_args)
+
+        tag_prefix = f"{args.registry}"
+        target = "final"
+        build_args = ""
+        if args.production:
+            tag_prefix += f"/amdinfer" + args.suffix
+            build_args += "--build-arg IMAGE_TYPE=prod "
+        else:
+            tag_prefix += f"/amdinfer-dev" + args.suffix
+            build_args += "--build-arg IMAGE_TYPE=dev "
+
+        latest_tag = f"{tag_prefix}:latest"
+
+        if args.vitis:
+            build_args += "--build-arg ENABLE_VITIS=yes "
+        if args.dev_base:
+            build_args += f"--build-arg DEV_BASE_IMAGE={args.dev_base} "
+
+        if args.tfzendnn_path:
+            build_args += f" --build-arg ENABLE_TFZENDNN=yes"
+            build_args += f" --build-arg TFZENDNN_PATH={args.tfzendnn_path}"
+
+        if args.ptzendnn_path:
+            build_args += f" --build-arg ENABLE_PTZENDNN=yes"
+            build_args += f" --build-arg PTZENDNN_PATH={args.ptzendnn_path}"
+
+        if args.migraphx:
+            build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
+
+        try:
+            git_branch = (
+                subprocess.check_output(shlex.split("git rev-parse --abbrev-ref HEAD"))
+                .decode("utf-8")
+                .strip()
+            )
+        except subprocess.CalledProcessError:
+            git_branch = "unknown"
+        try:
+            git_commit = (
+                subprocess.check_output(shlex.split("git rev-parse HEAD"))
+                .decode("utf-8")
+                .strip()
+            )
+        except subprocess.CalledProcessError:
+            git_commit = "unknown"
+        else:
+            retval = run_command(
+                "git diff --quiet -- . ':(exclude)VERSION'", False, False
+            )
+            if retval:
+                git_commit += "-dirty"
+
+        labels = f"--label git-branch={git_branch} --label git-commit={git_commit}"
+
+        version = get_version()
+        # normalize docker tag
+        version = re.sub("[^A-Za-z0-9.]+", "-", version)
+        os.environ["DOCKER_BUILDKIT"] = "1"
+        command = f"docker build {labels} --target {target} -t {latest_tag} -t {tag_prefix}:{version} {build_args} {unknown_arguments} ."
+        run_command(command, args.dry_run)
+
+        if args.push:
+            command = f"docker push {tag_prefix}:{version}"
+            run_command(command, args.dry_run)
+            command = f"docker push {latest_tag}"
+            run_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "dockerize", help="Build a docker image", add_help=False
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument(
+            "--dev-base",
+            dest="dev_base",
+            action="store",
+            help="Name of the image to use as dev image to build the production image.",
+            default="",
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        command_group.add_argument(
+            "--vitis",
+            dest="vitis",
+            action="store_true",
+            help="If provided, build with Vitis AI enabled",
+        )
+        command_group.add_argument(
+            "--production",
+            action="store_true",
+            help=f"Build the production image. Defaults to false to build the dev image.",
+        )
+        command_group.add_argument(
+            "--push",
+            action="store_true",
+            help="Push the image(s) to the registry after building.",
+        )
+        command_group.add_argument(
+            "--registry",
+            action="store",
+            help=f"Docker image registry. Defaults to {getpass.getuser()}",
+            default=getpass.getuser(),
+        )
+        command_group.add_argument(
+            "--tfzendnn_path",
+            type=str,
+            default=None,
+            help="TF+ZenDNN C++ package location. If provided, will build with TF+ZenDNN enabled",
+        )
+
+        command_group.add_argument(
+            "--ptzendnn_path",
+            type=str,
+            default=None,
+            help="PT+ZenDNN C++ package location. If provided, will build with PT+ZenDNN enabled",
+        )
+
+        command_group.add_argument(
+            "--migraphx",
+            action="store_true",
+            help="If provided, will build with Migraphx enabled",
+        )
+
+        command_group.add_argument(
+            "--suffix",
+            action="store",
+            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
+        )
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Get:
+    @staticmethod
+    def parse(args, unknown_args):
+
+        reject_unknown_args(unknown_args)
+
+        if not args.dry_run:
+            print(
+                textwrap.dedent(
+                    """
+                NOTICE: BY INVOKING THIS SCRIPT AND USING THE FILES INSTALLED BY THE SCRIPT, YOU
+                AGREE ON BEHALF OF YOURSELF AND YOUR EMPLOYER (IF APPLICABLE) TO BE BOUND TO THE
+                COPYRIGHT AND LICENSE AGREEMENT APPLICABLE TO THE FILES THAT YOU INSTALL BY
+                RUNNING THE SCRIPT. XILINX DOES NOT GRANT TO YOU ANY RIGHTS OR LICENSES TO SUCH
+                FILES. YOU AGREE TO CAREFULLY REVIEW AND ABIDE BY THE TERMS AND CONDITIONS OF
+                THE LICENSE AGREEMENT TO THE EXTENT THAT THEY GOVERN SUCH FILES.
+                """
+                )
+            )
+
+        if run_command("git lfs version", args.dry_run, False, True) is not None:
+            print(
+                "Install Git LFS and run the following commands in the repo before continuing:"
+            )
+            print("  $ git lfs install")
+            print("  $ git lfs pull")
+            sys.exit(1)
+
+        # use the size of mnist.zip as a proxy to see if git lfs pull has been called
+        if os.path.getsize(Path.cwd() / "tests/assets/mnist.zip") < 1024:
+            print("Git LFS detected but you haven't pulled the LFS artifacts:")
+            print("  $ git lfs install")
+            print("  $ git lfs pull")
+            sys.exit(1)
+
+        tests.download.main(args)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "get",
+            help="Get artifacts (images, videos and models) for examples and tests",
+            add_help=False,
+        )
+
+        subparser = tests.download.get_parser(subparser)
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Install:
+    @staticmethod
+    def parse(args, unknown_args):
+        if args.get_manifest:
+            try:
+                with open(f"{args.dir}/Release/install_manifest.txt") as f:
+                    print(f.read())
+                sys.exit(0)
+            except FileNotFoundError:
+                raise argparse.ArgumentError(
+                    None, "No manifest found. Install amdinfer first."
+                )
+
+        build_args = f"--dir {args.dir} --release --regen -DAMDINFER_BUILD_TESTING=OFF "
+        if unknown_args:
+            build_args += " ".join(unknown_args)
+
+        command = f"./amdinfer build {build_args}"
+
+        run_command(command, args.dry_run)
+
+        command = f"make -C {args.dir}/Release install"
+        # if user is root, no need for sudo
+        if os.geteuid() == 0:
+            run_command(command, args.dry_run)
+        else:
+            run_command("sudo " + command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "install",
+            help="Install amdinfer. Any unknown arguments are passed to the build command. Use -- --help to see options.",
+            add_help=False,
+        )
+
+        command_group = subparser.add_argument_group("Options")
+
+        # we need to build it somewhere else first because we're assuming that this
+        # build is running in the mounted directory in a container. The `make install`
+        # needs to be run as sudo to install to the system directory but the process
+        # also writes install_manifest.txt to the build tree. The root user does not
+        # have permissions to write into the mounted directory.
+        command_group.add_argument(
+            "-d",
+            "--dir",
+            action="store",
+            help="root path to the build tree. Defaults to /tmp/amdinfer/build",
+            default="/tmp/amdinfer/build",
+        )
+        command_group.add_argument(
+            "--get-manifest",
+            action="store_true",
+            help="Print the list of files last installed.",
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class List:
+    @staticmethod
+    def parse(args, unknown_args):
+        if args.type == "images":
+            command = 'docker image list -f reference=*/*amdinfer* -f reference=*/*/*amdinfer* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
+        elif args.type == "labels":
+            command = 'docker image list -f reference=*/*amdinfer* -f reference=*/*/*amdinfer* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
+        else:
+            command = 'docker ps --filter "label=project=amdinfer" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
+
+        if args.type == "labels":
+            if shutil.which("jq") is not None:
+                run_shell_command(command, args.dry_run)
+            else:
+                raise argparse.ArgumentError(None, "Install jq to use this command")
+        else:
+            if unknown_args:
+                command += " ".join(unknown_args)
+
+            run_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "list",
+            help="List containers and images on the host.",
+            add_help=False,
+        )
+
+        subparser.add_argument(
+            "type",
+            nargs="?",
+            action="store",
+            default=False,
+            help="List the active containers (default) or specify 'images' or 'labels'",
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Make:
+    @staticmethod
+    def parse(args, unknown_args):
+        _, old_build_config, _ = get_build_config(args.dir)
+
+        command = f"make -C {args.dir}/{old_build_config} "
+        if args.jobs is None:
+            command += "-j "
+        else:
+            command += f"-j{args.jobs} "
+        command += " ".join(unknown_args)
+
+        run_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "make",
+            help="This is a wrapper around make for the current build configuration.",
+            add_help=False,
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument(
+            "--dir",
+            action="store",
+            help="root path to the build tree. Defaults to ./build",
+            default=str(Path.cwd() / "build"),
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        command_group.add_argument(
+            "-j",
+            dest="jobs",
+            nargs="?",
+            action="store",
+            help="Allow N jobs at once; infinite jobs with no arg. Defaults to number of cores.",
+            default=mp.cpu_count(),
+        )
+
+        subparser.set_defaults(func=cls.parse)
+
+
+def _add_to_command(command, key, value):
+    def add_key(command, key, value):
+        if isinstance(value, str):
+            command += f"--{key} {value} "
+        elif value:
+            command += f"--{key} "
+        return command
+
+    if isinstance(value, list):
+        for item in value:
+            command = add_key(command, key, item)
+    else:
+        command = add_key(command, key, value)
+    return command
+
+
+class Run:
+    @staticmethod
+    def dict_to_flags(flags: dict):
+        command = ""
+        for key, value in flags.items():
+            if isinstance(value, list):
+                command = _add_to_command(command, key, value)
+            elif isinstance(value, dict):
+                items = []
+                for _, value_2 in value.items():
+                    if isinstance(value_2, list):
+                        items.extend(value_2)
+                    else:
+                        items.append(value_2)
+                command = _add_to_command(command, key, items)
+            else:
+                command = _add_to_command(command, key, value)
+        return command
+
+    @staticmethod
+    def parse(args, unknown_args: list):
+        if args.image is None and args.preset is None:
+            raise argparse.ArgumentError(
+                None, "Image must be specified if no preset is used. See --help."
+            )
+
+        flags = {}
+        image = None
+        cmd = None
+        root_dir = "/workspace/amdinfer"
+        if args.preset == "dev":
+            image = f"{getpass.getuser()}/amdinfer-dev:latest"
+            flags["cap-add"] = "SYS_PTRACE"
+            flags["device"] = WriteComposeFile.get_devices()
+            flags["hostname"] = "amdinfer-dev"
+            flags["publish"] = ["127.0.0.1::8998", "127.0.0.1::3000"]
+            flags["interactive"] = True
+            flags["rm"] = True
+            flags["tty"] = True
+            flags["volume"] = {
+                "user_config": WriteComposeFile.get_user_configs(),
+                "working_dir": f"{Path.cwd()}:{root_dir}",
+                "xclbins": WriteComposeFile.get_xclbins(),
+            }
+            flags["workdir"] = root_dir
+        elif args.preset == "autotest-dev":
+            cmd = "./tools/coverage.sh -t 50"
+            image = f"{getpass.getuser()}/amdinfer-dev:latest"
+            flags["volume"] = {
+                "working_dir": f"{Path.cwd()}:{root_dir}",
+            }
+            flags["workdir"] = root_dir
+
+        # if a preset was used, use the default image if no explicit image was provided.
+        if args.image is None:
+            args.image = image
+
+        if args.command is None:
+            args.command = cmd
+
+        if args.devices is not None:
+            if args.devices:
+                flags["device"] = WriteComposeFile.get_devices()
+            else:
+                flags["device"] = False
+
+        if args.user_config is not None:
+            if args.user_config:
+                flags["volume"]["user_config"] = WriteComposeFile.get_user_configs()
+            else:
+                flags["volume"]["user_config"] = False
+
+        if args.working_dir is not None:
+            if args.working_dir:
+                flags["volume"]["working_dir"] = f"{Path.cwd()}:{root_dir}"
+            else:
+                flags["volume"]["working_dir"] = False
+                if flags["workdir"] == root_dir:
+                    flags["workdir"] = False
+        if args.xclbins is not None:
+            if args.xclbins:
+                flags["volume"]["xclbins"] = WriteComposeFile.get_xclbins()
+            else:
+                flags["volume"]["xclbins"] = False
+
+        if args.interactive is not None:
+            flags["interactive"] = args.interactive
+            flags["tty"] = args.interactive
+
+        if args.net_host is not None:
+            flags["publish"] = False
+            if args.net_host:
+                flags["network"] = "host"
+            else:
+                flags["network"] = False
+
+        if args.rm is not None:
+            flags["rm"] = args.rm
+
+        columns, lines = shutil.get_terminal_size()
+        command = f"docker run -e COLUMNS={columns} -e LINES={lines} "
+
+        command += Run.dict_to_flags(flags)
+
+        command += " ".join(unknown_args)
+        command += " " + args.image
+
+        if args.command is not None:
+            command += " " + args.command.strip('"')
+
+        run_tty_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "run",
+            help="Run a container",
+            add_help=False,
+            description="This is a wrapper around 'docker run' with preset options. Any unparsed arguments are directly passed to 'docker run'. Use 'docker run --help' to see the options.",
+        )
+
+        command_group = subparser.add_argument_group(
+            "Presets",
+            "Presets define a set of options together for convenience. If additional options are provided, they override those set in the preset.",
+        )
+        presets = command_group.add_mutually_exclusive_group()
+
+        presets.add_argument(
+            "--dev",
+            dest="preset",
+            action="store_const",
+            help="Starts the dev container in interactive mode with the working directory mounted.",
+            const="dev",
+            default=None,
+        )
+
+        presets.add_argument(
+            "--autotest-dev",
+            dest="preset",
+            action="store_const",
+            help="Starts the dev container with the working directory mounted and runs the coverage test.",
+            const="autotest-dev",
+            default=None,
+        )
+
+        command_group = subparser.add_argument_group(
+            "Options", "These options may default to a value if a preset is selected."
+        )
+
+        command_group.add_argument(
+            "--command",
+            action="store",
+            help=f"Override the default CMD of the image. Defaults to None.",
+            default=None,
+        )
+        command_group.add_argument(
+            "--devices",
+            "--no-devices",
+            dest="devices",
+            action=NegateAction,
+            help="Pass devices from host to container, if they exist",
+            default=None,
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        command_group.add_argument(
+            "--image",
+            action="store",
+            help=f"Image to run. Defaults to a value if a preset is used.",
+            default=None,
+        )
+        command_group.add_argument(
+            "--interactive",
+            "--no-interactive",
+            dest="interactive",
+            action=NegateAction,
+            help="Keep STDIN open even if not attached and allocate a pseudo-TTY",
+            default=None,
+        )
+        command_group.add_argument(
+            "--net-host",
+            "--no-net-host",
+            dest="net_host",
+            action=NegateAction,
+            help="Use host networking mode",
+            default=None,
+        )
+        command_group.add_argument(
+            "--rm",
+            "--no-rm",
+            dest="rm",
+            action=NegateAction,
+            help="Remove container after exiting",
+            default=None,
+        )
+        command_group.add_argument(
+            "--user-config",
+            "--no-user-config",
+            dest="user_config",
+            action=NegateAction,
+            help="Pass the user's git config and SSH keys to the container, if they exist",
+            default=None,
+        )
+        command_group.add_argument(
+            "--working-dir",
+            "--no-working-dir",
+            dest="working_dir",
+            action=NegateAction,
+            help="Mount the current working directory from host to /workspace/amdinfer on the container",
+            default=None,
+        )
+        command_group.add_argument(
+            "--xclbins",
+            "--no-xclbins",
+            dest="xclbins",
+            action=NegateAction,
+            help="Pass /opt/xilinx/overlaybins from host to container, if it exists",
+            default=None,
+        )
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Start:
+    @staticmethod
+    def parse(args, unknown_args):
+        _, old_build_config, _ = get_build_config(args.dir)
+
+        command = ""
+        if args.gdb:
+            command += "gdb --args "
+        command += f"{args.dir}/{old_build_config}/src/amdinfer/amdinfer-server "
+        command += " ".join(unknown_args)
+
+        run_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "start",
+            help="Start amdinfer-server with the current build configuration. Unknown arguments are passed to amdinfer-server.",
+            add_help=False,
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument(
+            "--dir",
+            action="store",
+            help="root path to the build tree. Defaults to ./build",
+            default=str(Path.cwd() / "build"),
+        )
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        command_group.add_argument(
+            "--gdb",
+            action="store_true",
+            help="Run server with GDB.",
+        )
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Test:
+    @staticmethod
+    def parse(args, unknown_args):
+        try:
+            import amdinfer
+        except ImportError:
+            run_command(
+                f"./amdinfer build --{args.build.lower()} --regen --clean", args.dry_run
+            )
+        tests.test.main(args, unknown_args)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "test",
+            help="Run the test suite with pytest. All unknown arguments are passed to pytest",
+            add_help=False,
+        )
+
+        subparser = tests.test.get_parser(subparser)
+
+        subparser.set_defaults(func=cls.parse)
+
+
+class Up:
+    @staticmethod
+    def parse(args, unknown_args: list):
+        if unknown_args:
+            unknown_arguments = " ".join(unknown_args)
+            raise argparse.ArgumentError(
+                None, f"Unknown argument(s) passed: {unknown_arguments}"
+            )
+
+        extra_flags = ""
+        if args.profile == "dev":
+            args.name = "amdinfer-dev" + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
+            extra_flags = "--detach"
+        elif args.profile == "prod":
+            args.name = "amdinfer" + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
+        elif args.profile == "autotest":
+            args.tag = args.registry
+            extra_flags = "--abort-on-container-exit --exit-code-from amdinfer-tester"
+        elif args.profile == "autotest-dev":
+            args.name = "amdinfer-dev" + args.suffix
+            args.tag = f"{args.registry}/{args.name}"
+            extra_flags = "--abort-on-container-exit --exit-code-from amdinfer"
+        elif args.profile == "test":
+            args.tag = args.registry
+            extra_flags = "--detach"
+        else:
+            raise argparse.ArgumentError(None, f"Unknown profile: {args.profile}")
+
+        # used by WriteComposeFile
+        args.devices = True
+        WriteComposeFile.write(args, args.profile)
+
+        image = f"{args.tag}:{args.version}"
+
+        command = f"docker-compose up {extra_flags}"
+
+        if args.dry_run:
+            print(f"IMAGE: {image}")
+            print(f"SUFFIX: {args.suffix}")
+            print(f"REGISTRY: {args.registry}")
+            print(f"VERSION: {args.version}")
+            print("AKS_ROOT: $PWD/external/aks")
+        else:
+            with open("docker-compose.yml", "r") as f:
+                filedata = f.read()
+                filedata = "# " + command + "\n" + filedata
+                filedata = filedata.replace("$IMAGE", image)
+                filedata = filedata.replace("$SUFFIX", args.suffix)
+                filedata = filedata.replace("$REGISTRY", args.registry)
+                filedata = filedata.replace("$VERSION", args.version)
+                filedata = filedata.replace("$AKS_ROOT", "$PWD/external/aks")
+            with open("docker-compose.yml", "w") as f:
+                f.write(filedata)
+
+        if not args.write_only:
+            run_tty_command(command, args.dry_run)
+
+    @classmethod
+    def add(cls, parser):
+        subparser = parser.add_parser(
+            "up", help="Start docker-compose services", add_help=False
+        )
+
+        command_group = subparser.add_argument_group("Options")
+        command_group.add_argument("-h", "--help", action="help", help=help_message)
+        command_group.add_argument(
+            "-p",
+            "--profile",
+            action="store",
+            help=f"profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev",
+            default="autotest-dev",
+        )
+        command_group.add_argument(
+            "--registry",
+            action="store",
+            help=f"Registry to use for the Docker images. Defaults to {getpass.getuser()}",
+            default=getpass.getuser(),
+        )
+        command_group.add_argument(
+            "--suffix",
+            action="store",
+            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
+        )
+        command_group.add_argument(
+            "-v",
+            "--version",
+            action="store",
+            help=f"Version of the Docker images to run. Defaults to latest",
+            default="latest",
+        )
+        command_group.add_argument(
+            "--write-only",
+            action="store_true",
+            help=f"Only generate docker-compose.yml without running it",
+        )
+        subparser.set_defaults(func=cls.parse)
+
+
+def get_parser():
+    parser = argparse.ArgumentParser(
+        prog="amdinfer",
+        description="AMD Inference Server helper script",
+        add_help=False,
+    )
+    subparser = parser.add_subparsers(
+        title="Commands", metavar="command", dest="subparser_name"
+    )
+
+    Attach.add(subparser)
+    Benchmark.add(subparser)
+    Build.add(subparser)
+    Clean.add(subparser)
+    Dockerize.add(subparser)
+    Get.add(subparser)
+    Install.add(subparser)
+    List.add(subparser)
+    Make.add(subparser)
+    Run.add(subparser)
+    Start.add(subparser)
+    Test.add(subparser)
+    Up.add(subparser)
+
+    command_group = parser.add_argument_group("Options")
+    command_group.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print the actual commands that would be run without running them",
+    )
+    command_group.add_argument("-h", "--help", action="help", help=help_message)
+    command_group.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=get_version(),
+    )
+
+    return parser
+
+
+if __name__ == "__main__":
+    parser = get_parser()
+
+    known_args, unknown_args = parser.parse_known_args()
+
+    # preserve quotes around arguments with spaces
+    args = vars(known_args)
+    for key in args.keys():
+        if isinstance(args[key], str) and " " in args[key]:
+            args[key] = f'"{args[key]}"'
+    for i in range(len(unknown_args)):
+        if isinstance(unknown_args[i], str) and " " in unknown_args[i]:
+            unknown_args[i] = f'"{unknown_args[i]}"'
+    known_args = argparse.Namespace(**args)
+
+    if unknown_args and unknown_args[0] == "--":
+        unknown_args = unknown_args[1:]
+
+    try:
+        commands = known_args.func(known_args, unknown_args)
+    except argparse.ArgumentError as err:
+        print(err.message)
+        sys.exit(-1)
+    except KeyboardInterrupt:
+        pass
+    except AttributeError as ex:
+        print(ex)

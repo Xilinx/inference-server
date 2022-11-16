@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@
 #include <tuple>    // for tuple, get
 #include <vector>   // for vector
 
-#include "gtest/gtest.h"        // for ParamIteratorInterface, Message, Test...
-#include "proteus/proteus.hpp"  // for RequestParameters, InferenceRequestInput
+#include "amdinfer/amdinfer.hpp"  // for RequestParameters, InferenceRequestInput
+#include "gtest/gtest.h"  // for ParamIteratorInterface, Message, Test...
 
-namespace proteus {
+namespace amdinfer {
 
 class EchoParamFixture
   : public testing::TestWithParam<std::tuple<bool, bool, bool, bool, int>> {
@@ -101,7 +102,7 @@ class EchoParamFixture
     }
   }
 
-  proteus::Server server_;
+  amdinfer::Server server_;
 
  private:
   const int inputs_[1] = {3};
@@ -109,7 +110,7 @@ class EchoParamFixture
 };
 
 TEST_P(EchoParamFixture, EchoNative) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   client.workerLoad("echo", nullptr);
 
   auto request = this->construct_request();
@@ -121,10 +122,10 @@ TEST_P(EchoParamFixture, EchoNative) {
   client.modelUnload("echo");
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 TEST_P(EchoParamFixture, EchoGrpc) {
   server_.startGrpc(50051);
-  auto client = proteus::GrpcClient("localhost:50051");
+  auto client = amdinfer::GrpcClient("localhost:50051");
   while (!client.serverLive()) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
@@ -148,4 +149,4 @@ const std::tuple<bool, bool, bool, bool, int> configs[] = {
 };
 INSTANTIATE_TEST_SUITE_P(Echo, EchoParamFixture, testing::ValuesIn(configs));
 
-}  // namespace proteus
+}  // namespace amdinfer

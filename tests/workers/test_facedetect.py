@@ -18,8 +18,8 @@ import math
 import numpy as np
 import pytest
 
-import proteus
-import proteus.testing
+import amdinfer
+import amdinfer.testing
 
 from helper import root_path, run_benchmark
 
@@ -35,7 +35,7 @@ class TestInferImageFacedetectDPUCADF8H:
     model = "AksDetect"
     parameters = {
         "aks_graph_name": "facedetect",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json",
+        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
     }
 
     def send_request(self, request, check_asserts=True):
@@ -53,9 +53,9 @@ class TestInferImageFacedetectDPUCADF8H:
 
         try:
             response = self.rest_client.modelInfer(self.endpoint, request)
-        except proteus.ConnectionError:
+        except amdinfer.ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         num_inputs = len(request.getInputs())
@@ -77,7 +77,7 @@ class TestInferImageFacedetectDPUCADF8H:
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == proteus.DataType.FP32
+                assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
                 data = output.getFp32Data()
                 num_boxes = int(len(data) / 6)
@@ -92,10 +92,10 @@ class TestInferImageFacedetectDPUCADF8H:
         return response
 
     def construct_request(self, asTensor):
-        image_path = proteus.testing.getPathToAsset("asset_girl-1867092_640.jpg")
+        image_path = amdinfer.testing.getPathToAsset("asset_girl-1867092_640.jpg")
         batch = 1
         images = [image_path] * batch
-        request = proteus.ImageInferenceRequest(images, asTensor)
+        request = amdinfer.ImageInferenceRequest(images, asTensor)
 
         return request
 

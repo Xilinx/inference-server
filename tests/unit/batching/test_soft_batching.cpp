@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,19 +23,19 @@
 #include <utility>           // for move
 #include <vector>            // for vector
 
-#include "gtest/gtest.h"                        // for ParamIteratorInterface
-#include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "proteus/buffers/buffer.hpp"           // for Buffer
-#include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
-#include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_LOGGING
-#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
-#include "proteus/core/data_types.hpp"          // for DataType, DataType::U...
-#include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
-#include "proteus/core/worker_info.hpp"         // for WorkerInfo
-#include "proteus/declarations.hpp"             // for BufferPtrs
-#include "proteus/observation/logging.hpp"      // for initLogger, LogLevel
+#include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
+#include "amdinfer/buffers/buffer.hpp"           // for Buffer
+#include "amdinfer/buffers/vector_buffer.hpp"    // for VectorBuffer
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
+#include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
+#include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
+#include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
+#include "amdinfer/declarations.hpp"             // for BufferPtrs
+#include "amdinfer/observation/logging.hpp"      // for initLogger, LogLevel
+#include "gtest/gtest.h"                         // for ParamIteratorInterface
 
-namespace proteus {
+namespace amdinfer {
 
 // timeout in ms for the batcher
 constexpr auto kTimeoutMs = 1000;
@@ -64,7 +65,7 @@ struct BatchConfig {
 class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
  protected:
   void SetUp() override {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
     LogOptions options{
       "server",          // logger_name
       "",                // log directory
@@ -221,4 +222,4 @@ const std::array<BatchConfig, 7> configs = {
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitSoftBatcherFixture,
                          testing::ValuesIn(configs));
 
-}  // namespace proteus
+}  // namespace amdinfer

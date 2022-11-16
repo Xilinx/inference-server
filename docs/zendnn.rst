@@ -39,18 +39,18 @@ Build the image
 ^^^^^^^^^^^^^^^
 
 After downloading the packages, place them in the root of the repository.
-To build an image with ZenDNN enabled, you need to add the the appropriate flag(s) to the ``proteus dockerize`` command:
+To build an image with ZenDNN enabled, you need to add the the appropriate flag(s) to the ``amdinfer dockerize`` command:
 
 .. code-block:: bash
 
     # create the Dockerfile
     python3 docker/generate.py
 
-    # build the dev image $(whoami)/proteus-dev-zendnn:latest
-    ./proteus dockerize --tfzendnn=./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn=./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix="-zendnn"
+    # build the dev image $(whoami)/amdinfer-dev-zendnn:latest
+    ./amdinfer dockerize --tfzendnn=./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn=./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix="-zendnn"
 
-    # build the production image $(whoami)/proteus-zendnn:latest
-    ./proteus dockerize --tfzendnn=./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn=./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix="-zendnn" --production
+    # build the production image $(whoami)/amdinfer-zendnn:latest
+    ./amdinfer dockerize --tfzendnn=./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn=./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix="-zendnn" --production
 
 You can choose to build a image with just TF+ZenDNN or just PT+ZenDNN by only passing the appropriate flag.
 
@@ -66,7 +66,7 @@ You can download the assets and models used for tests and examples with:
 
 .. code-block:: console
 
-   $ ./proteus get --tfzendnn --ptzendnn
+   $ ./amdinfer get --tfzendnn --ptzendnn
 
 Freezing PyTorch models
 -----------------------
@@ -83,13 +83,13 @@ This test will load a model and run with a sample image and assert the output.
 
    .. code-block:: console
 
-      $ ./proteus test -k tfzendnn
+      $ ./amdinfer test -k tfzendnn
 
 2. For PyTorch + ZenDNN
 
    .. code-block:: console
 
-      $ ./proteus test -k ptzendnn
+      $ ./amdinfer test -k ptzendnn
 
 Tune performance
 ----------------

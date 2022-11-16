@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.21)
 
-# parse Proteus version
+# parse version
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ver)
 string(REPLACE "\n" "" ver ${ver})
 string(REGEX MATCHALL "([0-9]+)|-(.*)\\+" result ${ver})
@@ -38,10 +38,10 @@ endif()
 
 # set the project name
 project(
-  proteus
+  amdinfer
   VERSION ${ver_major}.${ver_minor}.${ver_patch}
   LANGUAGES CXX
-  DESCRIPTION "Proteus inference library and server"
+  DESCRIPTION "AMDinfer inference library and server"
 )
 
 # Only do these if this is the main project, and not if it is included through
@@ -69,9 +69,9 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-  set(PROTEUS_BUILD_TESTING_DEFAULT ON)
+  set(AMDINFER_BUILD_TESTING_DEFAULT ON)
 else()
-  set(PROTEUS_BUILD_TESTING_DEFAULT OFF)
+  set(AMDINFER_BUILD_TESTING_DEFAULT OFF)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Coverage)
@@ -119,8 +119,8 @@ if(${xir_FOUND}
    AND ${unilog_FOUND}
    AND ${target-factory_FOUND}
 )
-  set(PROTEUS_VITIS_FOUND ON)
-  set(PROTEUS_AKS_FOUND ${aks_FOUND})
+  set(AMDINFER_VITIS_FOUND ON)
+  set(AMDINFER_AKS_FOUND ${aks_FOUND})
   message(STATUS "Enabling Vitis dependencies")
   if(aks_FOUND)
     message(STATUS "Enabling AKS dependencies")
@@ -128,14 +128,14 @@ if(${xir_FOUND}
     message(STATUS "AKS not found, disabling AKS dependencies")
   endif()
 else()
-  set(PROTEUS_VITIS_FOUND OFF)
-  set(PROTEUS_AKS_FOUND OFF)
+  set(AMDINFER_VITIS_FOUND OFF)
+  set(AMDINFER_AKS_FOUND OFF)
   message(STATUS "One or more Vitis dependencies not found. Disabling Vitis")
 endif()
 
 configure_file(
-  ${PROJECT_SOURCE_DIR}/src/proteus/version.hpp.in
-  ${PROJECT_SOURCE_DIR}/src/proteus/version.hpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp.in
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp
 )
 
 message(STATUS "Build Options:")
@@ -144,11 +144,11 @@ add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
 add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
 add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
 add_option("ENABLE_TRACING" "Enable Jaeger tracing" ${opentelemetry-cpp_FOUND})
-add_option("ENABLE_AKS" "Enable AKS dependencies" ${PROTEUS_AKS_FOUND})
-add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${PROTEUS_VITIS_FOUND})
+add_option("ENABLE_AKS" "Enable AKS dependencies" ${AMDINFER_AKS_FOUND})
+add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${AMDINFER_VITIS_FOUND})
 add_option("BUILD_EXAMPLES" "Build examples" ON)
-add_option("BUILD_SHARED" "Build Proteus as a shared library" ON)
-add_option("BUILD_TESTING" "Build C++ tests" ${PROTEUS_BUILD_TESTING_DEFAULT})
+add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
+add_option("BUILD_TESTING" "Build C++ tests" ${AMDINFER_BUILD_TESTING_DEFAULT})
 add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
 add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
 add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
@@ -157,7 +157,7 @@ add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ${migraphx_FOUND})
 add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
 
 message(STATUS "Derived Options:")
-if(${PROTEUS_ENABLE_REST} OR ${PROTEUS_ENABLE_METRICS})
+if(${AMDINFER_ENABLE_REST} OR ${AMDINFER_ENABLE_METRICS})
   add_derived_option("ENABLE_HTTP" ON)
 else()
   add_derived_option("ENABLE_HTTP" OFF)
@@ -165,12 +165,12 @@ endif()
 
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)
-  set(PROTEUS_ENABLE_TRACING OFF)
+  set(AMDINFER_ENABLE_TRACING OFF)
 endif()
 
 configure_file(
-  src/proteus/build_options.hpp.in
-  ${PROJECT_SOURCE_DIR}/include/proteus/build_options.hpp
+  src/amdinfer/build_options.hpp.in
+  ${PROJECT_SOURCE_DIR}/include/amdinfer/build_options.hpp
 )
 configure_file(
   src/gui/src/build_options.ts.in
@@ -201,7 +201,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     Coverage
     --load-before
     DEPENDENCIES
-    proteus-server
+    amdinfer-server
     FASTCOV_ARGS
     "--include"
     ${PROJECT_SOURCE_DIR}
@@ -218,13 +218,13 @@ else()
   message(STATUS "Not a coverage build, not configuring coverage measurement")
 endif()
 
-set(PROTEUS_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src
-                         ${PROJECT_SOURCE_DIR}/include
+set(AMDINFER_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src
+                          ${PROJECT_SOURCE_DIR}/include
 )
-set(PROTEUS_PUBLIC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
-set(PROTEUS_TEST_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/tests/src)
+set(AMDINFER_PUBLIC_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
+set(AMDINFER_TEST_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/tests/src)
 
-if(${PROTEUS_ENABLE_LINTING})
+if(${AMDINFER_ENABLE_LINTING})
   enable_cxx_linting()
 endif()
 
@@ -236,11 +236,11 @@ else()
 endif()
 
 add_subdirectory(external)
-add_subdirectory(src/proteus)
-if(${PROTEUS_BUILD_EXAMPLES})
+add_subdirectory(src/amdinfer)
+if(${AMDINFER_BUILD_EXAMPLES})
   add_subdirectory(examples)
 endif()
-if(${PROTEUS_BUILD_TESTING})
+if(${AMDINFER_BUILD_TESTING})
   include(GTest)
   include(GoogleTest)
   add_subdirectory(tests)

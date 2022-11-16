@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,13 +17,13 @@
 #include <cstdint>  // for uint16_t, int16_t, int32_t
 #include <memory>   // for allocator
 
-#include "gtest/gtest.h"                      // for EXPECT_EQ, FAIL, UnitTest
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/core/data_types.hpp"        // for DataType, getSize, oper...
-#include "proteus/declarations.hpp"           // for BufferPtrs
-#include "proteus/util/queue.hpp"             // for BufferPtrsQueue
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/core/data_types.hpp"        // for DataType, getSize, oper...
+#include "amdinfer/declarations.hpp"           // for BufferPtrs
+#include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
+#include "gtest/gtest.h"                       // for EXPECT_EQ, FAIL, UnitTest
 
-namespace proteus {
+namespace amdinfer {
 
 constexpr auto kBufferSize = 10;
 // constexpr auto kDataType = DataType::INT32;
@@ -94,13 +95,13 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
-DataType datatypes[] = {proteus::DataType::BOOL,   proteus::DataType::UINT8,
-                        proteus::DataType::UINT16, proteus::DataType::UINT32,
-                        proteus::DataType::UINT64, proteus::DataType::INT8,
-                        proteus::DataType::INT16,  proteus::DataType::INT32,
-                        proteus::DataType::INT64,  proteus::DataType::FP16,
-                        proteus::DataType::FP32,   proteus::DataType::FP64};
+DataType datatypes[] = {amdinfer::DataType::BOOL,   amdinfer::DataType::UINT8,
+                        amdinfer::DataType::UINT16, amdinfer::DataType::UINT32,
+                        amdinfer::DataType::UINT64, amdinfer::DataType::INT8,
+                        amdinfer::DataType::INT16,  amdinfer::DataType::INT32,
+                        amdinfer::DataType::INT64,  amdinfer::DataType::FP16,
+                        amdinfer::DataType::FP32,   amdinfer::DataType::FP64};
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitVectorBufferFixture,
                          testing::ValuesIn(datatypes));
 
-}  // namespace proteus
+}  // namespace amdinfer

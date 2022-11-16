@@ -22,7 +22,7 @@ AMD Inference Server's performance can be maximized by appropriately controlling
 Hardware
 --------
 
-The :program:`proteus-server` executable or any application that links to AMD Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
+The :program:`amdinfer-server` executable or any application that links to AMD Inference Server should be run on a server-grade machine with adequate CPUs/threads and RAM.
 We suggest at least 32GB of RAM and 6 core/12 threads.
 Other processes running on the server should be minimized.
 
@@ -33,7 +33,7 @@ Enable compiler optimizations by building with the :option:`--release` flag.
 
 .. code-block:: console
 
-    $ proteus build --release
+    $ amdinfer build --release
 
 Parallelism
 -----------
@@ -55,7 +55,7 @@ For REST requests, make asynchronous requests so sequential requests don't block
 There are a few ways to do this.
 For benchmarking, use ``wrk`` or other HTTP benchmarking executables that ensure maximum throughput.
 If making requests from Python, use ``aiohttp`` or similar packages to make asynchronous requests instead of the ``requests`` package.
-AMD Inference Server's Python API provides :py:meth:`~proteus.HttpClient.modelInfer` for synchronous requests with the :py:class:`HttpClient <proteus.HttpClient>` class.
+AMD Inference Server's Python API provides :py:meth:`~amdinfer.HttpClient.modelInfer` for synchronous requests with the :py:class:`HttpClient <amdinfer.HttpClient>` class.
 
 For C++ applications, the same principle holds.
 Using multiple threads to enqueue and dequeue requests to AMD Inference Server allows for higher throughput.
@@ -70,20 +70,20 @@ One example of how to do this is in the following snippet:
 
     #include <concurrentqueue/blockingconcurrentqueue.h>
 
-    #include "proteus/proteus.hpp"
+    #include "amdinfer/amdinfer.hpp"
 
-    using FutureQueue = moodycamel::BlockingConcurrentQueue<std::future<proteus::InferenceResponse>>;
+    using FutureQueue = moodycamel::BlockingConcurrentQueue<std::future<amdinfer::InferenceResponse>>;
 
     void enqueue(const int images, const std::string& workerName,
-                 proteus::InferenceRequestInput request, FutureQueue& my_queue) {
+                 amdinfer::InferenceRequestInput request, FutureQueue& my_queue) {
         for (int i = 0; i < images; i++) {
-            auto future = proteus::enqueue(workerName, request);
+            auto future = amdinfer::enqueue(workerName, request);
             my_queue.enqueue(std::move(future));
         }
     }
 
     void dequeue(int images, FutureQueue& my_queue) {
-        std::future<proteus::InferenceResponse> element;
+        std::future<amdinfer::InferenceResponse> element;
         for (auto i = 0; i < images; i++) {
             my_queue.wait_dequeue(element);
             auto results = element.get();
@@ -102,7 +102,7 @@ One example of how to do this is in the following snippet:
 
         futures.reserve(threads);
         for (int i = 0; i < threads; i++) {
-            proteus::InferenceRequestInput request;
+            amdinfer::InferenceRequestInput request;
             std::thread{enqueue, images/threads, workerName, request, std::ref(my_queue)}.detach();
             futures.push_back(std::async(std::launch::async, dequeue, images / threads,
                                          std::ref(my_queue)));
@@ -132,7 +132,7 @@ Each of these workers will share a common batcher, which will push requests to a
 
 .. code-block:: python
 
-    client = proteus.HttpClient("127.0.0.1:8998")
+    client = amdinfer.HttpClient("127.0.0.1:8998")
 
     parameters = {"share": False}
 
@@ -150,7 +150,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
 
 .. code-block:: python
 
-    client = proteus.HttpClient("127.0.0.1:8998")
+    client = amdinfer.HttpClient("127.0.0.1:8998")
 
     parameters = {"threads": 5}
 

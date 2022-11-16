@@ -1,4 +1,5 @@
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,11 @@
 # limitations under the License.
 
 macro(add_option option_name description default)
-  option(PROTEUS_${option_name} ${description} ${default})
-  message(STATUS "  PROTEUS_${option_name}: " ${PROTEUS_${option_name}})
+  option(AMDINFER_${option_name} ${description} ${default})
+  message(STATUS "  AMDINFER_${option_name}: " ${AMDINFER_${option_name}})
 endmacro()
 
 macro(add_derived_option option_name default)
-  set(PROTEUS_${option_name} ${default})
-  message(STATUS "  PROTEUS_${option_name}: " ${PROTEUS_${option_name}})
+  set(AMDINFER_${option_name} ${default})
+  message(STATUS "  AMDINFER_${option_name}: " ${AMDINFER_${option_name}})
 endmacro()

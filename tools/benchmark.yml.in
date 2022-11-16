@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,7 +43,7 @@ wrk:
   connections: [64]
   # length of time to run wrk
   time: [5s]
-  # number of workers to spawn in Proteus to handle the requests
+  # number of workers to spawn in the server to handle the requests
   workers: [4]
 
 # Run the C++ benchmarks that match the benchmarks filter above. Each
@@ -55,7 +56,7 @@ cpp:
   # number of threads to use. This value may be used differently by different
   # benchmarks
   threads: [1]
-  # number of workers to spawn in Proteus or number of runners to use. This value
+  # number of workers to spawn in the server or number of runners to use. This value
   # may be used differently by different benchmarks
   workers: [1]
   # add any other flags or options to pass to the executable. If a particular

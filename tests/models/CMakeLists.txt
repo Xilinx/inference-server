@@ -16,8 +16,8 @@
 list(APPEND tests mnist)
 
 foreach(test ${tests})
-  proteus_add_system_test(${test})
-  proteus_get_test_target(target ${test})
+  amdinfer_add_system_test(${test})
+  amdinfer_get_test_target(target ${test})
   target_link_libraries(
     ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
   )

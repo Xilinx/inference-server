@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -78,14 +79,14 @@ parameters=(
 )
 
 cwd=$(pwd)
-cd $PROTEUS_ROOT
+cd $AMDINFER_ROOT
 
 
 for index in ${!durations[*]}; do
   duration=${durations[$index]}
   image=${images[$index]}
 
-  ./proteus build --release -DDURATION=$duration &> /dev/null
+  ./amdinfer build --release -DDURATION=$duration &> /dev/null
   if [[ $? != 0 ]]; then
     echo "Skipping build with a $duration sleep time. Build failed."
     continue

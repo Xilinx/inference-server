@@ -17,6 +17,7 @@ import glob
 import os
 import pathlib
 import subprocess
+import sys
 
 try:
     import pytest
@@ -25,8 +26,8 @@ except ImportError:
 
 
 def get_root():
-    root = os.getenv("PROTEUS_ROOT")
-    assert root is not None, "PROTEUS_ROOT must be defined in the environment"
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be defined in the environment"
     return pathlib.Path(root)
 
 
@@ -80,7 +81,8 @@ def run_tests(args: argparse.Namespace, unknown_args: list):
         print("Note: some statements may need to be quoted to use this command")
         print("pytest " + " ".join(pytest_args))
     else:
-        pytest.main(pytest_args)
+        retval = pytest.main(pytest_args)
+        sys.exit(retval)
 
 
 def run_examples(args: argparse.Namespace, unknown_args: list):

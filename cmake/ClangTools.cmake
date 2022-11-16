@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,9 @@ file(
   ALL_SOURCE_FILES
   CONFIGURE_DEPENDS
   ${PROJECT_SOURCE_DIR}/examples/cpp/*.cpp
-  ${PROJECT_SOURCE_DIR}/include/proteus/*.hpp
-  ${PROJECT_SOURCE_DIR}/src/proteus/*.cpp
-  ${PROJECT_SOURCE_DIR}/src/proteus/*.hpp
+  ${PROJECT_SOURCE_DIR}/include/amdinfer/*.hpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/*.cpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/*.hpp
   ${PROJECT_SOURCE_DIR}/tests/*.cpp
   ${PROJECT_SOURCE_DIR}/tests/*.hpp
 )

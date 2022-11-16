@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +15,17 @@
 
 #include <memory>  // for allocator
 
-#include "gtest/gtest.h"                    // for Test, SuiteApiResolver, TEST
-#include "proteus/batching/soft.hpp"        // for SoftBatcher
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/interface.hpp"       // IWYU pragma: keep
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/observation/logging.hpp"  // for initLogger, LogLevel, Log...
+#include "amdinfer/batching/soft.hpp"        // for SoftBatcher
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/interface.hpp"       // IWYU pragma: keep
+#include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
+#include "amdinfer/observation/logging.hpp"  // for initLogger, LogLevel, Log...
+#include "gtest/gtest.h"                     // for Test, SuiteApiResolver, TEST
 
-namespace proteus {
+namespace amdinfer {
 
 TEST(UnitSoftBatcher, ConstructAndStart) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "server",          // logger_name
     "",                // log directory
@@ -46,4 +47,4 @@ TEST(UnitSoftBatcher, ConstructAndStart) {
   batcher.end();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ function(enable_ipo_on_target target)
   if(IPO_SUPPORTED)
     set_property(
       TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION
-                                ${PROTEUS_ENABLE_IPO}
+                                ${AMDINFER_ENABLE_IPO}
     )
   endif()
 endfunction()

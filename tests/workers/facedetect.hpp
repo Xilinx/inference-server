@@ -1,4 +1,5 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2021 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 // Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,18 +32,18 @@
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "proteus/proteus.hpp"  // for load, RequestPa...
+#include "amdinfer/amdinfer.hpp"  // for load, RequestPa...
 
 namespace fs = std::filesystem;
 
 using FutureQueue =
-  moodycamel::BlockingConcurrentQueue<std::future<proteus::InferenceResponse>>;
+  moodycamel::BlockingConcurrentQueue<std::future<amdinfer::InferenceResponse>>;
 
 std::vector<char> imgData;
 
 void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
              const std::string& workerName, FutureQueue& my_queue) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   for (int i = 0; i < count; i++) {
     auto img = cv::imread(image_paths[start_index]);
     auto shape = {static_cast<uint64_t>(img.size[0]),
@@ -52,9 +53,9 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
     imgData.reserve(size);
     memcpy(imgData.data(), img.data, size);
 
-    proteus::InferenceRequest request;
+    amdinfer::InferenceRequest request;
     request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                           proteus::DataType::UINT8);
+                           amdinfer::DataType::UINT8);
 
     auto future = client.modelInferAsync(workerName, request);
     my_queue.enqueue(std::move(future));
@@ -75,14 +76,14 @@ void run(std::vector<std::string> image_paths, int threads,
 }
 
 std::string load(int workers) {
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   parameters.put("aks_graph_name", "facedetect");
   parameters.put("aks_graph",
                  "${AKS_ROOT}/graph_zoo/"
-                 "graph_facedetect_u200_u250_proteus.json");
+                 "graph_facedetect_u200_u250_amdinfer.json");
   parameters.put("share", false);
 
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   for (int i = 0; i < workers - 1; i++) {
     client.workerLoad("AksDetect", &parameters);
   }
@@ -92,7 +93,7 @@ std::string load(int workers) {
 std::vector<std::string> getImages(std::string imgDirPath) {
   std::vector<std::string> images;
 
-  std::queue<std::future<proteus::InferenceResponse>> my_queue;
+  std::queue<std::future<amdinfer::InferenceResponse>> my_queue;
   std::vector<std::string> image_paths;
 
   // Load Dataset

@@ -19,9 +19,9 @@ import cv2
 import numpy as np
 import pytest
 
-import proteus
-import proteus.pre_post as pre_post
-import proteus.testing
+import amdinfer
+import amdinfer.pre_post as pre_post
+import amdinfer.testing
 
 from helper import root_path, run_benchmark
 
@@ -49,7 +49,7 @@ def postprocess(output, k):
     to determine the most probable classifications
 
     Args:
-        output (proteus.InferenceResponseOutput): the output from the inference server
+        output (amdinfer.InferenceResponseOutput): the output from the inference server
         k (int): number of top categories to return
 
     Returns:
@@ -67,7 +67,7 @@ class TestTfZendnn:
 
     model = "TfZendnn"
     parameters = {
-        "model": proteus.testing.getPathToAsset("tf_resnet50"),
+        "model": amdinfer.testing.getPathToAsset("tf_resnet50"),
         "input_node": "input",
         "output_node": "resnet_v1_50/predictions/Reshape_1",
         "input_size": 224,
@@ -94,7 +94,7 @@ class TestTfZendnn:
             response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         num_inputs = len(request.getInputs())
@@ -107,7 +107,7 @@ class TestTfZendnn:
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == proteus.DataType.FP32
+                assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
         return response
 
@@ -116,13 +116,13 @@ class TestTfZendnn:
         """
         Send a request to tf model as tensor data
         """
-        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         batch = num
         image_paths = [image_path] * batch
         images = preprocess(image_paths)
         for image in images:
-            request = proteus.ImageInferenceRequest(image, True)
+            request = amdinfer.ImageInferenceRequest(image, True)
             response = self.send_request(request)
             outputs = response.getOutputs()
             top_k_responses = postprocess(outputs[0], 5)

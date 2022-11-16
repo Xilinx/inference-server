@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,11 @@ import os
 import pathlib
 import re
 
-from proteus import inference_request_to_dict
+from amdinfer import inference_request_to_dict
 
-root = os.getenv("PROTEUS_ROOT")
+root = os.getenv("AMDINFER_ROOT")
 if root is None:
-    raise RuntimeError("PROTEUS_ROOT not defined in the environment")
+    raise RuntimeError("AMDINFER_ROOT not defined in the environment")
 root_path = pathlib.Path(root)
 try:
     with open(root_path / "build/config.txt", "r") as f:
@@ -30,7 +31,7 @@ except FileNotFoundError:
     print("No config.txt found in build/. Using default value of 'Debug'")
     build = "Debug"
 build_path = root_path / f"build/{build}"
-run_path = build_path / "src/proteus/proteus-server"
+run_path = build_path / "src/amdinfer/amdinfer-server"
 
 
 def getConstexprFromHeader(constexpr, file):
@@ -78,6 +79,6 @@ def run_benchmark(benchmark, benchmark_name, func, request, **kwargs):
 
 kDefaultHttpPort = int(
     getConstexprFromHeader(
-        "kDefaultHttpPort", root_path / "include/proteus/build_options.hpp"
+        "kDefaultHttpPort", root_path / "include/amdinfer/build_options.hpp"
     )
 )

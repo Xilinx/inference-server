@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,8 +21,8 @@ usage() {
 cat << EOF
 usage: ./tools/update_aks.sh [direction] path/to/aks
 
-This script force updates the AKS-related files in Proteus. Note that these
-files in Proteus are similar to, but may slightly differ from, the AKS files
+This script force updates the AKS-related files. Note that the
+files in this repo are similar to, but may slightly differ from, the AKS files
 released in Vitis AI.
 
 Direction should be "to" or "from"
@@ -48,7 +49,7 @@ fi
 
 direction="$1"
 aks_path="$2"
-proteus_path="./external/aks/reference"
+amdinfer_path="./external/aks/reference"
 
 if [[ $direction != "to" && $direction != "from" ]]; then
   usage
@@ -56,11 +57,11 @@ if [[ $direction != "to" && $direction != "from" ]]; then
 fi
 
 if [[ $direction == "to" ]]; then
-  aks_src_path=$proteus_path
+  aks_src_path=$amdinfer_path
   aks_dst_path=$aks_path
 else
   aks_src_path=$aks_path
-  aks_dst_path=$proteus_path
+  aks_dst_path=$amdinfer_path
 fi
 
 srcs=(

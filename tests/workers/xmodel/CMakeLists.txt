@@ -15,10 +15,10 @@
 set(tests resnet50 yolov3)
 # list(APPEND tests resnet50)
 
-proteus_add_system_tests("${tests}")
+amdinfer_add_system_tests("${tests}")
 
 foreach(test ${tests})
-  proteus_get_test_target(target ${test})
+  amdinfer_get_test_target(target ${test})
   target_link_libraries(
     ${target} PRIVATE opencv_core opencv_imgproc opencv_imgcodecs
   )

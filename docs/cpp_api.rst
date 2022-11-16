@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022, Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,9 +22,9 @@ Native
 
 ..
     for some reason, native.hpp doesn't show up in sphinx
-.. doxygenfile:: proteus/clients/native.cpp
+.. doxygenfile:: amdinfer/clients/native.cpp
 
 gRPC
 ----
 
-.. doxygenfile:: proteus/clients/grpc.cpp
+.. doxygenfile:: amdinfer/clients/grpc.cpp

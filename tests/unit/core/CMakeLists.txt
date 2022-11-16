@@ -17,4 +17,4 @@ list(APPEND tests inference_request_input request_parameters)
 
 list(APPEND tests_libs "predict_api" "predict_api")
 
-proteus_add_unit_tests("${tests}" "${tests_libs}")
+amdinfer_add_unit_tests("${tests}" "${tests_libs}")

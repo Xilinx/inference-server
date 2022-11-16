@@ -13,13 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROTEUS_TEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(AMDINFER_TEST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(AddTest)
 
 add_subdirectory(api)
 add_subdirectory(models)
 add_subdirectory(performance)
-add_subdirectory(src/proteus)
+add_subdirectory(src/amdinfer)
 add_subdirectory(unit)
 add_subdirectory(workers)

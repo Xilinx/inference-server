@@ -1,18 +1,17 @@
-/**
- * Copyright 2021 Xilinx Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
@@ -99,7 +98,7 @@ let modelParameterMap: {[key: string]: model_meta} = {
     "parameters": {
       "share": false,
       "aks_graph_name": "facedetect",
-      "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json"
+      "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json"
     },
     "labels": null,
   }
@@ -118,7 +117,7 @@ function InvertVideoDemo() {
   const ws = useRef<WebSocket|undefined>(undefined);
   let frames: {[key: string]: Queue} = {};
   let videos = [
-    {src: "/workspace/proteus/tests/assets/adas.webm", model: "yolo", img: "", key: "0", framerate: 30, width: 640, height: 360},
+    {src: "/workspace/amdinfer/tests/assets/adas.webm", model: "yolo", img: "", key: "0", framerate: 30, width: 640, height: 360},
     {src: "https://upload.wikimedia.org/wikipedia/commons/c/c4/Hanoi_traffic.ogv", model: "yolo", img: "", key: "1", framerate: 30, width: 640, height: 360},
     {src: "https://upload.wikimedia.org/wikipedia/commons/f/f4/Traffic_control_in_Mexico_City.ogv", model: "yolo", img: "", key: "2", framerate: 30, width: 640, height: 360},
     {src: "https://upload.wikimedia.org/wikipedia/commons/a/a7/Driving_through_the_Continuous-Flow_Intersection_Utah_SR-154_Bangerter_Hwy_at_4100_South_2013-07.ogv", model: "yolo", img: "", key: "3", framerate: 30, width: 640, height: 360},

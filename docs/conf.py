@@ -27,14 +27,14 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 
 # to parse the CLI, we need to import it by file path since it's not in a Python package
-imp.load_source("proteus_cli", os.path.abspath("../proteus"))
+imp.load_source("amdinfer_cli", os.path.abspath("../amdinfer"))
 
 
 # -- Project information -----------------------------------------------------
 
 project = "AMD Inference Server"
-copyright = "2021, Xilinx Inc."
-author = "Xilinx Inc."
+copyright = "2022 Advanced Micro Devices, Inc."
+author = "Advanced Micro Devices, Inc."
 
 with open(os.path.abspath("../VERSION")) as f:
     raw_version = f.read().strip()
@@ -65,13 +65,13 @@ extensions = [
 ]
 
 # Breathe configuration
-breathe_projects = {"proteus": "../build/docs/doxygen/xml"}
-breathe_default_project = "proteus"
+breathe_projects = {"amdinfer": "../build/docs/doxygen/xml"}
+breathe_default_project = "amdinfer"
 
 # sphinxcontrib.confluencebuilder configuration
 confluence_publish = True
 confluence_space_name = "~varunsh"
-confluence_parent_page = "Proteus"
+confluence_parent_page = "AMDinfer"
 confluence_page_hierarchy = True
 confluence_ask_user = True
 confluence_ask_password = True
@@ -87,12 +87,12 @@ autodoc_default_options = {
 
 def hide_private_module(app, what, name, obj, options, signature, return_annotation):
     if signature is not None:
-        new_signature = signature.replace("proteus._proteus", "proteus")
+        new_signature = signature.replace("amdinfer._amdinfer", "amdinfer")
     else:
         new_signature = signature
 
     if return_annotation is not None:
-        new_return = return_annotation.replace("proteus._proteus", "proteus")
+        new_return = return_annotation.replace("amdinfer._amdinfer", "amdinfer")
     else:
         new_return = return_annotation
 

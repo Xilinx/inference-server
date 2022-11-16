@@ -28,18 +28,18 @@ Once your system recognizes your GPU(s), proceed to the next step.
 Build an image
 --------------
 
-To build an image with MIGraphX enabled, you need to add the ``--migraphx`` to the ``proteus dockerize`` command:
+To build an image with MIGraphX enabled, you need to add the ``--migraphx`` to the ``amdinfer dockerize`` command:
 
 .. code-block:: bash
 
     # create the Dockerfile
     python3 docker/generate.py
 
-    # build the dev image $(whoami)/proteus-dev-migraphx:latest
-    ./proteus dockerize --migraphx --suffix="-migraphx"
+    # build the dev image $(whoami)/amdinfer-dev-migraphx:latest
+    ./amdinfer dockerize --migraphx --suffix="-migraphx"
 
-    # build the production image $(whoami)/proteus-migraphx:latest
-    ./proteus dockerize --migraphx --suffix="-migraphx" --production
+    # build the production image $(whoami)/amdinfer-migraphx:latest
+    ./amdinfer dockerize --migraphx --suffix="-migraphx" --production
 
 Get assets and models
 ---------------------
@@ -48,4 +48,4 @@ You can download the assets and models used for tests and examples with:
 
 .. code-block:: console
 
-    $ ./proteus get --migraphx
+    $ ./amdinfer get --migraphx

@@ -17,8 +17,8 @@ import json
 
 import pytest
 
-import proteus
-import proteus.testing
+import amdinfer
+import amdinfer.testing
 
 
 @pytest.mark.extensions(["aks", "vitis"])
@@ -32,25 +32,25 @@ class TestFacedetectStream:
     model = "AksDetectStream"
     parameters = {
         "aks_graph_name": "facedetect",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_proteus.json",
+        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
     }
 
     def construct_request(self, requested_frames_count):
         asset_key = "asset_Physicsworks.ogv"
-        video_path = proteus.testing.getPathToAsset(asset_key)
+        video_path = amdinfer.testing.getPathToAsset(asset_key)
 
-        input_0 = proteus.InferenceRequestInput()
+        input_0 = amdinfer.InferenceRequestInput()
         input_0.name = "input0"
-        input_0.datatype = proteus.DataType.STRING
+        input_0.datatype = amdinfer.DataType.STRING
         input_0.setStringData(video_path)
         input_0.shape = [len(video_path)]
-        parameters = proteus.RequestParameters()
+        parameters = amdinfer.RequestParameters()
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         request.addInputTensor(input_0)
-        parameters_2 = proteus.RequestParameters()
+        parameters_2 = amdinfer.RequestParameters()
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 

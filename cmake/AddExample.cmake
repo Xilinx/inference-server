@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function(proteus_get_example_target target example)
-  string(REGEX REPLACE "^${PROTEUS_EXAMPLE_ROOT}" "" BASE_PATH
+function(amdinfer_get_example_target target example)
+  string(REGEX REPLACE "^${AMDINFER_EXAMPLE_ROOT}" "" BASE_PATH
                        ${CMAKE_CURRENT_SOURCE_DIR}
   )
   string(REGEX REPLACE "\/" "_" BASE_NAME ${BASE_PATH})
@@ -31,16 +31,16 @@ function(proteus_get_example_target target example)
   set(${target} ${prefix}${BASE_NAME}-${example} PARENT_SCOPE)
 endfunction()
 
-function(proteus_add_example example)
-  proteus_get_example_target(target ${example})
+function(amdinfer_add_example example)
+  amdinfer_get_example_target(target ${example})
 
   add_executable(${target} ${example}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
-  target_link_libraries(${target} PRIVATE proteus util)
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
+  target_link_libraries(${target} PRIVATE amdinfer util)
 endfunction()
 
-function(proteus_add_examples examples)
+function(amdinfer_add_examples examples)
   foreach(example ${examples})
-    proteus_add_example(${example})
+    amdinfer_add_example(${example})
   endforeach()
 endfunction()

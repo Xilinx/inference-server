@@ -16,8 +16,8 @@
 import numpy as np
 import pytest
 
-import proteus
-import proteus.testing
+import amdinfer
+import amdinfer.testing
 
 from helper import root_path, run_benchmark
 
@@ -33,7 +33,7 @@ class TestInferImageResNet50DPUCADF8H:
     model = "resnet50"
     parameters = {
         "aks_graph_name": "resnet50",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_proteus.json",
+        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json",
     }
 
     def send_request(self, request, check_asserts=True):
@@ -51,9 +51,9 @@ class TestInferImageResNet50DPUCADF8H:
 
         try:
             response = self.rest_client.modelInfer(self.endpoint, request)
-        except proteus.ConnectionError:
+        except amdinfer.ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         num_inputs = len(request.getInputs())
@@ -67,7 +67,7 @@ class TestInferImageResNet50DPUCADF8H:
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == proteus.DataType.UINT32
+                assert output.datatype == amdinfer.DataType.UINT32
                 assert output.parameters.empty()
                 assert output.shape == [5, 1, 1]
                 data = output.getUint32Data()
@@ -76,12 +76,12 @@ class TestInferImageResNet50DPUCADF8H:
         return response
 
     def construct_request(self, asTensor, batches=1):
-        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         # TODO(vishalk): AKS gives a segfault if batch != 4
         images = [image_path] * batches
 
-        return proteus.ImageInferenceRequest(images, asTensor)
+        return amdinfer.ImageInferenceRequest(images, asTensor)
 
     def test_resnet50_dpucadf8h_0(self):
         """

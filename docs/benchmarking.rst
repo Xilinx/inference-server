@@ -21,7 +21,7 @@ AMD Inference Server can be benchmarked from the command-line using the benchmar
 
 .. code-block:: console
 
-    $ proteus benchmark
+    $ amdinfer benchmark
 
 This command calls the benchmarking Python script in ``tools/``, which will read ``benchmark.yml`` for the configuration and run the configurations specified.
 Each configuration is run a number of times and the results are analyzed and printed to the terminal.

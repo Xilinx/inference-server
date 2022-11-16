@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@
 #include <thread>     // for sleep_for
 #include <vector>     // for vector
 
-#include "proteus/proteus.hpp"                 // for NativeClient, GrpcClient
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
+#include "amdinfer/amdinfer.hpp"                // for NativeClient, GrpcClient
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   const std::string worker = "echo";
 
   auto models_0 = client->modelList();
@@ -58,17 +59,17 @@ void test(proteus::Client* client) {
   }
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelList) { test(client_.get()); }
 #endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelList) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 TEST_F(HttpFixture, ModelList) { test(client_.get()); }
 #endif

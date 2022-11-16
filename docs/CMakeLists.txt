@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,17 +22,17 @@ file(
   GLOB_RECURSE
   ALL_SOURCE_FILES
   CONFIGURE_DEPENDS
-  ${PROJECT_SOURCE_DIR}/src/proteus/*.cpp
-  ${PROJECT_SOURCE_DIR}/src/proteus/*.hpp
-  ${PROJECT_SOURCE_DIR}/include/proteus/*.hpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/*.cpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/*.hpp
+  ${PROJECT_SOURCE_DIR}/include/amdinfer/*.hpp
 )
 
 # This will be the main output of our command
 set(DOXYGEN_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/xml/index.xml)
-set(DOXYGEN_INPUT_DIRS ${PROJECT_SOURCE_DIR}/src/proteus
-                       ${PROJECT_SOURCE_DIR}/include/proteus
+set(DOXYGEN_INPUT_DIRS ${PROJECT_SOURCE_DIR}/src/amdinfer
+                       ${PROJECT_SOURCE_DIR}/include/amdinfer
 )
-set(DOXYGEN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/proteus)
+set(DOXYGEN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/amdinfer)
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
 set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
@@ -63,7 +64,7 @@ add_custom_command(
   TARGET doxygen
   POST_BUILD
   COMMENT
-    "Linking ${DOXYGEN_OUTPUT_DIR} to Proteus gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
+    "Linking ${DOXYGEN_OUTPUT_DIR} to the gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen
   COMMAND cp -rfs ${DOXYGEN_OUTPUT_DIR} ${PROJECT_SOURCE_DIR}/src/gui/public/
   COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen > /dev/null
@@ -88,7 +89,7 @@ add_custom_command(
   COMMAND
     ${SPHINX_EXECUTABLE} -b html
     # Tell Breathe where to find the Doxygen output
-    -Dbreathe_projects.Proteus=${DOXYGEN_OUTPUT_DIR}/xml -E -a ${SPHINX_SOURCE}
+    -Dbreathe_projects.AMDinfer=${DOXYGEN_OUTPUT_DIR}/xml -E -a ${SPHINX_SOURCE}
     ${SPHINX_BUILD}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
@@ -104,7 +105,7 @@ add_custom_command(
   TARGET sphinx
   POST_BUILD
   COMMENT
-    "Linking ${SPHINX_BUILD} to Proteus gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
+    "Linking ${SPHINX_BUILD} to gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx
   COMMAND cp -rfs ${SPHINX_BUILD} ${PROJECT_SOURCE_DIR}/src/gui/public/
   COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx > /dev/null

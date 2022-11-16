@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -200,13 +201,13 @@ add_other_bins() {
   done
 }
 
-add_proteus_deps() {
-  if test -f ${manifests_dir}/proteus.txt; then
-    files=($(cat ${manifests_dir}/proteus.txt))
-  elif test -f /root/deps${manifests_dir}/proteus.txt; then
-    files=($(cat /root/deps${manifests_dir}/proteus.txt))
-  elif test -f /tmp/proteus/build/Release/install_manifest.txt; then
-    files=($(cat /tmp/proteus/build/Release/install_manifest.txt))
+add_amdinfer_deps() {
+  if test -f ${manifests_dir}/amdinfer.txt; then
+    files=($(cat ${manifests_dir}/amdinfer.txt))
+  elif test -f /root/deps${manifests_dir}/amdinfer.txt; then
+    files=($(cat /root/deps${manifests_dir}/amdinfer.txt))
+  elif test -f /tmp/amdinfer/build/Release/install_manifest.txt; then
+    files=($(cat /tmp/amdinfer/build/Release/install_manifest.txt))
   else
     echo "Warning: no manifest file found"
     return
@@ -246,7 +247,7 @@ main() {
   # overwrite the file
   echo -n > $DEPS_FILE
 
-  add_proteus_deps
+  add_amdinfer_deps
 
   if [[ $VITIS == "yes" ]]; then
     add_vitis_deps

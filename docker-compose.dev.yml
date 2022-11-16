@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,21 +15,21 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     cap_add:
     - SYS_PTRACE # needed to enable gdb in container
     # this doesn't work with docker-compose run (seems like known bug)
     # container_name: $NAME
     extra_hosts:
-      - "proteus-dev:127.0.1.1"
-    hostname: proteus-dev
+      - "amdinfer-dev:127.0.1.1"
+    hostname: amdinfer-dev
     image: $IMAGE
     ports:
-      - 127.0.0.1::8998 # used for proteus server
+      - 127.0.0.1::8998 # used for amdinfer server
       - 127.0.0.1::3000 # used for gui development
     stdin_open: true
     tty: true
     volumes:
-      - "~/.ssh:/home/proteus-user/.ssh:ro"
-      - "$PWD:/workspace/proteus"
-    working_dir: /workspace/proteus
+      - "~/.ssh:/home/amdinfer-user/.ssh:ro"
+      - "$PWD:/workspace/amdinfer"
+    working_dir: /workspace/amdinfer
