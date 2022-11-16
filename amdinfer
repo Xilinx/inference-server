@@ -774,8 +774,12 @@ class Install:
 
         run_command(command, args.dry_run)
 
-        command = f"sudo make -C {args.dir}/Release install"
-        run_command(command, args.dry_run)
+        command = f"make -C {args.dir}/Release install"
+        # if user is root, no need for sudo
+        if os.geteuid() == 0:
+            run_command(command, args.dry_run)
+        else:
+            run_command("sudo " + command, args.dry_run)
 
     @classmethod
     def add(cls, parser):
