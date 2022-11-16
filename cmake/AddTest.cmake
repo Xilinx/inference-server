@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function(proteus_get_test_target target test)
+function(amdinfer_get_test_target target test)
   string(REGEX REPLACE "^${PROTEUS_TEST_ROOT}" "" BASE_PATH
                        ${CMAKE_CURRENT_SOURCE_DIR}
   )
@@ -31,8 +31,8 @@ function(proteus_get_test_target target test)
   set(${target} ${prefix}${BASE_NAME}-${test} PARENT_SCOPE)
 endfunction()
 
-function(_proteus_add_test test type)
-  proteus_get_test_target(target ${test})
+function(_amdinfer_add_test test type)
+  amdinfer_get_test_target(target ${test})
 
   add_executable(${target} test_${test}.cpp)
   if(${type} STREQUAL "unit")
@@ -45,7 +45,7 @@ function(_proteus_add_test test type)
     target_include_directories(
       ${target} AFTER PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
     )
-    target_link_libraries(${target} PRIVATE proteus)
+    target_link_libraries(${target} PRIVATE amdinfer)
   else()
     message(FATAL_ERROR "Test type must be one of 'unit' or 'system'")
   endif()
@@ -55,28 +55,28 @@ function(_proteus_add_test test type)
   gtest_discover_tests(${target} DISCOVERY_TIMEOUT 30)
 endfunction()
 
-function(proteus_add_system_test test)
-  _proteus_add_test(${test} "system")
+function(amdinfer_add_system_test test)
+  _amdinfer_add_test(${test} "system")
 endfunction()
 
-function(proteus_add_unit_test test)
-  _proteus_add_test(${test} "unit")
+function(amdinfer_add_unit_test test)
+  _amdinfer_add_test(${test} "unit")
 endfunction()
 
-function(proteus_add_system_tests tests)
+function(amdinfer_add_system_tests tests)
   foreach(test ${tests})
-    proteus_add_system_test(${test})
+    amdinfer_add_system_test(${test})
   endforeach()
 endfunction()
 
-function(proteus_add_unit_tests tests tests_libs)
+function(amdinfer_add_unit_tests tests tests_libs)
   foreach(test lib_str IN ZIP_LISTS tests tests_libs)
 
     string(REPLACE " " "" libs_no_spaces ${lib_str})
     string(REPLACE "~" ";" libs ${libs_no_spaces})
 
-    proteus_add_unit_test(${test})
-    proteus_get_test_target(target ${test})
+    amdinfer_add_unit_test(${test})
+    amdinfer_get_test_target(target ${test})
 
     target_link_libraries(${target} PRIVATE ${libs})
   endforeach()

@@ -28,18 +28,18 @@
 #include <thread>   // for thread, thread::id
 #include <vector>   // for vector
 
-#include "proteus/declarations.hpp"  // for BufferPtr
-#include "proteus/util/queue.hpp"    // for BufferPtrsQueuePtr
+#include "amdinfer/declarations.hpp"  // for BufferPtr
+#include "amdinfer/util/queue.hpp"    // for BufferPtrsQueuePtr
 
-namespace proteus {
+namespace amdinfer {
 class Batcher;
 class RequestParameters;
 namespace workers {
 class Worker;
 }  // namespace workers
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief Stores the metadata associated with a worker. Instances of this class
@@ -159,5 +159,5 @@ class WorkerInfo {
   friend class Manager;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 #endif  // GUARD_PROTEUS_CORE_WORKER_INFO

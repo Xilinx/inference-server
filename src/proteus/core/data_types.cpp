@@ -17,18 +17,18 @@
  * @brief Implements the type-related methods
  */
 
-#include "proteus/core/data_types.hpp"
+#include "amdinfer/core/data_types.hpp"
 
 #include <cstddef>  // for size_t
 
-#include "proteus/build_options.hpp"
-#include "proteus/core/exceptions.hpp"
+#include "amdinfer/build_options.hpp"
+#include "amdinfer/core/exceptions.hpp"
 
 #ifdef PROTEUS_ENABLE_VITIS
 #include <xir/util/data_type.hpp>  // for DataType, DataType::FLOAT, DataTyp...
 #endif
 
-namespace proteus {
+namespace amdinfer {
 
 #ifdef PROTEUS_ENABLE_VITIS
 DataType mapXirToType(xir::DataType type) {
@@ -114,4 +114,4 @@ std::ostream& operator<<(std::ostream& os, const DataType& value) {
   return os << value.str();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

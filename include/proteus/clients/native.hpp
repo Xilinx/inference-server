@@ -23,13 +23,13 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"    // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
-#include "proteus/declarations.hpp"      // for InferenceResponseFuture
+#include "amdinfer/clients/client.hpp"    // IWYU pragma: export
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
+#include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
 
-// IWYU pragma: no_forward_declare proteus::RequestParameters
+// IWYU pragma: no_forward_declare amdinfer::RequestParameters
 
-namespace proteus {
+namespace amdinfer {
 
 class NativeClient : public Client {
  public:
@@ -84,6 +84,6 @@ class NativeClient : public Client {
   bool hasHardware(const std::string& name, int num) const override;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_NATIVE

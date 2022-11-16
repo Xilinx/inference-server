@@ -21,11 +21,11 @@ ARG COPY_DIR=/root/deps
 ARG MANIFESTS_DIR=${COPY_DIR}/usr/local/share/manifests
 # the working directory is mounted here. Note, this assumption is made in other
 # files as well so just changing this value may not work
-ARG PROTEUS_ROOT=/workspace/proteus
+ARG PROTEUS_ROOT=/workspace/amdinfer
 # the user and group to create in the image. Note, these names are hard-coded
 # in other files as well so just changing this value may not work
-ARG GNAME=proteus
-ARG UNAME=proteus-user
+ARG GNAME=amdinfer
+ARG UNAME=amdinfer-user
 
 # this image is used as the base to build the inference server for the
 # production image. By default, the dev image created with this Dockerfile is
@@ -742,11 +742,11 @@ COPY . $PROTEUS_ROOT
 RUN ldconfig \
     # delete any inherited artifacts and recreate
     && rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR} \
-    # install libproteus.so
+    # install libamdinfer.so
     && cd ${PROTEUS_ROOT} \
-    && ./proteus install \
-    && ./proteus install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && ./proteus install --get-manifest > ${MANIFESTS_DIR}/proteus.txt \
+    && ./amdinfer install \
+    && ./amdinfer install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && ./amdinfer install --get-manifest > ${MANIFESTS_DIR}/amdinfer.txt \
     # build the static GUI files
     # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
@@ -760,9 +760,9 @@ ARG COPY_DIR
 ARG PROTEUS_ROOT
 
 # get AKS kernels
-COPY --from=builder_prod $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/proteus/aks/libs/
+COPY --from=builder_prod $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/amdinfer/aks/libs/
 # get the fpga-util executable
-COPY --from=builder_prod /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
+COPY --from=builder_prod /usr/local/bin/fpga-util /opt/xilinx/amdinfer/bin/
 
 # we need the xclbins in the image and they must be copied from a path local
 # to the build tree. But we also need this hack so the copy doesn't fail
@@ -770,16 +770,16 @@ COPY --from=builder_prod /usr/local/bin/fpga-util /opt/xilinx/proteus/bin/
 COPY --from=builder_prod $PROTEUS_ROOT/docker/.env $PROTEUS_ROOT/external/overlaybin[s]/ /opt/xilinx/overlaybins/
 
 # get the pre-defined AKS graphs and kernels
-COPY --from=builder_prod $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/proteus/aks/graph_zoo/
-COPY --from=builder_prod $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/proteus/aks/kernel_zoo/
+COPY --from=builder_prod $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/amdinfer/aks/graph_zoo/
+COPY --from=builder_prod $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/amdinfer/aks/kernel_zoo/
 
-ENV LD_LIBRARY_PATH="/opt/xilinx/proteus/aks"
+ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"
 # TODO(varunsh): we shouldn't hardcode dpuv3int8 here
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
-ENV AKS_ROOT="/opt/xilinx/proteus/aks"
-ENV AKS_XMODEL_ROOT="/opt/xilinx/proteus"
-ENV PATH="/opt/xilinx/proteus/bin:${PATH}"
+ENV AKS_ROOT="/opt/xilinx/amdinfer/aks"
+ENV AKS_XMODEL_ROOT="/opt/xilinx/amdinfer"
+ENV PATH="/opt/xilinx/amdinfer/bin:${PATH}"
 
 FROM base AS vitis_installer_prod_no
 
@@ -804,7 +804,7 @@ WORKDIR /home/${UNAME}
 COPY --from=builder_prod ${COPY_DIR} /
 
 # get the static gui files
-# COPY --from=builder_prod $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/proteus/gui/
+# COPY --from=builder_prod $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/amdinfer/gui/
 # get the entrypoint script
 COPY --from=builder_prod $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the systemctl executable - pulled in by get_dynamic_dependencies.sh
@@ -823,7 +823,7 @@ RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
 # we need to run as root because KServe mounts models to /mnt/models which means
 # the server needs root access to access the mounted assets
 ENTRYPOINT [ "/root/entrypoint.sh", "root" ]
-CMD [ "proteus-server" ]
+CMD [ "amdinfer-server" ]
 
 FROM ${IMAGE_TYPE} AS final
 
@@ -832,7 +832,7 @@ ARG ENABLE_TFZENDNN
 ARG ENABLE_PTZENDNN
 ARG ENABLE_MIGRAPHX
 
-LABEL project="proteus"
+LABEL project="amdinfer"
 LABEL vitis=${ENABLE_VITIS}
 LABEL tfzendnn=${ENABLE_TFZENDNN}
 LABEL ptzendnn=${ENABLE_PTZENDNN}

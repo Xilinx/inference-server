@@ -17,7 +17,7 @@
  * @brief Implements the Python bindings for the http.hpp header
  */
 
-#include "proteus/clients/grpc.hpp"
+#include "amdinfer/clients/grpc.hpp"
 
 #include <pybind11/cast.h>      // for arg
 #include <pybind11/pybind11.h>  // for class_, init
@@ -25,15 +25,15 @@
 
 #include <unordered_map>  // for unordered_map
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "proteus/declarations.hpp"
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapGrpcClient(py::module_ &m) {
-  py::class_<GrpcClient, proteus::Client>(m, "GrpcClient")
+  py::class_<GrpcClient, amdinfer::Client>(m, "GrpcClient")
     .def(py::init<const std::string &>(), py::arg("address"),
          DOCS(GrpcClient, GrpcClient))
     .def("serverMetadata", &GrpcClient::serverMetadata,
@@ -64,4 +64,4 @@ void wrapGrpcClient(py::module_ &m) {
          py::arg("num"), DOCS(GrpcClient, hasHardware));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

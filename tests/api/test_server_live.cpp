@@ -14,10 +14,10 @@
 
 #include <memory>  // for allocator, unique_ptr
 
-#include "proteus/proteus.hpp"                 // for GrpcClient
-#include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
+#include "amdinfer/amdinfer.hpp"                // for GrpcClient
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
-void test(proteus::Client* client) { EXPECT_TRUE(client->serverLive()); }
+void test(amdinfer::Client* client) { EXPECT_TRUE(client->serverLive()); }
 
 #ifdef PROTEUS_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
@@ -26,7 +26,7 @@ TEST_F(GrpcFixture, ServerLive) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ServerLive) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 

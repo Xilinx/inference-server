@@ -14,11 +14,11 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     extra_hosts:
-      - "proteus:127.0.1.1"
+      - "amdinfer:127.0.1.1"
     ports:
-      - 127.0.0.1::8998 # used for proteus server
+      - 127.0.0.1::8998 # used for amdinfer server
     volumes:
-      - $AKS_ROOT/graph_zoo:/opt/xilinx/proteus/aks/graph_zoo
-      - $AKS_ROOT/kernel_zoo:/opt/xilinx/proteus/aks/kernel_zoo
+      - $AKS_ROOT/graph_zoo:/opt/xilinx/amdinfer/aks/graph_zoo
+      - $AKS_ROOT/kernel_zoo:/opt/xilinx/amdinfer/aks/kernel_zoo

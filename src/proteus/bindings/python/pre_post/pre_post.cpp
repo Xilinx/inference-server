@@ -22,14 +22,14 @@
 #include <pybind11/pybind11.h>  // for class_, init
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/pre_post/image_preprocess.hpp"
-#include "proteus/pre_post/resnet50_postprocess.hpp"
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"
+#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/pre_post/image_preprocess.hpp"
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 template <typename T>
 using ImagePreprocessOptions = pre_post::ImagePreprocessOptions<T, 3>;
@@ -92,4 +92,4 @@ void wrapPrePost(py::module_& m) {
         py::arg("options"));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

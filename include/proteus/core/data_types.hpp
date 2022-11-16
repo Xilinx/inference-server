@@ -26,9 +26,9 @@
 #include <iostream>  // for ostream
 #include <string>    // for string
 
-#include "half/half.hpp"                // for half
-#include "proteus/build_options.hpp"    // for PROTEUS_ENABLE_VITIS
-#include "proteus/core/exceptions.hpp"  // for invalid_argument
+#include "amdinfer/build_options.hpp"    // for PROTEUS_ENABLE_VITIS
+#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
+#include "half/half.hpp"                 // for half
 
 #ifdef PROTEUS_ENABLE_VITIS
 namespace xir {
@@ -36,7 +36,7 @@ class DataType;
 }  // namespace xir
 #endif
 
-namespace proteus {
+namespace amdinfer {
 
 namespace detail {
 // taken from https://stackoverflow.com/a/46711735
@@ -261,5 +261,5 @@ DataType mapXirToType(xir::DataType type);
 xir::DataType mapTypeToXir(DataType type);
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer
 #endif  // GUARD_PROTEUS_CORE_DATA_TYPES

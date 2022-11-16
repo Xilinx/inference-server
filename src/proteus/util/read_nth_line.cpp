@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/util/read_nth_line.hpp"
+#include "amdinfer/util/read_nth_line.hpp"
 
 #include <fstream>  // for ifstream
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 std::string readNthLine(const std::string& filename, int N) {
   std::ifstream in(filename);
@@ -34,4 +34,4 @@ std::string readNthLine(const std::string& filename, int N) {
   return line;
 }
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util

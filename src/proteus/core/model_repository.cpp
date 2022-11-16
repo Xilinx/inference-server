@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/core/model_repository.hpp"
+#include "amdinfer/core/model_repository.hpp"
 
 #include <fcntl.h>                                     // for open, O_RDONLY
 #include <google/protobuf/io/zero_copy_stream_impl.h>  // for FileInputStream
@@ -23,16 +23,16 @@
 #include <filesystem>  // for path, operator/
 #include <thread>      // for sleep_for
 
-#include "model_config.pb.h"                // for Config, InferP...
-#include "proteus/core/api.hpp"             // for modelLoad
-#include "proteus/core/exceptions.hpp"      // for file_not_found...
-#include "proteus/core/manager.hpp"         // for Manager
-#include "proteus/core/predict_api.hpp"     // for RequestParameters
-#include "proteus/observation/logging.hpp"  // for Logger, PROTEU...
+#include "amdinfer/core/api.hpp"             // for modelLoad
+#include "amdinfer/core/exceptions.hpp"      // for file_not_found...
+#include "amdinfer/core/manager.hpp"         // for Manager
+#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+#include "amdinfer/observation/logging.hpp"  // for Logger, PROTEU...
+#include "model_config.pb.h"                 // for Config, InferP...
 
 namespace fs = std::filesystem;
 
-namespace proteus {
+namespace amdinfer {
 
 // TODO(varunsh): get rid of this duplicate code with the one in grpc_internal
 void mapProtoToParameters2(
@@ -209,7 +209,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
 void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
   bool use_polling) {
   file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
-  listener_ = std::make_unique<proteus::UpdateListener>();
+  listener_ = std::make_unique<amdinfer::UpdateListener>();
 
   file_watcher_->addWatch(repository_.string(), listener_.get(), true);
   file_watcher_->watch();
@@ -220,12 +220,12 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
       auto model = path.path().filename();
       try {
         RequestParameters params;
-        proteus::modelLoad(model, &params);
-      } catch (const proteus::runtime_error&) {
+        amdinfer::modelLoad(model, &params);
+      } catch (const amdinfer::runtime_error&) {
         PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
       }
     }
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

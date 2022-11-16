@@ -58,7 +58,7 @@ if(NOT EXISTS ${dummy_new_file})
   file(WRITE ${dummy_new_file} "")
 endif()
 execute_process(
-  COMMAND sh -c "python3 -c 'import proteus'" RESULT_VARIABLE Result
+  COMMAND sh -c "python3 -c 'import amdinfer'" RESULT_VARIABLE Result
   OUTPUT_QUIET ERROR_QUIET
 )
 if(${Result})
@@ -66,27 +66,27 @@ if(${Result})
   file(TOUCH ${dummy_new_file})
 endif()
 
-pybind11_add_module(proteus_py MODULE proteus.cpp ${dummy_new_file})
-target_include_directories(proteus_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
+pybind11_add_module(amdinfer_py MODULE amdinfer.cpp ${dummy_new_file})
+target_include_directories(amdinfer_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
 target_link_libraries(
-  proteus_py PRIVATE proteus ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS}
-                     ${SERVER_OBJS} ${PRE_POST_OBJS}
+  amdinfer_py PRIVATE amdinfer ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS}
+                      ${SERVER_OBJS} ${PRE_POST_OBJS}
 )
 if(${PROTEUS_BUILD_TESTING})
-  target_link_libraries(proteus_py PRIVATE ${TESTING_OBJS})
+  target_link_libraries(amdinfer_py PRIVATE ${TESTING_OBJS})
 endif()
-set_target_properties(proteus_py PROPERTIES OUTPUT_NAME _proteus)
+set_target_properties(amdinfer_py PROPERTIES OUTPUT_NAME _amdinfer)
 
 if(UNIX AND NOT APPLE)
-  set_target_properties(proteus_py PROPERTIES INSTALL_RPATH "$ORIGIN")
+  set_target_properties(amdinfer_py PROPERTIES INSTALL_RPATH "$ORIGIN")
 elseif(APPLE)
-  set_target_properties(proteus_py PROPERTIES INSTALL_RPATH "@loader_path")
+  set_target_properties(amdinfer_py PROPERTIES INSTALL_RPATH "@loader_path")
 endif()
 
 # if building a wheel, the CMake build there sets this variable so we can detect
 # here whether CMake is running in the regular build or as part of the wheel
 # building run
-get_target_property(output_directory proteus_py LIBRARY_OUTPUT_DIRECTORY)
+get_target_property(output_directory amdinfer_py LIBRARY_OUTPUT_DIRECTORY)
 if(NOT output_directory)
   set(output_directory ${CMAKE_CURRENT_BINARY_DIR})
 endif()
@@ -94,14 +94,14 @@ endif()
 find_package(Pybind11Stubgen)
 if(${Pybind11Stubgen_FOUND})
   add_custom_command(
-    TARGET proteus_py
+    TARGET amdinfer_py
     POST_BUILD
     COMMAND PYTHONPATH=${output_directory} pybind11-stubgen -o
-            ${output_directory} _proteus --no-setup-py
-    COMMAND mkdir -p ${output_directory}/src/proteus
-    COMMAND cp -rf ${output_directory}/_proteus-stubs/*
-            ${output_directory}/src/proteus
-    COMMAND rm -rf ${output_directory}/_proteus-stubs
+            ${output_directory} _amdinfer --no-setup-py
+    COMMAND mkdir -p ${output_directory}/src/amdinfer
+    COMMAND cp -rf ${output_directory}/_amdinfer-stubs/*
+            ${output_directory}/src/amdinfer
+    COMMAND rm -rf ${output_directory}/_amdinfer-stubs
   )
 else()
   message(
@@ -125,11 +125,11 @@ if(NOT SKBUILD)
   )
 
   add_custom_command(
-    TARGET proteus_py
+    TARGET amdinfer_py
     POST_BUILD
     COMMAND pip install --prefix ~/.local ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.so
-            ${PY_USER_SITE_PACKAGES}/proteus
+            ${PY_USER_SITE_PACKAGES}/amdinfer
   )
 endif()
 
@@ -141,14 +141,14 @@ include(CMakePackageConfigHelpers)
 # . but it needs to be verified. If so, this if-else can be removed
 if(SKBUILD)
   install(
-    TARGETS proteus_py
-    LIBRARY COMPONENT proteus_Runtime
+    TARGETS amdinfer_py
+    LIBRARY COMPONENT amdinfer_Runtime
     LIBRARY DESTINATION .
   )
 else()
   install(
-    TARGETS proteus_py
-    LIBRARY COMPONENT proteus_Runtime
+    TARGETS amdinfer_py
+    LIBRARY COMPONENT amdinfer_Runtime
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   )
 endif()
@@ -156,12 +156,12 @@ endif()
 
 # we need to run this after the pip install above
 # if(${Pybind11Stubgen_FOUND})
-#   file(GLOB lib_exists ${output_directory}/_proteus*.so)
+#   file(GLOB lib_exists ${output_directory}/_amdinfer*.so)
 #   if(EXISTS ${lib_exists})
 #     add_custom_command(
-#       TARGET proteus_py POST_BUILD
+#       TARGET amdinfer_py POST_BUILD
 #       COMMAND PYTHONPATH=${output_directory} pybind11-stubgen -o
-#               ${output_directory} proteus --no-setup-py
+#               ${output_directory} amdinfer --no-setup-py
 #     )
 #   endif()
 # endif()

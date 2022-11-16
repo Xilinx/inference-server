@@ -17,7 +17,7 @@
 
 #include <type_traits>
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /**
  * @brief Similar to std::is_same, returns true if T is any of the types in the
@@ -32,6 +32,6 @@ struct is_any : std::disjunction<std::is_same<T, Ts>...> {};
 template <typename T, typename... Ts>
 inline constexpr bool is_any_v = is_any<T, Ts...>::value;
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_UTIL_TRAITS

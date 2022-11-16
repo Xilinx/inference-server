@@ -12,19 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PROTEUS
-#define GUARD_PROTEUS_PROTEUS
+/**
+ * @file
+ * @brief Defines the Proteus's version information
+ */
 
-// IWYU pragma: begin_exports
-#include "amdinfer/build_options.hpp"
-#include "amdinfer/clients/grpc.hpp"
-#include "amdinfer/clients/http.hpp"
-#include "amdinfer/clients/native.hpp"
-#include "amdinfer/core/data_types.hpp"
-#include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/predict_api.hpp"
-#include "amdinfer/declarations.hpp"
-#include "amdinfer/servers/server.hpp"
-// IWYU pragma: end_exports
+#ifndef GUARD_AMDINFER_VERSION_HPP
+#define GUARD_AMDINFER_VERSION_HPP
 
-#endif  // GUARD_PROTEUS_PROTEUS
+/// Proteus's full version as a string
+constexpr auto kProteusVersion = "0.3.0";
+
+/// Proteus's major version as an integer
+constexpr auto kProteusVersionMajor = 0;
+/// Proteus's minor version as an integer
+constexpr auto kProteusVersionMinor = 3;
+/// Proteus's patch version as an integer
+constexpr auto kProteusVersionPatch = 0;
+/// Proteus's version label as a string
+constexpr auto kProteusVersionLabel = "";
+#endif  // GUARD_AMDINFER_VERSION_HPP

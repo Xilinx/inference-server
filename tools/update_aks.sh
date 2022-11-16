@@ -48,7 +48,7 @@ fi
 
 direction="$1"
 aks_path="$2"
-proteus_path="./external/aks/reference"
+amdinfer_path="./external/aks/reference"
 
 if [[ $direction != "to" && $direction != "from" ]]; then
   usage
@@ -56,11 +56,11 @@ if [[ $direction != "to" && $direction != "from" ]]; then
 fi
 
 if [[ $direction == "to" ]]; then
-  aks_src_path=$proteus_path
+  aks_src_path=$amdinfer_path
   aks_dst_path=$aks_path
 else
   aks_src_path=$aks_path
-  aks_dst_path=$proteus_path
+  aks_dst_path=$amdinfer_path
 fi
 
 srcs=(

@@ -26,16 +26,16 @@
 #include <utility>   // for move
 #include <vector>    // for vector
 
-#include "gtest/gtest.h"                        // for UnitTest, EXPECT_NEAR
-#include "proteus/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "proteus/buffers/vector_buffer.hpp"    // for VectorBuffer
-#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
-#include "proteus/core/data_types.hpp"          // for DataType, DataType::U...
-#include "proteus/core/predict_api.hpp"         // for InferenceRequest, Req...
-#include "proteus/core/worker_info.hpp"         // for WorkerInfo
-#include "proteus/declarations.hpp"             // for BufferPtrs
+#include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
+#include "amdinfer/buffers/vector_buffer.hpp"    // for VectorBuffer
+#include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
+#include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
+#include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
+#include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
+#include "amdinfer/declarations.hpp"             // for BufferPtrs
+#include "gtest/gtest.h"                         // for UnitTest, EXPECT_NEAR
 
-namespace proteus {
+namespace amdinfer {
 
 constexpr auto kTimeoutMs = 1000;  // timeout in ms
 // timeout in us with safety factor
@@ -176,4 +176,4 @@ INSTANTIATE_TEST_SUITE_P(Datatypes, PerfSoftBatcherFixture,
                                           testing::ValuesIn(buffer_nums),
                                           testing::ValuesIn(work_delay)));
 
-}  // namespace proteus
+}  // namespace amdinfer

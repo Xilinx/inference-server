@@ -28,19 +28,19 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "proteus/batching/hard.hpp"          // for HardBatcher
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
-#include "proteus/declarations.hpp"           // for BufferPtr, InferenceResp...
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/metrics.hpp"    // for Metrics
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/hard.hpp"          // for HardBatcher
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
+#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"    // for Logger
+#include "amdinfer/observation/metrics.hpp"    // for Metrics
+#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker
 
-namespace proteus {
+namespace amdinfer {
 
 const int kInputTensors = 2;
 const std::array<int, kInputTensors> kInputLengths = {1, 2};
@@ -231,12 +231,12 @@ void EchoMulti::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::EchoMulti("echoMulti", "cpu");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::EchoMulti("echoMulti", "cpu");
 }
 }  // extern C

@@ -17,7 +17,7 @@
 
 #include <cstddef>
 
-namespace proteus::pre_post {
+namespace amdinfer::pre_post {
 
 /**
  * @brief Calculate softmax of the data
@@ -48,6 +48,6 @@ void calc_softmax(const T* data, size_t size, double* result) {
   }
 }
 
-}  // namespace proteus::pre_post
+}  // namespace amdinfer::pre_post
 
 #endif  // GUARD_PROTEUS_PRE_POST_SOFTMAX

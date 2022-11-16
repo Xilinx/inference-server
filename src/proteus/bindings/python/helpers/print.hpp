@@ -18,7 +18,7 @@
 #include <sstream>
 #include <string>
 
-namespace proteus {
+namespace amdinfer {
 
 template <typename T>
 std::string to_string(const T& self) {
@@ -27,6 +27,6 @@ std::string to_string(const T& self) {
   return os.str();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_PRINT

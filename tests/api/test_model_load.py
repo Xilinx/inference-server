@@ -16,7 +16,7 @@ import time
 
 import pytest
 
-import proteus
+import amdinfer
 
 
 # TODO(varunsh): update test to use modelLoad like C++ variant
@@ -41,7 +41,7 @@ class TestLoad:
         )  # this will do nothing and return 200
         assert response == "echo"
 
-        parameters = proteus.RequestParameters()
+        parameters = amdinfer.RequestParameters()
         parameters.put("max_buffer_num", 100)
         endpoint_1 = self.rest_client.workerLoad(
             "echo", parameters

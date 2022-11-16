@@ -17,7 +17,7 @@
  * @brief Implements tracing in Proteus
  */
 
-#include "proteus/observation/tracing.hpp"
+#include "amdinfer/observation/tracing.hpp"
 
 #include <opentelemetry/std/utility.h>           // for nostd
 #include <opentelemetry/trace/canonical_code.h>  // for trace
@@ -28,7 +28,7 @@
 namespace trace_api = opentelemetry::trace;
 namespace nostd = opentelemetry::nostd;
 
-namespace proteus {
+namespace amdinfer {
 
 void startTracer() {}
 
@@ -67,6 +67,6 @@ TracePtr startTrace(const char* name, const StringMap& http_headers) {
   return std::make_unique<Trace>(name);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif

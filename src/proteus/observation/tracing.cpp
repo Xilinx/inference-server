@@ -17,7 +17,7 @@
  * @brief Implements tracing in Proteus
  */
 
-#include "proteus/observation/tracing.hpp"
+#include "amdinfer/observation/tracing.hpp"
 
 #include <opentelemetry/context/propagation/global_propagator.h>
 #include <opentelemetry/context/propagation/text_map_propagator.h>
@@ -48,7 +48,7 @@
 #include <utility>  // for move
 #include <variant>  // for get
 
-#include "proteus/core/predict_api.hpp"
+#include "amdinfer/core/predict_api.hpp"
 
 #ifdef PROTEUS_ENABLE_TRACING
 
@@ -56,7 +56,7 @@ namespace trace_api = opentelemetry::trace;
 namespace trace_sdk = opentelemetry::sdk::trace;
 namespace nostd = opentelemetry::nostd;
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief This class provides the interface to hold the HTTP context from
@@ -104,7 +104,7 @@ void startTracer() {
   auto provider =
     nostd::shared_ptr<trace_api::TracerProvider>(new trace_sdk::TracerProvider(
       std::move(processor), opentelemetry::sdk::resource::Resource::Create(
-                              {{"service.name", "proteus"}})));
+                              {{"service.name", "amdinfer"}})));
 
   auto propagator =
     nostd::shared_ptr<opentelemetry::context::propagation::TextMapPropagator>(
@@ -119,7 +119,7 @@ void startTracer() {
 
 nostd::shared_ptr<trace_api::Tracer> get_tracer() {
   auto provider = trace_api::Provider::GetTracerProvider();
-  return provider->GetTracer("proteus");
+  return provider->GetTracer("amdinfer");
 }
 
 void stopTracer() {
@@ -212,6 +212,6 @@ TracePtr startTrace(const char* name, const StringMap& http_headers) {
   return std::make_unique<Trace>(name, options);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif

@@ -17,7 +17,7 @@
 
 #include <string>
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /**
  * @brief Execute an arbitrary command on the command line.
@@ -28,6 +28,6 @@ namespace proteus::util {
  */
 std::string exec(const char* cmd);
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_UTIL_EXEC

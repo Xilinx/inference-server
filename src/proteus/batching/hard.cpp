@@ -17,7 +17,7 @@
  * @brief Implements the hard batcher
  */
 
-#include "proteus/batching/hard.hpp"
+#include "amdinfer/batching/hard.hpp"
 
 #include <cstddef>  // for size_t
 #include <memory>   // for unique_ptr, operator==
@@ -25,18 +25,18 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
-#include "proteus/core/exceptions.hpp"      // for invalid_argument
-#include "proteus/core/interface.hpp"       // for Interface
-#include "proteus/declarations.hpp"         // for InterfacePtr
-#include "proteus/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
-#include "proteus/observation/tracing.hpp"  // for Trace
-#include "proteus/util/queue.hpp"           // for BlockingConcurrentQueue
-#include "proteus/util/thread.hpp"          // for setThreadName
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
+#include "amdinfer/core/exceptions.hpp"      // for invalid_argument
+#include "amdinfer/core/interface.hpp"       // for Interface
+#include "amdinfer/declarations.hpp"         // for InterfacePtr
+#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
+#include "amdinfer/observation/tracing.hpp"  // for Trace
+#include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"          // for setThreadName
 
-// IWYU pragma: no_forward_declare proteus::Buffer
+// IWYU pragma: no_forward_declare amdinfer::Buffer
 
-namespace proteus {
+namespace amdinfer {
 
 void HardBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
@@ -113,4 +113,4 @@ void HardBatcher::doRun(WorkerInfo* worker) {
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

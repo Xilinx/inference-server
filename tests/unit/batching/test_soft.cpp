@@ -14,14 +14,14 @@
 
 #include <memory>  // for allocator
 
-#include "gtest/gtest.h"                    // for Test, SuiteApiResolver, TEST
-#include "proteus/batching/soft.hpp"        // for SoftBatcher
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/interface.hpp"       // IWYU pragma: keep
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/observation/logging.hpp"  // for initLogger, LogLevel, Log...
+#include "amdinfer/batching/soft.hpp"        // for SoftBatcher
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/core/interface.hpp"       // IWYU pragma: keep
+#include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
+#include "amdinfer/observation/logging.hpp"  // for initLogger, LogLevel, Log...
+#include "gtest/gtest.h"                     // for Test, SuiteApiResolver, TEST
 
-namespace proteus {
+namespace amdinfer {
 
 TEST(UnitSoftBatcher, ConstructAndStart) {
 #ifdef PROTEUS_ENABLE_LOGGING
@@ -46,4 +46,4 @@ TEST(UnitSoftBatcher, ConstructAndStart) {
   batcher.end();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

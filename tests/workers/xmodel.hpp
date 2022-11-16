@@ -35,7 +35,7 @@
 #include <xir/graph/subgraph.hpp>  // for Subgraph
 #include <xir/tensor/tensor.hpp>   // for Tensor
 
-#include "proteus/proteus.hpp"
+#include "amdinfer/amdinfer.hpp"
 
 std::vector<const xir::Subgraph*> get_dpu_subgraphs(xir::Graph* graph) {
   std::vector<xir::Subgraph*> subgraphs =
@@ -147,11 +147,11 @@ int run_reference(std::string xmodel, int images, int threads, int runners) {
 }
 
 using FutureQueue =
-  moodycamel::BlockingConcurrentQueue<std::future<proteus::InferenceResponse>>;
+  moodycamel::BlockingConcurrentQueue<std::future<amdinfer::InferenceResponse>>;
 
 void enqueue(int images, const std::string& workerName,
-             proteus::InferenceRequest request, FutureQueue& my_queue) {
-  proteus::NativeClient client;
+             amdinfer::InferenceRequest request, FutureQueue& my_queue) {
+  amdinfer::NativeClient client;
   for (int i = 0; i < images; i++) {
     auto future = client.modelInferAsync(workerName, request);
     my_queue.enqueue(std::move(future));
@@ -159,7 +159,7 @@ void enqueue(int images, const std::string& workerName,
 }
 
 void dequeue(int images, FutureQueue& my_queue) {
-  std::future<proteus::InferenceResponse> element;
+  std::future<amdinfer::InferenceResponse> element;
   for (auto i = 0; i < images; i++) {
     my_queue.wait_dequeue(element);
     auto results = element.get();
@@ -167,21 +167,21 @@ void dequeue(int images, FutureQueue& my_queue) {
 }
 
 int run(std::string xmodel, int images, int threads, int runners) {
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   parameters.put("model", xmodel);
   parameters.put("share", false);
   auto threads_per_worker = std::max(threads / runners, 1);
   parameters.put("threads", threads_per_worker);
   parameters.put("batchers", 2);
 
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   auto workerName = client.workerLoad("Xmodel", &parameters);
   for (auto i = 0; i < runners - 1; i++) {
     client.workerLoad("Xmodel", &parameters);
   }
 
   std::vector<uint64_t> shape;
-  proteus::DataType type = proteus::DataType::INT8;
+  amdinfer::DataType type = amdinfer::DataType::INT8;
   {
     std::unique_ptr<xir::Graph> graph = xir::Graph::deserialize(xmodel);
     auto subgraphs = get_dpu_subgraphs(graph.get());
@@ -194,7 +194,7 @@ int run(std::string xmodel, int images, int threads, int runners) {
 
     std::copy(input_shape.begin() + 1, input_shape.end(),
               std::back_inserter(shape));
-    type = proteus::mapXirToType(input_type);
+    type = amdinfer::mapXirToType(input_type);
   }
 
   std::vector<char> data;
@@ -203,7 +203,7 @@ int run(std::string xmodel, int images, int threads, int runners) {
   data.reserve(num_elements * type.size());
 
   FutureQueue my_queue;
-  proteus::InferenceRequest request;
+  amdinfer::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(data.data()), shape, type);
 
   std::vector<std::future<void>> futures;

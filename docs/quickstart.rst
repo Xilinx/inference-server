@@ -22,7 +22,7 @@ Quickstart
 The easiest way to use the AMD Inference Server is to run it inside a Docker container.
 For these instructions, you'll need Git, Python3, and `Docker <https://docs.docker.com/get-docker/>`__.
 Also ensure that you set up your host appropriately depending on which platform(s) you are using (e.g. :ref:`Vitis AI <vitis_ai:vitis ai>`).
-The helper script used for most of the commands here is :file:`proteus`: a Python script with many helpful options.
+The helper script used for most of the commands here is :file:`amdinfer`: a Python script with many helpful options.
 The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
 You can also use :option:`--dry-run` before any command to see the underlying commands the script is running.
 
@@ -34,7 +34,7 @@ Build or Get the Docker Image
 
 We can build several types of containers.
 Development (dev) containers are intended for working on the AMD Inference Server or applications that link to the AMD Inference Server. They include all the build dependencies and mount the working directory into the container and drop the user into a terminal when they start.
-Production containers only contain the runtime dependencies of the :program:`proteus-server` executable and automatically run the executable when they start.
+Production containers only contain the runtime dependencies of the :program:`amdinfer-server` executable and automatically run the executable when they start.
 The Docker image can also be built with various options to disable certain components.
 
 Currently, these images are not pre-built anywhere and so must be built by the user.
@@ -43,19 +43,19 @@ We require `BuildKit <https://docs.docker.com/build/>`__ to build the image so y
 .. code-block:: console
 
     $ python3 docker/generate.py
-    $ ./proteus dockerize
+    $ ./amdinfer dockerize
 
 The ``generate.py`` script is used to create a dockerfile in the root directory, which is then used by the ``dockerize`` command.
 Use ``--help`` to see configurable options for the ``generate.py`` script.
-By default, this builds the stable dev image as ``{username}/proteus-dev``.
+By default, this builds the stable dev image as ``{username}/amdinfer-dev``.
 After the image is built, run the container:
 
 .. code-block:: console
 
-    $ ./proteus run --dev
+    $ ./amdinfer run --dev
 
-This command runs the ``{username}/proteus-dev:latest`` image, which corresponds to the latest local dev image.
-The dev container will mount the working directory into :file:`/workspace/proteus/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
+This command runs the ``{username}/amdinfer-dev:latest`` image, which corresponds to the latest local dev image.
+The dev container will mount the working directory into :file:`/workspace/amdinfer/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
 These details are the :option:`--dev` profile.
 Some options may be overridden on the command-line (use :option:`--help` to see the options).
 If you'd like to enable :ref:`TF+ZenDNN or PT+ZenDNN <zendnn:ZenDNN>` support in the container, pass the appropriate flag to the :option:`dockerize` command.
@@ -64,17 +64,17 @@ Building the AMD Inference Server
 ---------------------------------
 
 These commands are all run inside the dev container.
-Here, :file:`./proteus` is aliased to :command:`proteus`.
-Note, in general, you should not use ``sudo`` to run ``proteus`` commands.
+Here, :file:`./amdinfer` is aliased to :command:`amdinfer`.
+Note, in general, you should not use ``sudo`` to run ``amdinfer`` commands.
 
 .. code-block:: console
 
-    $ proteus build
+    $ amdinfer build
 
-The build command builds :program:`proteus-server` as well as the AKS kernels and documentation.
+The build command builds :program:`amdinfer-server` as well as the AKS kernels and documentation.
 By default, this will be the debug version.
 
-.. tip:: When starting new containers or switching to different ones after having run build once, you may need to run ``proteus build --regen --clean`` initially. New containers mount the working directory and so stale artifacts from previous builds may be present. These two flags delete the CMake cache and do a clean build, respectively.
+.. tip:: When starting new containers or switching to different ones after having run build once, you may need to run ``amdinfer build --regen --clean`` initially. New containers mount the working directory and so stale artifacts from previous builds may be present. These two flags delete the CMake cache and do a clean build, respectively.
 
 Getting Artifacts
 -----------------
@@ -87,7 +87,7 @@ Use ``--help`` to see the options available.
 .. code-block:: console
 
     $ git lfs pull
-    $ proteus get --all
+    $ amdinfer get --all
 
 You must abide by the license agreements of these files, if you choose to download them.
 
@@ -98,8 +98,8 @@ Once the server is built, start the server to begin serving requests.
 
 .. code-block:: bash
 
-    # start proteus-server in the background
-    proteus start &
+    # start amdinfer-server in the background
+    amdinfer start &
 
     # test that the server is ready. The server returns status 200 OK on success
     curl -I http://localhost:8998/v2/health/ready
@@ -107,7 +107,7 @@ Once the server is built, start the server to begin serving requests.
     # the server can now accept requests over REST/gRPC
 
     # shutdown the server
-    kill -2 $(pidof proteus-server)
+    kill -2 $(pidof amdinfer-server)
 
 You can also try running the test suite.
 Make sure you have the relevant test artifacts as described in the previous section.
@@ -115,6 +115,6 @@ Make sure you have the relevant test artifacts as described in the previous sect
 .. code-block:: bash
 
     # this will start the server and test the REST API from Python.
-    proteus test
+    amdinfer test
 
 Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.

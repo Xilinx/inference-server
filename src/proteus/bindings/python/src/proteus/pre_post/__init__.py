@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import proteus
-from proteus._proteus.pre_post import *
+import amdinfer
+from amdinfer._amdinfer.pre_post import *

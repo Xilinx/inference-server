@@ -22,13 +22,13 @@
 #include <thread>                 // for yield
 #include <vector>                 // for vector
 
-#include "proteus/proteus.hpp"                    // for InferenceRequestInput
-#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
+#include "amdinfer/amdinfer.hpp"                   // for InferenceRequestInput
+#include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
-namespace proteus {
+namespace amdinfer {
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
@@ -101,4 +101,4 @@ TEST_F(BaseFixture, mnist) {
 TEST_F(HttpFixture, mnist) { test(client_.get()); }
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer

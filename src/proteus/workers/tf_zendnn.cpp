@@ -43,19 +43,19 @@
 #include <utility>     // for pair, move
 #include <vector>      // for vector
 
-#include "proteus/batching/hard.hpp"          // for Batch, BatchP...
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABL...
-#include "proteus/core/data_types.hpp"        // for DataType, Dat...
-#include "proteus/core/exceptions.hpp"        // for external_error
-#include "proteus/core/predict_api.hpp"       // for InferenceResp...
-#include "proteus/declarations.hpp"           // for InferenceResp...
-#include "proteus/observation/logging.hpp"    // for Logger, PROTE...
-#include "proteus/observation/metrics.hpp"    // for Metrics, Metr...
-#include "proteus/observation/tracing.hpp"    // for Trace
-#include "proteus/util/string.hpp"            // for endsWith
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker, kNumB...
+#include "amdinfer/batching/hard.hpp"          // for Batch, BatchP...
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABL...
+#include "amdinfer/core/data_types.hpp"        // for DataType, Dat...
+#include "amdinfer/core/exceptions.hpp"        // for external_error
+#include "amdinfer/core/predict_api.hpp"       // for InferenceResp...
+#include "amdinfer/declarations.hpp"           // for InferenceResp...
+#include "amdinfer/observation/logging.hpp"    // for Logger, PROTE...
+#include "amdinfer/observation/metrics.hpp"    // for Metrics, Metr...
+#include "amdinfer/observation/tracing.hpp"    // for Trace
+#include "amdinfer/util/string.hpp"            // for endsWith
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker, kNumB...
 
 namespace tf = ::tensorflow;
 
@@ -63,7 +63,7 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace proteus {
+namespace amdinfer {
 
 namespace workers {
 
@@ -384,12 +384,12 @@ void TfZendnn::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::TfZendnn("TfZendnn", "cpu");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::TfZendnn("TfZendnn", "cpu");
 }
 }  // extern C

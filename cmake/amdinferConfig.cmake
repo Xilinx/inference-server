@@ -21,65 +21,65 @@
 
 cmake_minimum_required(VERSION 3.19)
 
-set(proteus_known_comps static shared)
-set(proteus_comp_static NO)
-set(proteus_comp_shared NO)
-foreach(proteus_comp IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-  if(proteus_comp IN_LIST proteus_known_comps)
-    set(proteus_comp_${proteus_comp} YES)
+set(amdinfer_known_comps static shared)
+set(amdinfer_comp_static NO)
+set(amdinfer_comp_shared NO)
+foreach(amdinfer_comp IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+  if(amdinfer_comp IN_LIST amdinfer_known_comps)
+    set(amdinfer_comp_${amdinfer_comp} YES)
   else()
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
-        "proteus does not recognize component `${proteus_comp}`."
+        "amdinfer does not recognize component `${amdinfer_comp}`."
     )
     set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
     return()
   endif()
 endforeach()
 
-if(proteus_comp_static AND proteus_comp_shared)
+if(amdinfer_comp_static AND amdinfer_comp_shared)
   set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
-      "proteus `static` and `shared` components are mutually exclusive."
+      "amdinfer `static` and `shared` components are mutually exclusive."
   )
   set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
   return()
 endif()
 
-set(proteus_static_targets
-    "${CMAKE_CURRENT_LIST_DIR}/proteus-static-targets.cmake"
+set(amdinfer_static_targets
+    "${CMAKE_CURRENT_LIST_DIR}/amdinfer-static-targets.cmake"
 )
-set(proteus_shared_targets
-    "${CMAKE_CURRENT_LIST_DIR}/proteus-shared-targets.cmake"
+set(amdinfer_shared_targets
+    "${CMAKE_CURRENT_LIST_DIR}/amdinfer-shared-targets.cmake"
 )
 
-macro(proteus_load_targets type)
-  if(NOT EXISTS "${proteus_${type}_targets}")
+macro(amdinfer_load_targets type)
+  if(NOT EXISTS "${amdinfer_${type}_targets}")
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
-        "proteus `${type}` libraries were requested but not found."
+        "amdinfer `${type}` libraries were requested but not found."
     )
     set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
     return()
   endif()
-  include("${proteus_${type}_targets}")
+  include("${amdinfer_${type}_targets}")
 endmacro()
 
-if(proteus_comp_static)
-  proteus_load_targets(static)
-elseif(proteus_comp_shared)
-  proteus_load_targets(shared)
-elseif(DEFINED proteus_SHARED_LIBS AND proteus_SHARED_LIBS)
-  proteus_load_targets(shared)
-elseif(DEFINED proteus_SHARED_LIBS AND NOT proteus_SHARED_LIBS)
-  proteus_load_targets(static)
+if(amdinfer_comp_static)
+  amdinfer_load_targets(static)
+elseif(amdinfer_comp_shared)
+  amdinfer_load_targets(shared)
+elseif(DEFINED amdinfer_SHARED_LIBS AND amdinfer_SHARED_LIBS)
+  amdinfer_load_targets(shared)
+elseif(DEFINED amdinfer_SHARED_LIBS AND NOT amdinfer_SHARED_LIBS)
+  amdinfer_load_targets(static)
 elseif(PROTEUS_BUILD_SHARED)
-  if(EXISTS "${proteus_shared_targets}")
-    proteus_load_targets(shared)
+  if(EXISTS "${amdinfer_shared_targets}")
+    amdinfer_load_targets(shared)
   else()
-    proteus_load_targets(static)
+    amdinfer_load_targets(static)
   endif()
 else()
-  if(EXISTS "${proteus_static_targets}")
-    proteus_load_targets(static)
+  if(EXISTS "${amdinfer_static_targets}")
+    amdinfer_load_targets(static)
   else()
-    proteus_load_targets(shared)
+    amdinfer_load_targets(shared)
   endif()
 endif()

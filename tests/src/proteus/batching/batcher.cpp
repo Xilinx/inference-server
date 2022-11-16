@@ -17,7 +17,7 @@
  * @brief Implements the fake batcher
  */
 
-#include "proteus/batching/batcher.hpp"
+#include "amdinfer/batching/batcher.hpp"
 
 #include <cstddef>     // for size_t
 #include <exception>   // for exception
@@ -28,18 +28,18 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "proteus/core/interface.hpp"         // for Interface
-#include "proteus/core/predict_api.hpp"       // for InferenceResponsePromis...
-#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_DEBUG
-#include "proteus/observation/tracing.hpp"    // for Trace
-#include "proteus/util/queue.hpp"             // for BlockingConcurrentQueue
-#include "proteus/util/thread.hpp"            // for setThreadName
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
+#include "amdinfer/core/interface.hpp"         // for Interface
+#include "amdinfer/core/predict_api.hpp"       // for InferenceResponsePromis...
+#include "amdinfer/observation/logging.hpp"    // for Logger, PROTEUS_LOG_DEBUG
+#include "amdinfer/observation/tracing.hpp"    // for Trace
+#include "amdinfer/util/queue.hpp"             // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"            // for setThreadName
 
-// IWYU pragma: no_forward_declare proteus::Buffer
+// IWYU pragma: no_forward_declare amdinfer::Buffer
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief For testing purposes, this fake C++ interface returns a
@@ -57,7 +57,7 @@ class FakeInterface : public Interface {
 
   size_t getInputSize() override;
   void errorHandler(const std::exception &e) override;
-  std::promise<proteus::InferenceResponse> *getPromise();
+  std::promise<amdinfer::InferenceResponse> *getPromise();
 
  private:
   InferenceRequestInput request_;
@@ -66,12 +66,13 @@ class FakeInterface : public Interface {
 
 FakeInterface::FakeInterface(InferenceRequestInput request)
   : request_(std::move(request)) {
-  this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
+  this->promise_ =
+    std::make_unique<std::promise<amdinfer::InferenceResponse>>();
 }
 
 size_t FakeInterface::getInputSize() { return 1; }
 
-std::promise<proteus::InferenceResponse> *FakeInterface::getPromise() {
+std::promise<amdinfer::InferenceResponse> *FakeInterface::getPromise() {
   return this->promise_.get();
 }
 
@@ -145,4 +146,4 @@ void Batcher::run(WorkerInfo *worker) {
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

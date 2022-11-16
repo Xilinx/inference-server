@@ -24,10 +24,10 @@
 #include <map>
 #include <string>
 
-#include "proteus/core/interface.hpp"  // for Interface
-#include "proteus/core/predict_api_internal.hpp"
-#include "proteus/observation/observer.hpp"  // for Observer
-#include "proteus/util/traits.hpp"           // for is_any
+#include "amdinfer/core/interface.hpp"  // for Interface
+#include "amdinfer/core/predict_api_internal.hpp"
+#include "amdinfer/observation/observer.hpp"  // for Observer
+#include "amdinfer/util/traits.hpp"           // for is_any
 
 namespace google::protobuf {
 template <typename T, typename U>
@@ -41,10 +41,10 @@ class ModelMetadataResponse;
 class ModelInferRequest;
 }  // namespace inference
 
-namespace proteus {
+namespace amdinfer {
 
 void mapParametersToProto(
-  const std::map<std::string, proteus::Parameter>& parameters,
+  const std::map<std::string, amdinfer::Parameter>& parameters,
   google::protobuf::Map<std::string, inference::InferParameter>*
     grpc_parameters);
 RequestParametersPtr mapProtoToParameters(
@@ -118,6 +118,6 @@ constexpr auto* getTensorContents(Tensor* tensor) {
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL

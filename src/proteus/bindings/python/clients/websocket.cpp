@@ -18,26 +18,26 @@
  * @brief Implements the Python bindings for the websocket client
  */
 
-#include "proteus/clients/websocket.hpp"
+#include "amdinfer/clients/websocket.hpp"
 
 #include <pybind11/cast.h>      // for arg
 #include <pybind11/pybind11.h>  // for class_, init
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
 
-namespace proteus {
+namespace amdinfer {
 class DataType;
 }
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapWebSocketClient(py::module_ &m) {
-  using proteus::WebSocketClient;
+  using amdinfer::WebSocketClient;
 
-  py::class_<WebSocketClient, proteus::Client>(m, "WebSocketClient")
+  py::class_<WebSocketClient, amdinfer::Client>(m, "WebSocketClient")
     .def(py::init<const std::string &, const std::string &>(),
          py::arg("ws_address"), py::arg("http_address"),
          DOCS(WebSocketClient, WebSocketClient))
@@ -78,4 +78,4 @@ void wrapWebSocketClient(py::module_ &m) {
     .def("close", &WebSocketClient::close, DOCS(WebSocketClient, close));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

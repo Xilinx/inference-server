@@ -17,7 +17,7 @@
  * @brief Implements the Python bindings for the http.hpp header
  */
 
-#include "proteus/clients/native.hpp"
+#include "amdinfer/clients/native.hpp"
 
 #include <pybind11/cast.h>      // for arg
 #include <pybind11/pybind11.h>  // for class_, init
@@ -25,15 +25,15 @@
 
 #include <unordered_map>  // for unordered_map
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "proteus/declarations.hpp"
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapNativeClient(py::module_ &m) {
-  py::class_<NativeClient, proteus::Client>(m, "NativeClient")
+  py::class_<NativeClient, amdinfer::Client>(m, "NativeClient")
     .def(py::init<>())
     .def("serverMetadata", &NativeClient::serverMetadata,
          DOCS(NativeClient, serverMetadata))
@@ -65,4 +65,4 @@ void wrapNativeClient(py::module_ &m) {
          py::arg("num"), DOCS(NativeClient, hasHardware));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

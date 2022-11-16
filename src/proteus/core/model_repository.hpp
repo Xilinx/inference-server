@@ -19,7 +19,7 @@
 #include <filesystem>
 #include <string>
 
-namespace proteus {
+namespace amdinfer {
 
 class RequestParameters;
 
@@ -57,6 +57,6 @@ class ModelRepository {
   inline static ModelRepositoryImpl repo_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_MODEL_REPOSITORY

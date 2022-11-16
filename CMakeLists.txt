@@ -38,7 +38,7 @@ endif()
 
 # set the project name
 project(
-  proteus
+  amdinfer
   VERSION ${ver_major}.${ver_minor}.${ver_patch}
   LANGUAGES CXX
   DESCRIPTION "Proteus inference library and server"
@@ -134,8 +134,8 @@ else()
 endif()
 
 configure_file(
-  ${PROJECT_SOURCE_DIR}/src/proteus/version.hpp.in
-  ${PROJECT_SOURCE_DIR}/src/proteus/version.hpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp.in
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp
 )
 
 message(STATUS "Build Options:")
@@ -169,8 +169,8 @@ if(SKBUILD)
 endif()
 
 configure_file(
-  src/proteus/build_options.hpp.in
-  ${PROJECT_SOURCE_DIR}/include/proteus/build_options.hpp
+  src/amdinfer/build_options.hpp.in
+  ${PROJECT_SOURCE_DIR}/include/amdinfer/build_options.hpp
 )
 configure_file(
   src/gui/src/build_options.ts.in
@@ -201,7 +201,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     Coverage
     --load-before
     DEPENDENCIES
-    proteus-server
+    amdinfer-server
     FASTCOV_ARGS
     "--include"
     ${PROJECT_SOURCE_DIR}
@@ -236,7 +236,7 @@ else()
 endif()
 
 add_subdirectory(external)
-add_subdirectory(src/proteus)
+add_subdirectory(src/amdinfer)
 if(${PROTEUS_BUILD_EXAMPLES})
   add_subdirectory(examples)
 endif()

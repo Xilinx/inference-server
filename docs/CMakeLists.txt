@@ -21,17 +21,17 @@ file(
   GLOB_RECURSE
   ALL_SOURCE_FILES
   CONFIGURE_DEPENDS
-  ${PROJECT_SOURCE_DIR}/src/proteus/*.cpp
-  ${PROJECT_SOURCE_DIR}/src/proteus/*.hpp
-  ${PROJECT_SOURCE_DIR}/include/proteus/*.hpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/*.cpp
+  ${PROJECT_SOURCE_DIR}/src/amdinfer/*.hpp
+  ${PROJECT_SOURCE_DIR}/include/amdinfer/*.hpp
 )
 
 # This will be the main output of our command
 set(DOXYGEN_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/xml/index.xml)
-set(DOXYGEN_INPUT_DIRS ${PROJECT_SOURCE_DIR}/src/proteus
-                       ${PROJECT_SOURCE_DIR}/include/proteus
+set(DOXYGEN_INPUT_DIRS ${PROJECT_SOURCE_DIR}/src/amdinfer
+                       ${PROJECT_SOURCE_DIR}/include/amdinfer
 )
-set(DOXYGEN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/proteus)
+set(DOXYGEN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/amdinfer)
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
 set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)

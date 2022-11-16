@@ -17,18 +17,18 @@
  * @brief Implements the Python bindings for the server.hpp header
  */
 
-#include "proteus/servers/server.hpp"
+#include "amdinfer/servers/server.hpp"
 
 #include <pybind11/cast.h>            // for arg
 #include <pybind11/pybind11.h>        // for class_, init
 #include <pybind11/stl.h>             // IWYU pragma: keep
 #include <pybind11/stl/filesystem.h>  // for filesystem
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapServer(py::module_ &m) {
   py::class_<Server>(m, "Server")
@@ -45,4 +45,4 @@ void wrapServer(py::module_ &m) {
          py::arg("use_polling"), DOCS(Server, enableRepositoryMonitoring));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

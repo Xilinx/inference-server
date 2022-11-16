@@ -23,7 +23,7 @@
 #include <cstddef>  // for size_t
 #include <string>   // for string
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /**
  * @brief Decodes a base64-encoded string and returns it
@@ -58,6 +58,6 @@ std::string base64_encode(std::string in);
  * @return std::string encoded string
  */
 std::string base64_encode(const char* in, size_t in_len);
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_UTIL_BASE64

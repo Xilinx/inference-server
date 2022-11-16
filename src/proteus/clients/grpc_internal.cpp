@@ -18,7 +18,7 @@
  * @brief Implements the internal objects used for gRPC
  */
 
-#include "proteus/clients/grpc_internal.hpp"
+#include "amdinfer/clients/grpc_internal.hpp"
 
 #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
 
@@ -28,14 +28,14 @@
 #include <memory>    // for make_shared, shared...
 #include <vector>    // for vector, _Bit_reference
 
-#include "predict_api.pb.h"                       // for ModelInferResponse_...
-#include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "proteus/core/predict_api_internal.hpp"  // for RequestParameters
-#include "proteus/declarations.hpp"               // for InferenceResponseOu...
-#include "proteus/observation/observer.hpp"       // for kNumTraceData
-#include "proteus/util/traits.hpp"                // for is_any
+#include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "amdinfer/core/predict_api_internal.hpp"  // for RequestParameters
+#include "amdinfer/declarations.hpp"               // for InferenceResponseOu...
+#include "amdinfer/observation/observer.hpp"       // for kNumTraceData
+#include "amdinfer/util/traits.hpp"                // for is_any
+#include "predict_api.pb.h"                        // for ModelInferResponse_...
 
-namespace proteus {
+namespace amdinfer {
 
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
@@ -94,7 +94,7 @@ template <class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
 
 void mapParametersToProto(
-  const std::map<std::string, proteus::Parameter>& parameters,
+  const std::map<std::string, amdinfer::Parameter>& parameters,
   google::protobuf::Map<std::string, inference::InferParameter>*
     grpc_parameters) {
   for (const auto& [key, value] : parameters) {
@@ -278,4 +278,4 @@ void mapModelMetadataToProto(const ModelMetadata& metadata,
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

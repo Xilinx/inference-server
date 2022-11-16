@@ -20,7 +20,7 @@
 #include <filesystem>
 #include <memory>
 
-namespace proteus {
+namespace amdinfer {
 
 class Server {
  public:
@@ -40,6 +40,6 @@ class Server {
   std::unique_ptr<ServerImpl> impl_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_SERVERS_SERVER

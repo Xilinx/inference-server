@@ -17,7 +17,7 @@
 
 #include <string>
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /// Expand any environment variables in the string in place
 void autoExpandEnvironmentVariables(std::string& text);
@@ -25,6 +25,6 @@ void autoExpandEnvironmentVariables(std::string& text);
 // Expand any environment variables in the string and return a copy
 std::string expandEnvironmentVariables(const std::string& input);
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_HELPERS_PARSE_ENV

@@ -14,11 +14,11 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     command: [ ./tools/coverage.sh, "-t", "50" ]
     extra_hosts:
-      - "proteus-dev:127.0.1.1"
-    hostname: proteus-dev
+      - "amdinfer-dev:127.0.1.1"
+    hostname: amdinfer-dev
     volumes:
-      - $PWD:/workspace/proteus
-    working_dir: /workspace/proteus
+      - $PWD:/workspace/amdinfer
+    working_dir: /workspace/amdinfer

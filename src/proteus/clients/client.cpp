@@ -13,14 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/clients/client.hpp"
+#include "amdinfer/clients/client.hpp"
 
 #include <queue>
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/observation/logging.hpp"  // for getLogDirectory, initLogger
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/observation/logging.hpp"  // for getLogDirectory, initLogger
 
-namespace proteus {
+namespace amdinfer {
 
 void initializeClientLogging() {
 #ifdef PROTEUS_ENABLE_LOGGING
@@ -48,7 +48,7 @@ void waitUntilServerReady(const Client* client) {
   while (!ready) {
     try {
       ready = client->serverReady();
-    } catch (const proteus::connection_error&) {
+    } catch (const amdinfer::connection_error&) {
       // ignore connection errors
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
@@ -117,4 +117,4 @@ std::vector<InferenceResponse> inferAsyncOrderedBatched(
   return responses;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

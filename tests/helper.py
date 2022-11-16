@@ -17,7 +17,7 @@ import os
 import pathlib
 import re
 
-from proteus import inference_request_to_dict
+from amdinfer import inference_request_to_dict
 
 root = os.getenv("PROTEUS_ROOT")
 if root is None:
@@ -30,7 +30,7 @@ except FileNotFoundError:
     print("No config.txt found in build/. Using default value of 'Debug'")
     build = "Debug"
 build_path = root_path / f"build/{build}"
-run_path = build_path / "src/proteus/proteus-server"
+run_path = build_path / "src/amdinfer/amdinfer-server"
 
 
 def getConstexprFromHeader(constexpr, file):
@@ -78,6 +78,6 @@ def run_benchmark(benchmark, benchmark_name, func, request, **kwargs):
 
 kDefaultHttpPort = int(
     getConstexprFromHeader(
-        "kDefaultHttpPort", root_path / "include/proteus/build_options.hpp"
+        "kDefaultHttpPort", root_path / "include/amdinfer/build_options.hpp"
     )
 )

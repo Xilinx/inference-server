@@ -21,10 +21,10 @@
 #* $ python docker/generate.py --cibuildwheel --base-image quay.io/pypa/manylinux2014_x86_64
 #*
 #* Build the image. Use the appropriate platform flags and suffix to name your image
-#* $ ./proteus dockerize --suffix="-ci"
+#* $ ./amdinfer dockerize --suffix="-ci"
 #*
 #* Add this image to the environment. In this case, it was a manylinux x86_64 image
-#* export CIBW_MANYLINUX_X86_64_IMAGE=$(whoami)/proteus-dev-ci:latest
+#* export CIBW_MANYLINUX_X86_64_IMAGE=$(whoami)/amdinfer-dev-ci:latest
 
 
 set -eo pipefail

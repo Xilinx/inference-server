@@ -17,7 +17,7 @@
  * @brief Implements logging in Proteus
  */
 
-#include "proteus/observation/logging.hpp"
+#include "amdinfer/observation/logging.hpp"
 
 #include <spdlog/sinks/basic_file_sink.h>     // for basic_file_sink_mt, bas...
 #include <spdlog/sinks/stdout_color_sinks.h>  // for ansicolor_stdout_sink
@@ -28,24 +28,24 @@
 #include <string>    // for string, operator+, char...
 #include <vector>    // for vector
 
-namespace proteus {
+namespace amdinfer {
 
 std::string getLogDirectory() { return "."; }
 
 void initLogger() {
   // if already initialized, return early to prevent duplicating logger
-  auto logger = spdlog::get("proteus");
+  auto logger = spdlog::get("amdinfer");
   if (logger != nullptr) {
     return;
   }
 
   auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
   console_sink->set_level(spdlog::level::warn);
-  console_sink->set_pattern("[proteus] [%^%l%$] %v");
+  console_sink->set_pattern("[amdinfer] [%^%l%$] %v");
 
   auto dir = getLogDirectory();
   auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-    dir + "/proteus.log", true);
+    dir + "/amdinfer.log", true);
   file_sink->set_level(spdlog::level::off);
 
   std::vector<spdlog::sink_ptr> sinks;
@@ -53,11 +53,11 @@ void initLogger() {
   sinks.push_back(console_sink);
 
   logger =
-    std::make_shared<spdlog::logger>("proteus", begin(sinks), end(sinks));
+    std::make_shared<spdlog::logger>("amdinfer", begin(sinks), end(sinks));
   logger->set_level(spdlog::level::off);
   // logger->flush_on(spdlog::level::info);
   spdlog::register_logger(logger);
   spdlog::set_default_logger(logger);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

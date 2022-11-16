@@ -18,16 +18,16 @@
  * Proteus runs
  */
 
-#include "proteus/core/manager.hpp"
+#include "amdinfer/core/manager.hpp"
 
 #include <thread>   // for thread
 #include <utility>  // for pair, make_pair, move
 
-#include "proteus/core/exceptions.hpp"   // for invalid_argument
-#include "proteus/core/worker_info.hpp"  // for WorkerInfo
-#include "proteus/workers/worker.hpp"    // for Worker
+#include "amdinfer/core/exceptions.hpp"   // for invalid_argument
+#include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
+#include "amdinfer/workers/worker.hpp"    // for Worker
 
-namespace proteus {
+namespace amdinfer {
 
 Manager::Manager() = default;
 
@@ -191,4 +191,4 @@ void Manager::Endpoints::shutdown() {
   this->worker_parameters_.clear();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

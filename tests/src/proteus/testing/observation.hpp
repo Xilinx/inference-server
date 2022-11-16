@@ -15,11 +15,11 @@
 #ifndef GUARD_SRC_PROTEUS_TESTING_OBSERVATION
 #define GUARD_SRC_PROTEUS_TESTING_OBSERVATION
 
-#include "proteus/build_options.hpp"
-#include "proteus/observation/observer.hpp"
-#include "proteus/util/string.hpp"
+#include "amdinfer/build_options.hpp"
+#include "amdinfer/observation/observer.hpp"
+#include "amdinfer/util/string.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 void initializeTestLogging() {
 #ifdef PROTEUS_ENABLE_LOGGING
@@ -35,6 +35,6 @@ void initializeTestLogging() {
 #endif
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_SRC_PROTEUS_TESTING_OBSERVATION

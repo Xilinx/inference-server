@@ -26,16 +26,16 @@
 #include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/declarations.hpp"         // for BufferRawPtrs
-#include "proteus/observation/logging.hpp"  // for Logger, Loggers, Loggers...
-#include "proteus/observation/tracing.hpp"  // for TracePtr
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/declarations.hpp"         // for BufferRawPtrs
+#include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Loggers...
+#include "amdinfer/observation/tracing.hpp"  // for TracePtr
 
-namespace proteus {
+namespace amdinfer {
 class InferenceRequest;
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief The InterfaceType identifies the Interface. New interfaces can be
@@ -116,6 +116,6 @@ class Interface {
 #endif
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_INTERFACE

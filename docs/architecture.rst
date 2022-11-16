@@ -87,12 +87,12 @@ Drogon uses a configurable number of threads to run these request handlers.
 When a REST request is made to an endpoint, the request data and callback function are provided for the handler to process the request and then respond to the client.
 To avoid blocking the finite number of handler threads with potentially long-running inference requests, we use an asynchronous architecture in the handler.
 The received request is packed into an ``Interface`` object and pushed into a :github:`thread-safe lock-free multi producer/consumer queue <cameron314/concurrentqueue>` to go to the target worker's batcher.
-The HTTP server code is in ``src/proteus/servers/http_server.*``.
+The HTTP server code is in ``src/amdinfer/servers/http_server.*``.
 
 Drogon also provides a WebSocket server, which is currently used experimentally to run predictions on videos from certain workers.
 The WebSocket API is custom.
 At this time, the client provides a URL to a video that the worker will retrieve and analyze frame-by-frame and send back to the client but this is subject to change.
-The WebSocket server code is in ``src/proteus/servers/websocket_server.*``.
+The WebSocket server code is in ``src/amdinfer/servers/websocket_server.*``.
 
 C++ API
 ^^^^^^^
@@ -105,7 +105,7 @@ The API lets users load workers and make inference requests.
 The inference request is packed into an ``Interface`` object and pushed to the target worker's batcher.
 An ``std::promise`` is returned to the user to retrieve the result.
 
-The public API is defined in ``include/proteus/clients/native.hpp`` and the implementation is in ``src/proteus/clients/native.cpp``.
+The public API is defined in ``include/amdinfer/clients/native.hpp`` and the implementation is in ``src/amdinfer/clients/native.cpp``.
 
 Batching
 --------
@@ -124,7 +124,7 @@ Batching is a technique used in hardware to improve throughput performance.
 Batching groups multiple smaller requests from the user into one large request to improve the performance of hardware accelerators.
 However, user requests at the software application level are usually not conveniently available as complete batches as they come one at a time.
 The Server incorporates batching as a transparent step in the pipeline that groups all incoming requests, independent of the source of the original request from the client (see :numref:`architecture_detail`).
-The implementations of the batchers are in ``src/proteus/batching``.
+The implementations of the batchers are in ``src/amdinfer/batching``.
 
 The base batcher class defines a common interface for all batcher implementations and has some basic common properties.
 Each batcher has two thread-safe queues (one for input and one for output), a configured batch size and a string identifying the worker group it's attached to.
@@ -159,7 +159,7 @@ A worker may be as simple or complex as you like: as long as it adheres to the i
 Each worker is compiled as a shared object that the Server can dynamically open at load-time.
 Thus, new workers can be loaded and unloaded without stopping the server.
 
-Workers are defined in ``src/proteus/workers``.
+Workers are defined in ``src/amdinfer/workers``.
 The ``CMakeLists.txt`` file builds each worker as ``libworkerX.so`` where *X* corresponds to the name of the C++ file defining the worker in PascalCase.
 
 Organization and Lifecycle
@@ -184,7 +184,7 @@ At load-time, the server will create an instance of the worker using its ``getWo
 .. code-block:: c++
 
     extern "C" {
-        proteus::workers::Worker* getWorker() { return new proteus::workers::MyWorkerClass(); }
+        amdinfer::workers::Worker* getWorker() { return new amdinfer::workers::MyWorkerClass(); }
     }
 
 This instance is saved internally and the first three methods above are called to initialize the worker.
@@ -293,7 +293,7 @@ Buffering
     The buffer lifecycle
 
 Buffers are used to hold data internally within the server after receiving a request.
-The implementations of buffers are in ``src/proteus/buffers``.
+The implementations of buffers are in ``src/amdinfer/buffers``.
 
 The lifecycle of buffers is shown in :numref:`fig_buffering`.
 In ``allocate()``, the worker creates a buffer pool made of some number of buffers.
@@ -321,9 +321,9 @@ This information enables the ingestion protocols to query the Manager to retriev
 To manage multiple versions of workers that may be running with different configurations, the Manager stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
 In the case that it's assigned to an existing worker group, the previously allocated endpoint is returned to the client.
 If a new worker group is created, a new endpoint is reserved for this worker group and returned to the client.
-The implementation is in ``src/proteus/core/manager.*``.
+The implementation is in ``src/amdinfer/core/manager.*``.
 
-Loading a new worker results in the creation of a new ``WorkerInfo`` (see ``src/proteus/core/worker_info.*``) object which the Manager uses internally to hold all the information associated with the worker.
+Loading a new worker results in the creation of a new ``WorkerInfo`` (see ``src/amdinfer/core/worker_info.*``) object which the Manager uses internally to hold all the information associated with the worker.
 The worker class instance, its batcher, and its buffer pool are all stored in this object.
 The ``WorkerInfo`` object provides two methods to create new workers: its constructor and an ``addAndStartWorker()`` method.
 The former is used for a brand-new worker and creates queues for the buffer pools and initializes the private members of the class.
@@ -341,7 +341,7 @@ Observation
 -----------
 
 Visibility into the server and its operations is provided through logging, metrics and tracing.
-The implementations of these components is in ``src/proteus/observation``.
+The implementations of these components is in ``src/amdinfer/observation``.
 
 Logging
 ^^^^^^^
@@ -373,6 +373,6 @@ Tracing data can be disabled at compile-time with a CMake option.
 
 Look at :ref:`tracing:tracing` for more information.
 
-.. [#f1] Some methods are only available through HTTP at this time. Using the C++ API requires compiling an application linked against ``libproteus.so`` rather than making requests to a server.
+.. [#f1] Some methods are only available through HTTP at this time. Using the C++ API requires compiling an application linked against ``libamdinfer.so`` rather than making requests to a server.
 .. [#f2] This library is deprecating and will be replaced with OpenTelemetry as recommended by Jaeger.
 .. [#f3] There are currently some restrictions on what may be run such as the number of input/output tensors.

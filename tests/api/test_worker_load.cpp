@@ -16,10 +16,10 @@
 #include <stdexcept>  // for runtime_error
 #include <string>     // for string
 
-#include "proteus/proteus.hpp"                 // for GrpcClient, NativeClient
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
+#include "amdinfer/amdinfer.hpp"                // for GrpcClient, NativeClient
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   std::string worker = "echo";
 
   EXPECT_TRUE(client->modelList().empty());
@@ -32,7 +32,7 @@ void test(proteus::Client* client) {
   EXPECT_EQ(endpoint, worker);
 
   // load the same worker with a different config
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   parameters.put("max_buffer_num", 100);
   auto endpoint_1 = client->workerLoad(worker, &parameters);
   EXPECT_EQ(endpoint_1, "echo-0");
@@ -61,7 +61,7 @@ TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, workerLoad) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 

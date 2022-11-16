@@ -31,12 +31,12 @@
 #include <string>      // for string
 #include <vector>      // for vector
 
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/interface.hpp"             // for Interface
-#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestBui...
-#include "proteus/declarations.hpp"               // for BufferRawPtrs, Infe...
+#include "amdinfer/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/interface.hpp"             // for Interface
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
+#include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief Convert JSON-styled parameters to Proteus's implementation
@@ -110,6 +110,6 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
 Json::Value ModelMetadataToJson(const ModelMetadata &metadata);
 ModelMetadata mapJsonToModelMetadata(const Json::Value *json);
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL

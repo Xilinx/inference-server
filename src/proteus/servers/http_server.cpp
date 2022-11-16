@@ -17,7 +17,7 @@
  * @brief Implements the HTTP REST server in Proteus
  */
 
-#include "proteus/servers/http_server.hpp"
+#include "amdinfer/servers/http_server.hpp"
 
 #include <drogon/HttpAppFramework.h>  // for HttpAppFramework, app
 #include <drogon/HttpRequest.h>       // for HttpRequestPtr, Htt...
@@ -31,24 +31,24 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/http_internal.hpp"      // for propagate, errorHtt...
-#include "proteus/core/api.hpp"                   // for hasHardware, modelI...
-#include "proteus/core/exceptions.hpp"            // for runtime_error, inva...
-#include "proteus/core/interface.hpp"             // for Interface
-#include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
-#include "proteus/observation/logging.hpp"        // for Logger, PROTEUS_LOG...
-#include "proteus/observation/metrics.hpp"        // for Metrics, MetricCoun...
-#include "proteus/observation/tracing.hpp"        // for startTrace, Trace
-#include "proteus/servers/websocket_server.hpp"   // for WebsocketServer
-#include "proteus/util/string.hpp"                // for toLower
+#include "amdinfer/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/clients/http_internal.hpp"      // for propagate, errorHtt...
+#include "amdinfer/core/api.hpp"                   // for hasHardware, modelI...
+#include "amdinfer/core/exceptions.hpp"            // for runtime_error, inva...
+#include "amdinfer/core/interface.hpp"             // for Interface
+#include "amdinfer/core/predict_api_internal.hpp"  // for RequestParametersPtr
+#include "amdinfer/observation/logging.hpp"        // for Logger, PROTEUS_LOG...
+#include "amdinfer/observation/metrics.hpp"        // for Metrics, MetricCoun...
+#include "amdinfer/observation/tracing.hpp"        // for startTrace, Trace
+#include "amdinfer/servers/websocket_server.hpp"   // for WebsocketServer
+#include "amdinfer/util/string.hpp"                // for toLower
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;
 using drogon::HttpResponsePtr;
 using drogon::HttpStatusCode;
 
-namespace proteus::http {
+namespace amdinfer::http {
 
 void start(int port) {
   auto controller = std::make_shared<v2::ProteusHttpServer>();
@@ -134,7 +134,7 @@ void v2::ProteusHttpServer::getModelReady(
 
   auto resp = HttpResponse::newHttpResponse();
   try {
-    if (!::proteus::modelReady(model)) {
+    if (!::amdinfer::modelReady(model)) {
       resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
     }
   } catch (const invalid_argument &e) {
@@ -179,7 +179,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   Json::Value ret;
   bool error = false;
   try {
-    auto metadata = ::proteus::modelMetadata(model);
+    auto metadata = ::amdinfer::modelMetadata(model);
     ret = ModelMetadataToJson(metadata);
   } catch (const runtime_error &e) {
     ret["error"] = e.what();
@@ -197,7 +197,7 @@ void v2::ProteusHttpServer::modelList(
   const drogon::HttpRequestPtr &req,
   std::function<void(const drogon::HttpResponsePtr &)> &&callback) const {
   (void)req;  // suppress unused variable warning
-  const auto models = ::proteus::modelList();
+  const auto models = ::amdinfer::modelList();
 
   Json::Value json;
   json["models"] = Json::arrayValue;
@@ -225,8 +225,8 @@ void v2::ProteusHttpServer::hasHardware(
     return;
   }
 
-  auto found = proteus::hasHardware(json->get("name", "").asString(),
-                                    json->get("num", 1).asInt());
+  auto found = amdinfer::hasHardware(json->get("name", "").asString(),
+                                     json->get("num", 1).asInt());
 
   auto resp = HttpResponse::newHttpResponse();
   if (!found) {
@@ -263,7 +263,7 @@ void v2::ProteusHttpServer::modelInfer(
     trace->endSpan();
     request->setTrace(std::move(trace));
 #endif
-    ::proteus::modelInfer(model, std::move(request));
+    ::amdinfer::modelInfer(model, std::move(request));
   } catch (const invalid_argument &e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -298,7 +298,7 @@ void v2::ProteusHttpServer::modelLoad(
 #endif
 
   try {
-    ::proteus::modelLoad(model_lower, parameters.get());
+    ::amdinfer::modelLoad(model_lower, parameters.get());
   } catch (const runtime_error &e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -332,7 +332,7 @@ void v2::ProteusHttpServer::modelUnload(
   trace->setAttribute("model", model_lower);
 #endif
 
-  ::proteus::modelUnload(model_lower);
+  ::amdinfer::modelUnload(model_lower);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef PROTEUS_ENABLE_TRACING
@@ -371,7 +371,7 @@ void v2::ProteusHttpServer::workerLoad(
 #endif
   HttpResponsePtr resp;
   try {
-    auto endpoint = ::proteus::workerLoad(worker_lower, parameters.get());
+    auto endpoint = ::amdinfer::workerLoad(worker_lower, parameters.get());
     resp = HttpResponse::newHttpResponse();
     resp->setBody(endpoint);
   } catch (const runtime_error &e) {
@@ -402,7 +402,7 @@ void v2::ProteusHttpServer::workerUnload(
   trace->setAttribute("model", worker_lower);
 #endif
 
-  ::proteus::workerUnload(worker_lower);
+  ::amdinfer::workerUnload(worker_lower);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef PROTEUS_ENABLE_TRACING
@@ -428,4 +428,4 @@ void v2::ProteusHttpServer::metrics(
 }
 #endif
 
-}  // namespace proteus::http
+}  // namespace amdinfer::http

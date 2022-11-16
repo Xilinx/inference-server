@@ -19,7 +19,7 @@
  * saves on each active worker
  */
 
-#include "proteus/core/worker_info.hpp"
+#include "amdinfer/core/worker_info.hpp"
 
 #include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
 
@@ -29,13 +29,13 @@
 #include <string>   // for string, operator+, basic_string
 #include <utility>  // for pair, move, make_pair
 
-#include "proteus/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
-#include "proteus/core/exceptions.hpp"   // for invalid_argument, file_not_f...
-#include "proteus/core/interface.hpp"    // IWYU pragma: keep
-#include "proteus/core/predict_api.hpp"  // for RequestParameters
-#include "proteus/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
+#include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
+#include "amdinfer/core/exceptions.hpp"   // for invalid_argument, file_not_f...
+#include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
+#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
+#include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief Find the named function in a *.so file
@@ -276,4 +276,4 @@ void WorkerInfo::allocate(size_t request_size) {
   this->buffer_num_ += allocated;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

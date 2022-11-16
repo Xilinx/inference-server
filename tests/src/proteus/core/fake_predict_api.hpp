@@ -23,10 +23,10 @@
 #include <cstddef>  // for size_t
 #include <vector>   // for vector
 
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest, Infere...
-#include "proteus/declarations.hpp"      // for BufferRawPtrs
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest, Infere...
+#include "amdinfer/declarations.hpp"      // for BufferRawPtrs
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief The FakeInferenceRequest object is used to mock the real thing for
@@ -43,6 +43,6 @@ class FakeInferenceRequest : public InferenceRequest {
                        std::vector<size_t>& output_offsets);
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_FAKE_PREDICT_API

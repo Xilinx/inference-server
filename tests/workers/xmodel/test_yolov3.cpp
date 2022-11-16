@@ -15,18 +15,18 @@
 #include <string>
 #include <vector>
 
-#include "proteus/clients/client.hpp"
-#include "proteus/pre_post/image_preprocess.hpp"
-#include "proteus/pre_post/resnet50_postprocess.hpp"
-#include "proteus/testing/get_path_to_asset.hpp"
-#include "proteus/testing/gtest_fixtures.hpp"
+#include "amdinfer/clients/client.hpp"
+#include "amdinfer/pre_post/image_preprocess.hpp"
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"
+#include "amdinfer/testing/get_path_to_asset.hpp"
+#include "amdinfer/testing/gtest_fixtures.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 using Images = std::vector<std::vector<float>>;
 
 Images preprocess(const std::vector<std::string>& paths) {
-  proteus::pre_post::ImagePreprocessOptions<float, 3> options;
+  amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
   options.height = 416;
   options.width = 416;
 
@@ -40,13 +40,13 @@ Images preprocess(const std::vector<std::string>& paths) {
   options.convert_scale = 1 / 255.0;
 
   options.normalize = true;
-  options.order = proteus::pre_post::ImageOrder::NHWC;
+  options.order = amdinfer::pre_post::ImageOrder::NHWC;
   options.mean = {0, 0, 0};
   options.std = {1, 1, 1};
   return pre_post::imagePreprocess(paths, options);
 }
 
-void postprocess(const proteus::InferenceResponseOutput& output) {
+void postprocess(const amdinfer::InferenceResponseOutput& output) {
   // TODO(varunsh): needs to be implemented
   (void)output;
 }
@@ -90,7 +90,7 @@ void test_0(Client* client) {
   const auto kTestAsset = getPathToAsset("asset_bicycle-384566_640.jpg");
   const auto kXmodel = getPathToAsset("u250_yolov3");
 
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   parameters.put("model", kXmodel);
 
   auto images = preprocess({kTestAsset});
@@ -122,4 +122,4 @@ TEST_F(BaseFixture, WorkersXmodelYolov3) {
 TEST_F(HttpFixture, WorkersXmodelYolov3) { test_0(client_.get()); }
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer

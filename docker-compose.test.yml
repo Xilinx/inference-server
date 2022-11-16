@@ -14,28 +14,28 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     command: [/bin/bash]
     extra_hosts:
-      - "proteus:127.0.1.1"
-    image: $REGISTRY/proteus$SUFFIX:$VERSION
+      - "amdinfer:127.0.1.1"
+    image: $REGISTRY/amdinfer$SUFFIX:$VERSION
     ports:
-      - 127.0.0.1:8998:8998 # used for proteus server
+      - 127.0.0.1:8998:8998 # used for amdinfer server
     stdin_open: true
     tty: true
     volumes:
-      - $AKS_ROOT/graph_zoo:/opt/xilinx/proteus/aks/graph_zoo
-      - $AKS_ROOT/kernel_zoo:/opt/xilinx/proteus/aks/kernel_zoo
-  proteus-tester:
+      - $AKS_ROOT/graph_zoo:/opt/xilinx/amdinfer/aks/graph_zoo
+      - $AKS_ROOT/kernel_zoo:/opt/xilinx/amdinfer/aks/kernel_zoo
+  amdinfer-tester:
     command: [/bin/bash]
     depends_on:
-      - proteus
+      - amdinfer
     extra_hosts:
-      - "proteus-tester:127.0.1.1"
-    hostname: proteus-tester
-    image: $REGISTRY/proteus-dev$SUFFIX:$VERSION
+      - "amdinfer-tester:127.0.1.1"
+    hostname: amdinfer-tester
+    image: $REGISTRY/amdinfer-dev$SUFFIX:$VERSION
     stdin_open: true
     tty: true
     volumes:
-      - $PWD:/workspace/proteus
-    working_dir: /workspace/proteus
+      - $PWD:/workspace/amdinfer
+    working_dir: /workspace/amdinfer

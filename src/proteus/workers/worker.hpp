@@ -27,13 +27,13 @@
 #include <utility>
 #include <vector>
 
-#include "proteus/batching/soft.hpp"
-#include "proteus/buffers/buffer.hpp"
-#include "proteus/build_options.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/observation/logging.hpp"
+#include "amdinfer/batching/soft.hpp"
+#include "amdinfer/buffers/buffer.hpp"
+#include "amdinfer/build_options.hpp"
+#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/observation/logging.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 constexpr auto kNumBufferAuto = -1;
 
@@ -212,6 +212,6 @@ class Worker {
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_WORKERS_WORKER

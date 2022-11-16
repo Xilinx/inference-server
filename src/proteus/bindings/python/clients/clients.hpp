@@ -20,13 +20,13 @@
 #ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS
 #define GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS
 
-#include "proteus/build_options.hpp"
+#include "amdinfer/build_options.hpp"
 
 namespace pybind11 {
 class module_;
 }  // namespace pybind11
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapClient(pybind11::module_ &);
 void wrapNativeClient(pybind11::module_ &);
@@ -50,6 +50,6 @@ void wrapClients(pybind11::module_ &m) {
 #endif
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CLIENTS_CLIENTS

@@ -17,7 +17,7 @@
 
 #include <string>
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /**
  * @brief Inflate a deflated (i.e. compressed) argument with zlib. Taken from
@@ -29,6 +29,6 @@ namespace proteus::util {
  */
 std::string z_decompress(const char *str, int len);
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_HELPERS_COMPRESSION

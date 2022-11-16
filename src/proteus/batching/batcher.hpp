@@ -27,19 +27,19 @@
 #include <thread>   // for thread
 #include <vector>   // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api.hpp"     // for RequestParameters
-#include "proteus/declarations.hpp"         // for BufferPtrs, InferenceReq...
-#include "proteus/observation/logging.hpp"  // for LoggerPtr
-#include "proteus/observation/tracing.hpp"  // for TracePtr
-#include "proteus/util/queue.hpp"           // for BlockingConcurrentQueue
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+#include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
+#include "amdinfer/observation/logging.hpp"  // for LoggerPtr
+#include "amdinfer/observation/tracing.hpp"  // for TracePtr
+#include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
 
-namespace proteus {
+namespace amdinfer {
 class Buffer;
 class WorkerInfo;
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus {
+namespace amdinfer {
 
 enum class BatcherStatus { kNew, kRun, kInactive, kDead };
 
@@ -98,7 +98,7 @@ using BatchPtrQueue = BlockingQueue<BatchPtr>;
 
 /**
  * @brief The base batcher implementation defines the basic structure of how
- * batchers behave in proteus. The run() method is purely virtual and must be
+ * batchers behave in amdinfer. The run() method is purely virtual and must be
  * implemented by the child classes.
  *
  */
@@ -189,6 +189,6 @@ class Batcher {
 #endif
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BATCHING_BATCHER

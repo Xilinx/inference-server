@@ -31,7 +31,7 @@
 #include <unordered_map>  // for unordered_map
 #include <vector>         // for vector
 
-#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_METRICS
+#include "amdinfer/build_options.hpp"  // for PROTEUS_ENABLE_METRICS
 
 #ifdef PROTEUS_ENABLE_METRICS
 
@@ -44,7 +44,7 @@ class Family;
 class Registry;
 }  // namespace prometheus
 
-namespace proteus {
+namespace amdinfer {
 
 /// Defines the IDs of the counters tracked in Proteus
 enum class MetricCounterIDs {
@@ -231,7 +231,7 @@ class Metrics {
   SummaryFamily request_latency_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif
 

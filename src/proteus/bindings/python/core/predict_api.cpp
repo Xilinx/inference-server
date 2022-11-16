@@ -17,7 +17,7 @@
  * @brief Implements the Python bindings for the predict_api.hpp header
  */
 
-#include "proteus/core/predict_api.hpp"
+#include "amdinfer/core/predict_api.hpp"
 
 #include <pybind11/attr.h>      // for keep_alive
 #include <pybind11/cast.h>      // for arg
@@ -29,15 +29,15 @@
 #include <sstream>        // IWYU pragma: keep
 #include <unordered_map>  // for unordered_map
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "proteus/bindings/python/helpers/print.hpp"       // for to_string
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/bindings/python/helpers/print.hpp"       // for to_string
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapRequestParameters(py::module_ &m) {
-  using proteus::RequestParameters;
+  using amdinfer::RequestParameters;
 
   py::class_<RequestParameters, std::shared_ptr<RequestParameters>>(
     m, "RequestParameters")
@@ -86,7 +86,7 @@ void wrapRequestParameters(py::module_ &m) {
          [](const RequestParameters &self) {
            return "RequestParameters(" + std::to_string(self.size()) + ")\n";
          })
-    .def("__str__", &proteus::to_string<RequestParameters>);
+    .def("__str__", &amdinfer::to_string<RequestParameters>);
 }
 
 // refer to cppreference for std::visit
@@ -101,9 +101,9 @@ void wrapRequestParameters(py::module_ &m) {
 
 //? Trying to auto-convert RequestParameters <-> dict but it's not working
 // namespace pybind11 { namespace detail {
-//     template <> struct type_caster<proteus::RequestParameters> {
+//     template <> struct type_caster<amdinfer::RequestParameters> {
 //     public:
-//         PYBIND11_TYPE_CASTER(proteus::RequestParameters,
+//         PYBIND11_TYPE_CASTER(amdinfer::RequestParameters,
 //         const_name("RequestParameters"));
 
 //         // Conversion part 1 (Python->C++)
@@ -152,7 +152,7 @@ void wrapRequestParameters(py::module_ &m) {
 //          * Conversion part 2 (C++ -> Python). Ignoring policy and handle per
 //          * pybind11 suggestion
 //          */
-//         static handle cast(proteus::RequestParameters src,
+//         static handle cast(amdinfer::RequestParameters src,
 //         return_value_policy, handle) {
 //           py::dict tmp;
 //           for (const auto& pair : src) {
@@ -182,7 +182,7 @@ void wrapServerMetadata(py::module_ &m) {
 }
 
 template <typename T>
-py::array_t<T> getData(const proteus::InferenceRequestInput &self) {
+py::array_t<T> getData(const amdinfer::InferenceRequestInput &self) {
   auto *data = static_cast<T *>(self.getData());
   return py::array_t<T>(self.getSize(), data);
 
@@ -190,7 +190,7 @@ py::array_t<T> getData(const proteus::InferenceRequestInput &self) {
 }
 
 template <typename T>
-void setData(proteus::InferenceRequestInput &self, py::array_t<T> &b) {
+void setData(amdinfer::InferenceRequestInput &self, py::array_t<T> &b) {
   self.setData(static_cast<void *>(const_cast<T *>(b.data())));
 }
 
@@ -201,10 +201,10 @@ void wrapInferenceRequestInput(py::module_ &m) {
 
   py::class_<InferenceRequestInput>(m, "InferenceRequestInput")
     .def(py::init<>(), DOCS(InferenceRequestInput))
-    .def(
-      py::init<void *, std::vector<uint64_t>, proteus::DataType, std::string>(),
-      DOCS(InferenceRequestInput, 2), py::arg("data"), py::arg("shape"),
-      py::arg("dataType"), py::arg("name") = "")
+    .def(py::init<void *, std::vector<uint64_t>, amdinfer::DataType,
+                  std::string>(),
+         DOCS(InferenceRequestInput, 2), py::arg("data"), py::arg("shape"),
+         py::arg("dataType"), py::arg("name") = "")
     .def("setUint8Data", &setData<uint8_t>, py::keep_alive<1, 2>())
     .def("setUint16Data", &setData<uint16_t>, py::keep_alive<1, 2>())
     .def("setUint32Data", &setData<uint32_t>, py::keep_alive<1, 2>())
@@ -213,12 +213,12 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def("setInt16Data", &setData<int16_t>, py::keep_alive<1, 2>())
     .def("setInt32Data", &setData<int32_t>, py::keep_alive<1, 2>())
     .def("setInt64Data", &setData<int64_t>, py::keep_alive<1, 2>())
-    .def("setFp16Data", &setData<proteus::fp16>, py::keep_alive<1, 2>())
+    .def("setFp16Data", &setData<amdinfer::fp16>, py::keep_alive<1, 2>())
     .def("setFp32Data", &setData<float>, py::keep_alive<1, 2>())
     .def("setFp64Data", &setData<double>, py::keep_alive<1, 2>())
     .def(
       "setStringData",
-      [](proteus::InferenceRequestInput &self, std::string &str) {
+      [](amdinfer::InferenceRequestInput &self, std::string &str) {
         std::vector<std::byte> data;
         data.resize(str.length());
         memcpy(data.data(), str.data(), str.length());
@@ -233,7 +233,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def("getInt16Data", &getData<int16_t>, py::keep_alive<0, 1>())
     .def("getInt32Data", &getData<int32_t>, py::keep_alive<0, 1>())
     .def("getInt64Data", &getData<int64_t>, py::keep_alive<0, 1>())
-    .def("getFp16Data", &getData<proteus::fp16>, py::keep_alive<0, 1>())
+    .def("getFp16Data", &getData<amdinfer::fp16>, py::keep_alive<0, 1>())
     .def("getFp32Data", &getData<float>, py::keep_alive<0, 1>())
     .def("getFp64Data", &getData<double>, py::keep_alive<0, 1>())
     .def("getStringData", &getData<char>, py::keep_alive<0, 1>())
@@ -251,7 +251,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
            return "InferenceRequestInput(" + std::to_string(self.getSize()) +
                   ")";
          })
-    .def("__str__", &proteus::to_string<InferenceRequestInput>);
+    .def("__str__", &amdinfer::to_string<InferenceRequestInput>);
 }
 
 void wrapInferenceRequestOutput(py::module_ &m) {
@@ -280,7 +280,7 @@ void wrapInferenceResponse(py::module_ &m) {
 #ifdef PROTEUS_ENABLE_TRACING
     .def("getContext", &InferenceResponse::getContext)
     .def("setContext",
-         [](InferenceResponse &self, proteus::StringMap context) {
+         [](InferenceResponse &self, amdinfer::StringMap context) {
            self.setContext(std::move(context));
          })
 #endif
@@ -300,7 +300,7 @@ void wrapInferenceResponse(py::module_ &m) {
            (void)self;
            return "InferenceResponse\n";
          })
-    .def("__str__", &proteus::to_string<InferenceResponse>);
+    .def("__str__", &amdinfer::to_string<InferenceResponse>);
 }
 
 void wrapInferenceRequest(py::module_ &m) {
@@ -325,7 +325,7 @@ void wrapInferenceRequest(py::module_ &m) {
     .def("addOutputTensor", &InferenceRequest::addOutputTensor,
          py::arg("output"), py::keep_alive<1, 2>(),
          DOCS(InferenceRequest, addOutputTensor))
-    // .def("setCallback", [](InferenceRequest& self, proteus::Callback
+    // .def("setCallback", [](InferenceRequest& self, amdinfer::Callback
     // callback) {
     //   self.setCallback(std::move(callback));
     // })
@@ -342,9 +342,9 @@ void wrapInferenceRequest(py::module_ &m) {
 
 void wrapModelMetadata(py::module_ &m) {
   py::class_<ModelMetadataTensor>(m, "ModelMetadataTensor")
-    .def(
-      py::init<const std::string &, proteus::DataType, std::vector<uint64_t>>(),
-      DOCS(ModelMetadataTensor, ModelMetadataTensor))
+    .def(py::init<const std::string &, amdinfer::DataType,
+                  std::vector<uint64_t>>(),
+         DOCS(ModelMetadataTensor, ModelMetadataTensor))
     .def("getName", &ModelMetadataTensor::getName,
          DOCS(ModelMetadataTensor, getName))
     .def("getDataType", &ModelMetadataTensor::getDataType,
@@ -353,10 +353,10 @@ void wrapModelMetadata(py::module_ &m) {
          DOCS(ModelMetadataTensor, getShape));
 
   auto addInputTensor = static_cast<void (ModelMetadata::*)(
-    const std::string &, proteus::DataType, std::vector<int>)>(
+    const std::string &, amdinfer::DataType, std::vector<int>)>(
     &ModelMetadata::addInputTensor);
   auto addOutputTensor = static_cast<void (ModelMetadata::*)(
-    const std::string &, proteus::DataType, std::vector<int>)>(
+    const std::string &, amdinfer::DataType, std::vector<int>)>(
     &ModelMetadata::addOutputTensor);
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),
@@ -382,4 +382,4 @@ void wrapPredictApi(py::module_ &m) {
   wrapModelMetadata(m);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

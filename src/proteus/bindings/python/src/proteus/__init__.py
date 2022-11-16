@@ -18,7 +18,7 @@ import multiprocessing as mp
 import sys
 import time
 
-from ._proteus import *
+from ._amdinfer import *
 
 
 def _set_data(input_n, image):
@@ -102,7 +102,7 @@ def _infer(client, model, image):
     top level
 
     Args:
-        client (proteus.client): client to send request with
+        client (amdinfer.client): client to send request with
         model (str): name of the model/worker to make the inference
         image (np.array): Image to send to the server
     """
@@ -116,13 +116,13 @@ def parallel_infer(client, model, data, processes):
     Make an inference to the server in parallel with n processes
 
     Args:
-        client (proteus.client): Client to make the inference with
+        client (amdinfer.client): Client to make the inference with
         model (str): Name of the model/worker to make the inference
         data (list[np.ndarray]): List of data to send
         processes (int): number of processes to use
 
     Returns:
-        list[proteus.InferenceResponse]: Responses for each request
+        list[amdinfer.InferenceResponse]: Responses for each request
     """
 
     make_inference = functools.partial(_infer, client, model)

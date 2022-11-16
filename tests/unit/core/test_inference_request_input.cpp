@@ -15,10 +15,10 @@
 #include <cstddef>
 #include <iostream>
 
+#include "amdinfer/core/predict_api.hpp"
 #include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
-#include "proteus/core/predict_api.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 TEST(UnitInferenceRequestInput, SerDes) {
   const auto data_size = 10;
@@ -90,4 +90,4 @@ TEST(UnitInferenceRequestInput, SerDes2) {
   EXPECT_EQ(req.getSize(), new_req.getSize());
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

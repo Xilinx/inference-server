@@ -15,13 +15,13 @@
 #include <cstddef>
 #include <iostream>
 
+#include "amdinfer/clients/client.hpp"
+#include "amdinfer/clients/native.hpp"
+#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for BaseFixture
 #include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
-#include "proteus/clients/client.hpp"
-#include "proteus/clients/native.hpp"
-#include "proteus/core/predict_api.hpp"
-#include "proteus/testing/gtest_fixtures.hpp"  // for BaseFixture
 
-namespace proteus {
+namespace amdinfer {
 
 TEST_F(HttpFixture, Ordered) {
   NativeClient client;
@@ -34,8 +34,8 @@ TEST_F(HttpFixture, Ordered) {
   imgData.reserve(size);
   imgData.push_back(1);
 
-  proteus::InferenceRequest request;
-  request.addInputTensor(imgData.data(), shape, proteus::DataType::UINT32);
+  amdinfer::InferenceRequest request;
+  request.addInputTensor(imgData.data(), shape, amdinfer::DataType::UINT32);
 
   const auto data_size = 10;
   std::vector<InferenceRequest> reqs;
@@ -51,4 +51,4 @@ TEST_F(HttpFixture, Ordered) {
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

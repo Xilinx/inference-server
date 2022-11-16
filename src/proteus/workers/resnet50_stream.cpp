@@ -40,17 +40,17 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"       // for BatchPtr, BatchPtrQueue
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::STRING
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "proteus/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/util/base64.hpp"            // for base64_encode
-#include "proteus/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, BatchPtrQueue
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::STRING
+#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"    // for Logger
+#include "amdinfer/util/base64.hpp"            // for base64_encode
+#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
 class AIGraph;
@@ -58,7 +58,7 @@ class AIGraph;
 
 using vidProps = cv::VideoCaptureProperties;
 
-namespace proteus {
+namespace amdinfer {
 
 std::string constructMessage(const std::string& key, const std::string& data,
                              const std::string& labels) {
@@ -133,7 +133,7 @@ size_t ResNet50Stream::doAllocate(size_t num) {
 
 void ResNet50Stream::doAcquire(RequestParameters* parameters) {
   auto kPath = std::string(
-    "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_proteus.json");
+    "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json");
 
   auto path = kPath;
   if (parameters->has("aks_graph")) {
@@ -324,12 +324,12 @@ void ResNet50Stream::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::ResNet50Stream("ResNet50Stream", "AKS");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::ResNet50Stream("ResNet50Stream", "AKS");
 }
 }  // extern C

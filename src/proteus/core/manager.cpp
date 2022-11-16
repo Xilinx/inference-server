@@ -18,18 +18,18 @@
  * Proteus runs
  */
 
-#include "proteus/core/manager.hpp"
+#include "amdinfer/core/manager.hpp"
 
 #include <thread>   // for yield, thread
 #include <utility>  // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"     // for kMaxModelNameSize
-#include "proteus/core/exceptions.hpp"   // for invalid_argument
-#include "proteus/core/worker_info.hpp"  // for WorkerInfo
-#include "proteus/util/thread.hpp"       // for setThreadName
-#include "proteus/workers/worker.hpp"    // for Worker
+#include "amdinfer/build_options.hpp"     // for kMaxModelNameSize
+#include "amdinfer/core/exceptions.hpp"   // for invalid_argument
+#include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
+#include "amdinfer/util/thread.hpp"       // for setThreadName
+#include "amdinfer/workers/worker.hpp"    // for Worker
 
-namespace proteus {
+namespace amdinfer {
 
 Manager::Manager() {
   update_queue_ = std::make_unique<UpdateCommandQueue>();
@@ -48,7 +48,7 @@ void Manager::init() {
 
 std::string Manager::loadWorker(std::string const& key,
                                 RequestParameters parameters) {
-  std::shared_ptr<proteus::UpdateCommand> request;
+  std::shared_ptr<amdinfer::UpdateCommand> request;
   std::string retval;
   retval.reserve(kMaxModelNameSize);
   retval = "";
@@ -80,7 +80,7 @@ WorkerInfo* Manager::getWorker(const std::string& key) {
 }
 
 bool Manager::workerReady(const std::string& key) {
-  std::shared_ptr<proteus::UpdateCommand> request;
+  std::shared_ptr<amdinfer::UpdateCommand> request;
   int ready = -1;
   request = std::make_shared<UpdateCommand>(UpdateCommandType::Ready, key,
                                             nullptr, &ready);
@@ -320,4 +320,4 @@ void Manager::Endpoints::shutdown() {
   this->worker_parameters_.clear();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

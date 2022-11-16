@@ -13,14 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(proteus-server-exe main.cpp)
-target_include_directories(proteus-server-exe PRIVATE ${PROTEUS_INCLUDE_DIRS})
-target_link_options(proteus-server-exe PRIVATE "LINKER:-E")
-enable_ipo_on_target(proteus-server-exe)
-set_target_properties(proteus-server-exe PROPERTIES OUTPUT_NAME proteus-server)
+add_executable(amdinfer-server-exe main.cpp)
+target_include_directories(amdinfer-server-exe PRIVATE ${PROTEUS_INCLUDE_DIRS})
+target_link_options(amdinfer-server-exe PRIVATE "LINKER:-E")
+enable_ipo_on_target(amdinfer-server-exe)
+set_target_properties(
+  amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
+)
 
 target_link_libraries(
-  proteus-server-exe PRIVATE batching clients core observation util servers
+  amdinfer-server-exe PRIVATE batching clients core observation util servers
 )
 
 add_subdirectory(batching)
@@ -33,7 +35,7 @@ add_subdirectory(servers)
 add_subdirectory(util)
 add_subdirectory(workers)
 
-# Build and install the proteus library. The dual static/shared build process is
+# Build and install the amdinfer library. The dual static/shared build process is
 # guided by: https://github.com/alexreinking/SharedStaticStarter and its
 # accompanying article.
 
@@ -45,7 +47,7 @@ endif()
 string(TOUPPER ${type} TYPE)
 
 add_library(
-  proteus
+  amdinfer
   ${TYPE}
   ${BATCHING_OBJS}
   ${CLIENT_OBJS}
@@ -55,64 +57,64 @@ add_library(
   ${SERVER_OBJS}
 )
 target_link_libraries(
-  proteus PRIVATE batching clients core observation util servers
+  amdinfer PRIVATE batching clients core observation util servers
 )
 
 add_library(
-  proteus-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
-                 ${OBSERVATION_OBJS} ${SERVER_OBJS}
+  amdinfer-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
+                  ${OBSERVATION_OBJS} ${SERVER_OBJS}
 )
 target_link_libraries(
-  proteus-server PRIVATE batching core observation util servers
+  amdinfer-server PRIVATE batching core observation util servers
 )
 
 add_library(
-  proteus-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
+  amdinfer-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
 )
-target_link_libraries(proteus-client PRIVATE clients core observation util)
+target_link_libraries(amdinfer-client PRIVATE clients core observation util)
 
-set(output_libraries proteus proteus-server proteus-client)
+set(output_libraries amdinfer amdinfer-server amdinfer-client)
 foreach(lib ${output_libraries})
   enable_ipo_on_target(${lib})
 
   # add alias to keep build and install interface the same
-  add_library(proteus::${lib} ALIAS ${lib})
+  add_library(amdinfer::${lib} ALIAS ${lib})
 
   set_target_properties(
-    ${lib} PROPERTIES VERSION ${proteus_VERSION}
-                      SOVERSION ${proteus_VERSION_MAJOR}
+    ${lib} PROPERTIES VERSION ${amdinfer_VERSION}
+                      SOVERSION ${amdinfer_VERSION_MAJOR}
   )
 endforeach()
 
 # ~~~
 # include(GenerateExportHeader)
-# generate_export_header(proteus EXPORT_FILE_NAME include/proteus/export.h)
+# generate_export_header(amdinfer EXPORT_FILE_NAME include/amdinfer/export.h)
 # target_compile_definitions(
-#   proteus PUBLIC
+#   amdinfer PUBLIC
 #   "$<$<NOT:$<BOOL:${PROTEUS_BUILD_SHARED}>>:PROTEUS_STATIC_DEFINE>"
 # )
 # target_include_directories(
-#   proteus PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
+#   amdinfer PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
 # )
 # ~~~
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-set(proteus_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/proteus"
-    CACHE STRING "Path to proteus CMake files"
+set(amdinfer_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/amdinfer"
+    CACHE STRING "Path to amdinfer CMake files"
 )
 
 if(NOT SKBUILD)
 
   # cmake-format: off
   install(
-    TARGETS proteus proteus-client proteus-server
-    EXPORT proteus_Targets
-    RUNTIME COMPONENT proteus_Runtime
-    LIBRARY COMPONENT proteus_Runtime
-    NAMELINK_COMPONENT proteus_Development
-    ARCHIVE COMPONENT proteus_Development
+    TARGETS amdinfer amdinfer-client amdinfer-server
+    EXPORT amdinfer_Targets
+    RUNTIME COMPONENT amdinfer_Runtime
+    LIBRARY COMPONENT amdinfer_Runtime
+    NAMELINK_COMPONENT amdinfer_Development
+    ARCHIVE COMPONENT amdinfer_Development
     INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
@@ -121,36 +123,36 @@ if(NOT SKBUILD)
   # cmake-format: on
 
   install(
-    TARGETS proteus-server-exe
-    EXPORT proteus_Server
-    RUNTIME COMPONENT proteus_Runtime
+    TARGETS amdinfer-server-exe
+    EXPORT amdinfer_Server
+    RUNTIME COMPONENT amdinfer_Runtime
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   )
 
-  install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
-          COMPONENT proteus_Development
+  install(DIRECTORY "${amdinfer_SOURCE_DIR}/include/" TYPE INCLUDE
+          COMPONENT amdinfer_Development
   )
 
   install(
-    EXPORT proteus_Targets
-    DESTINATION "${proteus_INSTALL_CMAKEDIR}"
-    NAMESPACE proteus::
-    FILE proteus-${type}-targets.cmake
-    COMPONENT proteus_Development
+    EXPORT amdinfer_Targets
+    DESTINATION "${amdinfer_INSTALL_CMAKEDIR}"
+    NAMESPACE amdinfer::
+    FILE amdinfer-${type}-targets.cmake
+    COMPONENT amdinfer_Development
   )
 
   write_basic_package_version_file(
-    proteusConfigVersion.cmake COMPATIBILITY SameMajorVersion
+    amdinferConfigVersion.cmake COMPATIBILITY SameMajorVersion
   )
 
   install(
-    FILES "${PROJECT_SOURCE_DIR}/cmake/proteusConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/proteusConfigVersion.cmake"
-    DESTINATION "${proteus_INSTALL_CMAKEDIR}" COMPONENT proteus_Development
+    FILES "${PROJECT_SOURCE_DIR}/cmake/amdinferConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/amdinferConfigVersion.cmake"
+    DESTINATION "${amdinfer_INSTALL_CMAKEDIR}" COMPONENT amdinfer_Development
   )
 
-  install(DIRECTORY "${proteus_SOURCE_DIR}/include/" TYPE INCLUDE
-          COMPONENT proteus_Development
+  install(DIRECTORY "${amdinfer_SOURCE_DIR}/include/" TYPE INCLUDE
+          COMPONENT amdinfer_Development
   )
 else()
   # auditwheel needs the location where the compiled libraries are found, which
@@ -190,7 +192,7 @@ if(${PROTEUS_ENABLE_VITIS})
     )
     list(APPEND deb_dependencies "libpython3.6")
 
-    install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT proteus_Runtime)
+    install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)
   endif()
 endif()
 
@@ -217,22 +219,22 @@ if(NOT SKBUILD)
     IMPORTED_RUNTIME_ARTIFACTS
     ${dependencies}
     RUNTIME_DEPENDENCY_SET
-    proteus_Dependencies
+    amdinfer_Dependencies
     LIBRARY
     COMPONENT
-    proteus_Runtime
+    amdinfer_Runtime
     LIBRARY
     DESTINATION
     "${CMAKE_INSTALL_LIBDIR}"
   )
 
-  install(RUNTIME_DEPENDENCY_SET proteus_Dependencies DESTINATION
-          "${CMAKE_INSTALL_LIBDIR}" COMPONENT proteus_Runtime
+  install(RUNTIME_DEPENDENCY_SET amdinfer_Dependencies DESTINATION
+          "${CMAKE_INSTALL_LIBDIR}" COMPONENT amdinfer_Runtime
   )
 endif()
 
 set(CPACK_GENERATOR "DEB")
-set(CPACK_PACKAGE_NAME "libproteus")
+set(CPACK_PACKAGE_NAME "libamdinfer")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AMD Inference Server")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.rst")
 set(CPACK_PACKAGE_VENDOR "Advanced Micro Devices, Inc.")
@@ -240,7 +242,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_PROJECT_VERSION_PATCH})
 set(CPACK_PACKAGE_CONTACT "varun.sharma@amd.com")
-set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/proteus")
+set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/amdinfer")
 set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.rst")
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 

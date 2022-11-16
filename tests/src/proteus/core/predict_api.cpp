@@ -17,17 +17,17 @@
  * @brief Implements the fake predict api InferenceRequest
  */
 
-#include "proteus/core/predict_api.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
 
 #include <cstddef>  // for size_t
 #include <memory>   // for make_unique
 #include <string>   // for string
 #include <vector>   // for vector
 
-#include "proteus/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "proteus/declarations.hpp"           // for BufferRawPtrs
+#include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
+#include "amdinfer/declarations.hpp"           // for BufferRawPtrs
 
-namespace proteus {
+namespace amdinfer {
 
 FakeInferenceRequest::FakeInferenceRequest(
   InferenceRequestInput& req, const BufferRawPtrs& input_buffers,
@@ -56,4 +56,4 @@ FakeInferenceRequest::FakeInferenceRequest() {
   this->outputs_.emplace_back();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

@@ -24,7 +24,7 @@ namespace pybind11 {
 class module_;
 }  // namespace pybind11
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapDataType(pybind11::module_ &);
 void wrapTypeMaps(pybind11::module_ &);
@@ -40,6 +40,6 @@ void wrapCore(pybind11::module_ &m) {
   wrapPredictApi(m);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE

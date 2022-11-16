@@ -25,14 +25,14 @@
 #include <thread>   // for thread::id, thread
 #include <utility>  // for move
 
-#include "proteus/batching/batcher.hpp"  // for Batcher
-#include "proteus/buffers/buffer.hpp"    // IWYU pragma: keep
-#include "proteus/core/predict_api.hpp"  // for RequestParameters
-#include "proteus/core/worker_info.hpp"  // for WorkerInfo
-#include "proteus/declarations.hpp"      // for BufferPtrs
-#include "proteus/util/queue.hpp"        // for BufferPtrsQueue, Blockin...
+#include "amdinfer/batching/batcher.hpp"  // for Batcher
+#include "amdinfer/buffers/buffer.hpp"    // IWYU pragma: keep
+#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
+#include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
+#include "amdinfer/declarations.hpp"      // for BufferPtrs
+#include "amdinfer/util/queue.hpp"        // for BufferPtrsQueue, Blockin...
 
-namespace proteus {
+namespace amdinfer {
 
 WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
@@ -96,4 +96,4 @@ bool WorkerInfo::inputSizeValid(size_t size) const {
 
 void WorkerInfo::allocate(size_t request_size) { (void)request_size; }
 
-}  // namespace proteus
+}  // namespace amdinfer

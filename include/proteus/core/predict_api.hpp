@@ -35,12 +35,12 @@
 #include <variant>           // for operator!=, operator<
 #include <vector>            // for vector
 
-#include "proteus/build_options.hpp"    // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"  // for DataType, mapTypeToStr
-#include "proteus/core/mixins.hpp"      // for Serializable
-#include "proteus/declarations.hpp"     // for InferenceResponseOutput
+#include "amdinfer/build_options.hpp"    // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"  // for DataType, mapTypeToStr
+#include "amdinfer/core/mixins.hpp"      // for Serializable
+#include "amdinfer/declarations.hpp"     // for InferenceResponseOutput
 
-namespace proteus {
+namespace amdinfer {
 
 /// parameters in Proteus may be one of these types
 using Parameter = std::variant<bool, int32_t, double, std::string>;
@@ -553,7 +553,7 @@ class ModelMetadata final {
   bool ready_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 namespace std {
 template <>
@@ -564,7 +564,7 @@ template <>
  * cannot be stored in an unordered_map.
  *
  */
-struct less<proteus::RequestParameters> {
+struct less<amdinfer::RequestParameters> {
   /**
    * @brief Implementation of the comparison of two RequestParameter objects.
    * We compare the size and then check each key is present and finally, compare
@@ -575,8 +575,8 @@ struct less<proteus::RequestParameters> {
    * @param rhs the RequestParameter object on the right-hand-side
    * @return bool
    */
-  bool operator()(const proteus::RequestParameters &lhs,
-                  const proteus::RequestParameters &rhs) const {
+  bool operator()(const amdinfer::RequestParameters &lhs,
+                  const amdinfer::RequestParameters &rhs) const {
     auto lhs_size = lhs.size();
     auto rhs_size = rhs.size();
     auto lhs_map = lhs.data();

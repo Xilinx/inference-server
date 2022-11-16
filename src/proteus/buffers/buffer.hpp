@@ -26,7 +26,7 @@
 #include <cstring>  // for memcpy, size_t
 #include <string>   // for string
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief The base buffer class used in Proteus. Buffer implementations should
@@ -92,5 +92,5 @@ class Buffer {
   }
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 #endif  // GUARD_PROTEUS_BUFFERS_BUFFER

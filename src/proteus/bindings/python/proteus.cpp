@@ -20,21 +20,21 @@
 
 #include <pybind11/pybind11.h>
 
-#include "proteus/bindings/python/clients/clients.hpp"
-#include "proteus/bindings/python/core/core.hpp"
-#include "proteus/bindings/python/pre_post/pre_post.hpp"
-#include "proteus/bindings/python/servers/servers.hpp"
-#include "proteus/bindings/python/testing/testing.hpp"
-#include "proteus/build_options.hpp"
+#include "amdinfer/bindings/python/clients/clients.hpp"
+#include "amdinfer/bindings/python/core/core.hpp"
+#include "amdinfer/bindings/python/pre_post/pre_post.hpp"
+#include "amdinfer/bindings/python/servers/servers.hpp"
+#include "amdinfer/bindings/python/testing/testing.hpp"
+#include "amdinfer/build_options.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
-PYBIND11_MODULE(_proteus, m) {
+PYBIND11_MODULE(_amdinfer, m) {
   py::module t = m.def_submodule("testing", "testing documentation");
   py::module p = m.def_submodule("pre_post", "pre/post documentation");
-  m.doc() = "proteus inference library";
+  m.doc() = "amdinfer inference library";
 
   wrapCore(m);
   wrapClients(m);
@@ -45,4 +45,4 @@ PYBIND11_MODULE(_proteus, m) {
   wrapPrePost(p);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

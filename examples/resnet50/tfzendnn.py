@@ -25,8 +25,8 @@ from time import sleep
 
 import cv2
 
-import proteus
-import proteus.pre_post as pre_post
+import amdinfer
+import amdinfer.pre_post as pre_post
 
 # isort: split
 
@@ -56,7 +56,7 @@ def postprocess(output, k):
     to determine the most probable classifications
 
     Args:
-        output (proteus.InferenceResponseOutput): the output from the inference server
+        output (amdinfer.InferenceResponseOutput): the output from the inference server
         k (int): number of top categories to return
 
     Returns:
@@ -74,11 +74,11 @@ def construct_requests(images):
         images (list[numpy.ndarray]): the input images
 
     Returns:
-        list[proteus.InferenceRequest]: the requests
+        list[amdinfer.InferenceRequest]: the requests
     """
     requests = []
     for image in images:
-        requests.append(proteus.ImageInferenceRequest(image))
+        requests.append(amdinfer.ImageInferenceRequest(image))
     return requests
 
 
@@ -88,7 +88,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.Client): the client object
+        client (amdinfer.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -99,7 +99,7 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    if not proteus.serverHasExtension(client, "tfzendnn"):
+    if not amdinfer.serverHasExtension(client, "tfzendnn"):
         print(
             "TF+ZenDNN is not enabled. Please recompile with it enabled to run this example"
         )
@@ -111,14 +111,14 @@ def load(client, args):
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     parameters.put("model", args.model)
     parameters.put("input_size", args.input_size)
     parameters.put("output_classes", args.output_classes)
     parameters.put("input_node", args.input_node)
     parameters.put("output_node", args.output_node)
     endpoint = client.workerLoad("tfzendnn", parameters)
-    proteus.waitUntilModelReady(client, endpoint)
+    amdinfer.waitUntilModelReady(client, endpoint)
     return endpoint
 
 
@@ -153,15 +153,15 @@ def main(args):
     print("Running the TF+ZenDNN example for ResNet50 in Python")
 
     server_addr = f"{args.ip}:{args.grpc_port}"
-    client = proteus.GrpcClient(server_addr)
+    client = amdinfer.GrpcClient(server_addr)
     # start it locally if it doesn't already up if the IP address is the localhost
     if args.ip == "127.0.0.1" and not client.serverLive():
-        server = proteus.Server()
+        server = amdinfer.Server()
         server.startGrpc(args.grpc_port)
     elif not client.serverLive():
         raise ConnectionError(f"Could not connect to server at {server_addr}")
     print("Waiting until the server is ready...")
-    proteus.waitUntilServerReady(client)
+    amdinfer.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)

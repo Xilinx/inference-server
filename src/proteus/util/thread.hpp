@@ -21,7 +21,7 @@
 #include <sys/prctl.h>
 #endif
 
-namespace proteus::util {
+namespace amdinfer::util {
 /**
  * @brief Attempt to set the calling thread's name. Note, this may or may not
  * succeed. If renaming is not possible, it should silently fail without error.
@@ -43,6 +43,6 @@ inline void setThreadName(const std::string& name) {
   util::setThreadName(name.c_str());
 }
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_HELPERS_THREAD

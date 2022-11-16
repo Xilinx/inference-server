@@ -26,19 +26,19 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/interface.hpp"       // for Interface
-#include "proteus/declarations.hpp"         // for BufferRawPtrs
-#include "proteus/observation/logging.hpp"  // for LoggerPtr
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/core/interface.hpp"       // for Interface
+#include "amdinfer/declarations.hpp"         // for BufferRawPtrs
+#include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
 namespace Json {
 class Value;
 }  // namespace Json
-namespace proteus {
+namespace amdinfer {
 class InferenceRequest;
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus::http {
+namespace amdinfer::http {
 
 /**
  * @brief The DrogonWs Interface class encapsulates incoming requests from
@@ -111,6 +111,6 @@ class WebsocketServer
 #endif
 };
 
-}  // namespace proteus::http
+}  // namespace amdinfer::http
 
 #endif  // GUARD_PROTEUS_SERVERS_WEBSOCKET_SERVER

@@ -17,7 +17,7 @@
  * @brief Implements the methods for interacting with Proteus with WebSocket
  */
 
-#include "proteus/clients/websocket.hpp"
+#include "amdinfer/clients/websocket.hpp"
 
 #include <concurrentqueue/blockingconcurrentqueue.h>  // for BlockingConcurr...
 #include <drogon/HttpRequest.h>                       // for HttpRequest
@@ -34,10 +34,10 @@
 #include <chrono>   // for milliseconds
 #include <thread>   // for sleep_for
 
-#include "proteus/clients/http.hpp"           // for HttpClient
-#include "proteus/clients/http_internal.hpp"  // for mapRequestToJson
+#include "amdinfer/clients/http.hpp"           // for HttpClient
+#include "amdinfer/clients/http_internal.hpp"  // for mapRequestToJson
 
-namespace proteus {
+namespace amdinfer {
 
 class WebSocketClient::WebSocketClientImpl {
  public:
@@ -249,4 +249,4 @@ void WebSocketClient::modelInferWs(const std::string& model,
 
 std::string WebSocketClient::modelRecv() const { return impl_->recv(); }
 
-}  // namespace proteus
+}  // namespace amdinfer

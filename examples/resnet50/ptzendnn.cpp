@@ -34,10 +34,10 @@
 #include <string>               // for string
 #include <vector>               // for vector
 
-#include "proteus/pre_post/image_preprocess.hpp"      // for ImagePrepr...
-#include "proteus/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
-#include "proteus/proteus.hpp"                        // for InferenceR...
-#include "resnet50.hpp"                               // for Args, pars...
+#include "amdinfer/amdinfer.hpp"                       // for InferenceR...
+#include "amdinfer/pre_post/image_preprocess.hpp"      // for ImagePrepr...
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
+#include "resnet50.hpp"                                // for Args, pars...
 
 namespace fs = std::filesystem;
 
@@ -57,8 +57,8 @@ Images preprocess(const std::vector<std::string>& paths) {
   // this example uses a custom image preprocessing function. You may use any
   // preprocessing logic or skip it entirely if your input data is already
   // preprocessed.
-  proteus::pre_post::ImagePreprocessOptions<float, 3> options;
-  options.order = proteus::pre_post::ImageOrder::NCHW;
+  amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
+  options.order = amdinfer::pre_post::ImageOrder::NCHW;
   options.mean = mean;
   options.std = std;
   options.normalize = true;
@@ -67,7 +67,7 @@ Images preprocess(const std::vector<std::string>& paths) {
   options.convert_type = true;
   options.type = CV_32FC3;
   options.convert_scale = 1.0 / 255.0;
-  return proteus::pre_post::imagePreprocess(paths, options);
+  return amdinfer::pre_post::imagePreprocess(paths, options);
 }
 
 /**
@@ -78,9 +78,9 @@ Images preprocess(const std::vector<std::string>& paths) {
  * @param k number of top categories to return
  * @return std::vector<int> the indices for the top k categories
  */
-std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
+std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
                              int k) {
-  return proteus::pre_post::resnet50Postprocess(
+  return amdinfer::pre_post::resnet50Postprocess(
     static_cast<const float*>(output.getData()), output.getSize(), k);
 }
 
@@ -91,11 +91,11 @@ std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
  *
  * @param images the input images
  * @param input_size size of the square image in pixels
- * @return std::vector<proteus::InferenceRequest>
+ * @return std::vector<amdinfer::InferenceRequest>
  */
-std::vector<proteus::InferenceRequest> constructRequests(const Images& images,
-                                                         uint64_t input_size) {
-  std::vector<proteus::InferenceRequest> requests;
+std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
+                                                          uint64_t input_size) {
+  std::vector<amdinfer::InferenceRequest> requests;
   requests.reserve(images.size());
 
   const std::initializer_list<uint64_t> shape = {input_size, input_size, 3};
@@ -103,7 +103,7 @@ std::vector<proteus::InferenceRequest> constructRequests(const Images& images,
   for (const auto& image : images) {
     requests.emplace_back();
     requests.back().addInputTensor((void*)image.data(), shape,
-                                   proteus::DataType::FP32);
+                                   amdinfer::DataType::FP32);
   }
 
   return requests;
@@ -117,7 +117,7 @@ std::vector<proteus::InferenceRequest> constructRequests(const Images& images,
  * @param args the command-line arguments
  * @return std::string
  */
-std::string load(const proteus::Client* client, const Args& args) {
+std::string load(const amdinfer::Client* client, const Args& args) {
   // Depending on how the server is compiled, it may or may not have support for
   // a particular backend. This guard checks to make sure the server does
   // support the requested backend. If you already know it's supported, you can
@@ -135,7 +135,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   // worker is using may have its own parameters. Check the documentation to see
   // what may be specified.
 
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   parameters.put("model", args.path_to_model);
   parameters.put("input_size", args.input_size);
   parameters.put("output_classes", args.output_classes);
@@ -171,12 +171,12 @@ int main(int argc, char* argv[]) {
 
   // +create client
   // ptzendnn.cpp
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
 
-  proteus::Server server;
+  amdinfer::Server server;
 
   std::cout << "Waiting until the server is ready...\n";
-  proteus::waitUntilServerReady(&client);
+  amdinfer::waitUntilServerReady(&client);
   // -create client
 
   std::cout << "Loading worker...\n";
@@ -185,7 +185,7 @@ int main(int argc, char* argv[]) {
   std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
   Images images = preprocess(paths);
 
-  std::vector<proteus::InferenceRequest> requests =
+  std::vector<amdinfer::InferenceRequest> requests =
     constructRequests(images, args.input_size);
 
   assert(paths.size() == requests.size());
@@ -194,17 +194,17 @@ int main(int argc, char* argv[]) {
   std::cout << "Making inference...\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (auto i = 0U; i < num_requests; ++i) {
-    const proteus::InferenceRequest& request = requests[i];
+    const amdinfer::InferenceRequest& request = requests[i];
     const std::string& image_path = paths[i];
 
     // +validate
     // ptzendnn.cpp
-    proteus::InferenceResponseFuture future =
+    amdinfer::InferenceResponseFuture future =
       client.modelInferAsync(endpoint, request);
-    proteus::InferenceResponse response = future.get();
+    amdinfer::InferenceResponse response = future.get();
     assert(!response.isError());
 
-    std::vector<proteus::InferenceResponseOutput> outputs =
+    std::vector<amdinfer::InferenceResponseOutput> outputs =
       response.getOutputs();
     // for resnet50, we expect a single output tensor
     assert(outputs.size() == 1);

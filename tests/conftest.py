@@ -25,7 +25,7 @@ import yaml
 from pytest_cpp.plugin import CppItem
 from xprocess import ProcessStarter
 
-import proteus
+import amdinfer
 
 from helper import build_path, kDefaultHttpPort, root_path, run_path
 
@@ -123,17 +123,17 @@ def pytest_collection_modifyitems(config, items):
     # add_cpp_markers(items, config.getoption("--cpp"))
     add_cpp_markers(items, "all")
 
-    client = proteus.HttpClient(http_server_addr)
+    client = amdinfer.HttpClient(http_server_addr)
     if not client.serverLive():
-        server = proteus.Server()
+        server = amdinfer.Server()
         server.startHttp(8998)
-        client = proteus.HttpClient("http://127.0.0.1:8998")
+        client = amdinfer.HttpClient("http://127.0.0.1:8998")
         while not client.serverLive():
             time.sleep(1)
 
     fpgas_avail = {}
 
-    client = proteus.HttpClient(http_server_addr)
+    client = amdinfer.HttpClient(http_server_addr)
     for item in items:
         for mark in item.iter_markers(name="fpgas"):
             fpga_i = mark.args[0]
@@ -169,10 +169,10 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture(scope="class")
 def server(xprocess, request):
     address = get_http_addr(request.config)
-    client = proteus.HttpClient("http://" + address)
+    client = amdinfer.HttpClient("http://" + address)
     try:
         ready = client.serverReady()
-    except proteus.ConnectionError:
+    except amdinfer.ConnectionError:
         ready = False
 
     if not ready:
@@ -183,16 +183,16 @@ def server(xprocess, request):
             terminate_on_interrupt = True
 
             def startup_check(self):
-                proteus.waitUntilServerReady(client)
+                amdinfer.waitUntilServerReady(client)
                 return True
 
-            proteus_command = [str(run_path)]
+            amdinfer_command = [str(run_path)]
             http_port = request.config.getoption("--http-port")
-            proteus_command.extend(["--http-port", str(http_port)])
-            proteus_command.extend(
+            amdinfer_command.extend(["--http-port", str(http_port)])
+            amdinfer_command.extend(
                 ["--model-repository", root_path / "external/artifacts/repository"]
             )
-            args = proteus_command
+            args = amdinfer_command
 
         xprocess.ensure("server", Starter)
 
@@ -213,7 +213,7 @@ def load(request, server):
 
     assert test_model
 
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     if test_parameters is not None:
         for key, value in test_parameters.items():
             parameters.put(key, value)
@@ -240,12 +240,12 @@ def load(request, server):
 
 def rest_client(request):
     address = get_http_addr(request.config)
-    return proteus.HttpClient("http://" + address)
+    return amdinfer.HttpClient("http://" + address)
 
 
 def ws_client(request):
     address = get_http_addr(request.config)
-    return proteus.WebSocketClient("ws://" + address, "http://" + address)
+    return amdinfer.WebSocketClient("ws://" + address, "http://" + address)
 
 
 # we can eventually parameterize the clients with a fixture like this
@@ -253,12 +253,12 @@ def ws_client(request):
 # def client(request):
 #     http_address = get_http_addr(request.config)
 #     if request.param == "http":
-#         http_client = proteus.HttpClient("http://" + http_address)
+#         http_client = amdinfer.HttpClient("http://" + http_address)
 #         if not http_client.serverLive():
 #             pytest.skip("HTTP client could not connect to server")
 #         return http_client
 #     elif request.param == "websocket":
-#         websocket_client = proteus.WebSocketClient("ws://" + http_address, "http://" + http_address)
+#         websocket_client = amdinfer.WebSocketClient("ws://" + http_address, "http://" + http_address)
 #         if not websocket_client.serverLive():
 #             pytest.skip("Websocket client could not connect to server")
 #         return websocket_client

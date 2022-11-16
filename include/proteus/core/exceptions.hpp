@@ -24,7 +24,7 @@
 
 #include <stdexcept>
 
-namespace proteus {
+namespace amdinfer {
 
 class runtime_error : public std::runtime_error {
   using std::runtime_error::runtime_error;
@@ -58,6 +58,6 @@ class environment_not_set_error : public runtime_error {
   using runtime_error::runtime_error;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_EXCEPTIONS

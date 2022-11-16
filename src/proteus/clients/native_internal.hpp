@@ -26,11 +26,11 @@
 #include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "proteus/core/interface.hpp"    // for Interface
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest, Infere...
-#include "proteus/declarations.hpp"      // for BufferRawPtrs
+#include "amdinfer/core/interface.hpp"    // for Interface
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest, Infere...
+#include "amdinfer/declarations.hpp"      // for BufferRawPtrs
 
-namespace proteus {
+namespace amdinfer {
 
 class CppNativeApi : public Interface {
  public:
@@ -43,13 +43,13 @@ class CppNativeApi : public Interface {
 
   size_t getInputSize() override;
   void errorHandler(const std::exception &e) override;
-  std::promise<proteus::InferenceResponse> *getPromise();
+  std::promise<amdinfer::InferenceResponse> *getPromise();
 
  private:
   InferenceRequest request_;
   InferenceResponsePromisePtr promise_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL

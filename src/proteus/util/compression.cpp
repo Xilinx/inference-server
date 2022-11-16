@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/util/compression.hpp"
+#include "amdinfer/util/compression.hpp"
 
 #include <zlib.h>  // for z_stream, inflate, inflateEnd, Z_OK, Z_NO_FLUSH
 
 #include <array>    // for array
 #include <cstring>  // for memset
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 std::string z_decompress(const char *str, int len) {
   constexpr auto buffer_size = 32768;
@@ -50,4 +50,4 @@ std::string z_decompress(const char *str, int len) {
   return "";
 }
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util

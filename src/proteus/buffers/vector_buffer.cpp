@@ -17,15 +17,15 @@
  * @brief Implements the VectorBuffer class
  */
 
-#include "proteus/buffers/vector_buffer.hpp"
+#include "amdinfer/buffers/vector_buffer.hpp"
 
 #include <algorithm>  // for max
 #include <memory>     // for make_unique
 #include <utility>    // for move
 
-#include "proteus/declarations.hpp"  // for BufferPtrs
+#include "amdinfer/declarations.hpp"  // for BufferPtrs
 
-namespace proteus {
+namespace amdinfer {
 
 VectorBuffer::VectorBuffer(int elements, DataType data_type)
   : type_(data_type) {
@@ -177,4 +177,4 @@ void VectorBuffer::allocate(BufferPtrsQueue* my_buffer, size_t num,
   }
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

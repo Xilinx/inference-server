@@ -17,19 +17,19 @@
  * @brief Implements the Buffer class
  */
 
-#include "proteus/buffers/buffer.hpp"
+#include "amdinfer/buffers/buffer.hpp"
 
 #include <algorithm>  // for copy
 #include <cstring>    // for memcpy, size_t
 #include <string>     // for string
 
-#include "proteus/core/data_types.hpp"  // for getSize, DataType, DataType::...
+#include "amdinfer/core/data_types.hpp"  // for getSize, DataType, DataType::...
 
-namespace proteus {
+namespace amdinfer {
 
 size_t Buffer::write(void* data, size_t offset, size_t size) {
   std::memcpy(this->data(offset), data, size);
   return offset + size;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

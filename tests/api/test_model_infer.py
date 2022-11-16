@@ -17,7 +17,7 @@ import time
 import numpy as np
 import pytest
 
-import proteus
+import amdinfer
 
 
 @pytest.mark.usefixtures("server", "assign_client")
@@ -34,10 +34,10 @@ class TestModelInfer:
         endpoint = self.rest_client.workerLoad("echo")
         assert endpoint == "echo"
 
-        input_data = proteus.InferenceRequestInput()
+        input_data = amdinfer.InferenceRequestInput()
         input_data.shape = [1]
         input_data.setUint32Data(np.array([1], np.uint32))
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         request.addInputTensor(input_data)
 
         response = self.rest_client.modelInfer(endpoint, request)
@@ -54,5 +54,5 @@ class TestModelInfer:
         try:
             while self.rest_client.modelReady(endpoint):
                 time.sleep(1)
-        except proteus.RuntimeError:
+        except amdinfer.RuntimeError:
             pass

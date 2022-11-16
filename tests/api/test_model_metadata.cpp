@@ -18,10 +18,10 @@
 #include <thread>  // for sleep_for
 #include <vector>  // for vector
 
-#include "proteus/proteus.hpp"                 // for ModelMetadata, NativeC...
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
+#include "amdinfer/amdinfer.hpp"                // for ModelMetadata, NativeC...
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   const std::string model = "echo";
 
   EXPECT_TRUE(client->modelList().empty());
@@ -50,7 +50,7 @@ TEST_F(GrpcFixture, modelMetadata) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, modelMetadata) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 

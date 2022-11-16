@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/servers/websocket_server.hpp"
+#include "amdinfer/servers/websocket_server.hpp"
 
 #include <json/reader.h>  // for CharReader, CharReaderBui...
 #include <json/value.h>   // for Value, arrayValue
@@ -23,19 +23,19 @@
 #include <string>     // for string, operator+, char_t...
 #include <utility>    // for move
 
-#include "proteus/batching/batcher.hpp"           // for Batcher
-#include "proteus/clients/http_internal.hpp"      // for RequestBuilder
-#include "proteus/core/exceptions.hpp"            // for invalid_argument
-#include "proteus/core/manager.hpp"               // for Manager
-#include "proteus/core/predict_api_internal.hpp"  // for RequestParametersPtr
-#include "proteus/core/worker_info.hpp"           // for WorkerInfo
-#include "proteus/observation/tracing.hpp"        // for startSpan, Span
+#include "amdinfer/batching/batcher.hpp"           // for Batcher
+#include "amdinfer/clients/http_internal.hpp"      // for RequestBuilder
+#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
+#include "amdinfer/core/manager.hpp"               // for Manager
+#include "amdinfer/core/predict_api_internal.hpp"  // for RequestParametersPtr
+#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/observation/tracing.hpp"        // for startSpan, Span
 
 using drogon::HttpRequestPtr;
 using drogon::WebSocketConnectionPtr;
 using drogon::WebSocketMessageType;
 
-namespace proteus::http {
+namespace amdinfer::http {
 
 WebsocketServer::WebsocketServer() {
   PROTEUS_LOG_INFO(logger_, "Constructed WebsocketServer");
@@ -164,4 +164,4 @@ void DrogonWs::errorHandler(const std::exception &e) {
   this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
 }
 
-}  // namespace proteus::http
+}  // namespace amdinfer::http

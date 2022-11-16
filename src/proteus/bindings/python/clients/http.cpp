@@ -18,7 +18,7 @@
  * @brief Implements the Python bindings for the http.hpp header
  */
 
-#include "proteus/clients/http.hpp"
+#include "amdinfer/clients/http.hpp"
 
 #include <pybind11/cast.h>      // for arg
 #include <pybind11/pybind11.h>  // for class_, init
@@ -26,17 +26,17 @@
 
 #include <unordered_map>  // for unordered_map
 
-#include "proteus/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "proteus/declarations.hpp"
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapHttpClient(py::module_ &m) {
-  using proteus::HttpClient;
+  using amdinfer::HttpClient;
 
-  py::class_<HttpClient, proteus::Client>(m, "HttpClient")
+  py::class_<HttpClient, amdinfer::Client>(m, "HttpClient")
     .def(py::init<const std::string &,
                   const std::unordered_map<std::string, std::string>, int>(),
          py::arg("address"),
@@ -74,10 +74,10 @@ void wrapHttpClient(py::module_ &m) {
       },
       [](py::tuple t) -> HttpClient {  // __setstate__
         if (t.size() != 2) {
-          throw proteus::runtime_error("Invalid state!");
+          throw amdinfer::runtime_error("Invalid state!");
         }
-        return {t[0].cast<std::string>(), t[1].cast<proteus::StringMap>()};
+        return {t[0].cast<std::string>(), t[1].cast<amdinfer::StringMap>()};
       }));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

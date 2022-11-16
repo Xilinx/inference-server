@@ -31,8 +31,8 @@ if(${PROTEUS_ENABLE_MIGRAPHX})
 endif()
 
 foreach(example ${examples})
-  proteus_add_example(${example})
-  proteus_get_example_target(target ${example})
+  amdinfer_add_example(${example})
+  amdinfer_get_example_target(target ${example})
   target_link_libraries(
     ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
   )
@@ -42,7 +42,7 @@ endforeach()
 #   add_executable(tf_zendnn_client tf_zendnn_client.cpp)
 
 #   target_link_libraries(
-#     tf_zendnn_client PRIVATE proteus util opencv_imgcodecs opencv_imgproc
+#     tf_zendnn_client PRIVATE amdinfer util opencv_imgcodecs opencv_imgproc
 #                              opencv_core
 #   )
 #   target_include_directories(tf_zendnn_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
@@ -52,7 +52,7 @@ endforeach()
 #   add_executable(pt_zendnn_client pt_zendnn_client.cpp)
 
 #   target_link_libraries(
-#     pt_zendnn_client PRIVATE proteus util opencv_imgcodecs opencv_imgproc
+#     pt_zendnn_client PRIVATE amdinfer util opencv_imgcodecs opencv_imgproc
 #                              opencv_core
 #   )
 #   target_include_directories(pt_zendnn_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
@@ -62,7 +62,7 @@ endforeach()
 #   add_executable(migraphx_client migraphx_client.cpp)
 
 #   target_link_libraries(
-#     migraphx_client PRIVATE proteus util opencv_imgcodecs opencv_imgproc
+#     migraphx_client PRIVATE amdinfer util opencv_imgcodecs opencv_imgproc
 #                             opencv_core migraphx::c
 #   )
 #   target_include_directories(migraphx_client PRIVATE ${PROTEUS_INCLUDE_DIRS})

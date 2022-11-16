@@ -21,7 +21,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace proteus {
+namespace amdinfer {
 
 class Buffer;
 
@@ -44,12 +44,12 @@ using BufferRawPtrs = std::vector<Buffer*>;
 
 using InferenceRequestPtr = std::shared_ptr<InferenceRequest>;
 
-using InferenceResponseFuture = std::future<proteus::InferenceResponse>;
+using InferenceResponseFuture = std::future<amdinfer::InferenceResponse>;
 
 using StringMap = std::unordered_map<std::string, std::string>;
 
 using Kernels = std::unordered_map<std::string, int>;
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_DECLARATIONS

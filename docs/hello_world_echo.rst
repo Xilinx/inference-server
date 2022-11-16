@@ -88,10 +88,10 @@ We construct a request that contains an integer and send it to AMD Inference Ser
     :end-before: -inference
     :dedent: 4
 
-To make a request, you need to create, at minimum, a ``proteus.InferenceRequest`` object and add ``proteus.InferenceRequestInput`` objects to it.
+To make a request, you need to create, at minimum, a ``amdinfer.InferenceRequest`` object and add ``amdinfer.InferenceRequestInput`` objects to it.
 Each input object represents an input tensor for the request and has a number of metadata attributes associated with it such as a name, datatype, and shape.
 This format is based on :github:`KServe's v2 specification <kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`.
-For images, there's also a helper method called ``proteus.ImageInferenceRequest`` that you can use to create requests.
+For images, there's also a helper method called ``amdinfer.ImageInferenceRequest`` that you can use to create requests.
 It's used in the ResNet50 Python examples.
 
 .. literalinclude:: ../examples/hello_world/echo.py

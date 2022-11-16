@@ -26,13 +26,13 @@
 #include <memory>               // for unique_ptr, make_unique
 #include <string>               // for string, allocator, char...
 
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
-#include "proteus/clients/native.hpp"         // for NativeClient
-#include "proteus/core/exceptions.hpp"        // for runtime_error
-#include "proteus/core/model_repository.hpp"  // for UpdateListener, ModelRe...
-#include "proteus/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
-#include "proteus/servers/http_server.hpp"    // for stop
-#include "proteus/servers/server.hpp"         // for Server
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "amdinfer/clients/native.hpp"         // for NativeClient
+#include "amdinfer/core/exceptions.hpp"        // for runtime_error
+#include "amdinfer/core/model_repository.hpp"  // for UpdateListener, ModelRe...
+#include "amdinfer/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
+#include "amdinfer/servers/http_server.hpp"    // for stop
+#include "amdinfer/servers/server.hpp"         // for Server
 
 namespace fs = std::filesystem;
 
@@ -44,7 +44,7 @@ namespace fs = std::filesystem;
 void signal_callback_handler(int signum) {
   std::cout << "Caught interrupt " << signum << ". Proteus is ending...\n";
 #ifdef PROTEUS_ENABLE_HTTP
-  proteus::http::stop();
+  amdinfer::http::stop();
 #endif
 }
 
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
   bool use_polling_watcher = false;
 
   try {
-    cxxopts::Options options("proteus-server", "Inference in the cloud");
+    cxxopts::Options options("amdinfer-server", "Inference in the cloud");
     // clang-format off
     options.add_options()
     ("model-repository", "Path to the model repository",
@@ -99,9 +99,9 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::Server server;
+  amdinfer::Server server;
 
-  proteus::Logger logger{proteus::Loggers::kServer};
+  amdinfer::Logger logger{amdinfer::Loggers::kServer};
 
   server.setModelRepository(model_repository);
   PROTEUS_LOG_INFO(logger, "Using model repository: " + model_repository);

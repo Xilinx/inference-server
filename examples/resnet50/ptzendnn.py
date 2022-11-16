@@ -25,8 +25,8 @@ from time import sleep
 
 import cv2
 
-import proteus
-import proteus.pre_post as pre_post
+import amdinfer
+import amdinfer.pre_post as pre_post
 
 # isort: split
 
@@ -62,7 +62,7 @@ def postprocess(output, k):
     to determine the most probable classifications
 
     Args:
-        output (proteus.InferenceResponseOutput): the output from the inference server
+        output (amdinfer.InferenceResponseOutput): the output from the inference server
         k (int): number of top categories to return
 
     Returns:
@@ -80,11 +80,11 @@ def construct_requests(images):
         images (list[numpy.ndarray]): the input images
 
     Returns:
-        list[proteus.InferenceRequest]: the requests
+        list[amdinfer.InferenceRequest]: the requests
     """
     requests = []
     for image in images:
-        requests.append(proteus.ImageInferenceRequest(image))
+        requests.append(amdinfer.ImageInferenceRequest(image))
     return requests
 
 
@@ -94,7 +94,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.Client): the client object
+        client (amdinfer.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -104,7 +104,7 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    if not proteus.serverHasExtension(client, "ptzendnn"):
+    if not amdinfer.serverHasExtension(client, "ptzendnn"):
         print(
             "PT+ZenDNN is not enabled. Please recompile with it enabled to run this example"
         )
@@ -116,12 +116,12 @@ def load(client, args):
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     parameters.put("model", args.model)
     parameters.put("input_size", args.input_size)
     parameters.put("output_classes", args.output_classes)
     endpoint = client.workerLoad("ptzendnn", parameters)
-    proteus.waitUntilModelReady(client, endpoint)
+    amdinfer.waitUntilModelReady(client, endpoint)
     return endpoint
 
 
@@ -147,11 +147,11 @@ def get_args():
 def main(args):
     print("Running the PT+ZenDNN example for ResNet50 in Python")
 
-    server = proteus.Server()
+    server = amdinfer.Server()
     print("Waiting until the server is ready...")
 
-    client = proteus.NativeClient()
-    proteus.waitUntilServerReady(client)
+    client = amdinfer.NativeClient()
+    amdinfer.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
@@ -163,7 +163,7 @@ def main(args):
     requests = construct_requests(images)
 
     assert len(paths) == len(requests)
-    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
+    responses = amdinfer.inferAsyncOrdered(client, endpoint, requests)
     print("Making inferences...")
     for image_path, response in zip(paths, responses):
         assert not response.isError()

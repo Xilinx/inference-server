@@ -17,6 +17,6 @@
 
 #include "auto_docstrings.hpp"  // IWYU pragma: export
 
-#define DOCS(...) DOC(proteus, __VA_ARGS__)
+#define DOCS(...) DOC(amdinfer, __VA_ARGS__)
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS

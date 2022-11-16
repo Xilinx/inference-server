@@ -20,16 +20,16 @@
 #ifndef GUARD_PROTEUS_SERVERS_GRPC_SERVER
 #define GUARD_PROTEUS_SERVERS_GRPC_SERVER
 
-#include "proteus/build_options.hpp"
+#include "amdinfer/build_options.hpp"
 
 #ifdef PROTEUS_ENABLE_GRPC
 
-namespace proteus::grpc {
+namespace amdinfer::grpc {
 
 void start(int port);
 void stop();
 
-}  // namespace proteus::grpc
+}  // namespace amdinfer::grpc
 
 #endif  // PROTEUS_ENABLE_GRPC
 

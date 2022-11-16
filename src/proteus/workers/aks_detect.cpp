@@ -40,19 +40,19 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "proteus/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
-#include "proteus/observation/tracing.hpp"    // for Trace
-#include "proteus/util/base64.hpp"            // for base64_decode
-#include "proteus/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"    // for Logger
+#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
+#include "amdinfer/observation/tracing.hpp"    // for Trace
+#include "amdinfer/util/base64.hpp"            // for base64_decode
+#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
 class AIGraph;
@@ -62,7 +62,7 @@ uint64_t reduce_mult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace proteus {
+namespace amdinfer {
 
 namespace workers {
 
@@ -143,7 +143,7 @@ void AksDetect::doAcquire(RequestParameters* parameters) {
   const auto& logger = this->getLogger();
 #endif
   auto kPath =
-    std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_proteus.json");
+    std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json");
 
   auto path = kPath;
   if (parameters->has("aks_graph")) {
@@ -328,12 +328,12 @@ void AksDetect::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::AksDetect("AksDetect", "AKS");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::AksDetect("AksDetect", "AKS");
 }
 }  // extern C

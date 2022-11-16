@@ -463,7 +463,7 @@ def install_dev_packages(manager: PackageManager, core):
             graphviz \\
             # used to turn absolute symlinks into relative ones
             symlinks \\
-            # used for z compression in proteus
+            # used for z compression
             zlib1g-dev \\
             # used by drogon. It needs the -dev versions to pass Cmake
             libbrotli-dev \\
@@ -506,7 +506,7 @@ def install_dev_packages(manager: PackageManager, core):
             graphviz \\
             # used to turn absolute symlinks into relative ones
             symlinks \\
-            # used for z compression in proteus
+            # used for z compression
             zlib-devel \\
             # used by drogon. It needs the -dev versions to pass Cmake
             brotli-devel \\

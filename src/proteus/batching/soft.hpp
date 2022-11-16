@@ -20,13 +20,13 @@
 #ifndef GUARD_PROTEUS_BATCHING_SOFT
 #define GUARD_PROTEUS_BATCHING_SOFT
 
-#include "proteus/batching/batcher.hpp"  // IWYU pragma: export
+#include "amdinfer/batching/batcher.hpp"  // IWYU pragma: export
 
-namespace proteus {
+namespace amdinfer {
 class WorkerInfo;
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief The SoftBatcher attempts to batch requests to the requested batch size
@@ -42,6 +42,6 @@ class SoftBatcher : public Batcher {
   void doRun(WorkerInfo* worker) override;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BATCHING_SOFT

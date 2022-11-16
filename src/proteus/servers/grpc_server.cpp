@@ -18,7 +18,7 @@
  * @brief Implements the gRPC server in Proteus
  */
 
-#include "proteus/servers/grpc_server.hpp"
+#include "amdinfer/servers/grpc_server.hpp"
 
 #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
@@ -37,23 +37,23 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "predict_api.grpc.pb.h"                  // for GRPCInferenceServic...
-#include "predict_api.pb.h"                       // for InferTensorContents
-#include "proteus/buffers/buffer.hpp"             // for Buffer
-#include "proteus/build_options.hpp"              // for PROTEUS_ENABLE_LOGGING
-#include "proteus/clients/grpc_internal.hpp"      // for mapProtoToParameters
-#include "proteus/core/api.hpp"                   // for hasHardware, modelI...
-#include "proteus/core/data_types.hpp"            // for DataType, DataType:...
-#include "proteus/core/exceptions.hpp"            // for invalid_argument
-#include "proteus/core/interface.hpp"             // for Interface, Interfac...
-#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "proteus/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "proteus/observation/logging.hpp"        // for Logger, Loggers
-#include "proteus/observation/tracing.hpp"        // for Trace, startTrace
-#include "proteus/util/string.hpp"                // for toLower
-#include "proteus/util/traits.hpp"                // for is_any
+#include "amdinfer/buffers/buffer.hpp"             // for Buffer
+#include "amdinfer/build_options.hpp"              // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/clients/grpc_internal.hpp"      // for mapProtoToParameters
+#include "amdinfer/core/api.hpp"                   // for hasHardware, modelI...
+#include "amdinfer/core/data_types.hpp"            // for DataType, DataType:...
+#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
+#include "amdinfer/core/interface.hpp"             // for Interface, Interfac...
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
+#include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
+#include "amdinfer/observation/logging.hpp"        // for Logger, Loggers
+#include "amdinfer/observation/tracing.hpp"        // for Trace, startTrace
+#include "amdinfer/util/string.hpp"                // for toLower
+#include "amdinfer/util/traits.hpp"                // for is_any
+#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
+#include "predict_api.pb.h"                        // for InferTensorContents
 
-namespace proteus {
+namespace amdinfer {
 class CallDataModelInfer;
 class CallDataModelMetadata;
 class CallDataModelLoad;
@@ -66,9 +66,9 @@ class CallDataServerMetadata;
 class CallDataServerReady;
 class CallDataHasHardware;
 class CallDataModelList;
-}  // namespace proteus
+}  // namespace amdinfer
 
-// use aliases to prevent clashes between grpc:: and proteus::grpc::
+// use aliases to prevent clashes between grpc:: and amdinfer::grpc::
 using ServerBuilder = grpc::ServerBuilder;
 using ServerCompletionQueue = grpc::ServerCompletionQueue;
 template <typename T>
@@ -82,7 +82,7 @@ using StatusCode = grpc::StatusCode;
 // using StreamModelInferResponse = ModelInferResponse;
 // }
 
-namespace proteus {
+namespace amdinfer {
 
 using AsyncService = inference::GRPCInferenceService::AsyncService;
 
@@ -488,7 +488,7 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelReady, Unary) {
   const auto& model = request_.name();
   try {
-    reply_.set_ready(::proteus::modelReady(model));
+    reply_.set_ready(::amdinfer::modelReady(model));
     finish();
   } catch (const invalid_argument& e) {
     reply_.set_ready(false);
@@ -503,7 +503,7 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelMetadata, Unary) {
   const auto& model = request_.name();
   try {
-    auto metadata = ::proteus::modelMetadata(model);
+    auto metadata = ::amdinfer::modelMetadata(model);
     mapModelMetadataToProto(metadata, reply_);
     finish();
   } catch (const invalid_argument& e) {
@@ -526,7 +526,7 @@ CALLDATA_IMPL(ServerMetadata, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelList, Unary) {
-  auto models = ::proteus::modelList();
+  auto models = ::amdinfer::modelList();
   for (const auto& model : models) {
     reply_.add_models(model);
   }
@@ -540,7 +540,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto* model = request_.mutable_name();
   util::toLower(model);
   try {
-    ::proteus::modelLoad(*model, parameters.get());
+    ::amdinfer::modelLoad(*model, parameters.get());
   } catch (const runtime_error& e) {
     PROTEUS_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -557,7 +557,7 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelUnload, Unary) {
   auto* model = request_.mutable_name();
   util::toLower(model);
-  ::proteus::modelUnload(*model);
+  ::amdinfer::modelUnload(*model);
   finish();
 }
 CALLDATA_IMPL_END
@@ -569,7 +569,7 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   util::toLower(model);
 
   try {
-    auto endpoint = ::proteus::workerLoad(*model, parameters.get());
+    auto endpoint = ::amdinfer::workerLoad(*model, parameters.get());
     reply_.set_endpoint(endpoint);
     finish();
   } catch (const runtime_error& e) {
@@ -585,13 +585,13 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(WorkerUnload, Unary) {
   auto* worker = request_.mutable_name();
   util::toLower(worker);
-  ::proteus::workerUnload(*worker);
+  ::amdinfer::workerUnload(*worker);
   finish();
 }
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(HasHardware, Unary) {
-  auto found = ::proteus::hasHardware(request_.name(), request_.num());
+  auto found = ::amdinfer::hasHardware(request_.name(), request_.num());
   reply_.set_found(found);
   finish();
 }
@@ -611,7 +611,7 @@ void CallDataModelInfer::handleRequest() noexcept {
     trace->endSpan();
     request->setTrace(std::move(trace));
 #endif
-    ::proteus::modelInfer(model, std::move(request));
+    ::amdinfer::modelInfer(model, std::move(request));
   } catch (const invalid_argument& e) {
     PROTEUS_LOG_INFO(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -732,4 +732,4 @@ void stop() {
 
 }  // namespace grpc
 
-}  // namespace proteus
+}  // namespace amdinfer

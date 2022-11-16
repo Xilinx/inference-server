@@ -17,7 +17,7 @@
  * @brief Implements the client-server API used in the inference server
  */
 
-#include "proteus/core/api.hpp"
+#include "amdinfer/core/api.hpp"
 
 #include <json/reader.h>  // for CharReaderBuilder, Char...
 #include <json/value.h>   // for Value
@@ -30,26 +30,26 @@
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for move, pair
 
-#include "proteus/batching/batcher.hpp"       // for Batcher
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_VITIS
-#include "proteus/core/exceptions.hpp"        // for external_error, invalid...
-#include "proteus/core/interface.hpp"         // IWYU pragma: keep
-#include "proteus/core/manager.hpp"           // for Manager
-#include "proteus/core/model_repository.hpp"  // for ModelRepository
-#include "proteus/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
-#include "proteus/core/worker_info.hpp"       // for WorkerInfo
-#include "proteus/version.hpp"                // for kProteusVersion
+#include "amdinfer/batching/batcher.hpp"       // for Batcher
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_VITIS
+#include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
+#include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
+#include "amdinfer/core/manager.hpp"           // for Manager
+#include "amdinfer/core/model_repository.hpp"  // for ModelRepository
+#include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
+#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
+#include "amdinfer/version.hpp"                // for kProteusVersion
 
 #ifdef PROTEUS_ENABLE_VITIS
 #include <sockpp/socket.h>         // for socket, socket_initializer
 #include <sockpp/tcp_connector.h>  // for tcp_connector
 #endif
 
-namespace proteus {
+namespace amdinfer {
 
 ServerMetadata serverMetadata() {
   std::unordered_set<std::string> extensions;
-  ServerMetadata metadata{"proteus", kProteusVersion, extensions};
+  ServerMetadata metadata{"amdinfer", kProteusVersion, extensions};
 
 #ifdef PROTEUS_ENABLE_AKS
   metadata.extensions.emplace("aks");
@@ -192,4 +192,4 @@ bool hasHardware(const std::string& name, int num) {
   return kernel_iterator->second >= num;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

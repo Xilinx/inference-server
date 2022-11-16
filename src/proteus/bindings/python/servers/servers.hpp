@@ -24,12 +24,12 @@ namespace pybind11 {
 class module_;
 }
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapServer(pybind11::module_&);
 
 void wrapServers(pybind11::module_& m) { wrapServer(m); }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS

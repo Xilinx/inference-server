@@ -13,19 +13,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/servers/server.hpp"
+#include "amdinfer/servers/server.hpp"
 
 #include <cstdlib>  // for getenv
 #include <string>   // for operator+, string
 #include <thread>   // for thread
 
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
-#include "proteus/core/manager.hpp"           // for Manager
-#include "proteus/core/model_repository.hpp"  // for ModelRepository
-#include "proteus/observation/logging.hpp"    // for initLogger, getLogDirec...
-#include "proteus/observation/tracing.hpp"    // for startTracer, stopTracer
-#include "proteus/servers/grpc_server.hpp"    // for start, stop
-#include "proteus/servers/http_server.hpp"    // for stop, start
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "amdinfer/core/manager.hpp"           // for Manager
+#include "amdinfer/core/model_repository.hpp"  // for ModelRepository
+#include "amdinfer/observation/logging.hpp"    // for initLogger, getLogDirec...
+#include "amdinfer/observation/tracing.hpp"    // for startTracer, stopTracer
+#include "amdinfer/servers/grpc_server.hpp"    // for start, stop
+#include "amdinfer/servers/http_server.hpp"    // for stop, start
 
 #ifdef PROTEUS_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
@@ -33,7 +33,7 @@
 
 namespace fs = std::filesystem;
 
-namespace proteus {
+namespace amdinfer {
 
 struct Server::ServerImpl {
 #ifdef PROTEUS_ENABLE_HTTP
@@ -143,4 +143,4 @@ void Server::enableRepositoryMonitoring(bool use_polling) const {
   ModelRepository::enableRepositoryMonitoring(use_polling);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

@@ -17,7 +17,7 @@ set -e
 
 usage_coverage() {
 cat << EOF
-Run proteus's tests with coverage measurement.
+Run amdinfer's tests with coverage measurement.
 
 usage: ./coverage.sh [flags]
 
@@ -44,7 +44,7 @@ coverage(){
       "--get-artifacts"     ) GET=1          ;      ;;
       "-t"  | "--threshold" ) THRESHOLD="$2" ; shift;;
       *)  echo "Unknown argument : $1";
-          echo "Try ./proteus.sh coverage -h to get correct usage. Exiting ...";
+          echo "Try ./amdinfer.sh coverage -h to get correct usage. Exiting ...";
           exit 1 ;;
     esac
     shift
@@ -58,11 +58,11 @@ coverage(){
   build_dir=${PROTEUS_ROOT}/build
 
   if [[ -n $GET ]]; then
-    ./proteus get --all
+    ./amdinfer get --all
   fi
 
-  ./proteus build --coverage --regen --clean
-  ./proteus make coverage
+  ./amdinfer build --coverage --regen --clean
+  ./amdinfer make coverage
 
   cd -
 

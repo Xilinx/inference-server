@@ -20,13 +20,13 @@
 #ifndef GUARD_PROTEUS_BATCHING_HARD
 #define GUARD_PROTEUS_BATCHING_HARD
 
-#include "proteus/batching/batcher.hpp"  // IWYU pragma: export
+#include "amdinfer/batching/batcher.hpp"  // IWYU pragma: export
 
-namespace proteus {
+namespace amdinfer {
 class WorkerInfo;
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief The HardBatcher batches to a multiple of the requested batch size and
@@ -43,6 +43,6 @@ class HardBatcher : public Batcher {
   void doRun(WorkerInfo* worker) override;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BATCHING_HARD

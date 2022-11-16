@@ -49,7 +49,7 @@ except ImportError:
     )
     sys.exit(1)
 
-import proteus
+import amdinfer
 
 # isort: split
 
@@ -65,7 +65,7 @@ try:
         write_predictions,
     )
 except ImportError:
-    print("Could not import run_onnx_squad. Did you run 'proteus get --migraphx'?")
+    print("Could not import run_onnx_squad. Did you run 'amdinfer get --migraphx'?")
     sys.exit(1)
 
 
@@ -75,7 +75,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.Client): the client object
+        client (amdinfer.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -86,7 +86,7 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    if not proteus.serverHasExtension(client, "migraphx"):
+    if not amdinfer.serverHasExtension(client, "migraphx"):
         print(
             "MIGraphX is not enabled. Please recompile with it enabled to run this example"
         )
@@ -97,7 +97,7 @@ def load(client, args):
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
     # future use. It will read the array dimensions and data type from the model.
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     parameters.put("model", args.model)
 
     parameters.put("batch", args.batch_size)
@@ -107,7 +107,7 @@ def load(client, args):
     endpoint = client.workerLoad("migraphx", parameters)
 
     # wait for the worker to load and compile model
-    proteus.waitUntilModelReady(client, endpoint)
+    amdinfer.waitUntilModelReady(client, endpoint)
 
     return endpoint
 
@@ -118,16 +118,16 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
     requests = []
     for idx in range(0, n):
         # Create an InferenceRequest
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         item = eval_examples[idx]  # class SquadExample
 
         # Depending on the model, it will require one or more input tensors
         # The values for name, datatype, shape will also be model-dependent
         # For MIGraphX, the names for each input tensor are meaningful
 
-        input_n = proteus.InferenceRequestInput()
+        input_n = amdinfer.InferenceRequestInput()
         input_n.name = f"input_ids:0"
-        input_n.datatype = proteus.DataType.INT64
+        input_n.datatype = amdinfer.DataType.INT64
         input_n.shape = (
             1,
             256,
@@ -135,9 +135,9 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         input_n.setInt64Data(input_ids[idx : idx + batch_size])
         request.addInputTensor(input_n)
 
-        input_n = proteus.InferenceRequestInput()
+        input_n = amdinfer.InferenceRequestInput()
         input_n.name = f"input_mask:0"
-        input_n.datatype = proteus.DataType.INT64
+        input_n.datatype = amdinfer.DataType.INT64
         input_n.shape = (
             1,
             256,
@@ -145,9 +145,9 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         input_n.setInt64Data(input_mask[idx : idx + batch_size])
         request.addInputTensor(input_n)
 
-        input_n = proteus.InferenceRequestInput()
+        input_n = amdinfer.InferenceRequestInput()
         input_n.name = f"segment_ids:0"
-        input_n.datatype = proteus.DataType.INT64
+        input_n.datatype = amdinfer.DataType.INT64
         input_n.shape = (
             1,
             256,
@@ -158,9 +158,9 @@ def construct_requests(eval_examples, input_ids, input_mask, segment_ids, batch_
         # This comes from the first argument; I think it's supposed to be output names
         #       see https://onnxruntime.ai/docs/api/python/api_summary.html#load-and-run-a-model
         # item = eval_examples[idx]   # class SquadExample
-        input_n = proteus.InferenceRequestInput()
+        input_n = amdinfer.InferenceRequestInput()
         input_n.name = f"unique_ids_raw_output___9:0"
-        input_n.datatype = proteus.DataType.INT64
+        input_n.datatype = amdinfer.DataType.INT64
         input_n.shape = (1,)
         input_n.setInt64Data(np.array([item.qas_id], dtype=np.int64))
         request.addInputTensor(input_n)
@@ -200,15 +200,15 @@ def main(args):
 
     # connect to the server
     server_addr = f"http://{args.ip}:{args.http_port}"
-    client = proteus.HttpClient(server_addr)
+    client = amdinfer.HttpClient(server_addr)
     print("Waiting for server...", end="")
     # start it locally if it doesn't already up if the IP address is the localhost
     if args.ip == "127.0.0.1" and not client.serverLive():
-        server = proteus.Server()
+        server = amdinfer.Server()
         server.startHttp(args.http_port)
     elif not client.serverLive():
         raise ConnectionError(f"Could not connect to server at {server_addr}")
-    proteus.waitUntilServerReady(client)
+    amdinfer.waitUntilServerReady(client)
     print("OK. Connected.")
 
     print("Loading worker...")
@@ -235,7 +235,7 @@ def main(args):
     )
 
     print(f"Sending {len(requests)} request(s)...")
-    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
+    responses = amdinfer.inferAsyncOrdered(client, endpoint, requests)
     print("Client received inference reply")
 
     print("Postprocessing...")
@@ -247,10 +247,10 @@ def main(args):
         # the migraphx worker doesn't support names for output channels,
         # so we get them by position instead.
         out0 = response.getOutputs()[0]
-        assert out0.datatype == proteus.DataType.FP32
+        assert out0.datatype == amdinfer.DataType.FP32
 
         out1 = response.getOutputs()[1]
-        assert out1.datatype == proteus.DataType.FP32
+        assert out1.datatype == amdinfer.DataType.FP32
 
         # The third output ("unique_ids:0") is a single int64 which our example doesn't use.
         # Put our results into a RawResult structure

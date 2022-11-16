@@ -25,9 +25,9 @@
 #include <string>
 #include <vector>
 
-#include "proteus/pre_post/center_crop.hpp"
+#include "amdinfer/pre_post/center_crop.hpp"
 
-namespace proteus::pre_post {
+namespace amdinfer::pre_post {
 
 enum class ImageOrder {
   NHWC,
@@ -165,6 +165,6 @@ std::vector<std::vector<T>> imagePreprocess(
   return outputs;
 }
 
-}  // namespace proteus::pre_post
+}  // namespace amdinfer::pre_post
 
 #endif  // GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS

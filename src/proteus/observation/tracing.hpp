@@ -23,11 +23,11 @@
 #include <memory>  // for shared_ptr, uniqu...
 #include <stack>   // for stack
 
-#include "proteus/build_options.hpp"     // for PROTEUS_ENABLE_TR...
-#include "proteus/core/predict_api.hpp"  // for RequestParameters
-#include "proteus/declarations.hpp"      // for StringMap
+#include "amdinfer/build_options.hpp"     // for PROTEUS_ENABLE_TR...
+#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
+#include "amdinfer/declarations.hpp"      // for StringMap
 
-// IWYU pragma: no_forward_declare proteus::RequestParameters
+// IWYU pragma: no_forward_declare amdinfer::RequestParameters
 
 #ifdef PROTEUS_ENABLE_TRACING
 
@@ -41,7 +41,7 @@
 #include <opentelemetry/trace/span.h>               // for span
 #include <opentelemetry/trace/span_startoptions.h>  // for StartSpanOptions
 
-namespace proteus {
+namespace amdinfer {
 
 /// initialize tracing globally
 void startTracer();
@@ -103,7 +103,7 @@ TracePtr startTrace(const char* name);
  */
 TracePtr startTrace(const char* name, const StringMap& http_headers);
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif
 

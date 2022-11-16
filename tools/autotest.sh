@@ -15,7 +15,7 @@
 
 # Instructions:
 #   1. git clone <url to Proteus repo>
-#   2. cd proteus
+#   2. cd amdinfer
 #   4. ./tools/autotest.sh 2>&1 | tee test.txt
 
 # print an easily searchable header so we can navigate the output. Search for
@@ -55,45 +55,45 @@ echo "Git version: $git_version"
 
 print_header "Initializing repository"
 
-# log the proteus version, git commit and make sure proteus exists
-proteus_version=$(cat VERSION)
-echo "Proteus version: $proteus_version"
+# log the amdinfer version, git commit and make sure amdinfer exists
+amdinfer_version=$(cat VERSION)
+echo "Proteus version: $amdinfer_version"
 commit=$(git rev-parse HEAD)
 echo "Git commit: $commit"
-test -e ./proteus
+test -e ./amdinfer
 
 print_header "Building the stable dev docker image"
 
 # use the --dry-run flag to log the "docker build" commands used
-./proteus --dry-run dockerize
-./proteus dockerize
+./amdinfer --dry-run dockerize
+./amdinfer dockerize
 
 print_header "Building the stable production docker image"
 
-./proteus --dry-run dockerize --production
-./proteus dockerize --production
+./amdinfer --dry-run dockerize --production
+./amdinfer dockerize --production
 
-# These commands add <user>/proteus-dev:<proteus-version> and
-# <user>/proteus:<proteus-version> to the local machine. Append
+# These commands add <user>/amdinfer-dev:<amdinfer-version> and
+# <user>/amdinfer:<amdinfer-version> to the local machine. Append
 # "--build-meta <build num>" to the commands above to change the image tags to
-# <user>/proteus[-dev]:<proteus-version>+<build num>. They also update the
+# <user>/amdinfer[-dev]:<amdinfer-version>+<build num>. They also update the
 # latest tags on these images
 
 print_header "Testing the stable dev docker image"
 
-./proteus --dry-run up --profile autotest-dev
-./proteus up --profile autotest-dev --write-only
+./amdinfer --dry-run up --profile autotest-dev
+./amdinfer up --profile autotest-dev --write-only
 docker-compose stop
 docker-compose rm -f
-./proteus up --profile autotest-dev
+./amdinfer up --profile autotest-dev
 
 # This test must be run after the previous one. It requires that certain files
 # e.g. the AKS files exist in the repository. These files are created when
 # the project is built in the autotest-dev test.
 print_header "Testing the stable production docker image"
 
-./proteus --dry-run up --profile autotest
-./proteus up --profile autotest --write-only
+./amdinfer --dry-run up --profile autotest
+./amdinfer up --profile autotest --write-only
 docker-compose stop
 docker-compose rm -f
-./proteus up --profile autotest
+./amdinfer up --profile autotest

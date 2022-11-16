@@ -14,11 +14,11 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     devices: []
-    hostname: proteus
+    hostname: amdinfer
     image: $IMAGE
     volumes: [
       "/opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro",
     ]
-    working_dir: /home/proteus-user
+    working_dir: /home/amdinfer-user

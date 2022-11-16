@@ -17,7 +17,7 @@
  * @brief Implements the objects used to hold incoming inference requests
  */
 
-#include "proteus/core/predict_api.hpp"
+#include "amdinfer/core/predict_api.hpp"
 
 #include <algorithm>  // for copy
 #include <cassert>    // for assert
@@ -26,9 +26,9 @@
 #include <numeric>    // for accumulate
 #include <utility>    // for pair, make_pair, move
 
-#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"  // for PROTEUS_ENABLE_TRACING
 
-namespace proteus {
+namespace amdinfer {
 
 void RequestParameters::put(const std::string &key, bool value) {
   this->parameters_.insert(std::make_pair(key, value));
@@ -323,7 +323,7 @@ void InferenceRequestInput::serialize(std::byte *data_out) const {
   parameters_->serialize(data_out);
   data_out += metadata.parameters;
   if (!shared_data_.empty()) {
-    proteus::copy(shared_data_.data(), data_out, metadata.shared_data);
+    amdinfer::copy(shared_data_.data(), data_out, metadata.shared_data);
   } else {
     std::memcpy(data_out, &data_, metadata.data);
   }
@@ -475,4 +475,4 @@ const std::vector<ModelMetadataTensor> &ModelMetadata::getOutputs() const {
   return this->outputs_;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

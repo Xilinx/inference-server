@@ -24,14 +24,14 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"    // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
+#include "amdinfer/clients/client.hpp"    // IWYU pragma: export
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
 
 namespace grpc {
 class Channel;
 }
 
-namespace proteus {
+namespace amdinfer {
 
 class GrpcClient : public Client {
  public:
@@ -70,6 +70,6 @@ class GrpcClient : public Client {
   std::unique_ptr<GrpcClientImpl> impl_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_GRPC

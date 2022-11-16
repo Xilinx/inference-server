@@ -16,21 +16,21 @@
 #ifndef GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
 #define GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
 
+#include <amdinfer/amdinfer.hpp>
 #include <memory>  // for allocator, unique_ptr
-#include <proteus/proteus.hpp>
 
 #include "gtest/gtest.h"  // IWYU pragma: export
 
 class BaseFixture : public testing::Test {
  public:
   // because of the session scoped HTTP fixture, the server needs to be static
-  inline static proteus::Server server_;
+  inline static amdinfer::Server server_;
 
  protected:
   void SetUp() override {
     const auto* root = std::getenv("PROTEUS_ROOT");
     if (root == nullptr) {
-      throw proteus::environment_not_set_error("PROTEUS_ROOT is not set");
+      throw amdinfer::environment_not_set_error("PROTEUS_ROOT is not set");
     }
     server_.setModelRepository(std::string{root} +
                                "/external/artifacts/repository");
@@ -44,7 +44,7 @@ class BaseFixtureWithParams : public BaseFixture,
 class GrpcFixture : public BaseFixture {
  protected:
   void SetUp() override {
-    client_ = std::make_unique<proteus::GrpcClient>("localhost:50051");
+    client_ = std::make_unique<amdinfer::GrpcClient>("localhost:50051");
     if (!client_->serverLive()) {
       BaseFixture::SetUp();
       server_.startGrpc(50051);
@@ -55,7 +55,7 @@ class GrpcFixture : public BaseFixture {
     }
   }
 
-  std::unique_ptr<proteus::GrpcClient> client_;
+  std::unique_ptr<amdinfer::GrpcClient> client_;
   bool started_ = false;
 };
 
@@ -70,7 +70,7 @@ class HttpFixture : public BaseFixture {
   // the same executable that use HTTP
   static void SetUpTestSuite() {
     // void SetUp() override {
-    client_ = std::make_unique<proteus::HttpClient>("http://127.0.0.1:8998");
+    client_ = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
       server_.startHttp(8998);
       started_ = true;
@@ -88,9 +88,9 @@ class HttpFixture : public BaseFixture {
     client_.reset(nullptr);
   }
 
-  inline static std::unique_ptr<proteus::HttpClient> client_;
+  inline static std::unique_ptr<amdinfer::HttpClient> client_;
   inline static bool started_ = false;
-  // std::unique_ptr<proteus::HttpClient> client_;
+  // std::unique_ptr<amdinfer::HttpClient> client_;
   // bool started_ = false;
 };
 

@@ -17,11 +17,11 @@
  * @brief Implements the VartTensorBuffer class
  */
 
-#include "proteus/buffers/vart_tensor_buffer.hpp"
+#include "amdinfer/buffers/vart_tensor_buffer.hpp"
 
 #include <utility>  // for pair
 
-namespace proteus {
+namespace amdinfer {
 
 VartTensorBuffer::VartTensorBuffer(const std::string& name,
                                    std::vector<int32_t>& shape,
@@ -62,4 +62,4 @@ void VartTensorBuffer::reset() {}
 
 vart::TensorBuffer* VartTensorBuffer::getTensorBuffer() { return &this->data_; }
 
-}  // namespace proteus
+}  // namespace amdinfer

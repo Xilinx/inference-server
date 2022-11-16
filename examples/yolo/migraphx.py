@@ -41,7 +41,7 @@ except ImportError:
     sys.exit(1)
 
 
-import proteus
+import amdinfer
 
 # isort: split
 
@@ -81,7 +81,7 @@ def load(client, args):
     you should use for subsequent requests
 
     Args:
-        client (proteus.client.Client): the client object
+        client (amdinfer.client.Client): the client object
         args (argparse.Namespace): the command line arguments
 
     Returns:
@@ -91,7 +91,7 @@ def load(client, args):
     # for a particular backend. This guard checks to make sure the server does
     # support the requested backend. If you already know it's supported, you can
     # skip this check.
-    if not proteus.serverHasExtension(client, "migraphx"):
+    if not amdinfer.serverHasExtension(client, "migraphx"):
         print(
             "MIGraphX is not enabled. Please recompile with it enabled to run this example"
         )
@@ -108,7 +108,7 @@ def load(client, args):
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
     # future use.  It will read the array dimensions and data type from the model.
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     parameters.put("model", args.model)
 
     # bpickrel: I found that allocation could fail with a large batch value of 64
@@ -121,7 +121,7 @@ def load(client, args):
     endpoint = client.workerLoad("migraphx", parameters)
 
     # wait for the worker to load and compile model
-    proteus.waitUntilModelReady(client, endpoint)
+    amdinfer.waitUntilModelReady(client, endpoint)
 
     return endpoint
 
@@ -149,16 +149,16 @@ def main(args):
     print("Running the MIGraphX example for Yolo in Python")
 
     server_addr = f"http://{args.ip}:{args.http_port}"
-    client = proteus.HttpClient(server_addr)
+    client = amdinfer.HttpClient(server_addr)
     # start it locally if it doesn't already up if the IP address is the localhost
     if args.ip == "127.0.0.1" and not client.serverLive():
         print("No server detected. Starting locally...")
-        server = proteus.Server()
+        server = amdinfer.Server()
         server.startHttp(args.http_port)
     elif not client.serverLive():
         raise ConnectionError(f"Could not connect to server at {server_addr}")
     print("Waiting until the server is ready...")
-    proteus.waitUntilServerReady(client)
+    amdinfer.waitUntilServerReady(client)
 
     print("Loading worker...")
     endpoint = load(client, args)
@@ -168,8 +168,8 @@ def main(args):
     images, original_images = preprocess(paths, args.input_size)
 
     print("Creating inference requests...")
-    requests = [proteus.ImageInferenceRequest(image) for image in images]
-    responses = proteus.inferAsyncOrdered(client, endpoint, requests)
+    requests = [amdinfer.ImageInferenceRequest(image) for image in images]
+    responses = amdinfer.inferAsyncOrdered(client, endpoint, requests)
     print("Client received inference reply")
 
     assert len(responses) == len(original_images)
@@ -180,7 +180,7 @@ def main(args):
         detections = []
         # YOLO produces multiple output tensors and so they all need to be processed
         for out in response.getOutputs():
-            assert out.datatype == proteus.DataType.FP32
+            assert out.datatype == amdinfer.DataType.FP32
             this_detect = np.array(out.getFp32Data())
             newshape = out.shape
             # add a 0'th dimension of 1, to make 5 (the migraphx worker stripped

@@ -27,19 +27,19 @@
 #include <thread>                 // for thread
 #include <vector>                 // for vector
 
-#include "proteus/batching/batcher.hpp"       // for Batch, BatchPtrQueue
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::STRING
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infer...
-#include "proteus/declarations.hpp"           // for BufferPtr, InferenceResp...
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/util/base64.hpp"            // for base64_encode
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::STRING
+#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"    // for Logger
+#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/util/base64.hpp"            // for base64_encode
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker
 
-namespace proteus {
+namespace amdinfer {
 
 std::string constructMessage(const std::string& key, const std::string& data) {
   const std::string labels = R"([])";
@@ -201,12 +201,12 @@ void InvertVideo::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::InvertVideo("InvertVideo", "CPU");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::InvertVideo("InvertVideo", "CPU");
 }
 }  // extern C

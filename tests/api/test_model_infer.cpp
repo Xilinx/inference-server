@@ -16,10 +16,10 @@
 #include <memory>   // for allocator, unique_ptr
 #include <vector>   // for vector
 
-#include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
-#include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
+#include "amdinfer/amdinfer.hpp"                // for InferenceResponse, Grp...
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   auto endpoint = client->workerLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
@@ -29,9 +29,9 @@ void test(proteus::Client* client) {
   imgData.reserve(size);
   imgData.push_back(1);
 
-  proteus::InferenceRequest request;
+  amdinfer::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         proteus::DataType::UINT32);
+                         amdinfer::DataType::UINT32);
 
   auto response = client->modelInfer(endpoint, request);
 
@@ -56,7 +56,7 @@ TEST_F(GrpcFixture, ModelInfer) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelInfer) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 

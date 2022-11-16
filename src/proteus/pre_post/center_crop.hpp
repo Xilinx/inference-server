@@ -17,7 +17,7 @@
 
 #include <opencv2/core.hpp>  // for cv::Mat
 
-namespace proteus::pre_post {
+namespace amdinfer::pre_post {
 
 /**
  * @brief Image preprocessing helper.  Crops the input `img` from center to a
@@ -36,6 +36,6 @@ inline cv::Mat centerCrop(cv::Mat img, int height, int width) {
   return img;
 }
 
-}  // namespace proteus::pre_post
+}  // namespace amdinfer::pre_post
 
 #endif  // GUARD_PROTEUS_PRE_POST_CENTER_CROP

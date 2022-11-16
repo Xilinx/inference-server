@@ -17,7 +17,7 @@
  * @brief Implements what metrics are defined and how they're are gathered
  */
 
-#include "proteus/observation/metrics.hpp"
+#include "amdinfer/observation/metrics.hpp"
 
 #include <prometheus/collectable.h>      // for Collectable
 #include <prometheus/counter.h>          // for Builder, Counter, BuildCounter
@@ -34,7 +34,7 @@
 #include <string>    // for string
 #include <vector>    // for vector
 
-namespace proteus {
+namespace amdinfer {
 
 CounterFamily::CounterFamily(
   const std::string& name, const std::string& help,
@@ -104,19 +104,19 @@ Metrics::Metrics()
   : registry_(std::make_shared<prometheus::Registry>()),
 
     ingress_requests_total_(
-      "proteus_requests_ingress_total",
+      "amdinfer_requests_ingress_total",
       "Number of incoming requests to Proteus", registry_.get(),
       {{MetricCounterIDs::kCppNative, {{"api", "cpp"}, {"method", "native"}}},
        {MetricCounterIDs::kRestGet, {{"api", "rest"}, {"method", "GET"}}},
        {MetricCounterIDs::kRestPost, {{"api", "rest"}, {"method", "POST"}}}}),
     pipeline_ingress_total_(
-      "proteus_pipeline_ingress_total",
+      "amdinfer_pipeline_ingress_total",
       "Number of incoming requests at different pipeline stages",
       registry_.get(),
       {{MetricCounterIDs::kPipelineIngressBatcher, {{"stage", "batcher"}}},
        {MetricCounterIDs::kPipelineIngressWorker, {{"stage", "worker"}}}}),
     pipeline_egress_total_(
-      "proteus_pipeline_egress_total",
+      "amdinfer_pipeline_egress_total",
       "Number of outgoing requests at different pipeline stages",
       registry_.get(),
       {{MetricCounterIDs::kPipelineEgressBatcher, {{"stage", "batcher"}}},
@@ -127,7 +127,7 @@ Metrics::Metrics()
     num_scrapes_("exposer_scrapes_total",
                  "Number of times metrics were scraped", registry_.get(),
                  {{MetricCounterIDs::kMetricScrapes, {}}}),
-    queue_sizes_total_("proteus_queue_sizes_total",
+    queue_sizes_total_("amdinfer_queue_sizes_total",
                        "Number of elements in the queues in Proteus",
                        registry_.get(),
                        {{MetricGaugeIDs::kQueuesBatcherInput,
@@ -144,7 +144,7 @@ Metrics::Metrics()
                     {{MetricSummaryIDs::kMetricLatency,
                       prometheus::Summary::Quantiles{
                         {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}}}}),
-    request_latency_("proteus_request_latency",
+    request_latency_("amdinfer_request_latency",
                      "Latencies of serving requests, in microseconds",
                      registry_.get(),
                      {{MetricSummaryIDs::kRequestLatency,
@@ -243,4 +243,4 @@ std::string Metrics::getMetrics() {
   return response;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

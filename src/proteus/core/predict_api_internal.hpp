@@ -21,9 +21,9 @@
 #ifndef GUARD_PROTEUS_CORE_PREDICT_API_INTERNAL
 #define GUARD_PROTEUS_CORE_PREDICT_API_INTERNAL
 
-#include "proteus/core/predict_api.hpp"  // IWYU pragma: export
+#include "amdinfer/core/predict_api.hpp"  // IWYU pragma: export
 
-namespace proteus {
+namespace amdinfer {
 
 template <typename T>
 class InferenceRequestBuilder {
@@ -77,6 +77,6 @@ class InferenceRequestOutputBuilder {
   static InferenceRequestOutput build(const T &req);
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_PREDICT_API_INTERNAL

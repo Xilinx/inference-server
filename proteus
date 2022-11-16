@@ -177,7 +177,7 @@ class WriteComposeFile:
 
         user_config = Path.home() / ".gitconfig"
         if user_config.exists():
-            configs.append(f"{str(user_config)}:/home/proteus-user/.gitconfig:ro")
+            configs.append(f"{str(user_config)}:/home/amdinfer-user/.gitconfig:ro")
 
         global_config = Path("/etc/gitconfig")
         if global_config.exists():
@@ -185,11 +185,11 @@ class WriteComposeFile:
 
         ssh = Path.home() / ".ssh"
         if ssh.exists():
-            configs.append(f"{str(ssh)}:/home/proteus-user/.ssh:ro")
+            configs.append(f"{str(ssh)}:/home/amdinfer-user/.ssh:ro")
 
         gpg = Path.home() / ".gnupg"
         if gpg.exists():
-            configs.append(f"{str(gpg)}:/home/proteus-user/.gnupg:rw")
+            configs.append(f"{str(gpg)}:/home/amdinfer-user/.gnupg:rw")
 
         return configs
 
@@ -274,7 +274,7 @@ class Attach:
     def parse(args, unknown_args):
         reject_unknown_args(unknown_args)
 
-        cmd = f"docker ps --filter status=running --filter 'label=project=proteus' --latest --quiet"
+        cmd = f"docker ps --filter status=running --filter 'label=project=amdinfer' --latest --quiet"
         if args.name is None:
             try:
                 latest_container = (
@@ -296,7 +296,7 @@ class Attach:
 
         columns, lines = shutil.get_terminal_size()
 
-        command = f"docker exec -it --user proteus-user -e COLUMNS={columns} -e LINES={lines} {latest_container} /bin/bash"
+        command = f"docker exec -it --user amdinfer-user -e COLUMNS={columns} -e LINES={lines} {latest_container} /bin/bash"
         run_tty_command(command, args.dry_run)
 
     @classmethod
@@ -378,7 +378,7 @@ class Build:
             run_command(command, args.dry_run)
 
         # if the package isn't importable, then we need to delete the CMake cache so the package can be installed by the build
-        package_installed = importlib.util.find_spec("proteus")
+        package_installed = importlib.util.find_spec("amdinfer")
         if package_installed is None:
             args.regen = True
 
@@ -416,7 +416,7 @@ class Build:
         else:
             Path(path).mkdir(parents=True, exist_ok=True)
 
-        shared_libs = " ".join(glob.glob(f"{str(build_dir)}/src/proteus/workers/*.so"))
+        shared_libs = " ".join(glob.glob(f"{str(build_dir)}/src/amdinfer/workers/*.so"))
         command = f"cp -fs {shared_libs} {path}/"
         run_command(command, args.dry_run)
         command = f"symlinks -rc {path}"
@@ -436,7 +436,7 @@ class Build:
     @classmethod
     def add(cls, parser):
         subparser = parser.add_parser(
-            "build", help="Build the proteus project", add_help=False
+            "build", help="Build the amdinfer project", add_help=False
         )
 
         command_group = subparser.add_mutually_exclusive_group()
@@ -511,8 +511,8 @@ class Clean:
         commands = [
             "rm -f docker-compose.devices.yml",
             "rm -f docker-compose.yml",
-            "rm -f include/proteus/build_options.hpp",
-            "rm -f src/proteus/version.hpp",
+            "rm -f include/amdinfer/build_options.hpp",
+            "rm -f src/amdinfer/version.hpp",
             "rm -f tools/benchmark.yml",
             "rm -rf external/aks/graph_zoo",
             "rm -rf external/aks/kernel_src",
@@ -574,10 +574,10 @@ class Dockerize:
         target = "final"
         build_args = ""
         if args.production:
-            tag_prefix += f"/proteus" + args.suffix
+            tag_prefix += f"/amdinfer" + args.suffix
             build_args += "--build-arg IMAGE_TYPE=prod "
         else:
-            tag_prefix += f"/proteus-dev" + args.suffix
+            tag_prefix += f"/amdinfer-dev" + args.suffix
             build_args += "--build-arg IMAGE_TYPE=dev "
 
         latest_tag = f"{tag_prefix}:latest"
@@ -770,7 +770,7 @@ class Install:
         if unknown_args:
             build_args += " ".join(unknown_args)
 
-        command = f"./proteus build {build_args}"
+        command = f"./amdinfer build {build_args}"
 
         run_command(command, args.dry_run)
 
@@ -796,8 +796,8 @@ class Install:
             "-d",
             "--dir",
             action="store",
-            help="root path to the build tree. Defaults to /tmp/proteus/build",
-            default="/tmp/proteus/build",
+            help="root path to the build tree. Defaults to /tmp/amdinfer/build",
+            default="/tmp/amdinfer/build",
         )
         command_group.add_argument(
             "--get-manifest",
@@ -813,11 +813,11 @@ class List:
     @staticmethod
     def parse(args, unknown_args):
         if args.type == "images":
-            command = 'docker image list -f reference=*/*proteus* -f reference=*/*/*proteus* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
+            command = 'docker image list -f reference=*/*amdinfer* -f reference=*/*/*amdinfer* --format "table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.CreatedSince}}\\t{{.Size}}" '
         elif args.type == "labels":
-            command = 'docker image list -f reference=*/*proteus* -f reference=*/*/*proteus* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
+            command = 'docker image list -f reference=*/*amdinfer* -f reference=*/*/*amdinfer* --format "{{.ID}}" | uniq | xargs -I{} bash -c \'docker image inspect {} | jq -r \'\\\'\'if (.[0].RepoTags != []) then ((.[0].RepoTags | join(", ")), (.[0].Config.Labels | del(."git-commit") | del(."git-branch") | del(.project) | keys[] as $k | "    \($k): \(.[$k])")) else empty end\'\\\'\'\''
         else:
-            command = 'docker ps --filter "label=project=proteus" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
+            command = 'docker ps --filter "label=project=amdinfer" --format "table {{.ID}}\\t{{.Image}}\\t{{.RunningFor}}\\t{{.Status}}\\t{{.Names}}\\t{{.Ports}}" '
 
         if args.type == "labels":
             if shutil.which("jq") is not None:
@@ -939,12 +939,12 @@ class Run:
         flags = {}
         image = None
         cmd = None
-        root_dir = "/workspace/proteus"
+        root_dir = "/workspace/amdinfer"
         if args.preset == "dev":
-            image = f"{getpass.getuser()}/proteus-dev:latest"
+            image = f"{getpass.getuser()}/amdinfer-dev:latest"
             flags["cap-add"] = "SYS_PTRACE"
             flags["device"] = WriteComposeFile.get_devices()
-            flags["hostname"] = "proteus-dev"
+            flags["hostname"] = "amdinfer-dev"
             flags["publish"] = ["127.0.0.1::8998", "127.0.0.1::3000"]
             flags["interactive"] = True
             flags["rm"] = True
@@ -957,7 +957,7 @@ class Run:
             flags["workdir"] = root_dir
         elif args.preset == "autotest-dev":
             cmd = "./tools/coverage.sh -t 50"
-            image = f"{getpass.getuser()}/proteus-dev:latest"
+            image = f"{getpass.getuser()}/amdinfer-dev:latest"
             flags["volume"] = {
                 "working_dir": f"{Path.cwd()}:{root_dir}",
             }
@@ -1117,7 +1117,7 @@ class Run:
             "--no-working-dir",
             dest="working_dir",
             action=NegateAction,
-            help="Mount the current working directory from host to /workspace/proteus on the container",
+            help="Mount the current working directory from host to /workspace/amdinfer on the container",
             default=None,
         )
         command_group.add_argument(
@@ -1140,7 +1140,7 @@ class Start:
         command = ""
         if args.gdb:
             command += "gdb --args "
-        command += f"{args.dir}/{old_build_config}/src/proteus/proteus-server "
+        command += f"{args.dir}/{old_build_config}/src/amdinfer/amdinfer-server "
         command += " ".join(unknown_args)
 
         run_command(command, args.dry_run)
@@ -1149,7 +1149,7 @@ class Start:
     def add(cls, parser):
         subparser = parser.add_parser(
             "start",
-            help="Start proteus-server with the current build configuration. Unknown arguments are passed to proteus-server.",
+            help="Start amdinfer-server with the current build configuration. Unknown arguments are passed to amdinfer-server.",
             add_help=False,
         )
 
@@ -1174,10 +1174,10 @@ class Test:
     @staticmethod
     def parse(args, unknown_args):
         try:
-            import proteus
+            import amdinfer
         except ImportError:
             run_command(
-                f"./proteus build --{args.build.lower()} --regen --clean", args.dry_run
+                f"./amdinfer build --{args.build.lower()} --regen --clean", args.dry_run
             )
         tests.test.main(args, unknown_args)
 
@@ -1205,19 +1205,19 @@ class Up:
 
         extra_flags = ""
         if args.profile == "dev":
-            args.name = "proteus-dev" + args.suffix
+            args.name = "amdinfer-dev" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
             extra_flags = "--detach"
         elif args.profile == "prod":
-            args.name = "proteus" + args.suffix
+            args.name = "amdinfer" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
-            extra_flags = "--abort-on-container-exit --exit-code-from proteus-tester"
+            extra_flags = "--abort-on-container-exit --exit-code-from amdinfer-tester"
         elif args.profile == "autotest-dev":
-            args.name = "proteus-dev" + args.suffix
+            args.name = "amdinfer-dev" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
-            extra_flags = "--abort-on-container-exit --exit-code-from proteus"
+            extra_flags = "--abort-on-container-exit --exit-code-from amdinfer"
         elif args.profile == "test":
             args.tag = args.registry
             extra_flags = "--detach"
@@ -1297,7 +1297,7 @@ class Up:
 
 def get_parser():
     parser = argparse.ArgumentParser(
-        prog="proteus",
+        prog="amdinfer",
         description="Proteus helper script",
         add_help=False,
     )

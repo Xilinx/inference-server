@@ -30,13 +30,13 @@
 #include <xir/tensor/tensor.hpp>                // for Tensor
 #include <xir/util/data_type.hpp>               // for DataType
 
-#include "proteus/buffers/buffer.hpp"
+#include "amdinfer/buffers/buffer.hpp"
 
 namespace vart {
 class TensorBuffer;
 }
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief VartTensorBuffer uses vart::CpuFlatTensorBufferOwned for storing data
@@ -71,6 +71,6 @@ class VartTensorBuffer : public Buffer {
   vart::CpuFlatTensorBufferOwned data_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BUFFERS_VART_TENSOR_BUFFER

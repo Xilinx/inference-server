@@ -16,7 +16,7 @@
 import numpy as np
 import pytest
 
-import proteus
+import amdinfer
 
 from helper import run_benchmark
 
@@ -49,17 +49,17 @@ class TestEcho:
             dict: The constructed request
         """
 
-        input_0 = proteus.InferenceRequestInput()
+        input_0 = amdinfer.InferenceRequestInput()
         input_0.name = "echo"
-        input_0.datatype = proteus.DataType.UINT32
+        input_0.datatype = amdinfer.DataType.UINT32
         input_0.shape = [1]
         input_0.setUint32Data(np.array([cls.inputs[0]], np.uint32))
         if add_input_parameters:
-            parameters = proteus.RequestParameters()
+            parameters = amdinfer.RequestParameters()
             parameters.put("key", "value")
             input_0.parameters = parameters
 
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         for _ in range(multiplier):
             request.addInputTensor(input_0)
 
@@ -67,7 +67,7 @@ class TestEcho:
             request.id = "hello_world"
 
         if add_request_parameters:
-            parameters = proteus.RequestParameters()
+            parameters = amdinfer.RequestParameters()
             parameters.put("key3", True)
             parameters.put("key4", 1.2)
             request.parameters = parameters
@@ -75,7 +75,7 @@ class TestEcho:
         return request
 
     @staticmethod
-    def add_outputs(request: proteus.InferenceRequest, add_parameters):
+    def add_outputs(request: amdinfer.InferenceRequest, add_parameters):
         """
         Add output tensors to the request. This is optional.
 
@@ -86,10 +86,10 @@ class TestEcho:
         Returns:
             dict: Updated request
         """
-        output_0 = proteus.InferenceRequestOutput()
+        output_0 = amdinfer.InferenceRequestOutput()
         output_0.name = "echo"
         if add_parameters:
-            parameters = proteus.RequestParameters()
+            parameters = amdinfer.RequestParameters()
             parameters.put("key", "value2")
             output_0.parameters = parameters
 
@@ -113,7 +113,7 @@ class TestEcho:
             response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         assert not response.isError(), response.getError()
@@ -127,7 +127,7 @@ class TestEcho:
             data = output.getUint32Data()
             assert len(data) == 1
             assert data[0] == self.golden_outputs[0]
-            assert output.datatype == proteus.DataType.UINT32
+            assert output.datatype == amdinfer.DataType.UINT32
             assert output.name == "echo"
             assert output.parameters.empty()
             assert output.shape == [1]
@@ -225,7 +225,7 @@ class TestEcho:
 #             response = self.rest_client.modelInfer("echo", request)
 #         except ConnectionError:
 #             pytest.fail(
-#                 "Connection to the proteus server ended without response!", False
+#                 "Connection to the amdinfer server ended without response!", False
 #             )
 
 #         assert response.error

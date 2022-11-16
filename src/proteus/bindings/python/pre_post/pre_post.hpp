@@ -24,10 +24,10 @@ namespace pybind11 {
 class module_;
 }
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapPrePost(pybind11::module_ &);
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST

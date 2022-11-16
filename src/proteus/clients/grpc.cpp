@@ -17,7 +17,7 @@
  * @brief Implements the methods for interacting with Proteus with gRPC
  */
 
-#include "proteus/clients/grpc.hpp"
+#include "amdinfer/clients/grpc.hpp"
 
 #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
 #include <google/protobuf/stubs/common.h>        // for string
@@ -36,17 +36,17 @@
 #include <variant>        // for visit
 #include <vector>         // for vector
 
-#include "predict_api.grpc.pb.h"  // for GRPCInferenceService...
-#include "predict_api.pb.h"       // for RepeatedField, Infer...
-#include "proteus/clients/grpc_internal.hpp"
-#include "proteus/core/data_types.hpp"  // for DataType, DataType::...
-#include "proteus/core/exceptions.hpp"  // for bad_status
-#include "proteus/declarations.hpp"     // for InferenceResponseOutput
+#include "amdinfer/clients/grpc_internal.hpp"
+#include "amdinfer/core/data_types.hpp"  // for DataType, DataType::...
+#include "amdinfer/core/exceptions.hpp"  // for bad_status
+#include "amdinfer/declarations.hpp"     // for InferenceResponseOutput
+#include "predict_api.grpc.pb.h"         // for GRPCInferenceService...
+#include "predict_api.pb.h"              // for RepeatedField, Infer...
 
 using grpc::ClientContext;
 using grpc::Status;
 
-namespace proteus {
+namespace amdinfer {
 
 class GrpcClient::GrpcClientImpl {
  public:
@@ -330,4 +330,4 @@ bool GrpcClient::hasHardware(const std::string& name, int num) const {
   return reply.found();
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

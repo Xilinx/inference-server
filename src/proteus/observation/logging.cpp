@@ -17,7 +17,7 @@
  * @brief Implements logging in Proteus
  */
 
-#include "proteus/observation/logging.hpp"
+#include "amdinfer/observation/logging.hpp"
 
 #include <spdlog/sinks/basic_file_sink.h>     // for basic_file_sink_mt, bas...
 #include <spdlog/sinks/stdout_color_sinks.h>  // for ansicolor_stdout_sink
@@ -30,9 +30,9 @@
 #include <string>    // for string, operator+, char...
 #include <vector>    // for vector
 
-#include "proteus/core/exceptions.hpp"
+#include "amdinfer/core/exceptions.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 constexpr spdlog::level::level_enum getLevel(LogLevel level) {
   switch (level) {
@@ -66,7 +66,7 @@ void initLogger(const LogOptions& options) {
   if (options.console_enable) {
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console_sink->set_level(getLevel(options.console_level));
-    console_sink->set_pattern("[proteus] [%^%l%$] %v");
+    console_sink->set_pattern("[amdinfer] [%^%l%$] %v");
     sinks.push_back(console_sink);
   }
 
@@ -110,7 +110,7 @@ std::string getLogDirectory() {
   std::string dir;
   if (home != nullptr) {
     dir = home;
-    dir += "/.proteus";
+    dir += "/.amdinfer";
   } else {
     dir = ".";
   }
@@ -118,4 +118,4 @@ std::string getLogDirectory() {
   return dir;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

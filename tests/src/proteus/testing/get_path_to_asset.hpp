@@ -18,10 +18,10 @@
 #include <filesystem>
 #include <string>
 
-namespace proteus {
+namespace amdinfer {
 
 std::string getPathToAsset(const std::string& key);
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET

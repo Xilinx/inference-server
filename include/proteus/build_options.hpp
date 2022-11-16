@@ -15,36 +15,36 @@
 /**
  * @file
  * @brief Defines the Proteus's build information. This file is updated
- * automatically by CMake. To update, recompile the amdinfer source code.
+ * automatically by CMake. To update, recompile the proteus source code.
  */
 
-#ifndef GUARD_PROTEUS_BUILD_OPTIONS_HPP
-#define GUARD_PROTEUS_BUILD_OPTIONS_HPP
+#ifndef GUARD_AMDINFER_BUILD_OPTIONS_HPP
+#define GUARD_AMDINFER_BUILD_OPTIONS_HPP
 
 /// Enables Proteus's testing
-#cmakedefine PROTEUS_BUILD_TESTING
+#define AMDINFER_BUILD_TESTING
 /// Enables Proteus's rest endpoints for inference
-#cmakedefine PROTEUS_ENABLE_REST
+#define AMDINFER_ENABLE_REST
 /// Enables Proteus's metric collection
-#cmakedefine PROTEUS_ENABLE_METRICS
+#define AMDINFER_ENABLE_METRICS
 /// Enables Proteus's HTTP server
-#cmakedefine PROTEUS_ENABLE_HTTP
+#define AMDINFER_ENABLE_HTTP
 /// Enables Proteus's gRPC server
-#cmakedefine PROTEUS_ENABLE_GRPC
+#define AMDINFER_ENABLE_GRPC
 /// Enables Proteus's tracing
-#cmakedefine PROTEUS_ENABLE_TRACING
+#define AMDINFER_ENABLE_TRACING
 /// Enables Proteus's logging
-#cmakedefine PROTEUS_ENABLE_LOGGING
-/// Enables AKS in amdinfer
-#cmakedefine PROTEUS_ENABLE_AKS
-/// Enables Vitis in amdinfer
-#cmakedefine PROTEUS_ENABLE_VITIS
-/// Enables TF+ZenDNN in amdinfer
-#cmakedefine PROTEUS_ENABLE_TFZENDNN
-/// Enables PT+ZenDNN in amdinfer
-#cmakedefine PROTEUS_ENABLE_PTZENDNN
-/// Enables MIGraphX in amdinfer
-#cmakedefine PROTEUS_ENABLE_MIGRAPHX
+#define AMDINFER_ENABLE_LOGGING
+/// Enables AKS in proteus
+#define AMDINFER_ENABLE_AKS
+/// Enables Vitis in proteus
+#define AMDINFER_ENABLE_VITIS
+/// Enables TF+ZenDNN in proteus
+/* #undef AMDINFER_ENABLE_TFZENDNN */
+/// Enables PT+ZenDNN in proteus
+/* #undef AMDINFER_ENABLE_PTZENDNN */
+/// Enables MIGraphX in proteus
+/* #undef AMDINFER_ENABLE_MIGRAPHX */
 
 /// Port used by the HTTP server by default
 constexpr auto kDefaultHttpPort = 8998;
@@ -63,4 +63,4 @@ constexpr auto kMaxGrpcMessageSize = 20971520;
 
 /// Maximum number of characters usable for a model name used in an endpoint.
 constexpr auto kMaxModelNameSize = 64;
-#endif  // GUARD_PROTEUS_BUILD_OPTIONS_HPP
+#endif  // GUARD_AMDINFER_BUILD_OPTIONS_HPP

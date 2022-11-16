@@ -240,7 +240,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
-For src/proteus/util/ctpl.h
+For src/amdinfer/util/ctpl.h
 
 Copyright (C) 2014 by Vitaliy Vitsentiy
 Copyright (C) 2021 Xilinx Inc.
@@ -258,7 +258,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 --------------------------------------------------------------------------------
-For cmake/proteusConfig.cmake
+For cmake/amdinferConfig.cmake
 
 Copyright (c) 2021 Alex Reinking
 Copyright (c) 2021 Xilinx Inc.

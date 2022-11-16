@@ -32,7 +32,7 @@ You may also install the Python library by installing a wheel.
 Include the module
 ------------------
 
-You can include the Python library by importing the ``proteus`` module.
+You can include the Python library by importing the ``amdinfer`` module.
 The different submodules are imported by default but you can include them manually as well.
 These explicit imports can help IDEs resolve Python imports for autocompletion.
 
@@ -45,7 +45,7 @@ Start the server
 ----------------
 
 This example assumes that the server is not running elsewhere and starts it locally from Python instead.
-Creating the ``proteus.servers.Server`` object starts the inference server backend and it stays alive as long as the object remains in scope.
+Creating the ``amdinfer.Server`` object starts the inference server backend and it stays alive as long as the object remains in scope.
 
 .. literalinclude:: ../examples/resnet50/vitis.py
     :start-after: +initialize

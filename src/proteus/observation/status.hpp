@@ -20,10 +20,10 @@
 #ifndef GUARD_PROTEUS_OBSERVATION_STATUS
 #define GUARD_PROTEUS_OBSERVATION_STATUS
 
-namespace proteus {
+namespace amdinfer {
 /// Status codes used in Proteus
 enum class Status { kOK, kNotFound, kNotImplemented };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_OBSERVATION_STATUS

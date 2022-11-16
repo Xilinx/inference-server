@@ -18,18 +18,18 @@
 #include <thread>  // for sleep_for, yield
 #include <vector>  // for vector
 
-#include "proteus/proteus.hpp"                 // for NativeClient, GrpcClient
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
+#include "amdinfer/amdinfer.hpp"                // for NativeClient, GrpcClient
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-bool isReady(proteus::Client* client, const std::string& endpoint) {
+bool isReady(amdinfer::Client* client, const std::string& endpoint) {
   try {
     return client->modelReady(endpoint);
-  } catch (const proteus::bad_status&) {
+  } catch (const amdinfer::bad_status&) {
     return false;
   }
 }
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   const std::string worker = "echo";
 
   auto models_0 = client->modelList();
@@ -65,7 +65,7 @@ TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelReady) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 

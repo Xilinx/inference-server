@@ -30,16 +30,16 @@
 #include <utility>        // for move, pair
 #include <vector>         // for vector
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/core/predict_api.hpp"     // for RequestParameters
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/observation/logging.hpp"  // for LoggerPtr
-#include "proteus/util/queue.hpp"           // for BlockingConcurrentQueue
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+#include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
+#include "amdinfer/observation/logging.hpp"  // for LoggerPtr
+#include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
 
-// IWYU pragma: no_forward_declare proteus::RequestParameters
-// IWYU pragma: no_forward_declare proteus::WorkerInfo
+// IWYU pragma: no_forward_declare amdinfer::RequestParameters
+// IWYU pragma: no_forward_declare amdinfer::WorkerInfo
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief IDs used to specify commands to update the Proteus Manager
@@ -197,5 +197,5 @@ class Manager {
   void update_manager(UpdateCommandQueue* input_queue);
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 #endif  // GUARD_PROTEUS_CORE_MANAGER

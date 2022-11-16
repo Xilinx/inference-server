@@ -17,7 +17,7 @@
  * @brief Implements the Python bindings for the data_types.hpp header
  */
 
-#include "proteus/core/data_types.hpp"
+#include "amdinfer/core/data_types.hpp"
 
 #include <pybind11/cast.h>       // for arg
 #include <pybind11/operators.h>  // for self, operator==, self_t
@@ -25,7 +25,7 @@
 
 #include <sstream>  // IWYU pragma: keep
 
-#include "proteus/build_options.hpp"  // for PROTEUS_ENABLE_VITIS
+#include "amdinfer/build_options.hpp"  // for PROTEUS_ENABLE_VITIS
 
 // IWYU pragma: no_forward_declare xir::Datatype
 
@@ -35,7 +35,7 @@
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapDataType(py::module_& m) {
   auto datatype = py::class_<DataType>(m, "DataType");
@@ -111,9 +111,9 @@ void wrapTypeMaps([[maybe_unused]] py::module_& m) {
 #ifdef PROTEUS_ENABLE_VITIS
   py::module_::import("xir").attr("DataType");
 
-  m.def("mapXirType", proteus::mapXirToType, py::arg("type"));
-  m.def("mapTypeToXir", proteus::mapTypeToXir, py::arg("type"));
+  m.def("mapXirType", amdinfer::mapXirToType, py::arg("type"));
+  m.def("mapTypeToXir", amdinfer::mapTypeToXir, py::arg("type"));
 #endif
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

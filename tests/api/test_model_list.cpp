@@ -19,10 +19,10 @@
 #include <thread>     // for sleep_for
 #include <vector>     // for vector
 
-#include "proteus/proteus.hpp"                 // for NativeClient, GrpcClient
-#include "proteus/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
+#include "amdinfer/amdinfer.hpp"                // for NativeClient, GrpcClient
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   const std::string worker = "echo";
 
   auto models_0 = client->modelList();
@@ -65,7 +65,7 @@ TEST_F(GrpcFixture, ModelList) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelList) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 

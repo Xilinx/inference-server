@@ -34,25 +34,25 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "proteus/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::FP32
-#include "proteus/core/exceptions.hpp"        // for external_error
-#include "proteus/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "proteus/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "proteus/observation/logging.hpp"    // for Logger
-#include "proteus/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
-#include "proteus/observation/tracing.hpp"    // for Trace
-#include "proteus/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
+#include "amdinfer/core/exceptions.hpp"        // for external_error
+#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"    // for Logger
+#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
+#include "amdinfer/observation/tracing.hpp"    // for Trace
+#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {
 class AIGraph;
 }  // namespace AKS
 
-namespace proteus {
+namespace amdinfer {
 
 namespace workers {
 
@@ -214,12 +214,12 @@ void Aks::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::Aks("AKS", "AKS");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::Aks("AKS", "AKS");
 }
 }  // extern C

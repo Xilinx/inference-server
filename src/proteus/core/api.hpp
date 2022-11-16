@@ -24,9 +24,9 @@
 #include <string>
 #include <vector>
 
-#include "proteus/declarations.hpp"
+#include "amdinfer/declarations.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 class ModelMetadata;
 class RequestParameters;
@@ -49,6 +49,6 @@ void modelInfer(const std::string& model, std::unique_ptr<Interface> request);
 Kernels getHardware();
 bool hasHardware(const std::string& name, int num);
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_API

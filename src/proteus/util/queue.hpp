@@ -20,9 +20,9 @@
 #include <memory>
 #include <vector>
 
-#include "proteus/declarations.hpp"
+#include "amdinfer/declarations.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 template <class T>
 using BlockingQueue = moodycamel::BlockingConcurrentQueue<T>;
@@ -32,6 +32,6 @@ using BufferPtrsQueuePtr = std::unique_ptr<BufferPtrsQueue>;
 
 using InferenceRequestPtrQueue = BlockingQueue<InferenceRequestPtr>;
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_UTIL_QUEUE

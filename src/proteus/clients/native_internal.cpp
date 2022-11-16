@@ -17,7 +17,7 @@
  * @brief Implements the internal objects used for the C++ API
  */
 
-#include "proteus/clients/native_internal.hpp"
+#include "amdinfer/clients/native_internal.hpp"
 
 #include <cstddef>     // for byte, size_t
 #include <cstdint>     // for uint64_t
@@ -27,19 +27,19 @@
 #include <string>      // for string
 #include <utility>     // for move
 
-#include "proteus/buffers/buffer.hpp"       // for Buffer
-#include "proteus/core/data_types.hpp"      // for DataType
-#include "proteus/observation/logging.hpp"  // for Logger, PROTEUS_LOG_ERROR
+#include "amdinfer/buffers/buffer.hpp"       // for Buffer
+#include "amdinfer/core/data_types.hpp"      // for DataType
+#include "amdinfer/observation/logging.hpp"  // for Logger, PROTEUS_LOG_ERROR
 
-namespace proteus {
+namespace amdinfer {
 template <typename T>
 class InferenceRequestBuilder;
 
 template <typename T>
 class InferenceRequestInputBuilder;
-}  // namespace proteus
+}  // namespace amdinfer
 
-namespace proteus {
+namespace amdinfer {
 
 template <>
 class InferenceRequestInputBuilder<InferenceRequestInput> {
@@ -132,12 +132,13 @@ using RequestBuilder = InferenceRequestBuilder<InferenceRequest>;
 
 CppNativeApi::CppNativeApi(InferenceRequest request)
   : request_(std::move(request)) {
-  this->promise_ = std::make_unique<std::promise<proteus::InferenceResponse>>();
+  this->promise_ =
+    std::make_unique<std::promise<amdinfer::InferenceResponse>>();
 }
 
 size_t CppNativeApi::getInputSize() { return this->request_.getInputSize(); }
 
-std::promise<proteus::InferenceResponse> *CppNativeApi::getPromise() {
+std::promise<amdinfer::InferenceResponse> *CppNativeApi::getPromise() {
   return this->promise_.get();
 }
 
@@ -165,4 +166,4 @@ void CppNativeApi::errorHandler(const std::exception &e) {
   this->getPromise()->set_value(InferenceResponse(e.what()));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

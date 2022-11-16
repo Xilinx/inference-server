@@ -23,7 +23,7 @@
 #include <memory>  // for shared_ptr
 #include <string>  // for string
 
-#include "proteus/build_options.hpp"
+#include "amdinfer/build_options.hpp"
 
 #ifdef PROTEUS_ENABLE_LOGGING
 
@@ -61,7 +61,7 @@
 #define PROTEUS_IF_LOGGING(args)
 #endif
 
-namespace proteus {
+namespace amdinfer {
 
 enum class Loggers { kServer, kClient, kTest };
 
@@ -106,6 +106,6 @@ void initLogger(const LogOptions& options);
 /// get log directory
 std::string getLogDirectory();
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_OBSERVATION_LOGGING

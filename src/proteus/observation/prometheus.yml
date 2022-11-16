@@ -16,6 +16,6 @@ global:
   scrape_interval: 1s
 
 scrape_configs:
-  - job_name: "proteus"
+  - job_name: "amdinfer"
     static_configs:
       - targets: ["localhost:8998"] # defaults to http://localhost:8998/metrics

@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::Server server;
+  amdinfer::Server server;
   server.startHttp(8998);
 
   if (run_ref) {

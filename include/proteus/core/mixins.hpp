@@ -3,7 +3,7 @@
 
 #include <cstddef>  // for std::byte, size_t
 
-namespace proteus {
+namespace amdinfer {
 
 class Serializable {
  public:
@@ -14,6 +14,6 @@ class Serializable {
   virtual void deserialize(const std::byte* data_in) = 0;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CORE_MIXINS

@@ -18,7 +18,7 @@
  * @brief Implements the methods for interacting with Proteus with HTTP/REST
  */
 
-#include "proteus/clients/http.hpp"
+#include "amdinfer/clients/http.hpp"
 
 #include <drogon/HttpAppFramework.h>      // for HttpAppFramework, app
 #include <drogon/HttpClient.h>            // for HttpClient, HttpClientPtr
@@ -34,10 +34,10 @@
 #include <utility>        // for tuple_element<>::type
 #include <vector>
 
-#include "proteus/clients/http_internal.hpp"  // for mapParametersToJson
-#include "proteus/core/exceptions.hpp"        // for bad_status
+#include "amdinfer/clients/http_internal.hpp"  // for mapParametersToJson
+#include "amdinfer/core/exceptions.hpp"        // for bad_status
 
-namespace proteus {
+namespace amdinfer {
 
 void addHeaders(drogon::HttpRequestPtr req, const StringMap& headers) {
   for (const auto& [field, value] : headers) {
@@ -290,7 +290,7 @@ auto createInferenceRequest(const std::string& model,
 InferenceResponseFuture HttpClient::modelInferAsync(
   const std::string& model, const InferenceRequest& request) const {
   auto req = createInferenceRequest(model, request, headers_);
-  auto prom = std::make_shared<std::promise<proteus::InferenceResponse>>();
+  auto prom = std::make_shared<std::promise<amdinfer::InferenceResponse>>();
   auto fut = prom->get_future();
 
   auto* client = this->impl_->getClient();
@@ -363,4 +363,4 @@ std::string HttpClient::getAddress() const&& { return address_; }
 const StringMap& HttpClient::getHeaders() const& { return headers_; }
 StringMap HttpClient::getHeaders() const&& { return headers_; }
 
-}  // namespace proteus
+}  // namespace amdinfer

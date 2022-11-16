@@ -14,12 +14,12 @@
 
 #include <cstdint>  // for uint16_t, int16_t, int32_t
 
+#include "amdinfer/clients/grpc_internal.hpp"  // for mapRequestToProto
+#include "amdinfer/testing/observation.hpp"
 #include "gtest/gtest.h"  // for EXPECT_EQ, FAIL, UnitTest
 #include "predict_api.pb.h"
-#include "proteus/clients/grpc_internal.hpp"  // for mapRequestToProto
-#include "proteus/testing/observation.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 const bool kBoolValue = true;
 const uint8_t kUint8Value = 2;
@@ -142,4 +142,4 @@ const std::array<DataType, 12> datatypes = {
 INSTANTIATE_TEST_SUITE_P(UnitClientsGrpcInternal, Fixture,
                          testing::ValuesIn(datatypes));
 
-}  // namespace proteus
+}  // namespace amdinfer

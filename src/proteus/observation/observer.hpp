@@ -15,23 +15,23 @@
 #ifndef GUARD_PROTEUS_OBSERVATION_OBSERVER
 #define GUARD_PROTEUS_OBSERVATION_OBSERVER
 
-#include "proteus/build_options.hpp"
-#include "proteus/core/data_types.hpp"
-#include "proteus/util/string.hpp"
+#include "amdinfer/build_options.hpp"
+#include "amdinfer/core/data_types.hpp"
+#include "amdinfer/util/string.hpp"
 
 #ifdef PROTEUS_ENABLE_LOGGING
-#include "proteus/observation/logging.hpp"  // IWYU pragma: export
+#include "amdinfer/observation/logging.hpp"  // IWYU pragma: export
 #endif
 
 #ifdef PROTEUS_ENABLE_METRICS
-#include "proteus/observation/metrics.hpp"  // IWYU pragma: export
+#include "amdinfer/observation/metrics.hpp"  // IWYU pragma: export
 #endif
 
 #ifdef PROTEUS_ENABLE_TRACING
-#include "proteus/observation/tracing.hpp"  // IWYU pragma: export
+#include "amdinfer/observation/tracing.hpp"  // IWYU pragma: export
 #endif
 
-namespace proteus {
+namespace amdinfer {
 
 const auto kNumTraceData = 5U;
 
@@ -54,6 +54,6 @@ inline void logTraceBuffer(Logger logger, void* data,
     logger, "Buffer(" + util::addressToString(data) + ") has bytes: " + bytes);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_OBSERVATION_OBSERVER

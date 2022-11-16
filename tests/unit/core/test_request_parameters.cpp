@@ -15,10 +15,10 @@
 #include <cstddef>
 #include <iostream>
 
+#include "amdinfer/core/predict_api.hpp"
 #include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
-#include "proteus/core/predict_api.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 TEST(UnitRequestParameters, SerDes) {
   std::array<std::string, 4> keys = {"string", "int", "bool", "double"};
@@ -58,4 +58,4 @@ TEST(UnitRequestParameters, SerDes) {
   EXPECT_EQ(params.get<double>(keys[3]), new_params.get<double>(keys[3]));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

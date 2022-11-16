@@ -27,7 +27,7 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 
 # to parse the CLI, we need to import it by file path since it's not in a Python package
-imp.load_source("proteus_cli", os.path.abspath("../proteus"))
+imp.load_source("amdinfer_cli", os.path.abspath("../amdinfer"))
 
 
 # -- Project information -----------------------------------------------------
@@ -65,8 +65,8 @@ extensions = [
 ]
 
 # Breathe configuration
-breathe_projects = {"proteus": "../build/docs/doxygen/xml"}
-breathe_default_project = "proteus"
+breathe_projects = {"amdinfer": "../build/docs/doxygen/xml"}
+breathe_default_project = "amdinfer"
 
 # sphinxcontrib.confluencebuilder configuration
 confluence_publish = True
@@ -87,12 +87,12 @@ autodoc_default_options = {
 
 def hide_private_module(app, what, name, obj, options, signature, return_annotation):
     if signature is not None:
-        new_signature = signature.replace("proteus._proteus", "proteus")
+        new_signature = signature.replace("amdinfer._amdinfer", "amdinfer")
     else:
         new_signature = signature
 
     if return_annotation is not None:
-        new_return = return_annotation.replace("proteus._proteus", "proteus")
+        new_return = return_annotation.replace("amdinfer._amdinfer", "amdinfer")
     else:
         new_return = return_annotation
 

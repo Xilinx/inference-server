@@ -58,7 +58,7 @@ def get_container_predictor(image):
                 name="custom",
                 image=image,
                 args=[
-                    "proteus-server",
+                    "amdinfer-server",
                     "--http-port=8080",
                     "--model-repository=/mnt/models",
                 ],

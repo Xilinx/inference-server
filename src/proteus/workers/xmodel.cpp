@@ -44,26 +44,26 @@
 #include <xir/graph/subgraph.hpp>       // for Subgraph
 #include <xir/tensor/tensor.hpp>        // for Tensor
 
-#include "proteus/batching/batcher.hpp"            // for BatchPtr, Batch
-#include "proteus/buffers/buffer.hpp"              // for Buffer
-#include "proteus/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
-#include "proteus/build_options.hpp"               // for PROTEUS_ENABLE_MET...
-#include "proteus/core/data_types.hpp"             // for mapXirType, DataType
-#include "proteus/core/predict_api.hpp"            // for InferenceResponse
-#include "proteus/declarations.hpp"                // for BufferPtrs, Infere...
-#include "proteus/observation/observer.hpp"        // for Loggers, Metrics...
-#include "proteus/util/ctpl.h"                     // for thread_pool
-#include "proteus/util/parse_env.hpp"              // for autoExpandEnvironm...
-#include "proteus/util/queue.hpp"                  // for BufferPtrsQueue
-#include "proteus/util/string.hpp"                 // for endsWith
-#include "proteus/util/thread.hpp"                 // for setThreadName
-#include "proteus/workers/worker.hpp"              // for Worker, kNumBuffer...
+#include "amdinfer/batching/batcher.hpp"            // for BatchPtr, Batch
+#include "amdinfer/buffers/buffer.hpp"              // for Buffer
+#include "amdinfer/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
+#include "amdinfer/build_options.hpp"               // for PROTEUS_ENABLE_MET...
+#include "amdinfer/core/data_types.hpp"             // for mapXirType, DataType
+#include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
+#include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
+#include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
+#include "amdinfer/util/ctpl.h"                     // for thread_pool
+#include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
+#include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
+#include "amdinfer/util/string.hpp"                 // for endsWith
+#include "amdinfer/util/thread.hpp"                 // for setThreadName
+#include "amdinfer/workers/worker.hpp"              // for Worker, kNumBuffer...
 
 uint64_t reduce_mult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace proteus {
+namespace amdinfer {
 
 namespace workers {
 
@@ -370,10 +370,12 @@ void XModel::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() { return new proteus::workers::XModel(); }
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::XModel();
+}
 }  // extern C

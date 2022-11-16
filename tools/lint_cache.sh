@@ -115,7 +115,7 @@ fi
 
 build_dir="$root_dir/build/Debug"
 if [[ ! -d $build_dir ]]; then
-    echo "The debug build directory doesn't exist, run 'proteus build --debug' once"
+    echo "The debug build directory doesn't exist, run 'amdinfer build --debug' once"
     exit 1
 fi
 

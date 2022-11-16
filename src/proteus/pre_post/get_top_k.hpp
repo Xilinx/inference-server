@@ -18,7 +18,7 @@
 #include <queue>
 #include <vector>
 
-namespace proteus::pre_post {
+namespace amdinfer::pre_post {
 
 /**
  * @brief After running softmax, get the labels associated with the top k values
@@ -45,6 +45,6 @@ std::vector<int> get_top_k(const double* d, size_t size, int k) {
   return topKIndex;
 }
 
-}  // namespace proteus::pre_post
+}  // namespace amdinfer::pre_post
 
 #endif  // GUARD_PROTEUS_PRE_POST_GET_TOP_K

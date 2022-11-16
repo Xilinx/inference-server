@@ -29,17 +29,17 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "proteus/batching/hard.hpp"          // for HardBatcher
-#include "proteus/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "proteus/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
-#include "proteus/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "proteus/core/predict_api.hpp"       // for InferenceRequest, Infere...
-#include "proteus/declarations.hpp"           // for BufferPtr, InferenceResp...
-#include "proteus/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPDL...
-#include "proteus/observation/metrics.hpp"    // for Metrics
-#include "proteus/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "proteus/util/thread.hpp"            // for setThreadName
-#include "proteus/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/hard.hpp"          // for HardBatcher
+#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
+#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
+#include "amdinfer/observation/metrics.hpp"    // for Metrics
+#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/worker.hpp"         // for Worker
 
 // opencv for debugging only --
 #include <migraphx/filesystem.hpp>
@@ -54,7 +54,7 @@
  *
  */
 
-namespace proteus {
+namespace amdinfer {
 
 namespace workers {
 
@@ -357,8 +357,8 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
 
     // Output buffers aren't used by the engine at time of writing this,
     // but allocate them anyway. (Use number of outputs for kBufferNum)
-    VectorBuffer::allocate(this->output_buffers_, output_shapes.size(), out_buffer_size,
-                           proteus::DataType::INT8);
+    VectorBuffer::allocate(this->output_buffers_, output_shapes.size(),
+                           out_buffer_size, amdinfer::DataType::INT8);
   } catch (...) {
     PROTEUS_LOG_ERROR(
       logger,
@@ -453,7 +453,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
         //  TODO: the following check works inconsistently between different example client scripts.
         // It accepts inputs from the yolo script but rejects hello_migraphx.py inputs
         // for(size_t ii = 1; ii < avShape.size(); ii++)
-        // {  
+        // {
         //   if( avShape.size() != llen.size() || avShape[ii] != llen[ii])
         //   {
         //     smsg.str("");
@@ -466,7 +466,6 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
         //   }
         // }
         // clang-format on
-
 
         auto aData = aninput.getData();  //  void *
         params.add(aname.c_str(), migraphx::argument(modelshape, aData));
@@ -552,7 +551,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             InferenceResponseOutput output;
 
             migraphx_shape_datatype_t output_type = output_shapes[i].type();
-            proteus::DataType output_dt = toDataType(output_type);
+            amdinfer::DataType output_dt = toDataType(output_type);
             output.setDatatype(output_dt);
 
             auto this_output = migraphx_output[i];
@@ -573,10 +572,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             // the kserve specification for response output is at
             // https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output
             //
-            // The outputs buffer in the InferenceRequest is not used or enforced at the time of writing this,
-            // but here it is.
-            // Give the output a default name if necessary.
-            auto outputs = req->getOutputs();  // one result vector for each request
+            // The outputs buffer in the InferenceRequest is not used or
+            // enforced at the time of writing this, but here it is. Give the
+            // output a default name if necessary.
+            auto outputs =
+              req->getOutputs();  // one result vector for each request
 
             std::string output_name{""};
             if (i < outputs.size()) output_name = outputs[i].getName();
@@ -641,12 +641,12 @@ void MIGraphXWorker::doDestroy() {}
 
 }  // namespace workers
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
-proteus::workers::Worker* getWorker() {
-  return new proteus::workers::MIGraphXWorker("MIGraphX", "gpu");
+amdinfer::workers::Worker* getWorker() {
+  return new amdinfer::workers::MIGraphXWorker("MIGraphX", "gpu");
 }
 }  // extern C

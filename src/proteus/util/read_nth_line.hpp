@@ -17,7 +17,7 @@
 
 #include <string>
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /**
  * @brief This method will read the class file and returns class name
@@ -28,6 +28,6 @@ namespace proteus::util {
  */
 std::string readNthLine(const std::string& filename, int n);
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_UTIL_READ_NTH_LINE

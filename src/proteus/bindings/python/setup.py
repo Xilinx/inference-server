@@ -36,7 +36,7 @@ else:
     version = "0.0.0"
 
 setuptools.setup(
-    name="proteus",
+    name="amdinfer",
     version=version,
     license="Apache 2.0",
     packages=setuptools.find_packages("src"),

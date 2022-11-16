@@ -17,14 +17,14 @@
  * @brief Implements the Python bindings for the http.hpp header
  */
 
-#include "proteus/clients/client.hpp"
+#include "amdinfer/clients/client.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>  // IWYU pragma: keep
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapClient(py::module_ &m) {
   py::class_<Client> client{m, "Client"};
@@ -42,4 +42,4 @@ void wrapClient(py::module_ &m) {
         py::arg("batch_sizes"));
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

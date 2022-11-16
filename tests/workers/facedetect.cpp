@@ -26,7 +26,7 @@
 
 void dequeue(FutureQueue& my_queue, int num_images) {
   for (int i = 0; i < num_images; i++) {
-    std::future<proteus::InferenceResponse> element;
+    std::future<amdinfer::InferenceResponse> element;
     my_queue.wait_dequeue(element);
     auto results = element.get();
   }
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::Server server;
+  amdinfer::Server server;
 
   auto workerName = load(runners);
   auto image_paths = getImages(path);

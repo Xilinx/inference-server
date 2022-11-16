@@ -20,7 +20,7 @@
 #include <sstream>
 #include <string>
 
-namespace proteus::util {
+namespace amdinfer::util {
 
 /**
  * @brief Checks if a string ends with another string
@@ -77,6 +77,6 @@ inline std::string addressToString(const void* ptr) {
   return addr.str();
 }
 
-}  // namespace proteus::util
+}  // namespace amdinfer::util
 
 #endif  // GUARD_PROTEUS_HELPERS_STRING

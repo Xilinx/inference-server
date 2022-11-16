@@ -16,7 +16,7 @@ import time
 
 import pytest
 
-import proteus
+import amdinfer
 
 
 @pytest.mark.usefixtures("server", "assign_client")
@@ -40,7 +40,7 @@ class TestLoad:
         )  # this will do nothing and return 200
         assert response == "echo"
 
-        parameters = proteus.RequestParameters()
+        parameters = amdinfer.RequestParameters()
         parameters.put("max_buffer_num", 100)
         endpoint_1 = self.rest_client.workerLoad(
             "echo", parameters

@@ -17,19 +17,19 @@
  * @brief Implements the base batcher and CppNativeApi interface
  */
 
-#include "proteus/batching/batcher.hpp"
+#include "amdinfer/batching/batcher.hpp"
 
 #include <cassert>  // for assert
 #include <memory>   // for shared_ptr, make_shared
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "proteus/buffers/buffer.hpp"       // IWYU pragma: keep
-#include "proteus/core/interface.hpp"       // IWYU pragma: keep
-#include "proteus/core/worker_info.hpp"     // for WorkerInfo
-#include "proteus/observation/logging.hpp"  // for Logger, Loggers, Loggers:...
+#include "amdinfer/buffers/buffer.hpp"       // IWYU pragma: keep
+#include "amdinfer/core/interface.hpp"       // IWYU pragma: keep
+#include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
+#include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Loggers:...
 
-namespace proteus {
+namespace amdinfer {
 
 /**
  * @brief The C++ Interface class encapsulates incoming requests from the C++
@@ -179,4 +179,4 @@ std::chrono::high_resolution_clock::time_point Batch::getTime(int index) {
 }
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer

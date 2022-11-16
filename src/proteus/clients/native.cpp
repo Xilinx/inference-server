@@ -18,32 +18,32 @@
  * API
  */
 
-#include "proteus/clients/native.hpp"
+#include "amdinfer/clients/native.hpp"
 
 #include <future>   // for future, promise
 #include <memory>   // for unique_ptr, make_unique
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "proteus/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
-#include "proteus/clients/native_internal.hpp"  // for CppNativeApi
-#include "proteus/core/api.hpp"                 // for modelLoad, workerLoad
-#include "proteus/core/exceptions.hpp"          // for invalid_argument
-#include "proteus/core/interface.hpp"           // for Interface
-#include "proteus/observation/metrics.hpp"      // for Metrics, MetricCounte...
-#include "proteus/observation/tracing.hpp"      // for startTrace, Trace
-#include "proteus/util/string.hpp"              // for toLower
+#include "amdinfer/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
+#include "amdinfer/core/api.hpp"                 // for modelLoad, workerLoad
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/interface.hpp"           // for Interface
+#include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCounte...
+#include "amdinfer/observation/tracing.hpp"      // for startTrace, Trace
+#include "amdinfer/util/string.hpp"              // for toLower
 
-namespace proteus {
+namespace amdinfer {
 
 ServerMetadata NativeClient::serverMetadata() const {
-  return ::proteus::serverMetadata();
+  return ::amdinfer::serverMetadata();
 }
 bool NativeClient::serverLive() const { return true; }
 bool NativeClient::serverReady() const { return true; }
 
 ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
-  return ::proteus::modelMetadata(model);
+  return ::amdinfer::modelMetadata(model);
 }
 
 void NativeClient::modelLoad(const std::string& model,
@@ -51,9 +51,9 @@ void NativeClient::modelLoad(const std::string& model,
   auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
     RequestParameters params;
-    ::proteus::modelLoad(model_lower, &params);
+    ::amdinfer::modelLoad(model_lower, &params);
   } else {
-    ::proteus::modelLoad(model_lower, parameters);
+    ::amdinfer::modelLoad(model_lower, parameters);
   }
 }
 
@@ -62,9 +62,9 @@ std::string NativeClient::workerLoad(const std::string& model,
   auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
     RequestParameters params;
-    return ::proteus::workerLoad(model_lower, &params);
+    return ::amdinfer::workerLoad(model_lower, &params);
   }
-  return ::proteus::workerLoad(model_lower, parameters);
+  return ::amdinfer::workerLoad(model_lower, parameters);
 }
 
 InferenceResponseFuture NativeClient::modelInferAsync(
@@ -83,7 +83,7 @@ InferenceResponseFuture NativeClient::modelInferAsync(
   trace->endSpan();
   api->setTrace(std::move(trace));
 #endif
-  ::proteus::modelInfer(workerName, std::move(api));
+  ::amdinfer::modelInfer(workerName, std::move(api));
 
   return future;
 }
@@ -96,28 +96,28 @@ InferenceResponse NativeClient::modelInfer(
 
 void NativeClient::modelUnload(const std::string& model) const {
   auto model_lower = util::toLower(model);
-  ::proteus::modelUnload(model);
+  ::amdinfer::modelUnload(model);
 }
 
 void NativeClient::workerUnload(const std::string& model) const {
   auto model_lower = util::toLower(model);
-  ::proteus::workerUnload(model);
+  ::amdinfer::workerUnload(model);
 }
 
 bool NativeClient::modelReady(const std::string& model) const {
   try {
-    return ::proteus::modelReady(model);
+    return ::amdinfer::modelReady(model);
   } catch (const invalid_argument&) {
     return false;
   }
 }
 
 std::vector<std::string> NativeClient::modelList() const {
-  return ::proteus::modelList();
+  return ::amdinfer::modelList();
 }
 
 bool NativeClient::hasHardware(const std::string& name, int num) const {
-  return ::proteus::hasHardware(name, num);
+  return ::amdinfer::hasHardware(name, num);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

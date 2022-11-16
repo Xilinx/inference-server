@@ -17,10 +17,10 @@
 
 #include <vector>
 
-#include "proteus/pre_post/get_top_k.hpp"
-#include "proteus/pre_post/softmax.hpp"
+#include "amdinfer/pre_post/get_top_k.hpp"
+#include "amdinfer/pre_post/softmax.hpp"
 
-namespace proteus::pre_post {
+namespace amdinfer::pre_post {
 
 /**
  * @brief Perform postprocessing of the data
@@ -39,6 +39,6 @@ std::vector<int> resnet50Postprocess(const T* data, size_t size, int k) {
   return get_top_k(softmax.data(), size, k);
 }
 
-}  // namespace proteus::pre_post
+}  // namespace amdinfer::pre_post
 
 #endif  // GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS

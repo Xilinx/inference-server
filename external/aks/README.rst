@@ -21,7 +21,7 @@ AMD Inference Server can run a subset of AKS graphs for end-to-end inference wit
 
 AMD Inference Server includes modified versions of the kernels source code, kernel definitions and graph definitions from AKS.
 These files are in the ``reference`` directory.
-When the ``proteus-server`` is built, these reference files are copied into this directory by the build system and excluded from version control.
+When the ``amdinfer-server`` is built, these reference files are copied into this directory by the build system and excluded from version control.
 Users are free to modify these copied files as needed to modify kernels and graphs that are used in AMD Inference Server.
 
 More information about AKS can be found in the `Vitis AI repository <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`_.

@@ -17,7 +17,7 @@
  * @brief Implements the internal objects used for HTTP/REST
  */
 
-#include "proteus/clients/http_internal.hpp"
+#include "amdinfer/clients/http_internal.hpp"
 
 #include <drogon/HttpRequest.h>   // for HttpRequestPtr, Htt...
 #include <drogon/HttpResponse.h>  // for HttpResponsePtr
@@ -35,16 +35,16 @@
 #include <utility>      // for move
 #include <variant>      // for visit
 
-#include "proteus/buffers/buffer.hpp"             // for Buffer
-#include "proteus/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "proteus/core/exceptions.hpp"            // invalid_argument
-#include "proteus/core/interface.hpp"             // for InterfaceType, Inte...
-#include "proteus/core/predict_api_internal.hpp"  // for InferenceRequestOutput
-#include "proteus/observation/logging.hpp"        // for Logger
-#include "proteus/util/compression.hpp"           // for z_decompress
-#include "proteus/util/traits.hpp"                // for is_any
+#include "amdinfer/buffers/buffer.hpp"             // for Buffer
+#include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
+#include "amdinfer/core/exceptions.hpp"            // invalid_argument
+#include "amdinfer/core/interface.hpp"             // for InterfaceType, Inte...
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
+#include "amdinfer/observation/logging.hpp"        // for Logger
+#include "amdinfer/util/compression.hpp"           // for z_decompress
+#include "amdinfer/util/traits.hpp"                // for is_any
 
-namespace proteus {
+namespace amdinfer {
 
 RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
   auto parameters_ = std::make_shared<RequestParameters>();
@@ -595,4 +595,4 @@ ModelMetadata mapJsonToModelMetadata(const Json::Value *json) {
   return metadata;
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

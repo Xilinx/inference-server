@@ -25,11 +25,11 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "proteus/clients/client.hpp"    // IWYU pragma: export
-#include "proteus/core/predict_api.hpp"  // for RequestParameters (ptr o...
-#include "proteus/declarations.hpp"      // for StringMap
+#include "amdinfer/clients/client.hpp"    // IWYU pragma: export
+#include "amdinfer/core/predict_api.hpp"  // for RequestParameters (ptr o...
+#include "amdinfer/declarations.hpp"      // for StringMap
 
-namespace proteus {
+namespace amdinfer {
 
 class HttpClient : public Client {
  public:
@@ -76,6 +76,6 @@ class HttpClient : public Client {
   std::unique_ptr<HttpClientImpl> impl_;
 };
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_HTTP

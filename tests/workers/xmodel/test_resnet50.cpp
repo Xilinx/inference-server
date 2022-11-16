@@ -15,28 +15,28 @@
 #include <string>
 #include <vector>
 
-#include "proteus/clients/client.hpp"
-#include "proteus/pre_post/image_preprocess.hpp"
-#include "proteus/pre_post/resnet50_postprocess.hpp"
-#include "proteus/testing/get_path_to_asset.hpp"
-#include "proteus/testing/gtest_fixtures.hpp"
+#include "amdinfer/clients/client.hpp"
+#include "amdinfer/pre_post/image_preprocess.hpp"
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"
+#include "amdinfer/testing/get_path_to_asset.hpp"
+#include "amdinfer/testing/gtest_fixtures.hpp"
 
-namespace proteus {
+namespace amdinfer {
 
 using Images = std::vector<std::vector<int8_t>>;
 
 Images preprocess(const std::vector<std::string>& paths) {
-  proteus::pre_post::ImagePreprocessOptions<int8_t, 3> options;
-  options.order = proteus::pre_post::ImageOrder::NHWC;
+  amdinfer::pre_post::ImagePreprocessOptions<int8_t, 3> options;
+  options.order = amdinfer::pre_post::ImageOrder::NHWC;
   options.mean = {123, 107, 104};
   options.std = {1, 1, 1};
   options.normalize = true;
   return pre_post::imagePreprocess(paths, options);
 }
 
-std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
+std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
                              int k) {
-  return proteus::pre_post::resnet50Postprocess(
+  return amdinfer::pre_post::resnet50Postprocess(
     static_cast<int8_t*>(output.getData()), output.getSize(), k);
 }
 
@@ -85,7 +85,7 @@ void test_0(Client* client) {
   const auto kTestAsset = getPathToAsset("asset_dog-3619020_640.jpg");
   const auto kXmodel = getPathToAsset("u250_resnet50");
 
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   parameters.put("model", kXmodel);
 
   auto images = preprocess({kTestAsset});
@@ -117,4 +117,4 @@ TEST_F(BaseFixture, WorkersXmodelResnet50) {
 TEST_F(HttpFixture, WorkersXmodelResnet50) { test_0(client_.get()); }
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer

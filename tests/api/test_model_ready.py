@@ -16,7 +16,7 @@ import time
 
 import pytest
 
-import proteus
+import amdinfer
 
 
 @pytest.mark.usefixtures("server", "assign_client")

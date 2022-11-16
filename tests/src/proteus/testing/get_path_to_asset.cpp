@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "proteus/testing/get_path_to_asset.hpp"
+#include "amdinfer/testing/get_path_to_asset.hpp"
 
 #include <cassert>
 #include <fstream>
 
-#include "proteus/core/exceptions.hpp"
-#include "proteus/util/string.hpp"
+#include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/util/string.hpp"
 
 namespace fs = std::filesystem;
 
-namespace proteus {
+namespace amdinfer {
 
 std::string getPathToAsset(const std::string& key) {
   const auto* root_env = std::getenv("PROTEUS_ROOT");
@@ -53,4 +53,4 @@ std::string getPathToAsset(const std::string& key) {
   throw invalid_argument("Key not found in downloaded assets: " + key);
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

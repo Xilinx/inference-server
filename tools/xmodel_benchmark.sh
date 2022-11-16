@@ -85,7 +85,7 @@ for index in ${!durations[*]}; do
   duration=${durations[$index]}
   image=${images[$index]}
 
-  ./proteus build --release -DDURATION=$duration &> /dev/null
+  ./amdinfer build --release -DDURATION=$duration &> /dev/null
   if [[ $? != 0 ]]; then
     echo "Skipping build with a $duration sleep time. Build failed."
     continue

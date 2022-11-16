@@ -24,7 +24,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-tmp_dir = Path("/tmp/proteus_get")
+tmp_dir = Path("/tmp/amdinfer_get")
 artifact_dir = Path.cwd() / "external/artifacts"
 repository_metadata_dir = Path.cwd() / "external/repository_metadata"
 u250_dir = artifact_dir / "u200_u250"
@@ -132,7 +132,7 @@ def download_http(model: Model):
     with open(filepath, "wb") as f:
         req = urllib.request.Request(model.url)
         # need to specify the user-agent for accessing some URLs
-        req.add_header("User-Agent", "proteus")
+        req.add_header("User-Agent", "amdinfer")
         try:
             response = urllib.request.urlopen(req)
         except urllib.error.URLError as e:

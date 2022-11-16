@@ -17,13 +17,13 @@
  * @brief Implements the Python bindings for the exceptions
  */
 
-#include "proteus/core/exceptions.hpp"
+#include "amdinfer/core/exceptions.hpp"
 
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 
-namespace proteus {
+namespace amdinfer {
 
 void wrapExceptions(py::module_& m) {
   py::register_exception<runtime_error>(m, "RuntimeError");
@@ -37,4 +37,4 @@ void wrapExceptions(py::module_& m) {
                                                     "EnvironmentNotSetError");
 }
 
-}  // namespace proteus
+}  // namespace amdinfer

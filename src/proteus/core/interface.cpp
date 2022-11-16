@@ -17,14 +17,14 @@
  * @brief Implements the base Interface class
  */
 
-#include "proteus/core/interface.hpp"
+#include "amdinfer/core/interface.hpp"
 
 #include <utility>  // for move
 
-#include "proteus/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
-#include "proteus/observation/tracing.hpp"  // for TracePtr
+#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/observation/tracing.hpp"  // for TracePtr
 
-namespace proteus {
+namespace amdinfer {
 
 Interface::Interface() { this->type_ = InterfaceType::kUnknown; }
 
@@ -50,4 +50,4 @@ std::chrono::high_resolution_clock::time_point Interface::get_time() const {
 const Logger& Interface::getLogger() const { return this->logger_; }
 #endif
 
-}  // namespace proteus
+}  // namespace amdinfer

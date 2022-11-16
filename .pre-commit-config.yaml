@@ -24,7 +24,7 @@ repos:
     hooks:
       - id: cmakelint
         # cmake-format may align text vertically at weird indents
-        args: [--filter=-whitespace/indent]
+        args: ["--filter=-whitespace/indent,-linelength"]
   # - repo: https://github.com/Takishima/cmake-pre-commit-hooks
   #   rev: v1.5.3
   #   hooks:

@@ -26,4 +26,4 @@ list(
          server_ready
 )
 
-proteus_add_system_tests("${tests}")
+amdinfer_add_system_tests("${tests}")

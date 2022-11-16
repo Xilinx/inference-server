@@ -18,12 +18,12 @@
 Logs
 ====
 
-Logs collected by AMD Inference Server are placed in ``~/.proteus/logs/`` by default.
+Logs collected by AMD Inference Server are placed in ``~/.amdinfer/logs/`` by default.
 
 AMD Inference Server Logs
 -------------------------
 
-Logging in AMD Inference Server is configured in ``proteus/observation/logging.*``.
+Logging in AMD Inference Server is configured in ``amdinfer/observation/logging.*``.
 There are multiple knobs that can be tweaked to affect how and which log messages are captured.
 
 .. code-block:: c++
@@ -66,7 +66,7 @@ There are multiple knobs that can be tweaked to affect how and which log message
 Drogon Logs
 -----------
 
-Logging in Drogon is configured in `proteus/servers/http_server.cpp` by setting the appropriate log level when initializing the Drogon app.
+Logging in Drogon is configured in `amdinfer/servers/http_server.cpp` by setting the appropriate log level when initializing the Drogon app.
 
 .. code-block:: c++
 

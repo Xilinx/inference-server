@@ -24,9 +24,9 @@
 #include <string>
 #include <vector>
 
-#include "proteus/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
 
-namespace proteus {
+namespace amdinfer {
 
 class Client {
  public:
@@ -69,6 +69,6 @@ std::vector<InferenceResponse> inferAsyncOrderedBatched(
   Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests, size_t batch_size);
 
-}  // namespace proteus
+}  // namespace amdinfer
 
 #endif  // GUARD_PROTEUS_CLIENTS_CLIENT

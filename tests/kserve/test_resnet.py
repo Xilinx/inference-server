@@ -19,16 +19,16 @@ np = pytest.importorskip("numpy")
 kserve = pytest.importorskip("kserve")
 cv2 = pytest.importorskip("cv2")
 
-import proteus
-import proteus.pre_post as pre_post
-import proteus.testing
+import amdinfer
+import amdinfer.pre_post as pre_post
+import amdinfer.testing
 
 import utils
 from fixtures import create_container_isvc, create_runtime_isvc, create_trained_model
 
 
 def make_request_migraphx():
-    image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+    image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
     options = pre_post.ImagePreprocessOptionsFloat()
     options.order = pre_post.ImageOrder.NCHW
@@ -46,16 +46,16 @@ def make_request_migraphx():
 
     assert len(images) == 1
 
-    input_0 = proteus.InferenceRequestInput()
+    input_0 = amdinfer.InferenceRequestInput()
     input_0.name = "input-0"
-    input_0.datatype = proteus.DataType.FP32
+    input_0.datatype = amdinfer.DataType.FP32
     input_0.shape = [224, 224, 3]
     input_0.setFp32Data(images[0])
 
-    request = proteus.InferenceRequest()
+    request = amdinfer.InferenceRequest()
     request.addInputTensor(input_0)
 
-    return proteus.inference_request_to_dict(request)
+    return amdinfer.inference_request_to_dict(request)
 
 
 def make_prediction(model_names, service_name, namespace):
