@@ -121,7 +121,7 @@ TEST_P(EchoParamFixture, EchoNative) {
   client.modelUnload("echo");
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 TEST_P(EchoParamFixture, EchoGrpc) {
   server_.startGrpc(50051);
   auto client = amdinfer::GrpcClient("localhost:50051");

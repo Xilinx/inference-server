@@ -172,7 +172,7 @@ Args getArgs(int argc, char** argv) {
   Args args = parseArgs(argc, argv);
 
   if (args.path_to_model.empty()) {
-    fs::path root{std::getenv("PROTEUS_ROOT")};
+    fs::path root{std::getenv("AMDINFER_ROOT")};
     args.path_to_model =
       root / "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx";
   }

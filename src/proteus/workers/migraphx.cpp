@@ -31,7 +31,7 @@
 
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
@@ -132,14 +132,14 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   // default batch size; client may request a change
   batch_size_ = 64;
   pad_batch_ = true;
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
   // stringstream used for formatting logger messages
   std::string msg;
   std::stringstream smsg(msg);
 
-  PROTEUS_LOG_INFO(logger, " MIGraphXWorker::doInit \n");
+  AMDINFER_LOG_INFO(logger, " MIGraphXWorker::doInit \n");
 
   if (parameters->has("batch")) {
     this->batch_size_ = parameters->get<int>("batch");
@@ -147,7 +147,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   if (parameters->has("model")) {
     input_file_ = parameters->get<std::string>("model");
   } else {
-    PROTEUS_LOG_ERROR(
+    AMDINFER_LOG_ERROR(
       logger, "MIGraphXWorker parameters required:  \"model\": \"<filepath>\"");
     // Throwing an exception causes server to delete this worker instance.
     // Client must try again.
@@ -184,7 +184,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   std::ifstream f(compiled_path.c_str());
   if (f.good()) {
     // Load the compiled MessagePack (*.mxr) file
-    PROTEUS_LOG_INFO(
+    AMDINFER_LOG_INFO(
       logger, std::string("migraphx worker loading compiled model file ") +
                 compiled_path.c_str());
     migraphx::file_options options;
@@ -199,7 +199,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
       if (emsg.find("Failed to call function") != std::string::npos) {
         emsg = emsg + ".  Server could not connect to a GPU.";
       }
-      PROTEUS_LOG_ERROR(logger, emsg);
+      AMDINFER_LOG_ERROR(logger, emsg);
       throw std::runtime_error(emsg);
       // prog_ does not need to be compiled.
     }
@@ -210,9 +210,9 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
       // Load the onnx file
       // Using parse_onnx() instead of load() because there's a bug at the
       // time of writing
-      PROTEUS_LOG_INFO(logger,
-                       std::string("migraphx worker loading ONNX model file ") +
-                         onnx_path.c_str());
+      AMDINFER_LOG_INFO(
+        logger, std::string("migraphx worker loading ONNX model file ") +
+                  onnx_path.c_str());
 
       migraphx::onnx_options onnx_opts;
       onnx_opts.set_default_dim_value(batch_size_);
@@ -221,9 +221,9 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
       auto param_shapes =
         prog_.get_parameter_shapes();  // program_parameter_shapes struct
 
-      PROTEUS_LOG_INFO(logger,
-                       std::string("migraphx worker loaded ONNX model file ") +
-                         onnx_path.c_str());
+      AMDINFER_LOG_INFO(logger,
+                        std::string("migraphx worker loaded ONNX model file ") +
+                          onnx_path.c_str());
 
       // Compile the model.  Hard-coded choices of offload_copy and gpu
       // target.
@@ -248,7 +248,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
         if (emsg.find("Failed to call function") != std::string::npos) {
           emsg = emsg + ".  Server could not connect to a GPU.";
         }
-        PROTEUS_LOG_ERROR(logger, emsg);
+        AMDINFER_LOG_ERROR(logger, emsg);
         throw std::runtime_error(emsg);
       }
 
@@ -259,14 +259,14 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
         options.set_file_format("msgpack");
 
         migraphx::save(this->prog_, compiled_path.c_str(), options);
-        PROTEUS_LOG_INFO(logger, std::string(" Saved compiled model file ") +
-                                   compiled_path.c_str());
+        AMDINFER_LOG_INFO(logger, std::string(" Saved compiled model file ") +
+                                    compiled_path.c_str());
       }
 
     } else {
       // Not finding the model file makes it impossible to finish initializing
       // this worker
-      PROTEUS_LOG_INFO(
+      AMDINFER_LOG_INFO(
         logger, std::string("migraphx worker cannot open the model file ") +
                   onnx_path.c_str() + " or " + compiled_path.c_str() +
                   ".  Does this path exist?");
@@ -297,10 +297,10 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
  * @return size_t the number of buffers added
  */
 size_t MIGraphXWorker::doAllocate(size_t num) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
-  PROTEUS_LOG_INFO(logger, "MIGraphXWorker::doAllocate");
+  AMDINFER_LOG_INFO(logger, "MIGraphXWorker::doAllocate");
   //
   // Allocate
   //
@@ -360,14 +360,14 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
     VectorBuffer::allocate(this->output_buffers_, output_shapes.size(),
                            out_buffer_size, amdinfer::DataType::INT8);
   } catch (...) {
-    PROTEUS_LOG_ERROR(
+    AMDINFER_LOG_ERROR(
       logger,
       std::string("MIGraphXWorker couldn't allocate buffer (batch size ") +
         std::to_string(batch_size_) + ")");
     throw "MIGraphXWorker couldn't allocate buffer";
   }
-  PROTEUS_LOG_INFO(logger, std::string("MIGraphXWorker::doAllocate() added ") +
-                             std::to_string(buffer_num) + " buffers");
+  AMDINFER_LOG_INFO(logger, std::string("MIGraphXWorker::doAllocate() added ") +
+                              std::to_string(buffer_num) + " buffers");
 
   return buffer_num;
 }
@@ -377,10 +377,10 @@ void MIGraphXWorker::doAcquire(RequestParameters* parameters) {
 }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
-  PROTEUS_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
+  AMDINFER_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
 
   util::setThreadName("Migraphx");
 
@@ -401,10 +401,10 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger, "New batch request in migraphx");
+    AMDINFER_LOG_INFO(logger, "New batch request in migraphx");
     std::chrono::time_point batch_tp =
       std::chrono::high_resolution_clock::now();
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
@@ -461,7 +461,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
         //     for(auto j : llen) smsg << j << ", ";
         //     smsg << " vs " ;
         //     for(auto j : avShape) smsg << j << ", ";
-        //     PROTEUS_LOG_DEBUG(logger, smsg.str());
+        //     AMDINFER_LOG_DEBUG(logger, smsg.str());
         //     throw invalid_argument(smsg.str());
         //   }
         // }
@@ -497,14 +497,14 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       // Run the inference
       //
 
-      PROTEUS_LOG_INFO(logger, "Beginning migraphx eval");
+      AMDINFER_LOG_INFO(logger, "Beginning migraphx eval");
       std::chrono::time_point eval_tp =
         std::chrono::high_resolution_clock::now();
       migraphx::api::arguments migraphx_output = this->prog_.eval(params);
       auto eval_duration =
         std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::high_resolution_clock::now() - eval_tp);
-      PROTEUS_LOG_INFO(
+      AMDINFER_LOG_INFO(
         logger, std::string("Finished migraphx eval; batch size: ") +
                   std::to_string(batch_size_) + "  elapsed time: " +
                   std::to_string(eval_duration.count()) + " us.  Images/sec: " +
@@ -597,7 +597,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           }
           // respond back to the client
           req->runCallbackOnce(resp);
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
           Metrics::getInstance().incrementCounter(
             MetricCounterIDs::kPipelineEgressWorker);
           auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -606,7 +606,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             MetricSummaryIDs::kRequestLatency, duration.count());
 #endif
         } catch (const std::exception& e) {
-          PROTEUS_LOG_ERROR(logger, e.what());
+          AMDINFER_LOG_ERROR(logger, e.what());
           // Pass error message back as reply to request; continue processing
           // more inference requests
 
@@ -616,7 +616,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       }  // end j, request
     } catch (const std::exception& e) {
       // This outer catch block catches exceptions in evaluation of the batch.
-      PROTEUS_LOG_ERROR(logger, e.what());
+      AMDINFER_LOG_ERROR(logger, e.what());
       // Pass error message back as reply for each request in the batch
       const auto& requests = batch->getRequests();
       for (auto& req_e : requests) {
@@ -627,12 +627,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
     auto batch_duration = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::high_resolution_clock::now() - batch_tp);
-    PROTEUS_LOG_INFO(
+    AMDINFER_LOG_INFO(
       logger, std::string("Finished migraphx batch processing; batch size: ") +
                 std::to_string(batch_size_) + "  elapsed time: " +
                 std::to_string(batch_duration.count()) + " us");
   }  // end while (batch)
-  PROTEUS_LOG_INFO(logger, "Migraphx::doRun ending");
+  AMDINFER_LOG_INFO(logger, "Migraphx::doRun ending");
 }
 
 void MIGraphXWorker::doRelease() {}

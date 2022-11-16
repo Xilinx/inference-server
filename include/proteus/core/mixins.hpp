@@ -1,5 +1,5 @@
-#ifndef GUARD_PROTEUS_CORE_MIXINS
-#define GUARD_PROTEUS_CORE_MIXINS
+#ifndef GUARD_AMDINFER_CORE_MIXINS
+#define GUARD_AMDINFER_CORE_MIXINS
 
 #include <cstddef>  // for std::byte, size_t
 
@@ -16,4 +16,4 @@ class Serializable {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_MIXINS
+#endif  // GUARD_AMDINFER_CORE_MIXINS

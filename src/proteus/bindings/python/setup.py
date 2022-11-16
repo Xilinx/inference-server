@@ -27,7 +27,7 @@ import os
 
 import setuptools
 
-version_path = os.getenv("PROTEUS_ROOT")
+version_path = os.getenv("AMDINFER_ROOT")
 if version_path:
     version_path += "/VERSION"
     with open(version_path, "r") as f:

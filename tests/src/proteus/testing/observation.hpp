@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_SRC_PROTEUS_TESTING_OBSERVATION
-#define GUARD_SRC_PROTEUS_TESTING_OBSERVATION
+#ifndef GUARD_SRC_AMDINFER_TESTING_OBSERVATION
+#define GUARD_SRC_AMDINFER_TESTING_OBSERVATION
 
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/observation/observer.hpp"
@@ -22,7 +22,7 @@
 namespace amdinfer {
 
 void initializeTestLogging() {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "test",  // logger_name
     getLogDirectory(),
@@ -37,4 +37,4 @@ void initializeTestLogging() {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_SRC_PROTEUS_TESTING_OBSERVATION
+#endif  // GUARD_SRC_AMDINFER_TESTING_OBSERVATION

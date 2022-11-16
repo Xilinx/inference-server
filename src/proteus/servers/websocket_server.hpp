@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_SERVERS_WEBSOCKET_SERVER
-#define GUARD_PROTEUS_SERVERS_WEBSOCKET_SERVER
+#ifndef GUARD_AMDINFER_SERVERS_WEBSOCKET_SERVER
+#define GUARD_AMDINFER_SERVERS_WEBSOCKET_SERVER
 
 #include <drogon/HttpRequest.h>          // for HttpRequestPtr
 #include <drogon/HttpTypes.h>            // for Get, WebSocketMessageType
@@ -26,7 +26,7 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/interface.hpp"       // for Interface
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
@@ -105,7 +105,7 @@ class WebsocketServer
   WS_PATH_ADD("/models/infer", drogon::Get);
   WS_PATH_LIST_END
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
  private:
   Logger logger_{Loggers::kServer};
 #endif
@@ -113,4 +113,4 @@ class WebsocketServer
 
 }  // namespace amdinfer::http
 
-#endif  // GUARD_PROTEUS_SERVERS_WEBSOCKET_SERVER
+#endif  // GUARD_AMDINFER_SERVERS_WEBSOCKET_SERVER

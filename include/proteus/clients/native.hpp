@@ -17,8 +17,8 @@
  * @brief Defines the methods for interacting with Proteus in the native C++ API
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_NATIVE
-#define GUARD_PROTEUS_CLIENTS_NATIVE
+#ifndef GUARD_AMDINFER_CLIENTS_NATIVE
+#define GUARD_AMDINFER_CLIENTS_NATIVE
 
 #include <string>  // for string
 #include <vector>  // for vector
@@ -86,4 +86,4 @@ class NativeClient : public Client {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_NATIVE
+#endif  // GUARD_AMDINFER_CLIENTS_NATIVE

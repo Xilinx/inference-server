@@ -78,7 +78,7 @@ parameters=(
 )
 
 cwd=$(pwd)
-cd $PROTEUS_ROOT
+cd $AMDINFER_ROOT
 
 
 for index in ${!durations[*]}; do

@@ -17,8 +17,8 @@
  * @brief Defines the soft batcher implementation
  */
 
-#ifndef GUARD_PROTEUS_BATCHING_SOFT
-#define GUARD_PROTEUS_BATCHING_SOFT
+#ifndef GUARD_AMDINFER_BATCHING_SOFT
+#define GUARD_AMDINFER_BATCHING_SOFT
 
 #include "amdinfer/batching/batcher.hpp"  // IWYU pragma: export
 
@@ -44,4 +44,4 @@ class SoftBatcher : public Batcher {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BATCHING_SOFT
+#endif  // GUARD_AMDINFER_BATCHING_SOFT

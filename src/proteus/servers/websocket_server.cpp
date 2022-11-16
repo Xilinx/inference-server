@@ -38,13 +38,13 @@ using drogon::WebSocketMessageType;
 namespace amdinfer::http {
 
 WebsocketServer::WebsocketServer() {
-  PROTEUS_LOG_INFO(logger_, "Constructed WebsocketServer");
+  AMDINFER_LOG_INFO(logger_, "Constructed WebsocketServer");
 }
 
 void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                                        std::string &&message,
                                        const WebSocketMessageType &type) {
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
   trace->startSpan("websocket_handler");
 #endif
@@ -64,7 +64,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
   // if we fail to get the JSON object, return
   if (!parsingSuccessful) {
-    PROTEUS_LOG_INFO(logger_, "Failed to parse JSON request to websocket");
+    AMDINFER_LOG_INFO(logger_, "Failed to parse JSON request to websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No JSON could be parsed in the request");
     return;
@@ -74,7 +74,7 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   if (json->isMember("model")) {
     model = json->get("model", "").asString();
   } else {
-    PROTEUS_LOG_INFO(logger_, "No model request found in websocket");
+    AMDINFER_LOG_INFO(logger_, "No model request found in websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No model found in request");
     return;
@@ -86,13 +86,13 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
   auto *worker = Manager::getInstance().getWorker(model);
   if (worker == nullptr) {
-    PROTEUS_LOG_INFO(logger_, "Worker " + model + " not found");
+    AMDINFER_LOG_INFO(logger_, "Worker " + model + " not found");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "Worker " + model + " not found");
     return;
   }
   auto *batcher = worker->getBatcher();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->endSpan();
   request->setTrace(std::move(trace));
 #endif
@@ -101,14 +101,14 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
 
 void WebsocketServer::handleConnectionClosed(
   const WebSocketConnectionPtr &conn) {
-  PROTEUS_LOG_INFO(logger_, "Websocket closed");
+  AMDINFER_LOG_INFO(logger_, "Websocket closed");
   // (void)conn;  // suppress unused variable warning
   conn->shutdown();
 }
 
 void WebsocketServer::handleNewConnection(const HttpRequestPtr &req,
                                           const WebSocketConnectionPtr &conn) {
-  PROTEUS_LOG_INFO(logger_, "New websocket connection");
+  AMDINFER_LOG_INFO(logger_, "New websocket connection");
   (void)conn;  // suppress unused variable warning
   (void)req;   // suppress unused variable warning
 }
@@ -131,7 +131,7 @@ size_t DrogonWs::getInputSize() {
 std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
   const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offset,
   const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offset) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto &logger = this->getLogger();
 #endif
   try {
@@ -152,7 +152,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
     request->setCallback(std::move(callback));
     return request;
   } catch (const invalid_argument &e) {
-    PROTEUS_LOG_INFO(logger, e.what());
+    AMDINFER_LOG_INFO(logger, e.what());
     this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition,
                           "Failed to create request");
     return nullptr;
@@ -160,7 +160,7 @@ std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
 }
 
 void DrogonWs::errorHandler(const std::exception &e) {
-  PROTEUS_LOG_INFO(this->getLogger(), e.what());
+  AMDINFER_LOG_INFO(this->getLogger(), e.what());
   this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
 }
 

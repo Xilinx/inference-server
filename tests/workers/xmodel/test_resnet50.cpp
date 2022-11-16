@@ -95,7 +95,7 @@ void test_0(Client* client) {
   validate(responses);
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
@@ -110,7 +110,7 @@ TEST_F(BaseFixture, WorkersXmodelResnet50) {
   test_0(&client);
 }
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)

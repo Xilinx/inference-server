@@ -23,7 +23,7 @@
 #include <opentelemetry/trace/canonical_code.h>  // for trace
 #include <opentelemetry/trace/tracer.h>          // for Tracer
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 
 namespace trace_api = opentelemetry::trace;
 namespace nostd = opentelemetry::nostd;

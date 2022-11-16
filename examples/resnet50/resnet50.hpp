@@ -80,11 +80,11 @@ Args parseArgs(int argc, char** argv) {
 
   if (args.path_to_image.empty() || args.path_to_model.empty() ||
       args.path_to_labels.empty()) {
-    const char* root_path = std::getenv("PROTEUS_ROOT");
+    const char* root_path = std::getenv("AMDINFER_ROOT");
     if (root_path == nullptr) {
-      std::cerr << "PROTEUS_ROOT is not defined in the environment\n";
+      std::cerr << "AMDINFER_ROOT is not defined in the environment\n";
       std::cerr << "-> Needed to infer default values for arguments\n";
-      std::cerr << "Either:\n - define PROTEUS_ROOT in the environment\n";
+      std::cerr << "Either:\n - define AMDINFER_ROOT in the environment\n";
       std::cerr << " - pass all the following flags:\n";
       std::cerr << "     --image\n";
       std::cerr << "     --model\n";

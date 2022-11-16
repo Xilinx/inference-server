@@ -113,7 +113,7 @@ class Fixture : public testing::TestWithParam<DataType> {};
 TEST_P(Fixture, TestRequestToProto) {
   initializeTestLogging();
   Observer observer;
-  PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kTest});
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kTest});
 
   auto datatype = GetParam();
 

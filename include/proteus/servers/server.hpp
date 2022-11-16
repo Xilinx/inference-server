@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_SERVERS_SERVER
-#define GUARD_PROTEUS_SERVERS_SERVER
+#ifndef GUARD_AMDINFER_SERVERS_SERVER
+#define GUARD_AMDINFER_SERVERS_SERVER
 
 #include <cstdint>
 #include <filesystem>
@@ -42,4 +42,4 @@ class Server {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_SERVERS_SERVER
+#endif  // GUARD_AMDINFER_SERVERS_SERVER

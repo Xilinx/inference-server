@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_HELPERS_THREAD
-#define GUARD_PROTEUS_HELPERS_THREAD
+#ifndef GUARD_AMDINFER_HELPERS_THREAD
+#define GUARD_AMDINFER_HELPERS_THREAD
 
 #include <string>
 
@@ -45,4 +45,4 @@ inline void setThreadName(const std::string& name) {
 
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_HELPERS_THREAD
+#endif  // GUARD_AMDINFER_HELPERS_THREAD

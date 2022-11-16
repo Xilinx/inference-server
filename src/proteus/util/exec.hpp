@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_EXEC
-#define GUARD_PROTEUS_UTIL_EXEC
+#ifndef GUARD_AMDINFER_UTIL_EXEC
+#define GUARD_AMDINFER_UTIL_EXEC
 
 #include <string>
 
@@ -30,4 +30,4 @@ std::string exec(const char* cmd);
 
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_UTIL_EXEC
+#endif  // GUARD_AMDINFER_UTIL_EXEC

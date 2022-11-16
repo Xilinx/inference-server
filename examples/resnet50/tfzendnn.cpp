@@ -152,7 +152,7 @@ Args getArgs(int argc, char** argv) {
   Args args = parseArgs(argc, argv);
 
   if (args.path_to_model.empty()) {
-    fs::path root{std::getenv("PROTEUS_ROOT")};
+    fs::path root{std::getenv("AMDINFER_ROOT")};
     args.path_to_model =
       root / "external/artifacts/tensorflow/resnet_v1_50_baseline_6.96B_922.pb";
   }

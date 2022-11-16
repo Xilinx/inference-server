@@ -29,7 +29,7 @@
 
 #include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::STRING
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
@@ -108,7 +108,7 @@ void InvertVideo::doAcquire(RequestParameters* parameters) {
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
   util::setThreadName("InvertVideo");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -119,10 +119,10 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_LOG_INFO(logger, "Got request in InvertVideo");
+    AMDINFER_LOG_INFO(logger, "Got request in InvertVideo");
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto& trace = batch->getTrace(j);
       trace->startSpan("InvertVideo");
 #endif
@@ -137,7 +137,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(idata);  // open the video file
         if (!cap.isOpened()) {        // check if we succeeded
           const char* error = "Cannot open video file";
-          PROTEUS_LOG_ERROR(logger, error);
+          AMDINFER_LOG_ERROR(logger, error);
           req->runCallbackError(error);
           continue;
         }
@@ -192,7 +192,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
       }
     }
   }
-  PROTEUS_LOG_INFO(logger, "InvertVideo ending");
+  AMDINFER_LOG_INFO(logger, "InvertVideo ending");
 }
 
 void InvertVideo::doRelease() {}

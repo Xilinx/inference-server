@@ -17,8 +17,8 @@
  * @brief Defines base64 encoding/decoding
  */
 
-#ifndef GUARD_PROTEUS_UTIL_BASE64
-#define GUARD_PROTEUS_UTIL_BASE64
+#ifndef GUARD_AMDINFER_UTIL_BASE64
+#define GUARD_AMDINFER_UTIL_BASE64
 
 #include <cstddef>  // for size_t
 #include <string>   // for string
@@ -60,4 +60,4 @@ std::string base64_encode(std::string in);
 std::string base64_encode(const char* in, size_t in_len);
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_UTIL_BASE64
+#endif  // GUARD_AMDINFER_UTIL_BASE64

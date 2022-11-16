@@ -18,8 +18,8 @@
  * runs
  */
 
-#ifndef GUARD_PROTEUS_CORE_MANAGER
-#define GUARD_PROTEUS_CORE_MANAGER
+#ifndef GUARD_AMDINFER_CORE_MANAGER
+#define GUARD_AMDINFER_CORE_MANAGER
 
 #include <exception>      // for exception_ptr
 #include <map>            // for map
@@ -30,7 +30,7 @@
 #include <utility>        // for move, pair
 #include <vector>         // for vector
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/predict_api.hpp"     // for RequestParameters
 #include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
@@ -182,7 +182,7 @@ class Manager {
   /// A queue used to sequentially order changes to the Proteus Manager state
   std::unique_ptr<UpdateCommandQueue> update_queue_;
   std::thread update_thread_;
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};
 #endif
 
@@ -198,4 +198,4 @@ class Manager {
 };
 
 }  // namespace amdinfer
-#endif  // GUARD_PROTEUS_CORE_MANAGER
+#endif  // GUARD_AMDINFER_CORE_MANAGER

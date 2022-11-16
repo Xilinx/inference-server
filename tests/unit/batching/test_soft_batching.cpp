@@ -25,7 +25,7 @@
 #include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
 #include "amdinfer/buffers/buffer.hpp"           // for Buffer
 #include "amdinfer/buffers/vector_buffer.hpp"    // for VectorBuffer
-#include "amdinfer/build_options.hpp"            // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
@@ -64,7 +64,7 @@ struct BatchConfig {
 class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
  protected:
   void SetUp() override {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
     LogOptions options{
       "server",          // logger_name
       "",                // log directory

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 add_executable(amdinfer-server-exe main.cpp)
-target_include_directories(amdinfer-server-exe PRIVATE ${PROTEUS_INCLUDE_DIRS})
+target_include_directories(amdinfer-server-exe PRIVATE ${AMDINFER_INCLUDE_DIRS})
 target_link_options(amdinfer-server-exe PRIVATE "LINKER:-E")
 enable_ipo_on_target(amdinfer-server-exe)
 set_target_properties(
@@ -39,7 +39,7 @@ add_subdirectory(workers)
 # guided by: https://github.com/alexreinking/SharedStaticStarter and its
 # accompanying article.
 
-if(${PROTEUS_BUILD_SHARED})
+if(${AMDINFER_BUILD_SHARED})
   set(type shared)
 else()
   set(type static)
@@ -91,7 +91,7 @@ endforeach()
 # generate_export_header(amdinfer EXPORT_FILE_NAME include/amdinfer/export.h)
 # target_compile_definitions(
 #   amdinfer PUBLIC
-#   "$<$<NOT:$<BOOL:${PROTEUS_BUILD_SHARED}>>:PROTEUS_STATIC_DEFINE>"
+#   "$<$<NOT:$<BOOL:${AMDINFER_BUILD_SHARED}>>:AMDINFER_STATIC_DEFINE>"
 # )
 # target_include_directories(
 #   amdinfer PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
@@ -165,12 +165,12 @@ endif()
 set(dependencies efsw::efsw protobuf::libprotobuf)
 set(deb_dependencies "")
 
-if(${PROTEUS_ENABLE_HTTP})
+if(${AMDINFER_ENABLE_HTTP})
   list(APPEND dependencies Drogon::Drogon Trantor::Trantor)
   list(APPEND deb_dependencies libjsoncpp1)
 endif()
 
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   list(
     APPEND dependencies
            json-c::json-c
@@ -183,7 +183,7 @@ if(${PROTEUS_ENABLE_VITIS})
   )
   list(APPEND deb_dependencies libgoogle-glog0v5 xrt)
 
-  if(${PROTEUS_ENABLE_PYTHON_BINDINGS})
+  if(${AMDINFER_ENABLE_PYTHON_BINDINGS})
     find_package(Python COMPONENTS Interpreter Development)
     execute_process(
       COMMAND ${Python_EXECUTABLE} "-c" "import xir; print(xir.__file__)"
@@ -196,21 +196,21 @@ if(${PROTEUS_ENABLE_VITIS})
   endif()
 endif()
 
-if(${PROTEUS_ENABLE_AKS})
+if(${AMDINFER_ENABLE_AKS})
   list(APPEND dependencies aks::aks)
   list(APPEND deb_dependencies libboost-system1.65.1
               "libboost-filesystem1.65.1"
   )
 endif()
 
-if(${PROTEUS_ENABLE_TRACING})
+if(${AMDINFER_ENABLE_TRACING})
   list(APPEND dependencies opentelemetry-cpp::jaeger_trace_exporter
               opentelemetry-cpp::resources opentelemetry-cpp::trace
               opentelemetry-cpp::common opentelemetry-cpp::http_client_curl
   )
 endif()
 
-if(${PROTEUS_ENABLE_METRICS})
+if(${AMDINFER_ENABLE_METRICS})
   list(APPEND dependencies prometheus-cpp::core)
 endif()
 

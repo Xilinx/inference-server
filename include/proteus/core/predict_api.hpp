@@ -17,8 +17,8 @@
  * @brief Defines the objects used to hold inference requests and responses
  */
 
-#ifndef GUARD_PROTEUS_CORE_PREDICT_API
-#define GUARD_PROTEUS_CORE_PREDICT_API
+#ifndef GUARD_AMDINFER_CORE_PREDICT_API
+#define GUARD_AMDINFER_CORE_PREDICT_API
 
 #include <cstddef>           // for size_t, byte
 #include <cstdint>           // for uint64_t, int32_t
@@ -35,7 +35,7 @@
 #include <variant>           // for operator!=, operator<
 #include <vector>            // for vector
 
-#include "amdinfer/build_options.hpp"    // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"  // for DataType, mapTypeToStr
 #include "amdinfer/core/mixins.hpp"      // for Serializable
 #include "amdinfer/declarations.hpp"     // for InferenceResponseOutput
@@ -325,7 +325,7 @@ class InferenceResponse {
   /// Get the error message if it exists. Defaults to an empty string
   std::string getError() const;
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   /**
    * @brief Set the Context object to propagate tracing data on
    *
@@ -361,7 +361,7 @@ class InferenceResponse {
   std::shared_ptr<RequestParameters> parameters_;
   std::vector<InferenceResponseOutput> outputs_;
   std::string error_msg_;
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   StringMap context_;
 #endif
 };
@@ -598,4 +598,4 @@ struct less<amdinfer::RequestParameters> {
 };
 }  // namespace std
 
-#endif  // GUARD_PROTEUS_CORE_PREDICT_API
+#endif  // GUARD_AMDINFER_CORE_PREDICT_API

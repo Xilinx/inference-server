@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_QUEUE
-#define GUARD_PROTEUS_UTIL_QUEUE
+#ifndef GUARD_AMDINFER_UTIL_QUEUE
+#define GUARD_AMDINFER_UTIL_QUEUE
 
 #include <concurrentqueue/blockingconcurrentqueue.h>  // IWYU pragma: export
 
@@ -34,4 +34,4 @@ using InferenceRequestPtrQueue = BlockingQueue<InferenceRequestPtr>;
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_UTIL_QUEUE
+#endif  // GUARD_AMDINFER_UTIL_QUEUE

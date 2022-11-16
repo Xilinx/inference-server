@@ -23,19 +23,19 @@ list(
          InvertVideo
 )
 
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   set(workers ${workers} Xmodel)
 endif()
 
-if(${PROTEUS_ENABLE_TFZENDNN})
+if(${AMDINFER_ENABLE_TFZENDNN})
   set(workers ${workers} TfZendnn)
 endif()
 
-if(${PROTEUS_ENABLE_PTZENDNN})
+if(${AMDINFER_ENABLE_PTZENDNN})
   set(workers ${workers} PtZendnn)
 endif()
 
-if(${PROTEUS_ENABLE_MIGRAPHX})
+if(${AMDINFER_ENABLE_MIGRAPHX})
   set(workers ${workers} Migraphx)
 endif()
 
@@ -60,7 +60,7 @@ foreach(worker ${workers})
   target_link_libraries(
     ${worker_name} PRIVATE batching buffers core observation
   )
-  target_include_directories(${worker_name} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${worker_name})
 
   list(APPEND WORKER_TARGETS ${worker_name})
@@ -72,34 +72,34 @@ target_link_libraries(
 target_link_libraries(
   workerInvertvideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio
 )
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
     workerXmodel PRIVATE parse_env vart-runner target-factory xir observation
   )
 endif()
 
-if(${PROTEUS_ENABLE_MIGRAPHX})
+if(${AMDINFER_ENABLE_MIGRAPHX})
   target_link_libraries(
     workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc
                            opencv_core
   )
 endif()
 
-if(${PROTEUS_ENABLE_TFZENDNN})
+if(${AMDINFER_ENABLE_TFZENDNN})
   target_include_directories(
     workerTfzendnn SYSTEM PRIVATE /usr/include/tfzendnn
   )
   target_link_libraries(workerTfzendnn PRIVATE tensorflow_cc)
 endif()
 
-if(${PROTEUS_ENABLE_PTZENDNN})
+if(${AMDINFER_ENABLE_PTZENDNN})
   target_include_directories(
     workerPtzendnn SYSTEM PRIVATE /usr/include/ptzendnn
   )
   target_link_libraries(workerPtzendnn PRIVATE torch torch_cpu c10)
 endif()
 
-if(${PROTEUS_ENABLE_AKS})
+if(${AMDINFER_ENABLE_AKS})
 
   set(aks_workers Resnet50 Resnet50Stream AksDetect AksDetectStream)
 
@@ -135,7 +135,7 @@ if(${PROTEUS_ENABLE_AKS})
               opencv_core
               opencv_imgcodecs
     )
-    target_include_directories(${worker_name} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
     add_dependencies(${worker_name} aks-kernels)
     enable_ipo_on_target(${worker_name})
 
@@ -154,7 +154,7 @@ if(${PROTEUS_ENABLE_AKS})
     workerAks PRIVATE batching buffers core parse_env observation
     PRIVATE aks vart-runner xir
   )
-  target_include_directories(workerAks PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(workerAks PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(workerAks)
   list(APPEND WORKER_TARGETS workerAks)
 else()

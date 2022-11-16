@@ -17,19 +17,19 @@
  * @brief Defines tracing in Proteus
  */
 
-#ifndef GUARD_PROTEUS_OBSERVATION_TRACING
-#define GUARD_PROTEUS_OBSERVATION_TRACING
+#ifndef GUARD_AMDINFER_OBSERVATION_TRACING
+#define GUARD_AMDINFER_OBSERVATION_TRACING
 
 #include <memory>  // for shared_ptr, uniqu...
 #include <stack>   // for stack
 
-#include "amdinfer/build_options.hpp"     // for PROTEUS_ENABLE_TR...
+#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TR...
 #include "amdinfer/core/predict_api.hpp"  // for RequestParameters
 #include "amdinfer/declarations.hpp"      // for StringMap
 
 // IWYU pragma: no_forward_declare amdinfer::RequestParameters
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 
 // opentelemetry needs this definition prior to any header inclusions if the
 // library was compiled with this flag set, which it is in the Docker build
@@ -107,4 +107,4 @@ TracePtr startTrace(const char* name, const StringMap& http_headers);
 
 #endif
 
-#endif  // GUARD_PROTEUS_OBSERVATION_TRACING
+#endif  // GUARD_AMDINFER_OBSERVATION_TRACING

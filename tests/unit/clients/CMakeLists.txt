@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if(${PROTEUS_ENABLE_GRPC})
+if(${AMDINFER_ENABLE_GRPC})
 
   list(APPEND tests grpc_internal)
   list(APPEND tests_libs "grpc_internal~lib_grpc~predict_api~data_types")

@@ -29,12 +29,12 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"      // for invalid_argument
 #include "amdinfer/core/interface.hpp"       // for Interface
 #include "amdinfer/core/predict_api.hpp"     // for RequestParameters
 #include "amdinfer/declarations.hpp"         // for InterfacePtr
-#include "amdinfer/observation/logging.hpp"  // for Logger, PROTEUS_LOG_DEBUG
+#include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_DEBUG
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
@@ -50,7 +50,7 @@ namespace amdinfer {
 void SoftBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
   util::setThreadName(thread_name);
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -70,7 +70,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
     std::vector<size_t> output_offset(output_buffers.size(), 0);
     size_t batch_size = 0;
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().setGauge(
       MetricGaugeIDs::kQueuesBatcherInput,
       static_cast<double>(input_queue_->size_approx()));
@@ -88,8 +88,8 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         // wait for the first request
         this->input_queue_->wait_dequeue(req);
         start_time = std::chrono::high_resolution_clock::now();
-        PROTEUS_LOG_DEBUG(logger,
-                          "Got request of a new batch for " + this->model_);
+        AMDINFER_LOG_DEBUG(logger,
+                           "Got request of a new batch for " + this->model_);
       } else {
         auto remaining_time =
           kTimeout - (std::chrono::high_resolution_clock::now() - start_time);
@@ -118,12 +118,12 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         continue;
       }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto trace = req->getTrace();
       trace->startSpan("soft_batcher");
 #endif
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineIngressBatcher);
 #endif
@@ -133,8 +133,8 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
       auto new_req = req->getRequest(input_buffers, input_offset,
                                      output_buffers, output_offset);
       if (new_req == nullptr) {
-        PROTEUS_LOG_DEBUG(logger, "Making request for " + this->model_ +
-                                    " failed. Reverting buffers.");
+        AMDINFER_LOG_DEBUG(logger, "Making request for " + this->model_ +
+                                     " failed. Reverting buffers.");
         input_offset = old_input_offset;
         output_offset = old_output_offset;
       } else {
@@ -143,21 +143,21 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         if (first_request) {
           first_request = false;
         }
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
         trace->endSpan();
         batch->addTrace(std::move(trace));
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
         batch->addTime(req->get_time());
 #endif
       }
     } while (batch_size % this->batch_size_ != 0 && run);
 
     if (!batch->empty()) {
-      PROTEUS_LOG_DEBUG(logger, "Enqueuing batch for " + this->model_ +
-                                  " of size " + std::to_string(batch_size));
+      AMDINFER_LOG_DEBUG(logger, "Enqueuing batch for " + this->model_ +
+                                   " of size " + std::to_string(batch_size));
       this->output_queue_->enqueue(std::move(batch));
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressBatcher);
 #endif

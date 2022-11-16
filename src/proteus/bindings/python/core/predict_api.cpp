@@ -277,7 +277,7 @@ void wrapInferenceResponse(py::module_ &m) {
     .def_property("id", &InferenceResponse::getID, &InferenceResponse::setID)
     .def_property("model", &InferenceResponse::getModel,
                   &InferenceResponse::setModel)
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     .def("getContext", &InferenceResponse::getContext)
     .def("setContext",
          [](InferenceResponse &self, amdinfer::StringMap context) {

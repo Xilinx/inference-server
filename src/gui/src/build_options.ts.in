@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export const kDefaultHttpPort = @PROTEUS_DEFAULT_HTTP_PORT@;
+export const kDefaultHttpPort = @AMDINFER_DEFAULT_HTTP_PORT@;

@@ -17,8 +17,8 @@
  * @brief Defines the base Interface class
  */
 
-#ifndef GUARD_PROTEUS_CORE_INTERFACE
-#define GUARD_PROTEUS_CORE_INTERFACE
+#ifndef GUARD_AMDINFER_CORE_INTERFACE
+#define GUARD_AMDINFER_CORE_INTERFACE
 
 #include <chrono>     // for high_resolution_clock
 #include <cstddef>    // for size_t
@@ -26,7 +26,7 @@
 #include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Loggers...
 #include "amdinfer/observation/tracing.hpp"  // for TracePtr
@@ -62,13 +62,13 @@ class Interface {
   virtual ~Interface() = default;  ///< Destructor
   /// Get the type of the interface
   InterfaceType getType() const;
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   /// Store the active trace into the Interface for propagation
   void setTrace(TracePtr &&trace);
   /// Get the stored trace from the interface for propagation
   TracePtr &&getTrace();
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   /// Store a time. This is used to track how long requests take
   void set_time(
     const std::chrono::high_resolution_clock::time_point &start_time);
@@ -100,22 +100,22 @@ class Interface {
 
  protected:
   InterfaceType type_;
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   TracePtr trace_;
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   std::chrono::_V2::system_clock::time_point start_time_;
 #endif
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const Logger &getLogger() const;
 #endif
 
  private:
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};
 #endif
 };
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_INTERFACE
+#endif  // GUARD_AMDINFER_CORE_INTERFACE

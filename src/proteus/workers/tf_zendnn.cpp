@@ -45,7 +45,7 @@
 
 #include "amdinfer/batching/hard.hpp"          // for Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABL...
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABL...
 #include "amdinfer/core/data_types.hpp"        // for DataType, Dat...
 #include "amdinfer/core/exceptions.hpp"        // for external_error
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResp...
@@ -157,9 +157,9 @@ void TfZendnn::doInit(RequestParameters* parameters) {
 
   std::string logmsg =
     "TensorFlow C/C++ library version: " + std::string(TF_Version());
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
-  PROTEUS_LOG_INFO(logger, logmsg);
+  AMDINFER_LOG_INFO(logger, logmsg);
 #endif
 }
 
@@ -176,7 +176,7 @@ size_t TfZendnn::doAllocate(size_t num) {
 }
 
 void TfZendnn::doAcquire(RequestParameters* parameters) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -197,7 +197,7 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   if (!status_.ok()) {
     throw external_error("Could not initialize a tensorflow session");
   }
-  PROTEUS_LOG_INFO(logger, "New TF Session Initiated");
+  AMDINFER_LOG_INFO(logger, "New TF Session Initiated");
 
   // Load the model
   std::string path;
@@ -214,14 +214,14 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   if (!status_.ok()) {
     throw external_error("Could not load model with tensorflow");
   }
-  PROTEUS_LOG_INFO(logger, "Reading Model");
+  AMDINFER_LOG_INFO(logger, "Reading Model");
 
   // Add the graph to the session
   status_ = this->session_->Create(graph_def_);
   if (!status_.ok()) {
     throw external_error("Could not load the model to session");
   }
-  PROTEUS_LOG_INFO(logger, "TF Session Created, Ready for prediction");
+  AMDINFER_LOG_INFO(logger, "TF Session Created, Ready for prediction");
 
   // Adding metadata for input and output
   this->metadata_.addInputTensor(
@@ -233,7 +233,7 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
 
 void TfZendnn::doRun(BatchPtrQueue* input_queue) {
   util::setThreadName("TfZendnn");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -243,13 +243,13 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_DEBUG(logger, "Got request in TfZendnn. Size: " +
-                                std::to_string(batch->size()));
+    AMDINFER_LOG_DEBUG(logger, "Got request in TfZendnn. Size: " +
+                                 std::to_string(batch->size()));
 
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->size());
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
@@ -270,7 +270,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     for (unsigned int j = 0; j < batch->size(); j++) {
       auto& req = batch->getRequest(j);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto& trace = batch->getTrace(j);
       trace->startSpan("tfzendnn");
 #endif
@@ -280,8 +280,8 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      PROTEUS_LOG_DEBUG(logger,
-                        "Size of input: " + std::to_string(inputs.size()));
+      AMDINFER_LOG_DEBUG(logger,
+                         "Size of input: " + std::to_string(inputs.size()));
 
       // Get all the inputs from the requests and copy to the TensorFlow tensor
       for (auto& input : inputs) {
@@ -293,7 +293,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       }
     }
 
-    PROTEUS_LOG_DEBUG(logger, input_tensor.DebugString());
+    AMDINFER_LOG_DEBUG(logger, input_tensor.DebugString());
 
     // Create the inputs and output tensor
     std::vector<std::pair<std::string, tf::Tensor>> input_pair = {
@@ -307,19 +307,19 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration =
       std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
     float time_tmp = duration.count();
-    PROTEUS_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
-                               " images: " + std::to_string(time_tmp));
+    AMDINFER_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
+                                " images: " + std::to_string(time_tmp));
 #endif
 
     if (!status_.ok()) {
-      PROTEUS_LOG_ERROR(logger, status_.ToString());
+      AMDINFER_LOG_ERROR(logger, status_.ToString());
       for (const auto& req : *batch) {
         req->runCallbackError("Issue with prediction");
       }
     }
-    PROTEUS_LOG_DEBUG(logger, output_tensor[0].DebugString());
+    AMDINFER_LOG_DEBUG(logger, output_tensor[0].DebugString());
 
     // Copy the output from the model to the response object
     size_t response_size = output_classes_;
@@ -352,7 +352,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
@@ -360,14 +360,14 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       auto TotalStop = std::chrono::high_resolution_clock::now();
       auto d = std::chrono::duration_cast<std::chrono::milliseconds>(
         TotalStop - TotalStart);
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
       float tt = d.count();
-      PROTEUS_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
+      AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
 #endif
 
       req->runCallbackOnce(resp);
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(k));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
@@ -375,7 +375,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 #endif
     }
   }
-  PROTEUS_LOG_INFO(logger, "TfZendnn ending");
+  AMDINFER_LOG_INFO(logger, "TfZendnn ending");
 }
 
 void TfZendnn::doRelease() { this->session_->Close(); }

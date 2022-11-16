@@ -26,7 +26,7 @@
 #include <numeric>    // for accumulate
 #include <utility>    // for pair, make_pair, move
 
-#include "amdinfer/build_options.hpp"  // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_TRACING
 
 namespace amdinfer {
 
@@ -398,7 +398,7 @@ std::vector<InferenceResponseOutput> InferenceResponse::getOutputs() const {
   return this->outputs_;
 }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 void InferenceResponse::setContext(StringMap &&context) {
   this->context_ = std::move(context);
 }

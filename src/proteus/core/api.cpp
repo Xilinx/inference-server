@@ -31,7 +31,7 @@
 #include <utility>        // for move, pair
 
 #include "amdinfer/batching/batcher.hpp"       // for Batcher
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_VITIS
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_VITIS
 #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
 #include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
 #include "amdinfer/core/manager.hpp"           // for Manager
@@ -40,7 +40,7 @@
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/version.hpp"                // for kProteusVersion
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
 #include <sockpp/socket.h>         // for socket, socket_initializer
 #include <sockpp/tcp_connector.h>  // for tcp_connector
 #endif
@@ -51,19 +51,19 @@ ServerMetadata serverMetadata() {
   std::unordered_set<std::string> extensions;
   ServerMetadata metadata{"amdinfer", kProteusVersion, extensions};
 
-#ifdef PROTEUS_ENABLE_AKS
+#ifdef AMDINFER_ENABLE_AKS
   metadata.extensions.emplace("aks");
 #endif
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
   metadata.extensions.emplace("vitis");
 #endif
-#ifdef PROTEUS_ENABLE_TFZENDNN
+#ifdef AMDINFER_ENABLE_TFZENDNN
   metadata.extensions.emplace("tfzendnn");
 #endif
-#ifdef PROTEUS_ENABLE_PTZENDNN
+#ifdef AMDINFER_ENABLE_PTZENDNN
   metadata.extensions.emplace("ptzendnn");
 #endif
-#ifdef PROTEUS_ENABLE_MIGRAPHX
+#ifdef AMDINFER_ENABLE_MIGRAPHX
   metadata.extensions.emplace("migraphx");
 #endif
   return metadata;
@@ -123,7 +123,7 @@ ModelMetadata modelMetadata(const std::string& model) {
 Kernels getHardware() {
   Kernels kernels;
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
   sockpp::socket_initializer sockInit;
   sockpp::tcp_connector conn({"localhost", 9763});
   if (!conn) {

@@ -18,8 +18,8 @@
  * @brief Defines the methods for interacting with Proteus with HTTP/REST
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_HTTP
-#define GUARD_PROTEUS_CLIENTS_HTTP
+#ifndef GUARD_AMDINFER_CLIENTS_HTTP
+#define GUARD_AMDINFER_CLIENTS_HTTP
 
 #include <memory>  // for unique_ptr
 #include <string>  // for string
@@ -78,4 +78,4 @@ class HttpClient : public Client {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_HTTP
+#endif  // GUARD_AMDINFER_CLIENTS_HTTP

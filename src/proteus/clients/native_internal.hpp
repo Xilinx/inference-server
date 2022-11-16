@@ -17,8 +17,8 @@
  * @brief Defines the internal objects used for the C++ API
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL
-#define GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL
+#ifndef GUARD_AMDINFER_CLIENTS_NATIVE_INTERNAL
+#define GUARD_AMDINFER_CLIENTS_NATIVE_INTERNAL
 
 #include <cstddef>    // for size_t
 #include <exception>  // for exception
@@ -52,4 +52,4 @@ class CppNativeApi : public Interface {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_NATIVE_INTERNAL
+#endif  // GUARD_AMDINFER_CLIENTS_NATIVE_INTERNAL

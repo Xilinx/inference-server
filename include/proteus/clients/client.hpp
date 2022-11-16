@@ -18,8 +18,8 @@
  * @brief Defines the base class for all clients
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_CLIENT
-#define GUARD_PROTEUS_CLIENTS_CLIENT
+#ifndef GUARD_AMDINFER_CLIENTS_CLIENT
+#define GUARD_AMDINFER_CLIENTS_CLIENT
 
 #include <string>
 #include <vector>
@@ -71,4 +71,4 @@ std::vector<InferenceResponse> inferAsyncOrderedBatched(
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_CLIENT
+#endif  // GUARD_AMDINFER_CLIENTS_CLIENT

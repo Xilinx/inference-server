@@ -19,8 +19,8 @@ list(APPEND LINK_TARGETS)
 foreach(target ${TARGETS})
   add_library(${target}_py OBJECT ${target}.cpp)
   target_include_directories(
-    ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
-                         ${Python_INCLUDE_DIRS}
+    ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..
+                         ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
   )
   target_link_libraries(
     ${target}_py PRIVATE ${Python_LIBRARIES} ${target}

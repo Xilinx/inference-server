@@ -135,15 +135,15 @@ void Manager::shutdown() {
 }
 
 void Manager::update_manager(UpdateCommandQueue* input_queue) {
-  PROTEUS_LOG_DEBUG(logger_, "Starting the Manager update thread");
+  AMDINFER_LOG_DEBUG(logger_, "Starting the Manager update thread");
   util::setThreadName("manager");
   std::shared_ptr<UpdateCommand> request;
   bool run = true;
   while (run) {
     input_queue->wait_dequeue(request);
-    PROTEUS_LOG_DEBUG(logger_,
-                      "Got request in Manager update thread with ID " +
-                        std::to_string(static_cast<int>(request->cmd)));
+    AMDINFER_LOG_DEBUG(logger_,
+                       "Got request in Manager update thread with ID " +
+                         std::to_string(static_cast<int>(request->cmd)));
     switch (request->cmd) {
       case UpdateCommandType::Shutdown:
         this->endpoints_.shutdown();
@@ -157,7 +157,7 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
           auto* worker_info = this->endpoints_.get(request->key);
           auto num = *static_cast<int*>(request->object);
           if (!worker_info->inputSizeValid(num)) {
-            PROTEUS_LOG_DEBUG(
+            AMDINFER_LOG_DEBUG(
               logger_,
 
               "Allocating more buffers for worker " + request->key);
@@ -192,7 +192,7 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
         break;
     }
   }
-  PROTEUS_LOG_DEBUG(logger_, "Ending update_thread");
+  AMDINFER_LOG_DEBUG(logger_, "Ending update_thread");
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,

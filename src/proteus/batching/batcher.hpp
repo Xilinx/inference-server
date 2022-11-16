@@ -17,8 +17,8 @@
  * @brief Defines the base batcher implementation
  */
 
-#ifndef GUARD_PROTEUS_BATCHING_BATCHER
-#define GUARD_PROTEUS_BATCHING_BATCHER
+#ifndef GUARD_AMDINFER_BATCHING_BATCHER
+#define GUARD_AMDINFER_BATCHING_BATCHER
 
 #include <chrono>   // for system_clock::time_point
 #include <cstddef>  // for size_t
@@ -27,7 +27,7 @@
 #include <thread>   // for thread
 #include <vector>   // for vector
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/predict_api.hpp"     // for RequestParameters
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
@@ -68,11 +68,11 @@ class Batch {
   size_t input_size() const;
   size_t output_size() const;
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   void addTrace(TracePtr trace);
   TracePtr& getTrace(int index);
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   void addTime(std::chrono::high_resolution_clock::time_point timestamp);
   std::chrono::high_resolution_clock::time_point getTime(int index);
 #endif
@@ -85,10 +85,10 @@ class Batch {
   std::vector<InferenceRequestPtr> requests_;
   std::vector<BufferPtr> input_buffers_;
   std::vector<BufferPtr> output_buffers_;
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   std::vector<TracePtr> traces_;
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   std::vector<std::chrono::high_resolution_clock::time_point> start_times_;
 #endif
 };
@@ -162,7 +162,7 @@ class Batcher {
   void end();
 
  protected:
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const Logger& getLogger() const;
 #endif
 
@@ -184,11 +184,11 @@ class Batcher {
 
   BatcherStatus status_;
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};
 #endif
 };
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BATCHING_BATCHER
+#endif  // GUARD_AMDINFER_BATCHING_BATCHER

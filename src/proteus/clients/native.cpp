@@ -25,7 +25,7 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/build_options.hpp"            // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/api.hpp"                 // for modelLoad, workerLoad
 #include "amdinfer/core/exceptions.hpp"          // for invalid_argument
@@ -69,17 +69,17 @@ std::string NativeClient::workerLoad(const std::string& model,
 
 InferenceResponseFuture NativeClient::modelInferAsync(
   const std::string& workerName, const InferenceRequest& request) const {
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
   trace->startSpan("C++ enqueue");
 #endif
   auto api = std::make_unique<CppNativeApi>(request);
   auto future = api->getPromise()->get_future();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->endSpan();
   api->setTrace(std::move(trace));
 #endif

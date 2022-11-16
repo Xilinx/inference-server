@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_CORE_MODEL_REPOSITORY
-#define GUARD_PROTEUS_CORE_MODEL_REPOSITORY
+#ifndef GUARD_AMDINFER_CORE_MODEL_REPOSITORY
+#define GUARD_AMDINFER_CORE_MODEL_REPOSITORY
 
 #include <efsw/efsw.hpp>
 #include <filesystem>
@@ -59,4 +59,4 @@ class ModelRepository {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_MODEL_REPOSITORY
+#endif  // GUARD_AMDINFER_CORE_MODEL_REPOSITORY

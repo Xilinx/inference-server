@@ -22,7 +22,7 @@ foreach(file ${files})
   set(target ${file})
   add_library(${target} OBJECT ${file}.cpp)
   target_include_directories(
-    ${target} PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS} ${PROTEUS_INCLUDE_DIRS}
+    ${target} PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS} ${AMDINFER_INCLUDE_DIRS}
   )
   enable_ipo_on_target(${target})
 

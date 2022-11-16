@@ -29,7 +29,7 @@
 
 #include "amdinfer/buffers/buffer.hpp"       // for Buffer
 #include "amdinfer/core/data_types.hpp"      // for DataType
-#include "amdinfer/observation/logging.hpp"  // for Logger, PROTEUS_LOG_ERROR
+#include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_ERROR
 
 namespace amdinfer {
 template <typename T>
@@ -162,7 +162,7 @@ std::shared_ptr<InferenceRequest> CppNativeApi::getRequest(
 }
 
 void CppNativeApi::errorHandler(const std::exception &e) {
-  PROTEUS_LOG_ERROR(this->getLogger(), e.what());
+  AMDINFER_LOG_ERROR(this->getLogger(), e.what());
   this->getPromise()->set_value(InferenceResponse(e.what()));
 }
 

@@ -41,7 +41,7 @@ Batcher::Batcher() {
   this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
   this->status_ = BatcherStatus::kNew;
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   this->logger_ = Logger(Loggers::kServer);
 #endif
 }
@@ -57,7 +57,7 @@ Batcher::Batcher(const Batcher& batcher) {
   this->output_queue_ = batcher.output_queue_;
   this->batch_size_ = batcher.batch_size_;
   this->status_ = BatcherStatus::kNew;
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   this->logger_ = Logger(Loggers::kServer);
 #endif
   this->model_ = batcher.model_;
@@ -98,7 +98,7 @@ void Batcher::end() {
   this->status_ = BatcherStatus::kDead;
 }
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
 const Logger& Batcher::getLogger() const { return logger_; }
 #endif
 
@@ -149,10 +149,10 @@ const InferenceRequestPtr& Batch::getRequest(int index) {
 bool Batch::empty() const { return requests_.empty(); }
 
 size_t Batch::size() const {
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   assert(requests_.size() == traces_.size());
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   assert(requests_.size() == start_times_.size());
 #endif
 
@@ -163,13 +163,13 @@ size_t Batch::input_size() const { return input_buffers_.size(); }
 
 size_t Batch::output_size() const { return output_buffers_.size(); }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 void Batch::addTrace(TracePtr trace) { traces_.push_back(std::move(trace)); }
 
 TracePtr& Batch::getTrace(int index) { return traces_.at(index); }
 #endif
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
 void Batch::addTime(std::chrono::high_resolution_clock::time_point timestamp) {
   start_times_.push_back(std::move(timestamp));
 }

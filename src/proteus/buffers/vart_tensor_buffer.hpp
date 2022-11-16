@@ -17,8 +17,8 @@
  * @brief Defines the VartTensorBuffer class
  */
 
-#ifndef GUARD_PROTEUS_BUFFERS_VART_TENSOR_BUFFER
-#define GUARD_PROTEUS_BUFFERS_VART_TENSOR_BUFFER
+#ifndef GUARD_AMDINFER_BUFFERS_VART_TENSOR_BUFFER
+#define GUARD_AMDINFER_BUFFERS_VART_TENSOR_BUFFER
 
 #include <stddef.h>  // for size_t
 
@@ -73,4 +73,4 @@ class VartTensorBuffer : public Buffer {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BUFFERS_VART_TENSOR_BUFFER
+#endif  // GUARD_AMDINFER_BUFFERS_VART_TENSOR_BUFFER

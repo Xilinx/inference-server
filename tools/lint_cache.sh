@@ -107,9 +107,9 @@ source_directories=(examples include src tests)
 # file extensions to search for
 extensions=(".c" ".cpp" ".cc" ".h" ".hpp")
 
-root_dir="$PROTEUS_ROOT"
+root_dir="$AMDINFER_ROOT"
 if [[ -z "$root_dir" ]]; then
-    echo "PROTEUS_ROOT isn't set in the env"
+    echo "AMDINFER_ROOT isn't set in the env"
     exit 1
 fi
 

@@ -17,8 +17,8 @@
  * @brief Defines the Python bindings for the testing headers
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_TESTING_TESTING
-#define GUARD_PROTEUS_BINDINGS_PYTHON_TESTING_TESTING
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_TESTING_TESTING
+#define GUARD_AMDINFER_BINDINGS_PYTHON_TESTING_TESTING
 
 namespace pybind11 {
 class module_;
@@ -26,4 +26,4 @@ class module_;
 
 void wrapTesting(pybind11::module_ &);
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_TESTING_TESTING
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_TESTING_TESTING

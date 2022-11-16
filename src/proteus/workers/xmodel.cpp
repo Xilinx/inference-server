@@ -47,17 +47,17 @@
 #include "amdinfer/batching/batcher.hpp"            // for BatchPtr, Batch
 #include "amdinfer/buffers/buffer.hpp"              // for Buffer
 #include "amdinfer/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
-#include "amdinfer/build_options.hpp"               // for PROTEUS_ENABLE_MET...
-#include "amdinfer/core/data_types.hpp"             // for mapXirType, DataType
-#include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
-#include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
-#include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
-#include "amdinfer/util/ctpl.h"                     // for thread_pool
-#include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
-#include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
-#include "amdinfer/util/string.hpp"                 // for endsWith
-#include "amdinfer/util/thread.hpp"                 // for setThreadName
-#include "amdinfer/workers/worker.hpp"              // for Worker, kNumBuffer...
+#include "amdinfer/build_options.hpp"         // for AMDINFER_ENABLE_MET...
+#include "amdinfer/core/data_types.hpp"       // for mapXirType, DataType
+#include "amdinfer/core/predict_api.hpp"      // for InferenceResponse
+#include "amdinfer/declarations.hpp"          // for BufferPtrs, Infere...
+#include "amdinfer/observation/observer.hpp"  // for Loggers, Metrics...
+#include "amdinfer/util/ctpl.h"               // for thread_pool
+#include "amdinfer/util/parse_env.hpp"        // for autoExpandEnvironm...
+#include "amdinfer/util/queue.hpp"            // for BufferPtrsQueue
+#include "amdinfer/util/string.hpp"           // for endsWith
+#include "amdinfer/util/thread.hpp"           // for setThreadName
+#include "amdinfer/workers/worker.hpp"        // for Worker, kNumBuffer...
 
 uint64_t reduce_mult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
@@ -222,7 +222,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
   std::atomic_int32_t pool_size = 0;
   const int max_pool_size = this->pool_.size() * 4;  // 4 is arbitrary
   util::setThreadName("XModel");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -232,9 +232,9 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger,
-                     "Got request in xmodel: " + std::to_string(batch->size()));
-#ifdef PROTEUS_ENABLE_METRICS
+    AMDINFER_LOG_INFO(
+      logger, "Got request in xmodel: " + std::to_string(batch->size()));
+#ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
@@ -244,7 +244,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     }
     this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
       (void)id;  // suppress unused variable warning
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       for (unsigned int j = 0; j < batch->size(); j++) {
         auto& trace = batch->getTrace(j);
         trace->startSpan("xmodel");
@@ -343,13 +343,13 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           resp.addOutput(output);
         }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
         auto context = batch->getTrace(k)->propagate();
         resp.setContext(std::move(context));
 #endif
 
         req->runCallbackOnce(resp);
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
           MetricCounterIDs::kPipelineEgressWorker);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -361,7 +361,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       pool_size--;
     });
   }
-  PROTEUS_LOG_INFO(logger, "XModel ending");
+  AMDINFER_LOG_INFO(logger, "XModel ending");
 }
 
 void XModel::doRelease() {}

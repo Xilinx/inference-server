@@ -14,13 +14,13 @@
 
 list(APPEND targets buffer vector_buffer)
 
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   set(targets ${targets} vart_tensor_buffer)
 endif()
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
 
   list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:${target}>)

@@ -14,17 +14,17 @@
 
 list(APPEND targets server)
 
-if(${PROTEUS_ENABLE_REST})
+if(${AMDINFER_ENABLE_REST})
   set(targets ${targets} http_server websocket_server)
 endif()
 
-if(${PROTEUS_ENABLE_GRPC})
+if(${AMDINFER_ENABLE_GRPC})
   set(targets ${targets} grpc_server)
 endif()
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
 
   list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
@@ -32,16 +32,16 @@ endforeach()
 
 target_link_libraries(server PRIVATE Jsoncpp_lib core)
 
-if(${PROTEUS_ENABLE_AKS})
+if(${AMDINFER_ENABLE_AKS})
   target_link_libraries(server INTERFACE aks)
 endif()
 
-if(${PROTEUS_ENABLE_REST})
+if(${AMDINFER_ENABLE_REST})
   target_link_libraries(http_server PUBLIC clients Drogon::Drogon)
   target_link_libraries(websocket_server PUBLIC Drogon::Drogon)
 endif()
 
-if(${PROTEUS_ENABLE_GRPC})
+if(${AMDINFER_ENABLE_GRPC})
   target_include_directories(
     grpc_server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )

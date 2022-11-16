@@ -153,7 +153,7 @@ def get_args():
     args = parse_args()
 
     if not args.model:
-        root = os.getenv("PROTEUS_ROOT")
+        root = os.getenv("AMDINFER_ROOT")
         args.model = root + "/external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx"
 
     return args

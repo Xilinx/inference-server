@@ -26,11 +26,11 @@
 #include <memory>               // for unique_ptr, make_unique
 #include <string>               // for string, allocator, char...
 
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
 #include "amdinfer/clients/native.hpp"         // for NativeClient
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error
 #include "amdinfer/core/model_repository.hpp"  // for UpdateListener, ModelRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
+#include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
 #include "amdinfer/servers/http_server.hpp"    // for stop
 #include "amdinfer/servers/server.hpp"         // for Server
 
@@ -43,7 +43,7 @@ namespace fs = std::filesystem;
  */
 void signal_callback_handler(int signum) {
   std::cout << "Caught interrupt " << signum << ". Proteus is ending...\n";
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
   amdinfer::http::stop();
 #endif
 }
@@ -58,10 +58,10 @@ void signal_callback_handler(int signum) {
 int main(int argc, char* argv[]) {
   signal(SIGINT, signal_callback_handler);
   signal(SIGTERM, signal_callback_handler);
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
   int http_port = kDefaultHttpPort;
 #endif
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
   int grpc_port = kDefaultGrpcPort;
 #endif
   std::string model_repository = "/mnt/models";
@@ -79,10 +79,10 @@ int main(int argc, char* argv[]) {
       cxxopts::value<bool>(enable_repository_watcher))
     ("use-polling-watcher", "Use polling to monitor model-repository directory",
       cxxopts::value<bool>(use_polling_watcher))
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
     ("http-port", "Port to use for HTTP server", cxxopts::value<int>(http_port))
 #endif
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
     ("grpc-port", "Port to use for gRPC server", cxxopts::value<int>(grpc_port))
 #endif
     ("help", "Print help");
@@ -104,18 +104,18 @@ int main(int argc, char* argv[]) {
   amdinfer::Logger logger{amdinfer::Loggers::kServer};
 
   server.setModelRepository(model_repository);
-  PROTEUS_LOG_INFO(logger, "Using model repository: " + model_repository);
+  AMDINFER_LOG_INFO(logger, "Using model repository: " + model_repository);
 
   if (enable_repository_watcher) {
     server.enableRepositoryMonitoring(use_polling_watcher);
   }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
   std::cout << "gRPC server starting at port " << grpc_port << "\n";
   server.startGrpc(grpc_port);
 #endif
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
   std::cout << "HTTP server starting at port " << http_port << std::endl;
   server.startHttp(http_port);
 #else

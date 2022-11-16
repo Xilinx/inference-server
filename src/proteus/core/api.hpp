@@ -17,8 +17,8 @@
  * @brief Defines the client-server API used in the inference server
  */
 
-#ifndef GUARD_PROTEUS_CORE_API
-#define GUARD_PROTEUS_CORE_API
+#ifndef GUARD_AMDINFER_CORE_API
+#define GUARD_AMDINFER_CORE_API
 
 #include <memory>
 #include <string>
@@ -51,4 +51,4 @@ bool hasHardware(const std::string& name, int num);
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_API
+#endif  // GUARD_AMDINFER_CORE_API

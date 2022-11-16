@@ -25,7 +25,7 @@ list(
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
 
   list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
@@ -35,12 +35,12 @@ target_link_libraries(manager INTERFACE Threads::Threads)
 
 target_link_libraries(api PRIVATE Jsoncpp_lib)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(data_types INTERFACE xir)
   target_link_libraries(api INTERFACE sockpp)
 endif()
 
-if(${PROTEUS_ENABLE_GRPC})
+if(${AMDINFER_ENABLE_GRPC})
   add_library(lib_grpc STATIC predict_api.proto)
   disable_target_linting(lib_grpc)
   target_include_directories(lib_grpc PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

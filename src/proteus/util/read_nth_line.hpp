@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_READ_NTH_LINE
-#define GUARD_PROTEUS_UTIL_READ_NTH_LINE
+#ifndef GUARD_AMDINFER_UTIL_READ_NTH_LINE
+#define GUARD_AMDINFER_UTIL_READ_NTH_LINE
 
 #include <string>
 
@@ -30,4 +30,4 @@ std::string readNthLine(const std::string& filename, int n);
 
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_UTIL_READ_NTH_LINE
+#endif  // GUARD_AMDINFER_UTIL_READ_NTH_LINE

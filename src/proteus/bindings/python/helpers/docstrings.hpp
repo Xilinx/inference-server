@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
-#define GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
+#define GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
 
 #include "auto_docstrings.hpp"  // IWYU pragma: export
 
 #define DOCS(...) DOC(amdinfer, __VA_ARGS__)
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_DOCSTRINGS
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_DOCSTRINGS

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PROTEUS
-#define GUARD_PROTEUS_PROTEUS
+#ifndef GUARD_AMDINFER_AMDINFER
+#define GUARD_AMDINFER_AMDINFER
 
 // IWYU pragma: begin_exports
 #include "amdinfer/build_options.hpp"
@@ -27,4 +27,4 @@
 #include "amdinfer/servers/server.hpp"
 // IWYU pragma: end_exports
 
-#endif  // GUARD_PROTEUS_PROTEUS
+#endif  // GUARD_AMDINFER_AMDINFER

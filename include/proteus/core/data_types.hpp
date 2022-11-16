@@ -17,8 +17,8 @@
  * @brief Defines the data types used in Proteus
  */
 
-#ifndef GUARD_PROTEUS_CORE_DATA_TYPES
-#define GUARD_PROTEUS_CORE_DATA_TYPES
+#ifndef GUARD_AMDINFER_CORE_DATA_TYPES
+#define GUARD_AMDINFER_CORE_DATA_TYPES
 
 #include <cassert>   // for assert
 #include <cstddef>   // for size_t
@@ -26,11 +26,11 @@
 #include <iostream>  // for ostream
 #include <string>    // for string
 
-#include "amdinfer/build_options.hpp"    // for PROTEUS_ENABLE_VITIS
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_VITIS
 #include "amdinfer/core/exceptions.hpp"  // for invalid_argument
 #include "half/half.hpp"                 // for half
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
 namespace xir {
 class DataType;
 }  // namespace xir
@@ -243,7 +243,7 @@ auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
   }
 }
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
 /**
  * @brief Given an XIR type, return the corresponding Proteus type
  *
@@ -262,4 +262,4 @@ xir::DataType mapTypeToXir(DataType type);
 #endif
 
 }  // namespace amdinfer
-#endif  // GUARD_PROTEUS_CORE_DATA_TYPES
+#endif  // GUARD_AMDINFER_CORE_DATA_TYPES

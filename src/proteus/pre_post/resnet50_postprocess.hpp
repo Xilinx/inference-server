@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS
-#define GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS
+#ifndef GUARD_AMDINFER_PRE_POST_RESNET50_POSTPROCESS
+#define GUARD_AMDINFER_PRE_POST_RESNET50_POSTPROCESS
 
 #include <vector>
 
@@ -41,4 +41,4 @@ std::vector<int> resnet50Postprocess(const T* data, size_t size, int k) {
 
 }  // namespace amdinfer::pre_post
 
-#endif  // GUARD_PROTEUS_PRE_POST_RESNET50_POSTPROCESS
+#endif  // GUARD_AMDINFER_PRE_POST_RESNET50_POSTPROCESS

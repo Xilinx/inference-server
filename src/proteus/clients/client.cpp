@@ -17,13 +17,13 @@
 
 #include <queue>
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/observation/logging.hpp"  // for getLogDirectory, initLogger
 
 namespace amdinfer {
 
 void initializeClientLogging() {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "client",  // logger_name
     getLogDirectory(),

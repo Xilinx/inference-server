@@ -17,8 +17,8 @@
  *
  *********************************************************/
 
-#ifndef GUARD_PROTEUS_HELPERS_CTPL
-#define GUARD_PROTEUS_HELPERS_CTPL
+#ifndef GUARD_AMDINFER_HELPERS_CTPL
+#define GUARD_AMDINFER_HELPERS_CTPL
 
 #include <concurrentqueue/concurrentqueue.h>
 
@@ -250,4 +250,4 @@ class thread_pool {
 
 }  // namespace ctpl
 
-#endif  // GUARD_PROTEUS_HELPERS_CTPL
+#endif  // GUARD_AMDINFER_HELPERS_CTPL

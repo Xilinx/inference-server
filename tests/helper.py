@@ -19,9 +19,9 @@ import re
 
 from amdinfer import inference_request_to_dict
 
-root = os.getenv("PROTEUS_ROOT")
+root = os.getenv("AMDINFER_ROOT")
 if root is None:
-    raise RuntimeError("PROTEUS_ROOT not defined in the environment")
+    raise RuntimeError("AMDINFER_ROOT not defined in the environment")
 root_path = pathlib.Path(root)
 try:
     with open(root_path / "build/config.txt", "r") as f:

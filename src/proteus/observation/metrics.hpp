@@ -17,8 +17,8 @@
  * @brief Defines what metrics are defined and how they're are gathered
  */
 
-#ifndef GUARD_PROTEUS_OBSERVATION_METRICS
-#define GUARD_PROTEUS_OBSERVATION_METRICS
+#ifndef GUARD_AMDINFER_OBSERVATION_METRICS
+#define GUARD_AMDINFER_OBSERVATION_METRICS
 
 #include <prometheus/serializer.h>  // for Serializer
 #include <prometheus/summary.h>     // for Summary, BuildSummary, Summa...
@@ -31,9 +31,9 @@
 #include <unordered_map>  // for unordered_map
 #include <vector>         // for vector
 
-#include "amdinfer/build_options.hpp"  // for PROTEUS_ENABLE_METRICS
+#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_METRICS
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
 
 namespace prometheus {
 class Collectable;
@@ -235,4 +235,4 @@ class Metrics {
 
 #endif
 
-#endif  // GUARD_PROTEUS_OBSERVATION_METRICS
+#endif  // GUARD_AMDINFER_OBSERVATION_METRICS

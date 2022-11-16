@@ -58,7 +58,7 @@ void test(amdinfer::Client* client) {
   }
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
 #endif
@@ -69,6 +69,6 @@ TEST_F(BaseFixture, ModelReady) {
   test(&client);
 }
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 TEST_F(HttpFixture, ModelReady) { test(client_.get()); }
 #endif

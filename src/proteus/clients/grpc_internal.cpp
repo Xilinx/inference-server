@@ -124,11 +124,11 @@ struct AddDataToTensor {
       }
     } else {
       for (auto i = 0U; i < size; ++i) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
         const auto min_size = size > kNumTraceData ? kNumTraceData : size;
         if (i < min_size) {
-          PROTEUS_LOG_TRACE(observer.logger, "Adding data to tensor: " +
-                                               std::to_string(data[i]));
+          AMDINFER_LOG_TRACE(observer.logger, "Adding data to tensor: " +
+                                                std::to_string(data[i]));
         }
 #endif
         contents->Add(data[i]);
@@ -140,8 +140,8 @@ struct AddDataToTensor {
 void mapRequestToProto(const InferenceRequest& request,
                        inference::ModelInferRequest& grpc_request,
                        [[maybe_unused]] const Observer& observer) {
-  PROTEUS_LOG_TRACE(observer.logger,
-                    "Mapping the InferenceRequest to proto object");
+  AMDINFER_LOG_TRACE(observer.logger,
+                     "Mapping the InferenceRequest to proto object");
   grpc_request.set_id(request.getID());
 
   if (const auto* parameters = request.getParameters(); parameters != nullptr) {
@@ -227,10 +227,10 @@ void mapProtoToResponse(const inference::ModelInferResponse& reply,
 void mapResponseToProto(InferenceResponse response,
                         inference::ModelInferResponse& reply) {
   Observer observer;
-  PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
 
-  PROTEUS_LOG_TRACE(observer.logger,
-                    "Mapping the InferenceResponse to proto object");
+  AMDINFER_LOG_TRACE(observer.logger,
+                     "Mapping the InferenceResponse to proto object");
   reply.set_model_name(response.getModel());
   reply.set_id(response.getID());
   auto outputs = response.getOutputs();

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_UTIL_TRAITS
-#define GUARD_PROTEUS_UTIL_TRAITS
+#ifndef GUARD_AMDINFER_UTIL_TRAITS
+#define GUARD_AMDINFER_UTIL_TRAITS
 
 #include <type_traits>
 
@@ -34,4 +34,4 @@ inline constexpr bool is_any_v = is_any<T, Ts...>::value;
 
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_UTIL_TRAITS
+#endif  // GUARD_AMDINFER_UTIL_TRAITS

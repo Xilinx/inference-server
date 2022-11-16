@@ -30,7 +30,7 @@ In the container:
     $ wget https://github.com/prometheus/prometheus/releases/download/v2.30.1/prometheus-2.30.1.linux-amd64.tar.gz
     $ tar -xzf prometheus-2.30.1.linux-amd64.tar.gz
     $ cd /tmp/prometheus-2.30.1.linux-amd64
-    $ cp $PROTEUS_ROOT/src/amdinfer/observation/prometheus.yml .
+    $ cp $AMDINFER_ROOT/src/amdinfer/observation/prometheus.yml .
     $ ./prometheus
 
 By default, Prometheus will use a configuration file named ``prometheus.yml`` in the local directory.

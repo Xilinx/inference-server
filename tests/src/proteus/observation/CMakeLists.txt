@@ -14,29 +14,31 @@
 
 add_library(fake_observation INTERFACE)
 
-if(${PROTEUS_ENABLE_LOGGING})
+if(${AMDINFER_ENABLE_LOGGING})
   # add_library(fake_logging OBJECT logging.cpp) # target_link_libraries(logging
   # INTERFACE spdlog) target_include_directories(fake_logging BEFORE PRIVATE
-  # ${PROTEUS_TEST_INCLUDE_DIRS}) target_include_directories(fake_logging AFTER
-  # PRIVATE ${PROTEUS_INCLUDE_DIRS}) enable_ipo_on_target(fake_logging)
+  # ${AMDINFER_TEST_INCLUDE_DIRS}) target_include_directories(fake_logging AFTER
+  # PRIVATE ${AMDINFER_INCLUDE_DIRS}) enable_ipo_on_target(fake_logging)
 
   target_link_libraries(
     fake_observation INTERFACE $<TARGET_OBJECTS:logging> logging
   )
 endif()
 
-if(${PROTEUS_ENABLE_METRICS})
+if(${AMDINFER_ENABLE_METRICS})
   target_link_libraries(
     fake_observation INTERFACE $<TARGET_OBJECTS:metrics> metrics
   )
 endif()
 
-if(${PROTEUS_ENABLE_TRACING})
+if(${AMDINFER_ENABLE_TRACING})
   add_library(fake_tracing OBJECT tracing.cpp)
   target_include_directories(
-    fake_tracing BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+    fake_tracing BEFORE PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
   )
-  target_include_directories(fake_tracing AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(
+    fake_tracing AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS}
+  )
   # switch opentelemetry_exporter_jaeger_trace to
   # opentelemetry_exporter_ostream_span for debugging traces locally
   # target_link_libraries(tracing INTERFACE opentelemetry_trace

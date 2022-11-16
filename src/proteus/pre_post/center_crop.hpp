@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PRE_POST_CENTER_CROP
-#define GUARD_PROTEUS_PRE_POST_CENTER_CROP
+#ifndef GUARD_AMDINFER_PRE_POST_CENTER_CROP
+#define GUARD_AMDINFER_PRE_POST_CENTER_CROP
 
 #include <opencv2/core.hpp>  // for cv::Mat
 
@@ -38,4 +38,4 @@ inline cv::Mat centerCrop(cv::Mat img, int height, int width) {
 
 }  // namespace amdinfer::pre_post
 
-#endif  // GUARD_PROTEUS_PRE_POST_CENTER_CROP
+#endif  // GUARD_AMDINFER_PRE_POST_CENTER_CROP

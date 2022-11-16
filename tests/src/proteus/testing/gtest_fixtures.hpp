@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
-#define GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
+#ifndef GUARD_SRC_AMDINFER_TESTING_GTEST_FIXTURES
+#define GUARD_SRC_AMDINFER_TESTING_GTEST_FIXTURES
 
 #include <amdinfer/amdinfer.hpp>
 #include <memory>  // for allocator, unique_ptr
@@ -28,9 +28,9 @@ class BaseFixture : public testing::Test {
 
  protected:
   void SetUp() override {
-    const auto* root = std::getenv("PROTEUS_ROOT");
+    const auto* root = std::getenv("AMDINFER_ROOT");
     if (root == nullptr) {
-      throw amdinfer::environment_not_set_error("PROTEUS_ROOT is not set");
+      throw amdinfer::environment_not_set_error("AMDINFER_ROOT is not set");
     }
     server_.setModelRepository(std::string{root} +
                                "/external/artifacts/repository");
@@ -109,4 +109,4 @@ class HttpFixtureWithParams : public HttpFixture,
     },                                                  \
     exception)
 
-#endif  // GUARD_SRC_PROTEUS_TESTING_GTEST_FIXTURES
+#endif  // GUARD_SRC_AMDINFER_TESTING_GTEST_FIXTURES

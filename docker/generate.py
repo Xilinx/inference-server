@@ -780,7 +780,7 @@ def generate(args: argparse.Namespace):
         entrypoint = textwrap.dedent(
             """\
             # skipping entrypoint for cibuildwheel
-            ENV PROTEUS_ROOT=/project"""
+            ENV AMDINFER_ROOT=/project"""
         )
     else:
         entrypoint = textwrap.dedent(

@@ -17,8 +17,8 @@
  * @brief Defines the Python bindings for pre_post
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST
-#define GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_PRE_POST_PRE_POST
+#define GUARD_AMDINFER_BINDINGS_PYTHON_PRE_POST_PRE_POST
 
 namespace pybind11 {
 class module_;
@@ -30,4 +30,4 @@ void wrapPrePost(pybind11::module_ &);
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_PRE_POST_PRE_POST
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_PRE_POST_PRE_POST

@@ -17,8 +17,8 @@
  * @brief Defines the internal objects used for HTTP/REST
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
-#define GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
+#ifndef GUARD_AMDINFER_CLIENTS_HTTP_INTERNAL
+#define GUARD_AMDINFER_CLIENTS_HTTP_INTERNAL
 
 #include <drogon/HttpRequest.h>   // for HttpRequestPtr
 #include <drogon/HttpResponse.h>  // for HttpResponsePtr
@@ -31,8 +31,8 @@
 #include <string>      // for string
 #include <vector>      // for vector
 
-#include "amdinfer/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "amdinfer/core/interface.hpp"             // for Interface
+#include "amdinfer/build_options.hpp"   // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/interface.hpp"  // for Interface
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
 
@@ -68,7 +68,7 @@ class InferenceRequestBuilder<std::shared_ptr<Json::Value>> {
 
 using RequestBuilder = InferenceRequestBuilder<std::shared_ptr<Json::Value>>;
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 void propagate(drogon::HttpResponse *resp, const StringMap &context);
 #endif
 
@@ -112,4 +112,4 @@ ModelMetadata mapJsonToModelMetadata(const Json::Value *json);
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_HTTP_INTERNAL
+#endif  // GUARD_AMDINFER_CLIENTS_HTTP_INTERNAL

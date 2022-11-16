@@ -25,11 +25,11 @@
 
 #include <sstream>  // IWYU pragma: keep
 
-#include "amdinfer/build_options.hpp"  // for PROTEUS_ENABLE_VITIS
+#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_VITIS
 
 // IWYU pragma: no_forward_declare xir::Datatype
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
 #include <xir/util/data_type.hpp>  // IWYU pragma: keep
 #endif
 
@@ -108,7 +108,7 @@ void wrapDataType(py::module_& m) {
 }
 
 void wrapTypeMaps([[maybe_unused]] py::module_& m) {
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
   py::module_::import("xir").attr("DataType");
 
   m.def("mapXirType", amdinfer::mapXirToType, py::arg("type"));

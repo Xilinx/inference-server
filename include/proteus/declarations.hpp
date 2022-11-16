@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_DECLARATIONS
-#define GUARD_PROTEUS_DECLARATIONS
+#ifndef GUARD_AMDINFER_DECLARATIONS
+#define GUARD_AMDINFER_DECLARATIONS
 
 #include <future>
 #include <memory>
@@ -52,4 +52,4 @@ using Kernels = std::unordered_map<std::string, int>;
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_DECLARATIONS
+#endif  // GUARD_AMDINFER_DECLARATIONS

@@ -24,13 +24,13 @@
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/core/exceptions.hpp"
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
 #include <xir/util/data_type.hpp>  // for DataType, DataType::FLOAT, DataTyp...
 #endif
 
 namespace amdinfer {
 
-#ifdef PROTEUS_ENABLE_VITIS
+#ifdef AMDINFER_ENABLE_VITIS
 DataType mapXirToType(xir::DataType type) {
   auto data_type = type.type;
   size_t width = type.bit_width >> 3;  // bit -> byte

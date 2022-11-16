@@ -19,7 +19,7 @@
 #include <string>   // for operator+, string
 #include <thread>   // for thread
 
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_HTTP
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
 #include "amdinfer/core/manager.hpp"           // for Manager
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/observation/logging.hpp"    // for initLogger, getLogDirec...
@@ -27,7 +27,7 @@
 #include "amdinfer/servers/grpc_server.hpp"    // for start, stop
 #include "amdinfer/servers/http_server.hpp"    // for stop, start
 
-#ifdef PROTEUS_ENABLE_AKS
+#ifdef AMDINFER_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #endif
 
@@ -36,17 +36,17 @@ namespace fs = std::filesystem;
 namespace amdinfer {
 
 struct Server::ServerImpl {
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
   bool http_started_ = false;
   std::thread http_thread_;
 #endif
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
   bool grpc_started_ = false;
 #endif
 };
 
 void initializeServerLogging() {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "server",  // logger_name
     getLogDirectory(),
@@ -61,13 +61,13 @@ void initializeServerLogging() {
 
 void initialize() {
   initializeServerLogging();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   startTracer();
 #endif
 
   Manager::getInstance().init();
 
-#ifdef PROTEUS_ENABLE_AKS
+#ifdef AMDINFER_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
 
   // Load all the kernels
@@ -77,12 +77,12 @@ void initialize() {
 }
 
 void terminate() {
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   stopTracer();
 #endif
   Manager::getInstance().shutdown();
 
-#ifdef PROTEUS_ENABLE_AKS
+#ifdef AMDINFER_ENABLE_AKS
   AKS::SysManagerExt::deleteGlobal();
 #endif
 }
@@ -99,7 +99,7 @@ Server::~Server() {
 }
 
 void Server::startHttp([[maybe_unused]] uint16_t port) const {
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
   if (!impl_->http_started_) {
     impl_->http_thread_ = std::thread{http::start, port};
     impl_->http_started_ = true;
@@ -108,7 +108,7 @@ void Server::startHttp([[maybe_unused]] uint16_t port) const {
 }
 
 void Server::stopHttp() const {
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
   if (impl_->http_started_) {
     http::stop();
     if (impl_->http_thread_.joinable()) {
@@ -119,7 +119,7 @@ void Server::stopHttp() const {
 }
 
 void Server::startGrpc([[maybe_unused]] uint16_t port) const {
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
   if (!impl_->grpc_started_) {
     grpc::start(port);
     impl_->grpc_started_ = true;
@@ -128,7 +128,7 @@ void Server::startGrpc([[maybe_unused]] uint16_t port) const {
 }
 
 void Server::stopGrpc() const {
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
   if (impl_->grpc_started_) {
     grpc::stop();
   }

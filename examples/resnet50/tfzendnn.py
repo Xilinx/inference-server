@@ -135,7 +135,7 @@ def get_args():
     args = parse_args()
 
     if not args.model:
-        root = os.getenv("PROTEUS_ROOT")
+        root = os.getenv("AMDINFER_ROOT")
         args.model = (
             root + "/external/artifacts/tensorflow/resnet_v1_50_baseline_6.96B_922.pb"
         )

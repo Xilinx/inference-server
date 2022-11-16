@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_HELPERS_PARSE_ENV
-#define GUARD_PROTEUS_HELPERS_PARSE_ENV
+#ifndef GUARD_AMDINFER_HELPERS_PARSE_ENV
+#define GUARD_AMDINFER_HELPERS_PARSE_ENV
 
 #include <string>
 
@@ -27,4 +27,4 @@ std::string expandEnvironmentVariables(const std::string& input);
 
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_HELPERS_PARSE_ENV
+#endif  // GUARD_AMDINFER_HELPERS_PARSE_ENV

@@ -82,7 +82,7 @@ void test(amdinfer::Client* client) {
   }
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, mnist) { test(client_.get()); }
@@ -95,7 +95,7 @@ TEST_F(BaseFixture, mnist) {
   test(&client);
 }
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, mnist) { test(client_.get()); }

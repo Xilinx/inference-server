@@ -138,7 +138,7 @@ def get_args():
     args = parse_args()
 
     if not args.model:
-        root = os.getenv("PROTEUS_ROOT")
+        root = os.getenv("AMDINFER_ROOT")
         args.model = root + "/external/artifacts/pytorch/resnet50_pretrained.pt"
 
     return args

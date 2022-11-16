@@ -18,8 +18,8 @@
  * worker group.
  */
 
-#ifndef GUARD_PROTEUS_CORE_WORKER_INFO
-#define GUARD_PROTEUS_CORE_WORKER_INFO
+#ifndef GUARD_AMDINFER_CORE_WORKER_INFO
+#define GUARD_AMDINFER_CORE_WORKER_INFO
 
 #include <cstddef>  // for size_t
 #include <map>      // for map
@@ -160,4 +160,4 @@ class WorkerInfo {
 };
 
 }  // namespace amdinfer
-#endif  // GUARD_PROTEUS_CORE_WORKER_INFO
+#endif  // GUARD_AMDINFER_CORE_WORKER_INFO

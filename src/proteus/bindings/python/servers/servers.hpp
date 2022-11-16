@@ -17,8 +17,8 @@
  * @brief Defines the Python bindings for the server.hpp header
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS
-#define GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_SERVERS_SERVERS
+#define GUARD_AMDINFER_BINDINGS_PYTHON_SERVERS_SERVERS
 
 namespace pybind11 {
 class module_;
@@ -32,4 +32,4 @@ void wrapServers(pybind11::module_& m) { wrapServer(m); }
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_SERVERS_SERVERS
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_SERVERS_SERVERS

@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_OBSERVATION_OBSERVER
-#define GUARD_PROTEUS_OBSERVATION_OBSERVER
+#ifndef GUARD_AMDINFER_OBSERVATION_OBSERVER
+#define GUARD_AMDINFER_OBSERVATION_OBSERVER
 
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/core/data_types.hpp"
 #include "amdinfer/util/string.hpp"
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
 #include "amdinfer/observation/logging.hpp"  // IWYU pragma: export
 #endif
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
 #include "amdinfer/observation/metrics.hpp"  // IWYU pragma: export
 #endif
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 #include "amdinfer/observation/tracing.hpp"  // IWYU pragma: export
 #endif
 
@@ -36,7 +36,7 @@ namespace amdinfer {
 const auto kNumTraceData = 5U;
 
 struct Observer {
-  PROTEUS_IF_LOGGING(Logger logger);
+  AMDINFER_IF_LOGGING(Logger logger);
 };
 
 inline void logTraceBuffer(Logger logger, void* data,
@@ -50,10 +50,10 @@ inline void logTraceBuffer(Logger logger, void* data,
     const auto* addr = static_cast<int8_t*>(data);
     bytes += std::to_string(static_cast<int>(addr[i])) + ", ";
   }
-  PROTEUS_LOG_TRACE(
+  AMDINFER_LOG_TRACE(
     logger, "Buffer(" + util::addressToString(data) + ") has bytes: " + bytes);
 }
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_OBSERVATION_OBSERVER
+#endif  // GUARD_AMDINFER_OBSERVATION_OBSERVER

@@ -14,19 +14,19 @@
 
 list(APPEND examples)
 
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   list(APPEND examples vitis)
 endif()
 
-if(${PROTEUS_ENABLE_PTZENDNN})
+if(${AMDINFER_ENABLE_PTZENDNN})
   list(APPEND examples ptzendnn)
 endif()
 
-if(${PROTEUS_ENABLE_TFZENDNN})
+if(${AMDINFER_ENABLE_TFZENDNN})
   list(APPEND examples tfzendnn)
 endif()
 
-if(${PROTEUS_ENABLE_MIGRAPHX})
+if(${AMDINFER_ENABLE_MIGRAPHX})
   list(APPEND examples migraphx)
 endif()
 
@@ -38,32 +38,32 @@ foreach(example ${examples})
   )
 endforeach()
 
-# if(${PROTEUS_ENABLE_TFZENDNN})
+# if(${AMDINFER_ENABLE_TFZENDNN})
 #   add_executable(tf_zendnn_client tf_zendnn_client.cpp)
 
 #   target_link_libraries(
 #     tf_zendnn_client PRIVATE amdinfer util opencv_imgcodecs opencv_imgproc
 #                              opencv_core
 #   )
-#   target_include_directories(tf_zendnn_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
+#   target_include_directories(tf_zendnn_client PRIVATE ${AMDINFER_INCLUDE_DIRS})
 # endif()
 
-# if(${PROTEUS_ENABLE_PTZENDNN})
+# if(${AMDINFER_ENABLE_PTZENDNN})
 #   add_executable(pt_zendnn_client pt_zendnn_client.cpp)
 
 #   target_link_libraries(
 #     pt_zendnn_client PRIVATE amdinfer util opencv_imgcodecs opencv_imgproc
 #                              opencv_core
 #   )
-#   target_include_directories(pt_zendnn_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
+#   target_include_directories(pt_zendnn_client PRIVATE ${AMDINFER_INCLUDE_DIRS})
 # endif()
 
-# if(${PROTEUS_ENABLE_MIGRAPHX})
+# if(${AMDINFER_ENABLE_MIGRAPHX})
 #   add_executable(migraphx_client migraphx_client.cpp)
 
 #   target_link_libraries(
 #     migraphx_client PRIVATE amdinfer util opencv_imgcodecs opencv_imgproc
 #                             opencv_core migraphx::c
 #   )
-#   target_include_directories(migraphx_client PRIVATE ${PROTEUS_INCLUDE_DIRS})
+#   target_include_directories(migraphx_client PRIVATE ${AMDINFER_INCLUDE_DIRS})
 # endif()

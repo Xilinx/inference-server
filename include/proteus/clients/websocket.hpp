@@ -17,8 +17,8 @@
  * @brief Defines the methods for interacting with Proteus with WebSocket
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_WEBSOCKET
-#define GUARD_PROTEUS_CLIENTS_WEBSOCKET
+#ifndef GUARD_AMDINFER_CLIENTS_WEBSOCKET
+#define GUARD_AMDINFER_CLIENTS_WEBSOCKET
 
 #include <memory>  // for unique_ptr
 #include <string>  // for string
@@ -70,4 +70,4 @@ class WebSocketClient : public Client {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_WEBSOCKET
+#endif  // GUARD_AMDINFER_CLIENTS_WEBSOCKET

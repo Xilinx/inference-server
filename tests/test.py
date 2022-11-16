@@ -25,8 +25,8 @@ except ImportError:
 
 
 def get_root():
-    root = os.getenv("PROTEUS_ROOT")
-    assert root is not None, "PROTEUS_ROOT must be defined in the environment"
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be defined in the environment"
     return pathlib.Path(root)
 
 

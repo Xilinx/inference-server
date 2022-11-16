@@ -30,7 +30,7 @@
 
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
@@ -137,7 +137,7 @@ void EchoMulti::doAcquire([[maybe_unused]] RequestParameters* parameters) {
 
 void EchoMulti::doRun(BatchPtrQueue* input_queue) {
   util::setThreadName("EchoMulti");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -147,15 +147,15 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger, "Got request in echoMulti");
-#ifdef PROTEUS_ENABLE_METRICS
+    AMDINFER_LOG_INFO(logger, "Got request in echoMulti");
+#ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
     const auto batch_size = batch->size();
     for (unsigned int j = 0; j < batch_size; j++) {
       const auto& req = batch->getRequest(j);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto& trace = batch->getTrace(j);
       trace->startSpan("echoMulti");
 #endif
@@ -205,14 +205,14 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
         offset += kOutputLengths[i];
       }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto context = trace->propagate();
       resp.setContext(std::move(context));
 #endif
 
       // respond back to the client
       req->runCallbackOnce(resp);
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressWorker);
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -222,7 +222,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
 #endif
     }
   }
-  PROTEUS_LOG_INFO(logger, "EchoMulti ending");
+  AMDINFER_LOG_INFO(logger, "EchoMulti ending");
 }
 
 void EchoMulti::doRelease() {}

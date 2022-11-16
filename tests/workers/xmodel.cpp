@@ -29,7 +29,8 @@ int main(int argc, char* argv[]) {
   int images = 100;
   int threads = 4;
   int runners = 4;
-  std::string path = std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets";
+  std::string path =
+    std::string(std::getenv("AMDINFER_ROOT")) + "/tests/assets";
   bool run_ref = false;
 
   try {

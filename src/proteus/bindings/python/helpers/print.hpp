@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_PRINT
-#define GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_PRINT
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_PRINT
+#define GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_PRINT
 
 #include <sstream>
 #include <string>
@@ -29,4 +29,4 @@ std::string to_string(const T& self) {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_HELPERS_PRINT
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_PRINT

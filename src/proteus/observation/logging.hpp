@@ -17,15 +17,15 @@
  * @brief Defines logging in Proteus
  */
 
-#ifndef GUARD_PROTEUS_OBSERVATION_LOGGING
-#define GUARD_PROTEUS_OBSERVATION_LOGGING
+#ifndef GUARD_AMDINFER_OBSERVATION_LOGGING
+#define GUARD_AMDINFER_OBSERVATION_LOGGING
 
 #include <memory>  // for shared_ptr
 #include <string>  // for string
 
 #include "amdinfer/build_options.hpp"
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
 
 #ifndef NDEBUG
 // used for debug builds
@@ -39,26 +39,26 @@
 
 #include <spdlog/spdlog.h>
 
-#define PROTEUS_LOG_TRACE(logger, message) \
+#define AMDINFER_LOG_TRACE(logger, message) \
   SPDLOG_LOGGER_TRACE(logger.get(), message)
-#define PROTEUS_LOG_DEBUG(logger, message) \
+#define AMDINFER_LOG_DEBUG(logger, message) \
   SPDLOG_LOGGER_DEBUG(logger.get(), message)
-#define PROTEUS_LOG_INFO(logger, message) \
+#define AMDINFER_LOG_INFO(logger, message) \
   SPDLOG_LOGGER_INFO(logger.get(), message)
-#define PROTEUS_LOG_WARN(logger, message) \
+#define AMDINFER_LOG_WARN(logger, message) \
   SPDLOG_LOGGER_WARN(logger.get(), message)
-#define PROTEUS_LOG_ERROR(logger, message) \
+#define AMDINFER_LOG_ERROR(logger, message) \
   SPDLOG_LOGGER_ERROR(logger.get(), message)
 
-#define PROTEUS_IF_LOGGING(args) args
+#define AMDINFER_IF_LOGGING(args) args
 #else
-#define PROTEUS_LOG_TRACE(logger, message)
-#define PROTEUS_LOG_DEBUG(logger, message)
-#define PROTEUS_LOG_INFO(logger, message)
-#define PROTEUS_LOG_WARN(logger, message)
-#define PROTEUS_LOG_ERROR(logger, message)
+#define AMDINFER_LOG_TRACE(logger, message)
+#define AMDINFER_LOG_DEBUG(logger, message)
+#define AMDINFER_LOG_INFO(logger, message)
+#define AMDINFER_LOG_WARN(logger, message)
+#define AMDINFER_LOG_ERROR(logger, message)
 
-#define PROTEUS_IF_LOGGING(args)
+#define AMDINFER_IF_LOGGING(args)
 #endif
 
 namespace amdinfer {
@@ -108,4 +108,4 @@ std::string getLogDirectory();
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_OBSERVATION_LOGGING
+#endif  // GUARD_AMDINFER_OBSERVATION_LOGGING

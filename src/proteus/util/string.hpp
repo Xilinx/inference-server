@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_HELPERS_STRING
-#define GUARD_PROTEUS_HELPERS_STRING
+#ifndef GUARD_AMDINFER_HELPERS_STRING
+#define GUARD_AMDINFER_HELPERS_STRING
 
 #include <algorithm>
 #include <sstream>
@@ -79,4 +79,4 @@ inline std::string addressToString(const void* ptr) {
 
 }  // namespace amdinfer::util
 
-#endif  // GUARD_PROTEUS_HELPERS_STRING
+#endif  // GUARD_AMDINFER_HELPERS_STRING

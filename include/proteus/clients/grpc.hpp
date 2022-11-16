@@ -17,8 +17,8 @@
  * @brief Defines the methods for interacting with Proteus with gRPC
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_GRPC
-#define GUARD_PROTEUS_CLIENTS_GRPC
+#ifndef GUARD_AMDINFER_CLIENTS_GRPC
+#define GUARD_AMDINFER_CLIENTS_GRPC
 
 #include <memory>  // for shared_ptr, unique_ptr
 #include <string>  // for string
@@ -72,4 +72,4 @@ class GrpcClient : public Client {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_GRPC
+#endif  // GUARD_AMDINFER_CLIENTS_GRPC

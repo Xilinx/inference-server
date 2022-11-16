@@ -18,8 +18,8 @@
  * tensor data: using subclasses of the Buffer class
  */
 
-#ifndef GUARD_PROTEUS_BUFFERS_BUFFER
-#define GUARD_PROTEUS_BUFFERS_BUFFER
+#ifndef GUARD_AMDINFER_BUFFERS_BUFFER
+#define GUARD_AMDINFER_BUFFERS_BUFFER
 
 #include <cstddef>  // for size_t
 #include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uint...
@@ -93,4 +93,4 @@ class Buffer {
 };
 
 }  // namespace amdinfer
-#endif  // GUARD_PROTEUS_BUFFERS_BUFFER
+#endif  // GUARD_AMDINFER_BUFFERS_BUFFER

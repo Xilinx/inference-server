@@ -17,12 +17,12 @@
  * @brief Defines the gRPC server in Proteus
  */
 
-#ifndef GUARD_PROTEUS_SERVERS_GRPC_SERVER
-#define GUARD_PROTEUS_SERVERS_GRPC_SERVER
+#ifndef GUARD_AMDINFER_SERVERS_GRPC_SERVER
+#define GUARD_AMDINFER_SERVERS_GRPC_SERVER
 
 #include "amdinfer/build_options.hpp"
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 
 namespace amdinfer::grpc {
 
@@ -31,6 +31,6 @@ void stop();
 
 }  // namespace amdinfer::grpc
 
-#endif  // PROTEUS_ENABLE_GRPC
+#endif  // AMDINFER_ENABLE_GRPC
 
-#endif  // GUARD_PROTEUS_SERVERS_GRPC_SERVER
+#endif  // GUARD_AMDINFER_SERVERS_GRPC_SERVER

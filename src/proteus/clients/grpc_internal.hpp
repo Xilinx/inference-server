@@ -18,8 +18,8 @@
  * @brief Defines the internal objects used for gRPC
  */
 
-#ifndef GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
-#define GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
+#ifndef GUARD_AMDINFER_CLIENTS_GRPC_INTERNAL
+#define GUARD_AMDINFER_CLIENTS_GRPC_INTERNAL
 
 #include <map>
 #include <string>
@@ -120,4 +120,4 @@ constexpr auto* getTensorContents(Tensor* tensor) {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CLIENTS_GRPC_INTERNAL
+#endif  // GUARD_AMDINFER_CLIENTS_GRPC_INTERNAL

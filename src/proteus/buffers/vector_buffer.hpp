@@ -17,8 +17,8 @@
  * @brief Defines the VectorBuffer class
  */
 
-#ifndef GUARD_PROTEUS_BUFFERS_VECTOR_BUFFER
-#define GUARD_PROTEUS_BUFFERS_VECTOR_BUFFER
+#ifndef GUARD_AMDINFER_BUFFERS_VECTOR_BUFFER
+#define GUARD_AMDINFER_BUFFERS_VECTOR_BUFFER
 
 #include <cstddef>  // for size_t, byte
 #include <vector>   // for vector
@@ -79,4 +79,4 @@ class VectorBuffer : public Buffer {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BUFFERS_VECTOR_BUFFER
+#endif  // GUARD_AMDINFER_BUFFERS_VECTOR_BUFFER

@@ -172,7 +172,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
         ModelRepository::modelLoad(model, &params);
         Manager::getInstance().loadWorker(model, params);
       } catch (const runtime_error&) {
-        PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
+        AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
       }
     } else if (action == efsw::Actions::Delete) {
       // arbitrary delay to make sure filesystem has settled
@@ -185,24 +185,24 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
 
   switch (action) {
     case efsw::Actions::Add:
-      PROTEUS_LOG_DEBUG(
+      AMDINFER_LOG_DEBUG(
         logger, "DIR (" + dir + ") FILE (" + filename + ") has event Added");
       break;
     case efsw::Actions::Delete:
-      PROTEUS_LOG_DEBUG(
+      AMDINFER_LOG_DEBUG(
         logger, "DIR (" + dir + ") FILE (" + filename + ") has event Delete");
       break;
     case efsw::Actions::Modified:
-      PROTEUS_LOG_DEBUG(
+      AMDINFER_LOG_DEBUG(
         logger, "DIR (" + dir + ") FILE (" + filename + ") has event Modified");
       break;
     case efsw::Actions::Moved:
-      PROTEUS_LOG_DEBUG(logger, "DIR (" + dir + ") FILE (" + filename +
-                                  ") has event Moved from (" + oldFilename +
-                                  ")");
+      AMDINFER_LOG_DEBUG(logger, "DIR (" + dir + ") FILE (" + filename +
+                                   ") has event Moved from (" + oldFilename +
+                                   ")");
       break;
     default:
-      PROTEUS_LOG_ERROR(logger, "Should never happen");
+      AMDINFER_LOG_ERROR(logger, "Should never happen");
   }
 }
 
@@ -222,7 +222,7 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
         RequestParameters params;
         amdinfer::modelLoad(model, &params);
       } catch (const amdinfer::runtime_error&) {
-        PROTEUS_LOG_INFO(logger, "Error loading " + model.string());
+        AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
       }
     }
   }

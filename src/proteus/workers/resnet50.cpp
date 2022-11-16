@@ -41,7 +41,7 @@
 
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
@@ -152,7 +152,7 @@ void ResNet50::doAcquire(RequestParameters* parameters) {
 void ResNet50::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   util::setThreadName("ResNet50");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -162,7 +162,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger, "Got request in Resnet50");
+    AMDINFER_LOG_INFO(logger, "Got request in Resnet50");
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->size());
 
@@ -172,7 +172,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     size_t tensor_count = 0;
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto& trace = batch->getTrace(j);
       trace->startSpan("Resnet50");
 #endif
@@ -211,7 +211,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            PROTEUS_LOG_ERROR(logger, error);
+            AMDINFER_LOG_ERROR(logger, error);
             req->runCallbackError(error);
             continue;
           }
@@ -287,20 +287,20 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(k));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
       req->runCallbackOnce(resp);
     }
   }
-  PROTEUS_LOG_INFO(logger, "ResNet50 ending");
+  AMDINFER_LOG_INFO(logger, "ResNet50 ending");
 }
 
 void ResNet50::doRelease() {}

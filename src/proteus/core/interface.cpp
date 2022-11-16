@@ -21,7 +21,7 @@
 
 #include <utility>  // for move
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/observation/tracing.hpp"  // for TracePtr
 
 namespace amdinfer {
@@ -30,12 +30,12 @@ Interface::Interface() { this->type_ = InterfaceType::kUnknown; }
 
 InterfaceType Interface::getType() const { return this->type_; }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 void Interface::setTrace(TracePtr&& trace) { this->trace_ = std::move(trace); }
 TracePtr&& Interface::getTrace() { return std::move(this->trace_); }
 #endif
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
 void Interface::set_time(
   const std::chrono::high_resolution_clock::time_point& start_time) {
   this->start_time_ = start_time;
@@ -46,7 +46,7 @@ std::chrono::high_resolution_clock::time_point Interface::get_time() const {
 }
 #endif
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
 const Logger& Interface::getLogger() const { return this->logger_; }
 #endif
 

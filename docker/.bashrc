@@ -151,7 +151,7 @@ if [ $? -eq 0 ]; then
 fi
 
 if [ $TFZENDNN_FOUND -eq 1 ] || [ $PTZENDNN_FOUND -eq 1 ]; then
-    source ${PROTEUS_ROOT}/external/zendnn/zendnn_tf_pt_cc_api_env_setup.sh
+    source ${AMDINFER_ROOT}/external/zendnn/zendnn_tf_pt_cc_api_env_setup.sh
 fi
 
 export GPG_TTY=$(tty)

@@ -15,7 +15,7 @@
 #include <memory>  // for allocator
 
 #include "amdinfer/batching/soft.hpp"        // for SoftBatcher
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/interface.hpp"       // IWYU pragma: keep
 #include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for initLogger, LogLevel, Log...
@@ -24,7 +24,7 @@
 namespace amdinfer {
 
 TEST(UnitSoftBatcher, ConstructAndStart) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "server",          // logger_name
     "",                // log directory

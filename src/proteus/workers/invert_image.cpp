@@ -35,7 +35,7 @@
 
 #include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT8
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
@@ -145,7 +145,7 @@ void InvertImage::doAcquire(RequestParameters* parameters) {
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
   util::setThreadName("InvertImage");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -156,10 +156,10 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_LOG_INFO(logger, "Got request in InvertImage");
+    AMDINFER_LOG_INFO(logger, "Got request in InvertImage");
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto& trace = batch->getTrace(j);
       trace->startSpan("InvertImage");
 #endif
@@ -204,14 +204,14 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           try {
             img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           } catch (const cv::Exception& e) {
-            PROTEUS_LOG_ERROR(logger, e.what());
+            AMDINFER_LOG_ERROR(logger, e.what());
             req->runCallbackError("Failed to decode base64 image data");
             continue;
           }
 
           if (img.empty()) {
             const char* error = "Decoded image is empty";
-            PROTEUS_LOG_ERROR(logger, error);
+            AMDINFER_LOG_ERROR(logger, error);
             req->runCallbackError(error);
             continue;
           }
@@ -239,20 +239,20 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         resp.addOutput(output);
       }
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(j));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto context = trace->propagate();
       resp.setContext(std::move(context));
 #endif
       req->runCallbackOnce(resp);
     }
   }
-  PROTEUS_LOG_INFO(logger, "InvertImage ending");
+  AMDINFER_LOG_INFO(logger, "InvertImage ending");
 }
 
 void InvertImage::doRelease() {}

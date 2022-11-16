@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET
-#define GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET
+#ifndef GUARD_SRC_AMDINFER_TESTING_GET_PATH_TO_ASSET
+#define GUARD_SRC_AMDINFER_TESTING_GET_PATH_TO_ASSET
 
 #include <filesystem>
 #include <string>
@@ -24,4 +24,4 @@ std::string getPathToAsset(const std::string& key);
 
 }  // namespace amdinfer
 
-#endif  // GUARD_SRC_PROTEUS_TESTING_GET_PATH_TO_ASSET
+#endif  // GUARD_SRC_AMDINFER_TESTING_GET_PATH_TO_ASSET

@@ -17,8 +17,8 @@
  * @brief Defines the status codes used in Proteus
  */
 
-#ifndef GUARD_PROTEUS_OBSERVATION_STATUS
-#define GUARD_PROTEUS_OBSERVATION_STATUS
+#ifndef GUARD_AMDINFER_OBSERVATION_STATUS
+#define GUARD_AMDINFER_OBSERVATION_STATUS
 
 namespace amdinfer {
 /// Status codes used in Proteus
@@ -26,4 +26,4 @@ enum class Status { kOK, kNotFound, kNotImplemented };
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_OBSERVATION_STATUS
+#endif  // GUARD_AMDINFER_OBSERVATION_STATUS

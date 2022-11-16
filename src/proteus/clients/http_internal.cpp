@@ -245,7 +245,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
   static InferenceRequestInput build(std::shared_ptr<Json::Value> const &req,
                                      Buffer *input_buffer, size_t offset) {
     InferenceRequestInput input;
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
     Logger logger{Loggers::kServer};
 #endif
     input.data_ = input_buffer->data();
@@ -403,7 +403,7 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
 }
 
 std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger{Loggers::kServer};
 #endif
 
@@ -413,7 +413,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
     return json_obj;
   }
 
-  PROTEUS_LOG_DEBUG(logger, "Failed to get JSON data directly");
+  AMDINFER_LOG_DEBUG(logger, "Failed to get JSON data directly");
 
   // if it's not valid, then we need to attempt to parse the body
   auto root = std::make_shared<Json::Value>();
@@ -428,7 +428,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
     return root;
   }
 
-  PROTEUS_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
+  AMDINFER_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
 
   // if it's still not valid, attempt to uncompress the body and convert to JSON
   auto body_decompress = util::z_decompress(body.data(), body.length());
@@ -486,7 +486,7 @@ Json::Value parseResponse(InferenceResponse response) {
   return ret;
 }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
 void propagate(drogon::HttpResponse *resp, const StringMap &context) {
   for (const auto &[key, value] : context) {
     resp->addHeader(key, value);
@@ -497,7 +497,7 @@ void propagate(drogon::HttpResponse *resp, const StringMap &context) {
 std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
   const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
   const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto &logger = this->getLogger();
 #endif
   try {
@@ -518,7 +518,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
           resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
         }
       }
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto &context = response.getContext();
       propagate(resp.get(), context);
 #endif
@@ -527,7 +527,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
     request->setCallback(std::move(callback));
     return request;
   } catch (const invalid_argument &e) {
-    PROTEUS_LOG_INFO(logger, e.what());
+    AMDINFER_LOG_INFO(logger, e.what());
     this->callback_(
       errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
     return nullptr;
@@ -535,9 +535,9 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
 }
 
 void DrogonHttp::errorHandler(const std::exception &e) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto &logger = this->getLogger();
-  PROTEUS_LOG_DEBUG(logger, e.what());
+  AMDINFER_LOG_DEBUG(logger, e.what());
 #endif
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
 }

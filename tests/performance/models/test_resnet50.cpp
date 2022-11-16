@@ -46,7 +46,7 @@ template <typename T, int C>
 using ImagePreprocessOptions = amdinfer::pre_post::ImagePreprocessOptions<T, C>;
 
 struct Workers {
-  const fs::path kRoot{std::getenv("PROTEUS_ROOT")};
+  const fs::path kRoot{std::getenv("AMDINFER_ROOT")};
   std::string extension;
   std::string name;
   fs::path graph;
@@ -201,7 +201,7 @@ const std::array<Workers*, 1> workers = {
   //  &ptzendnn, &tfzendnn
   &tfzendnn};
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
@@ -227,7 +227,7 @@ INSTANTIATE_TEST_SUITE_P(PerfModelsResnetBase, PerfModelsResnetBaseFixture,
                          testing::Combine(testing::ValuesIn(configs),
                                           testing::ValuesIn(workers)));
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {

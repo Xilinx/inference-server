@@ -19,17 +19,17 @@ list(
          native_internal
 )
 
-if(${PROTEUS_ENABLE_HTTP})
+if(${AMDINFER_ENABLE_HTTP})
   set(targets ${targets} http http_internal websocket)
 endif()
 
-if(${PROTEUS_ENABLE_GRPC})
+if(${AMDINFER_ENABLE_GRPC})
   set(targets ${targets} grpc grpc_internal)
 endif()
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
 
   list(APPEND CLIENT_OBJS $<TARGET_OBJECTS:${target}>)
@@ -37,13 +37,13 @@ endforeach()
 
 target_link_libraries(native INTERFACE batching)
 
-if(${PROTEUS_ENABLE_HTTP})
+if(${AMDINFER_ENABLE_HTTP})
   target_link_libraries(http_internal PRIVATE Drogon::Drogon INTERFACE util)
   target_link_libraries(http PRIVATE Drogon::Drogon)
   target_link_libraries(websocket PRIVATE Drogon::Drogon)
 endif()
 
-if(${PROTEUS_ENABLE_GRPC})
+if(${AMDINFER_ENABLE_GRPC})
   target_include_directories(
     grpc PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )

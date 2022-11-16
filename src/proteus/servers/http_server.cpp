@@ -31,17 +31,17 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "amdinfer/build_options.hpp"              // for PROTEUS_ENABLE_TRACING
-#include "amdinfer/clients/http_internal.hpp"      // for propagate, errorHtt...
-#include "amdinfer/core/api.hpp"                   // for hasHardware, modelI...
-#include "amdinfer/core/exceptions.hpp"            // for runtime_error, inva...
-#include "amdinfer/core/interface.hpp"             // for Interface
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/clients/http_internal.hpp"  // for propagate, errorHtt...
+#include "amdinfer/core/api.hpp"               // for hasHardware, modelI...
+#include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
+#include "amdinfer/core/interface.hpp"         // for Interface
 #include "amdinfer/core/predict_api_internal.hpp"  // for RequestParametersPtr
-#include "amdinfer/observation/logging.hpp"        // for Logger, PROTEUS_LOG...
-#include "amdinfer/observation/metrics.hpp"        // for Metrics, MetricCoun...
-#include "amdinfer/observation/tracing.hpp"        // for startTrace, Trace
-#include "amdinfer/servers/websocket_server.hpp"   // for WebsocketServer
-#include "amdinfer/util/string.hpp"                // for toLower
+#include "amdinfer/observation/logging.hpp"       // for Logger, AMDINFER_LOG...
+#include "amdinfer/observation/metrics.hpp"       // for Metrics, MetricCoun...
+#include "amdinfer/observation/tracing.hpp"       // for startTrace, Trace
+#include "amdinfer/servers/websocket_server.hpp"  // for WebsocketServer
+#include "amdinfer/util/string.hpp"               // for toLower
 
 using drogon::HttpRequestPtr;
 using drogon::HttpResponse;
@@ -57,7 +57,7 @@ void start(int port) {
   auto &app = drogon::app();
   app.registerController(controller);
   app.registerController(ws_controller);
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   auto dir = getLogDirectory();
   app.setLogLevel(trantor::Logger::kWarn).setLogPath(dir);
 #else
@@ -80,26 +80,26 @@ void start(int port) {
 void stop() { drogon::app().quit(); }
 
 v2::ProteusHttpServer::ProteusHttpServer() {
-  PROTEUS_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
+  AMDINFER_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
 }
 
-#ifdef PROTEUS_ENABLE_REST
+#ifdef AMDINFER_ENABLE_REST
 
 void v2::ProteusHttpServer::getServerLive(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
-  PROTEUS_LOG_INFO(logger_, "Received getServerLive request");
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received getServerLive request");
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #else
   (void)req;  // suppress unused variable warning
 #endif
 
   auto resp = HttpResponse::newHttpResponse();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
 #endif
@@ -109,8 +109,8 @@ void v2::ProteusHttpServer::getServerLive(
 void v2::ProteusHttpServer::getServerReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
-  PROTEUS_LOG_INFO(logger_, "Received getServerReady request");
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received getServerReady request");
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
@@ -126,8 +126,8 @@ void v2::ProteusHttpServer::getModelReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
-  PROTEUS_LOG_INFO(logger_, "Received getModelReady request");
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received getModelReady request");
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
@@ -147,8 +147,8 @@ void v2::ProteusHttpServer::getModelReady(
 void v2::ProteusHttpServer::getServerMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
-  PROTEUS_LOG_INFO(logger_, "Received getServerMetadata request");
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received getServerMetadata request");
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
@@ -170,8 +170,8 @@ void v2::ProteusHttpServer::getModelMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
-  PROTEUS_LOG_INFO(logger_, "Received getModelMetadata request");
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received getModelMetadata request");
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   (void)req;  // suppress unused variable warning
@@ -212,8 +212,8 @@ void v2::ProteusHttpServer::modelList(
 void v2::ProteusHttpServer::hasHardware(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
-  PROTEUS_LOG_INFO(logger_, "Received hasHardware request");
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received hasHardware request");
+#ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
   auto &json = req->jsonObject();
@@ -239,35 +239,35 @@ void v2::ProteusHttpServer::modelInfer(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
   trace->setAttribute("model", model);
 #endif
 
-  PROTEUS_LOG_INFO(logger_, "Received modelInfer request for " + model);
-#ifdef PROTEUS_ENABLE_METRICS
+  AMDINFER_LOG_INFO(logger_, "Received modelInfer request for " + model);
+#ifdef AMDINFER_ENABLE_METRICS
   auto now = std::chrono::high_resolution_clock::now();
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestPost);
 #endif
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->startSpan("request_handler");
 #endif
 
   try {
     auto request = std::make_unique<DrogonHttp>(req, std::move(callback));
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
     request->set_time(now);
 #endif
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
     request->setTrace(std::move(trace));
 #endif
     ::amdinfer::modelInfer(model, std::move(request));
   } catch (const invalid_argument &e) {
-    PROTEUS_LOG_INFO(logger_, e.what());
+    AMDINFER_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     auto context = trace->propagate();
     propagate(resp.get(), context);
 #endif
@@ -280,11 +280,11 @@ void v2::ProteusHttpServer::modelLoad(
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
   auto model_lower = util::toLower(model);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
   trace->setAttribute("model", model_lower);
 #endif
-  PROTEUS_LOG_INFO(logger_, "Received modelLoad request for " + model_lower);
+  AMDINFER_LOG_INFO(logger_, "Received modelLoad request for " + model_lower);
 
   auto json = req->getJsonObject();
   RequestParametersPtr parameters = nullptr;
@@ -293,16 +293,16 @@ void v2::ProteusHttpServer::modelLoad(
   } else {
     parameters = std::make_unique<RequestParameters>();
   }
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
 
   try {
     ::amdinfer::modelLoad(model_lower, parameters.get());
   } catch (const runtime_error &e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     auto context = trace->propagate();
     propagate(resp.get(), context);
 #endif
@@ -310,7 +310,7 @@ void v2::ProteusHttpServer::modelLoad(
   }
 
   auto resp = HttpResponse::newHttpResponse();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
 #endif
@@ -321,21 +321,21 @@ void v2::ProteusHttpServer::modelUnload(
   [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
-  PROTEUS_LOG_INFO(logger_, "Received modelUnload request");
-#ifdef PROTEUS_ENABLE_TRACING
+  AMDINFER_LOG_INFO(logger_, "Received modelUnload request");
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
   auto model_lower = util::toLower(model);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->setAttribute("model", model_lower);
 #endif
 
   ::amdinfer::modelUnload(model_lower);
 
   auto resp = HttpResponse::newHttpResponse();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
 #endif
@@ -346,8 +346,8 @@ void v2::ProteusHttpServer::workerLoad(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
-  PROTEUS_LOG_INFO(logger_, "Received load request");
-#ifdef PROTEUS_ENABLE_TRACING
+  AMDINFER_LOG_INFO(logger_, "Received load request");
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
@@ -361,12 +361,12 @@ void v2::ProteusHttpServer::workerLoad(
 
   auto worker_lower = util::toLower(worker);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->setAttribute("model", worker_lower);
 #endif
-  PROTEUS_LOG_INFO(logger_, "Received load request is for " + worker_lower);
+  AMDINFER_LOG_INFO(logger_, "Received load request is for " + worker_lower);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->setAttributes(parameters.get());
 #endif
   HttpResponsePtr resp;
@@ -375,11 +375,11 @@ void v2::ProteusHttpServer::workerLoad(
     resp = HttpResponse::newHttpResponse();
     resp->setBody(endpoint);
   } catch (const runtime_error &e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger_, e.what());
     resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
   }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
 #endif
@@ -390,36 +390,36 @@ void v2::ProteusHttpServer::workerUnload(
   [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
 #endif
 
   auto worker_lower = util::toLower(worker);
 
-  PROTEUS_LOG_INFO(logger_, "Received unload request is for " + worker_lower);
+  AMDINFER_LOG_INFO(logger_, "Received unload request is for " + worker_lower);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   trace->setAttribute("model", worker_lower);
 #endif
 
   ::amdinfer::workerUnload(worker_lower);
 
   auto resp = HttpResponse::newHttpResponse();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto context = trace->propagate();
   propagate(resp.get(), context);
 #endif
   callback(resp);
 }
 
-#endif  // PROTEUS_ENABLE_REST
+#endif  // AMDINFER_ENABLE_REST
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
 void v2::ProteusHttpServer::metrics(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   (void)req;  // suppress unused variable warning
-  PROTEUS_LOG_INFO(logger_, "Received metrics request");
+  AMDINFER_LOG_INFO(logger_, "Received metrics request");
   std::string body = Metrics::getInstance().getMetrics();
   auto resp = drogon::HttpResponse::newHttpResponse();
   resp->setBody(body);

@@ -19,8 +19,8 @@
  * snake case name syntax of the standard exceptions in std
  */
 
-#ifndef GUARD_PROTEUS_CORE_EXCEPTIONS
-#define GUARD_PROTEUS_CORE_EXCEPTIONS
+#ifndef GUARD_AMDINFER_CORE_EXCEPTIONS
+#define GUARD_AMDINFER_CORE_EXCEPTIONS
 
 #include <stdexcept>
 
@@ -60,4 +60,4 @@ class environment_not_set_error : public runtime_error {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_EXCEPTIONS
+#endif  // GUARD_AMDINFER_CORE_EXCEPTIONS

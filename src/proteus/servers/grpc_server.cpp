@@ -37,13 +37,13 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "amdinfer/buffers/buffer.hpp"             // for Buffer
-#include "amdinfer/build_options.hpp"              // for PROTEUS_ENABLE_LOGGING
-#include "amdinfer/clients/grpc_internal.hpp"      // for mapProtoToParameters
-#include "amdinfer/core/api.hpp"                   // for hasHardware, modelI...
-#include "amdinfer/core/data_types.hpp"            // for DataType, DataType:...
-#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
-#include "amdinfer/core/interface.hpp"             // for Interface, Interfac...
+#include "amdinfer/buffers/buffer.hpp"         // for Buffer
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/clients/grpc_internal.hpp"  // for mapProtoToParameters
+#include "amdinfer/core/api.hpp"               // for hasHardware, modelI...
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType:...
+#include "amdinfer/core/exceptions.hpp"        // for invalid_argument
+#include "amdinfer/core/interface.hpp"         // for Interface, Interfac...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
 #include "amdinfer/observation/logging.hpp"        // for Logger, Loggers
@@ -212,12 +212,12 @@ struct WriteData {
     } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, int8_t, int16_t,
                                         fp16>) {
       for (size_t i = 0; i < size; i++) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
         if (const auto min_size = size > kNumTraceData ? kNumTraceData : size;
             i < min_size) {
-          PROTEUS_LOG_TRACE(observer.logger,
-                            "Writing data to buffer: " +
-                              std::to_string(static_cast<T>(contents[i])));
+          AMDINFER_LOG_TRACE(observer.logger,
+                             "Writing data to buffer: " +
+                               std::to_string(static_cast<T>(contents[i])));
         }
 #endif
         offset = buffer->write(static_cast<T>(contents[i]), offset);
@@ -236,10 +236,10 @@ class InferenceRequestInputBuilder<
     const inference::ModelInferRequest_InferInputTensor& req,
     Buffer* input_buffer, size_t offset) {
     Observer observer;
-    PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
 
-    PROTEUS_LOG_TRACE(observer.logger,
-                      "Creating InferenceRequestInput from proto tensor");
+    AMDINFER_LOG_TRACE(observer.logger,
+                       "Creating InferenceRequestInput from proto tensor");
 
     InferenceRequestInput input;
     input.name_ = req.name();
@@ -253,10 +253,10 @@ class InferenceRequestInputBuilder<
 
     auto size = input.getSize();
     auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
-    PROTEUS_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
-                                         " elements of type " +
-                                         input.dataType_.str() + " to " +
-                                         util::addressToString(dest));
+    AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
+                                          " elements of type " +
+                                          input.dataType_.str() + " to " +
+                                          util::addressToString(dest));
 
     switchOverTypes(WriteData(), input.getDatatype(), input_buffer, &req,
                     offset, size, observer);
@@ -269,7 +269,7 @@ class InferenceRequestInputBuilder<
 using InputBuilder =
   InferenceRequestInputBuilder<inference::ModelInferRequest_InferInputTensor>;
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
 #define CALLDATA_IMPL(endpoint, type)                                         \
   class CallData##endpoint                                                    \
     : public CallData##type<inference::endpoint##Request,                     \
@@ -333,10 +333,10 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
                                    const BufferRawPtrs& output_buffers,
                                    std::vector<size_t>& output_offsets) {
     Observer observer;
-    PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
 
-    PROTEUS_LOG_TRACE(observer.logger,
-                      "Creating InferenceRequest from proto tensor");
+    AMDINFER_LOG_TRACE(observer.logger,
+                       "Creating InferenceRequest from proto tensor");
 
     auto request = std::make_shared<InferenceRequest>();
     const auto& grpc_request = req->getRequest();
@@ -419,7 +419,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
     return;
   }
 
-  // #ifdef PROTEUS_ENABLE_TRACING
+  // #ifdef AMDINFER_ENABLE_TRACING
   //   const auto &context = response.getContext();
   //   propagate(resp.get(), context);
   // #endif
@@ -442,7 +442,7 @@ class GrpcApiUnary : public Interface {
     const BufferRawPtrs& input_buffers, std::vector<size_t>& input_offsets,
     const BufferRawPtrs& output_buffers,
     std::vector<size_t>& output_offsets) override {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
     const auto& logger = this->getLogger();
 #endif
     try {
@@ -454,7 +454,7 @@ class GrpcApiUnary : public Interface {
       request->setCallback(std::move(callback));
       return request;
     } catch (const invalid_argument& e) {
-      PROTEUS_LOG_INFO(logger, e.what());
+      AMDINFER_LOG_INFO(logger, e.what());
       errorHandler(e);
       return nullptr;
     }
@@ -465,7 +465,7 @@ class GrpcApiUnary : public Interface {
   }
 
   void errorHandler(const std::exception& e) override {
-    PROTEUS_LOG_INFO(this->getLogger(), e.what());
+    AMDINFER_LOG_INFO(this->getLogger(), e.what());
     calldata_->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 
@@ -542,7 +542,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   try {
     ::amdinfer::modelLoad(*model, parameters.get());
   } catch (const runtime_error& e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
     return;
   } catch (const std::exception& e) {
@@ -573,10 +573,10 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
     reply_.set_endpoint(endpoint);
     finish();
   } catch (const runtime_error& e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   } catch (const std::exception& e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 }
@@ -599,7 +599,7 @@ CALLDATA_IMPL_END
 
 void CallDataModelInfer::handleRequest() noexcept {
   const auto& model = request_.model_name();
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
   trace->setAttribute("model", model);
   trace->startSpan("request_handler");
@@ -607,16 +607,16 @@ void CallDataModelInfer::handleRequest() noexcept {
 
   try {
     auto request = std::make_unique<GrpcApiUnary>(this);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
     request->setTrace(std::move(trace));
 #endif
     ::amdinfer::modelInfer(model, std::move(request));
   } catch (const invalid_argument& e) {
-    PROTEUS_LOG_INFO(logger_, e.what());
+    AMDINFER_LOG_INFO(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   } catch (const std::exception& e) {
-    PROTEUS_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
   }
 }

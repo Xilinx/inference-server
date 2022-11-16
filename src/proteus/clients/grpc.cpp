@@ -285,7 +285,7 @@ InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
   ClientContext context;
 
   Observer observer;
-  PROTEUS_IF_LOGGING(observer.logger = Logger{Loggers::kClient});
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kClient});
 
   grpc_request.set_model_name(model);
   mapRequestToProto(request, grpc_request, observer);

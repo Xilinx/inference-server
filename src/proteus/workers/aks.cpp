@@ -36,7 +36,7 @@
 
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
 #include "amdinfer/core/exceptions.hpp"        // for external_error
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
@@ -135,7 +135,7 @@ void Aks::doAcquire(RequestParameters* parameters) {
 
 void Aks::doRun(BatchPtrQueue* input_queue) {
   util::setThreadName("Aks");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -145,10 +145,10 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_INFO(logger, "Got request in aks");
+    AMDINFER_LOG_INFO(logger, "Got request in aks");
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto& trace = batch->getTrace(j);
       trace->startSpan("aks");
 #endif
@@ -192,20 +192,20 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(j));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto context = trace->propagate();
       resp.setContext(std::move(context));
 #endif
       req->runCallbackOnce(resp);
     }
   }
-  PROTEUS_LOG_INFO(logger, "Aks ending");
+  AMDINFER_LOG_INFO(logger, "Aks ending");
 }
 
 void Aks::doRelease() {}

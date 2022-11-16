@@ -25,7 +25,7 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_METRICS
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"      // for invalid_argument
 #include "amdinfer/core/interface.hpp"       // for Interface
 #include "amdinfer/declarations.hpp"         // for InterfacePtr
@@ -60,12 +60,12 @@ void HardBatcher::doRun(WorkerInfo* worker) {
         break;
       }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto trace = req->getTrace();
       trace->startSpan("hard_batcher");
 #endif
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineIngressBatcher);
 #endif
@@ -93,11 +93,11 @@ void HardBatcher::doRun(WorkerInfo* worker) {
       } else {
         batch->addRequest(new_req);
         batch_size++;
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
         trace->endSpan();
         batch->addTrace(std::move(trace));
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
         batch->addTime(req->get_time());
 #endif
       }
@@ -105,7 +105,7 @@ void HardBatcher::doRun(WorkerInfo* worker) {
 
     if (!batch->empty()) {
       this->output_queue_->enqueue(std::move(batch));
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressBatcher);
 #endif

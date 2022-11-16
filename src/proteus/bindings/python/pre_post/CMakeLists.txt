@@ -14,7 +14,7 @@
 
 add_library(pre_post_py OBJECT pre_post.cpp)
 target_include_directories(
-  pre_post_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
+  pre_post_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${AMDINFER_INCLUDE_DIRS}
                       ${Python_INCLUDE_DIRS}
 )
 target_link_libraries(

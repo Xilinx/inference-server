@@ -16,14 +16,14 @@ list(APPEND files hard soft)
 list(APPEND targets)
 
 add_library(batcher OBJECT batcher.cpp)
-target_include_directories(batcher PRIVATE ${PROTEUS_INCLUDE_DIRS})
+target_include_directories(batcher PRIVATE ${AMDINFER_INCLUDE_DIRS})
 enable_ipo_on_target(batcher)
 set(BATCHING_OBJS $<TARGET_OBJECTS:batcher>)
 
 foreach(file ${files})
   set(target ${file}Batcher)
   add_library(${target} OBJECT ${file}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${target})
 
   list(APPEND BATCHING_OBJS $<TARGET_OBJECTS:${target}>)

@@ -39,7 +39,7 @@ PYBIND11_MODULE(_amdinfer, m) {
   wrapCore(m);
   wrapClients(m);
   wrapServers(m);
-#ifdef PROTEUS_BUILD_TESTING
+#ifdef AMDINFER_BUILD_TESTING
   wrapTesting(t);
 #endif
   wrapPrePost(p);

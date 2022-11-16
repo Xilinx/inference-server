@@ -25,9 +25,9 @@ namespace fs = std::filesystem;
 namespace amdinfer {
 
 std::string getPathToAsset(const std::string& key) {
-  const auto* root_env = std::getenv("PROTEUS_ROOT");
+  const auto* root_env = std::getenv("AMDINFER_ROOT");
   if (root_env == nullptr) {
-    throw environment_not_set_error("PROTEUS_ROOT not found in the env");
+    throw environment_not_set_error("AMDINFER_ROOT not found in the env");
   }
   const fs::path root_path{root_env};
   const auto models_txt = root_path / "external/artifacts/artifacts.txt";

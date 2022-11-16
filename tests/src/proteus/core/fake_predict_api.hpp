@@ -17,8 +17,8 @@
  * @brief Defines the fake predict API InferenceRequest
  */
 
-#ifndef GUARD_PROTEUS_CORE_FAKE_PREDICT_API
-#define GUARD_PROTEUS_CORE_FAKE_PREDICT_API
+#ifndef GUARD_AMDINFER_CORE_FAKE_PREDICT_API
+#define GUARD_AMDINFER_CORE_FAKE_PREDICT_API
 
 #include <cstddef>  // for size_t
 #include <vector>   // for vector
@@ -45,4 +45,4 @@ class FakeInferenceRequest : public InferenceRequest {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_FAKE_PREDICT_API
+#endif  // GUARD_AMDINFER_CORE_FAKE_PREDICT_API

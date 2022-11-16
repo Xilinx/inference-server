@@ -25,10 +25,10 @@ list(
 foreach(target ${targets})
   add_library(fake_${target} OBJECT ${target}.cpp)
   target_include_directories(
-    fake_${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+    fake_${target} BEFORE PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
   )
   target_include_directories(
-    fake_${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS}
+    fake_${target} AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS}
   )
   enable_ipo_on_target(fake_${target})
 

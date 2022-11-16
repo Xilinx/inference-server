@@ -13,7 +13,7 @@
 # limitations under the License.
 
 function(amdinfer_get_example_target target example)
-  string(REGEX REPLACE "^${PROTEUS_EXAMPLE_ROOT}" "" BASE_PATH
+  string(REGEX REPLACE "^${AMDINFER_EXAMPLE_ROOT}" "" BASE_PATH
                        ${CMAKE_CURRENT_SOURCE_DIR}
   )
   string(REGEX REPLACE "\/" "_" BASE_NAME ${BASE_PATH})
@@ -35,7 +35,7 @@ function(amdinfer_add_example example)
   amdinfer_get_example_target(target ${example})
 
   add_executable(${target} ${example}.cpp)
-  target_include_directories(${target} PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   target_link_libraries(${target} PRIVATE amdinfer util)
 endfunction()
 

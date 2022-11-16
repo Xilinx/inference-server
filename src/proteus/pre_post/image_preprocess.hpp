@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS
-#define GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS
+#ifndef GUARD_AMDINFER_PRE_POST_IMAGE_PREPROCESS
+#define GUARD_AMDINFER_PRE_POST_IMAGE_PREPROCESS
 
 #include <array>
 #include <cassert>
@@ -167,4 +167,4 @@ std::vector<std::vector<T>> imagePreprocess(
 
 }  // namespace amdinfer::pre_post
 
-#endif  // GUARD_PROTEUS_PRE_POST_IMAGE_PREPROCESS
+#endif  // GUARD_AMDINFER_PRE_POST_IMAGE_PREPROCESS

@@ -28,11 +28,11 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
 #include "amdinfer/core/interface.hpp"         // for Interface
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponsePromis...
-#include "amdinfer/observation/logging.hpp"    // for Logger, PROTEUS_LOG_DEBUG
+#include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_DEBUG
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/queue.hpp"             // for BlockingConcurrentQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
@@ -94,7 +94,7 @@ std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
 }
 
 void FakeInterface::errorHandler(const std::exception &e) {
-  PROTEUS_LOG_ERROR(this->getLogger(), e.what());
+  AMDINFER_LOG_ERROR(this->getLogger(), e.what());
   (void)e;  // suppress unused variable warning
 }
 
@@ -113,14 +113,14 @@ void Batcher::run(WorkerInfo *worker) {
 
     // wait for the first request
     this->input_queue_->wait_dequeue(req);
-    PROTEUS_LOG_DEBUG(logger_,
-                      "Got initial request of a new batch for " + this->model_);
+    AMDINFER_LOG_DEBUG(
+      logger_, "Got initial request of a new batch for " + this->model_);
 
     if (req == nullptr) {
       break;
     }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     auto trace = req->getTrace();
     trace->startSpan("fake_batcher");
 #endif
@@ -130,17 +130,17 @@ void Batcher::run(WorkerInfo *worker) {
 
     batch->addRequest(new_req);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
     batch->addTrace(std::move(trace));
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
     batch->addTime(req->get_time());
 #endif
     // batch_size += 1;
 
     if (!batch->empty()) {
-      PROTEUS_LOG_DEBUG(logger_, "Enqueuing batch for " + this->model_);
+      AMDINFER_LOG_DEBUG(logger_, "Enqueuing batch for " + this->model_);
       this->output_queue_->enqueue(std::move(batch));
     }
   }

@@ -18,8 +18,8 @@
  * responses
  */
 
-#ifndef GUARD_PROTEUS_CORE_PREDICT_API_INTERNAL
-#define GUARD_PROTEUS_CORE_PREDICT_API_INTERNAL
+#ifndef GUARD_AMDINFER_CORE_PREDICT_API_INTERNAL
+#define GUARD_AMDINFER_CORE_PREDICT_API_INTERNAL
 
 #include "amdinfer/core/predict_api.hpp"  // IWYU pragma: export
 
@@ -79,4 +79,4 @@ class InferenceRequestOutputBuilder {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_CORE_PREDICT_API_INTERNAL
+#endif  // GUARD_AMDINFER_CORE_PREDICT_API_INTERNAL

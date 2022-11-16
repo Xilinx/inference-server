@@ -78,11 +78,11 @@ def parse_args():
     args = parser.parse_args()
 
     if (not args.image) or (not args.model) or (not args.labels) or (not args.anchors):
-        root = os.getenv("PROTEUS_ROOT")
+        root = os.getenv("AMDINFER_ROOT")
         if root is None:
-            print("PROTEUS_ROOT is not defined in the environment")
+            print("AMDINFER_ROOT is not defined in the environment")
             print("-> Needed to infer default values for arguments")
-            print("Either:\n - define PROTEUS_ROOT in the environment")
+            print("Either:\n - define AMDINFER_ROOT in the environment")
             print(" - pass all the following flags:")
             print("     --image")
             print("     --model")

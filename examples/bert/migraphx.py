@@ -180,7 +180,7 @@ def get_args():
     """
     args = parse_args()
 
-    root = os.getenv("PROTEUS_ROOT")
+    root = os.getenv("AMDINFER_ROOT")
 
     # assign default values if these are unset
     if not args.model:

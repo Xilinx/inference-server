@@ -41,7 +41,7 @@
 
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::STRING
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
@@ -148,7 +148,7 @@ void AksDetectStream::doAcquire(RequestParameters* parameters) {
 
 void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
   util::setThreadName("AksDetectStream");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -159,10 +159,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_LOG_INFO(logger, "Got request in AksDetectStream");
+    AMDINFER_LOG_INFO(logger, "Got request in AksDetectStream");
     for (unsigned int k = 0; k < batch->size(); k++) {
       const auto& req = batch->getRequest(k);
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto& trace = batch->getTrace(k);
       trace->startSpan("aks_detect_stream");
 #endif
@@ -178,7 +178,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(data);  // open the video file
         if (!cap.isOpened()) {       // check if we succeeded
           const char* error = "Cannot open video file";
-          PROTEUS_LOG_ERROR(logger, error);
+          AMDINFER_LOG_ERROR(logger, error);
           req->runCallbackError(error);
           continue;
         }
@@ -222,7 +222,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> v;
           v.reserve(1);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
           trace->startSpan("enqueue_batch");
 #endif
 
@@ -253,10 +253,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             std::string encoded = util::base64_encode(enc_msg, buf.size());
             frames.push("data:image/jpg;base64," + encoded);
           }
-          PROTEUS_LOG_INFO(logger, "Enqueuing in " + key);
+          AMDINFER_LOG_INFO(logger, "Enqueuing in " + key);
           futures.push(
             this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr));
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
           trace->endSpan();
 #endif
           auto status = futures.front().wait_for(std::chrono::seconds(0));
@@ -307,7 +307,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         while (!futures.empty()) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
             futures.front().get();
-          PROTEUS_LOG_INFO(logger, "Got future with key " + key);
+          AMDINFER_LOG_INFO(logger, "Got future with key " + key);
           futures.pop();
           auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
           auto shape = outDD[0]->get_tensor()->get_shape();
@@ -351,7 +351,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
       }
     }
   }
-  PROTEUS_LOG_INFO(logger, "AksDetectStream ending");
+  AMDINFER_LOG_INFO(logger, "AksDetectStream ending");
 }
 
 void AksDetectStream::doRelease() {}

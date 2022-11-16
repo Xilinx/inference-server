@@ -17,8 +17,8 @@
  * @brief Defines the objects for Python bindings for the core
  */
 
-#ifndef GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE
-#define GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_CORE_CORE
+#define GUARD_AMDINFER_BINDINGS_PYTHON_CORE_CORE
 
 namespace pybind11 {
 class module_;
@@ -42,4 +42,4 @@ void wrapCore(pybind11::module_ &m) {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BINDINGS_PYTHON_CORE_CORE
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_CORE_CORE

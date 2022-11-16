@@ -15,10 +15,10 @@
 set(OBSERVATION_OBJS "")
 set(targets "")
 
-if(${PROTEUS_ENABLE_LOGGING})
+if(${AMDINFER_ENABLE_LOGGING})
   add_library(logging OBJECT logging.cpp)
   target_link_libraries(logging INTERFACE spdlog)
-  target_include_directories(logging PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(logging PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(logging)
 
   list(APPEND targets logging)
@@ -26,10 +26,10 @@ if(${PROTEUS_ENABLE_LOGGING})
   set(OBSERVATION_OBJS ${OBSERVATION_OBJS} $<TARGET_OBJECTS:logging>)
 endif()
 
-if(${PROTEUS_ENABLE_METRICS})
+if(${AMDINFER_ENABLE_METRICS})
   add_library(metrics OBJECT metrics.cpp)
   target_link_libraries(metrics INTERFACE prometheus-cpp-core)
-  target_include_directories(metrics PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(metrics PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(metrics)
 
   list(APPEND targets metrics)
@@ -37,9 +37,9 @@ if(${PROTEUS_ENABLE_METRICS})
   set(OBSERVATION_OBJS ${OBSERVATION_OBJS} $<TARGET_OBJECTS:metrics>)
 endif()
 
-if(${PROTEUS_ENABLE_TRACING})
+if(${AMDINFER_ENABLE_TRACING})
   add_library(tracing OBJECT tracing.cpp)
-  target_include_directories(tracing PRIVATE ${PROTEUS_INCLUDE_DIRS})
+  target_include_directories(tracing PRIVATE ${AMDINFER_INCLUDE_DIRS})
   # switch opentelemetry_exporter_jaeger_trace to
   # opentelemetry_exporter_ostream_span for debugging traces locally
   target_link_libraries(

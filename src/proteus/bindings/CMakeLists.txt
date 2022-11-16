@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if(${PROTEUS_ENABLE_PYTHON_BINDINGS})
+if(${AMDINFER_ENABLE_PYTHON_BINDINGS})
   # manylinux builds don't include the Python library
   if(SKBUILD)
     find_package(Python COMPONENTS Interpreter Development.Module)

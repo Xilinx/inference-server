@@ -445,7 +445,7 @@ def get_last_benchmark_path(index) -> Optional[str]:
     Returns:
         Optional[str]: Path to the benchmark if found
     """
-    dir = os.getenv("PROTEUS_ROOT") + "/tests/.benchmarks"
+    dir = os.getenv("AMDINFER_ROOT") + "/tests/.benchmarks"
     machine_id = pytest_benchmark.utils.get_machine_id()
 
     list_of_files = pathlib.Path(f"{dir}/{machine_id}").rglob("*.json")
@@ -664,7 +664,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 continue
             if "lua" in extra_info:
                 lua_file = (
-                    os.getenv("PROTEUS_ROOT")
+                    os.getenv("AMDINFER_ROOT")
                     + f"/tests/workers/{extra_info['lua']}.lua"
                 )
                 if not os.path.exists(lua_file):
@@ -849,9 +849,11 @@ def make_cpp_benchmarks(raw_stats, path: pathlib.Path, cpp_config, repeat):
 
 def get_benchmark_exe(path: pathlib.Path):
     relative_path_to_exe = (
-        str(path.parent)[len(os.getenv("PROTEUS_ROOT")) :] + f"/{path.stem}"
+        str(path.parent)[len(os.getenv("AMDINFER_ROOT")) :] + f"/{path.stem}"
     )
-    benchmark_path = os.getenv("PROTEUS_ROOT") + f"/build/Release{relative_path_to_exe}"
+    benchmark_path = (
+        os.getenv("AMDINFER_ROOT") + f"/build/Release{relative_path_to_exe}"
+    )
     if not os.path.exists(benchmark_path):
         return None
     with open(path, "r") as f:
@@ -865,7 +867,7 @@ def get_benchmark_exe(path: pathlib.Path):
 
 def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
     benchmarks_to_run = set()
-    benchmark_dir = os.getenv("PROTEUS_ROOT") + "/tests"
+    benchmark_dir = os.getenv("AMDINFER_ROOT") + "/tests"
     accept_all_benchmarks = True if config.benchmarks is None else False
     for path in pathlib.Path(benchmark_dir).rglob("*.cpp"):
         if not accept_all_benchmarks:
@@ -960,7 +962,7 @@ def pytest_benchmarks(config: Config, quiet=False):
             sys.exit(1)
     cmd = (
         "python3 "
-        + os.getenv("PROTEUS_ROOT")
+        + os.getenv("AMDINFER_ROOT")
         + f"/tests/test.py --benchmark only --hostname {hostname} --http-port {port}"
     )
     if config.benchmarks:
@@ -1016,7 +1018,7 @@ if __name__ == "__main__":
         benchmarks.print()
         sys.exit(0)
 
-    config = Config(os.getenv("PROTEUS_ROOT") + "/tools/benchmark.yml")
+    config = Config(os.getenv("AMDINFER_ROOT") + "/tools/benchmark.yml")
     if args.k:
         config.benchmarks = args.k
 

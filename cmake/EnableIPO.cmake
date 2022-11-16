@@ -19,7 +19,7 @@ function(enable_ipo_on_target target)
   if(IPO_SUPPORTED)
     set_property(
       TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION
-                                ${PROTEUS_ENABLE_IPO}
+                                ${AMDINFER_ENABLE_IPO}
     )
   endif()
 endfunction()

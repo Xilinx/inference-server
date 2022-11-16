@@ -17,8 +17,8 @@
  * @brief Defines the Proteus's version information
  */
 
-#ifndef GUARD_PROTEUS_VERSION_HPP
-#define GUARD_PROTEUS_VERSION_HPP
+#ifndef GUARD_AMDINFER_VERSION_HPP
+#define GUARD_AMDINFER_VERSION_HPP
 
 /// Proteus's full version as a string
 constexpr auto kProteusVersion = "${ver}";
@@ -31,4 +31,4 @@ constexpr auto kProteusVersionMinor = ${ver_minor};
 constexpr auto kProteusVersionPatch = ${ver_patch};
 /// Proteus's version label as a string
 constexpr auto kProteusVersionLabel = "${ver_label}";
-#endif  // GUARD_PROTEUS_VERSION_HPP
+#endif  // GUARD_AMDINFER_VERSION_HPP

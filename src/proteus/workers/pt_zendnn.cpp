@@ -37,12 +37,12 @@
 
 #include "amdinfer/batching/hard.hpp"          // for Batch, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
 #include "amdinfer/core/exceptions.hpp"        // for external_error, file_no...
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Requ...
 #include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
-#include "amdinfer/observation/logging.hpp"    // for Logger, PROTEUS_LOG_INFO
+#include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/thread.hpp"            // for setThreadName
@@ -152,7 +152,7 @@ size_t PtZendnn::doAllocate(size_t num) {
 }
 
 void PtZendnn::doAcquire(RequestParameters* parameters) {
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -173,21 +173,21 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   try {
     torch_module = torch::jit::load(path, torch::kCPU);
   } catch (const c10::Error& e) {
-    PROTEUS_LOG_ERROR(logger, e.what());
+    AMDINFER_LOG_ERROR(logger, e.what());
     throw file_read_error("Could not load model with torch");
   }
 
-  PROTEUS_LOG_INFO(logger, "Model loaded");
+  AMDINFER_LOG_INFO(logger, "Model loaded");
 
   // Some online optimizations for the model
   torch_module.eval();
   try {
     torch_module = torch::jit::optimize_for_inference(torch_module);
   } catch (const std::exception& e) {
-    PROTEUS_LOG_ERROR(logger, e.what());
+    AMDINFER_LOG_ERROR(logger, e.what());
     throw external_error("Unable to perform optimizations");
   }
-  PROTEUS_LOG_INFO(logger, "Model Optimized, Ready for prediction");
+  AMDINFER_LOG_INFO(logger, "Model Optimized, Ready for prediction");
 
   this->model = torch_module;
 
@@ -202,7 +202,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
 void PtZendnn::doRun(BatchPtrQueue* input_queue) {
   std::unique_ptr<Batch> batch;
   util::setThreadName("PtZendnn");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -211,8 +211,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     if (batch == nullptr) {
       break;
     }
-    PROTEUS_LOG_DEBUG(logger, "Got request in PtZendnn. Size: " +
-                                std::to_string(batch->size()));
+    AMDINFER_LOG_DEBUG(logger, "Got request in PtZendnn. Size: " +
+                                 std::to_string(batch->size()));
 
     std::vector<InferenceResponse> responses;
     responses.reserve(batch->size());
@@ -229,7 +229,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     torch::Tensor input_tensor = torch::empty(
       {tensors, image_channels_, image_height_, image_width_}, torch::kF32);
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
@@ -238,7 +238,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       const auto& trace = batch->getTrace(j);
       trace->startSpan("ptzendnn");
 #endif
@@ -248,8 +248,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      PROTEUS_LOG_DEBUG(logger,
-                        "Size of input: " + std::to_string(inputs.size()));
+      AMDINFER_LOG_DEBUG(logger,
+                         "Size of input: " + std::to_string(inputs.size()));
 
       // Get all the inputs from the requests and copy to the PT tensor
       for (const auto& input : inputs) {
@@ -273,7 +273,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     try {
       prediction = this->model.forward(input_vec);
     } catch (const c10::Error& e) {
-      PROTEUS_LOG_ERROR(logger, "Model not suported/Issue with the model");
+      AMDINFER_LOG_ERROR(logger, "Model not suported/Issue with the model");
       for (const auto& req : *batch) {
         req->runCallbackError("Something went wrong");
       }
@@ -283,9 +283,9 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     {
       std::chrono::duration<float, std::milli> duration = stop - start;
       float time_tmp = duration.count();
-      PROTEUS_LOG_INFO(logger, "Time taken for " +
-                                 std::to_string(batch->size()) +
-                                 " images: " + std::to_string(time_tmp));
+      AMDINFER_LOG_INFO(logger, "Time taken for " +
+                                  std::to_string(batch->size()) +
+                                  " images: " + std::to_string(time_tmp));
     }
     at::Tensor output_tensor;
     if (!prediction.isTuple()) {
@@ -325,7 +325,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 
-#ifdef PROTEUS_ENABLE_TRACING
+#ifdef AMDINFER_ENABLE_TRACING
       auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
@@ -333,11 +333,11 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       auto TotalStop = std::chrono::high_resolution_clock::now();
       std::chrono::duration<float, std::milli> d = TotalStop - TotalStart;
       float tt = d.count();
-      PROTEUS_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
+      AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
 
       req->runCallbackOnce(resp);
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
       auto now = std::chrono::high_resolution_clock::now();
       std::chrono::duration<double, std::micro> duration =
         now - batch->getTime(k);
@@ -346,7 +346,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
 #endif
     }
   }
-  PROTEUS_LOG_INFO(logger, "PtZendnn ending");
+  AMDINFER_LOG_INFO(logger, "PtZendnn ending");
 }
 
 void PtZendnn::doRelease() {}

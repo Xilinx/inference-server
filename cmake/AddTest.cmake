@@ -13,7 +13,7 @@
 # limitations under the License.
 
 function(amdinfer_get_test_target target test)
-  string(REGEX REPLACE "^${PROTEUS_TEST_ROOT}" "" BASE_PATH
+  string(REGEX REPLACE "^${AMDINFER_TEST_ROOT}" "" BASE_PATH
                        ${CMAKE_CURRENT_SOURCE_DIR}
   )
   string(REGEX REPLACE "\/" "_" BASE_NAME ${BASE_PATH})
@@ -37,13 +37,15 @@ function(_amdinfer_add_test test type)
   add_executable(${target} test_${test}.cpp)
   if(${type} STREQUAL "unit")
     target_include_directories(
-      ${target} BEFORE PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+      ${target} BEFORE PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
     )
-    target_include_directories(${target} AFTER PRIVATE ${PROTEUS_INCLUDE_DIRS})
+    target_include_directories(${target} AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS})
   elseif(${type} STREQUAL "system")
-    target_include_directories(${target} BEFORE PRIVATE ${PROTEUS_INCLUDE_DIRS})
     target_include_directories(
-      ${target} AFTER PRIVATE ${PROTEUS_TEST_INCLUDE_DIRS}
+      ${target} BEFORE PRIVATE ${AMDINFER_INCLUDE_DIRS}
+    )
+    target_include_directories(
+      ${target} AFTER PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
     )
     target_link_libraries(${target} PRIVATE amdinfer)
   else()

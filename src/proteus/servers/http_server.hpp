@@ -17,16 +17,16 @@
  * @brief Defines the HTTP REST server in Proteus
  */
 
-#ifndef GUARD_PROTEUS_SERVERS_HTTP_SERVER
-#define GUARD_PROTEUS_SERVERS_HTTP_SERVER
+#ifndef GUARD_AMDINFER_SERVERS_HTTP_SERVER
+#define GUARD_AMDINFER_SERVERS_HTTP_SERVER
 
 #include <functional>  // for function
 #include <string>      // for allocator, string
 
-#include "amdinfer/build_options.hpp"        // for PROTEUS_ENABLE_HTTP, PROT...
+#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_HTTP, PROT...
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 #include <drogon/HttpController.h>  // for ADD_METHOD_TO, HttpContro...
 #include <drogon/HttpRequest.h>     // for HttpRequestPtr
 #include <drogon/HttpResponse.h>    // for HttpResponsePtr
@@ -35,7 +35,7 @@
 
 namespace amdinfer::http {
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 
 namespace v2 {
 
@@ -51,7 +51,7 @@ class ProteusHttpServer
   explicit ProteusHttpServer();
 
   METHOD_LIST_BEGIN
-#ifdef PROTEUS_ENABLE_REST
+#ifdef AMDINFER_ENABLE_REST
   /// Register the getServerLive endpoint
   ADD_METHOD_TO(ProteusHttpServer::getServerLive, "v2/health/live", drogon::Get,
                 drogon::Options);
@@ -91,13 +91,13 @@ class ProteusHttpServer
   ADD_METHOD_TO(ProteusHttpServer::workerUnload, "v2/workers/{worker}/unload",
                 drogon::Post, drogon::Options);
 #endif
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   /// Register the metrics endpoint
   ADD_METHOD_TO(ProteusHttpServer::metrics, "metrics", drogon::Get);
 #endif
   METHOD_LIST_END
 
-#ifdef PROTEUS_ENABLE_REST
+#ifdef AMDINFER_ENABLE_REST
   /**
    * @brief Returns 200 if server is live and ready to receive metadata and
    * inference requests
@@ -234,7 +234,7 @@ class ProteusHttpServer
     std::string const &worker) const;
 #endif
 
-#ifdef PROTEUS_ENABLE_METRICS
+#ifdef AMDINFER_ENABLE_METRICS
   /**
    * @brief Returns the raw metric data collected in Proteus
    *
@@ -245,7 +245,7 @@ class ProteusHttpServer
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 #endif
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
  private:
   Logger logger_{Loggers::kServer};
 #endif
@@ -266,4 +266,4 @@ void start(int port);
 void stop();
 
 }  // namespace amdinfer::http
-#endif  // GUARD_PROTEUS_SERVERS_HTTP_SERVER
+#endif  // GUARD_AMDINFER_SERVERS_HTTP_SERVER

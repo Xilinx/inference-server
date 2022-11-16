@@ -16,7 +16,7 @@
 find_package(Pybind11Mkdoc)
 if(${Pybind11Mkdoc_FOUND})
   file(GLOB_RECURSE ALL_PUBLIC_HEADER_FILES CONFIGURE_DEPENDS
-       ${PROTEUS_PUBLIC_INCLUDE_DIRS}/*.hpp
+       ${AMDINFER_PUBLIC_INCLUDE_DIRS}/*.hpp
   )
 
   # get the "-std=c++xx" flag to pass to pybind11-mkdoc
@@ -29,7 +29,7 @@ if(${Pybind11Mkdoc_FOUND})
     COMMAND
       pybind11-mkdoc -o ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
       ${ALL_PUBLIC_HEADER_FILES} ${CXX_STANDARD_FLAG}
-      -I${PROTEUS_PUBLIC_INCLUDE_DIRS}
+      -I${AMDINFER_PUBLIC_INCLUDE_DIRS}
     DEPENDS ${ALL_PUBLIC_HEADER_FILES}
   )
 else()
@@ -46,7 +46,7 @@ add_custom_target(
 add_subdirectory(core) # sets CORE_OBJS
 add_subdirectory(clients) # sets CLIENT_OBJS
 add_subdirectory(servers) # sets SERVER_OBJS
-if(${PROTEUS_BUILD_TESTING})
+if(${AMDINFER_BUILD_TESTING})
   add_subdirectory(testing) # sets TESTING_OBJS
 endif()
 add_subdirectory(pre_post) # sets PRE_POST_OBJS
@@ -67,12 +67,12 @@ if(${Result})
 endif()
 
 pybind11_add_module(amdinfer_py MODULE amdinfer.cpp ${dummy_new_file})
-target_include_directories(amdinfer_py PRIVATE ${PROTEUS_INCLUDE_DIRS})
+target_include_directories(amdinfer_py PRIVATE ${AMDINFER_INCLUDE_DIRS})
 target_link_libraries(
   amdinfer_py PRIVATE amdinfer ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS}
                       ${SERVER_OBJS} ${PRE_POST_OBJS}
 )
-if(${PROTEUS_BUILD_TESTING})
+if(${AMDINFER_BUILD_TESTING})
   target_link_libraries(amdinfer_py PRIVATE ${TESTING_OBJS})
 endif()
 set_target_properties(amdinfer_py PROPERTIES OUTPUT_NAME _amdinfer)

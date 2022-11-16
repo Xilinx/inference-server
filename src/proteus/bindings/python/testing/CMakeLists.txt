@@ -14,8 +14,8 @@
 
 add_library(testing_py OBJECT testing.cpp)
 target_include_directories(
-  testing_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${PROTEUS_INCLUDE_DIRS}
-                     ${Python_INCLUDE_DIRS} ${PROTEUS_TEST_INCLUDE_DIRS}
+  testing_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${AMDINFER_INCLUDE_DIRS}
+                     ${Python_INCLUDE_DIRS} ${AMDINFER_TEST_INCLUDE_DIRS}
 )
 target_link_libraries(testing_py PRIVATE ${Python_LIBRARIES} testing)
 add_dependencies(testing_py pybind11Mkdoc)

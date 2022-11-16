@@ -17,8 +17,8 @@
  * @brief Defines the Worker class
  */
 
-#ifndef GUARD_PROTEUS_WORKERS_WORKER
-#define GUARD_PROTEUS_WORKERS_WORKER
+#ifndef GUARD_AMDINFER_WORKERS_WORKER
+#define GUARD_AMDINFER_WORKERS_WORKER
 
 #include <limits>
 #include <memory>
@@ -173,7 +173,7 @@ class Worker {
   ModelMetadata getMetadata() { return this->metadata_; }
 
  protected:
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const Logger& getLogger() const { return logger_; };
 #endif
 
@@ -203,7 +203,7 @@ class Worker {
   /// Perform any final operations before the worker's run thread is joined
   virtual void doDestroy() = 0;
 
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::kServer};
 #endif
 
@@ -214,4 +214,4 @@ class Worker {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_WORKERS_WORKER
+#endif  // GUARD_AMDINFER_WORKERS_WORKER

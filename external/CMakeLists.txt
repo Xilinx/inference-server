@@ -14,7 +14,7 @@
 
 add_custom_target(extra)
 
-if(${PROTEUS_ENABLE_AKS})
+if(${AMDINFER_ENABLE_AKS})
   set(AKS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aks)
 
   foreach(DIR graph_zoo kernel_src kernel_zoo cmake-kernels.sh)

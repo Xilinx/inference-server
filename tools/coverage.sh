@@ -54,8 +54,8 @@ coverage(){
     source ~/.env
   fi
 
-  cd $PROTEUS_ROOT
-  build_dir=${PROTEUS_ROOT}/build
+  cd $AMDINFER_ROOT
+  build_dir=${AMDINFER_ROOT}/build
 
   if [[ -n $GET ]]; then
     ./amdinfer get --all

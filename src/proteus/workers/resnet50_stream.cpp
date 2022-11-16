@@ -42,7 +42,7 @@
 
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for PROTEUS_ENABLE_LOGGING
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::STRING
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
@@ -155,7 +155,7 @@ void ResNet50Stream::doAcquire(RequestParameters* parameters) {
 void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
   std::shared_ptr<InferenceRequest> req;
   util::setThreadName("ResNet50Stream");
-#ifdef PROTEUS_ENABLE_LOGGING
+#ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
@@ -166,7 +166,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
       break;
     }
 
-    PROTEUS_LOG_INFO(logger, "Got request in ResNet50Stream");
+    AMDINFER_LOG_INFO(logger, "Got request in ResNet50Stream");
     for (const auto& req : *batch) {
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -180,7 +180,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
         cv::VideoCapture cap(data);  // open the video file
         if (!cap.isOpened()) {       // check if we succeeded
           const char* error = "Cannot open video file";
-          PROTEUS_LOG_ERROR(logger, error);
+          AMDINFER_LOG_ERROR(logger, error);
           req->runCallbackError(error);
           continue;
         }
@@ -315,7 +315,7 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
       }
     }
   }
-  PROTEUS_LOG_INFO(logger, "ResNet50Stream ending");
+  AMDINFER_LOG_INFO(logger, "ResNet50Stream ending");
 }
 
 void ResNet50Stream::doRelease() {}

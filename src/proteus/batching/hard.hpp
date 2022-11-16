@@ -17,8 +17,8 @@
  * @brief Defines the hard batcher implementation
  */
 
-#ifndef GUARD_PROTEUS_BATCHING_HARD
-#define GUARD_PROTEUS_BATCHING_HARD
+#ifndef GUARD_AMDINFER_BATCHING_HARD
+#define GUARD_AMDINFER_BATCHING_HARD
 
 #include "amdinfer/batching/batcher.hpp"  // IWYU pragma: export
 
@@ -45,4 +45,4 @@ class HardBatcher : public Batcher {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_PROTEUS_BATCHING_HARD
+#endif  // GUARD_AMDINFER_BATCHING_HARD

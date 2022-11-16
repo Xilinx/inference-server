@@ -21,7 +21,7 @@ ARG COPY_DIR=/root/deps
 ARG MANIFESTS_DIR=${COPY_DIR}/usr/local/share/manifests
 # the working directory is mounted here. Note, this assumption is made in other
 # files as well so just changing this value may not work
-ARG PROTEUS_ROOT=/workspace/amdinfer
+ARG AMDINFER_ROOT=/workspace/amdinfer
 # the user and group to create in the image. Note, these names are hard-coded
 # in other files as well so just changing this value may not work
 ARG GNAME=amdinfer
@@ -51,14 +51,14 @@ FROM ${BASE_IMAGE} AS base
 
 ARG UNAME
 ARG GNAME
-ARG PROTEUS_ROOT
+ARG AMDINFER_ROOT
 
 ARG UID=1000
 ARG GID=1000
 
 ENV TZ=America/Los_Angeles
 ENV LANG=en_US.UTF-8
-ENV PROTEUS_ROOT=$PROTEUS_ROOT
+ENV AMDINFER_ROOT=$AMDINFER_ROOT
 
 $[SET_LOCALE]
     # set up timezone
@@ -674,7 +674,7 @@ $[INSTALL_MIGRAPHX_DEV]
 FROM common_builder AS builder_dev
 
 ARG COPY_DIR
-ARG PROTEUS_ROOT
+ARG AMDINFER_ROOT
 ARG ENABLE_VITIS
 SHELL ["/bin/bash", "-c"]
 
@@ -693,11 +693,11 @@ RUN pip3 install --no-cache-dir "pyinstaller!=4.6" \
     && cp dist/systemctl3 ${COPY_DIR}/usr/bin/systemctl \
     && rm -fr /tmp/*
 
-COPY . $PROTEUS_ROOT
+COPY . $AMDINFER_ROOT
 
 RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
         # make binary for custom script to get FPGAs
-        pyinstaller $PROTEUS_ROOT/docker/fpga_util.py --onefile \
+        pyinstaller $AMDINFER_ROOT/docker/fpga_util.py --onefile \
         && chmod a+x dist/fpga_util \
         && mkdir -p ${COPY_DIR}/usr/local/bin/ \
         && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
@@ -706,7 +706,7 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 
 ARG COPY_DIR
-ARG PROTEUS_ROOT
+ARG AMDINFER_ROOT
 ARG UNAME
 ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
@@ -718,9 +718,9 @@ $[INSTALL_PYTHON_PACKAGES]
 COPY --from=builder ${COPY_DIR} /
 COPY --from=common_builder ${COPY_DIR} /
 COPY --from=builder_dev ${COPY_DIR} /
-COPY --from=builder_dev $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
-COPY --from=builder_dev $PROTEUS_ROOT/docker/.bash* /home/${UNAME}/
-COPY --from=builder_dev $PROTEUS_ROOT/docker/.env /home/${UNAME}/
+COPY --from=builder_dev $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
+COPY --from=builder_dev $AMDINFER_ROOT/docker/.bash* /home/${UNAME}/
+COPY --from=builder_dev $AMDINFER_ROOT/docker/.env /home/${UNAME}/
 
 # run any final commands before finishing the dev image
 RUN git lfs install \
@@ -733,45 +733,45 @@ FROM ${DEV_BASE_IMAGE} AS builder_prod
 
 ARG COPY_DIR
 ARG MANIFESTS_DIR
-ARG PROTEUS_ROOT
+ARG AMDINFER_ROOT
 ARG ENABLE_VITIS
 ARG ENABLE_MIGRAPHX
 
-COPY . $PROTEUS_ROOT
+COPY . $AMDINFER_ROOT
 
 RUN ldconfig \
     # delete any inherited artifacts and recreate
     && rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR} \
     # install libamdinfer.so
-    && cd ${PROTEUS_ROOT} \
+    && cd ${AMDINFER_ROOT} \
     && ./amdinfer install \
     && ./amdinfer install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && ./amdinfer install --get-manifest > ${MANIFESTS_DIR}/amdinfer.txt \
     # build the static GUI files
     # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
-    && cd ${PROTEUS_ROOT} \
+    && cd ${AMDINFER_ROOT} \
     && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} > ${MANIFESTS_DIR}/prod.txt \
     && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS}
 
 FROM base AS vitis_installer_prod_yes
 
 ARG COPY_DIR
-ARG PROTEUS_ROOT
+ARG AMDINFER_ROOT
 
 # get AKS kernels
-COPY --from=builder_prod $PROTEUS_ROOT/external/aks/libs/ /opt/xilinx/amdinfer/aks/libs/
+COPY --from=builder_prod $AMDINFER_ROOT/external/aks/libs/ /opt/xilinx/amdinfer/aks/libs/
 # get the fpga-util executable
 COPY --from=builder_prod /usr/local/bin/fpga-util /opt/xilinx/amdinfer/bin/
 
 # we need the xclbins in the image and they must be copied from a path local
 # to the build tree. But we also need this hack so the copy doesn't fail
 # if this directory doesn't exist
-COPY --from=builder_prod $PROTEUS_ROOT/docker/.env $PROTEUS_ROOT/external/overlaybin[s]/ /opt/xilinx/overlaybins/
+COPY --from=builder_prod $AMDINFER_ROOT/docker/.env $AMDINFER_ROOT/external/overlaybin[s]/ /opt/xilinx/overlaybins/
 
 # get the pre-defined AKS graphs and kernels
-COPY --from=builder_prod $PROTEUS_ROOT/external/aks/graph_zoo/ /opt/xilinx/amdinfer/aks/graph_zoo/
-COPY --from=builder_prod $PROTEUS_ROOT/external/aks/kernel_zoo/ /opt/xilinx/amdinfer/aks/kernel_zoo/
+COPY --from=builder_prod $AMDINFER_ROOT/external/aks/graph_zoo/ /opt/xilinx/amdinfer/aks/graph_zoo/
+COPY --from=builder_prod $AMDINFER_ROOT/external/aks/kernel_zoo/ /opt/xilinx/amdinfer/aks/kernel_zoo/
 
 ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"
@@ -795,7 +795,7 @@ $[INSTALL_MIGRAPHX_PROD]
 
 FROM migraphx_installer_prod_${ENABLE_MIGRAPHX} as prod
 
-ARG PROTEUS_ROOT
+ARG AMDINFER_ROOT
 ARG COPY_DIR
 ARG UNAME
 WORKDIR /home/${UNAME}
@@ -804,17 +804,17 @@ WORKDIR /home/${UNAME}
 COPY --from=builder_prod ${COPY_DIR} /
 
 # get the static gui files
-# COPY --from=builder_prod $PROTEUS_ROOT/src/gui/build/ /opt/xilinx/amdinfer/gui/
+# COPY --from=builder_prod $AMDINFER_ROOT/src/gui/build/ /opt/xilinx/amdinfer/gui/
 # get the entrypoint script
-COPY --from=builder_prod $PROTEUS_ROOT/docker/entrypoint.sh /root/entrypoint.sh
+COPY --from=builder_prod $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the systemctl executable - pulled in by get_dynamic_dependencies.sh
 # COPY --from=builder_dev ${COPY_DIR}/bin/systemctl /bin/systemctl
 # get the gosu executable
 COPY --from=builder_prod /usr/local/bin/gosu /usr/local/bin/
 # get the .bashrc and .env to configure the environment for all shells
-COPY --from=builder_prod $PROTEUS_ROOT/docker/.bash* $PROTEUS_ROOT/docker/.env /home/${UNAME}/
-COPY --from=builder_prod $PROTEUS_ROOT/docker/.root_bashrc /root/.bashrc
-COPY --from=builder_prod $PROTEUS_ROOT/docker/.env /root/
+COPY --from=builder_prod $AMDINFER_ROOT/docker/.bash* $AMDINFER_ROOT/docker/.env /home/${UNAME}/
+COPY --from=builder_prod $AMDINFER_ROOT/docker/.root_bashrc /root/.bashrc
+COPY --from=builder_prod $AMDINFER_ROOT/docker/.env /root/
 
 # run any final commands before finishing the production image
 RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
