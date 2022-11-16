@@ -27,7 +27,7 @@ services:
       - $PWD/external/artifacts:/opt/xilinx/amdinfer/artifacts:ro
       - $PWD/tests/assets:/workspace/amdinfer/tests/assets:ro
   amdinfer-tester:
-    command: [python3, ./tests/test.py, --hostname, amdinfer, --cpp, skip]
+    command: [./amdinfer, test, --hostname, amdinfer, --cpp, skip]
     depends_on:
       - amdinfer
     extra_hosts:
