@@ -252,12 +252,12 @@ The following files can be optionally downloaded by scripts and may be needed by
 
     `Physicsworks.ogv <https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv>`__,`Wikimedia <https://commons.wikimedia.org/wiki/File:Physicsworks.ogv>`__,`CC Attribution 3.0 Unported <https://creativecommons.org/licenses/by/3.0/legalcode>`__,Used for testing\ :superscript:`d 0`
     `girl-1867092_640.jpg <https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg>`__,`Pixabay <https://pixabay.com/photos/girl-model-portrait-smile-smiling-1867092/>`__,`Pixabay License <https://pixabay.com/service/license/>`__,Used for testing\ :superscript:`d 0`
-    :xilinxdownload:`vitis_ai_runtime_r1.3.0_image_video.tar.gz <vitis_ai_runtime_r1.3.0_image_video.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
-    :xilinxdownload:`densebox_320_320-u200-u250-r1.4.0.tar.gz <densebox_320_320-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
-    :xilinxdownload:`resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz <resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
-    :xilinxdownload:`yolov3_voc-u200-u250-r1.4.0.tar.gz <yolov3_voc-u200-u250-r1.4.0.tar.gz>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
-    :xilinxdownload:`pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip <pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 3`
-    :xilinxdownload:`tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip <tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip>`,Xilinx Inc.,Apache 2.0,Used for testing\ :superscript:`d 2`
+    :xilinxdownload:`vitis_ai_runtime_r1.3.0_image_video.tar.gz <vitis_ai_runtime_r1.3.0_image_video.tar.gz>`,Xilinx, Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
+    :xilinxdownload:`densebox_320_320-u200-u250-r1.4.0.tar.gz <densebox_320_320-u200-u250-r1.4.0.tar.gz>`,Xilinx, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxdownload:`resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz <resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz>`,Xilinx, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxdownload:`yolov3_voc-u200-u250-r1.4.0.tar.gz <yolov3_voc-u200-u250-r1.4.0.tar.gz>`,Xilinx, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxdownload:`pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip <pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip>`,Xilinx, Inc.,Apache 2.0,Used for testing\ :superscript:`d 3`
+    :xilinxdownload:`tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip <tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip>`,Xilinx, Inc.,Apache 2.0,Used for testing\ :superscript:`d 2`
     `resnet50-v2-7.onnx <https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
     `val.txt <https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt>`,AMD Inc.,?,Used for testing\ :superscript:`d 4`
     `yolov4_anchors.txt <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`

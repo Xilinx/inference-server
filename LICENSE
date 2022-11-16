@@ -243,7 +243,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 For src/amdinfer/util/ctpl.h
 
 Copyright (C) 2014 by Vitaliy Vitsentiy
-Copyright (C) 2021 Xilinx Inc.
+Copyright (C) 2021 Xilinx, Inc.
+Copyright (C) 2022 Advanced Micro Devices, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -261,7 +262,8 @@ limitations under the License.
 For cmake/amdinferConfig.cmake
 
 Copyright (c) 2021 Alex Reinking
-Copyright (c) 2021 Xilinx Inc.
+Copyright (c) 2021 Xilinx, Inc.
+Copyright (c) 2022 Advanced Micro Devices, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

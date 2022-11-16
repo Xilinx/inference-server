@@ -33,8 +33,8 @@ imp.load_source("amdinfer_cli", os.path.abspath("../amdinfer"))
 # -- Project information -----------------------------------------------------
 
 project = "AMD Inference Server"
-copyright = "2021, Xilinx Inc."
-author = "Xilinx Inc."
+copyright = "2022 Advanced Micro Devices, Inc."
+author = "Advanced Micro Devices, Inc."
 
 with open(os.path.abspath("../VERSION")) as f:
     raw_version = f.read().strip()
