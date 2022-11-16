@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the methods for interacting with Proteus with WebSocket
+ * @brief Implements the methods for interacting with the server with WebSocket
  */
 
 #include "amdinfer/clients/websocket.hpp"

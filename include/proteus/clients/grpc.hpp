@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines the methods for interacting with Proteus with gRPC
+ * @brief Defines the methods for interacting with the server with gRPC
  */
 
 #ifndef GUARD_AMDINFER_CLIENTS_GRPC

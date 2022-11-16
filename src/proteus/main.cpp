@@ -14,7 +14,8 @@
 
 /**
  * @file
- * @brief Parses the command-line arguments and implements Proteus's entrypoint
+ * @brief Parses the command-line arguments and implements the entrypoint for
+ * the amdinfer-server executable
  */
 
 #include <csignal>              // for signal, SIGINT, SIGTERM
@@ -42,14 +43,15 @@ namespace fs = std::filesystem;
  * @param signum Integer ID for the caught interrupt
  */
 void signal_callback_handler(int signum) {
-  std::cout << "Caught interrupt " << signum << ". Proteus is ending...\n";
+  std::cout << "Caught interrupt " << signum
+            << ". amdinfer-server is ending...\n";
 #ifdef AMDINFER_ENABLE_HTTP
   amdinfer::http::stop();
 #endif
 }
 
 /**
- * @brief Parses command line options and starts Proteus
+ * @brief Parses command line options and starts amdinfer-server
  *
  * @param argc Number of command line arguments
  * @param argv Command line arguments

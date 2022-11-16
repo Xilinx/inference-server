@@ -412,7 +412,7 @@ def get_parser(parser=None):
     if parser is None:
         parser = argparse.ArgumentParser(
             prog="download",
-            description="Proteus download script for tests assets and models",
+            description="Download script for tests assets and models",
             add_help=False,
         )
 

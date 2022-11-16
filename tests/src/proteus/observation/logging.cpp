@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements logging in Proteus
+ * @brief Implements logging
  */
 
 #include "amdinfer/observation/logging.hpp"

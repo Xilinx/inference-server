@@ -26,7 +26,7 @@ namespace amdinfer::pre_post {
  * @brief Perform postprocessing of the data
  *
  * @tparam T the expected type of the data
- * @param output output from Proteus
+ * @param output output from the server
  * @param k number of top elements to return
  * @return std::vector<int>
  */

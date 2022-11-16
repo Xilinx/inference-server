@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
       cxxopts::value<std::string>(path))(
       "t,threads", "Number of threads to use to enqueue/deque images",
       cxxopts::value<int>(threads))(
-      "r,runners", "Number of runners (i.e. workers) to use in Proteus",
+      "r,runners", "Number of runners (i.e. workers) to use in the server",
       cxxopts::value<int>(runners))(
       "i,images", "Maximum number of images to use from the path (-1 for all)",
       cxxopts::value<int>(max_images))("h,help", "Print help");

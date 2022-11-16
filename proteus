@@ -302,7 +302,7 @@ class Attach:
     @classmethod
     def add(cls, parser):
         subparser = parser.add_parser(
-            "attach", help="Attach to a running Proteus container", add_help=False
+            "attach", help="Attach to a running container", add_help=False
         )
 
         command_group = subparser.add_argument_group("Options")
@@ -327,7 +327,7 @@ class Benchmark:
     @classmethod
     def add(cls, parser):
         subparser = parser.add_parser(
-            "benchmark", help="Benchmark Proteus", add_help=False
+            "benchmark", help="Run the benchmarks", add_help=False
         )
         subparser.set_defaults(func=cls.parse)
 
@@ -763,7 +763,7 @@ class Install:
                 sys.exit(0)
             except FileNotFoundError:
                 raise argparse.ArgumentError(
-                    None, "No manifest found. Install Proteus first."
+                    None, "No manifest found. Install amdinfer first."
                 )
 
         build_args = f"--dir {args.dir} --release --regen -DAMDINFER_BUILD_TESTING=OFF "
@@ -781,7 +781,7 @@ class Install:
     def add(cls, parser):
         subparser = parser.add_parser(
             "install",
-            help="Install Proteus. Any unknown arguments are passed to the build command. Use -- --help to see options.",
+            help="Install amdinfer. Any unknown arguments are passed to the build command. Use -- --help to see options.",
             add_help=False,
         )
 
@@ -834,7 +834,7 @@ class List:
     def add(cls, parser):
         subparser = parser.add_parser(
             "list",
-            help="List Proteus containers and images on the host.",
+            help="List containers and images on the host.",
             add_help=False,
         )
 
@@ -1050,7 +1050,7 @@ class Run:
             "--autotest-dev",
             dest="preset",
             action="store_const",
-            help="Starts the dev container with the working directory mounted and runs Proteus's coverage test.",
+            help="Starts the dev container with the working directory mounted and runs the coverage test.",
             const="autotest-dev",
             default=None,
         )
@@ -1298,7 +1298,7 @@ class Up:
 def get_parser():
     parser = argparse.ArgumentParser(
         prog="amdinfer",
-        description="Proteus helper script",
+        description="AMD Inference Server helper script",
         add_help=False,
     )
     subparser = parser.add_subparsers(

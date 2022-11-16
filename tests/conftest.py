@@ -42,13 +42,13 @@ def pytest_addoption(parser):
 
 def get_http_addr(config):
     """
-    Get the address of the Proteus server
+    Get the address of the server
 
     Args:
         config (Config): Pytest config object containing the options
 
     Returns:
-        str: Address of the Proteus server
+        str: Address of the server
     """
     hostname = config.getoption("hostname")
     http_port = config.getoption("http_port")

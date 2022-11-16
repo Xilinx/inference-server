@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines the methods for interacting with Proteus with WebSocket
+ * @brief Defines the methods for interacting with the server with WebSocket
  */
 
 #ifndef GUARD_AMDINFER_CLIENTS_WEBSOCKET

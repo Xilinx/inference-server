@@ -14,8 +14,8 @@
 
 /**
  * @file
- * @brief Implements the methods for interacting with Proteus in the native C++
- * API
+ * @brief Implements the methods for interacting with the server in the native
+ * C++ API
  */
 
 #include "amdinfer/clients/native.hpp"

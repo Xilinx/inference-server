@@ -316,7 +316,7 @@ They provide methods to write different data types into the buffer and access th
 Manager
 -------
 
-The shared state of Proteus is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in :numref:`architecture_detail`.
+The shared state of the AMD Inference Server is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in :numref:`architecture_detail`.
 This information enables the ingestion protocols to query the Manager to retrieve a pointer to the correct batcher to use to push the ``Interface`` object to the right one corresponding to the targeted worker.
 To manage multiple versions of workers that may be running with different configurations, the Manager stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
 In the case that it's assigned to an existing worker group, the previously allocated endpoint is returned to the client.

@@ -58,7 +58,7 @@ function RenderServerMetadata() {
     } else {
       console.log(error.message);
     }
-    return ServerMetadataCard("Error getting metadata from Proteus!")
+    return ServerMetadataCard("Error getting metadata from AMD Inference Server!")
   }
 
   if (data){
@@ -77,7 +77,7 @@ function RenderServerMetadata() {
     );
   } else {
     console.log("No data found when fetching server metadata");
-    return ServerMetadataCard("No data found getting metadata from Proteus!");
+    return ServerMetadataCard("No data found getting metadata from AMD Inference Server!");
   }
 }
 

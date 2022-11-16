@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines the data types used in Proteus
+ * @brief Defines the used data types
  */
 
 #ifndef GUARD_AMDINFER_CORE_DATA_TYPES
@@ -50,7 +50,7 @@ constexpr unsigned int hash(const char* s, int off = 0) {
 using fp16 = half_float::half;
 
 /**
- * @brief Data types supported in Proteus
+ * @brief Supported data types
  */
 class DataType {
  public:
@@ -245,7 +245,7 @@ auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
 
 #ifdef AMDINFER_ENABLE_VITIS
 /**
- * @brief Given an XIR type, return the corresponding Proteus type
+ * @brief Given an XIR type, return the corresponding AMDinfer type
  *
  * @param type XIR datatype
  * @return DataType
@@ -253,7 +253,7 @@ auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
 DataType mapXirToType(xir::DataType type);
 
 /**
- * @brief Given a Proteus type, return the corresponding XIR type, if it exists
+ * @brief Given a AMDinfer type, return the corresponding XIR type, if it exists
  *
  * @param type Datatype
  * @return xir::DataType

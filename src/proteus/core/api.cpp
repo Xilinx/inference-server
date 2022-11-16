@@ -38,7 +38,7 @@
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
-#include "amdinfer/version.hpp"                // for kProteusVersion
+#include "amdinfer/version.hpp"                // for kAmdinferVersion
 
 #ifdef AMDINFER_ENABLE_VITIS
 #include <sockpp/socket.h>         // for socket, socket_initializer
@@ -49,7 +49,7 @@ namespace amdinfer {
 
 ServerMetadata serverMetadata() {
   std::unordered_set<std::string> extensions;
-  ServerMetadata metadata{"amdinfer", kProteusVersion, extensions};
+  ServerMetadata metadata{"amdinfer", kAmdinferVersion, extensions};
 
 #ifdef AMDINFER_ENABLE_AKS
   metadata.extensions.emplace("aks");

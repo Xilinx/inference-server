@@ -39,7 +39,7 @@
 namespace amdinfer {
 
 /**
- * @brief Convert JSON-styled parameters to Proteus's implementation
+ * @brief Convert JSON-styled parameters to our objects
  *
  * @param parameters
  * @return RequestParametersPtr

@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements tracing in Proteus
+ * @brief Implements tracing
  */
 
 #include "amdinfer/observation/tracing.hpp"

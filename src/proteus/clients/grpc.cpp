@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the methods for interacting with Proteus with gRPC
+ * @brief Implements the methods for interacting with the server with gRPC
  */
 
 #include "amdinfer/clients/grpc.hpp"

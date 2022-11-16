@@ -37,15 +37,17 @@ int main(int argc, char* argv[]) {
     cxxopts::Options options("test_xmodel", "Test/benchmark the Xmodel worker");
     options.add_options()("m,model", "Path to xmodel to run",
                           cxxopts::value<std::string>(xmodel))(
-      "i,images", "Number of images to send to Proteus",
+      "i,images", "Number of images to send to the server",
       cxxopts::value<int>(images))(
       "t,threads", "Number of threads to use to enqueue/deque images",
       cxxopts::value<int>(threads))(
-      "r,runners", "Number of runners (i.e. workers) to use in Proteus",
+      "r,runners", "Number of runners (i.e. workers) to use in the server",
       cxxopts::value<int>(runners))(
       "p,path", "Path to directory containing at least one image to send",
       cxxopts::value<std::string>(path))(
-      "reference", "Run the reference benchmark instead (defaults to Proteus)",
+      "reference",
+      "Run the reference benchmark instead (defaults to using the AMD "
+      "Inference Server)",
       cxxopts::value<bool>(run_ref))("help", "Print help");
 
     auto result = options.parse(argc, argv);

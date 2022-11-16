@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines tracing in Proteus
+ * @brief Defines tracing
  */
 
 #ifndef GUARD_AMDINFER_OBSERVATION_TRACING

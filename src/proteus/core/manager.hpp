@@ -14,8 +14,7 @@
 
 /**
  * @file
- * @brief Defines how the shared mutable state of Proteus is managed as Proteus
- * runs
+ * @brief Defines how the shared mutable state is managed
  */
 
 #ifndef GUARD_AMDINFER_CORE_MANAGER
@@ -42,7 +41,7 @@
 namespace amdinfer {
 
 /**
- * @brief IDs used to specify commands to update the Proteus Manager
+ * @brief IDs used to specify commands to update the Manager
  *
  */
 enum class UpdateCommandType {
@@ -54,7 +53,7 @@ enum class UpdateCommandType {
 };
 
 /**
- * @brief Commands sent to update the Proteus Manager consist of an ID, a key
+ * @brief Commands sent to update the Manager consist of an ID, a key
  * value (string), an integer, and a pointer to an exception so if the update
  * fails for some reason, this information is communicated back to the requester
  */
@@ -81,10 +80,10 @@ struct UpdateCommand {
 using UpdateCommandQueue = BlockingQueue<std::shared_ptr<UpdateCommand>>;
 
 /**
- * @brief The Proteus Manager holds all the state information about a running
- * Proteus server. Read access to the state is thread-safe but all modifications
- * are handled through a separate update thread to preserve consistency. It is
- * a singleton instance and the base code is taken from
+ * @brief The Manager holds all the state information about a running
+ * amdinfer-server. Read access to the state is thread-safe but all
+ * modifications are handled through a separate update thread to preserve
+ * consistency. It is a singleton instance and the base code is taken from
  * https://stackoverflow.com/a/1008289.
  */
 class Manager {
@@ -136,7 +135,7 @@ class Manager {
    */
   void init();
   /**
-   * @brief Stop the Manager. This should be called prior to ending Proteus.
+   * @brief Stop the Manager. This should be called prior to ending the server.
    *
    */
   void shutdown();
@@ -179,7 +178,7 @@ class Manager {
 
   /// instantiation of the Endpoints class for maintaining state
   Endpoints endpoints_;
-  /// A queue used to sequentially order changes to the Proteus Manager state
+  /// A queue used to sequentially order changes to the Manager state
   std::unique_ptr<UpdateCommandQueue> update_queue_;
   std::thread update_thread_;
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -189,7 +188,7 @@ class Manager {
   /**
    * @brief This method is started as a separate thread when the Manager is
    * constructed. It monitors a queue which contains commands that modify the
-   * shared state of Proteus. This queue serializes these requests and ensures
+   * shared state. This queue serializes these requests and ensures
    * consistency
    *
    * @param input_queue queue where update requests will arrive

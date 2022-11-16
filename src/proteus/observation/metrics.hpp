@@ -46,7 +46,7 @@ class Registry;
 
 namespace amdinfer {
 
-/// Defines the IDs of the counters tracked in Proteus
+/// Defines the IDs of the tracked counters
 enum class MetricCounterIDs {
   kRestGet,
   kRestPost,
@@ -59,7 +59,7 @@ enum class MetricCounterIDs {
   kMetricScrapes,
 };
 
-/// Defines the IDs of the gauges tracked in Proteus
+/// Defines the IDs of the tracked gauges
 enum class MetricGaugeIDs {
   kQueuesBatcherInput,
   kQueuesBatcherOutput,
@@ -67,14 +67,14 @@ enum class MetricGaugeIDs {
   kQueuesBufferOutput,
 };
 
-/// Defines the IDs of the summaries tracked in Proteus
+/// Defines the IDs of the tracked summaries
 enum class MetricSummaryIDs {
   kMetricLatency,
   kRequestLatency,
 };
 
 /**
- * @brief The CounterFamily class stores the counters tracked in Proteus and
+ * @brief The CounterFamily class stores the tracked counters and
  * provides methods to increment them using an ID.
  *
  */
@@ -105,7 +105,7 @@ class CounterFamily {
 };
 
 /**
- * @brief The GaugeFamily class stores the gauges tracked in Proteus and
+ * @brief The GaugeFamily class stores the tracked gauges and
  * provides methods to set them using an ID.
  *
  */
@@ -133,7 +133,7 @@ class GaugeFamily {
 };
 
 /**
- * @brief The SummaryFamily class stores the summaries tracked in Proteus and
+ * @brief The SummaryFamily class stores the tracked summaries and
  * provides methods to record events.
  *
  */

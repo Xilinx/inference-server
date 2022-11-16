@@ -43,7 +43,7 @@ const CustomAppBar = (props) => {
         id="react-admin-title"
       />
       <Typography variant="h6" color="inherit">
-        Proteus Control Panel
+        AMD Inference Server Control Panel
       </Typography>
       <span className={classes.spacer} />
     </AppBar>

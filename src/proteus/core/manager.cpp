@@ -14,8 +14,7 @@
 
 /**
  * @file
- * @brief Implements how the shared mutable state of Proteus is managed as
- * Proteus runs
+ * @brief Implements how the shared mutable state is managed
  */
 
 #include "amdinfer/core/manager.hpp"

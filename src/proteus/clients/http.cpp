@@ -15,7 +15,7 @@
 
 /**
  * @file
- * @brief Implements the methods for interacting with Proteus with HTTP/REST
+ * @brief Implements the methods for interacting with the server with HTTP/REST
  */
 
 #include "amdinfer/clients/http.hpp"

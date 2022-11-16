@@ -991,7 +991,7 @@ def pytest_benchmarks(config: Config, quiet=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run Proteus benchmarking")
+    parser = argparse.ArgumentParser(description="Run benchmarking")
     parser.add_argument(
         "-k",
         action="store",

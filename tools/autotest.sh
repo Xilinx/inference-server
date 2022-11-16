@@ -14,8 +14,8 @@
 # limitations under the License.
 
 # Instructions:
-#   1. git clone <url to Proteus repo>
-#   2. cd amdinfer
+#   1. git clone <url to AMD Inference Server repo>
+#   2. cd inference-server
 #   4. ./tools/autotest.sh 2>&1 | tee test.txt
 
 # print an easily searchable header so we can navigate the output. Search for
@@ -57,7 +57,7 @@ print_header "Initializing repository"
 
 # log the amdinfer version, git commit and make sure amdinfer exists
 amdinfer_version=$(cat VERSION)
-echo "Proteus version: $amdinfer_version"
+echo "AMD Inference Server version: $amdinfer_version"
 commit=$(git rev-parse HEAD)
 echo "Git commit: $commit"
 test -e ./amdinfer

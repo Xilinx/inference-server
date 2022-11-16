@@ -15,7 +15,7 @@
 
 /**
  * @file
- * @brief Defines the methods for interacting with Proteus with HTTP/REST
+ * @brief Defines the methods for interacting with the server with HTTP/REST
  */
 
 #ifndef GUARD_AMDINFER_CLIENTS_HTTP

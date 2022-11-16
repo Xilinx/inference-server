@@ -42,7 +42,7 @@
 
 namespace amdinfer {
 
-/// parameters in Proteus may be one of these types
+/// parameters may be one of these types
 using Parameter = std::variant<bool, int32_t, double, std::string>;
 
 /**
@@ -370,7 +370,7 @@ using Callback = std::function<void(const InferenceResponse &)>;
 
 /**
  * @brief Creates an inference request object based on KServe's V2 spec that
- * is used to communicate between workers in Proteus
+ * is used to communicate between workers
  */
 class InferenceRequest {
  public:

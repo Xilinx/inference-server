@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines the HTTP REST server in Proteus
+ * @brief Defines the HTTP REST server
  */
 
 #ifndef GUARD_AMDINFER_SERVERS_HTTP_SERVER
@@ -40,60 +40,60 @@ namespace amdinfer::http {
 namespace v2 {
 
 /**
- * @brief Proteus's HTTP server for handling REST requests extends the base
+ * @brief The HTTP server for handling REST requests extends the base
  * HttpController in Drogon and adds the endpoints of interest.
  *
  */
-class ProteusHttpServer
-  : public drogon::HttpController<ProteusHttpServer, false> {
+class AmdinferHttpServer
+  : public drogon::HttpController<AmdinferHttpServer, false> {
  public:
   /// Constructor
-  explicit ProteusHttpServer();
+  explicit AmdinferHttpServer();
 
   METHOD_LIST_BEGIN
 #ifdef AMDINFER_ENABLE_REST
   /// Register the getServerLive endpoint
-  ADD_METHOD_TO(ProteusHttpServer::getServerLive, "v2/health/live", drogon::Get,
-                drogon::Options);
+  ADD_METHOD_TO(AmdinferHttpServer::getServerLive, "v2/health/live",
+                drogon::Get, drogon::Options);
   /// Register the getServerReady endpoint
-  ADD_METHOD_TO(ProteusHttpServer::getServerReady, "v2/health/ready",
+  ADD_METHOD_TO(AmdinferHttpServer::getServerReady, "v2/health/ready",
                 drogon::Get, drogon::Options);
   /// Register the getModelReady endpoint
-  ADD_METHOD_TO(ProteusHttpServer::getModelReady, "v2/models/{model}/ready",
+  ADD_METHOD_TO(AmdinferHttpServer::getModelReady, "v2/models/{model}/ready",
                 drogon::Get, drogon::Options);
   /// Register the getServerMetadata endpoint
-  ADD_METHOD_TO(ProteusHttpServer::getServerMetadata, "v2", drogon::Get,
+  ADD_METHOD_TO(AmdinferHttpServer::getServerMetadata, "v2", drogon::Get,
                 drogon::Options);
   /// Register the getModelMetadata endpoint
-  ADD_METHOD_TO(ProteusHttpServer::getModelMetadata, "v2/models/{model}",
+  ADD_METHOD_TO(AmdinferHttpServer::getModelMetadata, "v2/models/{model}",
                 drogon::Get, drogon::Options);
   /// Register the getHardware endpoint
-  ADD_METHOD_TO(ProteusHttpServer::hasHardware, "v2/hardware", drogon::Post,
+  ADD_METHOD_TO(AmdinferHttpServer::hasHardware, "v2/hardware", drogon::Post,
                 drogon::Options);
   /// Register the modelList endpoint
-  ADD_METHOD_TO(ProteusHttpServer::modelList, "v2/models", drogon::Get,
+  ADD_METHOD_TO(AmdinferHttpServer::modelList, "v2/models", drogon::Get,
                 drogon::Options);
   /// Register the modelInfer endpoint
-  ADD_METHOD_TO(ProteusHttpServer::modelInfer, "v2/models/{model}/infer",
+  ADD_METHOD_TO(AmdinferHttpServer::modelInfer, "v2/models/{model}/infer",
                 drogon::Post, drogon::Options);
   /// Register the load endpoint
-  ADD_METHOD_TO(ProteusHttpServer::modelLoad,
+  ADD_METHOD_TO(AmdinferHttpServer::modelLoad,
                 "v2/repository/models/{model}/load", drogon::Post,
                 drogon::Options);
   /// Register the unload endpoint
-  ADD_METHOD_TO(ProteusHttpServer::modelUnload,
+  ADD_METHOD_TO(AmdinferHttpServer::modelUnload,
                 "v2/repository/models/{model}/unload", drogon::Post,
                 drogon::Options);
   /// Register the workerLoad endpoint
-  ADD_METHOD_TO(ProteusHttpServer::workerLoad, "v2/workers/{worker}/load",
+  ADD_METHOD_TO(AmdinferHttpServer::workerLoad, "v2/workers/{worker}/load",
                 drogon::Post, drogon::Options);
   /// Register the workerUnload endpoint
-  ADD_METHOD_TO(ProteusHttpServer::workerUnload, "v2/workers/{worker}/unload",
+  ADD_METHOD_TO(AmdinferHttpServer::workerUnload, "v2/workers/{worker}/unload",
                 drogon::Post, drogon::Options);
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
   /// Register the metrics endpoint
-  ADD_METHOD_TO(ProteusHttpServer::metrics, "metrics", drogon::Get);
+  ADD_METHOD_TO(AmdinferHttpServer::metrics, "metrics", drogon::Get);
 #endif
   METHOD_LIST_END
 
@@ -132,7 +132,7 @@ class ProteusHttpServer
     std::string const &model) const;
 
   /**
-   * @brief Returns metadata associated with Proteus
+   * @brief Returns metadata associated with the server
    *
    * @param req the REST request object
    * @param callback the callback function to respond to the client
@@ -236,7 +236,7 @@ class ProteusHttpServer
 
 #ifdef AMDINFER_ENABLE_METRICS
   /**
-   * @brief Returns the raw metric data collected in Proteus
+   * @brief Returns the raw collected metric data
    *
    * @param req the REST request object
    * @param callback the callback function to respond to the client
@@ -256,7 +256,7 @@ class ProteusHttpServer
 #endif
 
 /**
- * @brief Start the Proteus HTTP REST server
+ * @brief Start the HTTP REST server
  *
  * @param port the port to use for the server
  */

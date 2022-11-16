@@ -14,21 +14,21 @@
 
 /**
  * @file
- * @brief Defines the Proteus's version information
+ * @brief Defines the version information
  */
 
 #ifndef GUARD_AMDINFER_VERSION_HPP
 #define GUARD_AMDINFER_VERSION_HPP
 
-/// Proteus's full version as a string
-constexpr auto kProteusVersion = "0.3.0";
+/// full version as a string
+constexpr auto kAmdinferVersion = "0.3.0";
 
-/// Proteus's major version as an integer
-constexpr auto kProteusVersionMajor = 0;
-/// Proteus's minor version as an integer
-constexpr auto kProteusVersionMinor = 3;
-/// Proteus's patch version as an integer
-constexpr auto kProteusVersionPatch = 0;
-/// Proteus's version label as a string
-constexpr auto kProteusVersionLabel = "";
+/// major version as an integer
+constexpr auto kAmdinferVersionMajor = 0;
+/// minor version as an integer
+constexpr auto kAmdinferVersionMinor = 3;
+/// patch version as an integer
+constexpr auto kAmdinferVersionPatch = 0;
+/// version label as a string
+constexpr auto kAmdinferVersionLabel = "";
 #endif  // GUARD_AMDINFER_VERSION_HPP

@@ -52,7 +52,7 @@ endif()
 add_subdirectory(pre_post) # sets PRE_POST_OBJS
 
 # add this dummy file to add a dependency on the Pybind11 target so it runs if
-# the Proteus package isn't installed in pip
+# the amdinfer package isn't installed in pip
 set(dummy_new_file ${CMAKE_CURRENT_BINARY_DIR}/src/main.cpp)
 if(NOT EXISTS ${dummy_new_file})
   file(WRITE ${dummy_new_file} "")

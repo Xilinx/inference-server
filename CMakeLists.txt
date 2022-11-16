@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.21)
 
-# parse Proteus version
+# parse version
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ver)
 string(REPLACE "\n" "" ver ${ver})
 string(REGEX MATCHALL "([0-9]+)|-(.*)\\+" result ${ver})
@@ -41,7 +41,7 @@ project(
   amdinfer
   VERSION ${ver_major}.${ver_minor}.${ver_patch}
   LANGUAGES CXX
-  DESCRIPTION "Proteus inference library and server"
+  DESCRIPTION "AMDinfer inference library and server"
 )
 
 # Only do these if this is the main project, and not if it is included through
@@ -147,7 +147,7 @@ add_option("ENABLE_TRACING" "Enable Jaeger tracing" ${opentelemetry-cpp_FOUND})
 add_option("ENABLE_AKS" "Enable AKS dependencies" ${AMDINFER_AKS_FOUND})
 add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${AMDINFER_VITIS_FOUND})
 add_option("BUILD_EXAMPLES" "Build examples" ON)
-add_option("BUILD_SHARED" "Build Proteus as a shared library" ON)
+add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
 add_option("BUILD_TESTING" "Build C++ tests" ${AMDINFER_BUILD_TESTING_DEFAULT})
 add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
 add_option("ENABLE_LINTING" "Enable build-time linting" OFF)

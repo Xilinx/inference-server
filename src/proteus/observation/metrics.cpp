@@ -105,7 +105,7 @@ Metrics::Metrics()
 
     ingress_requests_total_(
       "amdinfer_requests_ingress_total",
-      "Number of incoming requests to Proteus", registry_.get(),
+      "Number of incoming requests to amdinfer-server", registry_.get(),
       {{MetricCounterIDs::kCppNative, {{"api", "cpp"}, {"method", "native"}}},
        {MetricCounterIDs::kRestGet, {{"api", "rest"}, {"method", "GET"}}},
        {MetricCounterIDs::kRestPost, {{"api", "rest"}, {"method", "POST"}}}}),
@@ -128,7 +128,7 @@ Metrics::Metrics()
                  "Number of times metrics were scraped", registry_.get(),
                  {{MetricCounterIDs::kMetricScrapes, {}}}),
     queue_sizes_total_("amdinfer_queue_sizes_total",
-                       "Number of elements in the queues in Proteus",
+                       "Number of elements in the queues in amdinfer-server",
                        registry_.get(),
                        {{MetricGaugeIDs::kQueuesBatcherInput,
                          {{"direction", "input"}, {"stage", "batcher"}}},

@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines the gRPC server in Proteus
+ * @brief Defines the gRPC server
  */
 
 #ifndef GUARD_AMDINFER_SERVERS_GRPC_SERVER

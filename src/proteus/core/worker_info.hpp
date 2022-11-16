@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines the information the Proteus Manager saves on each active
+ * @brief Defines the information the Manager saves on each active
  * worker group.
  */
 
@@ -43,7 +43,7 @@ namespace amdinfer {
 
 /**
  * @brief Stores the metadata associated with a worker. Instances of this class
- * are saved in the Proteus Manager.
+ * are saved in the Manager.
  */
 class WorkerInfo {
  public:

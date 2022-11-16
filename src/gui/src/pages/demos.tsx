@@ -176,7 +176,7 @@ function InvertImageDemo() {
         try {
           const data = await mutation.mutateAsync({
             // the product of the height and width is used to size the decoded
-            // string in Proteus
+            // string in AMD Inference Server
             data: [img],
             height: img.length,
             width: 1

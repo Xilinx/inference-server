@@ -15,7 +15,7 @@
 
 /**
  * @file
- * @brief Implements the gRPC server in Proteus
+ * @brief Implements the gRPC server
  */
 
 #include "amdinfer/servers/grpc_server.hpp"

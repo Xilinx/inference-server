@@ -63,7 +63,7 @@ add_custom_command(
   TARGET doxygen
   POST_BUILD
   COMMENT
-    "Linking ${DOXYGEN_OUTPUT_DIR} to Proteus gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
+    "Linking ${DOXYGEN_OUTPUT_DIR} to the gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen
   COMMAND cp -rfs ${DOXYGEN_OUTPUT_DIR} ${PROJECT_SOURCE_DIR}/src/gui/public/
   COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen > /dev/null
@@ -88,7 +88,7 @@ add_custom_command(
   COMMAND
     ${SPHINX_EXECUTABLE} -b html
     # Tell Breathe where to find the Doxygen output
-    -Dbreathe_projects.Proteus=${DOXYGEN_OUTPUT_DIR}/xml -E -a ${SPHINX_SOURCE}
+    -Dbreathe_projects.AMDinfer=${DOXYGEN_OUTPUT_DIR}/xml -E -a ${SPHINX_SOURCE}
     ${SPHINX_BUILD}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
@@ -104,7 +104,7 @@ add_custom_command(
   TARGET sphinx
   POST_BUILD
   COMMENT
-    "Linking ${SPHINX_BUILD} to Proteus gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
+    "Linking ${SPHINX_BUILD} to gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx
   COMMAND cp -rfs ${SPHINX_BUILD} ${PROJECT_SOURCE_DIR}/src/gui/public/
   COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx > /dev/null

@@ -71,7 +71,7 @@ breathe_default_project = "amdinfer"
 # sphinxcontrib.confluencebuilder configuration
 confluence_publish = True
 confluence_space_name = "~varunsh"
-confluence_parent_page = "Proteus"
+confluence_parent_page = "AMDinfer"
 confluence_page_hierarchy = True
 confluence_ask_user = True
 confluence_ask_password = True

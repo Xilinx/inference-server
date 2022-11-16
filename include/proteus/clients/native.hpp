@@ -14,7 +14,8 @@
 
 /**
  * @file
- * @brief Defines the methods for interacting with Proteus in the native C++ API
+ * @brief Defines the methods for interacting with the server in the native C++
+ * API
  */
 
 #ifndef GUARD_AMDINFER_CLIENTS_NATIVE
@@ -66,7 +67,7 @@ class NativeClient : public Client {
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) const override;
   /**
-   * @brief Enqueue an inference request to Proteus
+   * @brief Enqueue an inference request
    *
    * @param workerName name of the worker to make the request to
    * @param request the request to make

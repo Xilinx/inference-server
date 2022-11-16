@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the HTTP REST server in Proteus
+ * @brief Implements the HTTP REST server
  */
 
 #include "amdinfer/servers/http_server.hpp"
@@ -51,7 +51,7 @@ using drogon::HttpStatusCode;
 namespace amdinfer::http {
 
 void start(int port) {
-  auto controller = std::make_shared<v2::ProteusHttpServer>();
+  auto controller = std::make_shared<v2::AmdinferHttpServer>();
   auto ws_controller = std::make_shared<WebsocketServer>();
 
   auto &app = drogon::app();
@@ -79,13 +79,13 @@ void start(int port) {
 
 void stop() { drogon::app().quit(); }
 
-v2::ProteusHttpServer::ProteusHttpServer() {
-  AMDINFER_LOG_DEBUG(logger_, "Constructed v2::ProteusHttpServer");
+v2::AmdinferHttpServer::AmdinferHttpServer() {
+  AMDINFER_LOG_DEBUG(logger_, "Constructed v2::AmdinferHttpServer");
 }
 
 #ifdef AMDINFER_ENABLE_REST
 
-void v2::ProteusHttpServer::getServerLive(
+void v2::AmdinferHttpServer::getServerLive(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerLive request");
@@ -106,7 +106,7 @@ void v2::ProteusHttpServer::getServerLive(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::getServerReady(
+void v2::AmdinferHttpServer::getServerReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerReady request");
@@ -122,7 +122,7 @@ void v2::ProteusHttpServer::getServerReady(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::getModelReady(
+void v2::AmdinferHttpServer::getModelReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
@@ -144,7 +144,7 @@ void v2::ProteusHttpServer::getModelReady(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::getServerMetadata(
+void v2::AmdinferHttpServer::getServerMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerMetadata request");
@@ -166,7 +166,7 @@ void v2::ProteusHttpServer::getServerMetadata(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::getModelMetadata(
+void v2::AmdinferHttpServer::getModelMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
@@ -193,7 +193,7 @@ void v2::ProteusHttpServer::getModelMetadata(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::modelList(
+void v2::AmdinferHttpServer::modelList(
   const drogon::HttpRequestPtr &req,
   std::function<void(const drogon::HttpResponsePtr &)> &&callback) const {
   (void)req;  // suppress unused variable warning
@@ -209,7 +209,7 @@ void v2::ProteusHttpServer::modelList(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::hasHardware(
+void v2::AmdinferHttpServer::hasHardware(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received hasHardware request");
@@ -235,7 +235,7 @@ void v2::ProteusHttpServer::hasHardware(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::modelInfer(
+void v2::AmdinferHttpServer::modelInfer(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
@@ -275,7 +275,7 @@ void v2::ProteusHttpServer::modelInfer(
   }
 }
 
-void v2::ProteusHttpServer::modelLoad(
+void v2::AmdinferHttpServer::modelLoad(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
@@ -317,7 +317,7 @@ void v2::ProteusHttpServer::modelLoad(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::modelUnload(
+void v2::AmdinferHttpServer::modelUnload(
   [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
@@ -342,7 +342,7 @@ void v2::ProteusHttpServer::modelUnload(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::workerLoad(
+void v2::AmdinferHttpServer::workerLoad(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
@@ -386,7 +386,7 @@ void v2::ProteusHttpServer::workerLoad(
   callback(resp);
 }
 
-void v2::ProteusHttpServer::workerUnload(
+void v2::AmdinferHttpServer::workerUnload(
   [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
@@ -415,7 +415,7 @@ void v2::ProteusHttpServer::workerUnload(
 #endif  // AMDINFER_ENABLE_REST
 
 #ifdef AMDINFER_ENABLE_METRICS
-void v2::ProteusHttpServer::metrics(
+void v2::AmdinferHttpServer::metrics(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   (void)req;  // suppress unused variable warning

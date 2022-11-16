@@ -67,29 +67,29 @@ What's also missing here is context about what AKS by itself can deliver for thi
 
 .. code-block:: text
 
-    Proteus_Threads wrk_threads wrk_connections wrk_time(s) runners Req/s
-    1               4           32              10          1       38.00
-    1               8           64              10          1       36.64
-    4               4           32              1           1       94.10
-    4               4           32              10          1       114.61
-    4               4           32              20          1       116.03
-    8               4           32              10          1       117.47
-    8               8           64              10          1       117.85
-    12              4           64              10          1       118.03
-    12              4           96              10          1       118.39
-    12              8           64              10          1       118.63
-    12              8           96              10          1       118.66
-    1               4           32              20          4       37.60
-    1               8           64              10          4       37.83
-    2               4           32              10          4       45.77
-    2               8           64              10          4       46.09
-    4               4           32              10          4       86.96
-    4               8           64              10          4       142.28
-    4               8           96              10          4       142.03
-    4               12          96              10          4       140.17
-    8               4           64              10          4       239.12
-    8               4           96              10          4       236.76
-    8               8           64              10          4       220.47
+    AMDinfer_Threads wrk_threads wrk_connections wrk_time(s) runners Req/s
+    1                4           32              10          1       38.00
+    1                8           64              10          1       36.64
+    4                4           32              1           1       94.10
+    4                4           32              10          1       114.61
+    4                4           32              20          1       116.03
+    8                4           32              10          1       117.47
+    8                8           64              10          1       117.85
+    12               4           64              10          1       118.03
+    12               4           96              10          1       118.39
+    12               8           64              10          1       118.63
+    12               8           96              10          1       118.66
+    1                4           32              20          4       37.60
+    1                8           64              10          4       37.83
+    2                4           32              10          4       45.77
+    2                8           64              10          4       46.09
+    4                4           32              10          4       86.96
+    4                8           64              10          4       142.28
+    4                8           96              10          4       142.03
+    4                12          96              10          4       140.17
+    8                4           64              10          4       239.12
+    8                4           96              10          4       236.76
+    8                8           64              10          4       220.47
 
 In the resnet50 stream case, we observe ~50 FPS per video (i.e. per thread) when collecting from Python.
 We have not measured the browser performance.

@@ -14,36 +14,36 @@
 
 /**
  * @file
- * @brief Defines the Proteus's build information. This file is updated
- * automatically by CMake. To update, recompile the proteus source code.
+ * @brief Defines the build information. This file is updated
+ * automatically by CMake. To update, recompile the source code.
  */
 
 #ifndef GUARD_AMDINFER_BUILD_OPTIONS_HPP
 #define GUARD_AMDINFER_BUILD_OPTIONS_HPP
 
-/// Enables Proteus's testing
+/// Enables testing
 #define AMDINFER_BUILD_TESTING
-/// Enables Proteus's rest endpoints for inference
+/// Enables rest endpoints for inference
 #define AMDINFER_ENABLE_REST
-/// Enables Proteus's metric collection
+/// Enables metric collection
 #define AMDINFER_ENABLE_METRICS
-/// Enables Proteus's HTTP server
+/// Enables HTTP server
 #define AMDINFER_ENABLE_HTTP
-/// Enables Proteus's gRPC server
+/// Enables gRPC server
 #define AMDINFER_ENABLE_GRPC
-/// Enables Proteus's tracing
+/// Enables tracing
 #define AMDINFER_ENABLE_TRACING
-/// Enables Proteus's logging
+/// Enables logging
 #define AMDINFER_ENABLE_LOGGING
-/// Enables AKS in proteus
+/// Enables AKS
 #define AMDINFER_ENABLE_AKS
-/// Enables Vitis in proteus
+/// Enables Vitis
 #define AMDINFER_ENABLE_VITIS
-/// Enables TF+ZenDNN in proteus
+/// Enables TF+ZenDNN
 /* #undef AMDINFER_ENABLE_TFZENDNN */
-/// Enables PT+ZenDNN in proteus
+/// Enables PT+ZenDNN
 /* #undef AMDINFER_ENABLE_PTZENDNN */
-/// Enables MIGraphX in proteus
+/// Enables MIGraphX
 /* #undef AMDINFER_ENABLE_MIGRAPHX */
 
 /// Port used by the HTTP server by default

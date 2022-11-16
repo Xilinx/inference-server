@@ -20,8 +20,8 @@ usage() {
 cat << EOF
 usage: ./tools/update_aks.sh [direction] path/to/aks
 
-This script force updates the AKS-related files in Proteus. Note that these
-files in Proteus are similar to, but may slightly differ from, the AKS files
+This script force updates the AKS-related files. Note that the
+files in this repo are similar to, but may slightly differ from, the AKS files
 released in Vitis AI.
 
 Direction should be "to" or "from"

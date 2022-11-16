@@ -15,7 +15,7 @@
 
 /**
  * @file
- * @brief Implements the WorkerInfo class - information the Proteus Manager
+ * @brief Implements the WorkerInfo class - information the Manager
  * saves on each active worker
  */
 

@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines logging in Proteus
+ * @brief Defines logging
  */
 
 #ifndef GUARD_AMDINFER_OBSERVATION_LOGGING

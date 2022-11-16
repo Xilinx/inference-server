@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Defines how inference requests made to Proteus should store their
+ * @brief Defines how inference requests made to the server should store their
  * tensor data: using subclasses of the Buffer class
  */
 
@@ -29,12 +29,12 @@
 namespace amdinfer {
 
 /**
- * @brief The base buffer class used in Proteus. Buffer implementations should
- * extend this class and override the methods.
+ * @brief The base buffer class. Buffer implementations should extend this class
+ * and override the methods.
  */
 class Buffer {
  public:
-  /// Destroy the Proteus Buffer object
+  /// Destroy the Buffer object
   virtual ~Buffer() = default;
 
   /**
