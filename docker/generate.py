@@ -561,6 +561,9 @@ def build_migraphx(manager: PackageManager):
             # clean up
             {code_indent(manager.clean, 12)}\
 
+        # needed for rbuild
+        ENV LANG=C.UTF-8
+
         # Install MIGraphX from source
         RUN mkdir -p /migraphx \\
             && cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src \\

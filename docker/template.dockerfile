@@ -45,33 +45,9 @@ ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
 ARG PTZENDNN_PATH
 ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-no}
 
-# this stage installs basic packages used by all images. It's used as an
-# ancestor for all subsequent stages
-FROM ${BASE_IMAGE} AS base
-
-ARG UNAME
-ARG GNAME
-ARG AMDINFER_ROOT
-
-ARG UID=1000
-ARG GID=1000
-
-ENV TZ=America/Los_Angeles
-ENV LANG=en_US.UTF-8
-ENV AMDINFER_ROOT=$AMDINFER_ROOT
-
-$[SET_LOCALE]
-    # set up timezone
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    # set up locale
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias $LANG
-
-# add a user
-$[ADD_USER]
-
 # this stage adds development tools such as compilers to the base image. It's
 # used as an ancestor for all development-related stages
-FROM base AS dev_base
+FROM ${BASE_IMAGE} AS dev_base
 
 ARG TARGETPLATFORM
 SHELL ["/bin/bash", "-c"]
@@ -754,7 +730,7 @@ RUN ldconfig \
     && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} > ${MANIFESTS_DIR}/prod.txt \
     && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS}
 
-FROM base AS vitis_installer_prod_yes
+FROM ${BASE_IMAGE} AS vitis_installer_prod_yes
 
 ARG COPY_DIR
 ARG AMDINFER_ROOT
@@ -781,7 +757,7 @@ ENV AKS_ROOT="/opt/xilinx/amdinfer/aks"
 ENV AKS_XMODEL_ROOT="/opt/xilinx/amdinfer"
 ENV PATH="/opt/xilinx/amdinfer/bin:${PATH}"
 
-FROM base AS vitis_installer_prod_no
+FROM ${BASE_IMAGE} AS vitis_installer_prod_no
 
 FROM vitis_installer_prod_${ENABLE_VITIS} AS migraphx_installer_prod_no
 
@@ -831,6 +807,26 @@ ARG ENABLE_VITIS
 ARG ENABLE_TFZENDNN
 ARG ENABLE_PTZENDNN
 ARG ENABLE_MIGRAPHX
+
+ARG UNAME
+ARG GNAME
+ARG AMDINFER_ROOT
+
+ARG UID=1000
+ARG GID=1000
+
+ENV TZ=America/Los_Angeles
+ENV LANG=en_US.UTF-8
+ENV AMDINFER_ROOT=$AMDINFER_ROOT
+
+$[SET_LOCALE]
+    # set up timezone
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    # set up locale
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias $LANG
+
+# add a user
+$[ADD_USER]
 
 LABEL project="amdinfer"
 LABEL vitis=${ENABLE_VITIS}
