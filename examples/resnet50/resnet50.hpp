@@ -28,6 +28,8 @@ struct Args {
   fs::path path_to_model;
   fs::path path_to_image;
   fs::path path_to_labels;
+  int batch_size = 1;
+  std::string ip = "127.0.0.1";
   uint16_t http_port = 8998;
   uint16_t grpc_port = 50'051;
   int top = 5;
@@ -50,6 +52,10 @@ Args parseArgs(int argc, char** argv) {
       cxxopts::value(args.path_to_image))
     ("labels", "Path to the text file containing the labels on the client",
       cxxopts::value(args.path_to_labels))
+    ("batch-size", "Batch size to use for the worker on the server",
+      cxxopts::value(args.batch_size))
+    ("ip", "IP to use for server",
+      cxxopts::value(args.ip))
     ("http-port", "Port to use for HTTP server",
       cxxopts::value(args.http_port))
     ("grpc-port", "Port to use for gRPC server",

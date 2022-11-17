@@ -141,14 +141,13 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // +load
   amdinfer::RequestParameters parameters;
   const auto timeout_ms = 1000;  // batcher timeout value in milliseconds
-  const auto batch_size = 2;
 
   // Required: specifies path to the model on the server for it to open
   parameters.put("model", args.path_to_model);
   // Optional: request a particular batch size to be sent to the backend. The
   // server will attempt to coalesce incoming requests into a single batch of
   // this size and pass it all to the backend.
-  parameters.put("batch", batch_size);
+  parameters.put("batch", args.batch_size);
   // Optional: specifies how long the batcher should wait for more requests
   // before sending the batch on
   parameters.put("timeout", timeout_ms);
@@ -186,13 +185,17 @@ int main(int argc, char* argv[]) {
   Args args = getArgs(argc, argv);
 
   const auto http_port_str = std::to_string(args.http_port);
-  amdinfer::HttpClient client{"http://127.0.0.1:" + http_port_str};
+  const auto server_addr = "http://" + args.ip + ":" + http_port_str;
+  amdinfer::HttpClient client{server_addr};
 
   std::optional<amdinfer::Server> server;
-  if (!client.serverLive()) {
+  if (args.ip == "127.0.0.1" && !client.serverLive()) {
     std::cout << "No server detected. Starting locally...\n";
     server.emplace();
     server.value().startHttp(args.http_port);
+  } else if (!client.serverLive()) {
+    throw amdinfer::connection_error("Could not connect to server at " +
+                                     server_addr);
   }
 
   std::cout << "Waiting until the server is ready...\n";

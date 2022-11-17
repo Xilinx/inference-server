@@ -117,6 +117,7 @@ def load(client, args):
     parameters.put("output_classes", args.output_classes)
     parameters.put("input_node", args.input_node)
     parameters.put("output_node", args.output_node)
+    parameters.put("batch_size", args.batch_size)
     endpoint = client.workerLoad("tfzendnn", parameters)
     amdinfer.waitUntilModelReady(client, endpoint)
     return endpoint
@@ -156,6 +157,7 @@ def main(args):
     client = amdinfer.GrpcClient(server_addr)
     # start it locally if it doesn't already up if the IP address is the localhost
     if args.ip == "127.0.0.1" and not client.serverLive():
+        print("No server detected. Starting locally...")
         server = amdinfer.Server()
         server.startGrpc(args.grpc_port)
     elif not client.serverLive():
