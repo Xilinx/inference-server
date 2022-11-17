@@ -25,6 +25,7 @@ import pty
 import re
 import shlex
 import shutil
+import site
 import subprocess
 import sys
 import tarfile
@@ -1182,6 +1183,8 @@ class Test:
             run_command(
                 f"./amdinfer build --{args.build.lower()} --regen --clean", args.dry_run
             )
+            sys.path.append(site.getusersitepackages())
+
         tests.test.main(args, unknown_args)
 
     @classmethod
