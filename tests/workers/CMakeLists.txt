@@ -15,14 +15,14 @@
 
 list(APPEND tests echo)
 
-if(${PROTEUS_ENABLE_AKS})
+if(${AMDINFER_ENABLE_AKS})
   set(tests ${tests} facedetect)
 endif()
 
-proteus_add_system_tests("${tests}")
+amdinfer_add_system_tests("${tests}")
 
-if(${PROTEUS_ENABLE_AKS})
-  proteus_get_test_target(facedetect_target facedetect)
+if(${AMDINFER_ENABLE_AKS})
+  amdinfer_get_test_target(facedetect_target facedetect)
   target_link_libraries(
     ${facedetect_target} PRIVATE opencv_core opencv_imgcodecs
   )
@@ -30,16 +30,18 @@ endif()
 
 foreach(test ${tests})
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${test}.cpp)
-    proteus_get_test_target(target ${test} "exec")
-    proteus_get_test_target(test_target ${test})
+    amdinfer_get_test_target(target ${test} "exec")
+    amdinfer_get_test_target(test_target ${test})
     add_executable(${target} ${test}.cpp)
     target_link_libraries(
       ${target} PRIVATE $<TARGET_PROPERTY:${test_target},LINK_LIBRARIES>
     )
-    target_include_directories(${target} PRIVATE ${PROTEUS_PUBLIC_INCLUDE_DIRS})
+    target_include_directories(
+      ${target} PRIVATE ${AMDINFER_PUBLIC_INCLUDE_DIRS}
+    )
   endif()
 endforeach()
 
-if(${PROTEUS_ENABLE_VITIS})
+if(${AMDINFER_ENABLE_VITIS})
   add_subdirectory(xmodel)
 endif()

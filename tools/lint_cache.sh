@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copyright 2022 Xilinx Inc.
+# Copyright 2022 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -107,15 +108,15 @@ source_directories=(examples include src tests)
 # file extensions to search for
 extensions=(".c" ".cpp" ".cc" ".h" ".hpp")
 
-root_dir="$PROTEUS_ROOT"
+root_dir="$AMDINFER_ROOT"
 if [[ -z "$root_dir" ]]; then
-    echo "PROTEUS_ROOT isn't set in the env"
+    echo "AMDINFER_ROOT isn't set in the env"
     exit 1
 fi
 
 build_dir="$root_dir/build/Debug"
 if [[ ! -d $build_dir ]]; then
-    echo "The debug build directory doesn't exist, run 'proteus build --debug' once"
+    echo "The debug build directory doesn't exist, run 'amdinfer build --debug' once"
     exit 1
 fi
 

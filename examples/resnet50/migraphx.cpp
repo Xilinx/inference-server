@@ -35,10 +35,10 @@
 #include <string>               // for string
 #include <vector>               // for vector
 
-#include "proteus/pre_post/image_preprocess.hpp"      // for ImagePrepr...
-#include "proteus/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
-#include "proteus/proteus.hpp"                        // for InferenceR...
-#include "resnet50.hpp"                               // for Args, pars...
+#include "amdinfer/amdinfer.hpp"                       // for InferenceR...
+#include "amdinfer/pre_post/image_preprocess.hpp"      // for ImagePrepr...
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Po...
+#include "resnet50.hpp"                                // for Args, pars...
 
 namespace fs = std::filesystem;
 
@@ -59,8 +59,8 @@ Images preprocess(const std::vector<std::string>& paths) {
   // this example uses a custom image preprocessing function. You may use any
   // preprocessing logic or skip it entirely if your input data is already
   // preprocessed.
-  proteus::pre_post::ImagePreprocessOptions<float, 3> options;
-  options.order = proteus::pre_post::ImageOrder::NCHW;
+  amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
+  options.order = amdinfer::pre_post::ImageOrder::NCHW;
   options.height = image_size;
   options.width = image_size;
   options.mean = mean;
@@ -71,7 +71,7 @@ Images preprocess(const std::vector<std::string>& paths) {
   options.convert_type = true;
   options.type = CV_32FC3;
   options.convert_scale = 1.0 / 255.0;
-  return proteus::pre_post::imagePreprocess(paths, options);
+  return amdinfer::pre_post::imagePreprocess(paths, options);
 }
 
 /**
@@ -82,9 +82,9 @@ Images preprocess(const std::vector<std::string>& paths) {
  * @param k number of top categories to return
  * @return std::vector<int> the indices for the top k categories
  */
-std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
+std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
                              int k) {
-  return proteus::pre_post::resnet50Postprocess(
+  return amdinfer::pre_post::resnet50Postprocess(
     static_cast<const float*>(output.getData()), output.getSize(), k);
 }
 
@@ -95,11 +95,11 @@ std::vector<int> postprocess(const proteus::InferenceResponseOutput& output,
  *
  * @param images the input images
  * @param input_size size of the square image in pixels
- * @return std::vector<proteus::InferenceRequest>
+ * @return std::vector<amdinfer::InferenceRequest>
  */
-std::vector<proteus::InferenceRequest> constructRequests(const Images& images,
-                                                         uint64_t input_size) {
-  std::vector<proteus::InferenceRequest> requests;
+std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
+                                                          uint64_t input_size) {
+  std::vector<amdinfer::InferenceRequest> requests;
   requests.reserve(images.size());
 
   const std::initializer_list<uint64_t> shape = {input_size, input_size, 3};
@@ -107,7 +107,7 @@ std::vector<proteus::InferenceRequest> constructRequests(const Images& images,
   for (const auto& image : images) {
     requests.emplace_back();
     requests.back().addInputTensor((void*)image.data(), shape,
-                                   proteus::DataType::FP32);
+                                   amdinfer::DataType::FP32);
   }
 
   return requests;
@@ -121,7 +121,7 @@ std::vector<proteus::InferenceRequest> constructRequests(const Images& images,
  * @param args the command-line arguments
  * @return std::string
  */
-std::string load(const proteus::Client* client, const Args& args) {
+std::string load(const amdinfer::Client* client, const Args& args) {
   // Depending on how the server is compiled, it may or may not have support for
   // a particular backend. This guard checks to make sure the server does
   // support the requested backend. If you already know it's supported, you can
@@ -139,7 +139,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   // what may be specified.
 
   // +load
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   const auto timeout_ms = 1000;  // batcher timeout value in milliseconds
   const auto batch_size = 2;
 
@@ -153,7 +153,7 @@ std::string load(const proteus::Client* client, const Args& args) {
   // before sending the batch on
   parameters.put("timeout", timeout_ms);
   std::string endpoint = client->workerLoad("migraphx", &parameters);
-  proteus::waitUntilModelReady(client, endpoint);
+  amdinfer::waitUntilModelReady(client, endpoint);
   // -load
   return endpoint;
 }
@@ -172,7 +172,7 @@ Args getArgs(int argc, char** argv) {
   Args args = parseArgs(argc, argv);
 
   if (args.path_to_model.empty()) {
-    fs::path root{std::getenv("PROTEUS_ROOT")};
+    fs::path root{std::getenv("AMDINFER_ROOT")};
     args.path_to_model =
       root / "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx";
   }
@@ -186,9 +186,9 @@ int main(int argc, char* argv[]) {
   Args args = getArgs(argc, argv);
 
   const auto http_port_str = std::to_string(args.http_port);
-  proteus::HttpClient client{"http://127.0.0.1:" + http_port_str};
+  amdinfer::HttpClient client{"http://127.0.0.1:" + http_port_str};
 
-  std::optional<proteus::Server> server;
+  std::optional<amdinfer::Server> server;
   if (!client.serverLive()) {
     std::cout << "No server detected. Starting locally...\n";
     server.emplace();
@@ -196,7 +196,7 @@ int main(int argc, char* argv[]) {
   }
 
   std::cout << "Waiting until the server is ready...\n";
-  proteus::waitUntilServerReady(&client);
+  amdinfer::waitUntilServerReady(&client);
 
   std::cout << "Loading worker...\n";
   std::string endpoint = load(&client, args);
@@ -204,7 +204,7 @@ int main(int argc, char* argv[]) {
   std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
   Images images = preprocess(paths);
 
-  std::vector<proteus::InferenceRequest> requests =
+  std::vector<amdinfer::InferenceRequest> requests =
     constructRequests(images, args.input_size);
 
   assert(paths.size() == requests.size());
@@ -215,15 +215,15 @@ int main(int argc, char* argv[]) {
 
   // +validate:
   // migraphx.cpp
-  std::vector<proteus::InferenceResponse> responses =
-    proteus::inferAsyncOrdered(&client, endpoint, requests);
+  std::vector<amdinfer::InferenceResponse> responses =
+    amdinfer::inferAsyncOrdered(&client, endpoint, requests);
   assert(num_requests == responses.size());
 
   for (auto i = 0U; i < num_requests; ++i) {
-    const proteus::InferenceResponse& response = responses[i];
+    const amdinfer::InferenceResponse& response = responses[i];
     assert(!response.isError());
 
-    std::vector<proteus::InferenceResponseOutput> outputs =
+    std::vector<amdinfer::InferenceResponseOutput> outputs =
       response.getOutputs();
     // for resnet50, we expect a single output tensor
     assert(outputs.size() == 1);

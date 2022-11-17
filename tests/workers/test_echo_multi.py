@@ -15,7 +15,7 @@
 import numpy as np
 import pytest
 
-import proteus
+import amdinfer
 
 
 @pytest.mark.usefixtures("load")
@@ -39,11 +39,11 @@ class TestEchoMulti:
             dict: The constructed request
         """
 
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         for i in cls.inputs:
-            input_0 = proteus.InferenceRequestInput()
+            input_0 = amdinfer.InferenceRequestInput()
             input_0.name = "echoMulti0"
-            input_0.datatype = proteus.DataType.UINT32
+            input_0.datatype = amdinfer.DataType.UINT32
             input_0.shape = [len(i)]
             input_0.setUint32Data(np.array(i, np.uint32))
             request.addInputTensor(input_0)
@@ -64,12 +64,12 @@ class TestEchoMulti:
 
         requests = [request] * 2
         try:
-            responses = proteus.inferAsyncOrdered(
+            responses = amdinfer.inferAsyncOrdered(
                 self.rest_client, self.endpoint, requests
             )
         except ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         for response in responses:
@@ -87,7 +87,7 @@ class TestEchoMulti:
                 data: list = output.getUint32Data()
                 assert len(data) == len(golden_output)
                 assert (data == golden_output).all(), data
-                assert output.datatype == proteus.DataType.UINT32
+                assert output.datatype == amdinfer.DataType.UINT32
                 assert output.name == "echoMulti0"
                 assert output.parameters.empty()
                 assert output.shape == [len(golden_output)]

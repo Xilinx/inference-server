@@ -23,11 +23,11 @@
 #include <string>
 #include <vector>
 
-#include "proteus/pre_post/image_preprocess.hpp"
-#include "proteus/proteus.hpp"  // for InferenceResponse, Grp...
-#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
-#include "proteus/testing/gtest_fixtures.hpp"     // for GrpcFixture
-#include "proteus/util/ctpl.h"                    // for thread_pool
+#include "amdinfer/amdinfer.hpp"  // for InferenceResponse, Grp...
+#include "amdinfer/pre_post/image_preprocess.hpp"
+#include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
+#include "amdinfer/testing/gtest_fixtures.hpp"     // for GrpcFixture
+#include "amdinfer/util/ctpl.h"                    // for thread_pool
 
 namespace fs = std::filesystem;
 
@@ -43,15 +43,15 @@ struct Config {
 };
 
 template <typename T, int C>
-using ImagePreprocessOptions = proteus::pre_post::ImagePreprocessOptions<T, C>;
+using ImagePreprocessOptions = amdinfer::pre_post::ImagePreprocessOptions<T, C>;
 
 struct Workers {
-  const fs::path kRoot{std::getenv("PROTEUS_ROOT")};
+  const fs::path kRoot{std::getenv("AMDINFER_ROOT")};
   std::string extension;
   std::string name;
   fs::path graph;
 
-  proteus::RequestParameters parameters;
+  amdinfer::RequestParameters parameters;
   std::variant<ImagePreprocessOptions<float, 3>> preprocessing;
 };
 
@@ -63,9 +63,9 @@ struct PtzendnnWorker : public Workers {
 
     parameters.put("model", graph.string());
 
-    proteus::pre_post::ImagePreprocessOptions<float, 3> options;
+    amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
     options.normalize = true;
-    options.order = proteus::pre_post::ImageOrder::NCHW;
+    options.order = amdinfer::pre_post::ImageOrder::NCHW;
     options.mean = {0.485, 0.456, 0.406};
     options.std = {4.367, 4.464, 4.444};
     options.convert_color = true;
@@ -90,7 +90,7 @@ struct TfzendnnWorker : public Workers {
     parameters.put("inter_op", 64);
     parameters.put("intra_op", 1);
 
-    proteus::pre_post::ImagePreprocessOptions<float, 3> options;
+    amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
     options.convert_color = true;
     options.color_code = cv::COLOR_BGR2RGB;
     options.assign = true;
@@ -112,13 +112,13 @@ struct Overload : Fs... {
 template <class... Fs>
 Overload(Fs...) -> Overload<Fs...>;
 
-void test(proteus::Client* client, const Config& config, Workers* worker) {
-  if (!proteus::serverHasExtension(client, worker->extension)) {
+void test(amdinfer::Client* client, const Config& config, Workers* worker) {
+  if (!amdinfer::serverHasExtension(client, worker->extension)) {
     GTEST_SKIP() << worker->extension << " support required but not found.\n";
   }
 
   const auto kImageLocation =
-    proteus::getPathToAsset("asset_dog-3619020_640.jpg");
+    amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
   const auto kInputSize = 224;
   const auto kOutputClasses = 1000;
   const auto kBatchSize = config.batch_size;
@@ -139,13 +139,13 @@ void test(proteus::Client* client, const Config& config, Workers* worker) {
   std::vector<std::string> paths{kImageLocation};
   auto& options = worker->preprocessing;
 
-  proteus::InferenceRequest request;
+  amdinfer::InferenceRequest request;
   std::visit(
     Overload{
       [&](const ImagePreprocessOptions<float, 3>& options_) {
-        auto images = proteus::pre_post::imagePreprocess(paths, options_);
+        auto images = amdinfer::pre_post::imagePreprocess(paths, options_);
         request.addInputTensor(images[0].data(), {3, kInputSize, kInputSize},
-                               proteus::DataType::FLOAT32);
+                               amdinfer::DataType::FLOAT32);
       },
     },
     options);
@@ -168,13 +168,13 @@ void test(proteus::Client* client, const Config& config, Workers* worker) {
             << std::endl;
   std::cout << "-----\n";
 
-  std::vector<proteus::InferenceRequest> requests;
+  std::vector<amdinfer::InferenceRequest> requests;
   requests.reserve(kRequests);
   for (auto i = 0; i < kRequests; ++i) {
     requests.push_back(request);
   }
   start = std::chrono::high_resolution_clock::now();
-  auto responses = proteus::inferAsyncOrdered(client, endpoint, requests);
+  auto responses = amdinfer::inferAsyncOrdered(client, endpoint, requests);
   stop = std::chrono::high_resolution_clock::now();
   duration = stop - start;
   std::cout << "-----\n";
@@ -201,7 +201,7 @@ const std::array<Workers*, 1> workers = {
   //  &ptzendnn, &tfzendnn
   &tfzendnn};
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
@@ -218,7 +218,7 @@ INSTANTIATE_TEST_SUITE_P(PerfModelsResnetGrpc, PerfModelsResnetGrpcFixture,
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   const auto& [config, worker] = GetParam();
   test(&client, config, worker);
 }
@@ -227,7 +227,7 @@ INSTANTIATE_TEST_SUITE_P(PerfModelsResnetBase, PerfModelsResnetBaseFixture,
                          testing::Combine(testing::ValuesIn(configs),
                                           testing::ValuesIn(workers)));
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {

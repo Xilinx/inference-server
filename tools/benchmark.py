@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 # Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +41,7 @@ from rich.console import Console
 from rich.progress import Progress
 from rich.table import Table
 
-import proteus
+import amdinfer
 
 
 class Highlight(Enum):
@@ -445,7 +446,7 @@ def get_last_benchmark_path(index) -> Optional[str]:
     Returns:
         Optional[str]: Path to the benchmark if found
     """
-    dir = os.getenv("PROTEUS_ROOT") + "/tests/.benchmarks"
+    dir = os.getenv("AMDINFER_ROOT") + "/tests/.benchmarks"
     machine_id = pytest_benchmark.utils.get_machine_id()
 
     list_of_files = pathlib.Path(f"{dir}/{machine_id}").rglob("*.json")
@@ -636,7 +637,7 @@ def combine_wrk_stats(samples):
 
 
 def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
-    client = proteus.HttpClient(config.http_address)
+    client = amdinfer.HttpClient(config.http_address)
     parsed_url = urllib.parse.urlsplit(config.http_address)
     hostname = parsed_url.hostname
     addr = socket.gethostbyname(hostname)
@@ -645,7 +646,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
         server = None
     else:
         if not client.serverLive():
-            server = proteus.Server()
+            server = amdinfer.Server()
             server.startHttp(parsed_url.port)
             while not client.serverLive():
                 time.sleep(1)
@@ -664,7 +665,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 continue
             if "lua" in extra_info:
                 lua_file = (
-                    os.getenv("PROTEUS_ROOT")
+                    os.getenv("AMDINFER_ROOT")
                     + f"/tests/workers/{extra_info['lua']}.lua"
                 )
                 if not os.path.exists(lua_file):
@@ -685,7 +686,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 for load in loads:
                     model = extra_info["model"]
 
-                    parameters = proteus.RequestParameters()
+                    parameters = amdinfer.RequestParameters()
                     if extra_info["parameters"] is not None:
                         for key, value in extra_info["parameters"].items():
                             parameters.put(key, value)
@@ -849,9 +850,11 @@ def make_cpp_benchmarks(raw_stats, path: pathlib.Path, cpp_config, repeat):
 
 def get_benchmark_exe(path: pathlib.Path):
     relative_path_to_exe = (
-        str(path.parent)[len(os.getenv("PROTEUS_ROOT")) :] + f"/{path.stem}"
+        str(path.parent)[len(os.getenv("AMDINFER_ROOT")) :] + f"/{path.stem}"
     )
-    benchmark_path = os.getenv("PROTEUS_ROOT") + f"/build/Release{relative_path_to_exe}"
+    benchmark_path = (
+        os.getenv("AMDINFER_ROOT") + f"/build/Release{relative_path_to_exe}"
+    )
     if not os.path.exists(benchmark_path):
         return None
     with open(path, "r") as f:
@@ -865,7 +868,7 @@ def get_benchmark_exe(path: pathlib.Path):
 
 def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
     benchmarks_to_run = set()
-    benchmark_dir = os.getenv("PROTEUS_ROOT") + "/tests"
+    benchmark_dir = os.getenv("AMDINFER_ROOT") + "/tests"
     accept_all_benchmarks = True if config.benchmarks is None else False
     for path in pathlib.Path(benchmark_dir).rglob("*.cpp"):
         if not accept_all_benchmarks:
@@ -948,19 +951,19 @@ def pytest_benchmarks(config: Config, quiet=False):
     parsed_url = urllib.parse.urlsplit(config.http_address)
     hostname = parsed_url.hostname
     port = parsed_url.port
-    client = proteus.HttpClient(config.http_address)
+    client = amdinfer.HttpClient(config.http_address)
     addr = socket.gethostbyname(hostname)
     if not ipaddress.ip_address(addr).is_loopback:
         try:
             assert client.serverLive()
-        except proteus.ConnectionError:
+        except amdinfer.ConnectionError:
             print(
                 f"Cannot connect to HTTP server at {config.http_address}. Check the address or set it to start automatically"
             )
             sys.exit(1)
     cmd = (
         "python3 "
-        + os.getenv("PROTEUS_ROOT")
+        + os.getenv("AMDINFER_ROOT")
         + f"/tests/test.py --benchmark only --hostname {hostname} --http-port {port}"
     )
     if config.benchmarks:
@@ -989,7 +992,7 @@ def pytest_benchmarks(config: Config, quiet=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run Proteus benchmarking")
+    parser = argparse.ArgumentParser(description="Run benchmarking")
     parser.add_argument(
         "-k",
         action="store",
@@ -1016,7 +1019,7 @@ if __name__ == "__main__":
         benchmarks.print()
         sys.exit(0)
 
-    config = Config(os.getenv("PROTEUS_ROOT") + "/tools/benchmark.yml")
+    config = Config(os.getenv("AMDINFER_ROOT") + "/tools/benchmark.yml")
     if args.k:
         config.benchmarks = args.k
 

@@ -19,7 +19,7 @@ import pathlib
 import setuptools
 import skbuild
 
-version_path = os.getenv("PROTEUS_ROOT")
+version_path = os.getenv("AMDINFER_ROOT")
 if version_path:
     version_path += "/VERSION"
     with open(version_path, "r") as f:
@@ -27,10 +27,10 @@ if version_path:
 else:
     version = "0.0.0"
 
-package = pathlib.Path("src/proteus/bindings/python/src")
+package = pathlib.Path("src/amdinfer/bindings/python/src")
 
 skbuild.setup(
-    name="proteus",
+    name="amdinfer",
     version=version,
     license="Apache 2.0",
     packages=setuptools.find_packages(str(package)),
@@ -41,7 +41,7 @@ skbuild.setup(
     python_requires=">=3.6",
     package_dir={"": str(package)},
     include_package_data=True,
-    cmake_install_dir=str(package / "proteus"),
+    cmake_install_dir=str(package / "amdinfer"),
     package_data={
         "": [
             "*.pyi",

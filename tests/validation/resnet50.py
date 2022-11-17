@@ -18,7 +18,7 @@ This example brings up the migraphx worker and runs a Resnet50 classification mo
 on the official imagenet validation set (50,000 images).
 
 The model file and test data is not in the git repo. and must be fetched with git or
-    proteus get or wget
+    amdinfer get or wget
 
 Model source:
 https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx
@@ -38,8 +38,8 @@ import time
 import cv2
 import numpy as np
 
-import proteus
-import proteus.pre_post as pre_post
+import amdinfer
+import amdinfer.pre_post as pre_post
 
 
 def preprocess(paths):
@@ -67,11 +67,11 @@ def main(args):
     labels_file = args.labels
     worker = args.worker
 
-    client = proteus.HttpClient("http://127.0.0.1:8998")
+    client = amdinfer.HttpClient("http://127.0.0.1:8998")
     print("waiting for server...", end="")
     start_server = not client.serverLive()
     if start_server:
-        server = proteus.Server()
+        server = amdinfer.Server()
         server.startHttp(8998)
         while not client.serverLive():
             time.sleep(1)
@@ -88,7 +88,7 @@ def main(args):
     # future use.  It will read
     # the array dimensions and data type from the model.
 
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     parameters.put("model", str(model))
     parameters.put("batch", batch_size)
     parameters.put("timeout", 100)  # ms
@@ -144,16 +144,16 @@ def main(args):
         if len(filenames) == request_size:
             images = preprocess(filenames)
 
-            imageReqs = [proteus.ImageInferenceRequest(image) for image in images]
+            imageReqs = [amdinfer.ImageInferenceRequest(image) for image in images]
             print("Request is ready.  Sending ", len(images), " requests")
             j = 0
-            responses = proteus.inferAsyncOrdered(client, endpoint, imageReqs)
+            responses = amdinfer.inferAsyncOrdered(client, endpoint, imageReqs)
             for response in responses:
                 assert not response.isError(), response.getError()
 
                 # print("Client received inference reply.")
                 for output in response.getOutputs():
-                    assert output.datatype == proteus.DataType.FP32
+                    assert output.datatype == amdinfer.DataType.FP32
                     recv_data = output.getFp32Data()
                     # the predicted category is the one with the highest match value
                     answer = np.argmax(recv_data)
@@ -198,13 +198,13 @@ def validate_args(args):
         raise ValueError(f"Worker must be one of: {' '.join(supported_workers)}")
     if not args.model:
         if args.worker == "vitis":
-            args.model = proteus.testing.getPathToAsset("u250_resnet50")
+            args.model = amdinfer.testing.getPathToAsset("u250_resnet50")
         elif args.worker == "ptzendnn":
-            args.model = proteus.testing.getPathToAsset("pt_resnet50")
+            args.model = amdinfer.testing.getPathToAsset("pt_resnet50")
         elif args.worker == "tfzendnn":
-            args.model = proteus.testing.getPathToAsset("tf_resnet50")
+            args.model = amdinfer.testing.getPathToAsset("tf_resnet50")
         else:
-            args.model = proteus.testing.getPathToAsset("onnx_resnet50")
+            args.model = amdinfer.testing.getPathToAsset("onnx_resnet50")
 
     return args
 

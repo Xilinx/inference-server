@@ -19,9 +19,9 @@ import cv2
 import numpy as np
 import pytest
 
-import proteus
-import proteus.pre_post as pre_post
-import proteus.testing
+import amdinfer
+import amdinfer.pre_post as pre_post
+import amdinfer.testing
 
 from helper import root_path, run_benchmark
 
@@ -58,7 +58,7 @@ def postprocess(output, k):
     to determine the most probable classifications
 
     Args:
-        output (proteus.InferenceResponseOutput): the output from the inference server
+        output (amdinfer.InferenceResponseOutput): the output from the inference server
         k (int): number of top categories to return
 
     Returns:
@@ -75,7 +75,7 @@ class TestMigraphx:
     """
 
     model = "Migraphx"
-    parameters = {"model": proteus.testing.getPathToAsset("onnx_resnet50")}
+    parameters = {"model": amdinfer.testing.getPathToAsset("onnx_resnet50")}
 
     def send_request(self, request, check_asserts=True):
         """
@@ -94,7 +94,7 @@ class TestMigraphx:
             response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         num_inputs = len(request.getInputs())
@@ -107,7 +107,7 @@ class TestMigraphx:
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
                 assert output.name == "input" + str(index)
-                assert output.datatype == proteus.DataType.FP32
+                assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
         return response
 
@@ -117,7 +117,7 @@ class TestMigraphx:
         Send a request to model as tensor data
         """
         image_paths = [
-            proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg"),
+            amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg"),
         ]
         gold_responses = [[259, 261, 157, 260, 154]]
         assert len(image_paths) == len(gold_responses)
@@ -127,7 +127,7 @@ class TestMigraphx:
         for i in range(request_num):
             img = preprocess([image_paths[i % image_num]])[0]
 
-            request = proteus.ImageInferenceRequest(img, True)
+            request = amdinfer.ImageInferenceRequest(img, True)
             response = self.send_request(request)
             outputs = response.getOutputs()
             assert len(outputs) == 1

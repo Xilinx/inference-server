@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,17 +16,17 @@
 print_banner(){
 echo -e \
 "\e[1;90m
-=================================================
+==================================================
 \e[m \e[1;91m
- ______
-(_____ \                _
- _____) )  ____   ___  | |_    ____  _   _   ___
-|  ____/  / ___) / _ \ |  _)  / _  )| | | | /___)
-| |      | |    | |_| || |__ ( (/ / | |_| ||___ |
-|_|      |_|     \___/  \___) \____) \____|(___/
+                   _  _          ___
+                  | |(_)        / __)
+  ____  ____    _ | | _  ____  | |__  ____   ____
+ / _  ||    \  / || || ||  _ \ |  __)/ _  ) / ___)
+( ( | || | | |( (_| || || | | || |  ( (/ / | |
+ \_||_||_|_|_| \____||_||_| |_||_|   \____)|_|
 
 \e[m \e[1;90m
-=================================================
+==================================================
 \e[m"
 
 }
@@ -151,7 +152,7 @@ if [ $? -eq 0 ]; then
 fi
 
 if [ $TFZENDNN_FOUND -eq 1 ] || [ $PTZENDNN_FOUND -eq 1 ]; then
-    source ${PROTEUS_ROOT}/external/zendnn/zendnn_tf_pt_cc_api_env_setup.sh
+    source ${AMDINFER_ROOT}/external/zendnn/zendnn_tf_pt_cc_api_env_setup.sh
 fi
 
 export GPG_TTY=$(tty)

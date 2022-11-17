@@ -19,29 +19,29 @@ np = pytest.importorskip("numpy")
 kserve = pytest.importorskip("kserve")
 cv2 = pytest.importorskip("cv2")
 
-import proteus
-import proteus.testing
+import amdinfer
+import amdinfer.testing
 
 import utils
 from fixtures import create_container_isvc, create_runtime_isvc, create_trained_model
 
 
 def make_request():
-    image_path = proteus.testing.getPathToAsset("asset_nine_9723.jpg")
+    image_path = amdinfer.testing.getPathToAsset("asset_nine_9723.jpg")
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     image = image.astype(np.float32)
     image *= 1.0 / 255.0
 
-    input_0 = proteus.InferenceRequestInput()
+    input_0 = amdinfer.InferenceRequestInput()
     input_0.name = "input-0"
-    input_0.datatype = proteus.DataType.FP32
+    input_0.datatype = amdinfer.DataType.FP32
     input_0.shape = [28, 28, 1]
     input_0.setFp32Data(image)
 
-    request = proteus.InferenceRequest()
+    request = amdinfer.InferenceRequest()
     request.addInputTensor(input_0)
 
-    return proteus.inference_request_to_dict(request)
+    return amdinfer.inference_request_to_dict(request)
 
 
 def make_prediction(model_names, service_name, namespace):

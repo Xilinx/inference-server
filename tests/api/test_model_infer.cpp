@@ -1,4 +1,5 @@
-// Copyright 2022 Xilinx Inc.
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@
 #include <memory>   // for allocator, unique_ptr
 #include <vector>   // for vector
 
-#include "proteus/proteus.hpp"                 // for InferenceResponse, Grp...
-#include "proteus/testing/gtest_fixtures.hpp"  // for GrpcFixture
+#include "amdinfer/amdinfer.hpp"                // for InferenceResponse, Grp...
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
-void test(proteus::Client* client) {
+void test(amdinfer::Client* client) {
   auto endpoint = client->workerLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
@@ -29,9 +30,9 @@ void test(proteus::Client* client) {
   imgData.reserve(size);
   imgData.push_back(1);
 
-  proteus::InferenceRequest request;
+  amdinfer::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         proteus::DataType::UINT32);
+                         amdinfer::DataType::UINT32);
 
   auto response = client->modelInfer(endpoint, request);
 
@@ -49,17 +50,17 @@ void test(proteus::Client* client) {
   client->modelUnload(endpoint);
 }
 
-#ifdef PROTEUS_ENABLE_GRPC
+#ifdef AMDINFER_ENABLE_GRPC
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(GrpcFixture, ModelInfer) { test(client_.get()); }
 #endif
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelInfer) {
-  proteus::NativeClient client;
+  amdinfer::NativeClient client;
   test(&client);
 }
 
-#ifdef PROTEUS_ENABLE_HTTP
+#ifdef AMDINFER_ENABLE_HTTP
 TEST_F(HttpFixture, ModelInfer) { test(client_.get()); }
 #endif

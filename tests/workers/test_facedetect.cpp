@@ -1,4 +1,5 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2021 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +15,9 @@
 
 #include <cstdlib>  // for getenv, abs
 
-#include "facedetect.hpp"  // IWYU pragma: associated
-#include "gtest/gtest.h"   // for Test, AssertionResult, EXPECT_EQ
-#include "proteus/testing/get_path_to_asset.hpp"  // for getPathToAsset
+#include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
+#include "facedetect.hpp"                          // IWYU pragma: associated
+#include "gtest/gtest.h"  // for Test, AssertionResult, EXPECT_EQ
 
 const int gold_response_size = 6;
 const float gold_response_output[gold_response_size] = {
@@ -25,17 +26,17 @@ const float gold_response_output[gold_response_size] = {
 
 std::string prepareDirectory() {
   fs::path temp_dir =
-    fs::temp_directory_path() / "proteus/tests/cpp/native/facedetect";
+    fs::temp_directory_path() / "amdinfer/tests/cpp/native/facedetect";
   fs::create_directories(temp_dir);
   const auto src_file =
-    fs::path(proteus::getPathToAsset("asset_girl-1867092_640.jpg"));
+    fs::path(amdinfer::getPathToAsset("asset_girl-1867092_640.jpg"));
   fs::copy_file(src_file, temp_dir / src_file.filename(),
                 fs::copy_options::skip_existing);
   return temp_dir;
 }
 
 void dequeue_validate(FutureQueue& my_queue, int num_images) {
-  std::future<proteus::InferenceResponse> element;
+  std::future<amdinfer::InferenceResponse> element;
   for (int i = 0; i < num_images; i++) {
     my_queue.wait_dequeue(element);
     auto results = element.get();
@@ -70,8 +71,8 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 TEST(Native, Facedetect) {
-  proteus::Server server;
-  proteus::NativeClient client;
+  amdinfer::Server server;
+  amdinfer::NativeClient client;
 
   auto fpgas_exist = client.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {

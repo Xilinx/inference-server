@@ -463,7 +463,7 @@ def install_dev_packages(manager: PackageManager, core):
             graphviz \\
             # used to turn absolute symlinks into relative ones
             symlinks \\
-            # used for z compression in proteus
+            # used for z compression
             zlib1g-dev \\
             # used by drogon. It needs the -dev versions to pass Cmake
             libbrotli-dev \\
@@ -506,7 +506,7 @@ def install_dev_packages(manager: PackageManager, core):
             graphviz \\
             # used to turn absolute symlinks into relative ones
             symlinks \\
-            # used for z compression in proteus
+            # used for z compression
             zlib-devel \\
             # used by drogon. It needs the -dev versions to pass Cmake
             brotli-devel \\
@@ -560,6 +560,9 @@ def build_migraphx(manager: PackageManager):
             && pip3 install --no-cache-dir https://github.com/RadeonOpenCompute/rbuild/archive/f74d130aac0405c7e6bc759d331f913a7577bd54.tar.gz \\
             # clean up
             {code_indent(manager.clean, 12)}\
+
+        # needed for rbuild
+        ENV LANG=C.UTF-8
 
         # Install MIGraphX from source
         RUN mkdir -p /migraphx \\
@@ -780,7 +783,7 @@ def generate(args: argparse.Namespace):
         entrypoint = textwrap.dedent(
             """\
             # skipping entrypoint for cibuildwheel
-            ENV PROTEUS_ROOT=/project"""
+            ENV AMDINFER_ROOT=/project"""
         )
     else:
         entrypoint = textwrap.dedent(

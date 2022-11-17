@@ -1,0 +1,120 @@
+// Copyright 2022 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @file
+ * @brief Implements the Python bindings for the data_types.hpp header
+ */
+
+#include "amdinfer/core/data_types.hpp"
+
+#include <pybind11/cast.h>       // for arg
+#include <pybind11/operators.h>  // for self, operator==, self_t
+#include <pybind11/pybind11.h>   // for class_, enum_, object, init, module_
+
+#include <sstream>  // IWYU pragma: keep
+
+#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_VITIS
+
+// IWYU pragma: no_forward_declare xir::Datatype
+
+#ifdef AMDINFER_ENABLE_VITIS
+#include <xir/util/data_type.hpp>  // IWYU pragma: keep
+#endif
+
+namespace py = pybind11;
+
+namespace amdinfer {
+
+void wrapDataType(py::module_& m) {
+  auto datatype = py::class_<DataType>(m, "DataType");
+  auto value = py::enum_<DataType::Value>(datatype, "Value");
+
+  datatype.def(py::init<>())
+    .def(py::init<>())
+    .def(py::init<const char*>())
+    .def(py::init<DataType::Value>())
+    .def_property_readonly_static("BOOL",
+                                  [](py::object) { return DataType("BOOL"); })
+    .def_property_readonly_static("UINT8",
+                                  [](py::object) { return DataType("UINT8"); })
+    .def_property_readonly_static("UINT16",
+                                  [](py::object) { return DataType("UINT16"); })
+    .def_property_readonly_static("UINT32",
+                                  [](py::object) { return DataType("UINT32"); })
+    .def_property_readonly_static("UINT64",
+                                  [](py::object) { return DataType("UINT64"); })
+    .def_property_readonly_static("INT8",
+                                  [](py::object) { return DataType("INT8"); })
+    .def_property_readonly_static("INT16",
+                                  [](py::object) { return DataType("INT16"); })
+    .def_property_readonly_static("INT32",
+                                  [](py::object) { return DataType("INT32"); })
+    .def_property_readonly_static("INT64",
+                                  [](py::object) { return DataType("INT64"); })
+    .def_property_readonly_static("FP16",
+                                  [](py::object) { return DataType("FP16"); })
+    .def_property_readonly_static("FP32",
+                                  [](py::object) { return DataType("FP32"); })
+    .def_property_readonly_static("FLOAT32",
+                                  [](py::object) { return DataType("FP32"); })
+    .def_property_readonly_static("FP64",
+                                  [](py::object) { return DataType("FP64"); })
+    .def_property_readonly_static("FLOAT64",
+                                  [](py::object) { return DataType("FP64"); })
+    .def_property_readonly_static("STRING",
+                                  [](py::object) { return DataType("STRING"); })
+    .def("size", &DataType::size)
+    .def("str", &DataType::str)
+    .def(py::self == py::self)
+    .def("__repr__",
+         [](const DataType& self) {
+           return "DataType(" + std::string(self.str()) + ")\n";
+         })
+    .def("__str__", [](const DataType& self) {
+      std::ostringstream os;
+      os << self;
+      return os.str();
+    });
+
+  value.value("BOOL", DataType::BOOL)
+    .value("UINT8", DataType::UINT8)
+    .value("UINT16", DataType::UINT16)
+    .value("UINT32", DataType::UINT32)
+    .value("UINT64", DataType::UINT64)
+    .value("INT8", DataType::INT8)
+    .value("INT16", DataType::INT16)
+    .value("INT32", DataType::INT32)
+    .value("INT64", DataType::INT64)
+    .value("FP16", DataType::FP16)
+    .value("FP32", DataType::FP32)
+    .value("FLOAT32", DataType::FP32)
+    .value("FP64", DataType::FP64)
+    .value("FLOAT64", DataType::FP64)
+    .value("STRING", DataType::STRING);
+
+  py::implicitly_convertible<DataType::Value, DataType>();
+}
+
+void wrapTypeMaps([[maybe_unused]] py::module_& m) {
+#ifdef AMDINFER_ENABLE_VITIS
+  py::module_::import("xir").attr("DataType");
+
+  m.def("mapXirType", amdinfer::mapXirToType, py::arg("type"));
+  m.def("mapTypeToXir", amdinfer::mapTypeToXir, py::arg("type"));
+#endif
+}
+
+}  // namespace amdinfer

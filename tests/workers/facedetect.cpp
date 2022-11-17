@@ -1,4 +1,5 @@
-// Copyright 2021 Xilinx Inc.
+// Copyright 2021 Xilinx, Inc.
+// Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,14 +27,15 @@
 
 void dequeue(FutureQueue& my_queue, int num_images) {
   for (int i = 0; i < num_images; i++) {
-    std::future<proteus::InferenceResponse> element;
+    std::future<amdinfer::InferenceResponse> element;
     my_queue.wait_dequeue(element);
     auto results = element.get();
   }
 }
 
 int main(int argc, char* argv[]) {
-  std::string path = std::string(std::getenv("PROTEUS_ROOT")) + "/tests/assets";
+  std::string path =
+    std::string(std::getenv("AMDINFER_ROOT")) + "/tests/assets";
   int threads = 4;
   int runners = 4;
   int max_images = -1;
@@ -46,7 +48,7 @@ int main(int argc, char* argv[]) {
       cxxopts::value<std::string>(path))(
       "t,threads", "Number of threads to use to enqueue/deque images",
       cxxopts::value<int>(threads))(
-      "r,runners", "Number of runners (i.e. workers) to use in Proteus",
+      "r,runners", "Number of runners (i.e. workers) to use in the server",
       cxxopts::value<int>(runners))(
       "i,images", "Maximum number of images to use from the path (-1 for all)",
       cxxopts::value<int>(max_images))("h,help", "Print help");
@@ -62,7 +64,7 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  proteus::Server server;
+  amdinfer::Server server;
 
   auto workerName = load(runners);
   auto image_paths = getImages(path);

@@ -16,7 +16,7 @@
 import numpy as np
 import pytest
 
-import proteus
+import amdinfer
 
 
 @pytest.mark.usefixtures("load")
@@ -27,23 +27,23 @@ class TestAks:
 
     def test_aks_0(self):
         numbers = [3.0]
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         request.id = "hello_world"
 
         for num in numbers:
-            input_0 = proteus.InferenceRequestInput()
+            input_0 = amdinfer.InferenceRequestInput()
             input_0.name = "aks"
             input_0.setFp32Data(np.asarray([num], np.float))
             input_0.shape = [1]
-            input_0.datatype = proteus.DataType.FP32
+            input_0.datatype = amdinfer.DataType.FP32
             request.addInputTensor(input_0)
         try:
-            response: proteus.InferenceResponse = self.rest_client.modelInfer(
+            response: amdinfer.InferenceResponse = self.rest_client.modelInfer(
                 self.endpoint, request
             )
         except ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         assert not response.isError(), response.getError()
@@ -59,5 +59,5 @@ class TestAks:
             assert len(data) == 1
             assert reply.name == "aks"
             assert data[0] == num + 60
-            assert reply.datatype == proteus.DataType.FP32
+            assert reply.datatype == amdinfer.DataType.FP32
             assert reply.parameters.empty()

@@ -19,8 +19,8 @@ import cv2
 import pytest
 from test_invert_image import compare_jpgs
 
-import proteus
-import proteus.testing
+import amdinfer
+import amdinfer.testing
 
 from helper import root_path
 
@@ -35,18 +35,18 @@ class TestInvertVideo:
     parameters = None
 
     def construct_request(self, video_path, requested_frames_count):
-        input_0 = proteus.InferenceRequestInput()
+        input_0 = amdinfer.InferenceRequestInput()
         input_0.name = "input0"
-        input_0.datatype = proteus.DataType.STRING
+        input_0.datatype = amdinfer.DataType.STRING
         input_0.setStringData(video_path)
         input_0.shape = [len(video_path)]
-        parameters = proteus.RequestParameters()
+        parameters = amdinfer.RequestParameters()
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
-        request = proteus.InferenceRequest()
+        request = amdinfer.InferenceRequest()
         request.addInputTensor(input_0)
-        parameters_2 = proteus.RequestParameters()
+        parameters_2 = amdinfer.RequestParameters()
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 
@@ -70,7 +70,7 @@ class TestInvertVideo:
 
     def test_invert_video_0(self):
         requested_frames_count = 100
-        video_path = proteus.testing.getPathToAsset("asset_Physicsworks.ogv")
+        video_path = amdinfer.testing.getPathToAsset("asset_Physicsworks.ogv")
 
         self.construct_request(video_path, requested_frames_count)
         self.recv_frames(video_path, requested_frames_count)
@@ -90,7 +90,7 @@ class TestInvertVideo:
 # if __name__ == "__main__":
 #     from argparse import Namespace
 
-#     client = proteus.clients.HttpClient("http://localhost:8998")
+#     client = amdinfer.clients.HttpClient("http://localhost:8998")
 #     models = client.modelList()
 #     if "InvertVideo" not in models:
 #         worker_name = client.workerLoad("InvertVideo")
@@ -98,10 +98,10 @@ class TestInvertVideo:
 #         worker_name = "InvertVideo"
 
 #     mod = Namespace()
-#     mod.ws_client = proteus.clients.WebSocketClient("ws://localhost:8998", "http://localhost:8998")
+#     mod.ws_client = amdinfer.clients.WebSocketClient("ws://localhost:8998", "http://localhost:8998")
 #     mod.model = "InvertVideo"
 
 #     runner = TestInvertVideo()
-#     runner.ws_client = proteus.clients.WebSocketClient("ws://localhost:8998", "http://localhost:8998")
+#     runner.ws_client = amdinfer.clients.WebSocketClient("ws://localhost:8998", "http://localhost:8998")
 #     runner.model = "InvertVideo"
 #     runner.test_invert_video_0()

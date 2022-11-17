@@ -24,7 +24,7 @@ from time import sleep
 
 import numpy as np
 
-import proteus
+import amdinfer
 
 # -imports
 
@@ -38,14 +38,14 @@ def make_request(data):
         data (int): Data to send
 
     Returns:
-        proteus.InferenceRequest: Request
+        amdinfer.InferenceRequest: Request
     """
-    request = proteus.InferenceRequest()
+    request = amdinfer.InferenceRequest()
     # each request has one or more input tensors, depending on the worker/model that's going to process it
-    input_0 = proteus.InferenceRequestInput()
+    input_0 = amdinfer.InferenceRequestInput()
     input_0.name = f"input0"
     input_0.setUint32Data(np.array([data], np.uint32))
-    input_0.datatype = proteus.DataType.UINT32
+    input_0.datatype = amdinfer.DataType.UINT32
     input_0.shape = [1]
     request.addInputTensor(input_0)
     return request
@@ -56,20 +56,20 @@ def make_request(data):
 
 def main():
     # +create objects
-    client = proteus.HttpClient("http://127.0.0.1:8998")
+    client = amdinfer.HttpClient("http://127.0.0.1:8998")
     # -create objects
 
     # +start server: if it's not already started, start it from Python
     start_server = not client.serverLive()
     if start_server:
-        server = proteus.Server()
+        server = amdinfer.Server()
         server.startHttp(8998)
-    proteus.waitUntilServerReady(client)
+    amdinfer.waitUntilServerReady(client)
     # -start server:
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
     endpoint = client.workerLoad("echo")
-    proteus.waitUntilModelReady(client, endpoint)
+    amdinfer.waitUntilModelReady(client, endpoint)
     # -load worker
 
     # +inference: construct the request and make the inference

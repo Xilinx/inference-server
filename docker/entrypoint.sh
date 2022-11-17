@@ -1,5 +1,6 @@
 #!/bin/sh
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@ if systemctl --all --type service | grep -q xrmd; then
 fi
 
 # if the user has mounted any files/directories into /workspace, get the UID/GID
-# from the first found one and use it to adjust the UID/GID of proteus-user
+# from the first found one and use it to adjust the UID/GID of amdinfer-user
 # Changing UID/GID taken from https://stackoverflow.com/a/46057716
 for dir in /workspace/*; do  # lists the absolute path to the file/directory
   if [ ! -d "$dir" ] && [ ! -f "$dir" ]; then
@@ -36,24 +37,24 @@ for dir in /workspace/*; do  # lists the absolute path to the file/directory
   USER_UID=$(ls -nd $dir | cut -f3 -d' ')
   USER_GID=$(ls -nd $dir | cut -f4 -d' ')
 
-  # get the current uid/gid of proteus-user
-  CUR_UID=$(getent passwd proteus-user | cut -f3 -d: || true)
-  CUR_GID=$(getent group proteus-user | cut -f3 -d: || true)
+  # get the current uid/gid of amdinfer-user
+  CUR_UID=$(getent passwd amdinfer-user | cut -f3 -d: || true)
+  CUR_GID=$(getent group amdinfer-user | cut -f3 -d: || true)
 
-  # if we're mounting the proteus repo, copy over the bash files at runtime
-  if [ -d /workspace/proteus/docker ]; then
-    cp -f /workspace/proteus/docker/.bash* /home/proteus-user
+  # if we're mounting the amdinfer repo, copy over the bash files at runtime
+  if [ -d /workspace/amdinfer/docker ]; then
+    cp -f /workspace/amdinfer/docker/.bash* /home/amdinfer-user
   fi
 
   # if they don't match, adjust
   if [ -n "$USER_GID" ] && [ "$USER_GID" != "$CUR_GID" ]; then
-    groupmod -g "${USER_GID}" proteus
-    chown -R --silent :proteus /home/proteus-user
+    groupmod -g "${USER_GID}" amdinfer
+    chown -R --silent :amdinfer /home/amdinfer-user
   fi
   if [ -n "$USER_UID" ] && [ "$USER_UID" != "$CUR_UID" ]; then
-    usermod -u "${USER_UID}" proteus-user
+    usermod -u "${USER_UID}" amdinfer-user
     # fix other permissions
-    chown -R --silent proteus-user /home/proteus-user
+    chown -R --silent amdinfer-user /home/amdinfer-user
   fi
 
   break
@@ -81,8 +82,8 @@ for group in $groups; do
       new_group="group$count"
     fi
     # if the user isn't a member of the group, then join it
-    if ! id -nG proteus-user | grep -qw "$group"; then
-      usermod -aG $group proteus-user
+    if ! id -nG amdinfer-user | grep -qw "$group"; then
+      usermod -aG $group amdinfer-user
       usermod -aG $group root
     fi
   fi
@@ -100,5 +101,5 @@ fi
 if [ "$user" = "root" ]; then
   exec gosu root "$@"
 else
-  exec gosu proteus-user "$@"
+  exec gosu amdinfer-user "$@"
 fi

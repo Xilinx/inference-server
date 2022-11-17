@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,25 +15,28 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     extra_hosts:
-      - "proteus:127.0.1.1"
-    image: $REGISTRY/proteus$SUFFIX:$VERSION
+      - "amdinfer:127.0.1.1"
+    image: $REGISTRY/amdinfer$SUFFIX:$VERSION
     ports:
-      - 127.0.0.1:8998:8998 # used for proteus server
+      - 127.0.0.1:8998:8998 # used for amdinfer server
     volumes:
       # for test artifacts
-      - $PWD/external:/workspace/proteus/external:ro
-      - $PWD/external/artifacts:/opt/xilinx/proteus/artifacts:ro
-      - $PWD/tests/assets:/workspace/proteus/tests/assets:ro
-  proteus-tester:
-    command: [python3, ./tests/test.py, --hostname, proteus, --cpp, skip]
+      - $PWD/external:/workspace/amdinfer/external:ro
+      - $PWD/external/artifacts:/opt/xilinx/amdinfer/artifacts:ro
+      - $PWD/tests/assets:/workspace/amdinfer/tests/assets:ro
+  amdinfer-tester:
+    # command: [./amdinfer, test, --hostname, amdinfer, --cpp, skip]
+    command: /bin/bash -c "source ~/.env && ./amdinfer test --hostname amdinfer --cpp skip"
+    # tty: true
+    # stdin_open: true
     depends_on:
-      - proteus
+      - amdinfer
     extra_hosts:
-      - "proteus-tester:127.0.1.1"
-    hostname: proteus-tester
-    image: $REGISTRY/proteus-dev$SUFFIX:$VERSION
+      - "amdinfer-tester:127.0.1.1"
+    hostname: amdinfer-tester
+    image: $REGISTRY/amdinfer-dev$SUFFIX:$VERSION
     volumes:
-      - $PWD:/workspace/proteus
-    working_dir: /workspace/proteus
+      - $PWD:/workspace/amdinfer
+    working_dir: /workspace/amdinfer

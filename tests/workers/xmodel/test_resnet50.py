@@ -14,9 +14,9 @@
 
 import pytest
 
-import proteus
-import proteus.pre_post as pre_post
-import proteus.testing
+import amdinfer
+import amdinfer.pre_post as pre_post
+import amdinfer.testing
 
 from helper import run_benchmark
 
@@ -46,7 +46,7 @@ def validate(responses):
         assert len(outputs) == 1
         for index, output in enumerate(outputs):
             assert output.name == "input" + str(index)
-            assert output.datatype == proteus.DataType.INT8
+            assert output.datatype == amdinfer.DataType.INT8
             assert output.parameters.empty()
             top_categories = postprocess(output, k)
             assert top_categories == golden
@@ -61,25 +61,25 @@ class TestXmodel:
     """
 
     model = "Xmodel"
-    parameters = {"model": proteus.testing.getPathToAsset("u250_resnet50")}
+    parameters = {"model": amdinfer.testing.getPathToAsset("u250_resnet50")}
 
     def test_xmodel_0(self):
         """
         Send a request to resnet50 as tensor data
         """
-        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         images = preprocess([image_path])
-        request = proteus.ImageInferenceRequest(images, True)
+        request = amdinfer.ImageInferenceRequest(images, True)
         response = self.rest_client.modelInfer(self.endpoint, request)
         validate([response])
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark):
-        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         images = preprocess([image_path])
-        request = proteus.ImageInferenceRequest(images, True)
+        request = amdinfer.ImageInferenceRequest(images, True)
 
         options = {
             "model": self.model,

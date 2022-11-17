@@ -97,7 +97,7 @@
 .. Docs
 .. ====
 
-.. .. doxygenclass:: proteus::Buffer
+.. .. doxygenclass:: amdinfer::Buffer
 ..    :members:
 
 .. Indices and tables

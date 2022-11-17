@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,11 @@
 
 version: '3.7'
 services:
-  proteus:
+  amdinfer:
     devices: []
-    hostname: proteus
+    hostname: amdinfer
     image: $IMAGE
     volumes: [
       "/opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro",
     ]
-    working_dir: /home/proteus-user
+    working_dir: /home/amdinfer-user

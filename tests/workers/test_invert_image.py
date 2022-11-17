@@ -22,8 +22,8 @@ import cv2
 import numpy as np
 import pytest
 
-import proteus
-import proteus.testing
+import amdinfer
+import amdinfer.testing
 
 from helper import root_path, run_benchmark, run_benchmark_func
 
@@ -76,7 +76,7 @@ class TestInvertImage:
             response = self.rest_client.modelInfer(self.endpoint, request)
         except ConnectionError:
             pytest.fail(
-                "Connection to the proteus server ended without response!", False
+                "Connection to the amdinfer server ended without response!", False
             )
 
         assert not response.isError(), response.getError()
@@ -87,13 +87,13 @@ class TestInvertImage:
         assert len(outputs) == 1
 
         output = outputs[0]
-        if output.datatype == proteus.DataType.STRING:
+        if output.datatype == amdinfer.DataType.STRING:
             data = output.getStringData()
             compare_jpgs(data, image)
             assert output.parameters.empty()
         else:
             assert output.shape == [*image.shape]
-            assert output.datatype == proteus.DataType.UINT8
+            assert output.datatype == amdinfer.DataType.UINT8
             data = output.getUint8Data()
             assert len(data) == image.size
             assert (data == image.flatten().tolist()).all()
@@ -102,9 +102,9 @@ class TestInvertImage:
         return response
 
     def construct_request(self, asTensor):
-        image_path = proteus.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
-        request = proteus.ImageInferenceRequest(image_path, asTensor)
+        request = amdinfer.ImageInferenceRequest(image_path, asTensor)
 
         image = cv2.imread(image_path)
         image = cv2.bitwise_not(image)

@@ -31,7 +31,7 @@ To build the production container:
 .. code-block:: console
 
     $ python3 docker/generate.py
-    $ ./proteus dockerize --production [platform flags]
+    $ ./amdinfer dockerize --production [platform flags]
 
 Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI <vitis_ai:vitis ai>`, :ref:`ZenDNN <zendnn:zendnn>` or :ref:`MIGraphX <migraphx:migraphx>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
@@ -45,7 +45,7 @@ Make sure to set up a secure registry if you need access to the registry from mo
 
 To push the image to the registry, re-tag the image with the registry and push it.
 For example, if you're using the local registry approach from above, the registry name would be ``localhost:5000`` by default.
-By default, using ``proteus dockerize ...`` will build an image of the form ``$(whoami)/<image>``, which is what the code snippet uses below.
+By default, using ``amdinfer dockerize ...`` will build an image of the form ``$(whoami)/<image>``, which is what the code snippet uses below.
 
 .. code-block:: console
 
@@ -76,7 +76,7 @@ For example, one approach is using a Dockerfile to build a new image:
 
     COPY /some/path/in/Docker/build/tree /some/path/in/the/image
     ENV SomeVariable=SomeValue
-    CMD ["proteus-server", "<more arguments?>"]
+    CMD ["amdinfer-server", "<more arguments?>"]
 
 In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
@@ -102,14 +102,14 @@ You can install it locally or use it in the development container to load the wo
 
 .. code-block:: python
 
-    import proteus
+    import amdinfer
 
-    client = proteus.HttpClient("http://hostname:port")
+    client = amdinfer.HttpClient("http://hostname:port")
 
     # depending on the model, you need to use the appropriate worker
     worker_name = "migraphx"
 
-    parameters = proteus.RequestParameters()
+    parameters = amdinfer.RequestParameters()
     # specifies the path to the model on the server for it to open
     parameters.put("model", "/path/to/model")
 
@@ -117,7 +117,7 @@ You can install it locally or use it in the development container to load the wo
 
     endpoint = client.workerLoad(worker_name, parameters)
     print(endpoint)
-    proteus.waitUntilModelReady(client, endpoint)
+    amdinfer.waitUntilModelReady(client, endpoint)
 
 Clients that make requests to this worker will need the endpoint to talk it.
 

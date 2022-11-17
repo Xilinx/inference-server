@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
 
 add_custom_target(extra)
 
-if(${PROTEUS_ENABLE_AKS})
+if(${AMDINFER_ENABLE_AKS})
   set(AKS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aks)
 
   foreach(DIR graph_zoo kernel_src kernel_zoo cmake-kernels.sh)

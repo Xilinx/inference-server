@@ -1,4 +1,5 @@
-# Copyright 2021 Xilinx Inc.
+# Copyright 2021 Xilinx, Inc.
+# Copyright 2022 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ import time
 
 import pytest
 
-import proteus
+import amdinfer
 
 
 @pytest.mark.usefixtures("server", "assign_client")
@@ -40,7 +41,7 @@ class TestLoad:
         )  # this will do nothing and return 200
         assert response == "echo"
 
-        parameters = proteus.RequestParameters()
+        parameters = amdinfer.RequestParameters()
         parameters.put("max_buffer_num", 100)
         endpoint_1 = self.rest_client.workerLoad(
             "echo", parameters
