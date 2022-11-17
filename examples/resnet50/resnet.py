@@ -46,6 +46,12 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--batch-size",
+        default=1,
+        help="Batch size to use for the worker on the server",
+    )
+
+    parser.add_argument(
         "--ip",
         default="127.0.0.1",
         help="IP to use for server",

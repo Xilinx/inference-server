@@ -120,6 +120,7 @@ def load(client, args):
     parameters.put("model", args.model)
     parameters.put("input_size", args.input_size)
     parameters.put("output_classes", args.output_classes)
+    parameters.put("batch_size", args.batch_size)
     endpoint = client.workerLoad("ptzendnn", parameters)
     amdinfer.waitUntilModelReady(client, endpoint)
     return endpoint
@@ -147,6 +148,7 @@ def get_args():
 def main(args):
     print("Running the PT+ZenDNN example for ResNet50 in Python")
 
+    print("Starting server locally")
     server = amdinfer.Server()
     print("Waiting until the server is ready...")
 
