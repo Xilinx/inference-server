@@ -446,10 +446,12 @@ def get_last_benchmark_path(index) -> Optional[str]:
     Returns:
         Optional[str]: Path to the benchmark if found
     """
-    dir = os.getenv("AMDINFER_ROOT") + "/tests/.benchmarks"
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be set in the environment"
+    bench_dir = root + "/tests/.benchmarks"
     machine_id = pytest_benchmark.utils.get_machine_id()
 
-    list_of_files = pathlib.Path(f"{dir}/{machine_id}").rglob("*.json")
+    list_of_files = pathlib.Path(f"{bench_dir}/{machine_id}").rglob("*.json")
     if list_of_files:
         return sorted(list_of_files, key=os.path.getctime, reverse=True)[index]
     return None
@@ -664,10 +666,9 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 progress.update(task0, advance=1)
                 continue
             if "lua" in extra_info:
-                lua_file = (
-                    os.getenv("AMDINFER_ROOT")
-                    + f"/tests/workers/{extra_info['lua']}.lua"
-                )
+                root = os.getenv("AMDINFER_ROOT")
+                assert root is not None, "AMDINFER_ROOT must be set in the environment"
+                lua_file = root + f"/tests/workers/{extra_info['lua']}.lua"
                 if not os.path.exists(lua_file):
                     print(f"Lua file not found, skipping: {lua_file}")
                     continue
@@ -849,12 +850,10 @@ def make_cpp_benchmarks(raw_stats, path: pathlib.Path, cpp_config, repeat):
 
 
 def get_benchmark_exe(path: pathlib.Path):
-    relative_path_to_exe = (
-        str(path.parent)[len(os.getenv("AMDINFER_ROOT")) :] + f"/{path.stem}"
-    )
-    benchmark_path = (
-        os.getenv("AMDINFER_ROOT") + f"/build/Release{relative_path_to_exe}"
-    )
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be set in the environment"
+    relative_path_to_exe = str(path.parent)[len(root) :] + f"/{path.stem}"
+    benchmark_path = root + f"/build/Release{relative_path_to_exe}"
     if not os.path.exists(benchmark_path):
         return None
     with open(path, "r") as f:
@@ -868,7 +867,9 @@ def get_benchmark_exe(path: pathlib.Path):
 
 def cpp_benchmarks(config: Config, benchmarks: Benchmarks):
     benchmarks_to_run = set()
-    benchmark_dir = os.getenv("AMDINFER_ROOT") + "/tests"
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be set in the environment"
+    benchmark_dir = root + "/tests"
     accept_all_benchmarks = True if config.benchmarks is None else False
     for path in pathlib.Path(benchmark_dir).rglob("*.cpp"):
         if not accept_all_benchmarks:
@@ -961,9 +962,11 @@ def pytest_benchmarks(config: Config, quiet=False):
                 f"Cannot connect to HTTP server at {config.http_address}. Check the address or set it to start automatically"
             )
             sys.exit(1)
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be set in the environment"
     cmd = (
         "python3 "
-        + os.getenv("AMDINFER_ROOT")
+        + root
         + f"/tests/test.py --benchmark only --hostname {hostname} --http-port {port}"
     )
     if config.benchmarks:
@@ -1019,7 +1022,9 @@ if __name__ == "__main__":
         benchmarks.print()
         sys.exit(0)
 
-    config = Config(os.getenv("AMDINFER_ROOT") + "/tools/benchmark.yml")
+    root = os.getenv("AMDINFER_ROOT")
+    assert root is not None, "AMDINFER_ROOT must be set in the environment"
+    config = Config(root + "/tools/benchmark.yml")
     if args.k:
         config.benchmarks = args.k
 

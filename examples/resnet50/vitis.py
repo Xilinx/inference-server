@@ -140,6 +140,7 @@ def get_args():
 
     if not args.model:
         root = os.getenv("AMDINFER_ROOT")
+        assert root is not None
         args.model = (
             root
             + "/external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel"

@@ -34,8 +34,11 @@ void dequeue(FutureQueue& my_queue, int num_images) {
 }
 
 int main(int argc, char* argv[]) {
-  std::string path =
-    std::string(std::getenv("AMDINFER_ROOT")) + "/tests/assets";
+  const auto* root = std::getenv("AMDINFER_ROOT");
+  if (root == nullptr) {
+    throw amdinfer::environment_not_set_error("AMDINFER_ROOT not set");
+  }
+  auto path = std::string{root} + "/tests/assets";
   int threads = 4;
   int runners = 4;
   int max_images = -1;

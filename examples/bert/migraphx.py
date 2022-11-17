@@ -181,6 +181,7 @@ def get_args():
     args = parse_args()
 
     root = os.getenv("AMDINFER_ROOT")
+    assert root is not None
 
     # assign default values if these are unset
     if not args.model:

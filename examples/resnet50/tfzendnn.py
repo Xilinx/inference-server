@@ -137,6 +137,7 @@ def get_args():
 
     if not args.model:
         root = os.getenv("AMDINFER_ROOT")
+        assert root is not None
         args.model = (
             root + "/external/artifacts/tensorflow/resnet_v1_50_baseline_6.96B_922.pb"
         )

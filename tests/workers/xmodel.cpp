@@ -24,9 +24,13 @@
 #include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Options, OptionEx...
 
 int main(int argc, char* argv[]) {
-  std::string xmodel = std::string(std::getenv("AKS_XMODEL_ROOT")) +
-                       "/artifacts/u200_u250/resnet_v1_50_tf/"
-                       "resnet_v1_50_tf.xmodel";
+  const auto* aks_model_root = std::getenv("AKS_XMODEL_ROOT");
+  if (aks_model_root == nullptr) {
+    throw amdinfer::environment_not_set_error("AKS_XMODEL_ROOT not set");
+  }
+  auto xmodel = std::string{aks_model_root} +
+                "/artifacts/u200_u250/resnet_v1_50_tf/"
+                "resnet_v1_50_tf.xmodel";
   int images = 100;
   int threads = 4;
   int runners = 4;

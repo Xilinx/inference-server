@@ -107,7 +107,7 @@ void Logger::set(Loggers name) {
 }
 
 std::string getLogDirectory() {
-  auto* home = std::getenv("HOME");
+  const auto* home = std::getenv("HOME");
   std::string dir;
   if (home != nullptr) {
     dir = home;

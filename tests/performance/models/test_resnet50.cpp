@@ -46,7 +46,7 @@ template <typename T, int C>
 using ImagePreprocessOptions = amdinfer::pre_post::ImagePreprocessOptions<T, C>;
 
 struct Workers {
-  const fs::path kRoot{std::getenv("AMDINFER_ROOT")};
+  char* root = std::getenv("AMDINFER_ROOT");
   std::string extension;
   std::string name;
   fs::path graph;
@@ -59,7 +59,11 @@ struct PtzendnnWorker : public Workers {
   PtzendnnWorker() {
     extension = "ptzendnn";
     name = "ptzendnn";
-    graph = kRoot / "external/pytorch_models/resnet50_pretrained.pt";
+    if (root != nullptr) {
+      graph = fs::path{root} / "external/pytorch_models/resnet50_pretrained.pt";
+    } else {
+      throw amdinfer::environment_not_set_error("AMDINFER_ROOT not set");
+    }
 
     parameters.put("model", graph.string());
 
@@ -81,8 +85,12 @@ struct TfzendnnWorker : public Workers {
   TfzendnnWorker() {
     extension = "tfzendnn";
     name = "tfzendnn";
-    graph =
-      kRoot / "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
+    if (root != nullptr) {
+      graph = fs::path{root} /
+              "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
+    } else {
+      throw amdinfer::environment_not_set_error("AMDINFER_ROOT not set");
+    }
 
     parameters.put("model", graph.string());
     parameters.put("input_node", "input");

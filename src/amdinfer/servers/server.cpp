@@ -72,8 +72,12 @@ void initialize() {
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
 
   // Load all the kernels
-  aks_sys_manager->loadKernels(std::string(std::getenv("AKS_ROOT")) +
-                               std::string("/kernel_zoo"));
+  const auto* aks_root = std::getenv("AKS_ROOT");
+  if (aks_root == nullptr) {
+    throw environment_not_set_error("AKS_ROOT not set");
+  }
+  const auto kernel_dir = std::string{aks_root} + "/kernel_zoo";
+  aks_sys_manager->loadKernels(kernel_dir);
 #endif
 }
 
