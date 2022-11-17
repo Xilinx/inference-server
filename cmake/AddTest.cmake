@@ -54,7 +54,7 @@ function(_amdinfer_add_test test type)
 
   target_link_libraries(${target} PRIVATE test_main testing)
 
-  gtest_discover_tests(${target} DISCOVERY_TIMEOUT 30)
+  gtest_discover_tests(${target} DISCOVERY_TIMEOUT 120)
 endfunction()
 
 function(amdinfer_add_system_test test)
