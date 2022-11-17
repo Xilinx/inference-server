@@ -1177,9 +1177,8 @@ class Start:
 class Test:
     @staticmethod
     def parse(args, unknown_args):
-        try:
-            import amdinfer
-        except ImportError:
+        package_installed = importlib.util.find_spec("amdinfer")
+        if not package_installed:
             run_command(
                 f"./amdinfer build --{args.build.lower()} --regen --clean", args.dry_run
             )
