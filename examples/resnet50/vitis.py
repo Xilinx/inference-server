@@ -120,6 +120,7 @@ def load(client, args):
     # +load
     parameters = amdinfer.RequestParameters()
     parameters.put("model", args.model)
+    parameters.put("batch_size", args.batch_size)
     endpoint = client.workerLoad("xmodel", parameters)
     # -load
     return endpoint

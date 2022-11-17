@@ -114,7 +114,7 @@ def load(client, args):
     # bpickrel: I found that allocation could fail with a large batch value of 64
     # and large (13) default buffer count in the migraphx worker
     # Beyond batch size 56, the worker seems to lock up while compiling the model
-    parameters.put("batch", 2)
+    parameters.put("batch", args.batch_size)
 
     # this call requests the server to either find a running instance of the named
     # worker type, or else create one and initialize it with the parameters.
@@ -193,7 +193,7 @@ def main(args):
 
         image = Image.fromarray(image)
         base_path = pathlib.Path(__file__).parent.resolve()
-        output_name = str(base_path / str(it)) + ".jpg"
+        output_name = str(base_path / f"yolo_output{str(it)}") + ".jpg"
         image.save(output_name)
 
         print("Your marked-up image is at " + str(output_name))

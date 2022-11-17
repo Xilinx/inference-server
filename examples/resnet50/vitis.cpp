@@ -138,6 +138,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // +load:
   amdinfer::RequestParameters parameters;
   parameters.put("model", args.path_to_model);
+  parameters.put("batch_size", args.batch_size);
   std::string endpoint = client->workerLoad("xmodel", &parameters);
   // -load:
   return endpoint;
@@ -174,17 +175,21 @@ int main(int argc, char* argv[]) {
   // +create client:
   // vitis.cpp
   const auto http_port_str = std::to_string(args.http_port);
-  amdinfer::HttpClient client{"http://127.0.0.1:" + http_port_str};
+  const auto server_addr = "http://" + args.ip + ":" + http_port_str;
+  amdinfer::HttpClient client{server_addr};
   // -create client:
 
   // +initialize:
   std::optional<amdinfer::Server> server;
   // -initialize:
   // +start protocol:
-  if (!client.serverLive()) {
+  if (args.ip == "127.0.0.1" && !client.serverLive()) {
     std::cout << "No server detected. Starting locally...\n";
     server.emplace();
     server.value().startHttp(args.http_port);
+  } else if (!client.serverLive()) {
+    throw amdinfer::connection_error("Could not connect to server at " +
+                                     server_addr);
   }
   // -start protocol:
 

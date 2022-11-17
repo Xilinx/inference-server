@@ -132,6 +132,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   parameters.put("output_classes", args.output_classes);
   parameters.put("input_node", args.input_node);
   parameters.put("output_node", args.output_node);
+  parameters.put("batch_size", args.batch_size);
   std::string endpoint = client->workerLoad("tfzendnn", &parameters);
   amdinfer::waitUntilModelReady(client, endpoint);
   // -load
@@ -176,14 +177,18 @@ int main(int argc, char* argv[]) {
   // +create client
   // tfzendnn.cpp
   const auto grpc_port_str = std::to_string(args.grpc_port);
-  amdinfer::GrpcClient client{"127.0.0.1:" + grpc_port_str};
+  const auto server_addr = args.ip + ":" + grpc_port_str;
+  amdinfer::GrpcClient client{server_addr};
 
   std::optional<amdinfer::Server> server;
   // +start protocol
-  if (!client.serverLive()) {
+  if (args.ip == "127.0.0.1" && !client.serverLive()) {
     std::cout << "No server detected. Starting locally...\n";
     server.emplace();
     server.value().startGrpc(args.grpc_port);
+  } else if (!client.serverLive()) {
+    throw amdinfer::connection_error("Could not connect to server at " +
+                                     server_addr);
   }
   // -start protocol:
 
