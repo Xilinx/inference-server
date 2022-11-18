@@ -31,7 +31,7 @@ To build the production container:
     $ python3 docker/generate.py
     $ ./amdinfer dockerize --production <platform flags>
 
-Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI <vitis_ai:vitis ai>`, :ref:`ZenDNN <zendnn:zendnn>` or :ref:`MIGraphX <migraphx:migraphx>`.
+Depending on what platforms you want to support, add the appropriate flags to enable :doc:`Vitis AI <vitis_ai>`, :doc:`ZenDNN <zendnn>` or :doc:`MIGraphX <migraphx>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
 
 .. important::

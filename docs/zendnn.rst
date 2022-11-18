@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-ZenDNN
-======
+CPUs - ZenDNN
+=============
 
 AMD Inference Server is integrated with `ZenDNN <ZenDNN_>`_ optimized libraries for running inference on AMD EPYC processors with TensorFlow and PyTorch.
 Check the :ref:`examples <zendnn_examples>` to see how to use ZenDNN with the Inference Server.

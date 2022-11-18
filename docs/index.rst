@@ -47,9 +47,9 @@
     :hidden:
     :caption: Platforms
 
+    zendnn
     migraphx
     vitis_ai
-    zendnn
 
 .. toctree::
     :maxdepth: 2

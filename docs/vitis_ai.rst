@@ -14,8 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Vitis AI
-========
+FPGAs - Vitis AI
+================
 
 Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
 
