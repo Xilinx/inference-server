@@ -125,9 +125,6 @@ void XModel::doInit(RequestParameters* parameters) {
   auto path = kPath;
   if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-    if (!util::endsWith(path, ".xmodel")) {
-      path += ".xmodel";
-    }
   }
   util::autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);

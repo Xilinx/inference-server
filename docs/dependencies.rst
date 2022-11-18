@@ -216,8 +216,12 @@ The following packages are downloaded from AMD.
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `TF_v2.9_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
+    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.0/pool/main/m/miopen-hip-dev/miopen-hip-dev_2.15.0.50000-49_amd64.deb>`__,5.0,?,Used by MIGraphX worker\ :superscript:`a 4`
     `PT_v1.11.0_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by PT+ZenDNN worker\ :superscript:`a 3`
+    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.0/pool/main/r/rocblas-dev/rocblas-dev_2.42.0.50000-49_amd64.deb>`__,5.0,?,Used by MIGraphX worker\ :superscript:`a 4`
+    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.0/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50000-49_amd64.deb>`__,5.0,?,Used by MIGraphX worker\ :superscript:`a 4`
+    `TF_v2.9_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
+
 
 Included
 --------

@@ -203,9 +203,6 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   std::string path;
   if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-    if (!util::endsWith(path, ".pb")) {
-      path += ".pb";
-    }
   } else {
     throw invalid_argument("Model not provided in load-time parameters");
   }
