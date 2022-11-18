@@ -1,0 +1,14 @@
+.. _exhale_enum_image__preprocess_8hpp_1adfe0be75a84efed14a2b0142cda01473:
+
+Enum ResizeAlgorithm
+====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: amdinfer::pre_post::ResizeAlgorithm
+   :project: amdinfer

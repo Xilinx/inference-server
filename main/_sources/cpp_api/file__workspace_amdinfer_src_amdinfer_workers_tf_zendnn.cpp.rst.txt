@@ -1,0 +1,138 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp:
+
+File tf_zendnn.cpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_workers>` (``/workspace/amdinfer/src/amdinfer/workers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the TfZendnn worker. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/workers/tf_zendnn.cpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/batching/hard.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.hpp`)
+
+- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+
+- ``chrono``
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring``
+
+- ``functional``
+
+- ``memory``
+
+- ``numeric``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``tensorflow/c/c_api.h``
+
+- ``tensorflow/core/framework/graph.pb.h``
+
+- ``tensorflow/core/framework/tensor.h``
+
+- ``tensorflow/core/framework/tensor_shape.h``
+
+- ``tensorflow/core/framework/tensor_shape.pb.h``
+
+- ``tensorflow/core/framework/tensor_types.h``
+
+- ``tensorflow/core/framework/types.pb.h``
+
+- ``tensorflow/core/platform/env.h``
+
+- ``tensorflow/core/platform/status.h``
+
+- ``tensorflow/core/protobuf/config.pb.h``
+
+- ``tensorflow/core/public/session.h``
+
+- ``tensorflow/core/public/session_options.h``
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``utility``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1workers_1_1TfZendnn`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+
+- :ref:`exhale_function_tf__zendnn_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141`
+

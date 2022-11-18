@@ -1,0 +1,17 @@
+.. _exhale_class_classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4:
+
+Template Class InferenceRequestOutputBuilder< std::shared_ptr< Json::Value > >
+==============================================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::InferenceRequestOutputBuilder< std::shared_ptr< Json::Value > >
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

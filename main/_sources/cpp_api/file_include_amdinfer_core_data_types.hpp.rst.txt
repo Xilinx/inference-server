@@ -1,0 +1,128 @@
+
+.. _file_include_amdinfer_core_data_types.hpp:
+
+File data_types.hpp
+===================
+
+
+Defines the used data types. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/amdinfer/core/data_types.hpp``)
+-----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_amdinfer_core_data_types.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file_include_amdinfer_core_exceptions.hpp`)
+
+- ``cassert``
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``half/half.hpp``
+
+- ``iostream``
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_amdinfer_bindings_python_core_data_types.cpp`
+
+- :ref:`file_src_amdinfer_buffers_buffer.cpp`
+
+- :ref:`file_src_amdinfer_buffers_vector_buffer.hpp`
+
+- :ref:`file_src_amdinfer_clients_grpc.cpp`
+
+- :ref:`file_src_amdinfer_clients_grpc_internal.cpp`
+
+- :ref:`file_src_amdinfer_clients_http_internal.cpp`
+
+- :ref:`file_src_amdinfer_clients_native_internal.cpp`
+
+- :ref:`file_src_amdinfer_core_data_types.cpp`
+
+- :ref:`file_src_amdinfer_observation_observer.hpp`
+
+- :ref:`file_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file_src_amdinfer_workers_aks.cpp`
+
+- :ref:`file_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file_src_amdinfer_workers_echo.cpp`
+
+- :ref:`file_src_amdinfer_workers_echo_multi.cpp`
+
+- :ref:`file_src_amdinfer_workers_invert_image.cpp`
+
+- :ref:`file_src_amdinfer_workers_invert_video.cpp`
+
+- :ref:`file_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file_src_amdinfer_workers_resnet50_stream.cpp`
+
+- :ref:`file_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file_src_amdinfer_workers_xmodel.cpp`
+
+- :ref:`file_include_amdinfer_amdinfer.hpp`
+
+- :ref:`file_include_amdinfer_core_predict_api.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1DataType`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_data__types_8hpp_1aae326a9a1c4392c4eede674a55989e48`
+

@@ -1,0 +1,54 @@
+
+.. _file_src_amdinfer_bindings_python_servers_server.cpp:
+
+File server.cpp
+===============
+
+
+Implements the Python bindings for the server.hpp header. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/bindings/python/servers/server.cpp``)
+----------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_bindings_python_servers_server.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/bindings/python/helpers/docstrings.hpp`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``amdinfer/servers/server.hpp`` (:ref:`file_include_amdinfer_servers_server.hpp`)
+
+- ``pybind11/cast.h``
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+- ``pybind11/stl/filesystem.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

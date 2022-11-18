@@ -1,0 +1,14 @@
+.. _exhale_function_amdinfer_8cpp_1a632ead35f824a7923c791054591f6a31:
+
+Function amdinfer::PYBIND11_MODULE
+==================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_amdinfer.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::PYBIND11_MODULE(_amdinfer, m)
+   :project: amdinfer

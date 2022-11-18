@@ -1,0 +1,17 @@
+.. _exhale_class_classamdinfer_1_1GrpcServer:
+
+Class GrpcServer
+================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::GrpcServer
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

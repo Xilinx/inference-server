@@ -1,0 +1,14 @@
+.. _exhale_function_bindings_2python_2clients_2client_8cpp_1a25d5cb0adad98a8507e1a6cbb50168d3:
+
+Function amdinfer::wrapClient(py::module_&)
+===========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_clients_client.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapClient(py::module_&)
+   :project: amdinfer

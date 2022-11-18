@@ -6,7 +6,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+		<meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.4382/css/CoveoFullSearch.css"/>
@@ -62,11 +62,10 @@ function OptanonWrapper() { }
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
+        <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -81,10 +80,9 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Python" href="python.html" />
-    <link rel="prev" title="REST Endpoints" href="rest.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -294,13 +292,9 @@ function OptanonWrapper() { }
 <li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Factors</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">C++ API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#native">Native</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#grpc">gRPC</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_api/cpp_root.html">C++ API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a></li>
 </ul>
@@ -387,63 +381,96 @@ function OptanonWrapper() { }
            <div itemprop="articleBody">
             
   <section id="c-api">
-<h1>C++ API<a class="headerlink" href="#c-api" title="Permalink to this heading">¶</a></h1>
-<section id="native">
-<h2>Native<a class="headerlink" href="#native" title="Permalink to this heading">¶</a></h2>
-<p>Implements the methods for interacting with the server in the native C++ API. </p>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv48amdinfer">
-<span id="_CPPv38amdinfer"></span><span id="_CPPv28amdinfer"></span><span id="amdinfer"></span><span class="target" id="namespaceamdinfer"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">amdinfer</span></span></span><a class="headerlink" href="#_CPPv48amdinfer" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>The Migraphx worker accepts the name of an migraphx model file as an argument and compiles and evaluates it. </p>
-</dd></dl>
-
-</section>
-<section id="grpc">
-<h2>gRPC<a class="headerlink" href="#grpc" title="Permalink to this heading">¶</a></h2>
-<p>Implements the methods for interacting with the server with gRPC. </p>
+<h1>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h1>
+<section id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClient14GrpcClientImplE">
-<span id="_CPPv3N8amdinfer10GrpcClient14GrpcClientImplE"></span><span id="_CPPv2N8amdinfer10GrpcClient14GrpcClientImplE"></span><span id="amdinfer::GrpcClient::GrpcClientImpl"></span><span class="target" id="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClientImpl</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient14GrpcClientImplE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6ClientE">
+<span id="_CPPv3N8amdinfer6ClientE"></span><span id="_CPPv2N8amdinfer6ClientE"></span><span id="amdinfer::Client"></span><span class="target" id="classamdinfer_1_1Client"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Client</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer6ClientE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Subclassed by <a class="reference internal" href="cpp_api/classamdinfer_1_1GrpcClient.html#classamdinfer_1_1GrpcClient"><span class="std std-ref">amdinfer::GrpcClient</span></a>, <a class="reference internal" href="cpp_api/classamdinfer_1_1HttpClient.html#classamdinfer_1_1HttpClient"><span class="std std-ref">amdinfer::HttpClient</span></a>, <a class="reference internal" href="cpp_api/classamdinfer_1_1NativeClient.html#classamdinfer_1_1NativeClient"><span class="std std-ref">amdinfer::NativeClient</span></a>, <a class="reference internal" href="cpp_api/classamdinfer_1_1WebSocketClient.html#classamdinfer_1_1WebSocketClient"><span class="std std-ref">amdinfer::WebSocketClient</span></a></p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE">
-<span id="_CPPv3N8amdinfer10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE"></span><span id="_CPPv2N8amdinfer10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE"></span><span id="amdinfer::GrpcClient::GrpcClientImpl::GrpcClientImpl__std::shared_ptr:grpc::Channel:CR"></span><span class="target" id="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl_1aa31fffd8b978eb7c053f39db425a9444"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClientImpl</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">grpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Channel</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">channel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient14GrpcClientImpl14GrpcClientImplERKNSt10shared_ptrIN4grpc7ChannelEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6ClientD0Ev">
+<span id="_CPPv3N8amdinfer6ClientD0Ev"></span><span id="_CPPv2N8amdinfer6ClientD0Ev"></span><span id="amdinfer::Client::~Client"></span><span class="target" id="classamdinfer_1_1Client_1ade9d30c8f6e593318dcf426c393a7f6d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Client</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N8amdinfer6ClientD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClient14GrpcClientImpl7getStubEv">
-<span id="_CPPv3N8amdinfer10GrpcClient14GrpcClientImpl7getStubEv"></span><span id="_CPPv2N8amdinfer10GrpcClient14GrpcClientImpl7getStubEv"></span><span id="amdinfer::GrpcClient::GrpcClientImpl::getStub"></span><span class="target" id="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl_1a923de3c2d285c3f3158577e4233a1460"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">inference</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">GRPCInferenceService</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Stub</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getStub</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient14GrpcClientImpl7getStubEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client14serverMetadataEv">
+<span id="_CPPv3NK8amdinfer6Client14serverMetadataEv"></span><span id="_CPPv2NK8amdinfer6Client14serverMetadataEv"></span><span id="amdinfer::Client::serverMetadataC"></span><span class="target" id="classamdinfer_1_1Client_1aa5f4971fe5dd1a3f38ca98e713b046ec"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="cpp_api/structamdinfer_1_1ServerMetadata.html#_CPPv4N8amdinfer14ServerMetadataE" title="amdinfer::ServerMetadata"><span class="n"><span class="pre">ServerMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverMetadata</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client14serverMetadataEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClient14GrpcClientImpl5stub_E">
-<span id="_CPPv3N8amdinfer10GrpcClient14GrpcClientImpl5stub_E"></span><span id="_CPPv2N8amdinfer10GrpcClient14GrpcClientImpl5stub_E"></span><span id="amdinfer::GrpcClient::GrpcClientImpl::stub___std::unique_ptr:inference::GRPCInferenceService::Stub:"></span><span class="target" id="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl_1aef10a5b6cae880d31c16890fc7866df8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">inference</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">GRPCInferenceService</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Stub</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stub_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient14GrpcClientImpl5stub_E" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client10serverLiveEv">
+<span id="_CPPv3NK8amdinfer6Client10serverLiveEv"></span><span id="_CPPv2NK8amdinfer6Client10serverLiveEv"></span><span id="amdinfer::Client::serverLiveC"></span><span class="target" id="classamdinfer_1_1Client_1a5c982e9758fd9dc527680d67226a10d3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverLive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client10serverLiveEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client11serverReadyEv">
+<span id="_CPPv3NK8amdinfer6Client11serverReadyEv"></span><span id="_CPPv2NK8amdinfer6Client11serverReadyEv"></span><span id="amdinfer::Client::serverReadyC"></span><span class="target" id="classamdinfer_1_1Client_1abef55e04258a28a27651c92b0355031f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverReady</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client11serverReadyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client10modelReadyERKNSt6stringE">
+<span id="_CPPv3NK8amdinfer6Client10modelReadyERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer6Client10modelReadyERKNSt6stringE"></span><span id="amdinfer::Client::modelReady__ssCRC"></span><span class="target" id="classamdinfer_1_1Client_1a70a666bf0cca284efcab77cd615d53e8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelReady</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client10modelReadyERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client13modelMetadataERKNSt6stringE">
+<span id="_CPPv3NK8amdinfer6Client13modelMetadataERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer6Client13modelMetadataERKNSt6stringE"></span><span id="amdinfer::Client::modelMetadata__ssCRC"></span><span class="target" id="classamdinfer_1_1Client_1a6a7cb8be22020a38635450a8718cc462"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadataE" title="amdinfer::ModelMetadata"><span class="n"><span class="pre">ModelMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelMetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client13modelMetadataERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client9modelLoadERKNSt6stringEP17RequestParameters">
+<span id="_CPPv3NK8amdinfer6Client9modelLoadERKNSt6stringEP17RequestParameters"></span><span id="_CPPv2NK8amdinfer6Client9modelLoadERKNSt6stringEP17RequestParameters"></span><span id="amdinfer::Client::modelLoad__ssCR.RequestParametersPC"></span><span class="target" id="classamdinfer_1_1Client_1ae210be5a1d031491f4cefc8d150a7594"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <a class="reference internal" href="cpp_api/classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client9modelLoadERKNSt6stringEP17RequestParameters" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client11modelUnloadERKNSt6stringE">
+<span id="_CPPv3NK8amdinfer6Client11modelUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer6Client11modelUnloadERKNSt6stringE"></span><span id="amdinfer::Client::modelUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1Client_1ab85c9723be285d7d8a003782a0ab1629"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client11modelUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client10modelInferERKNSt6stringERK16InferenceRequest">
+<span id="_CPPv3NK8amdinfer6Client10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer6Client10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::Client::modelInfer__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1Client_1a2b5afbee3cd762cfb08d7d0b5833028e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="cpp_api/classamdinfer_1_1InferenceResponse.html#_CPPv4N8amdinfer17InferenceResponseE" title="amdinfer::InferenceResponse"><span class="n"><span class="pre">InferenceResponse</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInfer</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client10modelInferERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client15modelInferAsyncERKNSt6stringERK16InferenceRequest">
+<span id="_CPPv3NK8amdinfer6Client15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer6Client15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::Client::modelInferAsync__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1Client_1a71629ac8a18c9395827b26fcd7cf1187"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="cpp_api/typedef_namespaceamdinfer_1a405b5e55988b1398107e8bdff0fefc3d.html#_CPPv4N8amdinfer23InferenceResponseFutureE" title="amdinfer::InferenceResponseFuture"><span class="n"><span class="pre">InferenceResponseFuture</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInferAsync</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client15modelInferAsyncERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client9modelListEv">
+<span id="_CPPv3NK8amdinfer6Client9modelListEv"></span><span id="_CPPv2NK8amdinfer6Client9modelListEv"></span><span id="amdinfer::Client::modelListC"></span><span class="target" id="classamdinfer_1_1Client_1afdaee90802ed9eaa3734a2718fc3cec9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelList</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client9modelListEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client10workerLoadERKNSt6stringEP17RequestParameters">
+<span id="_CPPv3NK8amdinfer6Client10workerLoadERKNSt6stringEP17RequestParameters"></span><span id="_CPPv2NK8amdinfer6Client10workerLoadERKNSt6stringEP17RequestParameters"></span><span id="amdinfer::Client::workerLoad__ssCR.RequestParametersPC"></span><span class="target" id="classamdinfer_1_1Client_1ac17447c766e41567913046089f170d9d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span>, <a class="reference internal" href="cpp_api/classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client10workerLoadERKNSt6stringEP17RequestParameters" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client12workerUnloadERKNSt6stringE">
+<span id="_CPPv3NK8amdinfer6Client12workerUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer6Client12workerUnloadERKNSt6stringE"></span><span id="amdinfer::Client::workerUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1Client_1ad0265129b8d5381fa4f0d0ff833815ec"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client12workerUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Client11hasHardwareERKNSt6stringEi">
+<span id="_CPPv3NK8amdinfer6Client11hasHardwareERKNSt6stringEi"></span><span id="_CPPv2NK8amdinfer6Client11hasHardwareERKNSt6stringEi"></span><span id="amdinfer::Client::hasHardware__ssCR.iC"></span><span class="target" id="classamdinfer_1_1Client_1a5fc5f3c35616e878dc60dd7271aed5dc"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hasHardware</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Client11hasHardwareERKNSt6stringEi" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
 </dd></dl>
 
-<dl class="cpp type">
-<dt class="sig sig-object cpp">
-<span class="target" id="namespaceamdinfer"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">amdinfer</span></span></span><br /></dt>
-<dd><p>The Migraphx worker accepts the name of an migraphx model file as an argument and compiles and evaluates it. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE">
-<span id="_CPPv3N8amdinfer23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE"></span><span id="_CPPv2N8amdinfer23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE"></span><span id="amdinfer::mapProtoToModelMetadata__inference::ModelMetadataResponseCR"></span><span class="target" id="namespaceamdinfer_1abca66df04c11d0bd7baee5bafb8d27ec"></span><span class="n"><span class="pre">ModelMetadata</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mapProtoToModelMetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">inference</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ModelMetadataResponse</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">resp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClientE">
+<span id="_CPPv3N8amdinfer10GrpcClientE"></span><span id="_CPPv2N8amdinfer10GrpcClientE"></span><span id="amdinfer::GrpcClient"></span><span class="target" id="classamdinfer_1_1GrpcClient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClient</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">amdinfer</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N8amdinfer6ClientE" title="amdinfer::Client"><span class="n"><span class="pre">Client</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClientE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClient14GrpcClientImplE">
+<span id="_CPPv3N8amdinfer10GrpcClient14GrpcClientImplE"></span><span id="_CPPv2N8amdinfer10GrpcClient14GrpcClientImplE"></span><span id="amdinfer::GrpcClient::GrpcClientImpl"></span><span class="target" id="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClientImpl</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient14GrpcClientImplE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest">
-<span id="_CPPv3N8amdinfer12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2N8amdinfer12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::runInference__inference::GRPCInferenceService::StubP.ssCR.InferenceRequestCR"></span><span class="target" id="namespaceamdinfer_1a575422378564fcee9c41fc4ecf1026d4"></span><span class="n"><span class="pre">InferenceResponse</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">runInference</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">inference</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">GRPCInferenceService</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Stub</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stub</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">InferenceRequest</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-</div>
 </dd></dl>
 
 </section>
@@ -463,22 +490,13 @@ function OptanonWrapper() { }
 
 	  <!-- Sphinx Page Footer block -->
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="python.html" class="btn btn-neutral float-right" title="Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="rest.html" class="btn btn-neutral float-left" title="REST Endpoints" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 17, 2022.
+        Last updated on November 18, 2022.
       </span>
 
     </p>

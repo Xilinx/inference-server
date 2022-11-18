@@ -1,0 +1,80 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_bindings_python_pre_post_pre_post.cpp:
+
+File pre_post.cpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_bindings_python_pre_post>` (``/workspace/amdinfer/src/amdinfer/bindings/python/pre_post``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the Python bindings for pre_post. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/bindings/python/pre_post/pre_post.cpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_bindings_python_pre_post_pre_post.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/bindings/python/helpers/docstrings.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/pre_post/image_preprocess.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp`)
+
+- ``amdinfer/pre_post/resnet50_postprocess.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_pre_post_resnet50_postprocess.hpp`)
+
+- ``pybind11/cast.h``
+
+- ``pybind11/numpy.h``
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_pre__post_8cpp_1aa1578d0042df559178ec75b6c85d41bc`
+
+- :ref:`exhale_function_pre__post_8cpp_1af44ee8945faf20d5230009aab6786601`
+
+- :ref:`exhale_function_pre__post_8cpp_1ad3dfbe9d07326bd56edfa4cedbc74b85`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_pre__post_8cpp_1ab9a93cdcbaf14280d0a9db62acfa1ec1`
+

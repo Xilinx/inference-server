@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1invalid__argument:
+
+Class invalid_argument
+======================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::runtime_error`` (:ref:`exhale_class_classamdinfer_1_1runtime__error`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::invalid_argument
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

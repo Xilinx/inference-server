@@ -1,0 +1,14 @@
+.. _exhale_typedef_namespaceamdinfer_1a0b08557614072d06cab7624a903fd723:
+
+Typedef amdinfer::InterfacePtr
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::InterfacePtr
+   :project: amdinfer

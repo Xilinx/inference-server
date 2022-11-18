@@ -1,0 +1,59 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_bindings_python_clients_client.cpp:
+
+File client.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_bindings_python_clients>` (``/workspace/amdinfer/src/amdinfer/bindings/python/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the Python bindings for the :ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp` header. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/bindings/python/clients/client.cpp``)
+------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_bindings_python_clients_client.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/client.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_client.hpp`)
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_bindings_2python_2clients_2client_8cpp_1a25d5cb0adad98a8507e1a6cbb50168d3`
+

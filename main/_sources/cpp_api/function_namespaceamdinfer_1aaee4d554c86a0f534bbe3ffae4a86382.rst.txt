@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1aaee4d554c86a0f534bbe3ffae4a86382:
+
+Function amdinfer::initialize
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::initialize()
+   :project: amdinfer

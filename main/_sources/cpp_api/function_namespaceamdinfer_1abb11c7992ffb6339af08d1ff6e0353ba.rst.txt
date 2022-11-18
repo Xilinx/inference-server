@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1abb11c7992ffb6339af08d1ff6e0353ba:
+
+Function amdinfer::createInferenceRequest
+=========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::createInferenceRequest(const std::string&, const InferenceRequest&, const StringMap&)
+   :project: amdinfer

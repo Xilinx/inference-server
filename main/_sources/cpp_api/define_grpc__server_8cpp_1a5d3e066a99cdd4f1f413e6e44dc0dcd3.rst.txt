@@ -1,0 +1,14 @@
+.. _exhale_define_grpc__server_8cpp_1a5d3e066a99cdd4f1f413e6e44dc0dcd3:
+
+Define CALLDATA_IMPL
+====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: CALLDATA_IMPL
+   :project: amdinfer

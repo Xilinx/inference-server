@@ -1,0 +1,17 @@
+.. _exhale_struct_structamdinfer_1_1WriteData:
+
+Struct WriteData
+================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::WriteData
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

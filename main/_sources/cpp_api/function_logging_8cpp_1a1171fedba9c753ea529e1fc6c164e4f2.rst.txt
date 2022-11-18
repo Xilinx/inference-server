@@ -1,0 +1,14 @@
+.. _exhale_function_logging_8cpp_1a1171fedba9c753ea529e1fc6c164e4f2:
+
+Function amdinfer::initLogger
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::initLogger(const LogOptions&)
+   :project: amdinfer

@@ -1,0 +1,14 @@
+.. _exhale_function_clients_2client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93:
+
+Function amdinfer::initializeClientLogging
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::initializeClientLogging()
+   :project: amdinfer

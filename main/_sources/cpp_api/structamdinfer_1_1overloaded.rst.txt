@@ -1,0 +1,27 @@
+.. _exhale_struct_structamdinfer_1_1overloaded:
+
+Template Struct overloaded
+==========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public Ts``
+- ``public Ts``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::overloaded
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

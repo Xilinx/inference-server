@@ -1,0 +1,71 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp:
+
+File model_repository.hpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/model_repository.hpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``efsw/efsw.hpp``
+
+- ``filesystem``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1ModelRepository`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl`
+
+- :ref:`exhale_class_classamdinfer_1_1UpdateListener`
+

@@ -1,0 +1,17 @@
+.. _exhale_struct_structamdinfer_1_1pre__post_1_1ImagePreprocessOptions:
+
+Template Struct ImagePreprocessOptions
+======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::pre_post::ImagePreprocessOptions
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

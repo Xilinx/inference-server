@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a406f7e61f45b6235bfb981735ff1f434:
+
+Function amdinfer::wrapExceptions(py::module_&)
+===============================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_core_exceptions.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapExceptions(py::module_&)
+   :project: amdinfer

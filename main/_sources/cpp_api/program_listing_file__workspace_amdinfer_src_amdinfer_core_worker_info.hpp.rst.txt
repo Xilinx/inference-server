@@ -1,0 +1,101 @@
+
+.. _program_listing_file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp:
+
+Program Listing for File worker_info.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp>` (``/workspace/amdinfer/src/amdinfer/core/worker_info.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2021 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_CORE_WORKER_INFO
+   #define GUARD_AMDINFER_CORE_WORKER_INFO
+   
+   #include <cstddef>  // for size_t
+   #include <map>      // for map
+   #include <memory>   // for unique_ptr
+   #include <string>   // for string
+   #include <thread>   // for thread, thread::id
+   #include <vector>   // for vector
+   
+   #include "amdinfer/declarations.hpp"  // for BufferPtr
+   #include "amdinfer/util/queue.hpp"    // for BufferPtrsQueuePtr
+   
+   namespace amdinfer {
+   class Batcher;
+   class RequestParameters;
+   namespace workers {
+   class Worker;
+   }  // namespace workers
+   }  // namespace amdinfer
+   
+   namespace amdinfer {
+   
+   class WorkerInfo {
+    public:
+     WorkerInfo(const std::string& name, RequestParameters* parameters);
+     ~WorkerInfo();                           
+     WorkerInfo(WorkerInfo const&) = delete;  
+     WorkerInfo& operator=(const WorkerInfo&) = delete;
+     WorkerInfo(WorkerInfo&& other) = delete;  
+     WorkerInfo& operator=(WorkerInfo&& other) = delete;
+   
+     Batcher* getBatcher();
+     void join(std::thread::id id);
+     void joinAll();  
+   
+     void addAndStartWorker(const std::string& name,
+                            RequestParameters* parameters);
+   
+     void unload();
+     void shutdown();
+   
+     [[nodiscard]] BufferPtrs getInputBuffer() const;
+     [[nodiscard]] BufferPtrs getOutputBuffer() const;
+     void putInputBuffer(BufferPtrs buffer) const;
+     void putOutputBuffer(BufferPtrs buffer) const;
+   
+     [[nodiscard]] bool inputSizeValid(size_t size) const;
+   
+     [[nodiscard]] auto getBufferNum() const { return this->buffer_num_; }
+   
+     [[nodiscard]] auto getMaxBufferNum() const { return this->max_buffer_num_; }
+   
+     void allocate(size_t request_size);
+   
+     size_t getGroupSize() const;
+   
+     [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
+   
+    private:
+     std::map<std::thread::id, std::thread> worker_threads_;
+     std::map<std::thread::id, workers::Worker*> workers_;
+     std::vector<std::unique_ptr<Batcher>> batchers_;
+     BufferPtrsQueuePtr input_buffer_ptr_;
+     BufferPtrsQueuePtr output_buffer_ptr_;
+     size_t buffer_num_ = 0;
+     size_t max_buffer_num_ = 0;
+     size_t batch_size_ = 1;
+   
+     friend class Manager;
+   };
+   
+   }  // namespace amdinfer
+   #endif  // GUARD_AMDINFER_CORE_WORKER_INFO

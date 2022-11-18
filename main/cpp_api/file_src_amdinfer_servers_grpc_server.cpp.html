@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>File grpc_server.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="../index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">AMD Inference Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../performance_factors.html">Factors</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_root.html">Code Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>File grpc_server.cpp</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp_api/file_src_amdinfer_servers_grpc_server.cpp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-grpc-server-cpp">
+<span id="file-src-amdinfer-servers-grpc-server-cpp"></span><h1>File grpc_server.cpp<a class="headerlink" href="#file-grpc-server-cpp" title="Permalink to this headline">¶</a></h1>
+<p>Implements the gRPC server.</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-src-amdinfer-servers-grpc-server-cpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/grpc_server.cpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
+<li><p><a class="reference internal" href="#defines" id="id6">Defines</a></p></li>
+<li><p><a class="reference internal" href="#typedefs" id="id7">Typedefs</a></p></li>
+</ul>
+</div>
+<section id="definition-src-amdinfer-servers-grpc-server-cpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/grpc_server.cpp</span></code>)<a class="headerlink" href="#definition-src-amdinfer-servers-grpc-server-cpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_src_amdinfer_servers_grpc_server.cpp.html">Program Listing for File grpc_server.cpp</a></li>
+</ul>
+</div>
+</section>
+<section id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/buffers/buffer.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_buffers_buffer.hpp.html#file-src-amdinfer-buffers-buffer-hpp"><span class="std std-ref">File buffer.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/build_options.hpp</span></code> (<a class="reference internal" href="file_include_amdinfer_build_options.hpp.html#file-include-amdinfer-build-options-hpp"><span class="std std-ref">File build_options.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/clients/grpc_internal.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_clients_grpc_internal.hpp.html#file-src-amdinfer-clients-grpc-internal-hpp"><span class="std std-ref">File grpc_internal.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/api.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_core_api.hpp.html#file-src-amdinfer-core-api-hpp"><span class="std std-ref">File api.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/data_types.hpp</span></code> (<a class="reference internal" href="file_include_amdinfer_core_data_types.hpp.html#file-include-amdinfer-core-data-types-hpp"><span class="std std-ref">File data_types.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/exceptions.hpp</span></code> (<a class="reference internal" href="file_include_amdinfer_core_exceptions.hpp.html#file-include-amdinfer-core-exceptions-hpp"><span class="std std-ref">File exceptions.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/interface.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_core_interface.hpp.html#file-src-amdinfer-core-interface-hpp"><span class="std std-ref">File interface.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/predict_api_internal.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_core_predict_api_internal.hpp.html#file-src-amdinfer-core-predict-api-internal-hpp"><span class="std std-ref">File predict_api_internal.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/declarations.hpp</span></code> (<a class="reference internal" href="file_include_amdinfer_declarations.hpp.html#file-include-amdinfer-declarations-hpp"><span class="std std-ref">File declarations.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/logging.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_observation_logging.hpp.html#file-src-amdinfer-observation-logging-hpp"><span class="std std-ref">File logging.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/tracing.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_observation_tracing.hpp.html#file-src-amdinfer-observation-tracing-hpp"><span class="std std-ref">File tracing.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/servers/grpc_server.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_servers_grpc_server.hpp.html#file-src-amdinfer-servers-grpc-server-hpp"><span class="std std-ref">File grpc_server.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/string.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_util_string.hpp.html#file-src-amdinfer-util-string-hpp"><span class="std std-ref">File string.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/traits.hpp</span></code> (<a class="reference internal" href="file_src_amdinfer_util_traits.hpp.html#file-src-amdinfer-util-traits-hpp"><span class="std std-ref">File traits.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cstddef</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cstdint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cstring</span></code> (<a class="reference internal" href="file_src_amdinfer_bindings_python_helpers_docstrings.hpp.html#file-src-amdinfer-bindings-python-helpers-docstrings-hpp"><span class="std std-ref">File docstrings.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exception</span></code> (<a class="reference internal" href="file_src_amdinfer_bindings_python_core_exceptions.cpp.html#file-src-amdinfer-bindings-python-core-exceptions-cpp"><span class="std std-ref">File exceptions.cpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">functional</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">google/protobuf/repeated_ptr_field.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grpc/support/log.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grpcpp/grpcpp.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iostream</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict_api.grpc.pb.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict_api.pb.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span></code> (<a class="reference internal" href="file_src_amdinfer_bindings_python_helpers_docstrings.hpp.html#file-src-amdinfer-bindings-python-helpers-docstrings-hpp"><span class="std std-ref">File docstrings.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">thread</span></code> (<a class="reference internal" href="file_src_amdinfer_util_thread.hpp.html#file-src-amdinfer-util-thread-hpp"><span class="std std-ref">File thread.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unordered_set</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">utility</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vector</span></code> (<a class="reference internal" href="file_src_amdinfer_buffers_vector_buffer.cpp.html#file-src-amdinfer-buffers-vector-buffer-cpp"><span class="std std-ref">File vector_buffer.cpp</span></a>)</p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_amdinfer.html#namespace-amdinfer"><span class="std std-ref">Namespace amdinfer</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_amdinfer__grpc.html#namespace-amdinfer-grpc"><span class="std std-ref">Namespace amdinfer::grpc</span></a></p></li>
+</ul>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="structamdinfer_1_1WriteData.html#exhale-struct-structamdinfer-1-1writedata"><span class="std std-ref">Struct WriteData</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallData.html#exhale-class-classamdinfer-1-1calldata"><span class="std std-ref">Template Class CallData</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataBase.html#exhale-class-classamdinfer-1-1calldatabase"><span class="std std-ref">Class CallDataBase</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataHasHardware.html#exhale-class-classamdinfer-1-1calldatahashardware"><span class="std std-ref">Class CallDataHasHardware</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataModelInfer.html#exhale-class-classamdinfer-1-1calldatamodelinfer"><span class="std std-ref">Class CallDataModelInfer</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataModelList.html#exhale-class-classamdinfer-1-1calldatamodellist"><span class="std std-ref">Class CallDataModelList</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataModelLoad.html#exhale-class-classamdinfer-1-1calldatamodelload"><span class="std std-ref">Class CallDataModelLoad</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataModelMetadata.html#exhale-class-classamdinfer-1-1calldatamodelmetadata"><span class="std std-ref">Class CallDataModelMetadata</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataModelReady.html#exhale-class-classamdinfer-1-1calldatamodelready"><span class="std std-ref">Class CallDataModelReady</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataModelUnload.html#exhale-class-classamdinfer-1-1calldatamodelunload"><span class="std std-ref">Class CallDataModelUnload</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataServerLive.html#exhale-class-classamdinfer-1-1calldataserverlive"><span class="std std-ref">Class CallDataServerLive</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataServerMetadata.html#exhale-class-classamdinfer-1-1calldataservermetadata"><span class="std std-ref">Class CallDataServerMetadata</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataServerReady.html#exhale-class-classamdinfer-1-1calldataserverready"><span class="std std-ref">Class CallDataServerReady</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataServerStream.html#exhale-class-classamdinfer-1-1calldataserverstream"><span class="std std-ref">Template Class CallDataServerStream</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataUnary.html#exhale-class-classamdinfer-1-1calldataunary"><span class="std std-ref">Template Class CallDataUnary</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataWorkerLoad.html#exhale-class-classamdinfer-1-1calldataworkerload"><span class="std std-ref">Class CallDataWorkerLoad</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1CallDataWorkerUnload.html#exhale-class-classamdinfer-1-1calldataworkerunload"><span class="std std-ref">Class CallDataWorkerUnload</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1GrpcApiUnary.html#exhale-class-classamdinfer-1-1grpcapiunary"><span class="std std-ref">Class GrpcApiUnary</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1GrpcServer.html#exhale-class-classamdinfer-1-1grpcserver"><span class="std std-ref">Class GrpcServer</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4.html#exhale-class-classamdinfer-1-1inferencerequestbuilder-3-01calldatamodelinfer-01-5-01-4"><span class="std std-ref">Template Class InferenceRequestBuilder&lt; CallDataModelInfer * &gt;</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4.html#exhale-class-classamdinfer-1-1inferencerequestinputbuilder-3-01inference-1-1modelinferrequest-inferinputtensor-01-4"><span class="std std-ref">Template Class InferenceRequestInputBuilder&lt; inference::ModelInferRequest_InferInputTensor &gt;</span></a></p></li>
+</ul>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_grpc__server_8cpp_1af2f2b9dcdbdb51142654acff7134fe47.html#exhale-function-grpc-server-8cpp-1af2f2b9dcdbdb51142654acff7134fe47"><span class="std std-ref">Function amdinfer::grpc::start</span></a></p></li>
+<li><p><a class="reference internal" href="function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1.html#exhale-function-grpc-server-8cpp-1a15ea0fa3e0ee2783642361b4e46de4b1"><span class="std std-ref">Function amdinfer::grpc::stop</span></a></p></li>
+</ul>
+</section>
+<section id="defines">
+<h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="define_grpc__server_8cpp_1a5d3e066a99cdd4f1f413e6e44dc0dcd3.html#exhale-define-grpc-server-8cpp-1a5d3e066a99cdd4f1f413e6e44dc0dcd3"><span class="std std-ref">Define CALLDATA_IMPL</span></a></p></li>
+<li><p><a class="reference internal" href="define_grpc__server_8cpp_1aa8804898829de032ded6a07028b0af36.html#exhale-define-grpc-server-8cpp-1aa8804898829de032ded6a07028b0af36"><span class="std std-ref">Define CALLDATA_IMPL_END</span></a></p></li>
+</ul>
+</section>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1aa3ba85be01ef9f3abcaf7b476cf8d588.html#exhale-typedef-grpc-server-8cpp-1aa3ba85be01ef9f3abcaf7b476cf8d588"><span class="std std-ref">Typedef Server</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1a3b67a1f4b15f6f8988d8e5172649fb00.html#exhale-typedef-grpc-server-8cpp-1a3b67a1f4b15f6f8988d8e5172649fb00"><span class="std std-ref">Typedef ServerAsyncResponseWriter</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1a2571f3485e82379ee4c555e64c58dc32.html#exhale-typedef-grpc-server-8cpp-1a2571f3485e82379ee4c555e64c58dc32"><span class="std std-ref">Typedef ServerBuilder</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1a522cc0269bb90723a0841f2d0a2be7fb.html#exhale-typedef-grpc-server-8cpp-1a522cc0269bb90723a0841f2d0a2be7fb"><span class="std std-ref">Typedef ServerCompletionQueue</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1a0795844bf8bd399665e38979b3bbe186.html#exhale-typedef-grpc-server-8cpp-1a0795844bf8bd399665e38979b3bbe186"><span class="std std-ref">Typedef ServerContext</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1aa51ad0e9f1a23127a07cdfc18412904d.html#exhale-typedef-grpc-server-8cpp-1aa51ad0e9f1a23127a07cdfc18412904d"><span class="std std-ref">Typedef StatusCode</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on November 18, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

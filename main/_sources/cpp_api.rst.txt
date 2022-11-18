@@ -17,14 +17,26 @@
 C++ API
 =======
 
-Native
-------
+Clients
+-------
 
-..
-    for some reason, native.hpp doesn't show up in sphinx
-.. doxygenfile:: amdinfer/clients/native.cpp
+.. doxygenclass:: amdinfer::Client
+    :members:
+    :undoc-members:
 
-gRPC
-----
+.. doxygenclass:: amdinfer::GrpcClient
+    :members:
+    :undoc-members:
+    :membergroups: public
 
-.. doxygenfile:: amdinfer/clients/grpc.cpp
+.. Native
+.. ------
+
+.. ..
+..     for some reason, native.hpp doesn't show up in sphinx
+.. .. doxygenfile:: amdinfer/clients/native.cpp
+
+.. gRPC
+.. ----
+
+.. .. doxygenfile:: amdinfer/clients/grpc.cpp

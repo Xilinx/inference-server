@@ -1,0 +1,89 @@
+
+.. _file_src_amdinfer_batching_soft.cpp:
+
+File soft.cpp
+=============
+
+
+Implements the soft batcher. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/batching/soft.cpp``)
+-----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_batching_soft.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/batching/soft.hpp`` (:ref:`file_src_amdinfer_batching_soft.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/interface.hpp`` (:ref:`file_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/queue.hpp`` (:ref:`file_src_amdinfer_util_queue.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file_src_amdinfer_util_thread.hpp`)
+
+- ``chrono``
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``memory``
+
+- ``ratio`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``utility``
+
+- ``vector`` (:ref:`file_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_soft_8cpp_1a668387f6df1819f5cb56113bdd3ef62a`
+

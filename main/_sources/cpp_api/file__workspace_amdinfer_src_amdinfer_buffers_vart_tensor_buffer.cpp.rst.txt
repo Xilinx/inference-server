@@ -1,0 +1,50 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.cpp:
+
+File vart_tensor_buffer.cpp
+===========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_buffers>` (``/workspace/amdinfer/src/amdinfer/buffers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the VartTensorBuffer class. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/buffers/vart_tensor_buffer.cpp``)
+--------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/buffers/vart_tensor_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp`)
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

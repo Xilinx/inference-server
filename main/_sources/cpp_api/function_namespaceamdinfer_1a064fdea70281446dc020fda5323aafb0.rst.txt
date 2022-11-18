@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a064fdea70281446dc020fda5323aafb0:
+
+Function amdinfer::wrapNativeClient(py::module_&)
+=================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_clients_native.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapNativeClient(py::module_&)
+   :project: amdinfer

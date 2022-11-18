@@ -1,0 +1,83 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp:
+
+File buffer.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_buffers>` (``/workspace/amdinfer/src/amdinfer/buffers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines how inference requests made to the server should store their tensor data: using subclasses of the Buffer class. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/buffers/buffer.hpp``)
+--------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1Buffer`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_http__internal_8cpp_1a6ea39202392964e0277721028771d11a:
+
+Function amdinfer::ModelMetadataToJson
+======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::ModelMetadataToJson(const ModelMetadata&)
+   :project: amdinfer

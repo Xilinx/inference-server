@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1ae231af8dac377878fed3388940b20b87:
+
+Function amdinfer::wrapModelMetadata
+====================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_core_predict_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapModelMetadata(py::module_&)
+   :project: amdinfer

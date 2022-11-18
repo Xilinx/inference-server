@@ -1,0 +1,14 @@
+.. _exhale_function_bindings_2python_2core_2predict__api_8cpp_1a3cc8488a3165119a2fce17ffa8bb124a:
+
+Function amdinfer::wrapInferenceRequestInput
+============================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_core_predict_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapInferenceRequestInput(py::module_&)
+   :project: amdinfer

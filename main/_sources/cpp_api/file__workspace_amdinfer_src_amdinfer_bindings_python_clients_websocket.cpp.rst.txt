@@ -1,0 +1,63 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_bindings_python_clients_websocket.cpp:
+
+File websocket.cpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_bindings_python_clients>` (``/workspace/amdinfer/src/amdinfer/bindings/python/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the Python bindings for the websocket client. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/bindings/python/clients/websocket.cpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_bindings_python_clients_websocket.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/bindings/python/helpers/docstrings.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``amdinfer/clients/websocket.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp`)
+
+- ``pybind11/cast.h``
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_bindings_2python_2clients_2websocket_8cpp_1a699fa6a22d77378c19f7ef437e8d3ad5`
+

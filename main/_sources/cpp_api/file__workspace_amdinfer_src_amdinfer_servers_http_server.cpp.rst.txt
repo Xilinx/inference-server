@@ -1,0 +1,99 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp:
+
+File http_server.cpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_servers>` (``/workspace/amdinfer/src/amdinfer/servers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the HTTP REST server. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/servers/http_server.cpp``)
+-------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/http_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`)
+
+- ``amdinfer/core/api.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/servers/http_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`)
+
+- ``amdinfer/servers/websocket_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``chrono``
+
+- ``drogon/HttpAppFramework.h``
+
+- ``drogon/HttpRequest.h``
+
+- ``json/value.h``
+
+- ``memory``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``trantor/utils/Logger.h``
+
+- ``unordered_set``
+
+- ``utility``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer__http`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_http__server_8cpp_1ac92ce920719257b547b656e4a2cc57ac`
+
+- :ref:`exhale_function_http__server_8cpp_1a024aac815aaac4c7a062bd1afa1d5efc`
+

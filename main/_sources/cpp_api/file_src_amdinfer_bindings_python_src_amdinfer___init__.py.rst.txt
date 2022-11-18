@@ -1,0 +1,36 @@
+
+.. _file_src_amdinfer_bindings_python_src_amdinfer___init__.py:
+
+File __init__.py
+================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/bindings/python/src/amdinfer/__init__.py``)
+----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_bindings_python_src_amdinfer___init__.py.rst
+
+
+
+
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace__amdinfer`
+
+- :ref:`namespace_amdinfer`
+

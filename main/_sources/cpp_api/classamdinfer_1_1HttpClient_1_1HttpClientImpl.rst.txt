@@ -1,0 +1,23 @@
+.. _exhale_class_classamdinfer_1_1HttpClient_1_1HttpClientImpl:
+
+Class HttpClient::HttpClientImpl
+================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+
+Nested Relationships
+--------------------
+
+This class is a nested type of :ref:`exhale_class_classamdinfer_1_1HttpClient`.
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::HttpClient::HttpClientImpl
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

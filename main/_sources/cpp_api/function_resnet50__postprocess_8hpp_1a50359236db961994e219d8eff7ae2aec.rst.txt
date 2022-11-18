@@ -1,0 +1,14 @@
+.. _exhale_function_resnet50__postprocess_8hpp_1a50359236db961994e219d8eff7ae2aec:
+
+Template Function amdinfer::pre_post::resnet50Postprocess
+=========================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_resnet50_postprocess.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::pre_post::resnet50Postprocess(const T *, size_t, int)
+   :project: amdinfer

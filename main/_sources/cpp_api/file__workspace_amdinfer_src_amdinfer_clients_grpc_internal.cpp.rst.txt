@@ -1,0 +1,106 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp:
+
+File grpc_internal.cpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_clients>` (``/workspace/amdinfer/src/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the internal objects used for gRPC. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/clients/grpc_internal.cpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/grpc_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
+
+- ``amdinfer/util/traits.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``google/protobuf/repeated_ptr_field.h``
+
+- ``iostream``
+
+- ``memory``
+
+- ``predict_api.pb.h``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1AddDataToTensor`
+
+- :ref:`exhale_struct_structamdinfer_1_1overloaded`
+
+- :ref:`exhale_struct_structamdinfer_1_1SetOutputData`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a29423446a13fe8f7300565cce516b05e`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a370f1b4a6348b2265e44bec053e75397`
+

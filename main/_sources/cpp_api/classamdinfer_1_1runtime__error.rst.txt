@@ -1,0 +1,37 @@
+.. _exhale_class_classamdinfer_1_1runtime__error:
+
+Class runtime_error
+===================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public runtime_error``
+
+
+Derived Types
+*************
+
+- ``public amdinfer::bad_status`` (:ref:`exhale_class_classamdinfer_1_1bad__status`)
+- ``public amdinfer::environment_not_set_error`` (:ref:`exhale_class_classamdinfer_1_1environment__not__set__error`)
+- ``public amdinfer::external_error`` (:ref:`exhale_class_classamdinfer_1_1external__error`)
+- ``public amdinfer::file_not_found_error`` (:ref:`exhale_class_classamdinfer_1_1file__not__found__error`)
+- ``public amdinfer::file_read_error`` (:ref:`exhale_class_classamdinfer_1_1file__read__error`)
+- ``public amdinfer::invalid_argument`` (:ref:`exhale_class_classamdinfer_1_1invalid__argument`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::runtime_error
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

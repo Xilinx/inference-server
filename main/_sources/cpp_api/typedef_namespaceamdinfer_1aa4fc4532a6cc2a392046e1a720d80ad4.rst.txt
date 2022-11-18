@@ -1,0 +1,14 @@
+.. _exhale_typedef_namespaceamdinfer_1aa4fc4532a6cc2a392046e1a720d80ad4:
+
+Typedef amdinfer::Kernels
+=========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::Kernels
+   :project: amdinfer

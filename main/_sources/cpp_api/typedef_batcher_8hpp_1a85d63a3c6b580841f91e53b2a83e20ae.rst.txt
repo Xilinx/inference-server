@@ -1,0 +1,14 @@
+.. _exhale_typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae:
+
+Typedef amdinfer::BatchPtr
+==========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::BatchPtr
+   :project: amdinfer

@@ -1,0 +1,14 @@
+.. _exhale_function_softmax_8hpp_1a0751a3e558d4dc26bd1a8ca8c5f222d3:
+
+Template Function amdinfer::pre_post::calc_softmax
+==================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::pre_post::calc_softmax(const T *, size_t, double *)
+   :project: amdinfer

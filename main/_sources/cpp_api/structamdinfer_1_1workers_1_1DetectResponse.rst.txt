@@ -1,0 +1,17 @@
+.. _exhale_struct_structamdinfer_1_1workers_1_1DetectResponse:
+
+Struct DetectResponse
+=====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::workers::DetectResponse
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

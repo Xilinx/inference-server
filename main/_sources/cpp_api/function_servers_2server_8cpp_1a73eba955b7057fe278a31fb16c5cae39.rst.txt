@@ -1,0 +1,14 @@
+.. _exhale_function_servers_2server_8cpp_1a73eba955b7057fe278a31fb16c5cae39:
+
+Function amdinfer::terminate
+============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::terminate()
+   :project: amdinfer

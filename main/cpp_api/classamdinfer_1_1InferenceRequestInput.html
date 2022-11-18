@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Class InferenceRequestInput &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class InferenceRequestInputBuilder" href="classamdinfer_1_1InferenceRequestInputBuilder.html" />
+    <link rel="prev" title="Template Class InferenceRequestBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;" href="classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="../index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">AMD Inference Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../performance_factors.html">Factors</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1AddDataToTensor.html">Struct AddDataToTensor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1InferenceRequestInputSizes.html">Struct InferenceRequestInputSizes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1LogOptions.html">Struct LogOptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1Observer.html">Struct Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1overloaded.html">Template Struct overloaded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1pre__post_1_1ImagePreprocessOptions.html">Template Struct ImagePreprocessOptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1Server_1_1ServerImpl.html">Struct Server::ServerImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1ServerMetadata.html">Struct ServerMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1SetInputData.html">Struct SetInputData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1SetOutputData.html">Struct SetOutputData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1UpdateCommand.html">Struct UpdateCommand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1util_1_1is__any.html">Template Struct is_any</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1workers_1_1DetectResponse.html">Struct DetectResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1WriteData.html">Struct WriteData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structstd_1_1less_3_01amdinfer_1_1RequestParameters_01_4.html">Template Struct less&lt; amdinfer::RequestParameters &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1bad__status.html">Class bad_status</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Batch.html">Class Batch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Batcher.html">Class Batcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Buffer.html">Class Buffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallData.html">Template Class CallData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataBase.html">Class CallDataBase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataHasHardware.html">Class CallDataHasHardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelInfer.html">Class CallDataModelInfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelList.html">Class CallDataModelList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelLoad.html">Class CallDataModelLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelMetadata.html">Class CallDataModelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelReady.html">Class CallDataModelReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelUnload.html">Class CallDataModelUnload</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerLive.html">Class CallDataServerLive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerMetadata.html">Class CallDataServerMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerReady.html">Class CallDataServerReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerStream.html">Template Class CallDataServerStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataUnary.html">Template Class CallDataUnary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataWorkerLoad.html">Class CallDataWorkerLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataWorkerUnload.html">Class CallDataWorkerUnload</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Client.html">Class Client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1connection__error.html">Class connection_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CppNativeApi.html">Class CppNativeApi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1DataType.html">Class DataType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1DrogonHttp.html">Class DrogonHttp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1environment__not__set__error.html">Class environment_not_set_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1external__error.html">Class external_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1file__not__found__error.html">Class file_not_found_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1file__read__error.html">Class file_read_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcApiUnary.html">Class GrpcApiUnary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcClient.html">Class GrpcClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl.html">Class GrpcClient::GrpcClientImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcServer.html">Class GrpcServer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1HardBatcher.html">Class HardBatcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1http_1_1DrogonWs.html">Class DrogonWs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1http_1_1WebsocketServer.html">Class WebsocketServer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1HttpClient.html">Class HttpClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1HttpClient_1_1HttpClientImpl.html">Class HttpClient::HttpClientImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html">Class InferenceRequest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder.html">Template Class InferenceRequestBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4.html">Template Class InferenceRequestBuilder&lt; CallDataModelInfer * &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01InferenceRequest_01_4.html">Template Class InferenceRequestBuilder&lt; InferenceRequest &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html">Template Class InferenceRequestBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Class InferenceRequestInput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder.html">Template Class InferenceRequestInputBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4.html">Template Class InferenceRequestInputBuilder&lt; inference::ModelInferRequest_InferInputTensor &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4.html">Template Class InferenceRequestInputBuilder&lt; InferenceRequestInput &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html">Template Class InferenceRequestInputBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestOutput.html">Class InferenceRequestOutput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestOutputBuilder.html">Template Class InferenceRequestOutputBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html">Template Class InferenceRequestOutputBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceResponse.html">Class InferenceResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Interface.html">Class Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1invalid__argument.html">Class invalid_argument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Logger.html">Class Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Manager.html">Class Manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Manager_1_1Endpoints.html">Class Manager::Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelMetadata.html">Class ModelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelMetadataTensor.html">Class ModelMetadataTensor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelRepository.html">Class ModelRepository</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl.html">Class ModelRepository::ModelRepositoryImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1NativeClient.html">Class NativeClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1RequestParameters.html">Class RequestParameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1runtime__error.html">Class runtime_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Serializable.html">Class Serializable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Server.html">Class Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1SoftBatcher.html">Class SoftBatcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1UpdateListener.html">Class UpdateListener</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1VartTensorBuffer.html">Class VartTensorBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1VectorBuffer.html">Class VectorBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1WebSocketClient.html">Class WebSocketClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.html">Class WebSocketClient::WebSocketClientImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1WorkerInfo.html">Class WorkerInfo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1Aks.html">Class Aks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetect.html">Class AksDetect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetectStream.html">Class AksDetectStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1Echo.html">Class Echo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1EchoMulti.html">Class EchoMulti</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1InvertImage.html">Class InvertImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1InvertVideo.html">Class InvertVideo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1MIGraphXWorker.html">Class MIGraphXWorker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1PtZendnn.html">Class PtZendnn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1ResNet50.html">Class ResNet50</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1ResNet50Stream.html">Class ResNet50Stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1TfZendnn.html">Class TfZendnn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html">Class Worker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1XModel.html">Class XModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classctpl_1_1thread__pool.html">Class thread_pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classgoogle_1_1protobuf_1_1Map.html">Template Class Map</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cpp_root.html">Code Documentation</a> &raquo;</li>
+      <li>Class InferenceRequestInput</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp_api/classamdinfer_1_1InferenceRequestInput.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="class-inferencerequestinput">
+<span id="exhale-class-classamdinfer-1-1inferencerequestinput"></span><h1>Class InferenceRequestInput<a class="headerlink" href="#class-inferencerequestinput" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp.html#file-workspace-amdinfer-include-amdinfer-core-predict-api-hpp"><span class="std std-ref">File predict_api.hpp</span></a></p></li>
+</ul>
+<section id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<section id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::Serializable</span></code> (<a class="reference internal" href="classamdinfer_1_1Serializable.html#exhale-class-classamdinfer-1-1serializable"><span class="std std-ref">Class Serializable</span></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInputE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInputE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInputE"></span><span id="amdinfer::InferenceRequestInput"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InferenceRequestInput</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1Serializable.html#_CPPv4N8amdinfer12SerializableE" title="amdinfer::Serializable"><span class="n"><span class="pre">Serializable</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInputE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Holds an inference request’s input data. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput21InferenceRequestInputEv"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput21InferenceRequestInputEv"></span><span id="amdinfer::InferenceRequestInput::InferenceRequestInput"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a79ad2fabdd396eb3aaf21b541087bb6a"></span><span class="sig-name descname"><span class="n"><span class="pre">InferenceRequestInput</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceRequestInput"><span class="std std-ref">InferenceRequestInput</span></a> object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE"></span><span id="amdinfer::InferenceRequestInput::InferenceRequestInput__voidP.std::vector:uint64_t:.DataType.ss"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1ae8b87021529ccce6509df0187350f023"></span><span class="sig-name descname"><span class="n"><span class="pre">InferenceRequestInput</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint64_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">shape</span></span>, <a class="reference internal" href="classamdinfer_1_1DataType.html#_CPPv4N8amdinfer8DataTypeE" title="amdinfer::DataType"><span class="n"><span class="pre">DataType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dataType</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;&quot;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceRequestInput"><span class="std std-ref">InferenceRequestInput</span></a> object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – pointer to data </p></li>
+<li><p><strong>shape</strong> – shape of the data </p></li>
+<li><p><strong>dataType</strong> – type of the data </p></li>
+<li><p><strong>name</strong> – name to assign </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput7setDataEPv"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput7setDataEPv"></span><span id="amdinfer::InferenceRequestInput::setData__voidP"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1ad90e2125820ad114b0256dd3f17f474b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setData</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the request’s data. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput7setDataERRNSt6vectorINSt4byteEEE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput7setDataERRNSt6vectorINSt4byteEEE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput7setDataERRNSt6vectorINSt4byteEEE"></span><span id="amdinfer::InferenceRequestInput::setData__std::vector:std::byte:RR"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1aaf51d2743c089078add0a80aa6c66ae2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setData</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput7setDataERRNSt6vectorINSt4byteEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the request’s shared data. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput10sharedDataEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput10sharedDataEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput10sharedDataEv"></span><span id="amdinfer::InferenceRequestInput::sharedDataC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a5af968209821e78af505ac42f968b05f"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sharedData</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput10sharedDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>check if the stored data is shared </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput7getDataEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput7getDataEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput7getDataEv"></span><span id="amdinfer::InferenceRequestInput::getDataC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a48429c8c07d15c09dcf3b67f702ec183"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getData</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput7getDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a pointer to the request’s data. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput7getNameEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput7getNameEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput7getNameEv"></span><span id="amdinfer::InferenceRequestInput::getNameC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1afb19443695753bb85a6eae9b199df58b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getName</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput7getNameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the input tensor’s name. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput7setNameENSt6stringE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput7setNameENSt6stringE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput7setNameENSt6stringE"></span><span id="amdinfer::InferenceRequestInput::setName__ss"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a21edfb11e06b29a10957d806da185591"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setName</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput7setNameENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the input tensor’s name. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput8getShapeEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput8getShapeEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput8getShapeEv"></span><span id="amdinfer::InferenceRequestInput::getShapeC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a905236c842e905b9d5eb173b402ed500"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint64_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getShape</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput8getShapeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the input tensor’s shape. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput8setShapeENSt16initializer_listI8uint64_tEE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput8setShapeENSt16initializer_listI8uint64_tEE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput8setShapeENSt16initializer_listI8uint64_tEE"></span><span id="amdinfer::InferenceRequestInput::setShape__std::initializer_list:uint64_t:"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1aa27160dbb5dd14142551df3f8156ee4d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setShape</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">initializer_list</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint64_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">shape</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput8setShapeENSt16initializer_listI8uint64_tEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the tensor’s shape. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI8uint64_tEE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI8uint64_tEE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI8uint64_tEE"></span><span id="amdinfer::InferenceRequestInput::setShape__std::vector:uint64_t:CR"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a23d8c6b898b30442d6a021b395403a65"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setShape</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint64_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shape</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI8uint64_tEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the tensor’s shape. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI7int32_tEE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI7int32_tEE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI7int32_tEE"></span><span id="amdinfer::InferenceRequestInput::setShape__std::vector:int32_t:CR"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a642bc92525e31e0843919ccb17f0fef9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setShape</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shape</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI7int32_tEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the tensor’s shape. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput11getDatatypeEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput11getDatatypeEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput11getDatatypeEv"></span><span id="amdinfer::InferenceRequestInput::getDatatypeC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a9ae1a636dd34dfcebd3bcd7d329b929f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1DataType.html#_CPPv4N8amdinfer8DataTypeE" title="amdinfer::DataType"><span class="n"><span class="pre">DataType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getDatatype</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput11getDatatypeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the input tensor’s datatype. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput11setDatatypeE8DataType">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput11setDatatypeE8DataType"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput11setDatatypeE8DataType"></span><span id="amdinfer::InferenceRequestInput::setDatatype__DataType"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a11f20c9b7eb5530f5b2caa54c9f0b46b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setDatatype</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="classamdinfer_1_1DataType.html#_CPPv4N8amdinfer8DataTypeE" title="amdinfer::DataType"><span class="n"><span class="pre">DataType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput11setDatatypeE8DataType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the tensor’s data type. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput13getParametersEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput13getParametersEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput13getParametersEv"></span><span id="amdinfer::InferenceRequestInput::getParametersC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1ae73e071c2ca2d567073244c59ce2bd2f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getParameters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput13getParametersEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the input tensor’s parameters. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput13setParametersE20RequestParametersPtr">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput13setParametersE20RequestParametersPtr"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput13setParametersE20RequestParametersPtr"></span><span id="amdinfer::InferenceRequestInput::setParameters__RequestParametersPtr"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a72fdb7d51387040eea5536cbb4222dd3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setParameters</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_namespaceamdinfer_1aecb5618c912edd1c1537ec7da1befebc.html#_CPPv4N8amdinfer20RequestParametersPtrE" title="amdinfer::RequestParametersPtr"><span class="n"><span class="pre">RequestParametersPtr</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput13setParametersE20RequestParametersPtr" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput7getSizeEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput7getSizeEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput7getSizeEv"></span><span id="amdinfer::InferenceRequestInput::getSizeC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a1df4ba01755018547f314ca6419a9ef3"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput7getSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the tensor’s size (number of elements) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput13serializeSizeEv">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput13serializeSizeEv"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput13serializeSizeEv"></span><span id="amdinfer::InferenceRequestInput::serializeSizeC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1ada6e3f10f3b9c1d80af358d93bd4bd7f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serializeSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput13serializeSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer21InferenceRequestInput9serializeEPNSt4byteE">
+<span id="_CPPv3NK8amdinfer21InferenceRequestInput9serializeEPNSt4byteE"></span><span id="_CPPv2NK8amdinfer21InferenceRequestInput9serializeEPNSt4byteE"></span><span id="amdinfer::InferenceRequestInput::serialize__std::bytePC"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1aff7be32a5516bb0837ac1d74e171d531"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer21InferenceRequestInput9serializeEPNSt4byteE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInput11deserializeEPKNSt4byteE">
+<span id="_CPPv3N8amdinfer21InferenceRequestInput11deserializeEPKNSt4byteE"></span><span id="_CPPv2N8amdinfer21InferenceRequestInput11deserializeEPKNSt4byteE"></span><span id="amdinfer::InferenceRequestInput::deserialize__std::byteCP"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1a965561bb748002717a74add2819155fd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deserialize</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data_in</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInput11deserializeEPKNSt4byteE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput">
+<span id="_CPPv3N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput"></span><span id="_CPPv2N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput"></span><span id="amdinfer::InferenceRequestInput::lshift-operator__osR.InferenceRequestInputCR"></span><span class="target" id="classamdinfer_1_1InferenceRequestInput_1acda6da62478e73493a8532f7d4d9de7c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <a class="reference internal" href="#_CPPv4N8amdinfer21InferenceRequestInputE" title="amdinfer::InferenceRequestInput"><span class="n"><span class="pre">InferenceRequestInput</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">my_class</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Provide an implementation to print the class with std::cout to an ostream. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html" class="btn btn-neutral float-left" title="Template Class InferenceRequestBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="classamdinfer_1_1InferenceRequestInputBuilder.html" class="btn btn-neutral float-right" title="Template Class InferenceRequestInputBuilder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on November 18, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

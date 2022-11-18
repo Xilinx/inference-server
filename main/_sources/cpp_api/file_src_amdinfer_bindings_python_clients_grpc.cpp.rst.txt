@@ -1,0 +1,56 @@
+
+.. _file_src_amdinfer_bindings_python_clients_grpc.cpp:
+
+File grpc.cpp
+=============
+
+
+Implements the Python bindings for the :ref:`file_include_amdinfer_clients_http.hpp` header. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/bindings/python/clients/grpc.cpp``)
+--------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_bindings_python_clients_grpc.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/bindings/python/helpers/docstrings.hpp`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``amdinfer/clients/grpc.hpp`` (:ref:`file_include_amdinfer_clients_grpc.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``pybind11/cast.h``
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+- ``unordered_map``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

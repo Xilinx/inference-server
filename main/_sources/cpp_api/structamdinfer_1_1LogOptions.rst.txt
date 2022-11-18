@@ -1,0 +1,17 @@
+.. _exhale_struct_structamdinfer_1_1LogOptions:
+
+Struct LogOptions
+=================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::LogOptions
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,73 @@
+
+.. _file_include_amdinfer_clients_http.hpp:
+
+File http.hpp
+=============
+
+
+Defines the methods for interacting with the server with HTTP/REST. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/amdinfer/clients/http.hpp``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_amdinfer_clients_http.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/client.hpp`` (:ref:`file_include_amdinfer_clients_client.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``memory``
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``vector`` (:ref:`file_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_amdinfer_bindings_python_clients_http.cpp`
+
+- :ref:`file_src_amdinfer_clients_http.cpp`
+
+- :ref:`file_src_amdinfer_clients_websocket.cpp`
+
+- :ref:`file_include_amdinfer_amdinfer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1HttpClient`
+

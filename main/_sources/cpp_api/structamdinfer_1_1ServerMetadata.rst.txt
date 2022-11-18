@@ -1,0 +1,17 @@
+.. _exhale_struct_structamdinfer_1_1ServerMetadata:
+
+Struct ServerMetadata
+=====================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::ServerMetadata
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

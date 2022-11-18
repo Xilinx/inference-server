@@ -1,0 +1,113 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_api.cpp:
+
+File api.cpp
+============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the client-server API used in the inference server. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/api.cpp``)
+--------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_api.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/api.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/manager.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`)
+
+- ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
+
+- ``amdinfer/version.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_version.hpp`)
+
+- ``cassert``
+
+- ``cctype``
+
+- ``iostream``
+
+- ``json/reader.h``
+
+- ``json/value.h``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``unordered_map``
+
+- ``unordered_set``
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf`
+
+- :ref:`exhale_function_api_8cpp_1a451d6aeeb8de699b4cfc8f632f8e78b6`
+
+- :ref:`exhale_function_api_8cpp_1ae0dbf04d01555d9b6428c642503e02d9`
+
+- :ref:`exhale_function_api_8cpp_1ad1da7e319e89046cb1f6d20fea46ef7d`
+
+- :ref:`exhale_function_api_8cpp_1aab5a33ec7de1e03183aa4075ca858cc3`
+
+- :ref:`exhale_function_api_8cpp_1a39eb9fa1198e60153ddaf2136833e96c`
+
+- :ref:`exhale_function_api_8cpp_1a2f1ebf8b459a22a7de3ce2906aac4f33`
+
+- :ref:`exhale_function_api_8cpp_1ad9bd380ef495aeb0b4efac1ecef7aef6`
+
+- :ref:`exhale_function_api_8cpp_1a769502f968540b2f68287c808a9156e2`
+
+- :ref:`exhale_function_api_8cpp_1abb0bfc39e167c58a8f83a57e8e3717ec`
+
+- :ref:`exhale_function_api_8cpp_1a61f95cf4710f15355fc00da05c888668`
+
+- :ref:`exhale_function_api_8cpp_1a59d78af1e09556ee7389be7bc48098db`
+

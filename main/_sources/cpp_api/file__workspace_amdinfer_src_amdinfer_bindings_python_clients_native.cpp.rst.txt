@@ -1,0 +1,67 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_bindings_python_clients_native.cpp:
+
+File native.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_bindings_python_clients>` (``/workspace/amdinfer/src/amdinfer/bindings/python/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the Python bindings for the :ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp` header. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/bindings/python/clients/native.cpp``)
+------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_bindings_python_clients_native.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/bindings/python/helpers/docstrings.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``amdinfer/clients/native.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``pybind11/cast.h``
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+- ``unordered_map``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_bindings_2python_2clients_2native_8cpp_1a064fdea70281446dc020fda5323aafb0`
+

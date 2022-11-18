@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Function amdinfer::check_error &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;, const std::string&amp;)" href="function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.html" />
+    <link rel="prev" title="Function amdinfer::addHeaders" href="function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="../index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">AMD Inference Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../performance_factors.html">Factors</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#functions">Functions</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05.html">Function amdinfer::addHeaders</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Function amdinfer::check_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.html">Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;, const std::string&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a.html">Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf.html">Template Function amdinfer::copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d.html">Function amdinfer::createGetRequest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http_8cpp_1abb11c7992ffb6339af08d1ff6e0353ba.html">Function amdinfer::createInferenceRequest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http_8cpp_1a32e9fc9ef05556e7d000554f8752678b.html">Function amdinfer::createPostRequest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_data__types_8hpp_1aae326a9a1c4392c4eede674a55989e48.html">Function amdinfer::detail::hash</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1a90265777686e06d56b25b0bc843eef9e.html">Function amdinfer::errorHttpResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_predict__api_8cpp_1a6671145ae5464f5f11fafa31cf195502.html">Template Function amdinfer::expand_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_worker__info_8cpp_1a1801c8afdba35242de42f29659c45e3a.html">Function amdinfer::findFunc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1a451d6aeeb8de699b4cfc8f632f8e78b6.html">Function amdinfer::getHardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_logging_8cpp_1ab42e9688a184d4c25b0809fd75c21465.html">Function amdinfer::getLevel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_logging_8cpp_1abf296c165ec250f986192b7ec61a0eeb.html">Function amdinfer::getLogDirectory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8hpp_1a060fbd208a90079d68fd5a5bb0d21ac6.html">Template Function amdinfer::getTensorContents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_worker__info_8cpp_1a19798ed33ad0cecb53ca678f47d8fb95.html">Function amdinfer::getWorker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__server_8cpp_1af2f2b9dcdbdb51142654acff7134fe47.html">Function amdinfer::grpc::start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1.html">Function amdinfer::grpc::stop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__server_8cpp_1a17fb6a89fb9a16380c4f07f999c78fb6.html">Function amdinfer::grpcUnaryCallback</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1ae0dbf04d01555d9b6428c642503e02d9.html">Function amdinfer::hasHardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__server_8cpp_1ac92ce920719257b547b656e4a2cc57ac.html">Function amdinfer::http::start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__server_8cpp_1a024aac815aaac4c7a062bd1afa1d5efc.html">Function amdinfer::http::stop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_client_8cpp_1a7db4f7d3cc3c76913a04f054545e45a1.html">Function amdinfer::inferAsyncOrdered</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_client_8cpp_1a4d4441bcf3855f2e944fa25af8295257.html">Function amdinfer::inferAsyncOrderedBatched</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_server_8cpp_1aaee4d554c86a0f534bbe3ffae4a86382.html">Function amdinfer::initialize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93.html">Function amdinfer::initializeClientLogging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_server_8cpp_1acea43796a83b9ee6de28c969539154a4.html">Function amdinfer::initializeServerLogging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_logging_8cpp_1a1171fedba9c753ea529e1fc6c164e4f2.html">Function amdinfer::initLogger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1afa990983f0c809168a33aae411a99f8b.html">Template Function amdinfer::jsonValueToType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_observer_8hpp_1a53f99a75a6bfc6f5dda8db77a7ea047c.html">Function amdinfer::logTraceBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b.html">Function amdinfer::mapJsonToModelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1ab124726c678d8eb69187eb82356b3fc8.html">Function amdinfer::mapJsonToParameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3.html">Function amdinfer::mapJsonToResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf.html">Function amdinfer::mapModelMetadataToProto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1a96f12abbea879eab96fc3a7677c27c4d.html">Function amdinfer::mapParametersToJson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a29423446a13fe8f7300565cce516b05e.html">Function amdinfer::mapParametersToProto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec.html">Function amdinfer::mapProtoToModelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843.html">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;, RequestParameters *)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba.html">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e.html">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;, RequestParameters&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_model__repository_8cpp_1a9635913e10f284c7c36fa430aab3e865.html">Function amdinfer::mapProtoToParameters2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9.html">Function amdinfer::mapProtoToResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537.html">Function amdinfer::mapRequestToJson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835.html">Function amdinfer::mapRequestToProto(const InferenceRequest&amp;, inference::ModelInferRequest&amp;, ] const Observer&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d.html">Function amdinfer::mapRequestToProto(const InferenceRequest&amp;, inference::ModelInferRequest&amp;, const Observer&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6.html">Function amdinfer::mapResponseToProto</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1ad1da7e319e89046cb1f6d20fea46ef7d.html">Function amdinfer::modelInfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1aab5a33ec7de1e03183aa4075ca858cc3.html">Function amdinfer::modelList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1a39eb9fa1198e60153ddaf2136833e96c.html">Function amdinfer::modelLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1a2f1ebf8b459a22a7de3ce2906aac4f33.html">Function amdinfer::modelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1aa73c320adf07dfce0d9cff01c4fbaf0e.html">Function amdinfer::ModelMetadataTensorToJson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1a6ea39202392964e0277721028771d11a.html">Function amdinfer::ModelMetadataToJson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1ad9bd380ef495aeb0b4efac1ecef7aef6.html">Function amdinfer::modelReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1a769502f968540b2f68287c808a9156e2.html">Function amdinfer::modelUnload</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49.html">Function amdinfer::operator&lt;&lt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc__internal_8cpp_1a370f1b4a6348b2265e44bec053e75397.html">Template Function amdinfer::overloaded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d.html">Function amdinfer::parseJson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_http__internal_8cpp_1acbfb678bfa4431649f17750ea346f33c.html">Function amdinfer::parseResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_softmax_8hpp_1a0751a3e558d4dc26bd1a8ca8c5f222d3.html">Template Function amdinfer::pre_post::calc_softmax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_center__crop_8hpp_1a38fcd76500e2a2a6f82b483f40898886.html">Function amdinfer::pre_post::centerCrop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_image__preprocess_8hpp_1afc409bcd827fd1219cc6844e0e07ed62.html">Template Function amdinfer::pre_post::detail::nestedLoop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_image__preprocess_8hpp_1a85688ea858ae957a61a92a169608ff0c.html">Template Function amdinfer::pre_post::detail::normalize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_get__top__k_8hpp_1a3b6421b0603fd4c79ca0263c3a582a5b.html">Function amdinfer::pre_post::get_top_k</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_image__preprocess_8hpp_1a6f99956e2db2c6e15a806fc1a0c02c1f.html">Template Function amdinfer::pre_post::imagePreprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_resnet50__postprocess_8hpp_1a50359236db961994e219d8eff7ae2aec.html">Template Function amdinfer::pre_post::resnet50Postprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4.html">Function amdinfer::runInference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2.html">Function amdinfer::serverHasExtension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1abb0bfc39e167c58a8f83a57e8e3717ec.html">Function amdinfer::serverMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb.html">Template Function amdinfer::switchOverTypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39.html">Function amdinfer::terminate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_string_8hpp_1ab7c84c671182f8c47329d59fbc06fc66.html">Function amdinfer::util::addressToString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_parse__env_8cpp_1a4251368d5d2f3507fb4ac4296f71c1d3.html">Function amdinfer::util::autoExpandEnvironmentVariables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_base64_8cpp_1a23046fcc3e0811f2990bb9b944927510.html">Function amdinfer::util::base64_decode(std::string)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_base64_8cpp_1aa4091ad73805c2d6aa1f1c05cb552ff5.html">Function amdinfer::util::base64_decode(const char *, size_t)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_base64_8cpp_1aee9b0fbf15e4d37e62d2b263d546c5e8.html">Function amdinfer::util::base64_encode(std::string)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_base64_8cpp_1ae50b1ca52f2936e85e477f18b6c8fd50.html">Function amdinfer::util::base64_encode(const char *, size_t)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327.html">Function amdinfer::util::endsWith</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f.html">Function amdinfer::util::exec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_parse__env_8cpp_1a8ce41d99ba53522df6ba71cffaf73f99.html">Function amdinfer::util::expandEnvironmentVariables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210.html">Function amdinfer::util::minDecodeLength</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4.html">Function amdinfer::util::minEncodeLength</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_read__nth__line_8cpp_1ab24290f139bfd0ba4a626bdd7d5412d4.html">Function amdinfer::util::readNthLine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_thread_8hpp_1a1f755ec0f69754bbf457b2c7f68a16c7.html">Function amdinfer::util::setThreadName(const char *)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_thread_8hpp_1a9f542ca1a9ee9128a5871d146acf8b1b.html">Function amdinfer::util::setThreadName(const std::string&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_string_8hpp_1ae4e85f841d4470eb0040ff4bef5adb52.html">Function amdinfer::util::split</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_string_8hpp_1a23ca4a0fca976cf704e73ba9c454edf9.html">Function amdinfer::util::startsWith</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_string_8hpp_1a66dcea22803a394e9d697db2110f57b1.html">Function amdinfer::util::toLower(const std::string&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_string_8hpp_1a4414f2322f12277f964e4a7cc3ae6733.html">Function amdinfer::util::toLower(std::string *)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_compression_8cpp_1a1a216241020e4c6fbd33c97243275bed.html">Function amdinfer::util::z_decompress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd.html">Function amdinfer::waitUntilModelReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724.html">Function amdinfer::waitUntilServerReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1a61f95cf4710f15355fc00da05c888668.html">Function amdinfer::workerLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_api_8cpp_1a59d78af1e09556ee7389be7bc48098db.html">Function amdinfer::workerUnload</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_aks_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_aks__detect_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_aks__detect__stream_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_echo_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_echo__multi_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_invert__image_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_invert__video_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_migraphx_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_pt__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_resnet50_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_resnet50__stream_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_xmodel_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html">Function getWorker()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97.html">Function main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_aks__detect_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141.html">Function reduce_mult(std::vector&lt;uint64_t&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_pt__zendnn_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141.html">Function reduce_mult(std::vector&lt;uint64_t&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_resnet50_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141.html">Function reduce_mult(std::vector&lt;uint64_t&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_tf__zendnn_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141.html">Function reduce_mult(std::vector&lt;uint64_t&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_xmodel_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141.html">Function reduce_mult(std::vector&lt;uint64_t&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_main_8cpp_1a89a8322bea357674e81ba9cbdefe0378.html">Function signal_callback_handler</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cpp_root.html">Code Documentation</a> &raquo;</li>
+      <li>Function amdinfer::check_error</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp_api/function_http_8cpp_1af1c58579846a3d1df81be93b1cd81dc6.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="function-amdinfer-check-error">
+<span id="exhale-function-http-8cpp-1af1c58579846a3d1df81be93b1cd81dc6"></span><h1>Function amdinfer::check_error<a class="headerlink" href="#function-amdinfer-check-error" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_http.cpp.html#file-workspace-amdinfer-src-amdinfer-clients-http-cpp"><span class="std std-ref">File http.cpp</span></a></p></li>
+</ul>
+<section id="function-documentation">
+<h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer11check_errorEN6drogon9ReqResultE">
+<span id="_CPPv3N8amdinfer11check_errorEN6drogon9ReqResultE"></span><span id="_CPPv2N8amdinfer11check_errorEN6drogon9ReqResultE"></span><span id="amdinfer::check_error__drogon::ReqResult"></span><span class="target" id="http_8cpp_1af1c58579846a3d1df81be93b1cd81dc6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">check_error</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">drogon</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ReqResult</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><br /></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05.html" class="btn btn-neutral float-left" title="Function amdinfer::addHeaders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.html" class="btn btn-neutral float-right" title="Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;, const std::string&amp;)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on November 18, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

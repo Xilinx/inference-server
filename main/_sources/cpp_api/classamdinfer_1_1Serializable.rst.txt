@@ -1,0 +1,27 @@
+.. _exhale_class_classamdinfer_1_1Serializable:
+
+Class Serializable
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_mixins.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public amdinfer::InferenceRequestInput`` (:ref:`exhale_class_classamdinfer_1_1InferenceRequestInput`)
+- ``public amdinfer::RequestParameters`` (:ref:`exhale_class_classamdinfer_1_1RequestParameters`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::Serializable
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

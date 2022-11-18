@@ -1,0 +1,110 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_interface.hpp:
+
+File interface.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines the base Interface class. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/interface.hpp``)
+--------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_interface.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``chrono``
+
+- ``cstddef``
+
+- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``memory``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1Interface`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123`
+

@@ -1,0 +1,14 @@
+.. _exhale_enum_image__preprocess_8hpp_1a004b461de156262bc78b132c472c322a:
+
+Enum ImageOrder
+===============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: amdinfer::pre_post::ImageOrder
+   :project: amdinfer

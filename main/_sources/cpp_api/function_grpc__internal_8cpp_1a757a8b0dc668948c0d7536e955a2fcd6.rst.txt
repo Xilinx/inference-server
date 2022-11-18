@@ -1,0 +1,14 @@
+.. _exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6:
+
+Function amdinfer::mapResponseToProto
+=====================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapResponseToProto(InferenceResponse, inference::ModelInferResponse&)
+   :project: amdinfer

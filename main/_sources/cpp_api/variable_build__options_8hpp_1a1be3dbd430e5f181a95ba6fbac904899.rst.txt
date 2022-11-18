@@ -1,0 +1,14 @@
+.. _exhale_variable_build__options_8hpp_1a1be3dbd430e5f181a95ba6fbac904899:
+
+Variable kDefaultDrogonThreads
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kDefaultDrogonThreads
+   :project: amdinfer

@@ -1,0 +1,421 @@
+
+.. _namespace_amdinfer:
+
+Namespace amdinfer
+==================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer__detail`
+
+- :ref:`namespace_amdinfer__grpc`
+
+- :ref:`namespace_amdinfer__http`
+
+- :ref:`namespace_amdinfer__pre_post`
+
+- :ref:`namespace_amdinfer__util`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1AddDataToTensor`
+
+- :ref:`exhale_struct_structamdinfer_1_1InferenceRequestInputSizes`
+
+- :ref:`exhale_struct_structamdinfer_1_1LogOptions`
+
+- :ref:`exhale_struct_structamdinfer_1_1Observer`
+
+- :ref:`exhale_struct_structamdinfer_1_1overloaded`
+
+- :ref:`exhale_struct_structamdinfer_1_1Server_1_1ServerImpl`
+
+- :ref:`exhale_struct_structamdinfer_1_1ServerMetadata`
+
+- :ref:`exhale_struct_structamdinfer_1_1SetInputData`
+
+- :ref:`exhale_struct_structamdinfer_1_1SetOutputData`
+
+- :ref:`exhale_struct_structamdinfer_1_1UpdateCommand`
+
+- :ref:`exhale_struct_structamdinfer_1_1WriteData`
+
+- :ref:`exhale_class_classamdinfer_1_1bad__status`
+
+- :ref:`exhale_class_classamdinfer_1_1Batch`
+
+- :ref:`exhale_class_classamdinfer_1_1Batcher`
+
+- :ref:`exhale_class_classamdinfer_1_1Buffer`
+
+- :ref:`exhale_class_classamdinfer_1_1CallData`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataBase`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataHasHardware`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelInfer`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelList`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelLoad`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelMetadata`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelReady`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelUnload`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerLive`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerMetadata`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerReady`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerStream`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataUnary`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataWorkerLoad`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataWorkerUnload`
+
+- :ref:`exhale_class_classamdinfer_1_1Client`
+
+- :ref:`exhale_class_classamdinfer_1_1connection__error`
+
+- :ref:`exhale_class_classamdinfer_1_1CppNativeApi`
+
+- :ref:`exhale_class_classamdinfer_1_1DataType`
+
+- :ref:`exhale_class_classamdinfer_1_1DrogonHttp`
+
+- :ref:`exhale_class_classamdinfer_1_1environment__not__set__error`
+
+- :ref:`exhale_class_classamdinfer_1_1external__error`
+
+- :ref:`exhale_class_classamdinfer_1_1file__not__found__error`
+
+- :ref:`exhale_class_classamdinfer_1_1file__read__error`
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcApiUnary`
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcClient`
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcClient_1_1GrpcClientImpl`
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcServer`
+
+- :ref:`exhale_class_classamdinfer_1_1HardBatcher`
+
+- :ref:`exhale_class_classamdinfer_1_1HttpClient`
+
+- :ref:`exhale_class_classamdinfer_1_1HttpClient_1_1HttpClientImpl`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequest`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01InferenceRequest_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInput`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestOutput`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestOutputBuilder`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceResponse`
+
+- :ref:`exhale_class_classamdinfer_1_1Interface`
+
+- :ref:`exhale_class_classamdinfer_1_1invalid__argument`
+
+- :ref:`exhale_class_classamdinfer_1_1Logger`
+
+- :ref:`exhale_class_classamdinfer_1_1Manager`
+
+- :ref:`exhale_class_classamdinfer_1_1Manager_1_1Endpoints`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelMetadata`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelMetadataTensor`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelRepository`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl`
+
+- :ref:`exhale_class_classamdinfer_1_1NativeClient`
+
+- :ref:`exhale_class_classamdinfer_1_1RequestParameters`
+
+- :ref:`exhale_class_classamdinfer_1_1runtime__error`
+
+- :ref:`exhale_class_classamdinfer_1_1Serializable`
+
+- :ref:`exhale_class_classamdinfer_1_1Server`
+
+- :ref:`exhale_class_classamdinfer_1_1SoftBatcher`
+
+- :ref:`exhale_class_classamdinfer_1_1UpdateListener`
+
+- :ref:`exhale_class_classamdinfer_1_1VartTensorBuffer`
+
+- :ref:`exhale_class_classamdinfer_1_1VectorBuffer`
+
+- :ref:`exhale_class_classamdinfer_1_1WebSocketClient`
+
+- :ref:`exhale_class_classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl`
+
+- :ref:`exhale_class_classamdinfer_1_1WorkerInfo`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_batcher_8hpp_1a5277d7d1a11facb999262c1ffa1cf5a8`
+
+- :ref:`exhale_enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123`
+
+- :ref:`exhale_enum_logging_8hpp_1a5f2178ac8de54222377d5c4a64f986ad`
+
+- :ref:`exhale_enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27`
+
+- :ref:`exhale_enum_status_8hpp_1a913436294d314192e3d1ef856c142de3`
+
+- :ref:`exhale_enum_manager_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05`
+
+- :ref:`exhale_function_http_8cpp_1af1c58579846a3d1df81be93b1cd81dc6`
+
+- :ref:`exhale_function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66`
+
+- :ref:`exhale_function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a`
+
+- :ref:`exhale_function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf`
+
+- :ref:`exhale_function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d`
+
+- :ref:`exhale_function_http_8cpp_1abb11c7992ffb6339af08d1ff6e0353ba`
+
+- :ref:`exhale_function_http_8cpp_1a32e9fc9ef05556e7d000554f8752678b`
+
+- :ref:`exhale_function_http__internal_8cpp_1a90265777686e06d56b25b0bc843eef9e`
+
+- :ref:`exhale_function_predict__api_8cpp_1a6671145ae5464f5f11fafa31cf195502`
+
+- :ref:`exhale_function_worker__info_8cpp_1a1801c8afdba35242de42f29659c45e3a`
+
+- :ref:`exhale_function_api_8cpp_1a451d6aeeb8de699b4cfc8f632f8e78b6`
+
+- :ref:`exhale_function_logging_8cpp_1ab42e9688a184d4c25b0809fd75c21465`
+
+- :ref:`exhale_function_logging_8cpp_1abf296c165ec250f986192b7ec61a0eeb`
+
+- :ref:`exhale_function_grpc__internal_8hpp_1a060fbd208a90079d68fd5a5bb0d21ac6`
+
+- :ref:`exhale_function_worker__info_8cpp_1a19798ed33ad0cecb53ca678f47d8fb95`
+
+- :ref:`exhale_function_grpc__server_8cpp_1a17fb6a89fb9a16380c4f07f999c78fb6`
+
+- :ref:`exhale_function_api_8cpp_1ae0dbf04d01555d9b6428c642503e02d9`
+
+- :ref:`exhale_function_client_8cpp_1a7db4f7d3cc3c76913a04f054545e45a1`
+
+- :ref:`exhale_function_client_8cpp_1a4d4441bcf3855f2e944fa25af8295257`
+
+- :ref:`exhale_function_server_8cpp_1aaee4d554c86a0f534bbe3ffae4a86382`
+
+- :ref:`exhale_function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93`
+
+- :ref:`exhale_function_server_8cpp_1acea43796a83b9ee6de28c969539154a4`
+
+- :ref:`exhale_function_logging_8cpp_1a1171fedba9c753ea529e1fc6c164e4f2`
+
+- :ref:`exhale_function_http__internal_8cpp_1afa990983f0c809168a33aae411a99f8b`
+
+- :ref:`exhale_function_observer_8hpp_1a53f99a75a6bfc6f5dda8db77a7ea047c`
+
+- :ref:`exhale_function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b`
+
+- :ref:`exhale_function_http__internal_8cpp_1ab124726c678d8eb69187eb82356b3fc8`
+
+- :ref:`exhale_function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf`
+
+- :ref:`exhale_function_http__internal_8cpp_1a96f12abbea879eab96fc3a7677c27c4d`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a29423446a13fe8f7300565cce516b05e`
+
+- :ref:`exhale_function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
+
+- :ref:`exhale_function_model__repository_8cpp_1a9635913e10f284c7c36fa430aab3e865`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
+
+- :ref:`exhale_function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835`
+
+- :ref:`exhale_function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6`
+
+- :ref:`exhale_function_api_8cpp_1ad1da7e319e89046cb1f6d20fea46ef7d`
+
+- :ref:`exhale_function_api_8cpp_1aab5a33ec7de1e03183aa4075ca858cc3`
+
+- :ref:`exhale_function_api_8cpp_1a39eb9fa1198e60153ddaf2136833e96c`
+
+- :ref:`exhale_function_api_8cpp_1a2f1ebf8b459a22a7de3ce2906aac4f33`
+
+- :ref:`exhale_function_http__internal_8cpp_1aa73c320adf07dfce0d9cff01c4fbaf0e`
+
+- :ref:`exhale_function_http__internal_8cpp_1a6ea39202392964e0277721028771d11a`
+
+- :ref:`exhale_function_api_8cpp_1ad9bd380ef495aeb0b4efac1ecef7aef6`
+
+- :ref:`exhale_function_api_8cpp_1a769502f968540b2f68287c808a9156e2`
+
+- :ref:`exhale_function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a370f1b4a6348b2265e44bec053e75397`
+
+- :ref:`exhale_function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d`
+
+- :ref:`exhale_function_http__internal_8cpp_1acbfb678bfa4431649f17750ea346f33c`
+
+- :ref:`exhale_function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4`
+
+- :ref:`exhale_function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2`
+
+- :ref:`exhale_function_api_8cpp_1abb0bfc39e167c58a8f83a57e8e3717ec`
+
+- :ref:`exhale_function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb`
+
+- :ref:`exhale_function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39`
+
+- :ref:`exhale_function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd`
+
+- :ref:`exhale_function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724`
+
+- :ref:`exhale_function_api_8cpp_1a61f95cf4710f15355fc00da05c888668`
+
+- :ref:`exhale_function_api_8cpp_1a59d78af1e09556ee7389be7bc48098db`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1a91acc2ad2e6156eccc10d01384ef8506`
+
+- :ref:`exhale_typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae`
+
+- :ref:`exhale_typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89`
+
+- :ref:`exhale_typedef_queue_8hpp_1a3221a88db26ee77b2f820bb75bc2ff24`
+
+- :ref:`exhale_typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8`
+
+- :ref:`exhale_typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849`
+
+- :ref:`exhale_typedef_queue_8hpp_1ad6d1b639ebd1fcf68a289f9d3cbd061d`
+
+- :ref:`exhale_typedef_declarations_8hpp_1ae43152e77216115d2665d62c4c8020ca`
+
+- :ref:`exhale_typedef_predict__api_8hpp_1a08788239a50c8739700f08f0a6ede4e5`
+
+- :ref:`exhale_typedef_http__internal_8hpp_1a7137f2088c425db6fdd74b1be1fe0663`
+
+- :ref:`exhale_typedef_data__types_8hpp_1ae6aa5769eb83832379c792c300d4566c`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe`
+
+- :ref:`exhale_typedef_queue_8hpp_1a11e139757fcec15a84a47b968f7aa685`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a69968e7d35b8ae122d52452c7e00ed9d`
+
+- :ref:`exhale_typedef_predict__api_8hpp_1a68c2a90f38823c9713e56fd203b2b88d`
+
+- :ref:`exhale_typedef_http__internal_8cpp_1a78092124400e8e02cce73782a3ed0832`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723`
+
+- :ref:`exhale_typedef_declarations_8hpp_1aa4fc4532a6cc2a392046e1a720d80ad4`
+
+- :ref:`exhale_typedef_http__internal_8cpp_1ac0c25a8d874c058c0256360834443885`
+
+- :ref:`exhale_typedef_predict__api_8hpp_1af874429ad00786b2a05f30c311422e4c`
+
+- :ref:`exhale_typedef_http__internal_8cpp_1a9a8b533ecefc7f30d6f3377cf897f1c8`
+
+- :ref:`exhale_typedef_predict__api_8hpp_1aecb5618c912edd1c1537ec7da1befebc`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf`
+
+- :ref:`exhale_typedef_manager_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_echo__multi_8cpp_1afa0b765105e95ab377c99ba05b254d06`
+
+- :ref:`exhale_variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898`
+
+- :ref:`exhale_variable_worker_8hpp_1afff06a8b4498d235dc378329775cf03d`
+
+- :ref:`exhale_variable_observer_8hpp_1ad1d17f4a2117c6141e8dfe1727c6cb92`
+
+- :ref:`exhale_variable_echo__multi_8cpp_1a416f1fc1c3bce51d97065301d41db581`
+
+- :ref:`exhale_variable_echo__multi_8cpp_1af0ec89de1369c878ed2a32a0e0227448`

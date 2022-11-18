@@ -1,0 +1,27 @@
+.. _exhale_class_classamdinfer_1_1Buffer:
+
+Class Buffer
+============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public amdinfer::VartTensorBuffer`` (:ref:`exhale_class_classamdinfer_1_1VartTensorBuffer`)
+- ``public amdinfer::VectorBuffer`` (:ref:`exhale_class_classamdinfer_1_1VectorBuffer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::Buffer
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

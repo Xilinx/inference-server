@@ -1,0 +1,188 @@
+
+.. _file_src_amdinfer_servers_grpc_server.cpp:
+
+File grpc_server.cpp
+====================
+
+
+Implements the gRPC server. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/servers/grpc_server.cpp``)
+-----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_servers_grpc_server.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/buffers/buffer.hpp`` (:ref:`file_src_amdinfer_buffers_buffer.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/grpc_internal.hpp`` (:ref:`file_src_amdinfer_clients_grpc_internal.hpp`)
+
+- ``amdinfer/core/api.hpp`` (:ref:`file_src_amdinfer_core_api.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/interface.hpp`` (:ref:`file_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file_src_amdinfer_core_predict_api_internal.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/servers/grpc_server.hpp`` (:ref:`file_src_amdinfer_servers_grpc_server.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file_src_amdinfer_util_string.hpp`)
+
+- ``amdinfer/util/traits.hpp`` (:ref:`file_src_amdinfer_util_traits.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``exception`` (:ref:`file_src_amdinfer_bindings_python_core_exceptions.cpp`)
+
+- ``functional``
+
+- ``google/protobuf/repeated_ptr_field.h``
+
+- ``grpc/support/log.h``
+
+- ``grpcpp/grpcpp.h``
+
+- ``iostream``
+
+- ``memory``
+
+- ``predict_api.grpc.pb.h``
+
+- ``predict_api.pb.h``
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``thread`` (:ref:`file_src_amdinfer_util_thread.hpp`)
+
+- ``unordered_set``
+
+- ``utility``
+
+- ``vector`` (:ref:`file_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__grpc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1WriteData`
+
+- :ref:`exhale_class_classamdinfer_1_1CallData`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataBase`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataHasHardware`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelInfer`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelList`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelLoad`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelMetadata`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelReady`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataModelUnload`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerLive`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerMetadata`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerReady`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataServerStream`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataUnary`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataWorkerLoad`
+
+- :ref:`exhale_class_classamdinfer_1_1CallDataWorkerUnload`
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcApiUnary`
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcServer`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_grpc__server_8cpp_1af2f2b9dcdbdb51142654acff7134fe47`
+
+- :ref:`exhale_function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_grpc__server_8cpp_1a5d3e066a99cdd4f1f413e6e44dc0dcd3`
+
+- :ref:`exhale_define_grpc__server_8cpp_1aa8804898829de032ded6a07028b0af36`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1aa3ba85be01ef9f3abcaf7b476cf8d588`
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1a3b67a1f4b15f6f8988d8e5172649fb00`
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1a2571f3485e82379ee4c555e64c58dc32`
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1a522cc0269bb90723a0841f2d0a2be7fb`
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1a0795844bf8bd399665e38979b3bbe186`
+
+- :ref:`exhale_typedef_grpc__server_8cpp_1aa51ad0e9f1a23127a07cdfc18412904d`
+

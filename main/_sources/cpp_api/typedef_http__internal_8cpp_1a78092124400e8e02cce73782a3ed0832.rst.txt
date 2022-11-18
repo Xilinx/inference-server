@@ -1,0 +1,14 @@
+.. _exhale_typedef_http__internal_8cpp_1a78092124400e8e02cce73782a3ed0832:
+
+Typedef amdinfer::InputBuilder
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::InputBuilder
+   :project: amdinfer

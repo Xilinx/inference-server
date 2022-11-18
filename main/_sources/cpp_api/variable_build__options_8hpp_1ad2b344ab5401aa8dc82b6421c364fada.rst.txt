@@ -1,0 +1,14 @@
+.. _exhale_variable_build__options_8hpp_1ad2b344ab5401aa8dc82b6421c364fada:
+
+Variable kMaxGrpcMessageSize
+============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kMaxGrpcMessageSize
+   :project: amdinfer

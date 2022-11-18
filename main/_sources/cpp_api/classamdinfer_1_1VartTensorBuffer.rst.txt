@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1VartTensorBuffer:
+
+Class VartTensorBuffer
+======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::Buffer`` (:ref:`exhale_class_classamdinfer_1_1Buffer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::VartTensorBuffer
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,14 @@
+.. _exhale_variable_setup_8py_1acb846d1875d1b97e69cd0832dd1f56d8:
+
+Variable setup::version_path
+============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_setup.py`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: setup::version_path
+   :project: amdinfer

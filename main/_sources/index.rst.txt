@@ -72,7 +72,7 @@
     :caption: User API libraries
 
     rest
-    cpp_api
+    cpp_user_api
     python
     cli
 
@@ -83,6 +83,7 @@
 
     architecture
     contributing
+    cpp_api/cpp_root
 
 .. toctree::
     :maxdepth: 2

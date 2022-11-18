@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1ae1c2c20a8a31a5fd81e2a8a13e11eb54:
+
+Function amdinfer::wrapCore
+===========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_core_core.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapCore(pybind11::module_&)
+   :project: amdinfer

@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a6b8a7abe7bfb17a9bf341c0a6a6ff2a0:
+
+Function amdinfer::wrapPrePost(pybind11::module_&)
+==================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_pre_post_pre_post.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapPrePost(pybind11::module_&)
+   :project: amdinfer

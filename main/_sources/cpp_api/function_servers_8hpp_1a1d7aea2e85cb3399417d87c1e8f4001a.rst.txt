@@ -1,0 +1,14 @@
+.. _exhale_function_servers_8hpp_1a1d7aea2e85cb3399417d87c1e8f4001a:
+
+Function amdinfer::wrapServer(pybind11::module_&)
+=================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_servers_servers.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::wrapServer(pybind11::module_&)
+   :project: amdinfer

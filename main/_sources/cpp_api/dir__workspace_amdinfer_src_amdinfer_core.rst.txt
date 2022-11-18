@@ -1,0 +1,32 @@
+.. _dir__workspace_amdinfer_src_amdinfer_core:
+
+
+Directory core
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer>` (``/workspace/amdinfer/src/amdinfer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/workspace/amdinfer/src/amdinfer/core``
+
+
+Files
+-----
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
+
+

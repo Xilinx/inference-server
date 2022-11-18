@@ -1,0 +1,14 @@
+.. _exhale_variable_setup_8py_1a13510753661cb74083a0c664db11dde9:
+
+Variable setup::zip_safe
+========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_setup.py`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: setup::zip_safe
+   :project: amdinfer

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Class file_not_found_error &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class file_read_error" href="classamdinfer_1_1file__read__error.html" />
+    <link rel="prev" title="Class external_error" href="classamdinfer_1_1external__error.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="../index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">AMD Inference Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../performance_factors.html">Factors</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1AddDataToTensor.html">Struct AddDataToTensor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1InferenceRequestInputSizes.html">Struct InferenceRequestInputSizes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1LogOptions.html">Struct LogOptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1Observer.html">Struct Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1overloaded.html">Template Struct overloaded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1pre__post_1_1ImagePreprocessOptions.html">Template Struct ImagePreprocessOptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1Server_1_1ServerImpl.html">Struct Server::ServerImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1ServerMetadata.html">Struct ServerMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1SetInputData.html">Struct SetInputData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1SetOutputData.html">Struct SetOutputData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1UpdateCommand.html">Struct UpdateCommand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1util_1_1is__any.html">Template Struct is_any</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1workers_1_1DetectResponse.html">Struct DetectResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structamdinfer_1_1WriteData.html">Struct WriteData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structstd_1_1less_3_01amdinfer_1_1RequestParameters_01_4.html">Template Struct less&lt; amdinfer::RequestParameters &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1bad__status.html">Class bad_status</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Batch.html">Class Batch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Batcher.html">Class Batcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Buffer.html">Class Buffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallData.html">Template Class CallData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataBase.html">Class CallDataBase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataHasHardware.html">Class CallDataHasHardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelInfer.html">Class CallDataModelInfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelList.html">Class CallDataModelList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelLoad.html">Class CallDataModelLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelMetadata.html">Class CallDataModelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelReady.html">Class CallDataModelReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataModelUnload.html">Class CallDataModelUnload</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerLive.html">Class CallDataServerLive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerMetadata.html">Class CallDataServerMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerReady.html">Class CallDataServerReady</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataServerStream.html">Template Class CallDataServerStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataUnary.html">Template Class CallDataUnary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataWorkerLoad.html">Class CallDataWorkerLoad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CallDataWorkerUnload.html">Class CallDataWorkerUnload</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Client.html">Class Client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1connection__error.html">Class connection_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1CppNativeApi.html">Class CppNativeApi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1DataType.html">Class DataType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1DrogonHttp.html">Class DrogonHttp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1environment__not__set__error.html">Class environment_not_set_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1external__error.html">Class external_error</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Class file_not_found_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1file__read__error.html">Class file_read_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcApiUnary.html">Class GrpcApiUnary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcClient.html">Class GrpcClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl.html">Class GrpcClient::GrpcClientImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1GrpcServer.html">Class GrpcServer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1HardBatcher.html">Class HardBatcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1http_1_1DrogonWs.html">Class DrogonWs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1http_1_1WebsocketServer.html">Class WebsocketServer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1HttpClient.html">Class HttpClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1HttpClient_1_1HttpClientImpl.html">Class HttpClient::HttpClientImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html">Class InferenceRequest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder.html">Template Class InferenceRequestBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4.html">Template Class InferenceRequestBuilder&lt; CallDataModelInfer * &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01InferenceRequest_01_4.html">Template Class InferenceRequestBuilder&lt; InferenceRequest &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html">Template Class InferenceRequestBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInput.html">Class InferenceRequestInput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder.html">Template Class InferenceRequestInputBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4.html">Template Class InferenceRequestInputBuilder&lt; inference::ModelInferRequest_InferInputTensor &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4.html">Template Class InferenceRequestInputBuilder&lt; InferenceRequestInput &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestInputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html">Template Class InferenceRequestInputBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestOutput.html">Class InferenceRequestOutput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestOutputBuilder.html">Template Class InferenceRequestOutputBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html">Template Class InferenceRequestOutputBuilder&lt; std::shared_ptr&lt; Json::Value &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1InferenceResponse.html">Class InferenceResponse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Interface.html">Class Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1invalid__argument.html">Class invalid_argument</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Logger.html">Class Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Manager.html">Class Manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Manager_1_1Endpoints.html">Class Manager::Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelMetadata.html">Class ModelMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelMetadataTensor.html">Class ModelMetadataTensor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelRepository.html">Class ModelRepository</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl.html">Class ModelRepository::ModelRepositoryImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1NativeClient.html">Class NativeClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1RequestParameters.html">Class RequestParameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1runtime__error.html">Class runtime_error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Serializable.html">Class Serializable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1Server.html">Class Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1SoftBatcher.html">Class SoftBatcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1UpdateListener.html">Class UpdateListener</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1VartTensorBuffer.html">Class VartTensorBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1VectorBuffer.html">Class VectorBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1WebSocketClient.html">Class WebSocketClient</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.html">Class WebSocketClient::WebSocketClientImpl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1WorkerInfo.html">Class WorkerInfo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1Aks.html">Class Aks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetect.html">Class AksDetect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetectStream.html">Class AksDetectStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1Echo.html">Class Echo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1EchoMulti.html">Class EchoMulti</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1InvertImage.html">Class InvertImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1InvertVideo.html">Class InvertVideo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1MIGraphXWorker.html">Class MIGraphXWorker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1PtZendnn.html">Class PtZendnn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1ResNet50.html">Class ResNet50</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1ResNet50Stream.html">Class ResNet50Stream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1TfZendnn.html">Class TfZendnn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html">Class Worker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classamdinfer_1_1workers_1_1XModel.html">Class XModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classctpl_1_1thread__pool.html">Class thread_pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classgoogle_1_1protobuf_1_1Map.html">Template Class Map</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cpp_root.html">Code Documentation</a> &raquo;</li>
+      <li>Class file_not_found_error</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp_api/classamdinfer_1_1file__not__found__error.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="class-file-not-found-error">
+<span id="exhale-class-classamdinfer-1-1file-not-found-error"></span><h1>Class file_not_found_error<a class="headerlink" href="#class-file-not-found-error" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp.html#file-workspace-amdinfer-include-amdinfer-core-exceptions-hpp"><span class="std std-ref">File exceptions.hpp</span></a></p></li>
+</ul>
+<section id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<section id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::runtime_error</span></code> (<a class="reference internal" href="classamdinfer_1_1runtime__error.html#exhale-class-classamdinfer-1-1runtime-error"><span class="std std-ref">Class runtime_error</span></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer20file_not_found_errorE">
+<span id="_CPPv3N8amdinfer20file_not_found_errorE"></span><span id="_CPPv2N8amdinfer20file_not_found_errorE"></span><span id="amdinfer::file_not_found_error"></span><span class="target" id="classamdinfer_1_1file__not__found__error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">file_not_found_error</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1runtime__error.html#_CPPv4N8amdinfer13runtime_errorE" title="amdinfer::runtime_error"><span class="n"><span class="pre">runtime_error</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer20file_not_found_errorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classamdinfer_1_1external__error.html" class="btn btn-neutral float-left" title="Class external_error" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="classamdinfer_1_1file__read__error.html" class="btn btn-neutral float-right" title="Class file_read_error" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on November 18, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a2ebb380690c36b8c9dd39ddd53230832:
+
+Function amdinfer::ImageInferenceRequest
+========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_src_amdinfer___init__.py`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::ImageInferenceRequest(images, asTensor)
+   :project: amdinfer
