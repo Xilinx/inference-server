@@ -32,12 +32,14 @@ set(DOXYGEN_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/xml/index.xml)
 set(DOXYGEN_INPUT_DIRS ${PROJECT_SOURCE_DIR}/src/amdinfer
                        ${PROJECT_SOURCE_DIR}/include/amdinfer
 )
+set(DOXYGEN_EXCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src/amdinfer/bindings)
 set(DOXYGEN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include/amdinfer)
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
 set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
 string(REPLACE ";" "\" \"" DOXYGEN_INPUT_DIR "${DOXYGEN_INPUT_DIRS}")
+string(REPLACE ";" "\" \"" DOXYGEN_EXCLUDE_DIR "${DOXYGEN_EXCLUDE_DIRS}")
 
 # Replace variables inside @@ with the current values
 configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)

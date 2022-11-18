@@ -30,11 +30,17 @@ kserve:
   mnist_model: ""
   # storage URI for the ResNet50 onnx model (migraphx)
   resnet50_onnx_model: ""
+  # storage URI for the ResNet50 U250 model (vitis)
+  resnet50_u250_model: ""
   # the container to use for ZenDNN-related tests
   image_zendnn: ""
   # the container to use for MIGraphX-related tests
   image_migraphx: ""
+  # the container to use for Vitis-related tests
+  image_vitis: ""
   # KServe ClusterServingRuntime for ZenDNN
   runtime_zendnn: ""
   # KServe ClusterServingRuntime for MIGraphX
   runtime_migraphx: ""
+  # KServe ClusterServingRuntime for Vitis
+  runtime_vitis: ""

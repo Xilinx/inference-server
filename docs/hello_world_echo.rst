@@ -21,6 +21,7 @@ Hello World - Python
 
 AMD Inference Server's Python API allows you to start the server and send requests to it from Python.
 This example walks you through how to start the server and use Python to send requests to a simple model.
+This example and script are intended to run in the dev container.
 The complete script used here is available in the repository.
 
 Import the library

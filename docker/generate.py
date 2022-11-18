@@ -586,6 +586,7 @@ def install_python_packages():
                 sphinxcontrib-confluencebuilder \\
                 sphinx-argparse \\
                 sphinx-issues \\
+                exhale \\
                 # install linting tools
                 black \\
                 cpplint \\

@@ -48,16 +48,15 @@
 #include <opencv2/imgcodecs.hpp>  // for imread
 #include <opencv2/imgproc.hpp>    // for resize
 
+namespace amdinfer {
+
+namespace workers {
+
 /**
  * @brief The Migraphx worker accepts the name of an migraphx model file as an
  * argument and compiles and evaluates it.
  *
  */
-
-namespace amdinfer {
-
-namespace workers {
-
 class MIGraphXWorker : public Worker {
  public:
   using Worker::Worker;

@@ -17,6 +17,7 @@ Running ResNet50 - C++
 ======================
 
 This page walks you through the C++ versions of the ResNet50 examples.
+These examples are intended to run in the dev container because you need to build and compile these executables.
 You can see the full source files used here in the repository for more details.
 
 While the inference server supports many backends, client applications to make requests to any of them largely look the same.
