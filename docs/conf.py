@@ -49,6 +49,7 @@ release = f"v{raw_version}"
 # ones.
 extensions = [
     "breathe",
+    "exhale",
     # adds argparse directive to parse CLIs
     "sphinxarg.ext",
     "sphinxcontrib.confluencebuilder",
@@ -67,6 +68,22 @@ extensions = [
 # Breathe configuration
 breathe_projects = {"amdinfer": "../build/docs/doxygen/xml"}
 breathe_default_project = "amdinfer"
+
+# Exhale configuration
+exhale_args = {
+    # These arguments are required
+    "containmentFolder": "./cpp_api",
+    "rootFileName": "cpp_root.rst",
+    "rootFileTitle": "Code Documentation",
+    "doxygenStripFromPath": ".",
+    # Suggested optional arguments
+    "createTreeView": True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    "treeViewIsBootstrap": True,
+    "unabridgedOrphanKinds": {"define", "dir", "typedef", "variable"},
+    # exclude PIMPL classes
+    "listingExclude": [r".*Impl$"],
+}
 
 # sphinxcontrib.confluencebuilder configuration
 confluence_publish = True
@@ -102,7 +119,9 @@ def hide_private_module(app, what, name, obj, options, signature, return_annotat
 # sphinx.ext.autosectionlabel configuration
 # prefix all generated labels with the document
 autosectionlabel_prefix_document = True
-
+# only auto-label top-level headings to prevent duplication when the same title
+# is used in different sections
+autosectionlabel_maxdepth = 2
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
@@ -126,10 +145,6 @@ nitpicky = True
 
 # number all figures with captions
 numfig = True
-
-rst_prolog = """
-.. include:: links.rst
-"""
 
 # Configure 'Edit on GitHub' extension
 edit_on_github_project = "Xilinx/inference-server"

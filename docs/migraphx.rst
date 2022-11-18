@@ -41,6 +41,25 @@ To build an image with MIGraphX enabled, you need to add the ``--migraphx`` to t
     # build the production image $(whoami)/amdinfer-migraphx:latest
     ./amdinfer dockerize --migraphx --suffix="-migraphx" --production
 
+Start an image
+--------------
+
+The development container can be started with:
+
+.. code-block:: console
+
+    $ ./amdinfer run --dev
+
+This automatically adds the detected devices, publishes ports, and mounts some convenient directories, such as your SSH directory, and drops you into a terminal in the container.
+
+You can start the :ref:`deployment container on Docker <docker:start the container>` with something like:
+
+.. code-block:: console
+
+    $ docker run --device /dev/kfd --device /dev/dri [--volume ...]
+
+These ``--device`` flags pass the GPU to the container and you can mount other directories as needed to make models available.
+
 Get assets and models
 ---------------------
 
