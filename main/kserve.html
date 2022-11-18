@@ -280,9 +280,9 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul class="current">
@@ -528,7 +528,7 @@ A sample <code class="docutils literal notranslate"><span class="pre">ClusterSer
 <span class="w">      </span><span class="c1"># the server are configurable, there are some assumptions in KServe</span><span class="w"></span>
 <span class="w">      </span><span class="c1"># with the default port values so it is recommended to not change them</span><span class="w"></span>
 <span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus-server</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amdinfer-server</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--enable-repository-watcher</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span><span class="w"></span>
@@ -604,7 +604,7 @@ A sample YAML file is provided below.</p>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTI_MODEL_SERVER</span><span class="w"></span>
 <span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proteus-server</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amdinfer-server</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span><span class="w"></span>
@@ -652,20 +652,20 @@ You’ll need to use <code class="docutils literal notranslate"><span class="pre
 The <code class="docutils literal notranslate"><span class="pre">logs</span></code> command will list the containers in this pod (if more than one exist) and prompt you to specify the container whose logs you’re interested in.
 These logs may have helpful error messages.</p>
 <p>You can also directly connect to the inference server container that’s running in KServe with Docker.
-The easiest way to do this is with the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> script in the inference server repository.
+The easiest way to do this is with the <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> script in the inference server repository.
 You’ll need to first connect to the node where the container is running.
 On that host:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this lists the running Inference Server containers</span>
-proteus list
+amdinfer list
 
 <span class="c1"># get the container ID of the container you want to connect to</span>
 
 <span class="c1"># provide the ID as an argument to the attach command to open a bash shell</span>
 <span class="c1"># in the container</span>
-proteus attach -n &lt;container ID&gt;
+amdinfer attach -n &lt;container ID&gt;
 </pre></div>
 </div>
-<p>Once in the container, you can find the running <code class="docutils literal notranslate"><span class="pre">proteus-server</span></code> executable and then follow the regular debugging guide to debug the inference server.</p>
+<p>Once in the container, you can find the running <code class="docutils literal notranslate"><span class="pre">amdinfer-server</span></code> executable and then follow the regular debugging guide to debug the inference server.</p>
 </section>
 </section>
 
@@ -698,7 +698,7 @@ proteus attach -n &lt;container ID&gt;
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 15, 2022.
+        Last updated on November 17, 2022.
       </span>
 
     </p>

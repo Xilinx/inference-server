@@ -155,7 +155,7 @@ A sample ``ClusterServingRuntime`` definition is provided below.
           # the server are configurable, there are some assumptions in KServe
           # with the default port values so it is recommended to not change them
           args:
-            - proteus-server
+            - amdinfer-server
             - --model-repository=/mnt/models
             - --enable-repository-watcher
             - --grpc-port=9000
@@ -235,7 +235,7 @@ A sample YAML file is provided below.
             - name: MULTI_MODEL_SERVER
               value: 'true'
           args:
-            - proteus-server
+            - amdinfer-server
             - --model-repository=/mnt/models
             - --http-port=8080
             - --grpc-port=9000
@@ -285,19 +285,19 @@ The ``logs`` command will list the containers in this pod (if more than one exis
 These logs may have helpful error messages.
 
 You can also directly connect to the inference server container that's running in KServe with Docker.
-The easiest way to do this is with the ``proteus`` script in the inference server repository.
+The easiest way to do this is with the ``amdinfer`` script in the inference server repository.
 You'll need to first connect to the node where the container is running.
 On that host:
 
 .. code-block:: bash
 
     # this lists the running Inference Server containers
-    proteus list
+    amdinfer list
 
     # get the container ID of the container you want to connect to
 
     # provide the ID as an argument to the attach command to open a bash shell
     # in the container
-    proteus attach -n <container ID>
+    amdinfer attach -n <container ID>
 
-Once in the container, you can find the running ``proteus-server`` executable and then follow the regular debugging guide to debug the inference server.
+Once in the container, you can find the running ``amdinfer-server`` executable and then follow the regular debugging guide to debug the inference server.

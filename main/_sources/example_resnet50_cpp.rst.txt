@@ -30,7 +30,7 @@ Include the header
 ------------------
 
 AMD Inference Server's C++ API allows you to write your own C++ client applications that can communicate with the inference server.
-You can include the entire public API by including :file:`proteus/proteus.hpp` or selectively include header files as needed.
+You can include the entire public API by including :file:`amdinfer/amdinfer.hpp` or selectively include header files as needed.
 
 .. literalinclude:: ../examples/resnet50/vitis.cpp
     :start-after: +include:
@@ -41,7 +41,7 @@ Start the server
 ----------------
 
 This example assumes that the server is not running elsewhere and starts it locally from C++ instead.
-Creating the ``proteus::Server`` object starts the inference server backend and it stays alive as long as the object remains in scope.
+Creating the ``amdinfer::Server`` object starts the inference server backend and it stays alive as long as the object remains in scope.
 
 .. literalinclude:: ../examples/resnet50/vitis.cpp
     :start-after: +initialize:
@@ -49,7 +49,7 @@ Creating the ``proteus::Server`` object starts the inference server backend and 
     :language: cpp
     :dedent: 2
 
-Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the ``proteus::Server`` object's methods.
+Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the ``amdinfer::Server`` object's methods.
 
 For example, if you were using HTTP/REST:
 
@@ -74,7 +74,7 @@ If the server is already running somewhere, you don't need to do this.
 Create the client object
 ------------------------
 
-The ``proteus::Client`` base class defines how to communicate with the server over the supported protocols.
+The ``amdinfer::Client`` base class defines how to communicate with the server over the supported protocols.
 This client protocol is based on KServe's API.
 Each protocol inherits from this class and implements its methods.
 Some examples of clients that you can create:

@@ -280,9 +280,9 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -478,11 +478,11 @@ Drogon uses a configurable number of threads to run these request handlers.
 When a REST request is made to an endpoint, the request data and callback function are provided for the handler to process the request and then respond to the client.
 To avoid blocking the finite number of handler threads with potentially long-running inference requests, we use an asynchronous architecture in the handler.
 The received request is packed into an <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object and pushed into a <a class="reference external" href="https://github.com/cameron314/concurrentqueue">thread-safe lock-free multi producer/consumer queue</a> to go to the target worker’s batcher.
-The HTTP server code is in <code class="docutils literal notranslate"><span class="pre">src/proteus/servers/http_server.*</span></code>.</p>
+The HTTP server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/http_server.*</span></code>.</p>
 <p>Drogon also provides a WebSocket server, which is currently used experimentally to run predictions on videos from certain workers.
 The WebSocket API is custom.
 At this time, the client provides a URL to a video that the worker will retrieve and analyze frame-by-frame and send back to the client but this is subject to change.
-The WebSocket server code is in <code class="docutils literal notranslate"><span class="pre">src/proteus/servers/websocket_server.*</span></code>.</p>
+The WebSocket server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/websocket_server.*</span></code>.</p>
 </section>
 <section id="c-api">
 <h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this heading">¶</a></h3>
@@ -492,7 +492,7 @@ As a result, using the C++ API will yield the highest performance of any ingesti
 The API lets users load workers and make inference requests.
 The inference request is packed into an <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object and pushed to the target worker’s batcher.
 An <code class="docutils literal notranslate"><span class="pre">std::promise</span></code> is returned to the user to retrieve the result.</p>
-<p>The public API is defined in <code class="docutils literal notranslate"><span class="pre">include/proteus/clients/native.hpp</span></code> and the implementation is in <code class="docutils literal notranslate"><span class="pre">src/proteus/clients/native.cpp</span></code>.</p>
+<p>The public API is defined in <code class="docutils literal notranslate"><span class="pre">include/amdinfer/clients/native.hpp</span></code> and the implementation is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/clients/native.cpp</span></code>.</p>
 </section>
 </section>
 <section id="batching">
@@ -509,7 +509,7 @@ An <code class="docutils literal notranslate"><span class="pre">std::promise</sp
 Batching groups multiple smaller requests from the user into one large request to improve the performance of hardware accelerators.
 However, user requests at the software application level are usually not conveniently available as complete batches as they come one at a time.
 The Server incorporates batching as a transparent step in the pipeline that groups all incoming requests, independent of the source of the original request from the client (see <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>).
-The implementations of the batchers are in <code class="docutils literal notranslate"><span class="pre">src/proteus/batching</span></code>.</p>
+The implementations of the batchers are in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/batching</span></code>.</p>
 <p>The base batcher class defines a common interface for all batcher implementations and has some basic common properties.
 Each batcher has two thread-safe queues (one for input and one for output), a configured batch size and a string identifying the worker group it’s attached to.
 The batcher runs as a separate thread that monitors its input queue to process incoming <code class="docutils literal notranslate"><span class="pre">Interface</span></code> objects from all ingestion methods and pushes completed <code class="docutils literal notranslate"><span class="pre">Batch</span></code> objects on the output queue.
@@ -536,7 +536,7 @@ They are the smallest unit that the Server manages.
 A worker may be as simple or complex as you like: as long as it adheres to the interface.
 Each worker is compiled as a shared object that the Server can dynamically open at load-time.
 Thus, new workers can be loaded and unloaded without stopping the server.</p>
-<p>Workers are defined in <code class="docutils literal notranslate"><span class="pre">src/proteus/workers</span></code>.
+<p>Workers are defined in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/workers</span></code>.
 The <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file builds each worker as <code class="docutils literal notranslate"><span class="pre">libworkerX.so</span></code> where <em>X</em> corresponds to the name of the C++ file defining the worker in PascalCase.</p>
 <section id="organization-and-lifecycle">
 <h3>Organization and Lifecycle<a class="headerlink" href="#organization-and-lifecycle" title="Permalink to this heading">¶</a></h3>
@@ -556,7 +556,7 @@ This lifecycle is defined as follows:</p>
 The body of these methods must be provided by each worker implementation in the corresponding <code class="docutils literal notranslate"><span class="pre">doX()</span></code> methods (e.g. <code class="docutils literal notranslate"><span class="pre">doInit()</span></code>).
 At load-time, the server will create an instance of the worker using its <code class="docutils literal notranslate"><span class="pre">getWorker()</span></code> method:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">proteus</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">Worker</span><span class="o">*</span><span class="w"> </span><span class="nf">getWorker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">proteus</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">MyWorkerClass</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">Worker</span><span class="o">*</span><span class="w"> </span><span class="nf">getWorker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">MyWorkerClass</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -652,7 +652,7 @@ THe only non-default implementation of the clean-up functions is to stop the int
 </figcaption>
 </figure>
 <p>Buffers are used to hold data internally within the server after receiving a request.
-The implementations of buffers are in <code class="docutils literal notranslate"><span class="pre">src/proteus/buffers</span></code>.</p>
+The implementations of buffers are in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/buffers</span></code>.</p>
 <p>The lifecycle of buffers is shown in <a class="reference internal" href="#fig-buffering"><span class="std std-numref">Fig. 4</span></a>.
 In <code class="docutils literal notranslate"><span class="pre">allocate()</span></code>, the worker creates a buffer pool made of some number of buffers.
 Using a buffer pool saves the cost of constantly allocating dynamic memory for each new request.
@@ -672,13 +672,13 @@ They provide methods to write different data types into the buffer and access th
 </section>
 <section id="manager">
 <h2>Manager<a class="headerlink" href="#manager" title="Permalink to this heading">¶</a></h2>
-<p>The shared state of Proteus is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>.
+<p>The shared state of the AMD Inference Server is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>.
 This information enables the ingestion protocols to query the Manager to retrieve a pointer to the correct batcher to use to push the <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object to the right one corresponding to the targeted worker.
 To manage multiple versions of workers that may be running with different configurations, the Manager stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
 In the case that it’s assigned to an existing worker group, the previously allocated endpoint is returned to the client.
 If a new worker group is created, a new endpoint is reserved for this worker group and returned to the client.
-The implementation is in <code class="docutils literal notranslate"><span class="pre">src/proteus/core/manager.*</span></code>.</p>
-<p>Loading a new worker results in the creation of a new <code class="docutils literal notranslate"><span class="pre">WorkerInfo</span></code> (see <code class="docutils literal notranslate"><span class="pre">src/proteus/core/worker_info.*</span></code>) object which the Manager uses internally to hold all the information associated with the worker.
+The implementation is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/manager.*</span></code>.</p>
+<p>Loading a new worker results in the creation of a new <code class="docutils literal notranslate"><span class="pre">WorkerInfo</span></code> (see <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/worker_info.*</span></code>) object which the Manager uses internally to hold all the information associated with the worker.
 The worker class instance, its batcher, and its buffer pool are all stored in this object.
 The <code class="docutils literal notranslate"><span class="pre">WorkerInfo</span></code> object provides two methods to create new workers: its constructor and an <code class="docutils literal notranslate"><span class="pre">addAndStartWorker()</span></code> method.
 The former is used for a brand-new worker and creates queues for the buffer pools and initializes the private members of the class.
@@ -694,7 +694,7 @@ Here, duplicate or contradictory requests can be silently dropped so the shared 
 <section id="observation">
 <h2>Observation<a class="headerlink" href="#observation" title="Permalink to this heading">¶</a></h2>
 <p>Visibility into the server and its operations is provided through logging, metrics and tracing.
-The implementations of these components is in <code class="docutils literal notranslate"><span class="pre">src/proteus/observation</span></code>.</p>
+The implementations of these components is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/observation</span></code>.</p>
 <section id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this heading">¶</a></h3>
 <p>The Server uses <a class="reference external" href="https://github.com/gabime/spdlog">spdlog</a> to provide logging.
@@ -721,7 +721,7 @@ Tracing data can be disabled at compile-time with a CMake option.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="f1" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Some methods are only available through HTTP at this time. Using the C++ API requires compiling an application linked against <code class="docutils literal notranslate"><span class="pre">libproteus.so</span></code> rather than making requests to a server.</p>
+<p>Some methods are only available through HTTP at this time. Using the C++ API requires compiling an application linked against <code class="docutils literal notranslate"><span class="pre">libamdinfer.so</span></code> rather than making requests to a server.</p>
 </aside>
 <aside class="footnote brackets" id="f2" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
@@ -765,7 +765,7 @@ Tracing data can be disabled at compile-time with a CMake option.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 15, 2022.
+        Last updated on November 17, 2022.
       </span>
 
     </p>

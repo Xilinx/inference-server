@@ -25,7 +25,7 @@ If you are just interested in deploying the server to serve inferences, then con
 For testing, debugging, and experimentation, you will need to follow the development instructions.
 
 Ensure that you set up your host appropriately depending on which platform(s) you are using.
-The helper script used for many of the commands here is :file:`proteus`: a Python script with many helpful options.
+The helper script used for many of the commands here is :file:`amdinfer`: a Python script with many helpful options.
 The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
 You can also use :option:`--dry-run` before any command to see the underlying commands the script is running.
 
@@ -86,22 +86,22 @@ After cloning the repository, enter the directory and run:
 .. code-block:: console
 
     $ python3 docker/generate.py
-    $ ./proteus dockerize <platform flags>
+    $ ./amdinfer dockerize <platform flags>
 
 The ``generate.py`` script is used to create a dockerfile in the root directory, which is then used by the ``dockerize`` command.
 Use ``--help`` to see configurable options for the ``generate.py`` script.
 If you want to enable any platforms, pass the appropriate flags.
 Look at the platform-specific documentation for more information about these flags.
 
-By default, this builds the dev image as ``<username>/proteus-dev:latest``.
+By default, this builds the dev image as ``<username>/amdinfer-dev:latest``.
 After the image is built, run the container:
 
 .. code-block:: console
 
-    $ ./proteus run --dev
+    $ ./amdinfer run --dev
 
-This command runs the ``<username>/proteus-dev:latest`` image, which corresponds to the latest local dev image.
-The ``--dev`` preset will mount the working directory into :file:`/workspace/proteus/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
+This command runs the ``<username>/amdinfer-dev:latest`` image, which corresponds to the latest local dev image.
+The ``--dev`` preset will mount the working directory into :file:`/workspace/amdinfer/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
 Some options may be overridden on the command-line (use :option:`--help` to see the options).
 By default, it will open a Bash shell in this container and show you a splash screen to show that you've entered the container.
 
@@ -109,25 +109,25 @@ Compiling the AMD Inference Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 These commands are all run inside the dev container.
-Here, :file:`./proteus` is aliased to :command:`proteus`.
+Here, :file:`./amdinfer` is aliased to :command:`amdinfer`.
 
 .. code-block:: console
 
-    $ proteus build
+    $ amdinfer build
 
-The build command builds the :program:`proteus-server` executable.
+The build command builds the :program:`amdinfer-server` executable.
 By default, this will be the debug version.
 You can pass flags to ``build`` to control the compile options.
 
 .. tip::
 
-    When starting new containers or switching to different ones after having run build once, you may need to run ``proteus build --regen --clean`` initially.
+    When starting new containers or switching to different ones after having run build once, you may need to run ``amdinfer build --regen --clean`` initially.
     New containers mount the working directory and so stale artifacts from previous builds may be present.
     These two flags delete the CMake cache and do a clean build, respectively.
 
 .. warning::
 
-    In general, you should not use ``sudo`` to run ``proteus`` commands.
+    In general, you should not use ``sudo`` to run ``amdinfer`` commands.
     Some commands create files in your working directory and using ``sudo`` creates files with mixed permissions in your container and host and will even fail in some cases.
 
 The ``build`` will also install the server's Python library in the dev container.
@@ -135,7 +135,7 @@ You can use it from Python in the container after importing it.
 
 .. code-block:: python
 
-    import proteus
+    import amdinfer
 
 Getting test artifacts
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -148,7 +148,7 @@ Use ``--help`` to see the options available.
 .. code-block:: console
 
     $ git lfs pull
-    $ proteus get --all
+    $ amdinfer get --all
 
 You must abide by the license agreements of these files, if you choose to download them.
 
@@ -160,7 +160,7 @@ Once the server is built, start the server to begin serving requests.
 .. code-block:: bash
 
     # start the server
-    proteus start
+    amdinfer start
 
     # this command will block and the server will idle for requests
     # from a new terminal, you can send it requests
@@ -182,6 +182,6 @@ Make sure you have the relevant test artifacts as described in the previous sect
 .. code-block:: bash
 
     # this will start the server and test the REST API from Python.
-    proteus test
+    amdinfer test
 
 Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.

@@ -83,8 +83,8 @@ function OptanonWrapper() { }
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Docker" href="docker.html" />
-    <link rel="prev" title="Vitis AI" href="vitis_ai.html" /> 
+    <link rel="next" title="GPUs - MIGraphX" href="migraphx.html" />
+    <link rel="prev" title="Tracing" href="tracing.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -280,9 +280,7 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ZenDNN</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CPUs - ZenDNN</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#build-an-image">Build an image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#download-the-zendnn-packages">Download the ZenDNN packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#build-the-image">Build the image</a></li>
@@ -294,6 +292,8 @@ function OptanonWrapper() { }
 <li class="toctree-l2"><a class="reference internal" href="#tune-performance">Tune performance</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -374,7 +374,7 @@ function OptanonWrapper() { }
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>ZenDNN</li>
+      <li>CPUs - ZenDNN</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -393,8 +393,8 @@ function OptanonWrapper() { }
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="id1">
-<h1>ZenDNN<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+  <section id="cpus-zendnn">
+<h1>CPUs - ZenDNN<a class="headerlink" href="#cpus-zendnn" title="Permalink to this heading">¶</a></h1>
 <p>AMD Inference Server is integrated with <a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN</a> optimized libraries for running inference on AMD EPYC processors with TensorFlow and PyTorch.
 Check the <a class="reference internal" href="zendnn_examples.html#zendnn-examples"><span class="std std-ref">examples</span></a> to see how to use ZenDNN with the Inference Server.</p>
 <section id="build-an-image">
@@ -413,15 +413,15 @@ Before downloading these packages, you will be required to read and agree to the
 <section id="build-the-image">
 <h3>Build the image<a class="headerlink" href="#build-the-image" title="Permalink to this heading">¶</a></h3>
 <p>After downloading the packages, place them in the root of the repository.
-To build an image with ZenDNN enabled, you need to add the the appropriate flag(s) to the <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span></code> command:</p>
+To build an image with ZenDNN enabled, you need to add the the appropriate flag(s) to the <code class="docutils literal notranslate"><span class="pre">amdinfer</span> <span class="pre">dockerize</span></code> command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the Dockerfile</span>
 python3 docker/generate.py
 
-<span class="c1"># build the dev image $(whoami)/proteus-dev-zendnn:latest</span>
-./proteus dockerize --tfzendnn<span class="o">=</span>./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn<span class="o">=</span>./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix<span class="o">=</span><span class="s2">&quot;-zendnn&quot;</span>
+<span class="c1"># build the dev image $(whoami)/amdinfer-dev-zendnn:latest</span>
+./amdinfer dockerize --tfzendnn<span class="o">=</span>./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn<span class="o">=</span>./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix<span class="o">=</span><span class="s2">&quot;-zendnn&quot;</span>
 
-<span class="c1"># build the production image $(whoami)/proteus-zendnn:latest</span>
-./proteus dockerize --tfzendnn<span class="o">=</span>./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn<span class="o">=</span>./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix<span class="o">=</span><span class="s2">&quot;-zendnn&quot;</span> --production
+<span class="c1"># build the production image $(whoami)/amdinfer-zendnn:latest</span>
+./amdinfer dockerize --tfzendnn<span class="o">=</span>./TF_v2.9_ZenDNN_v3.3_C++_API.zip --ptzendnn<span class="o">=</span>./PT_v1.11.0_ZenDNN_v3.3_C++_API.zip --suffix<span class="o">=</span><span class="s2">&quot;-zendnn&quot;</span> --production
 </pre></div>
 </div>
 <p>You can choose to build a image with just TF+ZenDNN or just PT+ZenDNN by only passing the appropriate flag.</p>
@@ -435,7 +435,7 @@ These instructions suggest using the repository root but any path that meets thi
 <section id="get-assets-and-models">
 <h2>Get assets and models<a class="headerlink" href="#get-assets-and-models" title="Permalink to this heading">¶</a></h2>
 <p>You can download the assets and models used for tests and examples with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus get --tfzendnn --ptzendnn
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer get --tfzendnn --ptzendnn
 </pre></div>
 </div>
 </section>
@@ -449,12 +449,12 @@ These instructions suggest using the repository root but any path that meets thi
 This test will load a model and run with a sample image and assert the output.</p>
 <ol class="arabic">
 <li><p>For TensorFlow + ZenDNN</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus <span class="nb">test</span> -k tfzendnn
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer <span class="nb">test</span> -k tfzendnn
 </pre></div>
 </div>
 </li>
 <li><p>For PyTorch + ZenDNN</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./proteus <span class="nb">test</span> -k ptzendnn
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer <span class="nb">test</span> -k ptzendnn
 </pre></div>
 </div>
 </li>
@@ -482,10 +482,10 @@ This test will load a model and run with a sample image and assert the output.</
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="docker.html" class="btn btn-neutral float-right" title="Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="migraphx.html" class="btn btn-neutral float-right" title="GPUs - MIGraphX" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="vitis_ai.html" class="btn btn-neutral float-left" title="Vitis AI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="tracing.html" class="btn btn-neutral float-left" title="Tracing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -495,7 +495,7 @@ This test will load a model and run with a sample image and assert the output.</
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 15, 2022.
+        Last updated on November 17, 2022.
       </span>
 
     </p>

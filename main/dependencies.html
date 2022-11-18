@@ -279,9 +279,9 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -556,7 +556,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libjsoncpp-dev">libjsoncpp-dev</a></p></td>
 <td><p>1.7.4-3</p></td>
 <td><p>MIT + others</p></td>
-<td><p>Dynamically linked by proteus-server and Drogon<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server and Drogon<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libnuma1">libnuma1</a></p></td>
 <td><p>2.0.11-2.1</p></td>
@@ -596,7 +596,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3">python3</a></p></td>
 <td><p>3.6.5-3</p></td>
 <td><p>PSF License</p></td>
-<td><p>Executable used for scripting and testing proteus-server<sup>d 0</sup></p></td>
+<td><p>Executable used for scripting and testing amdinfer-server<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3-dev">python3-dev</a></p></td>
 <td><p>3.6.7-1~18.04</p></td>
@@ -641,7 +641,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/zlib1g-dev">zlib1g-dev</a></p></td>
 <td><p>1:1.2.11.dfsg-0ubuntu2</p></td>
 <td><p>Zlib</p></td>
-<td><p>Dynamically linked by proteus-server<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server<sup>a 0</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -841,12 +841,12 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/cameron314/concurrentqueue">cameron314/concurrentqueue</a></p></td>
 <td><p>1.0.3</p></td>
 <td><p>Dual BSD-2/Boost + others</p></td>
-<td><p>Statically linked by proteus-server for an efficient multi-producer queue<sup>a 0</sup></p></td>
+<td><p>Statically linked by amdinfer-server for an efficient multi-producer queue<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/jarro2783/cxxopts">jarro2783/cxxopts</a></p></td>
 <td><p>2.2.1</p></td>
 <td><p>MIT</p></td>
-<td><p>Statically linked by proteus-server for command-line argument parsing<sup>a 0</sup></p></td>
+<td><p>Statically linked by amdinfer-server for command-line argument parsing<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/gdraheim/docker-systemctl-replacement">gdraheim/docker-systemctl-replacement</a></p></td>
 <td><p>1.5.4505</p></td>
@@ -856,17 +856,17 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/drogonframework/drogon">drogonframework/drogon</a></p></td>
 <td><p>1.8.1</p></td>
 <td><p>MIT</p></td>
-<td><p>Dynamically linked by proteus-server for an HTTP and websocket server<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for an HTTP and websocket server<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/SpartanJ/efsw">SpartanJ/efsw</a></p></td>
 <td><p>latest</p></td>
 <td><p>MIT</p></td>
-<td><p>Dynamically linked by proteus-server for directory monitoring<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for directory monitoring<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/FFmpeg/FFmpeg">FFmpeg/FFmpeg</a></p></td>
 <td><p>3.4.8</p></td>
 <td><p>LGPL-2.1+ + others</p></td>
-<td><p>Dynamically linked by proteus-server for video processing<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for video processing<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/tschaub/gh-pages">tschaub/gh-pages</a></p></td>
 <td><p>latest</p></td>
@@ -886,12 +886,12 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/google/googletest">google/googletest</a></p></td>
 <td><p>1.11.0</p></td>
 <td><p>BSD-3</p></td>
-<td><p>Statically linked by proteus’s test executables<sup>d 0</sup></p></td>
+<td><p>Statically linked by amdinfer’s test executables<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/grpc/grpc">grpc/grpc</a></p></td>
 <td><p>1.44</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Statically linked by proteus-server for gRPC support<sup>a 0</sup></p></td>
+<td><p>Statically linked by amdinfer-server for gRPC support<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/include-what-you-use/include-what-you-use">include-what-you-use/include-what-you-use</a></p></td>
 <td><p>0.14</p></td>
@@ -901,7 +901,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/jemalloc/jemalloc">jemalloc/jemalloc</a></p></td>
 <td><p>5.3.0</p></td>
 <td><p>BSD-2</p></td>
-<td><p>Dynamically linked by proteus-server for memory allocation implementation<sup>a 3</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for memory allocation implementation<sup>a 3</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/json-c/json-c">json-c/json-c</a></p></td>
 <td><p>0.15</p></td>
@@ -911,7 +911,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/libb64/libb64">libb64/libb64</a></p></td>
 <td><p>2.0.0.1</p></td>
 <td><p>Public Domain Certification</p></td>
-<td><p>Statically linked by proteus-server for base64 codec<sup>a 0</sup></p></td>
+<td><p>Statically linked by amdinfer-server for base64 codec<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/linux-test-project/lcov">linux-test-project/lcov</a></p></td>
 <td><p>1.15</p></td>
@@ -921,7 +921,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
 <td><p>cb18b0b</p></td>
 <td><p>MIT</p></td>
-<td><p>Dynamically linked by proteus-server for AMD GPU support<sup>a 4</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for AMD GPU support<sup>a 4</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/nodejs/node">nodejs/node</a></p></td>
 <td><p>14.16.0</p></td>
@@ -931,12 +931,12 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/opencv/opencv">opencv/opencv</a></p></td>
 <td><p>3.4.3</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Dynamically linked by proteus-server for image and video processing<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for image and video processing<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">open-telemetry/opentelemetry-cpp</a></p></td>
 <td><p>1.1.0</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>Dynamically linked by proteus-server<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/pybind/pybind11">pybind/pybind11</a></p></td>
 <td><p>2.9.1</p></td>
@@ -946,32 +946,32 @@ In the tables below, note the following symbols to indicate where a package (or 
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">jupp0r/prometheus-cpp</a></p></td>
 <td><p>0.12.2</p></td>
 <td><p>MIT</p></td>
-<td><p>Dynamically linked by proteus-server for metrics<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server for metrics<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/protocolbuffers/protobuf">protocolbuffers/protobuf</a></p></td>
 <td><p>3.19.4</p></td>
 <td><p>BSD-3</p></td>
-<td><p>Dynamically linked by proteus-server and Vitis libraries<sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server and Vitis libraries<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/fpagliughi/sockpp">fpagliughi/sockpp</a></p></td>
 <td><p>e5c51b5</p></td>
 <td><p>BSD-3</p></td>
-<td><p>Dynamically linked by proteus-server <sup>a 0</sup></p></td>
+<td><p>Dynamically linked by amdinfer-server <sup>a 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/gabime/spdlog">gabime/spdlog</a></p></td>
 <td><p>1.8.2</p></td>
 <td><p>MIT</p></td>
-<td><p>Statically linked by proteus-server for logging<sup>a 0</sup></p></td>
+<td><p>Statically linked by amdinfer-server for logging<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://github.com/Xilinx/Vitis-AI">Xilinx/Vitis-AI</a></p></td>
 <td><p>latest</p></td>
 <td><p>Apache 2.0</p></td>
-<td><p>VART is dynamically linked by proteus-server<sup>a 1</sup></p></td>
+<td><p>VART is dynamically linked by amdinfer-server<sup>a 1</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://github.com/wg/wrk">wg/wrk</a></p></td>
 <td><p>4.1.0</p></td>
 <td><p>modified Apache 2.0</p></td>
-<td><p>Executable used for benchmarking proteus-server<sup>d 0</sup></p></td>
+<td><p>Executable used for benchmarking amdinfer-server<sup>d 0</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -1033,15 +1033,30 @@ In the tables below, note the following symbols to indicate where a package (or 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://developer.amd.com/zendnn/">TF_v2.9_ZenDNN_v3.3_C++_API.zip</a></p></td>
-<td><p>3.3</p></td>
-<td><p>AMD ZenDNN EULA</p></td>
-<td><p>Used by TF+ZenDNN worker<sup>a 2</sup></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/pool/main/m/miopen-hip-dev/miopen-hip-dev_2.15.0.50000-49_amd64.deb">miopen-hip-dev</a></p></td>
+<td><p>5.0</p></td>
+<td><p>?</p></td>
+<td><p>Used by MIGraphX worker<sup>a 4</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://developer.amd.com/zendnn/">PT_v1.11.0_ZenDNN_v3.3_C++_API.zip</a></p></td>
 <td><p>3.3</p></td>
 <td><p>AMD ZenDNN EULA</p></td>
 <td><p>Used by PT+ZenDNN worker<sup>a 3</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/pool/main/r/rocblas-dev/rocblas-dev_2.42.0.50000-49_amd64.deb">rocblas-dev</a></p></td>
+<td><p>5.0</p></td>
+<td><p>?</p></td>
+<td><p>Used by MIGraphX worker<sup>a 4</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50000-49_amd64.deb">rocm-device-libs</a></p></td>
+<td><p>5.0</p></td>
+<td><p>?</p></td>
+<td><p>Used by MIGraphX worker<sup>a 4</sup></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://developer.amd.com/zendnn/">TF_v2.9_ZenDNN_v3.3_C++_API.zip</a></p></td>
+<td><p>3.3</p></td>
+<td><p>AMD ZenDNN EULA</p></td>
+<td><p>Used by TF+ZenDNN worker<sup>a 2</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -1096,7 +1111,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p><a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC BY-SA 3.0</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p>proteusConfig.cmake</p></td>
+<tr class="row-even"><td><p>amdinferConfig.cmake</p></td>
 <td><p><a class="reference external" href="https://github.com/alexreinking/SharedStaticStarter">alexreinking/SharedStaticStarter</a></p></td>
 <td><p><a class="reference external" href="https://github.com/alexreinking/SharedStaticStarter/blob/master/packaging/SomeLibConfig.cmake">SomeLibConfig.cmake</a></p></td>
 <td><p>MIT</p></td>
@@ -1144,6 +1159,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 <th class="head"><p>Source</p></th>
 <th class="head"><p>License</p></th>
 <th class="head"><p>Usage</p></th>
+<th class="head"></th>
 </tr>
 </thead>
 <tbody>
@@ -1151,39 +1167,47 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p><a class="reference external" href="https://commons.wikimedia.org/wiki/File:Physicsworks.ogv">Wikimedia</a></p></td>
 <td><p><a class="reference external" href="https://creativecommons.org/licenses/by/3.0/legalcode">CC Attribution 3.0 Unported</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg">girl-1867092_640.jpg</a></p></td>
 <td><p><a class="reference external" href="https://pixabay.com/photos/girl-model-portrait-smile-smiling-1867092/">Pixabay</a></p></td>
 <td><p><a class="reference external" href="https://pixabay.com/service/license/">Pixabay License</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz">vitis_ai_runtime_r1.3.0_image_video.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<td><p>Xilinx</p></td>
+<td><p>Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r1.4.0.tar.gz">densebox_320_320-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<td><p>Xilinx</p></td>
+<td><p>Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz">resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<td><p>Xilinx</p></td>
+<td><p>Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc-u200-u250-r1.4.0.tar.gz">yolov3_voc-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<td><p>Xilinx</p></td>
+<td><p>Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip">pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<td><p>Xilinx</p></td>
+<td><p>Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 3</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip">tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip</a></p></td>
-<td><p>Xilinx Inc.</p></td>
+<td><p>Xilinx</p></td>
+<td><p>Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 2</sup></p></td>
 </tr>
@@ -1191,41 +1215,49 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p><cite>val.txt &lt;https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt&gt;</cite></p></td>
 <td><p>AMD Inc.</p></td>
 <td><p>?</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><cite>yolov4_anchors.txt &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt&gt;</cite></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p><cite>yolov4.onnx &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx&gt;</cite></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><cite>coco.names &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names&gt;</cite></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p><cite>bertsquad-10.onnx &lt;https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx&gt;</cite></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><cite>run_onnx_squad &lt;https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py&gt;</cite></p></td>
 <td><p>AMD Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p><cite>inputs_amd.json &lt;https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json&gt;</cite></p></td>
 <td><p>AMD Inc.</p></td>
 <td><p>MIT</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1259,7 +1291,7 @@ In the tables below, note the following symbols to indicate where a package (or 
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 15, 2022.
+        Last updated on November 17, 2022.
       </span>
 
     </p>

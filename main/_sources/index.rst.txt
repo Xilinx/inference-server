@@ -47,9 +47,9 @@
     :hidden:
     :caption: Platforms
 
+    zendnn
     migraphx
     vitis_ai
-    zendnn
 
 .. toctree::
     :maxdepth: 2
@@ -97,7 +97,7 @@
 .. Docs
 .. ====
 
-.. .. doxygenclass:: proteus::Buffer
+.. .. doxygenclass:: amdinfer::Buffer
 ..    :members:
 
 .. Indices and tables

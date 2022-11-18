@@ -1,5 +1,6 @@
 ..
-    Copyright 2021 Xilinx Inc.
+    Copyright 2021 Xilinx, Inc.
+    Copyright 2022, Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@
 Command-Line Interface
 ======================
 
-The :file:`proteus` script provides an easy way to launch containers and build the Server.
+The :file:`amdinfer` script provides an easy way to launch containers and build the Server.
 The documentation for the options available in this Python script can be seen here or on the terminal using the :option:`--help` flag.
 
 .. argparse::
-   :module: proteus_cli
+   :module: amdinfer_cli
    :func: get_parser
-   :prog: proteus
+   :prog: amdinfer

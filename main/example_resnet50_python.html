@@ -289,9 +289,9 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -407,11 +407,11 @@ They are not intended to show the most optimal performance for each backend.</p>
 </div>
 <section id="include-the-module">
 <h2>Include the module<a class="headerlink" href="#include-the-module" title="Permalink to this heading">¶</a></h2>
-<p>You can include the Python library by importing the <code class="docutils literal notranslate"><span class="pre">proteus</span></code> module.
+<p>You can include the Python library by importing the <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> module.
 The different submodules are imported by default but you can include them manually as well.
 These explicit imports can help IDEs resolve Python imports for autocompletion.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">proteus</span>
-<span class="kn">import</span> <span class="nn">proteus.pre_post</span> <span class="k">as</span> <span class="nn">pre_post</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">amdinfer</span>
+<span class="kn">import</span> <span class="nn">amdinfer.pre_post</span> <span class="k">as</span> <span class="nn">pre_post</span>
 
 </pre></div>
 </div>
@@ -419,8 +419,8 @@ These explicit imports can help IDEs resolve Python imports for autocompletion.<
 <section id="start-the-server">
 <h2>Start the server<a class="headerlink" href="#start-the-server" title="Permalink to this heading">¶</a></h2>
 <p>This example assumes that the server is not running elsewhere and starts it locally from Python instead.
-Creating the <code class="docutils literal notranslate"><span class="pre">proteus.servers.Server</span></code> object starts the inference server backend and it stays alive as long as the object remains in scope.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">Server</span><span class="p">()</span>
+Creating the <code class="docutils literal notranslate"><span class="pre">amdinfer.Server</span></code> object starts the inference server backend and it stays alive as long as the object remains in scope.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">Server</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the object’s methods.</p>
@@ -434,7 +434,7 @@ Creating the <code class="docutils literal notranslate"><span class="pre">proteu
 <h2>Create the client object<a class="headerlink" href="#create-the-client-object" title="Permalink to this heading">¶</a></h2>
 <p>As in C++, you can create a client in Python corresponding to the protocol you want to use to talk to the server.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">server_addr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">ip</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">http_port</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="n">server_addr</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="n">server_addr</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -444,13 +444,14 @@ Creating the <code class="docutils literal notranslate"><span class="pre">proteu
 This worker, and any load-time parameters it accepts, are backend-specific.
 After loading the worker, you get back an endpoint string that you use to make requests to this worker.
 If a worker is already ready on the server or you already have an endpoint, then you don’t need to do this.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
 <span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;batch_size&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
 <span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="s2">&quot;xmodel&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>After loading a worker, make sure it’s ready before attempting to make an inference.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">proteus</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -483,11 +484,11 @@ This function infers the shape and datatype of the image using the properties st
 <span class="sd">        images (list[numpy.ndarray]): the input images</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list[proteus.InferenceRequest]: the requests</span>
+<span class="sd">        list[amdinfer.InferenceRequest]: the requests</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">requests</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
-        <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proteus</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amdinfer</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">requests</span>
 
 
@@ -518,7 +519,7 @@ The postprocessing identifies the highest probability classes and the top few of
 The <code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered</span></code> method accepts a list of requests, makes all the requests asynchronously using the C++ <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> API, waits until each request completes, and then returns a list of responses.
 If there are multiple requests sent in this way, they may be batched together by the server.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># in migraphx.py</span>
-<span class="n">responses</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">requests</span><span class="p">)</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">requests</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Making inferences...&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
     <span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">()</span>
@@ -561,7 +562,7 @@ If there are multiple requests sent in this way, they may be batched together by
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 15, 2022.
+        Last updated on November 17, 2022.
       </span>
 
     </p>

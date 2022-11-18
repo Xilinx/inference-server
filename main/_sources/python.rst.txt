@@ -40,14 +40,14 @@ These instructions assume you're only building wheels for x86_64 Linux with CPyt
 
     # build the image. You should add some suffix to differentiate this image
     # from the regular image
-    ./proteus dockerize --suffix="-ci"
+    ./amdinfer dockerize --suffix="-ci"
 
-    # this will build an image with the name $(whoami)/proteus-dev-ci:latest
+    # this will build an image with the name $(whoami)/amdinfer-dev-ci:latest
     # if you're not building wheels on the same host, you will need to upload
     # this image to a Docker registry
 
     # on a host where your image exists or can be pulled
-    export CIBW_MANYLINUX_X86_64_IMAGE=$(whoami)/proteus-dev-ci:latest
+    export CIBW_MANYLINUX_X86_64_IMAGE=$(whoami)/amdinfer-dev-ci:latest
 
     pip install cibuildwheel
 
@@ -70,5 +70,5 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 API
 ---
 
-.. automodule:: proteus
+.. automodule:: amdinfer
     :imported-members:

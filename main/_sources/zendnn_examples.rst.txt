@@ -107,7 +107,7 @@ Source is available at :code:`examples/cpp/tf_zendnn_client.cpp`. To build and r
 
 .. code-block:: console
 
-    $ ./proteus build --debug && ./build/Debug/examples/cpp/tf_zendnn_client
+    $ ./amdinfer build --debug && ./build/Debug/examples/cpp/tf_zendnn_client
 
 PyTorch + ZenDNN
 ^^^^^^^^^^^^^^^^
@@ -116,4 +116,4 @@ Source is available at :code:`examples/cpp/pt_zendnn_client.cpp`. To build and r
 
 .. code-block:: console
 
-    $ ./proteus build --debug && ./build/Debug/examples/cpp/pt_zendnn_client
+    $ ./amdinfer build --debug && ./build/Debug/examples/cpp/pt_zendnn_client

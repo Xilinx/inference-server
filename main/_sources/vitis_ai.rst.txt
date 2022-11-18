@@ -14,8 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Vitis AI
-========
+FPGAs - Vitis AI
+================
 
 Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
 
@@ -57,18 +57,18 @@ Alternatively, you can also copy XCLBINs directly into the container as well.
 Build an image
 --------------
 
-To build an image with Vitis AI enabled, you need to add the ``--vitis`` to the ``proteus dockerize`` command:
+To build an image with Vitis AI enabled, you need to add the ``--vitis`` to the ``amdinfer dockerize`` command:
 
 .. code-block:: bash
 
     # create the Dockerfile
     python3 docker/generate.py
 
-    # build the dev image $(whoami)/proteus-dev-vitis:latest
-    ./proteus dockerize --vitis --suffix="-vitis"
+    # build the dev image $(whoami)/amdinfer-dev-vitis:latest
+    ./amdinfer dockerize --vitis --suffix="-vitis"
 
-    # build the production image $(whoami)/proteus-vitis:latest
-    ./proteus dockerize --vitis --suffix="-vitis" --production
+    # build the production image $(whoami)/amdinfer-vitis:latest
+    ./amdinfer dockerize --vitis --suffix="-vitis" --production
 
 Get assets and models
 ---------------------
@@ -77,4 +77,4 @@ You can download the assets and models used for tests and examples with:
 
 .. code-block:: console
 
-    $ ./proteus get --vitis
+    $ ./amdinfer get --vitis

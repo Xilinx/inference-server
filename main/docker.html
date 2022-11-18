@@ -84,7 +84,7 @@ function OptanonWrapper() { }
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="KServe" href="kserve.html" />
-    <link rel="prev" title="ZenDNN" href="zendnn.html" /> 
+    <link rel="prev" title="FPGAs - Vitis AI" href="vitis_ai.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -280,9 +280,9 @@ function OptanonWrapper() { }
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="migraphx.html">MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">Vitis AI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="zendnn.html">ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul class="current">
@@ -401,10 +401,10 @@ For more powerful and easier to use deployments, consider using <a class="refere
 It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
 To build the production container:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
-<span class="gp">$ </span>./proteus dockerize --production &lt;platform flags&gt;
+<span class="gp">$ </span>./amdinfer dockerize --production &lt;platform flags&gt;
 </pre></div>
 </div>
-<p>Depending on what platforms you want to support, add the appropriate flags to enable <a class="reference internal" href="vitis_ai.html#vitis-ai"><span class="std std-ref">Vitis AI</span></a>, <a class="reference internal" href="zendnn.html#id1"><span class="std std-ref">ZenDNN</span></a> or <a class="reference internal" href="migraphx.html#migraphx"><span class="std std-ref">MIGraphX</span></a>.
+<p>Depending on what platforms you want to support, add the appropriate flags to enable <a class="reference internal" href="vitis_ai.html"><span class="doc">Vitis AI</span></a>, <a class="reference internal" href="zendnn.html"><span class="doc">ZenDNN</span></a> or <a class="reference internal" href="migraphx.html"><span class="doc">MIGraphX</span></a>.
 Refer to the help or the platform documentation for more information on how to build the right image.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -418,7 +418,7 @@ If you don’t have access to one, you can start a local registry using <a class
 Make sure to set up a secure registry if you need access to the registry from more than one host.</p>
 <p>To push the image to the registry, re-tag the image with the registry and push it.
 For example, if you’re using the local registry approach from above, the registry name would be <code class="docutils literal notranslate"><span class="pre">localhost:5000</span></code> by default.
-By default, using <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">dockerize</span> <span class="pre">...</span></code> will build an image of the form <code class="docutils literal notranslate"><span class="pre">$(whoami)/&lt;image&gt;</span></code>, which is what the code snippet uses below.</p>
+By default, using <code class="docutils literal notranslate"><span class="pre">amdinfer</span> <span class="pre">dockerize</span> <span class="pre">...</span></code> will build an image of the form <code class="docutils literal notranslate"><span class="pre">$(whoami)/&lt;image&gt;</span></code>, which is what the code snippet uses below.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker tag <span class="k">$(</span>whoami<span class="k">)</span>/&lt;image&gt; &lt;registry&gt;/&lt;image&gt; <span class="o">&amp;&amp;</span> docker push &lt;registry&gt;/&lt;image&gt;
 </pre></div>
 </div>
@@ -443,7 +443,7 @@ For example, one approach is using a Dockerfile to build a new image:</p>
 
 <span class="k">COPY</span><span class="w"> </span>/some/path/in/Docker/build/tree /some/path/in/the/image
 <span class="k">ENV</span><span class="w"> </span><span class="nv">SomeVariable</span><span class="o">=</span>SomeValue
-<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;proteus-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&lt;more arguments?&gt;&quot;</span><span class="p">]</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;amdinfer-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&lt;more arguments?&gt;&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In this case, you can build and save a new image that includes the models you want to serve.
@@ -464,14 +464,14 @@ Look at the <code class="docutils literal notranslate"><span class="pre">docker<
 But before it can serve requests, you need to load the models that you added into the image.
 The easiest way to communicate with the server is using the <a class="reference internal" href="python.html#install-the-python-library"><span class="std std-ref">Python library</span></a>.
 You can install it locally or use it in the development container to load the workers on the server.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">proteus</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">amdinfer</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;http://hostname:port&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;http://hostname:port&quot;</span><span class="p">)</span>
 
 <span class="c1"># depending on the model, you need to use the appropriate worker</span>
 <span class="n">worker_name</span> <span class="o">=</span> <span class="s2">&quot;migraphx&quot;</span>
 
-<span class="n">parameters</span> <span class="o">=</span> <span class="n">proteus</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
 <span class="c1"># specifies the path to the model on the server for it to open</span>
 <span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/model&quot;</span><span class="p">)</span>
 
@@ -479,7 +479,7 @@ You can install it locally or use it in the development container to load the wo
 
 <span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
-<span class="n">proteus</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+<span class="n">amdinfer</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Clients that make requests to this worker will need the endpoint to talk it.</p>
@@ -511,7 +511,7 @@ Once you have it, you can use <code class="docutils literal notranslate"><span c
         <a href="kserve.html" class="btn btn-neutral float-right" title="KServe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="zendnn.html" class="btn btn-neutral float-left" title="ZenDNN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vitis_ai.html" class="btn btn-neutral float-left" title="FPGAs - Vitis AI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -521,7 +521,7 @@ Once you have it, you can use <code class="docutils literal notranslate"><span c
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on November 15, 2022.
+        Last updated on November 17, 2022.
       </span>
 
     </p>
