@@ -609,43 +609,13 @@ ARG COPY_DIR
 
 COPY --from=ptzendnn_builder ${COPY_DIR} /
 
-FROM common_builder AS migraphx_builder
-
-ARG COPY_DIR
-ARG MANIFESTS_DIR
-WORKDIR /tmp
-
-# delete any inherited artifacts and recreate
-RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
-
-# Install migraphx which supports GPU targets.  At the time of writing this,
-# it was necessary to build migraphx from source because the release branch
-# didn't contain needed headers but it should be possible to install from repo
-# some day.
-
-# Install dependencies for migraphx
-# ENV PYTHONPATH=/opt/rocm/lib   # This addition may be needed to import migraphx in Python scripts
-#        for Release version, since it's set up differently than dev
-
-$[BUILD_MIGRAPHX]
-
-# Alternative: install MIGraphX with package manager
-# RUN sudo apt update \
-#     && sudo apt install -y migraphx
-
-# build wheel for onnx (it needs protobuf), used by migraphx example scripts
-RUN pip3 wheel onnx \
-    && cp *.whl ${COPY_DIR}
-
 FROM ptzendnn_installer_${ENABLE_PTZENDNN} AS migraphx_installer_no
 
 FROM ptzendnn_installer_${ENABLE_PTZENDNN} AS migraphx_installer_yes
 
 ARG COPY_DIR
 
-COPY --from=migraphx_builder ${COPY_DIR} /
-
-$[INSTALL_MIGRAPHX_DEV]
+$[INSTALL_MIGRAPHX]
 
 FROM common_builder AS builder_dev
 
@@ -765,9 +735,7 @@ FROM vitis_installer_prod_${ENABLE_VITIS} AS migraphx_installer_prod_yes
 
 ARG COPY_DIR
 
-COPY --from=migraphx_builder ${COPY_DIR} /
-
-$[INSTALL_MIGRAPHX_PROD]
+$[INSTALL_MIGRAPHX]
 
 FROM migraphx_installer_prod_${ENABLE_MIGRAPHX} as prod
 
