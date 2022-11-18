@@ -158,7 +158,9 @@ Args getArgs(int argc, char** argv) {
   Args args = parseArgs(argc, argv);
 
   if (args.path_to_model.empty()) {
-    fs::path root{std::getenv("AMDINFER_ROOT")};
+    const auto* root_str = std::getenv("AMDINFER_ROOT");
+    assert(root_str != nullptr);
+    fs::path root{root_str};
     args.path_to_model =
       root /
       "external/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel";

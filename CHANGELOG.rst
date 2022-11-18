@@ -34,8 +34,9 @@ Added
 - Support building Python wheels with cibuildwheel (:pr:`71`)
 - Support XModels with multiple output tensors (:pr:`74`)
 - Add FP16 support (:pr:`76`)
-- Add more documentation (:pr:`85`)
+- Add more documentation (:pr:`85`, :pr:`90`)
 - Add Python bindings for gRPC and Native clients (:pr:`88`)
+- Add tests with KServe (:pr:`90`)
 
 Changed
 ^^^^^^^

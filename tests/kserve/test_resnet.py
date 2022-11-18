@@ -27,7 +27,15 @@ import utils
 from fixtures import create_container_isvc, create_runtime_isvc, create_trained_model
 
 
+# TODO(varunsh): this doesn't work because KServe timeouts when loading the
+# worker. Not sure how to increase the KNative timeout value
 def make_request_migraphx():
+    """
+    Make a request compatible with MIGraphX
+
+    Returns:
+        dict: request
+    """
     image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
     options = pre_post.ImagePreprocessOptionsFloat()
@@ -58,8 +66,34 @@ def make_request_migraphx():
     return amdinfer.inference_request_to_dict(request)
 
 
+def make_request_u250():
+    image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+
+    options = pre_post.ImagePreprocessOptionsInt8()
+    options.order = pre_post.ImageOrder.NHWC
+    options.mean = [123, 107, 104]
+    options.std = [1, 1, 1]
+    options.normalize = True
+    images = pre_post.imagePreprocessInt8([image_path], options)
+
+    assert len(images) == 1
+
+    input_0 = amdinfer.InferenceRequestInput()
+    input_0.name = "input-0"
+    input_0.datatype = amdinfer.DataType.INT8
+    input_0.shape = [224, 224, 3]
+    input_0.setInt8Data(images[0])
+
+    request = amdinfer.InferenceRequest()
+    request.addInputTensor(input_0)
+
+    return amdinfer.inference_request_to_dict(request)
+
+
 def make_prediction(model_names, service_name, namespace):
-    data = make_request_migraphx()
+
+    # data = make_request_migraphx()
+    data = make_request_u250()
 
     print("making prediction")
     responses = [
@@ -76,16 +110,28 @@ def validate(responses):
     assert len(response["outputs"]) == 1
     output = response["outputs"][0]
 
-    index = pre_post.resnet50PostprocessFloat(output, 1)
+    index = np.argmax(output["data"])
+
     # for this image, this is the expected top classification
-    assert index == 259
+    assert index == 259, index
 
 
-@pytest.mark.skip("Skipping while debugging the MIGraphX image")
 @pytest.mark.parametrize(
-    "create_trained_model", [("resnet50-onnx", "resnet50_onnx_model")], indirect=True
+    "create_trained_model",
+    [
+        ("resnet50-u250", "resnet50_u250_model"),
+        # ("resnet50-onnx", "resnet50_onnx_model")
+    ],
+    indirect=True,
 )
-@pytest.mark.parametrize("create_container_isvc", ["image_migraphx"], indirect=True)
+@pytest.mark.parametrize(
+    "create_container_isvc",
+    [
+        ("image_vitis", {"xilinx.com/fpga-xilinx_u250_gen3x16_xdma_shell_3_1-0": 1})
+        # ("image_migraphx", {"amd.com/gpu": 1})
+    ],
+    indirect=True,
+)
 def test_mms_resnet50_kserve(
     runtime_config, create_container_isvc, create_trained_model
 ):
@@ -98,10 +144,9 @@ def test_mms_resnet50_kserve(
     validate(responses)
 
 
-@pytest.mark.skip("Skipping while debugging the MIGraphX image")
 @pytest.mark.parametrize(
     "create_runtime_isvc",
-    [("runtime_migraphx", "resnet50-onnx", "resnet50_onnx_model")],
+    [("runtime_vitis", "resnet50-u250", "resnet50_u250_model", "vitis_xmodel")],
     indirect=True,
 )
 def test_runtime_resnet50_kserve(

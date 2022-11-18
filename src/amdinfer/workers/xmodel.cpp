@@ -108,8 +108,12 @@ vart::RunnerExt* XModel::getRunner() {
 
 void XModel::doInit(RequestParameters* parameters) {
   constexpr auto kMaxBufferNum = 50;
-  std::string kPath =
-    std::string(std::getenv("AKS_XMODEL_ROOT")) +
+  const auto* aks_xmodel_root = std::getenv("AKS_XMODEL_ROOT");
+  if (aks_xmodel_root == nullptr) {
+    throw environment_not_set_error("AKS_XMODEL_ROOT not set");
+  }
+  const auto kPath =
+    std::string{aks_xmodel_root} +
     "/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel";
 
   auto max_buffer_num = kMaxBufferNum;
@@ -121,9 +125,6 @@ void XModel::doInit(RequestParameters* parameters) {
   auto path = kPath;
   if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
-    if (!util::endsWith(path, ".xmodel")) {
-      path += ".xmodel";
-    }
   }
   util::autoExpandEnvironmentVariables(path);
   graph_ = xir::Graph::deserialize(path);

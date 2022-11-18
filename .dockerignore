@@ -25,6 +25,7 @@ private/
 src/amdinfer/bindings/python/dist
 _skbuild
 dist
+docs/cpp_api
 
 # files
 **/callgrind.out.*

@@ -13,28 +13,33 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _docker:
-
 Docker
 ======
 
 You can use the AMD Inference Server with Docker to deploy the server.
-For more powerful and easier to use deployments, consider using :ref:`KServe <kserve>`.
+For more powerful and easier to use deployments, consider using :ref:`KServe <kserve:KServe>`.
 
 Build the production Docker image
 ---------------------------------
 
 The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
-It will automatically start the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
+It automatically starts the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
 To build the production container:
 
 .. code-block:: console
 
     $ python3 docker/generate.py
-    $ ./amdinfer dockerize --production [platform flags]
+    $ ./amdinfer dockerize --production <platform flags>
 
-Depending on what platforms you want to support, add the appropriate flags to enable :ref:`Vitis AI <vitis_ai:vitis ai>`, :ref:`ZenDNN <zendnn:zendnn>` or :ref:`MIGraphX <migraphx:migraphx>`.
+Depending on what platforms you want to support, add the appropriate flags to enable :doc:`Vitis AI <vitis_ai>`, :doc:`ZenDNN <zendnn>` or :doc:`MIGraphX <migraphx>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
+
+.. important::
+
+    Some platforms require additional steps before building the Docker image with them enabled.
+    Look at the platform-specific documentation for more information about how to build images for a given platform.
+
+.. _docker~push to a registry:
 
 Push to a registry
 ^^^^^^^^^^^^^^^^^^
@@ -45,7 +50,7 @@ Make sure to set up a secure registry if you need access to the registry from mo
 
 To push the image to the registry, re-tag the image with the registry and push it.
 For example, if you're using the local registry approach from above, the registry name would be ``localhost:5000`` by default.
-By default, using ``amdinfer dockerize ...`` will build an image of the form ``$(whoami)/<image>``, which is what the code snippet uses below.
+By default, using ``amdinfer dockerize ...`` builds an image of the form ``$(whoami)/<image>``, which is what the code snippet uses below.
 
 .. code-block:: console
 
@@ -80,22 +85,23 @@ For example, one approach is using a Dockerfile to build a new image:
 
 In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
-As with the production image, this image may need to be :ref:`pushed to a registry server <docker:push to a registry>` for your use case.
+As with the production image, this image may need to be :ref:`pushed to a registry server <docker~push to a registry>` for your use case.
 
-Note that the command that the image will run can also be overridden at the command-line when starting the container.
-So if you only need access to files in the image, an alternative approach to building a new image is to mount the needed files as volumes when starting the container.
+Note that the command that the image runs and its environment can also be overridden at the command-line when starting the container.
+Therefore, an alternative approach to building a new image is to mount the needed files as volumes when starting the container and set the environment then.
 
 Start the container
 -------------------
 
-You can start the production container with docker as any other container.
-You will need to pass along any devices that you want to enable in your container and expose ports to access the server.
+You can start the production container with ``docker`` as any other container.
+You need to pass along any devices that you want to enable in your container and expose ports to access the server.
+Look at the ``docker run`` documentation for more information about what flags can be passed.
 
 .. code-block:: console
 
-    $ docker run [--device ...] [--publish ...] <image>
+    $ docker run [--device ...] [--publish ...] [--volume ...] [--env ...] <image>
 
-By default, the production container will start the server executable and it will continue to run after the ``docker run`` command.
+By default, the production container starts the server executable and it continues to run after the ``docker run`` command.
 But before it can serve requests, you need to load the models that you added into the image.
 The easiest way to communicate with the server is using the :ref:`Python library <python:install the python library>`.
 You can install it locally or use it in the development container to load the workers on the server.
@@ -119,7 +125,7 @@ You can install it locally or use it in the development container to load the wo
     print(endpoint)
     amdinfer.waitUntilModelReady(client, endpoint)
 
-Clients that make requests to this worker will need the endpoint to talk it.
+Clients that make requests to this worker need this endpoint to talk to it.
 
 Make a request
 --------------

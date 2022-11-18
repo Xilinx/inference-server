@@ -14,8 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Vitis AI
-========
+FPGAs - Vitis AI
+================
 
 Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.
 
@@ -70,6 +70,45 @@ To build an image with Vitis AI enabled, you need to add the ``--vitis`` to the 
     # build the production image $(whoami)/amdinfer-vitis:latest
     ./amdinfer dockerize --vitis --suffix="-vitis" --production
 
+The production image will need XCLBINs.
+There are a few ways to achieve this:
+
+1. Copy XCLBINs into ``./external/overlaybins/*`` before invoking the ``dockerize`` command. The ``Dockerfile`` is configured to copy any files and directories at this path into the production image under ``/opt/xilinx/overlaybins``.
+2. Copy XCLBINs into the image after building it.
+3. Mount the XCLBINs in the container at start time
+
+Start an image
+--------------
+
+The development container can be started with:
+
+.. code-block:: console
+
+    $ ./amdinfer run --dev
+
+This automatically adds the detected devices, publishes ports, and mounts some convenient directories, such as your SSH directory, and drops you into a terminal in the container.
+
+You can start the :ref:`deployment container on Docker <docker:start the container>` with something like:
+
+.. code-block:: console
+
+    $ docker run --device /dev/xclmgmt# --device /dev/dri [--volume ...]
+
+These ``--device`` flags pass the FPGA to the container and you can mount other directories as needed to make models available.
+The name of the ``xclmgmt`` file depends on your host.
+
+On Kubernetes, you will need to add the FPGA as a resource to your deployment after installing the `Xilinx FPGA Kubernetes plugin <https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin>`__.
+The exact name of the resource will depend on which FPGA and shell you are trying to request.
+
+.. code-block:: yaml
+
+    # rest of the deployment logic
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+        xilinx.com/fpga-xilinx_u250_gen3x16_xdma_shell_3_1-0: 1
+
 Get assets and models
 ---------------------
 
@@ -78,3 +117,6 @@ You can download the assets and models used for tests and examples with:
 .. code-block:: console
 
     $ ./amdinfer get --vitis
+
+The AMD Inference Server is using models and XCLBINs from Vitis 2.5 in its tests and examples.
+Make sure you have compatible tools, shells and XCLBINs with `Vitis 2.5 <https://github.com/Xilinx/Vitis-AI/tree/v2.5/setup>`__.

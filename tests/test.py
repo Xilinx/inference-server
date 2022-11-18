@@ -92,7 +92,10 @@ def run_examples(args: argparse.Namespace, unknown_args: list):
     for file in files:
         print(f"Running {file}")
         if not args.dry_run:
-            subprocess.check_output(["python3", file])
+            try:
+                subprocess.check_output(["python3", file])
+            except subprocess.CalledProcessError as e:
+                print(f"  {e.output.decode('utf-8')}")
 
     files = glob.iglob(
         str(root / "build" / args.build / "examples/**/*"), recursive=True
@@ -101,7 +104,10 @@ def run_examples(args: argparse.Namespace, unknown_args: list):
         if os.path.isfile(file) and os.access(file, os.X_OK):
             print(f"Running {file}")
             if not args.dry_run:
-                subprocess.check_output([file])
+                try:
+                    subprocess.check_output([file])
+                except subprocess.CalledProcessError as e:
+                    print(f"  {e.output.decode('utf-8')}")
 
 
 def main(args: argparse.Namespace, unknown_args: list):

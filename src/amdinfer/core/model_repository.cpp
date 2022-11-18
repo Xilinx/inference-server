@@ -102,7 +102,7 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   }
 
   // TODO(varunsh): support other versions than 1/
-  parameters->put("model", model_path / "1/saved_model");
+  const std::string model_base = model_path / "1/saved_model";
 
   inference::Config config;
 
@@ -143,12 +143,19 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
     }
 
     parameters->put("worker", "tfzendnn");
+    parameters->put("model", model_base + ".pb");
   } else if (config.platform() == "pytorch_torchscript") {
     parameters->put("worker", "ptzendnn");
+    parameters->put("model", model_base + ".pt");
   } else if (config.platform() == "onnx_onnxv1") {
     parameters->put("worker", "migraphx");
+    parameters->put("model", model_base + ".onnx");
+  } else if (config.platform() == "migraphx_mxr") {
+    parameters->put("worker", "migraphx");
+    parameters->put("model", model_base + ".mxr");
   } else if (config.platform() == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
+    parameters->put("model", model_base + ".xmodel");
   } else {
     throw invalid_argument("Unknown platform: " + config.platform());
   }
@@ -222,8 +229,9 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
       try {
         RequestParameters params;
         amdinfer::modelLoad(model, &params);
-      } catch (const amdinfer::runtime_error&) {
-        AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
+      } catch (const amdinfer::runtime_error& e) {
+        AMDINFER_LOG_INFO(logger,
+                          "Error loading " + model.string() + ": " + e.what());
       }
     }
   }
