@@ -526,7 +526,8 @@ def install_dev_packages(manager: PackageManager, core):
             {code_indent(manager.clean, 12)}"""
     )
 
-
+# The release repo (Nov 30) is
+# migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.4/ ubuntu main" > /etc/apt/sources.list.d/rocm.list' 
 migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/.apt_5.4/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
 migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.0/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
 
