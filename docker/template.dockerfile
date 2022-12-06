@@ -89,10 +89,10 @@ $[INSTALL_BUILD_PACKAGES]
 # install extra optional distro packages
 $[INSTALL_OPTIONAL_BUILD_PACKAGES]
 
-# install Boost for VAI
-RUN wget --quiet https://boostorg.jfrog.io/artifactory/main/release/1.65.1/source/boost_1_65_1.tar.gz \
-    && tar -xzf boost_1_65_1.tar.gz \
-    && cd boost_1_65_1 \
+# install Boost for VAI and Apache Thrift. This must match the boost version installed by XRT package
+RUN wget --quiet https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.gz \
+    && tar -xzf boost_1_71_0.tar.gz \
+    && cd boost_1_71_0 \
     # && PYTHON_ROOT=$(dirname $(find /usr/include -name pyconfig.h)) \
     # && ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-root=${PYTHON_ROOT} \
     && INSTALL_DIR=/tmp/installed \
@@ -502,6 +502,8 @@ RUN git clone --recursive --single-branch --branch v2.5 --depth 1 https://github
     && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cat install_manifest.txt > ${MANIFESTS_DIR}/vart.txt \
     && cd ${VITIS_ROOT}/rt-engine \
+    # find the required components. Adding this was needed when using Boost from Ubuntu apt repositories
+    && sed -i '42i find_package(Boost COMPONENTS system filesystem thread serialization)' ./CMakeLists.txt \
     && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --cmake-options="-DBUILD_TESTS=OFF" --install-prefix /usr/local/ \
     && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cat install_manifest.txt > ${MANIFESTS_DIR}/rt-engine.txt \
