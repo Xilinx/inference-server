@@ -51,17 +51,25 @@ save_data() {
 resolve_symlinks() {
   dep=$1
 
-  dir=$(dirname $dep)
-  while [[ -L $dep ]]; do
-    save_data "$(realpath -s $dep)"
-    dep=$(readlink $dep)
+  # resolve all the symlinks in the directory
+  dir=$(readlink -f $(dirname $dep))
+  base=$(basename $dep)
+
+  new_dep="$dir/$base"
+  while [[ -L $new_dep ]]; do
+    save_data "$(realpath -s $new_dep)"
+    new_dep=$(readlink $new_dep)
     # if the next path isn't absolute, append the directory from above and
     # resolve full path
-    if [[ ! "$dep" = /* ]]; then
-      dep="$dir/$dep"
+    if [[ ! "$new_dep" = /* ]]; then
+      new_dep="$dir/$new_dep"
+    else
+      dir=$(readlink -f $(dirname $new_dep))
+      base=$(basename $new_dep)
+      new_dep="$dir/$base"
     fi
   done
-  save_data "$(realpath -s $dep)"
+  save_data "$(realpath -s $new_dep)"
 }
 
 # Usage: get_dependencies /path/to/file
