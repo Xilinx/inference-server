@@ -9,8 +9,10 @@ File soft.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the soft batcher. 
- 
+
+
 
 .. contents:: Contents
    :local:

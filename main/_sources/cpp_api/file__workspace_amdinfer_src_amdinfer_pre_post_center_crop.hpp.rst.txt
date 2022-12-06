@@ -8,6 +8,7 @@ File center_crop.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -45,6 +46,8 @@ Included By
 Namespaces
 ----------
 
+
+- :ref:`namespace_amdinfer`
 
 - :ref:`namespace_amdinfer__pre_post`
 

@@ -29,7 +29,7 @@ In essence, you will need to install software, program the shell on the FPGA(s) 
 Software
 ^^^^^^^^
 
-You need to install the Xilinx Runtime (XRT) to communicate with the FPGA over PCIe.
+You need to install the :term:`Xilinx Runtime (XRT)<Xilinx Runtime>` to communicate with the FPGA over PCIe.
 The XRT version on the host should match the one installed in the container where the server will be running.
 The Xilinx Resource Manager (XRM) is not needed on the host because it is already installed in the container.
 

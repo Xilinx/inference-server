@@ -9,8 +9,10 @@ File http_server.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the HTTP REST server. 
- 
+
+
 
 .. contents:: Contents
    :local:
@@ -59,6 +61,8 @@ Included By
 Namespaces
 ----------
 
+
+- :ref:`namespace_amdinfer`
 
 - :ref:`namespace_amdinfer__http`
 

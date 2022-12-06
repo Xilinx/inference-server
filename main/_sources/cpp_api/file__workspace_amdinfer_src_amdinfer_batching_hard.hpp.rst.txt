@@ -9,8 +9,10 @@ File hard.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the hard batcher implementation. 
- 
+
+
 
 .. contents:: Contents
    :local:

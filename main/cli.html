@@ -23,6 +23,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.bundle.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -34,7 +42,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
+        <script src="_static/js/hoverxref.js"></script>
+        <script src="_static/js/tooltipster.bundle.min.js"></script>
+        <script src="_static/js/micromodal.min.js"></script>
         <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -103,58 +115,58 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="cpp_user_api.html">C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Command-Line Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Commands">Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#options">Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Sub-commands">Sub-commands</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attach">attach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat1">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat1">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#benchmark">benchmark</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#build">build</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat2">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#named-arguments">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat2">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#clean">clean</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat3">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat3">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#dockerize">dockerize</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat4">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat4">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#get">get</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat5">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat5">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#install">install</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat6">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat6">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#list">list</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#positional-arguments">Positional Arguments</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#make">make</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat7">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat7">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#run">run</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Presets">Presets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat8">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#presets">Presets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat8">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#start">start</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat9">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat9">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#test">test</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat10">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat10">Options</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#up">up</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Options_repeat11">Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#options_repeat11">Options</a></li>
 </ul>
 </li>
 </ul>
@@ -209,16 +221,16 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">amdinfer</span> <span class="p">[</span><span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="n">command</span> <span class="o">...</span>
 </pre></div>
 </div>
-<section id="Commands">
-<h2>Commands<a class="headerlink" href="#Commands" title="Permalink to this headline">¶</a></h2>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>command</kbd></dt>
 <dd><p>Possible choices: attach, benchmark, build, clean, dockerize, get, install, list, make, run, start, test, up</p>
 </dd>
 </dl>
 </section>
-<section id="Options">
-<h2>Options<a class="headerlink" href="#Options" title="Permalink to this headline">¶</a></h2>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>--dry-run</kbd></dt>
 <dd><p>print the actual commands that would be run without running them</p>
@@ -237,8 +249,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">attach</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat1">
-<h4>Options<a class="headerlink" href="#Options_repeat1" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat1">
+<h4>Options<a class="headerlink" href="#options_repeat1" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>name</kbd></dt>
 <dd><p>name of the container to attach to. Defaults to latest running container</p>
@@ -259,8 +271,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">build</span> <span class="p">[</span><span class="o">--</span><span class="n">coverage</span> <span class="o">|</span> <span class="o">--</span><span class="n">debug</span> <span class="o">|</span> <span class="o">--</span><span class="n">release</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">THREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Named Arguments">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h4>
+<section id="named-arguments">
+<h4>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--coverage</kbd></dt>
 <dd><p>build the coverage configuration</p>
@@ -273,8 +285,8 @@ The documentation for the options available in this Python script can be seen he
 </dd>
 </dl>
 </section>
-<section id="Options_repeat2">
-<h4>Options<a class="headerlink" href="#Options_repeat2" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat2">
+<h4>Options<a class="headerlink" href="#options_repeat2" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-a, --all</kbd></dt>
 <dd><p>Build additional optional targets</p>
@@ -309,8 +321,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">clean</span> <span class="p">[</span><span class="o">--</span><span class="n">artifacts</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">gui</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat3">
-<h4>Options<a class="headerlink" href="#Options_repeat3" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat3">
+<h4>Options<a class="headerlink" href="#options_repeat3" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--artifacts</kbd></dt>
 <dd><p>Delete downloaded artifacts</p>
@@ -329,8 +341,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">dockerize</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span><span class="o">-</span><span class="n">base</span> <span class="n">DEV_BASE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">production</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">push</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn_path</span> <span class="n">TFZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn_path</span> <span class="n">PTZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat4">
-<h4>Options<a class="headerlink" href="#Options_repeat4" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat4">
+<h4>Options<a class="headerlink" href="#options_repeat4" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dev-base</kbd></dt>
 <dd><p>Name of the image to use as dev image to build the production image.</p>
@@ -375,8 +387,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">get</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat5">
-<h4>Options<a class="headerlink" href="#Options_repeat5" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat5">
+<h4>Options<a class="headerlink" href="#options_repeat5" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--all</kbd></dt>
 <dd><p>download all files</p>
@@ -411,8 +423,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">install</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">manifest</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat6">
-<h4>Options<a class="headerlink" href="#Options_repeat6" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat6">
+<h4>Options<a class="headerlink" href="#options_repeat6" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to /tmp/amdinfer/build</p>
@@ -431,8 +443,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="nb">type</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Positional Arguments">
-<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h4>
+<section id="positional-arguments">
+<h4>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>type</kbd></dt>
 <dd><p>List the active containers (default) or specify ‘images’ or ‘labels’</p>
@@ -447,8 +459,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">make</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span> <span class="p">[</span><span class="n">JOBS</span><span class="p">]]</span>
 </pre></div>
 </div>
-<section id="Options_repeat7">
-<h4>Options<a class="headerlink" href="#Options_repeat7" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat7">
+<h4>Options<a class="headerlink" href="#options_repeat7" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -467,8 +479,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">run</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span> <span class="o">|</span> <span class="o">--</span><span class="n">autotest</span><span class="o">-</span><span class="n">dev</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">command</span> <span class="n">COMMAND</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">devices</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">image</span> <span class="n">IMAGE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">interactive</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">net</span><span class="o">-</span><span class="n">host</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rm</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">config</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">working</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">xclbins</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Presets">
-<h4>Presets<a class="headerlink" href="#Presets" title="Permalink to this headline">¶</a></h4>
+<section id="presets">
+<h4>Presets<a class="headerlink" href="#presets" title="Permalink to this headline">¶</a></h4>
 <p>Presets define a set of options together for convenience. If additional options are provided, they override those set in the preset.</p>
 <dl class="option-list">
 <dt><kbd>--dev</kbd></dt>
@@ -479,8 +491,8 @@ The documentation for the options available in this Python script can be seen he
 </dd>
 </dl>
 </section>
-<section id="Options_repeat8">
-<h4>Options<a class="headerlink" href="#Options_repeat8" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat8">
+<h4>Options<a class="headerlink" href="#options_repeat8" title="Permalink to this headline">¶</a></h4>
 <p>These options may default to a value if a preset is selected.</p>
 <dl class="option-list">
 <dt><kbd>--command</kbd></dt>
@@ -519,8 +531,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">gdb</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat9">
-<h4>Options<a class="headerlink" href="#Options_repeat9" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat9">
+<h4>Options<a class="headerlink" href="#options_repeat9" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -536,15 +548,14 @@ The documentation for the options available in this Python script can be seen he
 <section id="test">
 <h3>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
 <p>Run the test suite with pytest. All unknown arguments are passed to pytest</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span>
-              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">tests</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat10">
-<h4>Options<a class="headerlink" href="#Options_repeat10" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat10">
+<h4>Options<a class="headerlink" href="#options_repeat10" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--mode</kbd></dt>
-<dd><p>Possible choices: all, examples, tests</p>
+<dd><p>Possible choices: tests, examples, all</p>
 <p>Type of tests to run. Defaults to tests</p>
 <p>Default: “tests”</p>
 </dd>
@@ -588,8 +599,8 @@ The documentation for the options available in this Python script can be seen he
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">up</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PROFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="n">VERSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">only</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="Options_repeat11">
-<h4>Options<a class="headerlink" href="#Options_repeat11" title="Permalink to this headline">¶</a></h4>
+<section id="options_repeat11">
+<h4>Options<a class="headerlink" href="#options_repeat11" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-p, --profile</kbd></dt>
 <dd><p>profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev</p>
@@ -639,7 +650,7 @@ The documentation for the options available in this Python script can be seen he
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on November 18, 2022.
+      <span class="lastupdated">Last updated on December 06, 2022.
       </span></p>
   </div>
 

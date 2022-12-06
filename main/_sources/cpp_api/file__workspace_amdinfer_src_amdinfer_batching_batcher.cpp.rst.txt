@@ -9,8 +9,10 @@ File batcher.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the base batcher and CppNativeApi interface. 
- 
+
+
 
 .. contents:: Contents
    :local:

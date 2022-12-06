@@ -9,8 +9,10 @@ File base64.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines base64 encoding/decoding. 
- 
+
+
 
 .. contents:: Contents
    :local:
@@ -63,6 +65,8 @@ Included By
 Namespaces
 ----------
 
+
+- :ref:`namespace_amdinfer`
 
 - :ref:`namespace_amdinfer__util`
 

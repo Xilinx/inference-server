@@ -23,6 +23,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster.custom.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster.bundle.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -34,7 +42,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
+        <script src="../_static/js/hoverxref.js"></script>
+        <script src="../_static/js/tooltipster.bundle.min.js"></script>
+        <script src="../_static/js/micromodal.min.js"></script>
         <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -287,7 +299,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7Batcher7BatcherEv">
 <span id="_CPPv3N8amdinfer7Batcher7BatcherEv"></span><span id="_CPPv2N8amdinfer7Batcher7BatcherEv"></span><span id="amdinfer::Batcher::Batcher"></span><span class="target" id="classamdinfer_1_1Batcher_1aee7276b2f5daa48c4fc2c0078b3a8982"></span><span class="sig-name descname"><span class="n"><span class="pre">Batcher</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7Batcher7BatcherEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Construct a new <a class="reference internal" href="#classamdinfer_1_1Batcher"><span class="std std-ref">Batcher</span></a> object. </p>
-<p>The C++ <a class="reference internal" href="classamdinfer_1_1Interface.html#classamdinfer_1_1Interface"><span class="std std-ref">Interface</span></a> class encapsulates incoming requests from the C++ API to the batcher. </p>
+<p>The C++ <a class="reference internal" href="classamdinfer_1_1Interface.html#classamdinfer_1_1Interface"><span class="std std-ref">Interface</span></a> class encapsulates incoming requests from the C++ API to the batcher.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -301,7 +313,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd><p>Construct a new <a class="reference internal" href="#classamdinfer_1_1Batcher"><span class="std std-ref">Batcher</span></a> object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – the endpoint corresponding to the batcher’s worker groupcopy constructor </p>
+<dd class="field-odd"><p><strong>name</strong> – the endpoint corresponding to the batcher’s worker group copy constructor </p>
 </dd>
 </dl>
 </dd></dl>
@@ -371,7 +383,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7Batcher13getInputQueueEv">
-<span id="_CPPv3N8amdinfer7Batcher13getInputQueueEv"></span><span id="_CPPv2N8amdinfer7Batcher13getInputQueueEv"></span><span id="amdinfer::Batcher::getInputQueue"></span><span class="target" id="classamdinfer_1_1Batcher_1ab8037f785e74dabbbee70a7b903d92b3"></span><a class="reference internal" href="typedef_namespaceamdinfer_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4N8amdinfer13BlockingQueueE" title="amdinfer::BlockingQueue"><span class="n"><span class="pre">BlockingQueue</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE" title="amdinfer::InterfacePtr"><span class="n"><span class="pre">InterfacePtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getInputQueue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7Batcher13getInputQueueEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7Batcher13getInputQueueEv"></span><span id="_CPPv2N8amdinfer7Batcher13getInputQueueEv"></span><span id="amdinfer::Batcher::getInputQueue"></span><span class="target" id="classamdinfer_1_1Batcher_1ab8037f785e74dabbbee70a7b903d92b3"></span><a class="reference internal" href="typedef_namespaceamdinfer_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4I0EN8amdinfer13BlockingQueueE" title="amdinfer::BlockingQueue"><span class="n"><span class="pre">BlockingQueue</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE" title="amdinfer::InterfacePtr"><span class="n"><span class="pre">InterfacePtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getInputQueue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7Batcher13getInputQueueEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the batcher’s input queue (used to enqueue new requests) </p>
 </dd></dl>
 
@@ -418,7 +430,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7Batcher12input_queue_E">
-<span id="_CPPv3N8amdinfer7Batcher12input_queue_E"></span><span id="_CPPv2N8amdinfer7Batcher12input_queue_E"></span><span id="amdinfer::Batcher::input_queue___std::shared_ptr:BlockingQueue:InterfacePtr::"></span><span class="target" id="classamdinfer_1_1Batcher_1a0ea2c99c18b3c9e884aee6701352c44e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_namespaceamdinfer_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4N8amdinfer13BlockingQueueE" title="amdinfer::BlockingQueue"><span class="n"><span class="pre">BlockingQueue</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE" title="amdinfer::InterfacePtr"><span class="n"><span class="pre">InterfacePtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_queue_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7Batcher12input_queue_E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7Batcher12input_queue_E"></span><span id="_CPPv2N8amdinfer7Batcher12input_queue_E"></span><span id="amdinfer::Batcher::input_queue___std::shared_ptr:BlockingQueue:InterfacePtr::"></span><span class="target" id="classamdinfer_1_1Batcher_1a0ea2c99c18b3c9e884aee6701352c44e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_namespaceamdinfer_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4I0EN8amdinfer13BlockingQueueE" title="amdinfer::BlockingQueue"><span class="n"><span class="pre">BlockingQueue</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE" title="amdinfer::InterfacePtr"><span class="n"><span class="pre">InterfacePtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_queue_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7Batcher12input_queue_E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -469,7 +481,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on November 18, 2022.
+      <span class="lastupdated">Last updated on December 06, 2022.
       </span></p>
   </div>
 

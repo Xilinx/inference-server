@@ -9,8 +9,10 @@ File manager.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines how the shared mutable state is managed. 
- 
+
+
 
 .. contents:: Contents
    :local:

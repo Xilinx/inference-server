@@ -9,8 +9,10 @@ File worker_info.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the WorkerInfo class - information the Manager saves on each active worker. 
- 
+
+
 
 .. contents:: Contents
    :local:

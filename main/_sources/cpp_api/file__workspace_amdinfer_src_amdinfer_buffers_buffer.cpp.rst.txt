@@ -9,8 +9,10 @@ File buffer.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the Buffer class. 
- 
+
+
 
 .. contents:: Contents
    :local:

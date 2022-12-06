@@ -9,8 +9,10 @@ File batcher.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the base batcher implementation. 
- 
+
+
 
 .. contents:: Contents
    :local:

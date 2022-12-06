@@ -9,8 +9,10 @@ File main.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Parses the command-line arguments and implements the entrypoint for the amdinfer-server executable. 
- 
+
+
 
 .. contents:: Contents
    :local:

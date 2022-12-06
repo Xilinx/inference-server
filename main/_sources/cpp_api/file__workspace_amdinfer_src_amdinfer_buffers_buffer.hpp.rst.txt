@@ -9,8 +9,10 @@ File buffer.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines how inference requests made to the server should store their tensor data: using subclasses of the Buffer class. 
- 
+
+
 
 .. contents:: Contents
    :local:

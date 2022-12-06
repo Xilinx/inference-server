@@ -40,41 +40,50 @@ Code Documentation
             */
             // Part 1: use linkColor as a parameter to bootstrap treeview
 
-            // apply the page view hierarchy
-            $("#page-treeView").treeview({
-                data: getPageHierarchyTree(),
-                enableLinks: true,
-                color: linkColor,
-                showTags: true,
-                collapseIcon: "glyphicon glyphicon-minus",
-                expandIcon: "glyphicon glyphicon-plus",
-                levels: 1,
-                onhoverColor: "#F5F5F5"
-            });
+            // apply the page view hierarchy if it exists
+            var page_h = $("#page-treeView");
+            if (page_h.length) {
+                page_h.treeview({
+                    data: getPageHierarchyTree(),
+                    enableLinks: true,
+                    color: linkColor,
+                    showTags: true,
+                    collapseIcon: "glyphicon glyphicon-minus",
+                    expandIcon: "glyphicon glyphicon-plus",
+                    levels: 1,
+                    onhoverColor: "#F5F5F5"
+                });
+            }
 
-            // apply the class view hierarchy
-            $("#class-treeView").treeview({
-                data: getClassHierarchyTree(),
-                enableLinks: true,
-                color: linkColor,
-                showTags: true,
-                collapseIcon: "glyphicon glyphicon-minus",
-                expandIcon: "glyphicon glyphicon-plus",
-                levels: 1,
-                onhoverColor: "#F5F5F5"
-            });
+            // apply the class view hierarchy if it exists
+            var class_h = $("#class-treeView");
+            if (class_h.length) {
+                class_h.treeview({
+                    data: getClassHierarchyTree(),
+                    enableLinks: true,
+                    color: linkColor,
+                    showTags: true,
+                    collapseIcon: "glyphicon glyphicon-minus",
+                    expandIcon: "glyphicon glyphicon-plus",
+                    levels: 1,
+                    onhoverColor: "#F5F5F5"
+                });
+            }
 
-            // apply the file view hierarchy
-            $("#file-treeView").treeview({
-                data: getFileHierarchyTree(),
-                enableLinks: true,
-                color: linkColor,
-                showTags: true,
-                collapseIcon: "glyphicon glyphicon-minus",
-                expandIcon: "glyphicon glyphicon-plus",
-                levels: 1,
-                onhoverColor: "#F5F5F5"
-            });
+            // apply the file view hierarchy if it exists
+            var file_h = $("#file-treeView");
+            if (file_h.length) {
+                file_h.treeview({
+                    data: getFileHierarchyTree(),
+                    enableLinks: true,
+                    color: linkColor,
+                    showTags: true,
+                    collapseIcon: "glyphicon glyphicon-minus",
+                    expandIcon: "glyphicon glyphicon-plus",
+                    levels: 1,
+                    onhoverColor: "#F5F5F5"
+                });
+            }
 
             // Part 2: override the style of the glyphicons by injecting some CSS
             $('<style type="text/css" id="exhaleTreeviewOverride">' +

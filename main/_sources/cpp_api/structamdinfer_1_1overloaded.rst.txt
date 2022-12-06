@@ -9,10 +9,9 @@ Template Struct overloaded
 Inheritance Relationships
 -------------------------
 
-Base Types
-**********
+Base Type
+*********
 
-- ``public Ts``
 - ``public Ts``
 
 

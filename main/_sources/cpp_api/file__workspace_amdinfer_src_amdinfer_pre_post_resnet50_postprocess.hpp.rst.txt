@@ -8,6 +8,7 @@ File resnet50_postprocess.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -43,6 +44,8 @@ Includes
 Namespaces
 ----------
 
+
+- :ref:`namespace_amdinfer`
 
 - :ref:`namespace_amdinfer__pre_post`
 

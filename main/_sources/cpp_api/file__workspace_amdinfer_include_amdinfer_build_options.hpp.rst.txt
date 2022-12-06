@@ -9,8 +9,10 @@ File build_options.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the build information. This file is updated automatically by CMake. To update, recompile the amdinfer source code. 
- 
+
+
 
 .. contents:: Contents
    :local:

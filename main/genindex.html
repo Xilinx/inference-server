@@ -22,6 +22,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.bundle.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -33,7 +41,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
+        <script src="_static/js/hoverxref.js"></script>
+        <script src="_static/js/tooltipster.bundle.min.js"></script>
+        <script src="_static/js/micromodal.min.js"></script>
         <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -161,6 +173,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -329,7 +342,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE">amdinfer::BatchPtrQueue (C++ type)</a>, <a href="cpp_api/typedef_namespaceamdinfer_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE">[1]</a>
 </li>
-      <li><a href="cpp_api/typedef_namespaceamdinfer_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4N8amdinfer13BlockingQueueE">amdinfer::BlockingQueue (C++ type)</a>, <a href="cpp_api/typedef_queue_8hpp_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4N8amdinfer13BlockingQueueE">[1]</a>
+      <li><a href="cpp_api/typedef_namespaceamdinfer_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4I0EN8amdinfer13BlockingQueueE">amdinfer::BlockingQueue (C++ type)</a>, <a href="cpp_api/typedef_queue_8hpp_1a3221a88db26ee77b2f820bb75bc2ff24.html#_CPPv4I0EN8amdinfer13BlockingQueueE">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6BufferE">amdinfer::Buffer (C++ class)</a>
 </li>
@@ -749,6 +762,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcherE">amdinfer::HardBatcher (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherEP17RequestParameters">amdinfer::HardBatcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherERK7Batcher">[1]</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherERR7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherEv">[3]</a>
+</li>
       <li><a href="cpp_api/function_api_8cpp_1ae0dbf04d01555d9b6428c642503e02d9.html#_CPPv4N8amdinfer11hasHardwareERKNSt6stringEi">amdinfer::hasHardware (C++ function)</a>, <a href="cpp_api/function_namespaceamdinfer_1ae0dbf04d01555d9b6428c642503e02d9.html#_CPPv4N8amdinfer11hasHardwareERKNSt6stringEi">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1http_1_1DrogonWs.html#_CPPv4N8amdinfer4http8DrogonWsE">amdinfer::http::DrogonWs (C++ class)</a>
@@ -1019,8 +1034,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9Interface5type_E">amdinfer::Interface::type_ (C++ member)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9InterfaceD0Ev">amdinfer::Interface::~Interface (C++ function)</a>
 </li>
       <li><a href="cpp_api/typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE">amdinfer::InterfacePtr (C++ type)</a>, <a href="cpp_api/typedef_namespaceamdinfer_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE">[1]</a>
@@ -1033,6 +1046,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType9kDrogonWsE">amdinfer::InterfaceType::kDrogonWs (C++ enumerator)</a>, <a href="cpp_api/enum_namespaceamdinfer_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType9kDrogonWsE">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType5kGrpcE">amdinfer::InterfaceType::kGrpc (C++ enumerator)</a>, <a href="cpp_api/enum_namespaceamdinfer_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType5kGrpcE">[1]</a>
 </li>
       <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType8kUnknownE">amdinfer::InterfaceType::kUnknown (C++ enumerator)</a>, <a href="cpp_api/enum_namespaceamdinfer_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType8kUnknownE">[1]</a>
@@ -1433,6 +1448,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcherE">amdinfer::SoftBatcher (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherEP17RequestParameters">amdinfer::SoftBatcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherERK7Batcher">[1]</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherERR7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherEv">[3]</a>
+</li>
       <li><a href="cpp_api/enum_namespaceamdinfer_1a913436294d314192e3d1ef856c142de3.html#_CPPv4N8amdinfer6StatusE">amdinfer::Status (C++ enum)</a>, <a href="cpp_api/enum_status_8hpp_1a913436294d314192e3d1ef856c142de3.html#_CPPv4N8amdinfer6StatusE">[1]</a>
 </li>
       <li><a href="cpp_api/enum_namespaceamdinfer_1a913436294d314192e3d1ef856c142de3.html#_CPPv4N8amdinfer6Status9kNotFoundE">amdinfer::Status::kNotFound (C++ enumerator)</a>, <a href="cpp_api/enum_status_8hpp_1a913436294d314192e3d1ef856c142de3.html#_CPPv4N8amdinfer6Status9kNotFoundE">[1]</a>
@@ -1635,13 +1652,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Aks.html#_CPPv4N8amdinfer7workers3Aks5spawnEP13BatchPtrQueue">amdinfer::workers::Aks::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Aks.html#_CPPv4N8amdinfer7workers3Aks6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::Aks::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4N8amdinfer7workers9AksDetectE">amdinfer::workers::AksDetect (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4N8amdinfer7workers9AksDetect5spawnEP13BatchPtrQueue">amdinfer::workers::AksDetect::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4N8amdinfer7workers9AksDetect6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::AksDetect::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4N8amdinfer7workers15AksDetectStreamE">amdinfer::workers::AksDetectStream (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4N8amdinfer7workers15AksDetectStream5spawnEP13BatchPtrQueue">amdinfer::workers::AksDetectStream::spawn (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4N8amdinfer7workers15AksDetectStream6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::AksDetectStream::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/structamdinfer_1_1workers_1_1DetectResponse.html#_CPPv4N8amdinfer7workers14DetectResponseE">amdinfer::workers::DetectResponse (C++ struct)</a>
 </li>
@@ -1661,17 +1684,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Echo.html#_CPPv4N8amdinfer7workers4Echo5spawnEP13BatchPtrQueue">amdinfer::workers::Echo::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Echo.html#_CPPv4N8amdinfer7workers4Echo6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::Echo::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1EchoMulti.html#_CPPv4N8amdinfer7workers9EchoMultiE">amdinfer::workers::EchoMulti (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1EchoMulti.html#_CPPv4N8amdinfer7workers9EchoMulti5spawnEP13BatchPtrQueue">amdinfer::workers::EchoMulti::spawn (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1EchoMulti.html#_CPPv4N8amdinfer7workers9EchoMulti6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::EchoMulti::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4N8amdinfer7workers11InvertImageE">amdinfer::workers::InvertImage (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4N8amdinfer7workers11InvertImage5spawnEP13BatchPtrQueue">amdinfer::workers::InvertImage::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4N8amdinfer7workers11InvertImage6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::InvertImage::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertVideo.html#_CPPv4N8amdinfer7workers11InvertVideoE">amdinfer::workers::InvertVideo (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertVideo.html#_CPPv4N8amdinfer7workers11InvertVideo5spawnEP13BatchPtrQueue">amdinfer::workers::InvertVideo::spawn (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertVideo.html#_CPPv4N8amdinfer7workers11InvertVideo6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::InvertVideo::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da.html#_CPPv4N8amdinfer7workers10kBoxHeightE">amdinfer::workers::kBoxHeight (C++ member)</a>
 </li>
@@ -1693,21 +1724,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.html#_CPPv4N8amdinfer7workers14MIGraphXWorker5spawnEP13BatchPtrQueue">amdinfer::workers::MIGraphXWorker::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.html#_CPPv4N8amdinfer7workers14MIGraphXWorker6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::MIGraphXWorker::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4N8amdinfer7workers8PtZendnnE">amdinfer::workers::PtZendnn (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4N8amdinfer7workers8PtZendnn5spawnEP13BatchPtrQueue">amdinfer::workers::PtZendnn::spawn (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4N8amdinfer7workers8PtZendnn6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::PtZendnn::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50.html#_CPPv4N8amdinfer7workers8ResNet50E">amdinfer::workers::ResNet50 (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50.html#_CPPv4N8amdinfer7workers8ResNet505spawnEP13BatchPtrQueue">amdinfer::workers::ResNet50::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50.html#_CPPv4N8amdinfer7workers8ResNet506WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::ResNet50::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4N8amdinfer7workers14ResNet50StreamE">amdinfer::workers::ResNet50Stream (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4N8amdinfer7workers14ResNet50Stream5spawnEP13BatchPtrQueue">amdinfer::workers::ResNet50Stream::spawn (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4N8amdinfer7workers14ResNet50Stream6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::ResNet50Stream::Worker (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1TfZendnn.html#_CPPv4N8amdinfer7workers8TfZendnnE">amdinfer::workers::TfZendnn (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1TfZendnn.html#_CPPv4N8amdinfer7workers8TfZendnn5spawnEP13BatchPtrQueue">amdinfer::workers::TfZendnn::spawn (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1TfZendnn.html#_CPPv4N8amdinfer7workers8TfZendnn6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::TfZendnn::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6WorkerE">amdinfer::workers::Worker (C++ class)</a>
 </li>
@@ -2467,6 +2508,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </ul></td>
 </tr></table>
 
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="glossary.html#term-Xilinx-Runtime"><strong>Xilinx Runtime</strong></a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="glossary.html#term-XRT"><strong>XRT</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
 
 
            </div>
@@ -2487,7 +2540,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on November 18, 2022.
+      <span class="lastupdated">Last updated on December 06, 2022.
       </span></p>
   </div>
 

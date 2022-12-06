@@ -9,8 +9,10 @@ File native.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the methods for interacting with the server in the native C++ API. 
- 
+
+
 
 .. contents:: Contents
    :local:

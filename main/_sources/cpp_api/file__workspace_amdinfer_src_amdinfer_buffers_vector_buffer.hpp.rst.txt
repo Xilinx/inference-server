@@ -9,8 +9,10 @@ File vector_buffer.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the VectorBuffer class. 
- 
+
+
 
 .. contents:: Contents
    :local:

@@ -9,8 +9,10 @@ File exceptions.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the exception classes. Exception classes follow lower-case snake case name syntax of the standard exceptions in std. 
- 
+
+
 
 .. contents:: Contents
    :local:

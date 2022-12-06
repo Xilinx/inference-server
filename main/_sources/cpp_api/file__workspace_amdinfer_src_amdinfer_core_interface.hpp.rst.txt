@@ -9,8 +9,10 @@ File interface.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the base Interface class. 
- 
+
+
 
 .. contents:: Contents
    :local:

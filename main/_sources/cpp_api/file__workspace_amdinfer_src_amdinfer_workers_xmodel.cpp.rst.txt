@@ -9,8 +9,10 @@ File xmodel.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the XModel worker. 
- 
+
+
 
 .. contents:: Contents
    :local:

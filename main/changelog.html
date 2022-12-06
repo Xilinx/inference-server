@@ -23,6 +23,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.bundle.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -34,7 +42,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
+        <script src="_static/js/hoverxref.js"></script>
+        <script src="_static/js/tooltipster.bundle.min.js"></script>
+        <script src="_static/js/micromodal.min.js"></script>
         <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -179,6 +191,9 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Add more documentation (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/85">#85</a>, <a class="reference external" href="https://github.com/Xilinx/inference-server/pull/90">#90</a>)</p></li>
 <li><p>Add Python bindings for gRPC and Native clients (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
 <li><p>Add tests with KServe (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/90">#90</a>)</p></li>
+<li><p>Add batch size flag to examples (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/94">#94</a>)</p></li>
+<li><p>Add Kubernetes test for KServe (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/95">#95</a>)</p></li>
+<li><p>Use exhale to generate Python API documentation (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/95">#95</a>)</p></li>
 </ul>
 </section>
 <section id="changed">
@@ -190,6 +205,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Update test asset downloading (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/81">#81</a>)</p></li>
 <li><p>Reimplement and align examples across platforms (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/85">#85</a>)</p></li>
 <li><p>Reorganize Python library (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
+<li><p>Rename ‘proteus’ to ‘amdinfer’ (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/91">#91</a>)</p></li>
+<li><p>Use Ubuntu 20.04 by default for Docker (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/97">#97</a>)</p></li>
 </ul>
 </section>
 <section id="fixed">
@@ -290,7 +307,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on November 18, 2022.
+      <span class="lastupdated">Last updated on December 06, 2022.
       </span></p>
   </div>
 

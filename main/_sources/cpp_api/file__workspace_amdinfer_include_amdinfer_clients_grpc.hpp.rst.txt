@@ -9,8 +9,10 @@ File grpc.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the methods for interacting with the server with gRPC. 
- 
+
+
 
 .. contents:: Contents
    :local:

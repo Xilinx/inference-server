@@ -9,8 +9,10 @@ File predict_api.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the objects used to hold inference requests and responses. 
- 
+
+
 
 .. contents:: Contents
    :local:

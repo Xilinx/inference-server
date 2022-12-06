@@ -9,8 +9,10 @@ File worker_info.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the information the Manager saves on each active worker group. 
- 
+
+
 
 .. contents:: Contents
    :local:

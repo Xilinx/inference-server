@@ -9,8 +9,10 @@ File invert_image.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Implements the InvertImage worker. 
- 
+
+
 
 .. contents:: Contents
    :local:

@@ -23,6 +23,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster.bundle.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -34,7 +42,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
+        <script src="_static/js/hoverxref.js"></script>
+        <script src="_static/js/tooltipster.bundle.min.js"></script>
+        <script src="_static/js/micromodal.min.js"></script>
         <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -117,7 +129,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Dependencies</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#docker-image">Docker Image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#base-image">Base Image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ubuntu-bionic-repositories">Ubuntu Bionic Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ubuntu-ppas">Ubuntu PPAs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pypi">PyPI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#github">Github</a></li>
@@ -204,10 +216,10 @@ In the tables below, note the following symbols to indicate where a package (or 
 </table>
 <section id="base-image">
 <h3>Base Image<a class="headerlink" href="#base-image" title="Permalink to this headline">¶</a></h3>
-<p>The base image for both dev and production images is <a class="reference external" href="https://hub.docker.com/_/ubuntu">Ubuntu 18.04</a> and it includes a number of packages by default.</p>
+<p>The base image for both dev and production images is <a class="reference external" href="https://hub.docker.com/_/ubuntu">Ubuntu 20.04</a> and it includes a number of packages by default.</p>
 </section>
-<section id="ubuntu-bionic-repositories">
-<h3>Ubuntu Bionic Repositories<a class="headerlink" href="#ubuntu-bionic-repositories" title="Permalink to this headline">¶</a></h3>
+<section id="ubuntu-focal-repositories">
+<h3>Ubuntu Focal Repositories<a class="headerlink" href="#ubuntu-focal-repositories" title="Permalink to this headline">¶</a></h3>
 <p>The following packages (and any dependencies) are installed from Ubuntu’s repositories using Ubuntu’s package manager <code class="docutils literal notranslate"><span class="pre">apt</span></code>.</p>
 <table class="colwidths-auto docutils align-default">
 <thead>
@@ -219,187 +231,172 @@ In the tables below, note the following symbols to indicate where a package (or 
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/bash-completion">bash-completion</a></p></td>
-<td><p>1:2.8-1ubuntu1</p></td>
+<td><p>1:2.10-1ubuntu1</p></td>
 <td><p>GPL-2+</p></td>
 <td><p>Scripts used to auto-complete bash commands<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/clang-format-10">clang-format-10</a></p></td>
-<td><p>1:10.0.0-4ubuntu1~18.04.2</p></td>
+<td><p>1:10.0.0-4ubuntu1</p></td>
 <td><p>Apache 2.0 with LLVM exceptions + others</p></td>
 <td><p>Executable used to apply formatting<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/clang-tidy-10">clang-tidy-10</a></p></td>
-<td><p>1:10.0.0-4ubuntu1~18.04.2</p></td>
+<td><p>1:10.0.0-4ubuntu1</p></td>
 <td><p>Apache 2.0 with LLVM exceptions + others</p></td>
 <td><p>Executable used for linting<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/curl">curl</a></p></td>
-<td><p>7.58.0-2ubuntu3.14</p></td>
+<td><p>7.68.0-1ubuntu2.14</p></td>
 <td><p>Curl</p></td>
 <td><p>Executable used for transferring data<sup>a 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/doxygen">doxygen</a></p></td>
-<td><p>1.8.13-10</p></td>
+<td><p>1.8.17-0ubuntu2</p></td>
 <td><p>GPL-2 with Qt exception + others</p></td>
 <td><p>Executable used for building documentation<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/gcc">gcc</a></p></td>
-<td><p>4:7.4.0-1ubuntu2.3</p></td>
+<td><p>4:9.3.0-1ubuntu2</p></td>
 <td><p>GPL-2 + others</p></td>
 <td><p>Executable used for compiling source code<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/gdb">gdb</a></p></td>
-<td><p>8.1-0ubuntu3</p></td>
+<td><p>9.2-0ubuntu1~20.04.1</p></td>
 <td><p>LGPL-2.1+ + others</p></td>
 <td><p>Executable used for debugging<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/git">git</a></p></td>
-<td><p>1:2.17.1-1ubuntu0.8</p></td>
+<td><p>1:2.25.1-1ubuntu3.6</p></td>
 <td><p>GPL-2 + others</p></td>
 <td><p>Executable used for source control<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/gnupg2">gnupg2</a></p></td>
-<td><p>2.2.4-1ubuntu1.6</p></td>
+<td><p>2.2.19-3ubuntu2.2</p></td>
 <td><p>GPL-3+ + others</p></td>
 <td><p>Executable used for signing commits<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/graphviz">graphviz</a></p></td>
-<td><p>2.40.1-2</p></td>
+<td><p>2.42.2-3build2</p></td>
 <td><p>EPL-1.0 + others</p></td>
 <td><p>Executable used to draw graphs in documentation<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost1.65-dev">libboost1.65-dev</a></p></td>
-<td><p>1.65.1+dfsg-0ubuntu5</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost1.71-dev">libboost1.71-dev</a></p></td>
+<td><p>1.71.0-6ubuntu6</p></td>
 <td><p>Boost</p></td>
 <td><p>Used to build AKS kernels<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-filesystem1.65.1">libboost-filesystem1.65.1</a></p></td>
-<td><p>1.65.1+dfsg-0ubuntu5</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-filesystem1.71.0">libboost-filesystem1.71.0</a></p></td>
+<td><p>1.71.0-6ubuntu6</p></td>
 <td><p>Boost</p></td>
 <td><p>Dynamically linked by AKS<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-serialization1.65.1">libboost-serialization1.65.1</a></p></td>
-<td><p>1.65.1+dfsg-0ubuntu5</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-serialization1.71.0">libboost-serialization1.71.0</a></p></td>
+<td><p>1.71.0-6ubuntu6</p></td>
 <td><p>Boost</p></td>
 <td><p>Dynamically linked by AKS<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-system1.65.1">libboost-system1.65.1</a></p></td>
-<td><p>1.65.1+dfsg-0ubuntu5</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-system1.71.0">libboost-system1.71.0</a></p></td>
+<td><p>1.71.0-6ubuntu6</p></td>
 <td><p>Boost</p></td>
 <td><p>Dynamically linked by AKS<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-thread1.65.1">libboost-thread1.65.1</a></p></td>
-<td><p>1.65.1+dfsg-0ubuntu5</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libboost-thread1.71.0">libboost-thread1.71.0</a></p></td>
+<td><p>1.71.0-6ubuntu6</p></td>
 <td><p>Boost</p></td>
 <td><p>Dynamically linked by AKS<sup>a 1</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libbrotli-dev">libbrotli-dev</a></p></td>
-<td><p>1.0.3-1ubuntu1.3</p></td>
+<td><p>1.0.7-6ubuntu0.1</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libc-ares-dev">libc-ares-dev</a></p></td>
-<td><p>1.14.0-1ubuntu0.1</p></td>
-<td><p>MIT + others</p></td>
-<td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libgoogle-glog-dev">libgoogle-glog-dev</a></p></td>
-<td><p>0.3.5-1</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libgoogle-glog-dev">libgoogle-glog-dev</a></p></td>
+<td><p>0.4.0-1build1</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Dynamically linked by VART<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libjson-c-dev">libjson-c-dev</a></p></td>
-<td><p>0.12.1-1.3ubuntu0.3</p></td>
-<td><p>MIT</p></td>
-<td><p>Dynamically linked by rt-engine<sup>a 1</sup></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libjsoncpp-dev">libjsoncpp-dev</a></p></td>
-<td><p>1.7.4-3</p></td>
-<td><p>MIT + others</p></td>
-<td><p>Dynamically linked by amdinfer-server and Drogon<sup>a 0</sup></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libnuma1">libnuma1</a></p></td>
-<td><p>2.0.11-2.1</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libnuma1">libnuma1</a></p></td>
+<td><p>2.0.12-1</p></td>
 <td><p>LGPL-2</p></td>
 <td><p>Dependency of migraphx<sup>a 4</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libssl-dev">libssl-dev</a></p></td>
-<td><p>1.1.1-1ubuntu2.1~18.04.13</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/libssl-dev">libssl-dev</a></p></td>
+<td><p>1.1.1f-1ubuntu2.16</p></td>
 <td><p>Dual OpenSSL/SSLeay</p></td>
 <td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/locales">locales</a></p></td>
-<td><p>2.27-3ubuntu1.2</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/locales">locales</a></p></td>
+<td><p>2.31-0ubuntu9.9</p></td>
 <td><p>GPL-2 + others</p></td>
 <td><p>Executable used to set locale<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/make">make</a></p></td>
-<td><p>4.1-9.1ubuntu1</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/make">make</a></p></td>
+<td><p>4.2.1-1.2</p></td>
 <td><p>GPL-3+</p></td>
 <td><p>Executable used to build executables<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/net-tools">net-tools</a></p></td>
-<td><p>1.60+git20161116.90da8a0-1ubuntu1</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/net-tools">net-tools</a></p></td>
+<td><p>1.60+git20180626.aebd88e-1ubuntu1</p></td>
 <td><p>GPL-2+</p></td>
 <td><p>Executable used to query used ports<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/openssh-client">openssh-client</a></p></td>
-<td><p>1:7.6p1-4ubuntu0.5</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/openssh-client">openssh-client</a></p></td>
+<td><p>1:8.2p1-4ubuntu0.5</p></td>
 <td><p>OpenSSH + others</p></td>
 <td><p>Executable used for remote connections<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/pkg-config">pkg-config</a></p></td>
-<td><p>0.29.1-0ubuntu2</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/pkg-config">pkg-config</a></p></td>
+<td><p>0.29.1-0ubuntu4</p></td>
 <td><p>GPL-2+</p></td>
 <td><p>Executable used for configuring unilog<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3">python3</a></p></td>
-<td><p>3.6.5-3</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3">python3</a></p></td>
+<td><p>3.8.2-0ubuntu2</p></td>
 <td><p>PSF License</p></td>
 <td><p>Executable used for scripting and testing amdinfer-server<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3-dev">python3-dev</a></p></td>
-<td><p>3.6.7-1~18.04</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/python3-dev">python3-dev</a></p></td>
+<td><p>3.8.2-0ubuntu2</p></td>
 <td><p>PSF License</p></td>
 <td><p>Used to build Python bindings<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/sudo">sudo</a></p></td>
-<td><p>1.8.21p2-3ubuntu1.4</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/sudo">sudo</a></p></td>
+<td><p>1.8.31-1ubuntu1.2</p></td>
 <td><p>ISC license + others</p></td>
 <td><p>Executable used to grant elevated permissions to the user<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/symlinks">symlinks</a></p></td>
-<td><p>1.4-3build1</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/symlinks">symlinks</a></p></td>
+<td><p>1.4-4</p></td>
 <td><p>Freely distributable</p></td>
 <td><p>Executable used to convert absolute symlinks to relative ones<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/tzdata">tzdata</a></p></td>
-<td><p>2021a-0ubuntu0.18.04</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/tzdata">tzdata</a></p></td>
+<td><p>2022f-0ubuntu0.20.04.1</p></td>
 <td><p>Public Domain</p></td>
 <td><p>Used for setting the timezone<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/uuid-dev">uuid-dev</a></p></td>
-<td><p>2.31.1-0.4ubuntu3.7</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/uuid-dev">uuid-dev</a></p></td>
+<td><p>2.34-0.1ubuntu9.3</p></td>
 <td><p>GPL-2+ + others</p></td>
 <td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/valgrind">valgrind</a></p></td>
-<td><p>1:3.13.0-2ubuntu2</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/valgrind">valgrind</a></p></td>
+<td><p>1:3.15.0-1ubuntu9.1</p></td>
 <td><p>GPL-2+ + others</p></td>
 <td><p>Executable used for for debugging<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/vim">vim</a></p></td>
-<td><p>2:8.0.1453-1ubuntu1.4</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/vim">vim</a></p></td>
+<td><p>2:8.1.2269-1ubuntu5.9</p></td>
 <td><p>Vim + others</p></td>
 <td><p>Executable used for text editing in terminal<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/wget">wget</a></p></td>
-<td><p>1.19.4-1ubuntu2.2</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/wget">wget</a></p></td>
+<td><p>1.20.3-1ubuntu2</p></td>
 <td><p>GPL-3 with OpenSSL exception</p></td>
 <td><p>Executable used to retrieve files from the internet<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/zlib1g-dev">zlib1g-dev</a></p></td>
-<td><p>1:1.2.11.dfsg-0ubuntu2</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://packages.ubuntu.com/bionic/zlib1g-dev">zlib1g-dev</a></p></td>
+<td><p>1:1.2.11.dfsg-2ubuntu1.5</p></td>
 <td><p>Zlib</p></td>
 <td><p>Dynamically linked by amdinfer-server<sup>a 0</sup></p></td>
 </tr>
@@ -418,25 +415,15 @@ In the tables below, note the following symbols to indicate where a package (or 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test">gcc-9</a></p></td>
-<td><p>9.4.0-1ubuntu1~18.04</p></td>
-<td><p>GPL-3 + others</p></td>
-<td><p>Executable used for compiling source code<sup>d 0</sup></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test">g++-9</a></p></td>
-<td><p>9.4.0-1ubuntu1~18.04</p></td>
-<td><p>GPL-3 + others</p></td>
-<td><p>Executable used for compiling source code<sup>d 0</sup></p></td>
-</tr>
 <tr class="row-even"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/">miopen-hip-dev</a></p></td>
 <td><p>2.15.0.50000-49</p></td>
 <td><p>MIT</p></td>
-<td><p>Used for fp16 datatype<sup>a 4</sup></p></td>
+<td><p>Dependency of migraphx<sup>a 4</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/">rocblas-dev</a></p></td>
 <td><p>2.42.0.50000-49</p></td>
 <td><p>MIT</p></td>
-<td><p>Used for fp16 datatype<sup>a 4</sup></p></td>
+<td><p>Dependency of migraphx<sup>a 4</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="http://repo.radeon.com/rocm/apt/5.0/">rocm-device-libs</a></p></td>
 <td><p>1.0.0.50000-49</p></td>
@@ -598,142 +585,147 @@ In the tables below, note the following symbols to indicate where a package (or 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Kitware/CMake">Kitware/CMake</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/c-ares/c-ares">c-ares/c-ares</a></p></td>
+<td><p>1.14</p></td>
+<td><p>c-ares license</p></td>
+<td><p>Dynamically linked by Drogon<sup>a 0</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Kitware/CMake">Kitware/CMake</a></p></td>
 <td><p>3.21.1</p></td>
 <td><p>BSD-3 + others</p></td>
 <td><p>Executable used to generate build systems<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/cameron314/concurrentqueue">cameron314/concurrentqueue</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/cameron314/concurrentqueue">cameron314/concurrentqueue</a></p></td>
 <td><p>1.0.3</p></td>
 <td><p>Dual BSD-2/Boost + others</p></td>
 <td><p>Statically linked by amdinfer-server for an efficient multi-producer queue<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/jarro2783/cxxopts">jarro2783/cxxopts</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/jarro2783/cxxopts">jarro2783/cxxopts</a></p></td>
 <td><p>2.2.1</p></td>
 <td><p>MIT</p></td>
 <td><p>Statically linked by amdinfer-server for command-line argument parsing<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/gdraheim/docker-systemctl-replacement">gdraheim/docker-systemctl-replacement</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/gdraheim/docker-systemctl-replacement">gdraheim/docker-systemctl-replacement</a></p></td>
 <td><p>1.5.4505</p></td>
 <td><p>EUPL</p></td>
 <td><p>Executable created by pyinstaller for starting XRM<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/drogonframework/drogon">drogonframework/drogon</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/drogonframework/drogon">drogonframework/drogon</a></p></td>
 <td><p>1.8.1</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by amdinfer-server for an HTTP and websocket server<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/SpartanJ/efsw">SpartanJ/efsw</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/SpartanJ/efsw">SpartanJ/efsw</a></p></td>
 <td><p>latest</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by amdinfer-server for directory monitoring<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/FFmpeg/FFmpeg">FFmpeg/FFmpeg</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/FFmpeg/FFmpeg">FFmpeg/FFmpeg</a></p></td>
 <td><p>3.4.8</p></td>
 <td><p>LGPL-2.1+ + others</p></td>
 <td><p>Dynamically linked by amdinfer-server for video processing<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/tschaub/gh-pages">tschaub/gh-pages</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/tschaub/gh-pages">tschaub/gh-pages</a></p></td>
 <td><p>latest</p></td>
 <td><p>MIT</p></td>
 <td><p>Executable used to publish documentation to gh-pages branch<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/git-lfs/git-lfs">git-lfs/git-lfs</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/git-lfs/git-lfs">git-lfs/git-lfs</a></p></td>
 <td><p>2.13.3</p></td>
 <td><p>MIT + others</p></td>
 <td><p>Executable used to manage large files in git<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/tianon/gosu">tianon/gosu</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/tianon/gosu">tianon/gosu</a></p></td>
 <td><p>1.12</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Executable used to drop down to user when starting container<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/google/googletest">google/googletest</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/google/googletest">google/googletest</a></p></td>
 <td><p>1.11.0</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Statically linked by amdinfer’s test executables<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/grpc/grpc">grpc/grpc</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/grpc/grpc">grpc/grpc</a></p></td>
 <td><p>1.44</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Statically linked by amdinfer-server for gRPC support<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/include-what-you-use/include-what-you-use">include-what-you-use/include-what-you-use</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/include-what-you-use/include-what-you-use">include-what-you-use/include-what-you-use</a></p></td>
 <td><p>0.14</p></td>
 <td><p>LLVM License</p></td>
 <td><p>Executable used to check C++ header inclusions<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/jemalloc/jemalloc">jemalloc/jemalloc</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/jemalloc/jemalloc">jemalloc/jemalloc</a></p></td>
 <td><p>5.3.0</p></td>
 <td><p>BSD-2</p></td>
 <td><p>Dynamically linked by amdinfer-server for memory allocation implementation<sup>a 3</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/json-c/json-c">json-c/json-c</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/json-c/json-c">json-c/json-c</a></p></td>
 <td><p>0.15</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by Vitis libraries<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/libb64/libb64">libb64/libb64</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/libb64/libb64">libb64/libb64</a></p></td>
 <td><p>2.0.0.1</p></td>
 <td><p>Public Domain Certification</p></td>
 <td><p>Statically linked by amdinfer-server for base64 codec<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/linux-test-project/lcov">linux-test-project/lcov</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/linux-test-project/lcov">linux-test-project/lcov</a></p></td>
 <td><p>1.15</p></td>
 <td><p>GPL-2</p></td>
 <td><p>Executable used for test coverage measurement<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">ROCmSoftwarePlatform/AMDMIGraphX</a></p></td>
 <td><p>cb18b0b</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by amdinfer-server for AMD GPU support<sup>a 4</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/nodejs/node">nodejs/node</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/nodejs/node">nodejs/node</a></p></td>
 <td><p>14.16.0</p></td>
 <td><p>MIT + others</p></td>
 <td><p>Executable used for web GUI development<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/opencv/opencv">opencv/opencv</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/opencv/opencv">opencv/opencv</a></p></td>
 <td><p>3.4.3</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Dynamically linked by amdinfer-server for image and video processing<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">open-telemetry/opentelemetry-cpp</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">open-telemetry/opentelemetry-cpp</a></p></td>
 <td><p>1.1.0</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Dynamically linked by amdinfer-server<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/pybind/pybind11">pybind/pybind11</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/pybind/pybind11">pybind/pybind11</a></p></td>
 <td><p>2.9.1</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Headers used to build Python bindings<sup>d 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">jupp0r/prometheus-cpp</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">jupp0r/prometheus-cpp</a></p></td>
 <td><p>0.12.2</p></td>
 <td><p>MIT</p></td>
 <td><p>Dynamically linked by amdinfer-server for metrics<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/protocolbuffers/protobuf">protocolbuffers/protobuf</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/protocolbuffers/protobuf">protocolbuffers/protobuf</a></p></td>
 <td><p>3.19.4</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Dynamically linked by amdinfer-server and Vitis libraries<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/fpagliughi/sockpp">fpagliughi/sockpp</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/fpagliughi/sockpp">fpagliughi/sockpp</a></p></td>
 <td><p>e5c51b5</p></td>
 <td><p>BSD-3</p></td>
 <td><p>Dynamically linked by amdinfer-server <sup>a 0</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/gabime/spdlog">gabime/spdlog</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/gabime/spdlog">gabime/spdlog</a></p></td>
 <td><p>1.8.2</p></td>
 <td><p>MIT</p></td>
 <td><p>Statically linked by amdinfer-server for logging<sup>a 0</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Xilinx/Vitis-AI">Xilinx/Vitis-AI</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Xilinx/Vitis-AI">Xilinx/Vitis-AI</a></p></td>
 <td><p>latest</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>VART is dynamically linked by amdinfer-server<sup>a 1</sup></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/wg/wrk">wg/wrk</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/wg/wrk">wg/wrk</a></p></td>
 <td><p>4.1.0</p></td>
 <td><p>modified Apache 2.0</p></td>
 <td><p>Executable used for benchmarking amdinfer-server<sup>d 0</sup></p></td>
@@ -924,7 +916,6 @@ In the tables below, note the following symbols to indicate where a package (or 
 <th class="head"><p>Source</p></th>
 <th class="head"><p>License</p></th>
 <th class="head"><p>Usage</p></th>
-<th class="head"></th>
 </tr>
 </thead>
 <tbody>
@@ -932,97 +923,81 @@ In the tables below, note the following symbols to indicate where a package (or 
 <td><p><a class="reference external" href="https://commons.wikimedia.org/wiki/File:Physicsworks.ogv">Wikimedia</a></p></td>
 <td><p><a class="reference external" href="https://creativecommons.org/licenses/by/3.0/legalcode">CC Attribution 3.0 Unported</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
-<td></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg">girl-1867092_640.jpg</a></p></td>
 <td><p><a class="reference external" href="https://pixabay.com/photos/girl-model-portrait-smile-smiling-1867092/">Pixabay</a></p></td>
 <td><p><a class="reference external" href="https://pixabay.com/service/license/">Pixabay License</a></p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
-<td></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=vitis_ai_runtime_r1.3.0_image_video.tar.gz">vitis_ai_runtime_r1.3.0_image_video.tar.gz</a></p></td>
-<td><p>Xilinx</p></td>
-<td><p>Inc.</p></td>
+<td><p>Xilinx, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 0</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=densebox_320_320-u200-u250-r1.4.0.tar.gz">densebox_320_320-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx</p></td>
-<td><p>Inc.</p></td>
+<td><p>Xilinx, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz">resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx</p></td>
-<td><p>Inc.</p></td>
+<td><p>Xilinx, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=yolov3_voc-u200-u250-r1.4.0.tar.gz">yolov3_voc-u200-u250-r1.4.0.tar.gz</a></p></td>
-<td><p>Xilinx</p></td>
-<td><p>Inc.</p></td>
+<td><p>Xilinx, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 1</sup></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip">pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip</a></p></td>
-<td><p>Xilinx</p></td>
-<td><p>Inc.</p></td>
+<td><p>Xilinx, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 3</sup></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip">tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip</a></p></td>
-<td><p>Xilinx</p></td>
-<td><p>Inc.</p></td>
+<td><p>Xilinx, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 2</sup></p></td>
 </tr>
-<tr class="row-even"><td><p><cite>resnet50-v2-7.onnx &lt;https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx&gt;</cite></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx">resnet50-v2-7.onnx</a></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-odd"><td><p><cite>val.txt &lt;https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt&gt;</cite></p></td>
-<td><p>AMD Inc.</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt">val.txt</a></p></td>
+<td><p>AMD, Inc.</p></td>
 <td><p>?</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-even"><td><p><cite>yolov4_anchors.txt &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt&gt;</cite></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt">yolov4_anchors.txt</a></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-odd"><td><p><cite>yolov4.onnx &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx&gt;</cite></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx">yolov4.onnx</a></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-even"><td><p><cite>coco.names &lt;https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names&gt;</cite></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names">coco.names</a></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-odd"><td><p><cite>bertsquad-10.onnx &lt;https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx&gt;</cite></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx">bertsquad-10.onnx</a></p></td>
 <td><p>ONNX</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-even"><td><p><cite>run_onnx_squad &lt;https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py&gt;</cite></p></td>
-<td><p>AMD Inc.</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py">run_onnx_squad</a></p></td>
+<td><p>AMD, Inc.</p></td>
 <td><p>Apache 2.0</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
-<tr class="row-odd"><td><p><cite>inputs_amd.json &lt;https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json&gt;</cite></p></td>
-<td><p>AMD Inc.</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json">inputs_amd.json</a></p></td>
+<td><p>AMD, Inc.</p></td>
 <td><p>MIT</p></td>
 <td><p>Used for testing<sup>d 4</sup></p></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -1050,7 +1025,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on November 18, 2022.
+      <span class="lastupdated">Last updated on December 06, 2022.
       </span></p>
   </div>
 

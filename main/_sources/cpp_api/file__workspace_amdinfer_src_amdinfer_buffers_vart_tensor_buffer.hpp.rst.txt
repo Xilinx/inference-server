@@ -9,8 +9,10 @@ File vart_tensor_buffer.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the VartTensorBuffer class. 
- 
+
+
 
 .. contents:: Contents
    :local:

@@ -9,8 +9,10 @@ File grpc_internal.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines the internal objects used for gRPC. 
- 
+
+
 
 .. contents:: Contents
    :local:
@@ -65,6 +67,8 @@ Namespaces
 
 
 - :ref:`namespace_amdinfer`
+
+- :ref:`namespace_google`
 
 - :ref:`namespace_google__protobuf`
 

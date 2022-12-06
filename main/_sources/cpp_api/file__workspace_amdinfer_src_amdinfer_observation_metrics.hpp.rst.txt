@@ -9,8 +9,10 @@ File metrics.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
+
 Defines what metrics are defined and how they're are gathered. 
- 
+
+
 
 .. contents:: Contents
    :local:
