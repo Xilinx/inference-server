@@ -17,22 +17,28 @@
 AMD Inference Server
 ====================
 
-The AMD Inference Server is an easy-to-use inferencing solution designed for AMD CPUs, GPUs, FPGAs.
-It can be deployed as a server or through custom applications using its C++ API.
-The AMD Inference Server can also be extended to support other hardware accelerators and machine learning frameworks.
+The AMD Inference Server is an open-source tool to deploy your machine learning models and make them accessible to clients for inference.
+Out-of-the-box, the server can support selected models that run on AMD CPUs, GPUs or FPGAs by leveraging existing libraries.
+For all these models and hardware accelerators, the server presents a common user interface based on community standards so clients can make requests to any using the same API.
+The server provides HTTP/REST and gRPC interfaces for clients to submit requests.
+For both, there are C++ and Python bindings to simplify writing client programs.
+You can also use the server backend directly using the native C++ API to write local applications.
 
 Features
 --------
 
-* Inference Server: The AMD Inference Server supports client requests using HTTP REST / websockets protocols using an API based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__
-* C++ API: custom applications to directly call the backend to bypass the REST interface
-* Python REST library: clients can submit requests to the inference server from Python through this simplified Python API
-* Efficient hardware usage: The AMD Inference Server will automatically make use of all available FPGAs on a machine as needed with `XRM <https://github.com/Xilinx/XRM>`__
-* User-defined model parallelism: users can define how many models, and how many instances of each, to run simultaneously
-* Batching: incoming requests are batched based on the model's specifications transparently
-* Integrated with Vitis AI: The AMD/Xilinx Inference Server can serve most xmodels generated from Vitis AI
-* End-to-end inference: A graph of computation such as pre- and post-processing can be written and deployed with the AMD/Xilinx Inference Server using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__
-* Integrated with ZenDNN: The AMD Inference Server can serve `ZenDNN <https://developer.amd.com/zendnn/>`_ optimized TensorFlow/PyTorch models on AMD EPYC CPUs.
+* Supports client requests using **HTTP/REST, gRPC and websocket protocols** using an API based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__
+* Custom applications can directly call the backend bypassing the other protocols using the **native C++ API**
+* **C++ library with Python bindings** to simplify making requests to the server
+* Incoming requests are transparently **batched** based on the user specifications
+* Users can define how many models, and how many instances of each, to **run in parallel**
+
+The AMD Inference Server is integrated with the following libraries out of the gate:
+
+* TensorFlow and PyTorch models with `ZenDNN <https://developer.amd.com/zendnn/>`__ on AMD CPUs
+* ONNX models with `MIGraphX <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX>`__ on AMD GPUs
+* XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
+* A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD FPGAs for end-to-end inference
 
 Learn more
 ----------
