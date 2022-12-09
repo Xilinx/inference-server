@@ -228,6 +228,7 @@ def install_build_packages(manager):
             curl \\
             libtool \\"""
         )
+        site_packages = '&& echo "/usr/lib/python3.8/site-packages" >> /usr/local/lib/python3.8/dist-packages/site-packages.pth \\'
     elif manager.name == "yum":
         packages = textwrap.dedent(
             """\
@@ -262,6 +263,7 @@ def install_build_packages(manager):
             # used by Drogon and pyinstaller
             zlib-devel \\"""
         )
+        site_packages = "# no site-packages modifications needed"
     else:
         raise ValueError(f"Unknown base image type: {manager.name}")
 
@@ -270,6 +272,7 @@ def install_build_packages(manager):
             RUN {manager.update} \\
                 && {manager.install} \\
                     {code_indent(packages, 20)}
+                {code_indent(site_packages, 16)}
                 # clean up
                 {code_indent(manager.clean, 16)}"""
     )
@@ -354,12 +357,12 @@ def build_optional():
             && rm -rf /tmp/*
 
         # install wrk for http benchmarking
-        #RUN wget --quiet https://github.com/wg/wrk/archive/refs/tags/4.1.0.tar.gz \\
-        #    && tar -xzf 4.1.0.tar.gz \\
-        #    && cd wrk-4.1.0 \\
-        #    && make -j$(($(nproc) - 1)) \\
-        #    && mkdir -p ${COPY_DIR}/usr/local/bin && cp wrk ${COPY_DIR}/usr/local/bin \\
-        #    && rm -rf /tmp/*
+        RUN wget --quiet https://github.com/wg/wrk/archive/refs/tags/4.2.0.tar.gz \\
+            && tar -xzf 4.2.0.tar.gz \\
+            && cd wrk-4.2.0 \\
+            && make -j$(($(nproc) - 1)) \\
+            && mkdir -p ${COPY_DIR}/usr/local/bin && cp wrk ${COPY_DIR}/usr/local/bin \\
+            && rm -rf /tmp/*
 
         # install include-what-you-use 0.14
         RUN wget --quiet https://github.com/include-what-you-use/include-what-you-use/archive/refs/tags/0.14.tar.gz \\
