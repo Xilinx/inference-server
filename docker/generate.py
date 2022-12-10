@@ -686,6 +686,7 @@ def install_python_packages():
                 sphinx-argparse \\
                 sphinx-issues \\
                 exhale \\
+                sphinx-tabs \\
                 # install linting tools
                 black \\
                 cpplint \\

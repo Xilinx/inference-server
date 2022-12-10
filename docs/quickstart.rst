@@ -14,17 +14,18 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _quickstart:
-
-Quickstart
-==========
+Quickstart - Inference
+======================
 
 The easiest way to use the AMD Inference Server is to run it inside a `Docker container <https://docs.docker.com/get-docker/>`__.
 There are two modes of operation: development and deployment.
-If you are just interested in deploying the server to serve inferences, then consider the deployment instructions.
-For testing, debugging, and experimentation, you will need to follow the development instructions.
+If you are just interested in deploying the server to serve inferences, then consider the :ref:`deployment instructions <Deployment>`.
+To enable testing, debugging, and experimentation as well, follow the :ref:`development instructions <Development>`.
 
+The inference server supports multiple platforms and hardware backends.
 Ensure that you set up your host appropriately depending on which platform(s) you are using.
+More information on host setup can be found in :ref:`each platforms' guide <platforms>`.
+
 The helper script used for many of the commands here is :file:`amdinfer`: a Python script with many helpful options.
 The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
 You can also use :option:`--dry-run` before any command to see the underlying commands the script is running.

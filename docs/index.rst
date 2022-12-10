@@ -14,62 +14,39 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. include:: ../README.rst
+AMD Inference Server
+====================
+
+Welcome to the official documentation for the AMD Inference Server: an open-source tool to deploy your machine learning models and make them accessible to clients for inference.
+
+If you are new to the project, start with the :ref:`Introduction <introduction>` to get an overview of what it's about and how this documentation is organized.
+
+Use the sidebar to navigate through the different pages in the documentation.
+Note that the documentation is versioned.
+By default, it shows the latest documentation corresponding to the current state of the `code <https://github.com/Xilinx/inference-server>`__.
+To see other versions, you can use "Read the Docs" panel on the bottom-left, visit this `landing page <https://xilinx.github.io/inference-server/>`__ or edit the version in the URL directly.
 
 .. toctree::
+    :maxdepth: 2
     :hidden:
+    :caption: About
 
-    self
+    introduction
+    dependencies
+    roadmap
+    changelog
 
 .. toctree::
     :maxdepth: 2
     :hidden:
     :caption: Getting Started
 
-    quickstart
-    hello_world_echo
-    example_resnet50_cpp
-    example_resnet50_python
+    quickstart_inference
 
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Using AMD Inference Server
-
-    aks
-    logging
-    benchmarking
-    metrics
-    tracing
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Platforms
-
-    zendnn
-    migraphx
-    vitis_ai
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Deployment
-
-    docker
-    kserve
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Getting Performance
-
-    performance_factors
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: User API libraries
+    :caption: Libraries and API
 
     rest
     cpp_user_api
@@ -79,31 +56,32 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Developers
+    :caption: Examples
 
-    architecture
-    contributing
-    cpp_api/cpp_root
+    hello_world_echo
+    example_resnet50_cpp
+    example_resnet50_python
 
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: About
+    :caption: Using the Server
 
-    roadmap
-    changelog
-    glossary
-    dependencies
+    aks
+    platforms
+    Deploying with Docker <docker>
+    Deploying with KServe <kserve>
+    performance_factors
 
-.. Docs
-.. ====
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Developers
 
-.. .. doxygenclass:: amdinfer::Buffer
-..    :members:
-
-.. Indices and tables
-.. ==================
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
+    contributing
+    architecture
+    logging
+    benchmarking
+    metrics
+    tracing
+    cpp_api/cpp_root

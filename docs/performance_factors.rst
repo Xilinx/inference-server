@@ -14,8 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Factors
-=======
+Performance Factors
+===================
 
 AMD Inference Server's performance can be maximized by appropriately controlling the factors described here.
 

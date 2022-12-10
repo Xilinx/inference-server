@@ -13,13 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Glossary
-========
+Platforms
+=========
 
-.. glossary::
+The AMD Inference Server supports a number of platforms:
 
-    Xilinx Runtime
-        An open-source standardized software interface that facilitates communication between the application code and the accelerated-kernels deployed on the reconfigurable portion of PCIe-based Alveo accelerator cards, Zynq-7000, Zynq UltraScale+ MPSoC based embedded platforms or Versal ACAPs.
+.. toctree::
+    :titlesonly:
 
-    XRT
-        See :term:`Xilinx Runtime`
+    zendnn
+    migraphx
+    vitis_ai
