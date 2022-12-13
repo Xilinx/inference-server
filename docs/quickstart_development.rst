@@ -14,57 +14,30 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Quickstart - Inference
-======================
+Quickstart - Development
+========================
+
+This quickstart is intended for a user who is developing, testing, debugging or otherwise working more deeply with the inference server.
 
 The easiest way to use the AMD Inference Server is to run it inside a `Docker container <https://docs.docker.com/get-docker/>`__.
-There are two modes of operation: development and deployment.
-If you are just interested in deploying the server to serve inferences, then consider the :ref:`deployment instructions <Deployment>`.
-To enable testing, debugging, and experimentation as well, follow the :ref:`development instructions <Development>`.
+The development Docker image contains all the dependencies to compile and test the inference server.
+It does not container the source code for the inference server however.
+Using the included script to run the container, you can mount the repository into the container and build the server.
 
 The inference server supports multiple platforms and hardware backends.
 Ensure that you set up your host appropriately depending on which platform(s) you are using.
-More information on host setup can be found in :ref:`each platforms' guide <platforms>`.
+For development, your host needs Git, Python3, and `Docker <https://docs.docker.com/get-docker/>`__.
+Some tests require `Docker-Compose <https://docs.docker.com/compose/install/>`__ as well.
+More information on host setup can be found in :ref:`each platforms' guide <platforms:Platforms>`.
 
 The helper script used for many of the commands here is :file:`amdinfer`: a Python script with many helpful options.
 The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
 You can also use :option:`--dry-run` before any command to see the underlying commands the script is running.
 
-Deployment
-----------
+Get the code
+------------
 
-For deployment, the container for the AMD Inference server only contains the runtime dependencies of the server to minimize image size.
-The deployment container, also referred to as the production container, contains a precompiled binary for the server that automatically starts when the container starts.
-
-Build or get the Docker image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can use ``docker pull`` to get the production container from a Docker registry if it's already built.
-
-To build from source, you will need Docker 18.09 or newer because you need to enable `BuildKit <https://docs.docker.com/build/>`__ to build the image.
-Look at the instructions for :ref:`building the production container <docker:Build the production Docker image>` for more information.
-
-Launch the server
-^^^^^^^^^^^^^^^^^
-
-Your chosen deployment method determines how to start the server.
-
-If you want to launch it as a bare Docker container, follow the :ref:`Docker instructions <docker:Prepare the image for Docker deployment>`.
-This has the fewest external dependencies but requires more manual work to set up the image.
-
-If you want to use the AMD Inference Server with `KServe <https://kserve.github.io/website/master/>`__, follow the :ref:`KServe instructions <kserve:Start an inference service>`.
-KServe is an open-source project for model serving in production on Kubernetes.
-Using this deployment method requires a working Kubernetes cluster with KServe installed.
-
-Development
------------
-
-For development, the container for the AMD Inference server contains the build-time dependencies needed to compile and test the inference server.
-However, the development container, also referred to as the dev container, does not contain the inference server source code.
-The expected workflow is that you mount the source code into the container.
-
-For development, your host needs Git, Python3, and `Docker <https://docs.docker.com/get-docker/>`__.
-Some tests require `Docker-Compose <https://docs.docker.com/compose/install/>`__ as well.
+Use ``git`` to clone the repository from Github:
 
 .. code-block:: bash
 
@@ -77,11 +50,11 @@ If some of the files in ``tests/assets`` are very small (less than 300 bytes), t
 From your host or after entering the dev container, use ``git lfs pull`` to get these files.
 
 Build or get the Docker image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 You can use ``docker pull`` to get the dev container from a Docker registry if it's already built.
 
-To build from source, you will need Docker 18.09 or newer because you need to enable `BuildKit <https://docs.docker.com/build/>`__ to build the image.
+To build from source, you will need Docker 18.09 or newer to build the image.
 After cloning the repository, enter the directory and run:
 
 .. code-block:: console
@@ -107,7 +80,7 @@ Some options may be overridden on the command-line (use :option:`--help` to see 
 By default, it will open a Bash shell in this container and show you a splash screen to show that you've entered the container.
 
 Compiling the AMD Inference Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------
 
 These commands are all run inside the dev container.
 Here, :file:`./amdinfer` is aliased to :command:`amdinfer`.
@@ -138,8 +111,8 @@ You can use it from Python in the container after importing it.
 
     import amdinfer
 
-Getting test artifacts
-^^^^^^^^^^^^^^^^^^^^^^
+Get test artifacts
+------------------
 
 For running tests and certain examples, you need to get models and other files.
 Make sure you have `Git LFS <https://git-lfs.github.com/>`__ installed.
@@ -153,8 +126,8 @@ Use ``--help`` to see the options available.
 
 You must abide by the license agreements of these files, if you choose to download them.
 
-Running the AMD Inference Server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Run the AMD Inference Server
+----------------------------
 
 Once the server is built, start the server to begin serving requests.
 
@@ -174,7 +147,7 @@ Once the server is built, start the server to begin serving requests.
     # shutdown the server using Ctrl+C
 
 The :ref:`REST endpoints <rest:REST Endpoints>` available to the server are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__.
-While using REST directly works, the Python API is an easier way to communicate with the server.
+While using REST directly works, using the library is an easier way to communicate with the server.
 
 You can also try running the test suite.
 The suite is run using PyTest and you can optionally pass Pytest options to the command to filter and choose which tests to run.

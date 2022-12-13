@@ -24,8 +24,8 @@ Your server administrator can provide this information.
 
 Once the server is running somewhere, you can communicate with it from your own machine as long as you can connect to it.
 
-Making requests with the ``amdinfer`` library
----------------------------------------------
+Making requests with the library
+--------------------------------
 
 The easiest way to make requests is using the AMD Inference Server's library ``amdinfer``.
 The library allows you to make a client object that you can use to communicate with the server over any protocol that the server supports.
@@ -127,3 +127,10 @@ Each tensor must have a name, a data type, an associated shape and the data itse
 The result of the inference is an ``InferenceResponse`` object that you can examine to get the results.
 
 For more information about these objects and the available methods, look at the examples or the documentation for the :ref:`C++ <cpp_user_api:c++>` and :ref:`Python <python:API>` APIs.
+
+Making requests directly
+------------------------
+
+If you are unable to use the library, you can also communicate with the server directly over REST or gRPC.
+However, you will need to construct the requests yourself in the correct format.
+Both the :ref:`REST API <rest:rest endpoints>` and the `gRPC API <https://github.com/Xilinx/inference-server/blob/main/src/amdinfer/core/predict_api.proto>`__ are documented.

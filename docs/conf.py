@@ -64,6 +64,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_issues",
     "sphinx_tabs.tabs",
+    "sphinxcontrib.openapi",
 ]
 
 # Breathe configuration

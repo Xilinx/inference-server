@@ -19,7 +19,7 @@ AMD Inference Server
 
 Welcome to the official documentation for the AMD Inference Server: an open-source tool to deploy your machine learning models and make them accessible to clients for inference.
 
-If you are new to the project, start with the :ref:`Introduction <introduction>` to get an overview of what it's about and how this documentation is organized.
+If you are new to the project, start with the :ref:`Introduction <introduction:introduction>` to get an overview of what it's about and how this documentation is organized.
 
 Use the sidebar to navigate through the different pages in the documentation.
 Note that the documentation is versioned.
@@ -42,15 +42,17 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     :caption: Getting Started
 
     quickstart_inference
+    quickstart_deployment
+    quickstart_development
 
 .. toctree::
     :maxdepth: 2
     :hidden:
     :caption: Libraries and API
 
-    rest
     cpp_user_api
     python
+    rest
     cli
 
 .. toctree::

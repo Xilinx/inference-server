@@ -19,32 +19,7 @@ REST Endpoints
 
 The REST endpoints are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__.
 Additional endpoints are driven by community adoption.
+The `full OpenAPI 3.0 spec <https://github.com/Xilinx/inference-server/blob/main/docs/rest_api.yaml>`__ is available in the repository.
 
-Health
-------
-
-*  GET ``v2/health/live``: Check if the server is live
-*  GET ``v2/health/ready``: Check if the server is ready for inference requests
-*  GET ``v2/models/{model}/ready``: Check if a particular model is ready for inference requests
-
-Metadata
---------
-
-*  GET ``v2``: Get AMD Inference Server's metadata
-*  GET ``v2/hardware``: Get a string describing the number and type of kernels that are available
-*  GET ``v2/models``: Get a list of active models
-*  GET ``v2/models/{model}``: Get model metadata
-
-Inference
----------
-
-*  POST ``v2/repository/models/{model}/load``: Load a model
-*  POST ``v2/workers/{worker}/load``: Load a worker. The HTML body in the response contains the endpoint to use for subsequent requests
-*  POST ``v2/repository/models/{model}/unload``: Unload a model
-*  POST ``v2/workers/{worker}/unload``: Unload a worker
-*  POST ``v2/models/{model}/infer``: Make an inference request to a particular model
-
-Observation
------------
-
-*  GET ``metrics``: Get Prometheus metrics
+.. openapi:httpdomain:: rest_api.yaml
+    :generate-examples-from-schemas:
