@@ -519,105 +519,11 @@ def install_dev_packages(manager: PackageManager, core):
     )
 
 
-migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.0/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
-migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.0/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
+migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.4.1/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
+migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.4.1/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
 
 
-def build_migraphx(manager: PackageManager):
-    if manager.name == "apt":
-        add_repo = migraphx_apt_repo
-    elif manager.name == "yum":
-        add_repo = migraphx_yum_repo
-    else:
-        raise ValueError(f"Unknown base image type: {manager.name}")
-
-    return textwrap.dedent(
-        f"""\
-        # Install rbuild
-        RUN {add_repo} \\
-            && {manager.update} \\
-            && {manager.install} \\
-                aria2 \\
-                half \\
-                libnuma-dev \\
-                python3-dev \\
-                miopen-hip-dev \\
-                rocblas-dev \\
-                rocm-cmake \\
-                rocm-dev \\
-            && ln -s /opt/rocm-* /opt/rocm \\
-            && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
-            && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
-            && ldconfig \\
-            && pip3 install --no-cache-dir https://github.com/RadeonOpenCompute/rbuild/archive/f74d130aac0405c7e6bc759d331f913a7577bd54.tar.gz \\
-            # clean up
-            {code_indent(manager.clean, 12)}\
-
-        # needed for rbuild
-        ENV LANG=C.UTF-8
-
-        # Install MIGraphX from source
-        RUN mkdir -p /migraphx \\
-            && cd /migraphx && git clone --branch develop https://github.com/ROCmSoftwarePlatform/AMDMIGraphX src \\
-            && cd /migraphx/src  && git checkout cb18b0b5722373c49f5c257380af206e13344735 \\
-            # disable building documentation and tests. Is there a better way?
-            && sed -i 's/^add_subdirectory(doc)/#&/' CMakeLists.txt \\
-            && sed -i 's/^add_subdirectory(test)/#&/' CMakeLists.txt \\
-            && rbuild package -d /migraphx/deps -B /migraphx/build --define "BUILD_TESTING=OFF" \\
-            && cp /migraphx/build/*.{manager.package} ${{COPY_DIR}}"""
-    )
-
-
-def install_migraphx_dev(manager: PackageManager):
-    if manager.name == "apt":
-        add_repo = migraphx_apt_repo
-    elif manager.name == "yum":
-        add_repo = migraphx_yum_repo
-    else:
-        raise ValueError(f"Unknown base image type: {manager.name}")
-
-    return textwrap.dedent(
-        f"""\
-        # install all .{manager.package} files from the builder
-        RUN {add_repo} \\
-            && {manager.update} \\
-            && {manager.install} \\
-                python3-pip \\
-                rsync \\
-                # these packages are required to build with migraphx but don't get installed
-                # as dependencies. They also create /opt/rocm-* so we can make a symlink
-                # before installing migraphx
-                miopen-hip-dev \\
-                rocm-device-libs \\
-                rocblas-dev \\
-                libnuma1 \\
-            && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
-            && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
-            && ldconfig \\
-            && {manager.install} \\
-                /*.{manager.package} \\
-            # having symlinks between rocm-* and rocm complicates building the production
-            # image so make /opt/rocm a real directory and move files over to it from
-            # /opt/rocm-* but add a symlink for /opt/rocm-* for compatibility
-            && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \\
-            && rm -rf /opt/rocm \\
-            && mkdir /opt/rocm \\
-            && rsync -a $dir/* /opt/rocm/ \\
-            && rm -rf $dir \\
-            && ln -s /opt/rocm $dir \\
-            # install .whl from the builder
-            && pip3 install --no-cache-dir /*.whl \\
-            && rm -f /*.whl \\
-            # clean up
-            && {manager.remove} \\
-                python3-pip \\
-                rsync \\
-            {code_indent(manager.clean, 12)} \\
-            && rm -f /*.deb"""
-    )
-
-
-def install_migraphx_prod(manager: PackageManager):
+def install_migraphx(manager: PackageManager):
     if manager.name == "apt":
         add_repo = migraphx_apt_repo
     elif manager.name == "yum":
@@ -639,11 +545,10 @@ def install_migraphx_prod(manager: PackageManager):
                 rocm-device-libs \\
                 rocblas-dev \\
                 libnuma1 \\
+                migraphx-dev \\
             && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
             && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
             && ldconfig \\
-            && {manager.install} \\
-                /*.{manager.package} \\
             # having symlinks between rocm-* and rocm complicates building the production
             # image so move files over to rocm/ but add a symlink for compatibility
             && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \\
@@ -655,8 +560,7 @@ def install_migraphx_prod(manager: PackageManager):
             # clean up
             && {manager.remove} \\
                 rsync \\
-            {code_indent(manager.clean, 12)} \\
-            && rm -f /*.{manager.package}"""
+            {code_indent(manager.clean, 12)}"""
     )
 
 
@@ -762,15 +666,7 @@ def generate(args: argparse.Namespace):
             "$[INSTALL_PYTHON_PACKAGES]", install_python_packages()
         )
 
-    dockerfile = dockerfile.replace("$[BUILD_MIGRAPHX]", build_migraphx(manager))
-
-    dockerfile = dockerfile.replace(
-        "$[INSTALL_MIGRAPHX_DEV]", install_migraphx_dev(manager)
-    )
-
-    dockerfile = dockerfile.replace(
-        "$[INSTALL_MIGRAPHX_PROD]", install_migraphx_prod(manager)
-    )
+    dockerfile = dockerfile.replace("$[INSTALL_MIGRAPHX]", install_migraphx(manager))
 
     if args.cibuildwheel:
         entrypoint = textwrap.dedent(

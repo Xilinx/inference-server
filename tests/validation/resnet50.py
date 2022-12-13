@@ -71,6 +71,7 @@ def main(args):
     print("waiting for server...", end="")
     start_server = not client.serverLive()
     if start_server:
+        print("No server detected. Starting locally...")
         server = amdinfer.Server()
         server.startHttp(8998)
         while not client.serverLive():
