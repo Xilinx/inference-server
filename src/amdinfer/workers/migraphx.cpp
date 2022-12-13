@@ -181,8 +181,6 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
 
   // Is there an mxr file?
   std::ifstream f(compiled_path.c_str());
-  // TODO(varunsh): there's a bug in ROCm 5.4 with opening .mxr files
-  /*
   if (f.good()) {
     // Load the compiled MessagePack (*.mxr) file
     AMDINFER_LOG_INFO(
@@ -205,8 +203,6 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
       // prog_ does not need to be compiled.
     }
   } else {
-  */
-  {
     // Look for onnx file.  ifstream tests that the file can be opened
     f = std::ifstream(onnx_path.c_str());
     if (f.good()) {
