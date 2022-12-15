@@ -19,6 +19,7 @@ Quickstart - Deployment
 This quickstart is intended for a user who is deploying the inference server and configuring the available models for inference.
 
 There are a few different methods to deploy the server and make it available for remote clients:
+
 * Deploy on Docker with a development or deployment image
 * Deploy on KServe with a deployment image
 * Deploy without Docker
@@ -46,7 +47,6 @@ Deployment image
 
 Once you have the basic deployment image, you'll need to prepare the image by adding models that you want to support.
 Follow these :ref:`instructions <docker:Prepare the image for Docker deployment>` for more information.
-This approach has the fewest external dependencies but requires more manual work.
 
 Development image
 ^^^^^^^^^^^^^^^^^

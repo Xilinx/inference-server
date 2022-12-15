@@ -24,18 +24,22 @@ More detailed information about the work that's ongoing and/or completed can be 
 2022 Q1
 -------
 
-- gRPC support
+- gRPC support (series of commits starting in :commit:`37a6aad`)
 
 2022 Q2
 -------
 
-- ZenDNN CPU support
-- Official integration with KServe
+- ZenDNN CPU support (:pr:`17` and :pr:`21`)
+- Official integration with KServe (KServe website `#179 <https://github.com/kserve/website/pull/179>`__)
+
+2022 Q3
+-------
+
+- GPU support (:pr:`34`)
 
 Future
 ------
 
-- GPU support
-- Compatibility with AMD APIs
+- Refactor memory model
 - Expanded testing with models in Vitis AI model zoo
 - Benchmarking with MLPerf

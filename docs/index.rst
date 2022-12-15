@@ -39,11 +39,11 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Getting Started
+    :caption: Quickstart
 
-    quickstart_inference
-    quickstart_deployment
-    quickstart_development
+    Inference <quickstart_inference>
+    Deployment <quickstart_deployment>
+    Development <quickstart_development>
 
 .. toctree::
     :maxdepth: 2
@@ -69,7 +69,6 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     :hidden:
     :caption: Using the Server
 
-    aks
     platforms
     Deploying with Docker <docker>
     Deploying with KServe <kserve>
@@ -82,6 +81,7 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
 
     contributing
     architecture
+    aks
     logging
     benchmarking
     metrics

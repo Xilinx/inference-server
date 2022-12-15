@@ -49,7 +49,7 @@ release = f"v{raw_version}"
 # ones.
 extensions = [
     "breathe",
-    # "exhale",
+    "exhale",
     # adds argparse directive to parse CLIs
     "sphinxarg.ext",
     "sphinxcontrib.confluencebuilder",
