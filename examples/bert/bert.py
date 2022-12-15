@@ -47,6 +47,7 @@ def parse_args():
     parser.add_argument(
         "--batch-size",
         default=10,
+        type=int,
         help="Batch size to use for the MIGraphX worker on the server",
     )
 
@@ -59,12 +60,14 @@ def parse_args():
     parser.add_argument(
         "--http-port",
         default=8998,
+        type=int,
         help="Port to use for HTTP server",
     )
 
     parser.add_argument(
         "--grpc-port",
         default=50051,
+        type=int,
         help="Port to use for gRPC server",
     )
 

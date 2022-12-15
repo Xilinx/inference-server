@@ -205,6 +205,7 @@ def main(args):
     print("Waiting for server...", end="")
     # start it locally if it doesn't already up if the IP address is the localhost
     if args.ip == "127.0.0.1" and not client.serverLive():
+        print("No server detected. Starting locally...")
         server = amdinfer.Server()
         server.startHttp(args.http_port)
     elif not client.serverLive():

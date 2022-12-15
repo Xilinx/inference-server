@@ -37,6 +37,9 @@ Added
 - Add more documentation (:pr:`85`, :pr:`90`)
 - Add Python bindings for gRPC and Native clients (:pr:`88`)
 - Add tests with KServe (:pr:`90`)
+- Add batch size flag to examples (:pr:`94`)
+- Add Kubernetes test for KServe (:pr:`95`)
+- Use exhale to generate Python API documentation (:pr:`95`)
 
 Changed
 ^^^^^^^
@@ -47,6 +50,8 @@ Changed
 - Update test asset downloading (:pr:`81`)
 - Reimplement and align examples across platforms (:pr:`85`)
 - Reorganize Python library (:pr:`88`)
+- Rename 'proteus' to 'amdinfer' (:pr:`91`)
+- Use Ubuntu 20.04 by default for Docker (:pr:`97`)
 
 Fixed
 ^^^^^

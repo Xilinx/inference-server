@@ -48,6 +48,7 @@ def parse_args():
     parser.add_argument(
         "--batch-size",
         default=1,
+        type=int,
         help="Batch size to use for the worker on the server",
     )
 
@@ -60,30 +61,35 @@ def parse_args():
     parser.add_argument(
         "--http-port",
         default=8998,
+        type=int,
         help="Port to use for HTTP server",
     )
 
     parser.add_argument(
         "--grpc-port",
         default=50051,
+        type=int,
         help="Port to use for gRPC server",
     )
 
     parser.add_argument(
         "--top",
         default=5,
+        type=int,
         help="Number of top categories to print",
     )
 
     parser.add_argument(
         "--input-size",
         default=224,
+        type=int,
         help="Size of the square image in pixels",
     )
 
     parser.add_argument(
         "--output-classes",
         default=1000,
+        type=int,
         help="Number of output classes for this model",
     )
 

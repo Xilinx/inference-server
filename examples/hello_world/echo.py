@@ -62,6 +62,7 @@ def main():
     # +start server: if it's not already started, start it from Python
     start_server = not client.serverLive()
     if start_server:
+        print("No server detected. Starting locally...")
         server = amdinfer.Server()
         server.startHttp(8998)
     amdinfer.waitUntilServerReady(client)
