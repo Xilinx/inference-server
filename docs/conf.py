@@ -63,6 +63,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
     "sphinx_issues",
+    "sphinx_tabs.tabs",
+    "sphinxcontrib.openapi",
 ]
 
 # Breathe configuration
@@ -168,6 +170,35 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/build/**", "**/uploa
 if os.path.exists("./_themes/xilinx"):
     html_theme = "xilinx"
     html_theme_path = ["./_themes"]
+    html_favicon = "./_themes/xilinx/favicon.ico"
+    html_theme_options = {
+        # set to true to hide the expand buttons on headings in the sidebar
+        # until the heading is clicked on
+        "collapse_navigation": False,
+        "navigation_depth": 3,
+        # prevent the sidebar from scrolling while the main window is scrolled
+        "sticky_navigation": False,
+    }
+    using_rtd_theme = True
+
+    # using this guide for enabling RTD-style version / language options:
+    # https://tech.michaelaltfield.net/2020/07/23/sphinx-rtd-github-pages-2/
+    html_context = {
+        "display_lower_left": True,
+        "current_language": "en",
+        "current_version": version,
+        "version": version,
+    }
+
+    html_context["languages"] = [("en", "/" + "inference-server/" + version + "/")]
+
+    versions = ["0.1.0", "0.2.0"]
+    versions.append("main")
+    html_context["versions"] = []
+    for version in versions:
+        html_context["versions"].append(
+            (version, "/" + "inference-server/" + version + "/")
+        )
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

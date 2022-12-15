@@ -14,8 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Factors
-=======
+Performance Factors
+===================
 
 AMD Inference Server's performance can be maximized by appropriately controlling the factors described here.
 
@@ -29,7 +29,7 @@ Other processes running on the server should be minimized.
 Compile the right version
 -------------------------
 
-Enable compiler optimizations by building with the :option:`--release` flag.
+Enable compiler optimizations by building with the ``--release`` flag.
 
 .. code-block:: console
 
