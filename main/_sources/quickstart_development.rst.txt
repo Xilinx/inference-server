@@ -31,8 +31,8 @@ Some tests require `Docker-Compose <https://docs.docker.com/compose/install/>`__
 More information on host setup can be found in :ref:`each platforms' guide <platforms:Platforms>`.
 
 The helper script used for many of the commands here is :file:`amdinfer`: a Python script with many helpful options.
-The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with :option:`--help`.
-You can also use :option:`--dry-run` before any command to see the underlying commands the script is running.
+The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with ``--help``.
+You can also use ``--dry-run`` before any command to see the underlying commands the script is running.
 
 Get the code
 ------------
@@ -76,7 +76,7 @@ After the image is built, run the container:
 
 This command runs the ``<username>/amdinfer-dev:latest`` image, which corresponds to the latest local dev image.
 The ``--dev`` preset will mount the working directory into :file:`/workspace/amdinfer/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
-Some options may be overridden on the command-line (use :option:`--help` to see the options).
+Some options may be overridden on the command-line (use ``--help`` to see the options).
 By default, it will open a Bash shell in this container and show you a splash screen to show that you've entered the container.
 
 Compiling the AMD Inference Server

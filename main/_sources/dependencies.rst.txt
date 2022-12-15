@@ -103,10 +103,10 @@ The following packages (and any dependencies) are installed from a Personal Pack
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `migraphx-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,5.4.1,MIT,Dynamically linked by amdinfer-server for AMD GPU support\ :superscript:`a 4`
-    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.15.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
-    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.42.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
-    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.4.1/>`__,1.0.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `migraphx-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.4.0.50401-84~20.04,MIT,Dynamically linked by amdinfer-server for AMD GPU support\ :superscript:`a 4`
+    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.19.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.46.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.4.1/>`__,1.0.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
 
 PyPI
 ^^^^

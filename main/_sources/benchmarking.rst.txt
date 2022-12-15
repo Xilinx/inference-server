@@ -39,8 +39,8 @@ XModel Benchmarking
 -------------------
 
 The XModel test in ``tests/cpp/native/xmodel.cpp`` is the easiest way to benchmark an arbitrary XModel that you may want to serve with AMD Inference Server.
-It gets built as part of the regular AMD Inference Server build flow (for benchmarking, use the :option:`--release` flag to build optimized executables).
-This test accepts a number of arguments (use :option:`--help` to see all the options) and makes requests to AMD Inference Server's backend using C++.
+It gets built as part of the regular AMD Inference Server build flow (for benchmarking, use the ``--release`` flag to build optimized executables).
+This test accepts a number of arguments (use ``--help`` to see all the options) and makes requests to AMD Inference Server's backend using C++.
 It will print out the :abbr:`QPS (queries per second)` of the requested configuration.
 
 .. code-block:: console

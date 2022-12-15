@@ -29,7 +29,7 @@ Other processes running on the server should be minimized.
 Compile the right version
 -------------------------
 
-Enable compiler optimizations by building with the :option:`--release` flag.
+Enable compiler optimizations by building with the ``--release`` flag.
 
 .. code-block:: console
 
