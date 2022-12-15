@@ -19,16 +19,16 @@
 Dependencies
 ============
 
-This document catalogues the tools, libraries and packages that AMD Inference Server depends on and are installed in the AMD Inference Server Docker containers.
+This document catalogues the tools, libraries and packages that AMD Inference Server depends on and are installed in the Docker images.
 The information here is derived from the Dockerfile and source files used in AMD Inference Server.
 If there is a conflict, the source takes precedence.
 
 Docker Image
 ------------
 
-There are two kinds of images: development and production.
+There are two kinds of images: development and deployment.
 Dev images are larger in size and contain all the tools and dependencies to compile, lint and test the inference server.
-In contrast, the production image is much smaller and only includes specific files from a subset of these packages that are needed at runtime.
+In contrast, the deployment image is much smaller and only includes specific files from a subset of these packages that are needed at runtime.
 In these two images, multiple flavors of Docker images may be created based on which optional features are enabled and how the server is compiled.
 In the tables below, note the following symbols to indicate where a package (or a subset of the package) or its dependencies are used:
 
@@ -48,7 +48,7 @@ In the tables below, note the following symbols to indicate where a package (or 
 Base Image
 ^^^^^^^^^^
 
-The base image for both dev and production images is `Ubuntu 20.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
+The base image for both dev and deployment images is `Ubuntu 20.04 <https://hub.docker.com/_/ubuntu>`__ and it includes a number of packages by default.
 
 Ubuntu Focal Repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -103,9 +103,10 @@ The following packages (and any dependencies) are installed from a Personal Pack
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.0/>`__,2.15.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
-    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.0/>`__,2.42.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
-    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.0/>`__,1.0.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `migraphx-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,5.4.1,MIT,Dynamically linked by amdinfer-server for AMD GPU support\ :superscript:`a 4`
+    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.15.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.42.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.4.1/>`__,1.0.0.50000-49,MIT,Dependency of migraphx\ :superscript:`a 4`
 
 PyPI
 ^^^^
@@ -139,7 +140,9 @@ The following packages (and any dependencies) are installed from the Python Pack
     :pypipackages:`sphinx-argparse`,latest,MIT,Sphinx plugin for documenting CLIs\ :superscript:`d 0`
     :pypipackages:`sphinx-copybutton`,latest,MIT,Adds copy button for code blocks\ :superscript:`d 0`
     :pypipackages:`sphinx-issues`,latest,MIT,Sphinx plugin for links to the project's Github issue tracker\ :superscript:`d 0`
+    :pypipackages:`sphinx-tabs`,latest,MIT,Sphinx plugin to create tabs\ :superscript:`d 0`
     :pypipackages:`sphinxcontrib-confluencebuilder`,latest,BSD-2,Sphinx plugin to export documentation to Confluence\ :superscript:`d 0`
+    :pypipackages:`sphinxcontrib-openapi`,latest,BSD-2,Sphinx plugin to build OpenAPI docs\ :superscript:`d 0`
     :pypipackages:`wheel`,latest,MIT,Support wheels for Python packages\ :superscript:`d 0`
 
 Github
@@ -169,7 +172,6 @@ The following packages are installed from Github.
     :github:`json-c/json-c`,0.15,MIT,Dynamically linked by Vitis libraries\ :superscript:`a 1`
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by amdinfer-server for base64 codec\ :superscript:`a 0`
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement\ :superscript:`d 0`
-    :github:`ROCmSoftwarePlatform/AMDMIGraphX`,cb18b0b,MIT,Dynamically linked by amdinfer-server for AMD GPU support\ :superscript:`a 4`
     :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development\ :superscript:`d 0`
     :github:`opencv/opencv`,3.4.3,Apache 2.0,Dynamically linked by amdinfer-server for image and video processing\ :superscript:`a 0`
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by amdinfer-server\ :superscript:`a 0`
@@ -213,10 +215,7 @@ The following packages are downloaded from AMD.
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.0/pool/main/m/miopen-hip-dev/miopen-hip-dev_2.15.0.50000-49_amd64.deb>`__,5.0,?,Used by MIGraphX worker\ :superscript:`a 4`
     `PT_v1.11.0_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by PT+ZenDNN worker\ :superscript:`a 3`
-    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.0/pool/main/r/rocblas-dev/rocblas-dev_2.42.0.50000-49_amd64.deb>`__,5.0,?,Used by MIGraphX worker\ :superscript:`a 4`
-    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.0/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50000-49_amd64.deb>`__,5.0,?,Used by MIGraphX worker\ :superscript:`a 4`
     `TF_v2.9_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
 
 

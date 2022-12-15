@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -23,15 +23,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.bundle.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -39,14 +32,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/js/hoverxref.js"></script>
-        <script src="../_static/js/tooltipster.bundle.min.js"></script>
-        <script src="../_static/js/micromodal.min.js"></script>
         <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -82,23 +73,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platforms.html">Platforms</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -115,6 +96,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
@@ -186,8 +175,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="namespace-amdinfer">
-<span id="id1"></span><h1>Namespace amdinfer<a class="headerlink" href="#namespace-amdinfer" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
+<span id="id1"></span><h1>Namespace amdinfer<a class="headerlink" href="#namespace-amdinfer" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#namespaces" id="id2">Namespaces</a></p></li>
@@ -197,9 +186,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="#typedefs" id="id6">Typedefs</a></p></li>
 <li><p><a class="reference internal" href="#variables" id="id7">Variables</a></p></li>
 </ul>
-</div>
+</nav>
 <section id="namespaces">
-<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="namespace_amdinfer__detail.html#namespace-amdinfer-detail"><span class="std std-ref">Namespace amdinfer::detail</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_amdinfer__grpc.html#namespace-amdinfer-grpc"><span class="std std-ref">Namespace amdinfer::grpc</span></a></p></li>
@@ -210,7 +199,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </section>
 <section id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structamdinfer_1_1AddDataToTensor.html#exhale-struct-structamdinfer-1-1adddatatotensor"><span class="std std-ref">Struct AddDataToTensor</span></a></p></li>
 <li><p><a class="reference internal" href="structamdinfer_1_1InferenceRequestInputSizes.html#exhale-struct-structamdinfer-1-1inferencerequestinputsizes"><span class="std std-ref">Struct InferenceRequestInputSizes</span></a></p></li>
@@ -297,7 +286,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </section>
 <section id="enums">
-<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
+<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="enum_batcher_8hpp_1a5277d7d1a11facb999262c1ffa1cf5a8.html#exhale-enum-batcher-8hpp-1a5277d7d1a11facb999262c1ffa1cf5a8"><span class="std std-ref">Enum BatcherStatus</span></a></p></li>
 <li><p><a class="reference internal" href="enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#exhale-enum-interface-8hpp-1a2f1c337cd175cabc3a786e0f5712e123"><span class="std std-ref">Enum InterfaceType</span></a></p></li>
@@ -308,7 +297,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05.html#exhale-function-http-8cpp-1abe41107a4023b87ce71b29c188aa3f05"><span class="std std-ref">Function amdinfer::addHeaders</span></a></p></li>
 <li><p><a class="reference internal" href="function_http_8cpp_1af1c58579846a3d1df81be93b1cd81dc6.html#exhale-function-http-8cpp-1af1c58579846a3d1df81be93b1cd81dc6"><span class="std std-ref">Function amdinfer::check_error</span></a></p></li>
@@ -376,7 +365,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </section>
 <section id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="typedef_grpc__server_8cpp_1a91acc2ad2e6156eccc10d01384ef8506.html#exhale-typedef-grpc-server-8cpp-1a91acc2ad2e6156eccc10d01384ef8506"><span class="std std-ref">Typedef amdinfer::AsyncService</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae.html#exhale-typedef-batcher-8hpp-1a85d63a3c6b580841f91e53b2a83e20ae"><span class="std std-ref">Typedef amdinfer::BatchPtr</span></a></p></li>
@@ -407,7 +396,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </section>
 <section id="variables">
-<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="variable_echo__multi_8cpp_1afa0b765105e95ab377c99ba05b254d06.html#exhale-variable-echo-multi-8cpp-1afa0b765105e95ab377c99ba05b254d06"><span class="std std-ref">Variable amdinfer::kInputLengths</span></a></p></li>
 <li><p><a class="reference internal" href="variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898.html#exhale-variable-echo-multi-8cpp-1a99f0d6272c799cd29afc336c68feb898"><span class="std std-ref">Variable amdinfer::kInputTensors</span></a></p></li>
@@ -441,7 +430,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 06, 2022.
+      <span class="lastupdated">Last updated on December 08, 2022.
       </span></p>
   </div>
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -23,15 +23,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.bundle.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -39,14 +32,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/js/hoverxref.js"></script>
-        <script src="../_static/js/tooltipster.bundle.min.js"></script>
-        <script src="../_static/js/micromodal.min.js"></script>
         <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -82,23 +73,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platforms.html">Platforms</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -115,6 +96,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
@@ -272,21 +261,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="class-echo">
-<span id="exhale-class-classamdinfer-1-1workers-1-1echo"></span><h1>Class Echo<a class="headerlink" href="#class-echo" title="Permalink to this headline">¶</a></h1>
+<span id="exhale-class-classamdinfer-1-1workers-1-1echo"></span><h1>Class Echo<a class="headerlink" href="#class-echo" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-echo-cpp"><span class="std std-ref">File echo.cpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this heading">¶</a></h2>
 <section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::workers::Worker</span></code> (<a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#exhale-class-classamdinfer-1-1workers-1-1worker"><span class="std std-ref">Class Worker</span></a>)</p></li>
 </ul>
 </section>
 </section>
 <section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers4EchoE">
 <span id="_CPPv3N8amdinfer7workers4EchoE"></span><span id="_CPPv2N8amdinfer7workers4EchoE"></span><span id="amdinfer::workers::Echo"></span><span class="target" id="classamdinfer_1_1workers_1_1Echo"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Echo</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6WorkerE" title="amdinfer::workers::Worker"><span class="n"><span class="pre">Worker</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer7workers4EchoE" title="Permalink to this definition">¶</a><br /></dt>
@@ -298,10 +287,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer7workers4Echo5spawnEP13BatchPtrQueue"></span><span id="_CPPv2N8amdinfer7workers4Echo5spawnEP13BatchPtrQueue"></span><span id="amdinfer::workers::Echo::spawn__BatchPtrQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Echo_1adc0e54c22aed416977a1587a32ce6379"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">thread</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spawn</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE" title="amdinfer::BatchPtrQueue"><span class="n"><span class="pre">BatchPtrQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input_queue</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers4Echo5spawnEP13BatchPtrQueue" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Starts the worker’s <a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#classamdinfer_1_1workers_1_1Worker_1ac9ab4e2e24a43a6b36a6e6f5f97e28dc"><span class="std std-ref">run()</span></a> method as a separate thread and returns it. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input_queue</strong> – queue used to send requests to the started worker thread </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>std::thread </p>
 </dd>
 </dl>
@@ -341,7 +330,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 06, 2022.
+      <span class="lastupdated">Last updated on December 08, 2022.
       </span></p>
   </div>
 

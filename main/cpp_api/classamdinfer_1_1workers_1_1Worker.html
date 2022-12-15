@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -23,15 +23,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.bundle.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -39,14 +32,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/js/hoverxref.js"></script>
-        <script src="../_static/js/tooltipster.bundle.min.js"></script>
-        <script src="../_static/js/micromodal.min.js"></script>
         <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -82,23 +73,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platforms.html">Platforms</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -115,6 +96,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
@@ -272,14 +261,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="class-worker">
-<span id="exhale-class-classamdinfer-1-1workers-1-1worker"></span><h1>Class Worker<a class="headerlink" href="#class-worker" title="Permalink to this headline">¶</a></h1>
+<span id="exhale-class-classamdinfer-1-1workers-1-1worker"></span><h1>Class Worker<a class="headerlink" href="#class-worker" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_worker.hpp.html#file-workspace-amdinfer-src-amdinfer-workers-worker-hpp"><span class="std std-ref">File worker.hpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this heading">¶</a></h2>
 <section id="derived-types">
-<h3>Derived Types<a class="headerlink" href="#derived-types" title="Permalink to this headline">¶</a></h3>
+<h3>Derived Types<a class="headerlink" href="#derived-types" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::workers::Aks</span></code> (<a class="reference internal" href="classamdinfer_1_1workers_1_1Aks.html#exhale-class-classamdinfer-1-1workers-1-1aks"><span class="std std-ref">Class Aks</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::workers::AksDetect</span></code> (<a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetect.html#exhale-class-classamdinfer-1-1workers-1-1aksdetect"><span class="std std-ref">Class AksDetect</span></a>)</p></li>
@@ -298,7 +287,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </section>
 </section>
 <section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers6WorkerE">
 <span id="_CPPv3N8amdinfer7workers6WorkerE"></span><span id="_CPPv2N8amdinfer7workers6WorkerE"></span><span id="amdinfer::workers::Worker"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Worker</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6WorkerE" title="Permalink to this definition">¶</a><br /></dt>
@@ -323,10 +312,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer7workers6Worker5spawnEP13BatchPtrQueue"></span><span id="_CPPv2N8amdinfer7workers6Worker5spawnEP13BatchPtrQueue"></span><span id="amdinfer::workers::Worker::spawn__BatchPtrQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a698ea26814bfe704580d93e712e5e0b9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">thread</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spawn</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE" title="amdinfer::BatchPtrQueue"><span class="n"><span class="pre">BatchPtrQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input_queue</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker5spawnEP13BatchPtrQueue" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Starts the worker’s <a class="reference internal" href="#classamdinfer_1_1workers_1_1Worker_1ac9ab4e2e24a43a6b36a6e6f5f97e28dc"><span class="std std-ref">run()</span></a> method as a separate thread and returns it. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input_queue</strong> – queue used to send requests to the started worker thread </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>std::thread </p>
 </dd>
 </dl>
@@ -355,7 +344,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer7workers6Worker3runEP13BatchPtrQueue"></span><span id="_CPPv2N8amdinfer7workers6Worker3runEP13BatchPtrQueue"></span><span id="amdinfer::workers::Worker::run__BatchPtrQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1ac9ab4e2e24a43a6b36a6e6f5f97e28dc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE" title="amdinfer::BatchPtrQueue"><span class="n"><span class="pre">BatchPtrQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input_queue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker3runEP13BatchPtrQueue" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The main body of the worker executes the work. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input_queue</strong> – queue that receives incoming requests </p>
 </dd>
 </dl>
@@ -384,7 +373,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer7workers6Worker13returnBuffersENSt10unique_ptrINSt6vectorI10BufferPtrsEEEENSt10unique_ptrINSt6vectorI10BufferPtrsEEEE"></span><span id="_CPPv2N8amdinfer7workers6Worker13returnBuffersENSt10unique_ptrINSt6vectorI10BufferPtrsEEEENSt10unique_ptrINSt6vectorI10BufferPtrsEEEE"></span><span id="amdinfer::workers::Worker::returnBuffers__std::unique_ptr:std::vector:BufferPtrs::.std::unique_ptr:std::vector:BufferPtrs::"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1ac9666559b5f217be79322023f6001e13"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">returnBuffers</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_buffers</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_buffers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker13returnBuffersENSt10unique_ptrINSt6vectorI10BufferPtrsEEEENSt10unique_ptrINSt6vectorI10BufferPtrsEEEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Return buffers to the worker’s buffer pool after use. The buffers’ reset() method is called prior to returning. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_buffers</strong> – </p></li>
 <li><p><strong>output_buffers</strong> – </p></li>
@@ -395,12 +384,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue">
-<span id="_CPPv3N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue"></span><span id="_CPPv2N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue"></span><span id="amdinfer::workers::Worker::setInputBuffers__BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a9fa177b9a6aee93e3240622e7994a76c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setInputBuffers</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_namespaceamdinfer_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue"></span><span id="_CPPv2N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue"></span><span id="amdinfer::workers::Worker::setInputBuffers__BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a9fa177b9a6aee93e3240622e7994a76c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setInputBuffers</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue">
-<span id="_CPPv3N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue"></span><span id="_CPPv2N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue"></span><span id="amdinfer::workers::Worker::setOutputBuffers__BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a09dfd8f766cef9ef770b83e46ae7f48a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setOutputBuffers</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_namespaceamdinfer_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue"></span><span id="_CPPv2N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue"></span><span id="amdinfer::workers::Worker::setOutputBuffers__BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a09dfd8f766cef9ef770b83e46ae7f48a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setOutputBuffers</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -438,12 +427,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-attributes">Protected Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers6Worker14input_buffers_E">
-<span id="_CPPv3N8amdinfer7workers6Worker14input_buffers_E"></span><span id="_CPPv2N8amdinfer7workers6Worker14input_buffers_E"></span><span id="amdinfer::workers::Worker::input_buffers___BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a3b33633951b948f03079f05ce3bb6219"></span><a class="reference internal" href="typedef_namespaceamdinfer_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">input_buffers_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker14input_buffers_E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7workers6Worker14input_buffers_E"></span><span id="_CPPv2N8amdinfer7workers6Worker14input_buffers_E"></span><span id="amdinfer::workers::Worker::input_buffers___BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a3b33633951b948f03079f05ce3bb6219"></span><a class="reference internal" href="typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">input_buffers_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker14input_buffers_E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers6Worker15output_buffers_E">
-<span id="_CPPv3N8amdinfer7workers6Worker15output_buffers_E"></span><span id="_CPPv2N8amdinfer7workers6Worker15output_buffers_E"></span><span id="amdinfer::workers::Worker::output_buffers___BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a8d2a63e026246bba2fac89b8a270ee26"></span><a class="reference internal" href="typedef_namespaceamdinfer_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">output_buffers_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker15output_buffers_E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7workers6Worker15output_buffers_E"></span><span id="_CPPv2N8amdinfer7workers6Worker15output_buffers_E"></span><span id="amdinfer::workers::Worker::output_buffers___BufferPtrsQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1Worker_1a8d2a63e026246bba2fac89b8a270ee26"></span><a class="reference internal" href="typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849.html#_CPPv4N8amdinfer15BufferPtrsQueueE" title="amdinfer::BufferPtrsQueue"><span class="n"><span class="pre">BufferPtrsQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">output_buffers_</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers6Worker15output_buffers_E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -489,7 +478,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 06, 2022.
+      <span class="lastupdated">Last updated on December 08, 2022.
       </span></p>
   </div>
 

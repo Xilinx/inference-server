@@ -32,9 +32,9 @@ Functions
 
 - :ref:`exhale_function_base64_8cpp_1aa4091ad73805c2d6aa1f1c05cb552ff5`
 
-- :ref:`exhale_function_base64_8cpp_1ae50b1ca52f2936e85e477f18b6c8fd50`
-
 - :ref:`exhale_function_base64_8cpp_1aee9b0fbf15e4d37e62d2b263d546c5e8`
+
+- :ref:`exhale_function_base64_8cpp_1ae50b1ca52f2936e85e477f18b6c8fd50`
 
 - :ref:`exhale_function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327`
 

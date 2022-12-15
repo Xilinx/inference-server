@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Quickstart - Deployment &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart - Development" href="quickstart_development.html" />
+    <link rel="prev" title="Quickstart - Inference" href="quickstart_inference.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#documentation-overview">Documentation overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#support">Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#docker-image">Docker Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#base-image">Base Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-ppas">Ubuntu PPAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#github">Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#others">Others</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#xilinx">Xilinx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#amd">AMD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#included">Included</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#downloaded-files">Downloaded Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Quickstart - Inference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart - Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-vs-development-images">Deployment vs. Development Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-on-docker">Deploying on Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deployment-image">Deployment image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#development-image">Development image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-on-kserve">Deploying on KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-without-docker">Deploying without Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-models">Loading models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Quickstart - Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries and API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_user_api.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#clients">Clients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#grpc">gRPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#http">HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#native">Native</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#websocket">WebSocket</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#core">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#datatype">DataType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#exceptions">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#prediction">Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#servers">Servers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python.html#install-the-python-library">Install the Python library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#commands">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#Sub-commands">Sub-commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#attach">attach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#benchmark">benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#build">build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#clean">clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#dockerize">dockerize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#get">get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#install">install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#list">list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#make">make</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#run">run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#start">start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#test">test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#up">up</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#import-the-library">Import the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#create-our-client-and-server-objects">Create our client and server objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#is-amd-inference-server-already-running">Is AMD Inference Server already running?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#include-the-header">Include the header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#include-the-module">Include the module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="platforms.html">Platforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#get-assets-and-models">Get assets and models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#freezing-pytorch-models">Freezing PyTorch models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#run-tests">Run Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#tune-performance">Tune performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#set-up-the-host-and-gpus">Set up the host and GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#start-an-image">Start an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#get-assets-and-models">Get assets and models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#set-up-the-host-and-fpgas">Set up the host and FPGAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#start-an-image">Start an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#get-assets-and-models">Get assets and models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#prepare-the-image-for-docker-deployment">Prepare the image for Docker deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#start-the-container">Start the container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#make-a-request">Make a request</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">Deploying with KServe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#start-an-inference-service">Start an inference service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="kserve.html#serving-runtime">Serving Runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="kserve.html#custom-container">Custom container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Performance Factors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#hardware">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#compile-the-right-version">Compile the right version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#parallelism">Parallelism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#rest-threads">REST threads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#sending-requests">Sending requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#duplicating-workers">Duplicating workers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-your-work">Sign Your Work</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#c-api">C++ API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#batching">Batching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#workers">Workers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#organization-and-lifecycle">Organization and Lifecycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#improving-performance">Improving Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#external-processing">External Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#xmodel">XModel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#buffering">Buffering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#observation">Observation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#metrics">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#tracing">Tracing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aks.html#introduction-to-aks">Introduction to AKS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aks.html#using-aks-in-amd-inference-server">Using AKS in AMD Inference Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#amd-inference-server-logs">AMD Inference Server Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#drogon-logs">Drogon Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html#xmodel-benchmarking">XModel Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html#kernel-simulation">Kernel Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Quickstart - Deployment</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart_deployment.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quickstart-deployment">
+<h1>Quickstart - Deployment<a class="headerlink" href="#quickstart-deployment" title="Permalink to this headline">¶</a></h1>
+<p>This quickstart is intended for a user who is deploying the inference server and configuring the available models for inference.</p>
+<p>There are a few different methods to deploy the server and make it available for remote clients:</p>
+<ul class="simple">
+<li><p>Deploy on Docker with a development or deployment image</p></li>
+<li><p>Deploy on KServe with a deployment image</p></li>
+<li><p>Deploy without Docker</p></li>
+</ul>
+<p>Once the server is up, you and any clients can <a class="reference internal" href="quickstart_inference.html#quickstart-inference"><span class="std std-ref">make requests to it</span></a>.</p>
+<section id="deployment-vs-development-images">
+<h2>Deployment vs. Development Images<a class="headerlink" href="#deployment-vs-development-images" title="Permalink to this headline">¶</a></h2>
+<p>There are two kinds of Docker images you can make for the inference server: deployment and development.
+The deployment image is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
+It has limited debugging capabilities and it contains a precompiled binary for the server that automatically starts when the container starts.
+In contrast, the development image is far larger in size because it also contains the build-time dependencies of the server.
+It allows you to compile the server and build the <cite>amdinfer</cite> library.
+You can build either the <a class="reference internal" href="docker.html#build-the-production-docker-image"><span class="std std-ref">deployment</span></a> or development image using a script.</p>
+</section>
+<section id="deploying-on-docker">
+<h2>Deploying on Docker<a class="headerlink" href="#deploying-on-docker" title="Permalink to this headline">¶</a></h2>
+<p>You can use either the deployment or development image to make the server available for inference with Docker.
+This approach has the fewest external dependencies but requires more manual work to set up.</p>
+<section id="deployment-image">
+<h3>Deployment image<a class="headerlink" href="#deployment-image" title="Permalink to this headline">¶</a></h3>
+<p>Once you have the basic deployment image, you’ll need to prepare the image by adding models that you want to support.
+Follow these <a class="reference internal" href="docker.html#prepare-the-image-for-docker-deployment"><span class="std std-ref">instructions</span></a> for more information.</p>
+</section>
+<section id="development-image">
+<h3>Development image<a class="headerlink" href="#development-image" title="Permalink to this headline">¶</a></h3>
+<p>Once you have the development image, you can start the container, compile the server, and start it.
+Follow these <a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server"><span class="std std-ref">instructions</span></a> for more information.</p>
+</section>
+</section>
+<section id="deploying-on-kserve">
+<h2>Deploying on KServe<a class="headerlink" href="#deploying-on-kserve" title="Permalink to this headline">¶</a></h2>
+<p>You can use <a class="reference external" href="https://kserve.github.io/website/0.9/">KServe</a> to deploy the inference server on a Kubernetes cluster.
+Once KServe is installed on your Kubernetes cluster, you can use a prepared deployment image to make models available for inference.
+Follow these <a class="reference internal" href="kserve.html#kserve"><span class="std std-ref">instructions</span></a> for more information.</p>
+</section>
+<section id="deploying-without-docker">
+<h2>Deploying without Docker<a class="headerlink" href="#deploying-without-docker" title="Permalink to this headline">¶</a></h2>
+<p>While deploying without Docker is not an officially supported approach, it is possible to make the server available without Docker.
+The server is compiled with CMake so you can install all the dependencies on your host machine so that the CMake build can compile the server executable.
+Looking at the <a class="reference internal" href="dependencies.html#dependencies"><span class="std std-ref">dependencies</span></a> can help you identify what third-party packages are needed by the server.</p>
+</section>
+<section id="loading-models">
+<h2>Loading models<a class="headerlink" href="#loading-models" title="Permalink to this headline">¶</a></h2>
+<p>Once the server is up using one of the approaches above, you must load the models you want to make available for inference.
+The easiest way to load models is using the AMD Inference Server’s library <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code>.
+The library allows you to make a client object that you can use to communicate with the server over any protocol that the server supports.
+Clients have the same base set of methods so you can easily replace one with another.
+It also allows you to make objects to hold the requests and responses and use defined methods for interacting with them.</p>
+<p>The library is natively in C++ and has Python bindings that you can use as well.
+The C++ version of the library is most easily available in the development container for the Inference Server as that has all the needed dependencies already.
+If you want to use the C++ library outside the container, you need to resolve the dependencies yourself.
+You can <a class="reference internal" href="python.html#install-the-python-library"><span class="std std-ref">install the Python version</span></a> on a host, in an environment or in a container using a package.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-0-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// your server administrator must provide the values for these variables:</span>
+<span class="c1">//   - http_server_addr: HTTP address of the server, if supported</span>
+<span class="c1">//   - grpc_server_addr: gRPC address of the server, if supported</span>
+<span class="c1">//   - endpoint: string to identify the model for inference. If there are</span>
+<span class="c1">//               multiple models available, each model will have its own</span>
+<span class="c1">//               endpoint that you can use to request inferences from it</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">http_server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://127.0.0.1:8998&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">grpc_server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;127.0.0.1:50051&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span><span class="p">;</span><span class="w"></span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/amdinfer.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp"># create a client to communicate to the server over HTTP</span>
+<span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">HttpClient</span><span class="w"> </span><span class="n">http_client</span><span class="p">{</span><span class="n">http_server_addr</span><span class="p">};</span><span class="w"></span>
+
+<span class="cp"># create a client to communicate to the server over gRPC</span>
+<span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">GrpcClient</span><span class="w"> </span><span class="n">grpc_client</span><span class="p">{</span><span class="n">grpc_server_addr</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># your server administrator must provide the values for these variables:</span>
+<span class="c1">#   - http_server_addr: HTTP address of the server, if supported</span>
+<span class="c1">#   - grpc_server_addr: gRPC address of the server, if supported</span>
+<span class="c1">#   - endpoint: string to identify the model for inference. If there are</span>
+<span class="c1">#               multiple models available, each model will have its own</span>
+<span class="c1">#               endpoint that you can use to request inferences from it</span>
+<span class="n">http_server_addr</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8998&quot;</span>
+<span class="n">grpc_server_addr</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1:50051&quot;</span>
+<span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;endpoint&quot;</span>
+
+<span class="kn">import</span> <span class="nn">amdinfer</span>
+
+<span class="c1"># create a client to communicate to the server over HTTP</span>
+<span class="n">http_client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="n">http_server_addr</span><span class="p">)</span>
+
+<span class="c1"># create a client to communicate to the server over gRPC</span>
+<span class="n">grpc_client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">GrpcClient</span><span class="p">(</span><span class="n">grpc_server_addr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>The library also defines the <code class="docutils literal notranslate"><span class="pre">workerLoad</span></code> API that you can use to load models.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The similar <code class="docutils literal notranslate"><span class="pre">modelLoad</span></code> API works in a related but different way.
+It is primarily meant for use by KServe.</p>
+</div>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-1-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/path/to/model&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">// the first argument should be the worker</span>
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;migraphx&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
+
+<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/model&quot;</span><span class="p">)</span>
+<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># the first argument should be the worker</span>
+<span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="s2">&quot;migraphx&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+
+<span class="n">amdinfer</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>After the model is loaded and ready, it is ready to accept inferences at the given endpoint.</p>
+<p>For more information about these objects and the available methods, look at the examples or the documentation for the <a class="reference internal" href="cpp_user_api.html#c"><span class="std std-ref">C++</span></a> and <a class="reference internal" href="python.html#module-amdinfer"><span class="std std-ref">Python</span></a> APIs.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart_inference.html" class="btn btn-neutral float-left" title="Quickstart - Inference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quickstart_development.html" class="btn btn-neutral float-right" title="Quickstart - Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on December 15, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: main
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      <dl>
+        <dt>Languages</dt>
+        
+           <strong> 
+          <dd><a href="/inference-server/main/">en</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/inference-server/0.1.0/">0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/inference-server/main/">main</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+       
+    </div>
+  </div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

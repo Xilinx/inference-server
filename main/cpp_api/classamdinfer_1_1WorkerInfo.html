@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -23,15 +23,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.custom.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster.bundle.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-shadow.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-punk.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-noir.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-light.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/tooltipster-sideTip-borderless.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/micromodal.css" type="text/css" />
       <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -39,14 +32,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/js/hoverxref.js"></script>
-        <script src="../_static/js/tooltipster.bundle.min.js"></script>
-        <script src="../_static/js/micromodal.min.js"></script>
         <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -82,23 +73,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platforms.html">Platforms</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Platforms</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../zendnn.html">CPUs - ZenDNN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migraphx.html">GPUs - MIGraphX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../vitis_ai.html">FPGAs - Vitis AI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
 <ul>
@@ -115,6 +96,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
@@ -272,12 +261,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="class-workerinfo">
-<span id="exhale-class-classamdinfer-1-1workerinfo"></span><h1>Class WorkerInfo<a class="headerlink" href="#class-workerinfo" title="Permalink to this headline">¶</a></h1>
+<span id="exhale-class-classamdinfer-1-1workerinfo"></span><h1>Class WorkerInfo<a class="headerlink" href="#class-workerinfo" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp.html#file-workspace-amdinfer-src-amdinfer-core-worker-info-hpp"><span class="std std-ref">File worker_info.hpp</span></a></p></li>
 </ul>
 <section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10WorkerInfoE">
 <span id="_CPPv3N8amdinfer10WorkerInfoE"></span><span id="_CPPv2N8amdinfer10WorkerInfoE"></span><span id="amdinfer::WorkerInfo"></span><span class="target" id="classamdinfer_1_1WorkerInfo"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WorkerInfo</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer10WorkerInfoE" title="Permalink to this definition">¶</a><br /></dt>
@@ -328,7 +317,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer10WorkerInfo10getBatcherEv"></span><span id="_CPPv2N8amdinfer10WorkerInfo10getBatcherEv"></span><span id="amdinfer::WorkerInfo::getBatcher"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a9af75abc90476c17bf1e3f3bc4fa7a2c"></span><a class="reference internal" href="classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7BatcherE" title="amdinfer::Batcher"><span class="n"><span class="pre">Batcher</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getBatcher</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10WorkerInfo10getBatcherEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the queue associated with this worker to send it requests. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>InferenceRequestPtrQueue* </p>
 </dd>
 </dl>
@@ -351,7 +340,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer10WorkerInfo17addAndStartWorkerERKNSt6stringEP17RequestParameters"></span><span id="_CPPv2N8amdinfer10WorkerInfo17addAndStartWorkerERKNSt6stringEP17RequestParameters"></span><span id="amdinfer::WorkerInfo::addAndStartWorker__ssCR.RequestParametersP"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1ab0fc1dfde62ece34f9aa1c4d76918946"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addAndStartWorker</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10WorkerInfo17addAndStartWorkerERKNSt6stringEP17RequestParameters" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Start a new worker in the group with the given parameters. The name is used to uniquely identify a particular worker to dynamically load. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – </p></li>
 <li><p><strong>parameters</strong> – pointer to parameters. Should not be nullptr </p></li>
@@ -377,7 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo14getInputBufferEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo14getInputBufferEv"></span><span id="amdinfer::WorkerInfo::getInputBufferC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a2ee667b786bc0b020a9965f95c08508f"></span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getInputBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo14getInputBufferEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get an input buffer from this worker. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>BufferPtrs </p>
 </dd>
 </dl>
@@ -388,7 +377,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo15getOutputBufferEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo15getOutputBufferEv"></span><span id="amdinfer::WorkerInfo::getOutputBufferC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1ac926246b891213ed84c94f75e308f273"></span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getOutputBuffer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo15getOutputBufferEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get an output buffer from this worker. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>BufferPtrs </p>
 </dd>
 </dl>
@@ -399,7 +388,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo14putInputBufferE10BufferPtrs"></span><span id="_CPPv2NK8amdinfer10WorkerInfo14putInputBufferE10BufferPtrs"></span><span id="amdinfer::WorkerInfo::putInputBuffer__BufferPtrsC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1adb1abf92beac1843eb50b9da46938a9f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">putInputBuffer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo14putInputBufferE10BufferPtrs" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Return an input buffer to the worker. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>buffer</strong> – the buffer to return </p>
 </dd>
 </dl>
@@ -410,7 +399,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo15putOutputBufferE10BufferPtrs"></span><span id="_CPPv2NK8amdinfer10WorkerInfo15putOutputBufferE10BufferPtrs"></span><span id="amdinfer::WorkerInfo::putOutputBuffer__BufferPtrsC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1adc6f65ffe8555128f32bf3670270f366"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">putOutputBuffer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo15putOutputBufferE10BufferPtrs" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Return an output buffer to the worker. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>buffer</strong> – the buffer to return </p>
 </dd>
 </dl>
@@ -421,16 +410,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo14inputSizeValidE6size_t"></span><span id="_CPPv2NK8amdinfer10WorkerInfo14inputSizeValidE6size_t"></span><span id="amdinfer::WorkerInfo::inputSizeValid__sC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a89e6ecb35bbc2b2f08d9b2431b741b96"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inputSizeValid</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo14inputSizeValidE6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if this worker group supports a particular number of input tensors. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>size</strong> – </p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="classamdinfer_1_1invalid__argument.html#_CPPv4N8amdinfer16invalid_argumentE" title="amdinfer::invalid_argument"><span class="n">invalid_argument</span></a></span></span> – too many input tensors for this worker </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>true if the number of input tensors is acceptable </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>false if more buffers need to be allocated but the number is okay </p>
 </dd>
 </dl>
@@ -441,7 +430,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo12getBufferNumEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo12getBufferNumEv"></span><span id="amdinfer::WorkerInfo::getBufferNumC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a23091b1aa1348197be06aab72bb01ccc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getBufferNum</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo12getBufferNumEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the number of buffers currently allocated by this worker. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>auto </p>
 </dd>
 </dl>
@@ -452,7 +441,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10WorkerInfo15getMaxBufferNumEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo15getMaxBufferNumEv"></span><span id="amdinfer::WorkerInfo::getMaxBufferNumC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1af7b5d4cf7ea75a3f1005d285e9c72184"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getMaxBufferNum</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo15getMaxBufferNumEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the maximum number of buffers that this worker may allocate. -1 indicates there is no limit. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>auto </p>
 </dd>
 </dl>
@@ -463,7 +452,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer10WorkerInfo8allocateE6size_t"></span><span id="_CPPv2N8amdinfer10WorkerInfo8allocateE6size_t"></span><span id="amdinfer::WorkerInfo::allocate__s"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a39679461e9343c3b491f7a4914c569c0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allocate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10WorkerInfo8allocateE6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Allocate enough buffers to fulfill a particular request size. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>request_size</strong> – </p>
 </dd>
 </dl>
@@ -509,7 +498,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 06, 2022.
+      <span class="lastupdated">Last updated on December 08, 2022.
       </span></p>
   </div>
 

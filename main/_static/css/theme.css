@@ -3936,7 +3936,8 @@ html{
     top:0;
     bottom:0;
     left:0;
-    padding-bottom:2em;
+    /* 2*12px for the padding around rst-versions */
+    padding-bottom:calc(1em + 24px);
     width:300px;
     overflow-x:hidden;
     overflow-y:hidden;
