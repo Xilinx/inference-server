@@ -81,8 +81,8 @@ exhale_args = {
     # Suggested optional arguments
     "createTreeView": True,
     # TIP: if using the sphinx-bootstrap-theme, you need
-    "treeViewIsBootstrap": True,
-    "unabridgedOrphanKinds": {"define", "dir", "typedef", "variable"},
+    # "treeViewIsBootstrap": True,
+    "unabridgedOrphanKinds": {"define", "dir", "typedef", "variable", "file"},
     # exclude PIMPL classes
     "listingExclude": [r".*Impl$"],
 }
@@ -100,7 +100,6 @@ confluence_server_url = "https://confluence.xilinx.com/"
 autodoc_default_options = {
     "members": True,
     "special-members": "__init__",
-    "undoc-members": True,
 }
 
 

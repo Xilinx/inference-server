@@ -26,34 +26,71 @@
 
 namespace amdinfer {
 
+/**
+ * @brief The base class for all exceptions thrown by the inference server
+ *
+ */
 class runtime_error : public std::runtime_error {
   using std::runtime_error::runtime_error;
 };
 
+/**
+ * @brief This exception gets thrown by the clients if a method fails or the
+ * server raises an error.
+ *
+ */
 class bad_status : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+/**
+ * @brief This exception gets thrown by the clients if the connection to the
+ * server fails.
+ *
+ */
 class connection_error : public bad_status {
   using bad_status::bad_status;
 };
 
+/**
+ * @brief This exception gets thrown if a requested file cannot be found
+ *
+ */
 class file_not_found_error : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+/**
+ * @brief This exception gets thrown if a requested file cannot be read
+ *
+ */
 class file_read_error : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+/**
+ * @brief This exception gets thrown if a third-party library raises an
+ * exception
+ *
+ */
 class external_error : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+/**
+ * @brief This exception gets thrown if an invalid argument is passed to a
+ * function
+ *
+ */
 class invalid_argument : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+/**
+ * @brief This exception gets thrown if an expected environment variable is not
+ * set
+ *
+ */
 class environment_not_set_error : public runtime_error {
   using runtime_error::runtime_error;
 };

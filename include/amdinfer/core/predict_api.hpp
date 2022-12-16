@@ -54,35 +54,35 @@ using Parameter = std::variant<bool, int32_t, double, std::string>;
 class RequestParameters : public Serializable {
  public:
   /**
-   * @brief Put in a key-value pair
+   * @brief Puts in a key-value pair
    *
    * @param key key used to store and retrieve the value
    * @param value value to store
    */
   void put(const std::string &key, bool value);
   /**
-   * @brief Put in a key-value pair
+   * @brief Puts in a key-value pair
    *
    * @param key key used to store and retrieve the value
    * @param value value to store
    */
   void put(const std::string &key, double value);
   /**
-   * @brief Put in a key-value pair
+   * @brief Puts in a key-value pair
    *
    * @param key key used to store and retrieve the value
    * @param value value to store
    */
   void put(const std::string &key, int32_t value);
   /**
-   * @brief Put in a key-value pair
+   * @brief Puts in a key-value pair
    *
    * @param key key used to store and retrieve the value
    * @param value value to store
    */
   void put(const std::string &key, const std::string &value);
   /**
-   * @brief Put in a key-value pair
+   * @brief Puts in a key-value pair
    *
    * @param key key used to store and retrieve the value
    * @param value value to store
@@ -90,7 +90,7 @@ class RequestParameters : public Serializable {
   void put(const std::string &key, const char *value);
 
   /**
-   * @brief Get a pointer to the named parameter. Returns nullptr if not found
+   * @brief Gets a pointer to the named parameter. Returns nullptr if not found
    * or if a bad type is used.
    *
    * @tparam T type of parameter. Must be (bool|double|int32_t|std::string)
@@ -104,36 +104,57 @@ class RequestParameters : public Serializable {
   }
 
   /**
-   * @brief Check if a particular parameter exists
+   * @brief Checks if a particular parameter exists
    *
    * @param key name of the parameter to check
    * @return bool
    */
   bool has(const std::string &key);
   /**
-   * @brief Remove a parameter
+   * @brief Removes a parameter
    *
    * @param key name of the parameter to remove
    */
   void erase(const std::string &key);
-  /// Get the number of parameters
+  /// Gets the number of parameters
   [[nodiscard]] size_t size() const;
-  /// Check if the parameters are empty
+  /// Checks if the parameters are empty
   [[nodiscard]] bool empty() const;
-  /// Get the underlying data structure holding the parameters
+  /// Gets the underlying data structure holding the parameters
   [[nodiscard]] std::map<std::string, Parameter> data() const;
 
+  /// Returns a read/write iterator to the first parameter in the object
   auto begin() { return parameters_.begin(); }
+  /// Returns a read iterator to the first parameter in the object
   auto cbegin() const { return parameters_.cbegin(); }
 
+  /// Returns a read/write iterator to one past the last parameter in the object
   auto end() { return parameters_.end(); }
+  /// Returns a read iterator to one past the last parameter in the object
   auto cend() const { return parameters_.cend(); }
 
+  /**
+   * @brief Returns the size of the serialized data
+   *
+   * @return size_t
+   */
   size_t serializeSize() const override;
+  /**
+   * @brief Serializes the object to the provided memory address. There should
+   * be sufficient space to store the serialized object.
+   *
+   * @param data_out
+   */
   void serialize(std::byte *data_out) const override;
+  /**
+   * @brief Deserializes the data at the provided memory address to initialize
+   * this object. If the memory cannot be deserialized, an exception is thrown.
+   *
+   * @param data_in a pointer to the serialized data for this object type
+   */
   void deserialize(const std::byte *data_in) override;
 
-  /// Provide an implementation to print the class with std::cout to an ostream
+  /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
                                   RequestParameters const &self) {
     std::stringstream ss;
@@ -156,8 +177,15 @@ class RequestParameters : public Serializable {
 using RequestParametersPtr = std::shared_ptr<RequestParameters>;
 
 struct ServerMetadata {
+  /// Name of the server
   std::string name;
+  /// Version of the server
   std::string version;
+  /**
+   * @brief The extensions supported by the server. The KServe specification
+   * allows servers to support custom extensions and return them with a
+   * metadata request.
+   */
   std::unordered_set<std::string> extensions;
 };
 
@@ -166,7 +194,7 @@ struct ServerMetadata {
  */
 class InferenceRequestInput : public Serializable {
  public:
-  /// Construct a new InferenceRequestInput object
+  /// Constructs a new InferenceRequestInput object
   InferenceRequestInput();
 
   /**
@@ -180,28 +208,28 @@ class InferenceRequestInput : public Serializable {
   InferenceRequestInput(void *data, std::vector<uint64_t> shape,
                         DataType dataType, std::string name = "");
 
-  /// Set the request's data
+  /// Sets the request's data
   void setData(void *buffer);
-  /// Set the request's shared data
+  /// Sets the request's shared data
   void setData(std::vector<std::byte> &&buffer);
-  /// check if the stored data is shared
+  /// Checks if the stored data is shared
   bool sharedData() const;
 
-  /// Get a pointer to the request's data
+  /// Gets a pointer to the request's data
   [[nodiscard]] void *getData() const;
 
-  /// Get the input tensor's name
+  /// Gets the input tensor's name
   const std::string &getName() const { return this->name_; }
-  /// Set the input tensor's name
+  /// Sets the input tensor's name
   void setName(std::string name);
 
-  /// Get the input tensor's shape
+  /// Gets the input tensor's shape
   const std::vector<uint64_t> &getShape() const { return this->shape_; }
-  /// Set the tensor's shape
+  /// Sets the tensor's shape
   void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
-  /// Set the tensor's shape
+  /// Sets the tensor's shape
   void setShape(const std::vector<uint64_t> &shape) { this->shape_ = shape; }
-  /// Set the tensor's shape
+  /// Sets the tensor's shape
   void setShape(const std::vector<int32_t> &shape) {
     this->shape_.reserve(shape.size());
     for (const auto &index : shape) {
@@ -209,13 +237,18 @@ class InferenceRequestInput : public Serializable {
     }
   }
 
-  /// Get the input tensor's datatype
+  /// Gets the input tensor's datatype
   DataType getDatatype() const { return this->dataType_; }
   /// Set the tensor's data type
   void setDatatype(DataType type);
 
-  /// Get the input tensor's parameters
+  /// Gets the input tensor's parameters
   RequestParameters *getParameters() const { return this->parameters_.get(); }
+  /**
+   * @brief Sets the input tensor's parameters
+   *
+   * @param parameters pointer to parameters to assign
+   */
   void setParameters(RequestParametersPtr parameters) {
     parameters_ = parameters;
   }
@@ -223,11 +256,28 @@ class InferenceRequestInput : public Serializable {
   /// Get the tensor's size (number of elements)
   size_t getSize() const;
 
+  /**
+   * @brief Returns the size of the serialized data
+   *
+   * @return size_t
+   */
   size_t serializeSize() const override;
+  /**
+   * @brief Serializes the object to the provided memory address. There should
+   * be sufficient space to store the serialized object.
+   *
+   * @param data_out
+   */
   void serialize(std::byte *data_out) const override;
+  /**
+   * @brief Deserializes the data at the provided memory address to initialize
+   * this object. If the memory cannot be deserialized, an exception is thrown.
+   *
+   * @param data_in a pointer to the serialized data for this object type
+   */
   void deserialize(const std::byte *data_in) override;
 
-  /// Provide an implementation to print the class with std::cout to an ostream
+  /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
                                   InferenceRequestInput const &my_class) {
     os << "InferenceRequestInput:\n";
@@ -264,22 +314,29 @@ class InferenceRequestInput : public Serializable {
  */
 class InferenceRequestOutput {
  public:
-  /// Construct a new Request Output object
+  /// Constructs a new Request Output object
   InferenceRequestOutput();
 
-  /// Set the request's data
+  /// Sets the request's data
   void setData(void *buffer) { this->data_ = buffer; }
 
-  /// Take the request's data
+  /// Takes the request's data
   void *getData() { return this->data_; }
 
-  /// Get the output tensor's name
+  /// Gets the output tensor's name
   std::string getName() { return this->name_; }
+  /// Set the output tensor's name
   void setName(const std::string &name);
 
+  /**
+   * @brief Sets the output tensor's parameters
+   *
+   * @param parameters pointer to parameters to assign
+   */
   void setParameters(RequestParametersPtr parameters) {
     parameters_ = parameters;
   }
+  /// @brief Gets the output tensor's parameters
   RequestParameters *getParameters() { return parameters_.get(); }
 
  private:
@@ -297,50 +354,50 @@ class InferenceRequestOutput {
  */
 class InferenceResponse {
  public:
-  /// Construct a new InferenceResponse object
+  /// Constructs a new InferenceResponse object
   InferenceResponse();
 
-  /// Construct a new InferenceResponse error object
+  /// Constructs a new InferenceResponse error object
   explicit InferenceResponse(const std::string &error);
 
-  /// Get a vector of the requested output information
+  /// Gets a vector of the requested output information
   [[nodiscard]] std::vector<InferenceResponseOutput> getOutputs() const;
   /**
-   * @brief Add an output tensor to the response
+   * @brief Adds an output tensor to the response
    *
    * @param output an output tensor
    */
   void addOutput(const InferenceResponseOutput &output);
 
-  /// Get the ID of the response
+  /// Gets the ID of the response
   std::string getID() { return id_; }
-  /// Set the ID of the response
+  /// Sets the ID of the response
   void setID(const std::string &id);
-  /// set the model name of the response
+  /// sets the model name of the response
   void setModel(const std::string &model);
-  /// get the model name of the response
+  /// gets the model name of the response
   std::string getModel();
 
-  /// Check if this is an error response
+  /// Checks if this is an error response
   bool isError() const;
-  /// Get the error message if it exists. Defaults to an empty string
+  /// Gets the error message if it exists. Defaults to an empty string
   std::string getError() const;
 
 #ifdef AMDINFER_ENABLE_TRACING
   /**
-   * @brief Set the Context object to propagate tracing data on
+   * @brief Sets the Context object to propagate tracing data on
    *
    * @param context
    */
   void setContext(StringMap &&context);
-  /// Get the response's context to use to initialize a new span
+  /// Gets the response's context to use to initialize a new span
   const StringMap &getContext() const;
 #endif
 
-  /// Get a pointer to the parameters associated with this response
+  /// Gets a pointer to the parameters associated with this response
   RequestParameters *getParameters() { return this->parameters_.get(); }
 
-  /// Provide an implementation to print the class with std::cout to an ostream
+  /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
                                   InferenceResponse const &my_class) {
     os << "Inference Response:\n";
@@ -379,20 +436,20 @@ class InferenceRequest {
   InferenceRequest() = default;
 
   /**
-   * @brief Set the request's callback function used by the last worker to
+   * @brief Sets the request's callback function used by the last worker to
    * respond back to the client
    *
    * @param callback a function pointer that accepts a InferenceResponse object
    */
   void setCallback(Callback &&callback);
   /**
-   * @brief Run the request's callback function.
+   * @brief Runs the request's callback function.
    *
    * @param response the response data
    */
   void runCallback(const InferenceResponse &response);
   /**
-   * @brief Run the request's callback function and clear it after. This
+   * @brief Runs the request's callback function and clear it after. This
    * prevents calling the callback multiple times. If this function is called
    * again, it's a no-op.
    *
@@ -400,37 +457,65 @@ class InferenceRequest {
    */
   void runCallbackOnce(const InferenceResponse &response);
   /**
-   * @brief Run the request's callback function with an error response. The
+   * @brief Runs the request's callback function with an error response. The
    * callback function is not cleared
    *
    * @param error_msg error message to send back to the client
    */
   void runCallbackError(std::string_view error_msg);
 
+  /**
+   * @brief Constructs and adds a new input tensor to this request
+   *
+   * @param data pointer to data to add
+   * @param shape shape of the data
+   * @param dataType the datatype of the data
+   * @param name the name of the input tensor
+   */
   void addInputTensor(void *data, const std::vector<uint64_t> &shape,
                       DataType dataType, const std::string &name = "");
 
+  /**
+   * @brief Adds a new input tensor to this request
+   *
+   * @param input an existing InferenceRequestInput object
+   */
   void addInputTensor(InferenceRequestInput input);
+  /**
+   * @brief Adds a new output tensor to this request
+   *
+   * @param output an existing InferenceRequestOutput object
+   */
   void addOutputTensor(const InferenceRequestOutput &output);
 
-  /// Get a vector of all the input request objects
+  /// Gets a vector of all the input request objects
   const std::vector<InferenceRequestInput> &getInputs() const;
   /// Get the number of input request objects
   size_t getInputSize();
 
-  /// Get a vector of the requested output information
+  /// Gets a vector of the requested output information
   const std::vector<InferenceRequestOutput> &getOutputs() const;
 
   /**
-   * @brief Get the ID associated with this request
+   * @brief Gets the ID associated with this request
    *
    * @return std::string
    */
   const std::string &getID() const { return id_; }
+  /**
+   * @brief Sets the ID associated with this request
+   *
+   * @param id ID to set
+   */
   void setID(const std::string &id) { id_ = id; }
 
   /// Get a pointer to the request's parameters
   RequestParameters *getParameters() const { return this->parameters_.get(); }
+  /**
+   * @brief Sets the parameters for the request
+   *
+   * @param parameters pointer to the parameters
+   */
   void setParameters(RequestParametersPtr parameters) {
     parameters_ = parameters;
   }
@@ -466,8 +551,11 @@ class ModelMetadataTensor final {
   ModelMetadataTensor(const std::string &name, DataType datatype,
                       std::vector<uint64_t> shape);
 
+  /// @brief Gets the name of the tensor
   const std::string &getName() const;
+  /// @brief Gets the datatype that this tensor accepts
   const DataType &getDataType() const;
+  /// @brief Gets the expected shape of the data
   const std::vector<uint64_t> &getShape() const;
 
  private:
@@ -484,7 +572,7 @@ class ModelMetadataTensor final {
 class ModelMetadata final {
  public:
   /**
-   * @brief Construct a new Model Metadata object
+   * @brief Constructs a new Model Metadata object
    *
    * @param name Name of the model
    * @param platform the platform this model runs on
@@ -492,7 +580,7 @@ class ModelMetadata final {
   ModelMetadata(const std::string &name, const std::string &platform);
 
   /**
-   * @brief Add an input tensor to this model
+   * @brief Adds an input tensor to this model
    *
    * @param name name of the tensor
    * @param datatype datatype of the tensor
@@ -501,7 +589,7 @@ class ModelMetadata final {
   void addInputTensor(const std::string &name, DataType datatype,
                       std::initializer_list<uint64_t> shape);
   /**
-   * @brief Add an input tensor to this model
+   * @brief Adds an input tensor to this model
    *
    * @param name name of the tensor
    * @param datatype datatype of the tensor
@@ -510,10 +598,15 @@ class ModelMetadata final {
   void addInputTensor(const std::string &name, DataType datatype,
                       std::vector<int> shape);
 
+  /**
+   * @brief Gets the input tensor' metadata for this model
+   *
+   * @return const std::vector<ModelMetadataTensor>&
+   */
   const std::vector<ModelMetadataTensor> &getInputs() const;
 
   /**
-   * @brief Add an output tensor to this model
+   * @brief Adds an output tensor to this model
    *
    * @param name name of the tensor
    * @param datatype datatype of the tensor
@@ -522,7 +615,7 @@ class ModelMetadata final {
   void addOutputTensor(const std::string &name, DataType datatype,
                        std::initializer_list<uint64_t> shape);
   /**
-   * @brief Add an output tensor to this model
+   * @brief Adds an output tensor to this model
    *
    * @param name name of the tensor
    * @param datatype datatype of the tensor
@@ -531,18 +624,19 @@ class ModelMetadata final {
   void addOutputTensor(const std::string &name, DataType datatype,
                        std::vector<int> shape);
 
+  /// @brief Gets the output tensors' metadata for this model
   const std::vector<ModelMetadataTensor> &getOutputs() const;
 
-  /// set the model's name
+  /// Sets the model's name
   void setName(const std::string &name);
-  /// get the model's name
+  /// Gets the model's name
   const std::string &getName() const;
 
   const std::string &getPlatform() const;
 
-  /// mark this model as ready/not ready
+  /// Marks this model as ready/not ready
   void setReady(bool ready);
-  /// check if this model is ready
+  /// Checks if this model is ready
   [[nodiscard]] bool isReady() const;
 
  private:

@@ -32,41 +32,157 @@
 
 namespace amdinfer {
 
+/**
+ * @brief The HttpClient class implements the Client using HTTP REST
+ *
+ * @details Usage:
+ *
+ * HttpClient client{"http://127:0.0.1:8998"};
+ * if (client.serverLive()){
+ *   ...
+ * }
+ *
+ */
 class HttpClient : public Client {
  public:
+  /**
+   * @brief Construct a new HttpClient object
+   *
+   * @param address Address of the server to connect to
+   * @param headers Key-value pairs that should be added to the HTTP headers for
+   * all requests
+   * @param parallelism Max number of requests that can be sent in parallel
+   */
   HttpClient(std::string address, const StringMap& headers = {},
              int parallelism = 32);
+  /// Copy constructor
   HttpClient(HttpClient const&);
+  /// Copy assignment constructor deleted
   HttpClient& operator=(const HttpClient&) const = delete;
+  /// Move constructor
   HttpClient(HttpClient&& other) noexcept;
+  /// Move assignment constructor deleted
   HttpClient& operator=(HttpClient&& other) const noexcept = delete;
+  /// Destructor
   ~HttpClient() override;
 
+  /**
+   * @brief Returns the server metadata as a ServerMetadata object
+   *
+   * @return ServerMetadata
+   */
   ServerMetadata serverMetadata() const override;
+  /**
+   * @brief Checks if the server is live
+   *
+   * @return bool - true if server is live, false otherwise
+   */
   bool serverLive() const override;
+  /**
+   * @brief Checks if the server is ready
+   *
+   * @return bool - true if server is ready, false otherwise
+   */
   bool serverReady() const override;
+  /**
+   * @brief Checks if a model/worker is ready
+   *
+   * @param model name of the model to check
+   * @return bool - true if model is ready, false otherwise
+   */
   bool modelReady(const std::string& model) const override;
+  /**
+   * @brief Returns the metadata associated with a ready model/worker
+   *
+   * @param model name of the model/worker to get metadata
+   * @return ModelMetadata
+   */
   ModelMetadata modelMetadata(const std::string& model) const override;
 
+  /**
+   * @brief Loads a model with the given name and load-time parameters. This
+   * method assumes that a directory with this model name already exists in the
+   * model repository directory for the server containing the model and its
+   * metadata in the right format.
+   *
+   * @param model name of the model to load from the model repository directory
+   * @param parameters load-time parameters for the worker supporting the model
+   */
   void modelLoad(const std::string& model,
                  RequestParameters* parameters) const override;
+  /**
+   * @brief Unloads a previously loaded model and shut it down. This is
+   * identical in functionality to workerUnload and is provided for symmetry.
+   *
+   * @param model name of the model to unload
+   */
   void modelUnload(const std::string& model) const override;
 
+  /**
+   * @brief Makes a synchronous inference request to the given model/worker. The
+   * contents of the request depends on the model/worker that the request is
+   * for.
+   *
+   * @param model name of the model/worker to request inference to
+   * @param request the request
+   * @return InferenceResponse
+   */
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) const override;
+  /**
+   * @brief Makes an asynchronous inference request to the given model/worker.
+   * The contents of the request depends on the model/worker that the request
+   * is for. The user must save the Future object and use it to get the results
+   * of the inference later.
+   *
+   * @param model name of the model/worker to request inference to
+   * @param request the request
+   * @return InferenceResponseFuture
+   */
   InferenceResponseFuture modelInferAsync(
     const std::string& model, const InferenceRequest& request) const override;
+  /**
+   * @brief Gets a list of active models on the server, returning their names
+   *
+   * @return std::vector<std::string>
+   */
   std::vector<std::string> modelList() const override;
 
+  /**
+   * @brief Loads a worker with the given name and load-time parameters.
+   *
+   * @param worker name of the worker to load
+   * @param parameters load-time parameters for the worker
+   * @return std::string
+   */
   std::string workerLoad(const std::string& worker,
                          RequestParameters* parameters) const override;
+  /**
+   * @brief Unloads a previously loaded worker and shut it down. This is
+   * identical in functionality to modelUnload and is provided for symmetry.
+   *
+   * @param worker name of the worker to unload
+   */
   void workerUnload(const std::string& worker) const override;
 
+  /**
+   * @brief Checks if the server has the requested number of a specific hardware
+   * device
+   *
+   * @param name name of the hardware device to check
+   * @param num number of the device that should exist at minimum
+   * @return bool - true if server has at least the requested number of the
+   * hardware device, false otherwise
+   */
   bool hasHardware(const std::string& name, int num) const override;
 
+  /// Returns the HTTP address
   const std::string& getAddress() const&;
+  /// Returns the HTTP address
   std::string getAddress() const&&;
+  /// Returns the HTTP headers
   const StringMap& getHeaders() const&;
+  /// Returns the HTTP headers
   StringMap getHeaders() const&&;
 
  private:
