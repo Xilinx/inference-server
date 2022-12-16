@@ -572,8 +572,6 @@ def install_python_packages():
                 # install these first
                 setuptools \\
                 wheel \\
-                # the sphinx theme has a bug with docutils>=0.17
-                "docutils<0.17" \\
             # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
             && pip install --no-cache-dir --ignore-installed \\
                 # install testing dependencies
@@ -591,6 +589,7 @@ def install_python_packages():
                 sphinx-issues \\
                 exhale \\
                 sphinx-tabs \\
+                sphinxcontrib-openapi \\
                 # install linting tools
                 black \\
                 cpplint \\

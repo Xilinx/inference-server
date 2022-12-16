@@ -26,6 +26,7 @@ build-backend = "setuptools.build_meta"
 build = ["*-manylinux_x86_64"]
 # there's some issues with Python 11 and numpy
 skip = ["pp*", "cp311-manylinux_x86_64"]
+environment = { AMDINFER_ROOT= "/project" }
 
 [tool.cibuildwheel.linux]
 repair-wheel-command = [
