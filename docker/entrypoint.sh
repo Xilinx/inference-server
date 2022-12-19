@@ -49,13 +49,13 @@ for dir in /workspace/*; do  # lists the absolute path to the file/directory
   # if they don't match, adjust
   if [ -n "$USER_GID" ] && [ "$USER_GID" != "$CUR_GID" ]; then
     groupmod -g "${USER_GID}" amdinfer
-    chown -R --silent :amdinfer /home/amdinfer-user
   fi
+  chown -R --silent :amdinfer /home/amdinfer-user
   if [ -n "$USER_UID" ] && [ "$USER_UID" != "$CUR_UID" ]; then
     usermod -u "${USER_UID}" amdinfer-user
-    # fix other permissions
-    chown -R --silent amdinfer-user /home/amdinfer-user
   fi
+  # fix other permissions
+  chown -R --silent amdinfer-user /home/amdinfer-user
 
   break
 done
