@@ -19,7 +19,7 @@ REST Endpoints
 
 The REST endpoints are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__.
 Additional endpoints are driven by community adoption.
-The `full OpenAPI 3.0 spec <https://github.com/Xilinx/inference-server/blob/main/docs/rest_api.yaml>`__ is available in the repository.
+The :amdinferblob:`full OpenAPI 3.0 spec <docs/rest_api.yaml>` is available in the repository.
 
 .. openapi:httpdomain:: rest_api.yaml
     :generate-examples-from-schemas:

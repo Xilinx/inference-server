@@ -59,4 +59,4 @@ You can also raise issues on the `Github page <https://github.com/Xilinx/inferen
 
 The AMD Inference Server is open-source and welcomes contributions.
 If you are interested in adding a feature, raise an issue first so your proposal can be discussed.
-Follow the `Contributing <https://xilinx.github.io/inference-server/main/contributing.html>`__ guidelines when making a new pull request.
+Follow the :ref:`Contributing <contributing:Contributing>` guidelines when making a new pull request.

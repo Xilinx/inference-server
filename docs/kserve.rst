@@ -270,7 +270,7 @@ This use case may be needed if your cluster doesn't have a load-balancer and/or 
 
 Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`__.
 The request will be routed to the server and the response will be returned.
-You can see some examples of using the KServe Python API to make requests in the `tests <https://github.com/Xilinx/inference-server/tree/main/tests/kserve>`__.
+You can see some examples of using the KServe Python API to make requests in the :amdinfertree:`tests <tests/kserve>`.
 
 Debugging
 ---------

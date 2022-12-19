@@ -133,4 +133,4 @@ Making requests directly
 
 If you are unable to use the library, you can also communicate with the server directly over REST or gRPC.
 However, you will need to construct the requests yourself in the correct format.
-Both the :ref:`REST API <rest:rest endpoints>` and the `gRPC API <https://github.com/Xilinx/inference-server/blob/main/src/amdinfer/core/predict_api.proto>`__ are documented.
+Both the :ref:`REST API <rest:rest endpoints>` and the :amdinferblob:`gRPC API <src/amdinfer/core/predict_api.proto>` are documented.
