@@ -5,12 +5,33 @@
 
 namespace amdinfer {
 
+/**
+ * @brief This class can be inherited from to implement serialization and
+ * deserialization in a class.
+ */
 class Serializable {
  public:
   virtual ~Serializable() = default;
 
+  /**
+   * @brief Returns the size of the serialized data
+   *
+   * @return size_t
+   */
   virtual size_t serializeSize() const = 0;
+  /**
+   * @brief Serializes the object to the provided memory address. There should
+   * be sufficient space to store the serialized object.
+   *
+   * @param data_out
+   */
   virtual void serialize(std::byte* data_out) const = 0;
+  /**
+   * @brief Deserializes the data at the provided memory address to initialize
+   * this object. If the memory cannot be deserialized, an exception is thrown.
+   *
+   * @param data_in a pointer to the serialized data for this object type
+   */
   virtual void deserialize(const std::byte* data_in) = 0;
 };
 

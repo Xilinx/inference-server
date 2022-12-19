@@ -18,9 +18,10 @@ Running ResNet50 - C++
 
 This page walks you through the C++ versions of the ResNet50 examples.
 These examples are intended to run in the dev container because you need to build and compile these executables.
-You can see the full source files used here in the `repository <https://github.com/Xilinx/inference-server/tree/main/examples/resnet50>`__ for more details.
+You can see the full source files used here in the :amdinfertree:`repository <examples/resnet50>` for more details.
 
-While the inference server supports many backends, client applications to make requests to any of them largely look the same.
+The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
+You should read the :ref:`Python version of this example <example_resnet50_python:Running ResNet50 - Python` to better compare these two.
 
 .. note::
     These examples are intended to demonstrate the API and how to communicate with the server.

@@ -74,12 +74,31 @@ class DataType {
     UNKNOWN
   };
 
+  /// Constructs a new DataType object
   constexpr DataType() : value_(Value::UNKNOWN) {}
+  /**
+   * @brief Constructs a new DataType object
+   *
+   * @param value string to identify the initial value of the new datatype
+   */
   constexpr DataType(const char* value) : value_(mapStrToType(value)) {}
+  /**
+   * @brief Constructs a new DataType object
+   *
+   * @param value datatype to identify the initial value of the new datatype
+   */
   constexpr DataType(DataType::Value value) : value_(value) {}
 
+  /// Implicit conversion between the Datatype class and its internal value
   constexpr operator Value() const { return value_; }
 
+  /**
+   * @brief Print support for the DataType class
+   *
+   * @param os stream to print to
+   * @param value Datatype instance to print
+   * @return std::ostream&
+   */
   friend std::ostream& operator<<(std::ostream& os, const DataType& value);
 
   /**
@@ -197,6 +216,17 @@ class DataType {
   Value value_;
 };
 
+/**
+ * @brief Runs a callable templated function based on the type passed as an
+ * argument
+ *
+ * @tparam F a callable templated function type
+ * @tparam Args the types of arguments to the function F
+ * @param f a callable templated function to evaluate for all datatypes
+ * @param type the datatype to choose which templated function f to run
+ * @param args arguments to the function F
+ * @return auto - return value from the function f
+ */
 template <typename F, typename... Args>
 auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
   switch (type) {

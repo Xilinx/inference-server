@@ -190,7 +190,7 @@ if(${AMDINFER_ENABLE_VITIS})
       OUTPUT_VARIABLE PY_XIR_PATH OUTPUT_STRIP_TRAILING_WHITESPACE
                                   COMMAND_ERROR_IS_FATAL ANY
     )
-    list(APPEND deb_dependencies "libpython3.6")
+    list(APPEND deb_dependencies "libpython3")
 
     install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)
   endif()

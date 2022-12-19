@@ -33,7 +33,7 @@ class TestAks:
         for num in numbers:
             input_0 = amdinfer.InferenceRequestInput()
             input_0.name = "aks"
-            input_0.setFp32Data(np.asarray([num], np.float))
+            input_0.setFp32Data(np.asarray([num], np.float32))
             input_0.shape = [1]
             input_0.datatype = amdinfer.DataType.FP32
             request.addInputTensor(input_0)

@@ -17,11 +17,11 @@ Running ResNet50 - Python
 =========================
 
 This page walks you through the Python versions of the ResNet50 examples.
-These examples and script are intended to run in the dev container.
-You can see the full source files in the `repository <https://github.com/Xilinx/inference-server/tree/main/examples/resnet50>`__ for more details.
+These examples and script are intended to run in the development container.
+You can see the full source files in the :amdinfertree:`repository <examples/resnet50>` for more details.
 
 The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
-You should read the C++ version of this documentation to better compare these two.
+You should read the :ref:`C++ version of this example <example_resnet50_cpp:Running ResNet50 - C++` to better compare these two.
 
 In the dev container, the Python library is automatically built and installed as part of the CMake build process.
 You may also install the Python library by installing a wheel.

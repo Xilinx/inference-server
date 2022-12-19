@@ -33,56 +33,130 @@
 
 namespace amdinfer {
 
+/**
+ * @brief The NativeClient class implements the Client using the native C++ API.
+ * This client can be used if the client and backend are in the same C++
+ * executable.
+ *
+ * @details Usage:
+ *
+ * NativeClient client;
+ * if (client.serverLive()){
+ *   ...
+ * }
+ *
+ */
 class NativeClient : public Client {
  public:
+  /**
+   * @brief Returns the server metadata as a ServerMetadata object
+   *
+   * @return ServerMetadata
+   */
   ServerMetadata serverMetadata() const override;
+  /**
+   * @brief Checks if the server is live
+   *
+   * @return bool - true if server is live, false otherwise
+   */
   bool serverLive() const override;
+  /**
+   * @brief Checks if the server is ready
+   *
+   * @return bool - true if server is ready, false otherwise
+   */
   bool serverReady() const override;
 
   /**
-   * @brief Check if a worker is ready
+   * @brief Checks if a model/worker is ready
    *
-   * @param worker name of the worker to check if ready
+   * @param model name of the model to check
+   * @return bool - true if model is ready, false otherwise
    */
   bool modelReady(const std::string& model) const override;
-
+  /**
+   * @brief Returns the metadata associated with a ready model/worker
+   *
+   * @param model name of the model/worker to get metadata
+   * @return ModelMetadata
+   */
   ModelMetadata modelMetadata(const std::string& model) const override;
 
   /**
-   * @brief Load a worker
+   * @brief Loads a model with the given name and load-time parameters. This
+   * method assumes that a directory with this model name already exists in the
+   * model repository directory for the server containing the model and its
+   * metadata in the right format.
    *
-   * @param model name of the worker to load
-   * @param parameters any load-time parameters to pass to the worker
-   * @return std::string the qualified name of the worker to make inference
-   * requests
+   * @param model name of the model to load from the model repository directory
+   * @param parameters load-time parameters for the worker supporting the model
    */
   void modelLoad(const std::string& model,
                  RequestParameters* parameters) const override;
   /**
-   * @brief Unload a worker
+   * @brief Unloads a previously loaded model and shut it down. This is
+   * identical in functionality to workerUnload and is provided for symmetry.
    *
-   * @param worker name of the worker to unload
+   * @param model name of the model to unload
    */
   void modelUnload(const std::string& model) const override;
 
+  /**
+   * @brief Makes a synchronous inference request to the given model/worker. The
+   * contents of the request depends on the model/worker that the request is
+   * for.
+   *
+   * @param model name of the model/worker to request inference to
+   * @param request the request
+   * @return InferenceResponse
+   */
   InferenceResponse modelInfer(const std::string& model,
                                const InferenceRequest& request) const override;
   /**
-   * @brief Enqueue an inference request
+   * @brief Makes an asynchronous inference request to the given model/worker.
+   * The contents of the request depends on the model/worker that the request
+   * is for. The user must save the Future object and use it to get the results
+   * of the inference later.
    *
-   * @param workerName name of the worker to make the request to
-   * @param request the request to make
-   * @return InferenceResponseFuture a future to get the results of the request
+   * @param model name of the model/worker to request inference to
+   * @param request the request
+   * @return InferenceResponseFuture
    */
   InferenceResponseFuture modelInferAsync(
-    const std::string& workerName,
-    const InferenceRequest& request) const override;
+    const std::string& model, const InferenceRequest& request) const override;
+  /**
+   * @brief Gets a list of active models on the server, returning their names
+   *
+   * @return std::vector<std::string>
+   */
   std::vector<std::string> modelList() const override;
 
+  /**
+   * @brief Loads a worker with the given name and load-time parameters.
+   *
+   * @param worker name of the worker to load
+   * @param parameters load-time parameters for the worker
+   * @return std::string
+   */
   std::string workerLoad(const std::string& worker,
                          RequestParameters* parameters) const override;
+  /**
+   * @brief Unloads a previously loaded worker and shut it down. This is
+   * identical in functionality to modelUnload and is provided for symmetry.
+   *
+   * @param worker name of the worker to unload
+   */
   void workerUnload(const std::string& worker) const override;
 
+  /**
+   * @brief Checks if the server has the requested number of a specific hardware
+   * device
+   *
+   * @param name name of the hardware device to check
+   * @param num number of the device that should exist at minimum
+   * @return bool - true if server has at least the requested number of the
+   * hardware device, false otherwise
+   */
   bool hasHardware(const std::string& name, int num) const override;
 };
 

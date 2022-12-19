@@ -36,11 +36,13 @@ project = "AMD Inference Server"
 copyright = "2022 Advanced Micro Devices, Inc."
 author = "Advanced Micro Devices, Inc."
 
-with open(os.path.abspath("../VERSION")) as f:
-    raw_version = f.read().strip()
-
+# override this value to build different versions
 version = "main"
-release = f"v{raw_version}"
+
+if version != "main":
+    release = f"v{version}"
+else:
+    release = version
 
 # -- General configuration ---------------------------------------------------
 
@@ -81,8 +83,8 @@ exhale_args = {
     # Suggested optional arguments
     "createTreeView": True,
     # TIP: if using the sphinx-bootstrap-theme, you need
-    "treeViewIsBootstrap": True,
-    "unabridgedOrphanKinds": {"define", "dir", "typedef", "variable"},
+    # "treeViewIsBootstrap": True,
+    "unabridgedOrphanKinds": {"define", "dir", "typedef", "variable", "file"},
     # exclude PIMPL classes
     "listingExclude": [r".*Impl$"],
 }
@@ -100,7 +102,6 @@ confluence_server_url = "https://confluence.xilinx.com/"
 autodoc_default_options = {
     "members": True,
     "special-members": "__init__",
-    "undoc-members": True,
 }
 
 
@@ -127,6 +128,14 @@ autosectionlabel_maxdepth = 2
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
+    "amdinfertree": (
+        f"https://github.com/Xilinx/inference-server/tree/{release}/%s",
+        "%s",
+    ),
+    "amdinferblob": (
+        f"https://github.com/Xilinx/inference-server/blob/{release}/%s",
+        "%s",
+    ),
     "ubuntupackages": ("https://packages.ubuntu.com/bionic/%s", "%s"),
     "pypipackages": ("https://pypi.org/project/%s", "%s"),
     "github": ("https://github.com/%s", "%s"),
@@ -150,7 +159,7 @@ numfig = True
 
 # Configure 'Edit on GitHub' extension
 edit_on_github_project = "Xilinx/inference-server"
-edit_on_github_branch = "main/docs"
+edit_on_github_branch = f"{release}/docs"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -192,7 +201,7 @@ if os.path.exists("./_themes/xilinx"):
 
     html_context["languages"] = [("en", "/" + "inference-server/" + version + "/")]
 
-    versions = ["0.1.0", "0.2.0"]
+    versions = ["0.1.0", "0.2.0", "0.3.0"]
     versions.append("main")
     html_context["versions"] = []
     for version in versions:
