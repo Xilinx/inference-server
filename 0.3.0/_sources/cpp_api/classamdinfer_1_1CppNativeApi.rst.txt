@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1CppNativeApi:
+
+Class CppNativeApi
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::Interface`` (:ref:`exhale_class_classamdinfer_1_1Interface`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::CppNativeApi
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

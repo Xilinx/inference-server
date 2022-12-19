@@ -1,0 +1,22 @@
+
+.. _namespace_amdinfer__grpc:
+
+Namespace amdinfer::grpc
+========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_grpc__server_8cpp_1af2f2b9dcdbdb51142654acff7134fe47`
+
+- :ref:`exhale_function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1`

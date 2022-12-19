@@ -1,0 +1,14 @@
+.. _exhale_enum_namespaceamdinfer_1a913436294d314192e3d1ef856c142de3:
+
+Enum Status
+===========
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_status.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: amdinfer::Status
+   :project: amdinfer

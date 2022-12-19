@@ -1,0 +1,14 @@
+.. _exhale_define_build__options_8hpp_1a1d18cfe00c47ea32eee897db8c259810:
+
+Define AMDINFER_ENABLE_METRICS
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AMDINFER_ENABLE_METRICS
+   :project: amdinfer

@@ -1,0 +1,46 @@
+
+.. _file_src_amdinfer_bindings_python_core_exceptions.cpp:
+
+File exceptions.cpp
+===================
+
+
+Implements the Python bindings for the exceptions. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/bindings/python/core/exceptions.cpp``)
+-----------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_bindings_python_core_exceptions.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file_include_amdinfer_core_exceptions.hpp`)
+
+- ``pybind11/pybind11.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

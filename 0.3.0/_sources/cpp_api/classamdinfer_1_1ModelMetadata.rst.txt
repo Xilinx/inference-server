@@ -1,0 +1,17 @@
+.. _exhale_class_classamdinfer_1_1ModelMetadata:
+
+Class ModelMetadata
+===================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::ModelMetadata
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

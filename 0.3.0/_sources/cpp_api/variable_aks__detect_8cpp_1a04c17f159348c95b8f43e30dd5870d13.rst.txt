@@ -1,0 +1,14 @@
+.. _exhale_variable_aks__detect_8cpp_1a04c17f159348c95b8f43e30dd5870d13:
+
+Variable amdinfer::workers::kImageChannels
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::workers::kImageChannels
+   :project: amdinfer

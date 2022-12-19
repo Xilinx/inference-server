@@ -1,0 +1,14 @@
+.. _exhale_function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f:
+
+Function amdinfer::util::exec
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_exec.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::exec(const char *)
+   :project: amdinfer

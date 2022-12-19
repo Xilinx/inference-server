@@ -1,0 +1,34 @@
+.. _dir__workspace_amdinfer_src_amdinfer_workers:
+
+
+Directory workers
+=================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer>` (``/workspace/amdinfer/src/amdinfer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``/workspace/amdinfer/src/amdinfer/workers``
+
+
+Files
+-----
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+

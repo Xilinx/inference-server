@@ -1,0 +1,14 @@
+.. _exhale_enum_namespaceamdinfer_1a2f1c337cd175cabc3a786e0f5712e123:
+
+Enum InterfaceType
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: amdinfer::InterfaceType
+   :project: amdinfer

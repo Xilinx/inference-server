@@ -1,0 +1,75 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp:
+
+File websocket_server.cpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_servers>` (``/workspace/amdinfer/src/amdinfer/servers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/servers/websocket_server.cpp``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+- ``amdinfer/clients/http_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/manager.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`)
+
+- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+
+- ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/servers/websocket_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp`)
+
+- ``cctype``
+
+- ``json/reader.h``
+
+- ``json/value.h``
+
+- ``memory``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__http`
+

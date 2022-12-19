@@ -1,0 +1,45 @@
+
+.. _program_listing_file_src_amdinfer_util_base64.hpp:
+
+Program Listing for File base64.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_src_amdinfer_util_base64.hpp>` (``src/amdinfer/util/base64.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2021 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_UTIL_BASE64
+   #define GUARD_AMDINFER_UTIL_BASE64
+   
+   #include <cstddef>  // for size_t
+   #include <string>   // for string
+   
+   namespace amdinfer::util {
+   
+   std::string base64_decode(std::string in);
+   
+   std::string base64_decode(const char* in, size_t in_len);
+   
+   std::string base64_encode(std::string in);
+   
+   std::string base64_encode(const char* in, size_t in_len);
+   }  // namespace amdinfer::util
+   
+   #endif  // GUARD_AMDINFER_UTIL_BASE64

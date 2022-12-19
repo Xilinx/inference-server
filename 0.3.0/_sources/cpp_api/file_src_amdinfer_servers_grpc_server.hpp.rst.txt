@@ -1,0 +1,45 @@
+
+.. _file_src_amdinfer_servers_grpc_server.hpp:
+
+File grpc_server.hpp
+====================
+
+
+Defines the gRPC server. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/servers/grpc_server.hpp``)
+-----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_servers_grpc_server.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file_src_amdinfer_servers_server.cpp`
+
+
+

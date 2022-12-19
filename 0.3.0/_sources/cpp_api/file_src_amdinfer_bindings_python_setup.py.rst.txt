@@ -1,0 +1,59 @@
+
+.. _file_src_amdinfer_bindings_python_setup.py:
+
+File setup.py
+=============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/bindings/python/setup.py``)
+------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_bindings_python_setup.py.rst
+
+
+
+
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_setup`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_setup_8py_1abead4f26b530856f858f0d44c7cf2588`
+
+- :ref:`exhale_variable_setup_8py_1a8ed6f50a28bd6a8794f8e1153baa6de9`
+
+- :ref:`exhale_variable_setup_8py_1ab3a7a0638d76a01367c5bc3cc699447f`
+
+- :ref:`exhale_variable_setup_8py_1a0a5ccc22976d20d42c6bb6c7651ce0be`
+
+- :ref:`exhale_variable_setup_8py_1afd7273d426fd6e1796ec17175f6521c3`
+
+- :ref:`exhale_variable_setup_8py_1aff2375a361fd5865c77bd9aa093be747`
+
+- :ref:`exhale_variable_setup_8py_1aa7ca7bc9391b217e81efeb03689d8dbf`
+
+- :ref:`exhale_variable_setup_8py_1a8b86ddd5b5591d99de08e584197a53d9`
+
+- :ref:`exhale_variable_setup_8py_1acb846d1875d1b97e69cd0832dd1f56d8`
+
+- :ref:`exhale_variable_setup_8py_1a13510753661cb74083a0c664db11dde9`
+

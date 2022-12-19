@@ -1,0 +1,14 @@
+.. _exhale_function_image__preprocess_8hpp_1afc409bcd827fd1219cc6844e0e07ed62:
+
+Template Function amdinfer::pre_post::detail::nestedLoop
+========================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::pre_post::detail::nestedLoop(int, int, int, T *, F)
+   :project: amdinfer

@@ -1,0 +1,83 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_servers_server.cpp:
+
+File server.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_servers>` (``/workspace/amdinfer/src/amdinfer/servers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/servers/server.cpp``)
+--------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_servers_server.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/manager.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`)
+
+- ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/servers/grpc_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.hpp`)
+
+- ``amdinfer/servers/http_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`)
+
+- ``amdinfer/servers/server.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_servers_server.hpp`)
+
+- ``cstdlib``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1Server_1_1ServerImpl`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_server_8cpp_1aaee4d554c86a0f534bbe3ffae4a86382`
+
+- :ref:`exhale_function_server_8cpp_1acea43796a83b9ee6de28c969539154a4`
+
+- :ref:`exhale_function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39`
+

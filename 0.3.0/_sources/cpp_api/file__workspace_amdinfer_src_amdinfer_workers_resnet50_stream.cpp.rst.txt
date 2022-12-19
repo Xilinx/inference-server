@@ -1,0 +1,150 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp:
+
+File resnet50_stream.cpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_workers>` (``/workspace/amdinfer/src/amdinfer/workers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Implements the ResNet50Stream worker. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/workers/resnet50_stream.cpp``)
+-----------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``aks/AksSysManagerExt.h``
+
+- ``aks/AksTensorBuffer.h``
+
+- ``algorithm``
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/util/base64.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`)
+
+- ``amdinfer/util/parse_env.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+
+- ``chrono``
+
+- ``cstdint``
+
+- ``cstring``
+
+- ``ext/alloc_traits.h``
+
+- ``future``
+
+- ``memory``
+
+- ``opencv2/core.hpp``
+
+- ``opencv2/imgcodecs.hpp``
+
+- ``opencv2/imgproc.hpp``
+
+- ``opencv2/videoio.hpp``
+
+- ``queue`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``utility``
+
+- ``vart/tensor_buffer.hpp``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+- ``xir/tensor/tensor.hpp``
+
+- ``xir/util/data_type.hpp``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_AKS`
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1workers_1_1ResNet50Stream`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_resnet50__stream_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_resnet50__stream_8cpp_1a91ed90b284d1c6942686de273a3cd850`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da`
+
+- :ref:`exhale_variable_resnet50__stream_8cpp_1a3cf9bf5036efcc4d92cb4b5faec907a6`
+
+- :ref:`exhale_variable_resnet50__stream_8cpp_1afe3341a020a5ae7f03cbd635abaa90fc`
+
+- :ref:`exhale_variable_resnet50__stream_8cpp_1af570cb232c9a5846340eae70c6c53ec6`
+

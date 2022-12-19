@@ -1,0 +1,76 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp:
+
+File metrics.cpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_observation>` (``/workspace/amdinfer/src/amdinfer/observation``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Implements what metrics are defined and how they're are gathered. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/observation/metrics.cpp``)
+-------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``chrono``
+
+- ``iterator``
+
+- ``memory``
+
+- ``prometheus/collectable.h``
+
+- ``prometheus/counter.h``
+
+- ``prometheus/family.h``
+
+- ``prometheus/gauge.h``
+
+- ``prometheus/metric_family.h``
+
+- ``prometheus/registry.h``
+
+- ``prometheus/serializer.h``
+
+- ``prometheus/text_serializer.h``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

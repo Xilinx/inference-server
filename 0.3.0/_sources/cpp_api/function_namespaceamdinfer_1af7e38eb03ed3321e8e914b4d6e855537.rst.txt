@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1af7e38eb03ed3321e8e914b4d6e855537:
+
+Function amdinfer::mapRequestToJson
+===================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapRequestToJson(const InferenceRequest&)
+   :project: amdinfer

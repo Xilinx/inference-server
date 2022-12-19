@@ -1,0 +1,14 @@
+.. _exhale_variable_version_8hpp_1a0cfff96254bdc960863abdcc6199f7cf:
+
+Variable kAmdinferVersionLabel
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_version.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kAmdinferVersionLabel
+   :project: amdinfer

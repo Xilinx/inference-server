@@ -1,0 +1,57 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_bindings_python_core_exceptions.cpp:
+
+File exceptions.cpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_bindings_python_core>` (``/workspace/amdinfer/src/amdinfer/bindings/python/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the Python bindings for the exceptions. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/bindings/python/core/exceptions.cpp``)
+-------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_bindings_python_core_exceptions.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``pybind11/pybind11.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_exceptions_8cpp_1a406f7e61f45b6235bfb981735ff1f434`
+

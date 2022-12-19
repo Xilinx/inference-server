@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1abf296c165ec250f986192b7ec61a0eeb:
+
+Function amdinfer::getLogDirectory
+==================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::getLogDirectory()
+   :project: amdinfer

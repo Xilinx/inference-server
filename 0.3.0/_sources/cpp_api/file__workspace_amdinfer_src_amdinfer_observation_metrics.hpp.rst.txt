@@ -1,0 +1,93 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp:
+
+File metrics.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_observation>` (``/workspace/amdinfer/src/amdinfer/observation``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines what metrics are defined and how they're are gathered. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/observation/metrics.hpp``)
+-------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``cstddef``
+
+- ``map``
+
+- ``memory``
+
+- ``mutex``
+
+- ``prometheus/serializer.h``
+
+- ``prometheus/summary.h``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``unordered_map``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+
+

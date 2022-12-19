@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a61f95cf4710f15355fc00da05c888668:
+
+Function amdinfer::workerLoad
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::workerLoad(const std::string&, RequestParameters *)
+   :project: amdinfer

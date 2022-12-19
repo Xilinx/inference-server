@@ -1,0 +1,14 @@
+.. _exhale_function_base64_8cpp_1aee9b0fbf15e4d37e62d2b263d546c5e8:
+
+Function amdinfer::util::base64_encode(std::string)
+===================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::base64_encode(std::string)
+   :project: amdinfer

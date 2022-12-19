@@ -1,0 +1,77 @@
+
+.. _file_src_amdinfer_clients_native_internal.cpp:
+
+File native_internal.cpp
+========================
+
+
+Implements the internal objects used for the C++ API. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/clients/native_internal.cpp``)
+---------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_clients_native_internal.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/buffers/buffer.hpp`` (:ref:`file_src_amdinfer_buffers_buffer.hpp`)
+
+- ``amdinfer/clients/native_internal.hpp`` (:ref:`file_src_amdinfer_clients_native_internal.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file_src_amdinfer_observation_logging.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``functional``
+
+- ``numeric``
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01InferenceRequest_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4`
+

@@ -1,0 +1,74 @@
+
+.. _file_src_amdinfer_util_base64.cpp:
+
+File base64.cpp
+===============
+
+
+Implements base64 encoding/decoding. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/util/base64.cpp``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_util_base64.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/util/base64.hpp`` (:ref:`file_src_amdinfer_util_base64.hpp`)
+
+- ``b64/decode.h``
+
+- ``b64/encode.h``
+
+- ``stdexcept``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer__util`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_base64_8cpp_1a23046fcc3e0811f2990bb9b944927510`
+
+- :ref:`exhale_function_base64_8cpp_1aa4091ad73805c2d6aa1f1c05cb552ff5`
+
+- :ref:`exhale_function_base64_8cpp_1aee9b0fbf15e4d37e62d2b263d546c5e8`
+
+- :ref:`exhale_function_base64_8cpp_1ae50b1ca52f2936e85e477f18b6c8fd50`
+
+- :ref:`exhale_function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210`
+
+- :ref:`exhale_function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_base64_8cpp_1ac3146f1e9227301bb4aa518f4d336cee`
+

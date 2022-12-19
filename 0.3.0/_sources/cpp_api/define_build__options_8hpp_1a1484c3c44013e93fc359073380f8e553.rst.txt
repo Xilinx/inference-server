@@ -1,0 +1,14 @@
+.. _exhale_define_build__options_8hpp_1a1484c3c44013e93fc359073380f8e553:
+
+Define AMDINFER_BUILD_TESTING
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AMDINFER_BUILD_TESTING
+   :project: amdinfer

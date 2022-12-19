@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a704e42ab497bfe5b6f257eb423d6df49:
+
+Function amdinfer::operator<<
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::operator<<(std::ostream&, const DataType&)
+   :project: amdinfer

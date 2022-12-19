@@ -1,0 +1,14 @@
+.. _exhale_typedef_pre__post_8cpp_1ab9a93cdcbaf14280d0a9db62acfa1ec1:
+
+Typedef amdinfer::ImagePreprocessOptions
+========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_pre_post_pre_post.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::ImagePreprocessOptions
+   :project: amdinfer

@@ -1,0 +1,49 @@
+
+.. _file_include_amdinfer_amdinfer.hpp:
+
+File amdinfer.hpp
+=================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/amdinfer/amdinfer.hpp``)
+----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_amdinfer_amdinfer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/grpc.hpp`` (:ref:`file_include_amdinfer_clients_grpc.hpp`)
+
+- ``amdinfer/clients/http.hpp`` (:ref:`file_include_amdinfer_clients_http.hpp`)
+
+- ``amdinfer/clients/native.hpp`` (:ref:`file_include_amdinfer_clients_native.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/servers/server.hpp`` (:ref:`file_include_amdinfer_servers_server.hpp`)
+
+
+
+
+

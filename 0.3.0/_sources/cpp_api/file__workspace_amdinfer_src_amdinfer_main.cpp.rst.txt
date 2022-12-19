@@ -1,0 +1,80 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_main.cpp:
+
+File main.cpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer>` (``/workspace/amdinfer/src/amdinfer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Parses the command-line arguments and implements the entrypoint for the amdinfer-server executable. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/main.cpp``)
+----------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_main.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/native.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/servers/http_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`)
+
+- ``amdinfer/servers/server.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_servers_server.hpp`)
+
+- ``csignal``
+
+- ``cstdlib``
+
+- ``cxxopts/cxxopts.hpp``
+
+- ``efsw/efsw.hpp``
+
+- ``filesystem``
+
+- ``iostream``
+
+- ``memory``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97`
+
+- :ref:`exhale_function_main_8cpp_1a89a8322bea357674e81ba9cbdefe0378`
+

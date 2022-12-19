@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1workers_1_1InvertVideo:
+
+Class InvertVideo
+=================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::workers::Worker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Worker`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::workers::InvertVideo
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

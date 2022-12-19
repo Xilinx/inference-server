@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a6671145ae5464f5f11fafa31cf195502:
+
+Template Function amdinfer::expand_type
+=======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::expand_type(std::size_t)
+   :project: amdinfer

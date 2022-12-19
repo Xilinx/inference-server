@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1abb0bfc39e167c58a8f83a57e8e3717ec:
+
+Function amdinfer::serverMetadata
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::serverMetadata()
+   :project: amdinfer

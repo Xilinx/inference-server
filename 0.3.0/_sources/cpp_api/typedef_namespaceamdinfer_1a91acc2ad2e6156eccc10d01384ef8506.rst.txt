@@ -1,0 +1,14 @@
+.. _exhale_typedef_namespaceamdinfer_1a91acc2ad2e6156eccc10d01384ef8506:
+
+Typedef amdinfer::AsyncService
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::AsyncService
+   :project: amdinfer

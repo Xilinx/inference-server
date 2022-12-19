@@ -1,0 +1,108 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp:
+
+File grpc.cpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_clients>` (``/workspace/amdinfer/src/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Implements the methods for interacting with the server with gRPC. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/clients/grpc.cpp``)
+------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/grpc.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp`)
+
+- ``amdinfer/clients/grpc_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring``
+
+- ``future``
+
+- ``google/protobuf/repeated_ptr_field.h``
+
+- ``google/protobuf/stubs/common.h``
+
+- ``grpcpp/grpcpp.h``
+
+- ``iostream``
+
+- ``map``
+
+- ``memory``
+
+- ``predict_api.grpc.pb.h``
+
+- ``predict_api.pb.h``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``unordered_set``
+
+- ``utility``
+
+- ``variant``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1GrpcClient_1_1GrpcClientImpl`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec`
+
+- :ref:`exhale_function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4`
+

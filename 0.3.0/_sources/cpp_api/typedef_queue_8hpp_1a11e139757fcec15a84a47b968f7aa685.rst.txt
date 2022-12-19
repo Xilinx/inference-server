@@ -1,0 +1,14 @@
+.. _exhale_typedef_queue_8hpp_1a11e139757fcec15a84a47b968f7aa685:
+
+Typedef amdinfer::InferenceRequestPtrQueue
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::InferenceRequestPtrQueue
+   :project: amdinfer

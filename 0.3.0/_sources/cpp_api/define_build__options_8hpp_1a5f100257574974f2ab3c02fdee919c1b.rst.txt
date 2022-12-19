@@ -1,0 +1,14 @@
+.. _exhale_define_build__options_8hpp_1a5f100257574974f2ab3c02fdee919c1b:
+
+Define AMDINFER_ENABLE_REST
+===========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AMDINFER_ENABLE_REST
+   :project: amdinfer

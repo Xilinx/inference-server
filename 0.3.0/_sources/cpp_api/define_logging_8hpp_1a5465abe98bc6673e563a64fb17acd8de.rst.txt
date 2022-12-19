@@ -1,0 +1,14 @@
+.. _exhale_define_logging_8hpp_1a5465abe98bc6673e563a64fb17acd8de:
+
+Define AMDINFER_LOG_INFO
+========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AMDINFER_LOG_INFO
+   :project: amdinfer

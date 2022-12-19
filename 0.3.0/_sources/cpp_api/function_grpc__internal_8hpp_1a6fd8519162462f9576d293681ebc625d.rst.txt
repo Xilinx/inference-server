@@ -1,0 +1,14 @@
+.. _exhale_function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d:
+
+Function amdinfer::mapRequestToProto(const InferenceRequest&, inference::ModelInferRequest&, const Observer&)
+=============================================================================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapRequestToProto(const InferenceRequest&, inference::ModelInferRequest&, const Observer&)
+   :project: amdinfer

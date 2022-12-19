@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a370f1b4a6348b2265e44bec053e75397:
+
+Template Function amdinfer::overloaded
+======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::overloaded(Ts...)
+   :project: amdinfer

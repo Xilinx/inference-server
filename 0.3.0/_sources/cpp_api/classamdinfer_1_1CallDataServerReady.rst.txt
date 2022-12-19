@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1CallDataServerReady:
+
+Class CallDataServerReady
+=========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::CallDataUnary< inference::ServerReadyRequest, inference::ServerReadyResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallDataUnary`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::CallDataServerReady
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

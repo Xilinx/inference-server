@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1CallDataHasHardware:
+
+Class CallDataHasHardware
+=========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::CallDataUnary< inference::HasHardwareRequest, inference::HasHardwareResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallDataUnary`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::CallDataHasHardware
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

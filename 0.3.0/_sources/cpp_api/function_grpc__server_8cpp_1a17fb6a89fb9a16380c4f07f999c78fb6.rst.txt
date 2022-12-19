@@ -1,0 +1,14 @@
+.. _exhale_function_grpc__server_8cpp_1a17fb6a89fb9a16380c4f07f999c78fb6:
+
+Function amdinfer::grpcUnaryCallback
+====================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::grpcUnaryCallback(CallDataModelInfer *, const InferenceResponse&)
+   :project: amdinfer

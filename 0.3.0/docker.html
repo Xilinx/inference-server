@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Docker &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="KServe" href="kserve.html" />
+    <link rel="prev" title="FPGAs - Vitis AI" href="vitis_ai.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                0.3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#documentation-overview">Documentation overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#support">Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#docker-image">Docker Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#base-image">Base Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-ppas">Ubuntu PPAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#github">Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#others">Others</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#xilinx">Xilinx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#amd">AMD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#included">Included</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#downloaded-files">Downloaded Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries and API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_user_api.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#clients">Clients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#grpc">gRPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#http">HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#native">Native</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#websocket">WebSocket</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#core">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#datatype">DataType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#exceptions">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#prediction">Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#servers">Servers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python.html#install-the-python-library">Install the Python library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#api">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#commands">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#Sub-commands">Sub-commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#attach">attach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#benchmark">benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#build">build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#clean">clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#dockerize">dockerize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#get">get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#install">install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#list">list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#make">make</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#run">run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#start">start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#test">test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli.html#up">up</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#import-the-library">Import the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#create-our-client-and-server-objects">Create our client and server objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#is-amd-inference-server-already-running">Is AMD Inference Server already running?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#include-the-header">Include the header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#include-the-module">Include the module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using the Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="platforms.html">Platforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zendnn.html">CPUs - ZenDNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#get-assets-and-models">Get assets and models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#freezing-pytorch-models">Freezing PyTorch models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#run-tests">Run Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zendnn.html#tune-performance">Tune performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="migraphx.html">GPUs - MIGraphX</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#set-up-the-host-and-gpus">Set up the host and GPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#start-an-image">Start an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="migraphx.html#get-assets-and-models">Get assets and models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vitis_ai.html">FPGAs - Vitis AI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#set-up-the-host-and-fpgas">Set up the host and FPGAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#start-an-image">Start an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#get-assets-and-models">Get assets and models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deploying with Docker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#push-to-a-registry">Push to a registry</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-the-image-for-docker-deployment">Prepare the image for Docker deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-the-container">Start the container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-request">Make a request</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">Deploying with KServe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#start-an-inference-service">Start an inference service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="kserve.html#serving-runtime">Serving Runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="kserve.html#custom-container">Custom container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Performance Factors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#hardware">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#compile-the-right-version">Compile the right version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#parallelism">Parallelism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#rest-threads">REST threads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#sending-requests">Sending requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#duplicating-workers">Duplicating workers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-your-work">Sign Your Work</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#c-api">C++ API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#batching">Batching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#workers">Workers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#organization-and-lifecycle">Organization and Lifecycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#improving-performance">Improving Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#external-processing">External Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#xmodel">XModel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#buffering">Buffering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#observation">Observation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#metrics">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#tracing">Tracing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aks.html#introduction-to-aks">Introduction to AKS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aks.html#using-aks-in-amd-inference-server">Using AKS in AMD Inference Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#amd-inference-server-logs">AMD Inference Server Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#drogon-logs">Drogon Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html#xmodel-benchmarking">XModel Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html#kernel-simulation">Kernel Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_api/cpp_root.html">Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_api/cpp_root.html#full-api">Full API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Docker</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/docker.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h1>
+<p>You can use the AMD Inference Server with Docker to deploy the server.
+For more powerful and easier to use deployments, consider using <a class="reference internal" href="kserve.html#kserve"><span class="std std-ref">KServe</span></a>.</p>
+<section id="build-the-production-docker-image">
+<h2>Build the production Docker image<a class="headerlink" href="#build-the-production-docker-image" title="Permalink to this headline">¶</a></h2>
+<p>The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
+It automatically starts the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
+To build the production container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
+<span class="gp">$ </span>./amdinfer dockerize --production &lt;platform flags&gt;
+</pre></div>
+</div>
+<p>Depending on what platforms you want to support, add the appropriate flags to enable <a class="reference internal" href="vitis_ai.html"><span class="doc">Vitis AI</span></a>, <a class="reference internal" href="zendnn.html"><span class="doc">ZenDNN</span></a> or <a class="reference internal" href="migraphx.html"><span class="doc">MIGraphX</span></a>.
+Refer to the help or the platform documentation for more information on how to build the right image.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Some platforms require additional steps before building the Docker image with them enabled.
+Look at the platform-specific documentation for more information about how to build images for a given platform.</p>
+</div>
+<section id="push-to-a-registry">
+<span id="docker-push-to-a-registry"></span><h3>Push to a registry<a class="headerlink" href="#push-to-a-registry" title="Permalink to this headline">¶</a></h3>
+<p>In some use cases, for example with Kubernetes or KServe, the image must be pushed to a Docker registry before it can be used.
+If you don’t have access to one, you can start a local registry using <a class="reference external" href="https://docs.docker.com/registry/deploying/">these instructions</a> from Docker.
+Make sure to set up a secure registry if you need access to the registry from more than one host.</p>
+<p>To push the image to the registry, re-tag the image with the registry and push it.
+For example, if you’re using the local registry approach from above, the registry name would be <code class="docutils literal notranslate"><span class="pre">localhost:5000</span></code> by default.
+By default, using <code class="docutils literal notranslate"><span class="pre">amdinfer</span> <span class="pre">dockerize</span> <span class="pre">...</span></code> builds an image of the form <code class="docutils literal notranslate"><span class="pre">$(whoami)/&lt;image&gt;</span></code>, which is what the code snippet uses below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker tag <span class="k">$(</span>whoami<span class="k">)</span>/&lt;image&gt; &lt;registry&gt;/&lt;image&gt; <span class="o">&amp;&amp;</span> docker push &lt;registry&gt;/&lt;image&gt;
+</pre></div>
+</div>
+<p>Once the image is pushed to the registry, verify that it can be pulled with Docker from all nodes in the Kubernetes cluster.
+In some cases, Kubernetes may fail to pull the image, even if it’s tagged with the right version due to some issues with mapping the version to the image.
+If you run into this issue, you can use the SHA value of the image directly to skip this lookup.
+In that case, the image string you would use in the YAML configuration files would be of the form <code class="docutils literal notranslate"><span class="pre">&lt;registry&gt;/&lt;image&gt;&#64;sha256:&lt;SHA&gt;</span></code>.
+The SHA is visible when you push the image to the registry or you can get it by inspecting the image:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker inspect --format<span class="o">=</span><span class="s1">&#39;{{index .RepoDigests 0}}&#39;</span> &lt;registry&gt;/&lt;image&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="prepare-the-image-for-docker-deployment">
+<h2>Prepare the image for Docker deployment<a class="headerlink" href="#prepare-the-image-for-docker-deployment" title="Permalink to this headline">¶</a></h2>
+<p>Once you build the basic production image or pull a pre-built version, you need to prepare it before it can be deployed on Docker.
+While the image has the dependencies needed to run the server, there are no models present and the default environment may not be appropriate.
+You need to modify this image for the use case that you’re targeting.
+There are multiple ways of modifying an existing Docker image that are well-documented online and functionally equivalent.
+For example, one approach is using a Dockerfile to build a new image:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">&lt;image&gt;</span>
+
+<span class="k">COPY</span><span class="w"> </span>/some/path/in/Docker/build/tree /some/path/in/the/image
+<span class="k">ENV</span><span class="w"> </span><span class="nv">SomeVariable</span><span class="o">=</span>SomeValue
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;amdinfer-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&lt;more arguments?&gt;&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In this case, you can build and save a new image that includes the models you want to serve.
+Depending on the platform, you may need to include other files as well that the platform runtime needs.
+As with the production image, this image may need to be <a class="reference internal" href="#docker-push-to-a-registry"><span class="std std-ref">pushed to a registry server</span></a> for your use case.</p>
+<p>Note that the command that the image runs and its environment can also be overridden at the command-line when starting the container.
+Therefore, an alternative approach to building a new image is to mount the needed files as volumes when starting the container and set the environment then.</p>
+</section>
+<section id="start-the-container">
+<h2>Start the container<a class="headerlink" href="#start-the-container" title="Permalink to this headline">¶</a></h2>
+<p>You can start the production container with <code class="docutils literal notranslate"><span class="pre">docker</span></code> as any other container.
+You need to pass along any devices that you want to enable in your container and expose ports to access the server.
+Look at the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> documentation for more information about what flags can be passed.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run <span class="o">[</span>--device ...<span class="o">]</span> <span class="o">[</span>--publish ...<span class="o">]</span> <span class="o">[</span>--volume ...<span class="o">]</span> <span class="o">[</span>--env ...<span class="o">]</span> &lt;image&gt;
+</pre></div>
+</div>
+<p>By default, the production container starts the server executable and it continues to run after the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command.
+But before it can serve requests, you need to load the models that you added into the image.
+The easiest way to communicate with the server is using the <a class="reference internal" href="python.html#install-the-python-library"><span class="std std-ref">Python library</span></a>.
+You can install it locally or use it in the development container to load the workers on the server.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">amdinfer</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;http://hostname:port&quot;</span><span class="p">)</span>
+
+<span class="c1"># depending on the model, you need to use the appropriate worker</span>
+<span class="n">worker_name</span> <span class="o">=</span> <span class="s2">&quot;migraphx&quot;</span>
+
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">RequestParameters</span><span class="p">()</span>
+<span class="c1"># specifies the path to the model on the server for it to open</span>
+<span class="n">parameters</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/model&quot;</span><span class="p">)</span>
+
+<span class="c1"># workers may accept other parameters at load-time. Refer to worker documentation</span>
+
+<span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="n">worker_name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+<span class="n">amdinfer</span><span class="o">.</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Clients that make requests to this worker need this endpoint to talk to it.</p>
+</section>
+<section id="make-a-request">
+<h2>Make a request<a class="headerlink" href="#make-a-request" title="Permalink to this headline">¶</a></h2>
+<p>As in the <a class="reference internal" href="example_resnet50_python.html#running-resnet50-python"><span class="std std-ref">Python examples</span></a>, you can make a request by creating a client in Python by pointing it to the address of the server to communicate with.
+Unlike these examples, you can skip ahead to making the request for inference because the server is already started and the worker is ready to serve your request.
+Once you have it, you can use <code class="docutils literal notranslate"><span class="pre">modelInfer</span></code> to make the request.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vitis_ai.html" class="btn btn-neutral float-left" title="FPGAs - Vitis AI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kserve.html" class="btn btn-neutral float-right" title="KServe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on December 19, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: 0.3.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      <dl>
+        <dt>Languages</dt>
+        
+           <strong> 
+          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/inference-server/0.1.0/">0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/inference-server/main/">main</a></dd>
+          
+        
+      </dl>
+      
+      
+       
+    </div>
+  </div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

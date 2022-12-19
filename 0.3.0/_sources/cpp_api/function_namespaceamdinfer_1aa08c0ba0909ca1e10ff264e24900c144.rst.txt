@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1aa08c0ba0909ca1e10ff264e24900c144:
+
+Template Function amdinfer::setData
+===================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_core_predict_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::setData(amdinfer::InferenceRequestInput&, py::array_t<T>&)
+   :project: amdinfer

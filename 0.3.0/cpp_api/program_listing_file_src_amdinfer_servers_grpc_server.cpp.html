@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Program Listing for File grpc_server.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="../index.html" class="icon icon-home"> AMD Inference Server
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">AMD Inference Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platforms.html">Platforms</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../performance_factors.html">Factors</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User API libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using AMD Inference Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_root.html">Code Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Program Listing for File grpc_server.cpp</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp_api/program_listing_file_src_amdinfer_servers_grpc_server.cpp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="program-listing-for-file-grpc-server-cpp">
+<span id="program-listing-file-src-amdinfer-servers-grpc-server-cpp"></span><h1>Program Listing for File grpc_server.cpp<a class="headerlink" href="#program-listing-for-file-grpc-server-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file_src_amdinfer_servers_grpc_server.cpp.html#file-src-amdinfer-servers-grpc-server-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/grpc_server.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Copyright 2022 Xilinx, Inc.</span>
+<span class="c1">// Copyright 2022 Advanced Micro Devices, Inc.</span>
+<span class="c1">//</span>
+<span class="c1">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">// you may not use this file except in compliance with the License.</span>
+<span class="c1">// You may obtain a copy of the License at</span>
+<span class="c1">//</span>
+<span class="c1">//      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">//</span>
+<span class="c1">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">// See the License for the specific language governing permissions and</span>
+<span class="c1">// limitations under the License.</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/servers/grpc_server.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/repeated_ptr_field.h&gt;</span><span class="c1">  // for RepeatedPtrField</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;grpc/support/log.h&gt;</span><span class="c1">                    // for GPR_ASSERT, GPR_UNL...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;grpcpp/grpcpp.h&gt;</span><span class="c1">                       // for ServerCompletionQueue</span><span class="cp"></span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span><span class="c1">        // for size_t, byte</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span><span class="c1">        // for uint64_t, int16_t</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span><span class="c1">        // for memcpy</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span><span class="c1">      // for exception</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span><span class="c1">     // for _Bind_helper&lt;&gt;::type</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="c1">       // for operator&lt;&lt;, cout</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for unique_ptr, shared_ptr</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for allocator, string</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span><span class="c1">         // for thread, yield</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_set&gt;</span><span class="c1">  // for unordered_set</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">        // for move</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span><span class="cp"></span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/buffer.hpp&quot;</span><span class="c1">         // for Buffer</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">          // for AMDINFER_ENABLE_LOGGING</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc_internal.hpp&quot;</span><span class="c1">  // for mapProtoToParameters</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/api.hpp&quot;</span><span class="c1">               // for hasHardware, modelI...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">        // for DataType, DataType:...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">        // for invalid_argument</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">         // for Interface, Interfac...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api_internal.hpp&quot;</span><span class="c1">  // for InferenceRequestInput</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">               // for BufferRawPtrs, Infe...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">        // for Logger, Loggers</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/tracing.hpp&quot;</span><span class="c1">        // for Trace, startTrace</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/string.hpp&quot;</span><span class="c1">                // for toLower</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/traits.hpp&quot;</span><span class="c1">                // for is_any</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.grpc.pb.h&quot;</span><span class="c1">                   // for GRPCInferenceServic...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.pb.h&quot;</span><span class="c1">                        // for InferTensorContents</span><span class="cp"></span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelInfer</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelMetadata</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelLoad</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataWorkerLoad</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelReady</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelUnload</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataWorkerUnload</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataServerLive</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataServerMetadata</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataServerReady</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataHasHardware</span><span class="p">;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelList</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
+
+<span class="c1">// use aliases to prevent clashes between grpc:: and amdinfer::grpc::</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ServerBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerBuilder</span><span class="p">;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">ServerCompletionQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerCompletionQueue</span><span class="p">;</span><span class="w"></span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">ServerAsyncResponseWriter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerAsyncResponseWriter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">ServerContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerContext</span><span class="p">;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">Server</span><span class="p">;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">StatusCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">StatusCode</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// namespace inference {</span>
+<span class="c1">// using StreamModelInferRequest = ModelInferRequest;</span>
+<span class="c1">// using StreamModelInferResponse = ModelInferResponse;</span>
+<span class="c1">// }</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">AsyncService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">AsyncService</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataBase</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">proceed</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">RequestType</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">ReplyType</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">CallDataBase</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Take in the &quot;service&quot; instance (in this case representing an asynchronous</span>
+<span class="w">  </span><span class="c1">// server) and the completion queue &quot;cq&quot; used for asynchronous communication</span>
+<span class="w">  </span><span class="c1">// with the gRPC runtime.</span>
+<span class="w">  </span><span class="n">CallData</span><span class="p">(</span><span class="n">AsyncService</span><span class="o">*</span><span class="w"> </span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerCompletionQueue</span><span class="o">*</span><span class="w"> </span><span class="n">cq</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">service_</span><span class="p">(</span><span class="n">service</span><span class="p">),</span><span class="w"> </span><span class="n">cq_</span><span class="p">(</span><span class="n">cq</span><span class="p">),</span><span class="w"> </span><span class="n">status_</span><span class="p">(</span><span class="n">CREATE</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">CallData</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">proceed</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">CREATE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="c1">// Make this instance progress to the PROCESS state.</span>
+<span class="w">      </span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PROCESS</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">waitForRequest</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">PROCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">addNewCallData</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// queue_-&gt;enqueue(this);</span>
+<span class="w">      </span><span class="c1">// status_ = WAIT;</span>
+<span class="w">      </span><span class="n">handleRequest</span><span class="p">();</span><span class="w"></span>
+<span class="w">      </span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WAIT</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">WAIT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">GPR_ASSERT</span><span class="p">(</span><span class="n">status_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">FINISH</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="c1">// Once in the FINISH state, deallocate ourselves (CallData).</span>
+<span class="w">      </span><span class="k">delete</span><span class="w"> </span><span class="k">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">finish</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">&amp;</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w"> </span><span class="k">protected</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// When we handle a request of this type, we need to tell</span>
+<span class="w">  </span><span class="c1">// the completion queue to wait for new requests of the same type.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">addNewCallData</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">waitForRequest</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleRequest</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// The means of communication with the gRPC runtime for an asynchronous</span>
+<span class="w">  </span><span class="c1">// server.</span>
+<span class="w">  </span><span class="n">AsyncService</span><span class="o">*</span><span class="w"> </span><span class="n">service_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The producer-consumer queue where for asynchronous server notifications.</span>
+<span class="w">  </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerCompletionQueue</span><span class="o">*</span><span class="w"> </span><span class="n">cq_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Context for the rpc, allowing to tweak aspects of it such as the use</span>
+<span class="w">  </span><span class="c1">// of compression, authentication, as well as to send metadata back to the</span>
+<span class="w">  </span><span class="c1">// client.</span>
+<span class="w">  </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerContext</span><span class="w"> </span><span class="n">ctx_</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// What we get from the client.</span>
+<span class="w">  </span><span class="n">RequestType</span><span class="w"> </span><span class="n">request_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// What we send back to the client.</span>
+<span class="w">  </span><span class="n">ReplyType</span><span class="w"> </span><span class="n">reply_</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Let&#39;s implement a tiny state machine with the following states.</span>
+<span class="w">  </span><span class="k">enum</span><span class="w"> </span><span class="nc">CallStatus</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">CREATE</span><span class="p">,</span><span class="w"> </span><span class="n">PROCESS</span><span class="p">,</span><span class="w"> </span><span class="n">WAIT</span><span class="p">,</span><span class="w"> </span><span class="n">FINISH</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="n">CallStatus</span><span class="w"> </span><span class="n">status_</span><span class="p">;</span><span class="w">  </span><span class="c1">// The current serving state.</span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">RequestType</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">ReplyType</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataUnary</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">CallData</span><span class="o">&lt;</span><span class="n">RequestType</span><span class="p">,</span><span class="w"> </span><span class="n">ReplyType</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Take in the &quot;service&quot; instance (in this case representing an asynchronous</span>
+<span class="w">  </span><span class="c1">// server) and the completion queue &quot;cq&quot; used for asynchronous communication</span>
+<span class="w">  </span><span class="c1">// with the gRPC runtime.</span>
+<span class="w">  </span><span class="n">CallDataUnary</span><span class="p">(</span><span class="n">AsyncService</span><span class="o">*</span><span class="w"> </span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerCompletionQueue</span><span class="o">*</span><span class="w"> </span><span class="n">cq</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">CallData</span><span class="o">&lt;</span><span class="n">RequestType</span><span class="p">,</span><span class="w"> </span><span class="n">ReplyType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="n">cq</span><span class="p">),</span><span class="w"> </span><span class="n">responder_</span><span class="p">(</span><span class="o">&amp;</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">ctx_</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">finish</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">&amp;</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// And we are done! Let the gRPC runtime know we&#39;ve finished, using the</span>
+<span class="w">    </span><span class="c1">// memory address of this instance as the uniquely identifying tag for</span>
+<span class="w">    </span><span class="c1">// the event.</span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">FINISH</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">responder_</span><span class="p">.</span><span class="n">Finish</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">reply_</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w"> </span><span class="k">protected</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The means to get back to the client.</span>
+<span class="w">  </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerAsyncResponseWriter</span><span class="o">&lt;</span><span class="n">ReplyType</span><span class="o">&gt;</span><span class="w"> </span><span class="n">responder_</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">RequestType</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">ReplyType</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallDataServerStream</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">CallData</span><span class="o">&lt;</span><span class="n">RequestType</span><span class="p">,</span><span class="w"> </span><span class="n">ReplyType</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Take in the &quot;service&quot; instance (in this case representing an asynchronous</span>
+<span class="w">  </span><span class="c1">// server) and the completion queue &quot;cq&quot; used for asynchronous communication</span>
+<span class="w">  </span><span class="c1">// with the gRPC runtime.</span>
+<span class="w">  </span><span class="n">CallDataServerStream</span><span class="p">(</span><span class="n">AsyncService</span><span class="o">*</span><span class="w"> </span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerCompletionQueue</span><span class="o">*</span><span class="w"> </span><span class="n">cq</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">CallData</span><span class="o">&lt;</span><span class="n">RequestType</span><span class="p">,</span><span class="w"> </span><span class="n">ReplyType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="n">cq</span><span class="p">),</span><span class="w"> </span><span class="n">responder_</span><span class="p">(</span><span class="o">&amp;</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">ctx_</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ReplyType</span><span class="o">&amp;</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">responder_</span><span class="o">-&gt;</span><span class="n">Write</span><span class="p">(</span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">finish</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">&amp;</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// And we are done! Let the gRPC runtime know we&#39;ve finished, using the</span>
+<span class="w">    </span><span class="c1">// memory address of this instance as the uniquely identifying tag for</span>
+<span class="w">    </span><span class="c1">// the event.</span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">FINISH</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">responder_</span><span class="p">.</span><span class="n">Finish</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">reply_</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w"> </span><span class="k">protected</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The means to get back to the client.</span>
+<span class="w">  </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerAsyncWriter</span><span class="o">&lt;</span><span class="n">ReplyType</span><span class="o">&gt;</span><span class="w"> </span><span class="n">responder_</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">WriteData</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">Tensor</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="n">Buffer</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">Tensor</span><span class="o">*</span><span class="w"> </span><span class="n">tensor</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"></span>
+<span class="w">                  </span><span class="k">const</span><span class="w"> </span><span class="n">Observer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">observer</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getTensorContents</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tensor</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">is_any_v</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                 </span><span class="kt">float</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">dest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(</span><span class="n">offset</span><span class="p">));</span><span class="w"></span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">memcpy</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span><span class="w"> </span><span class="n">contents</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">is_any_v</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="p">,</span><span class="w"> </span><span class="kt">int8_t</span><span class="p">,</span><span class="w"> </span><span class="kt">int16_t</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="n">fp16</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">min_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">kNumTraceData</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">kNumTraceData</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">min_size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="n">AMDINFER_LOG_TRACE</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="p">,</span><span class="w"></span>
+<span class="w">                             </span><span class="s">&quot;Writing data to buffer: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">                               </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">])));</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="cp">#endif</span>
+<span class="w">        </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="n">offset</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Invalid type to WriteData&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InferenceRequestInputBuilder</span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest_InferInputTensor</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">build</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest_InferInputTensor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">Buffer</span><span class="o">*</span><span class="w"> </span><span class="n">input_buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">offset</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Observer</span><span class="w"> </span><span class="n">observer</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_IF_LOGGING</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">kServer</span><span class="p">});</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">AMDINFER_LOG_TRACE</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="s">&quot;Creating InferenceRequestInput from proto tensor&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">.</span><span class="n">name_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">name</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">.</span><span class="n">shape_</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">shape_size</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">shape</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">input</span><span class="p">.</span><span class="n">shape_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">.</span><span class="n">dataType_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DataType</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">datatype</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">input</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapProtoToParameters</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">parameters</span><span class="p">());</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">getSize</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">dest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">input_buffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_TRACE</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Writing &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">                                          </span><span class="s">&quot; elements of type &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">input</span><span class="p">.</span><span class="n">dataType_</span><span class="p">.</span><span class="n">str</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; to &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">util</span><span class="o">::</span><span class="n">addressToString</span><span class="p">(</span><span class="n">dest</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">switchOverTypes</span><span class="p">(</span><span class="n">WriteData</span><span class="p">(),</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">getDatatype</span><span class="p">(),</span><span class="w"> </span><span class="n">input_buffer</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">,</span><span class="w"></span>
+<span class="w">                    </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">input</span><span class="p">.</span><span class="n">data_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dest</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">InputBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">  </span><span class="n">InferenceRequestInputBuilder</span><span class="o">&lt;</span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest_InferInputTensor</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+
+<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
+<span class="cp">#define CALLDATA_IMPL(endpoint, type)                                         \</span>
+<span class="cp">  class CallData##endpoint                                                    \</span>
+<span class="cp">    : public CallData##type&lt;inference::endpoint##Request,                     \</span>
+<span class="cp">                            inference::endpoint##Response&gt; {                  \</span>
+<span class="cp">   public:                                                                    \</span>
+<span class="cp">    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \</span>
+<span class="cp">      : CallData##type(service, cq) {                                         \</span>
+<span class="cp">      proceed();                                                              \</span>
+<span class="cp">    }                                                                         \</span>
+<span class="cp">                                                                              \</span>
+<span class="cp">   private:                                                                   \</span>
+<span class="cp">    Logger logger_{Loggers::kServer};                                         \</span>
+<span class="cp">                                                                              \</span>
+<span class="cp">   protected:                                                                 \</span>
+<span class="cp">    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \</span>
+<span class="cp">    void waitForRequest() override {                                          \</span>
+<span class="cp">      service_-&gt;Request##endpoint(&amp;ctx_, &amp;request_, &amp;responder_, cq_, cq_,    \</span>
+<span class="cp">                                  this);                                      \</span>
+<span class="cp">    }                                                                         \</span>
+<span class="cp">    void handleRequest() noexcept override</span>
+<span class="cp">#else</span>
+<span class="cp">#define CALLDATA_IMPL(endpoint, type)                                         \</span>
+<span class="cp">  class CallData##endpoint                                                    \</span>
+<span class="cp">    : public CallData##type&lt;inference::endpoint##Request,                     \</span>
+<span class="cp">                            inference::endpoint##Response&gt; {                  \</span>
+<span class="cp">   public:                                                                    \</span>
+<span class="cp">    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \</span>
+<span class="cp">      : CallData##type(service, cq) {                                         \</span>
+<span class="cp">      proceed();                                                              \</span>
+<span class="cp">    }                                                                         \</span>
+<span class="cp">                                                                              \</span>
+<span class="cp">   protected:                                                                 \</span>
+<span class="cp">    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \</span>
+<span class="cp">    void waitForRequest() override {                                          \</span>
+<span class="cp">      service_-&gt;Request##endpoint(&amp;ctx_, &amp;request_, &amp;responder_, cq_, cq_,    \</span>
+<span class="cp">                                  this);                                      \</span>
+<span class="cp">    }                                                                         \</span>
+<span class="cp">    void handleRequest() noexcept override</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define CALLDATA_IMPL_END \</span>
+<span class="cp">  }                       \</span>
+<span class="cp">  ;  </span><span class="c1">// NOLINT</span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelInfer</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getRequest</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">request_</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">inference</span><span class="o">::</span><span class="n">ModelInferResponse</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getReply</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">reply_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InferenceRequestBuilder</span><span class="o">&lt;</span><span class="n">CallDataModelInfer</span><span class="o">*&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">InferenceRequestPtr</span><span class="w"> </span><span class="n">build</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CallDataModelInfer</span><span class="o">*</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="n">BufferRawPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">input_offsets</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="n">BufferRawPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output_buffers</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">output_offsets</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Observer</span><span class="w"> </span><span class="n">observer</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_IF_LOGGING</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">kServer</span><span class="p">});</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">AMDINFER_LOG_TRACE</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="s">&quot;Creating InferenceRequest from proto tensor&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">InferenceRequest</span><span class="o">&gt;</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">grpc_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">id_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">id</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapProtoToParameters</span><span class="p">(</span><span class="n">grpc_request</span><span class="p">.</span><span class="n">parameters</span><span class="p">());</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">callback_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">inputs</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">buffers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_offsets</span><span class="p">[</span><span class="n">index</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">inputs_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">InputBuilder</span><span class="o">::</span><span class="n">build</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">offset</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">last_input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">inputs_</span><span class="p">.</span><span class="n">back</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">offset</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">last_input</span><span class="p">.</span><span class="n">getSize</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">last_input</span><span class="p">.</span><span class="n">getDatatype</span><span class="p">().</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="n">index</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// TODO(varunsh): output_offset is currently ignored! The size of the</span>
+<span class="w">    </span><span class="c1">// output needs to come from the worker but we have no such information.</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">grpc_request</span><span class="p">.</span><span class="n">outputs_size</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">outputs</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// TODO(varunsh): we&#39;re ignoring incoming output data</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">output</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_buffers</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">buffers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_offsets</span><span class="p">[</span><span class="n">index</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">          </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">outputs_</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span><span class="w"></span>
+<span class="w">          </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">outputs_</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">setData</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">);</span><span class="w"></span>
+<span class="w">          </span><span class="n">index</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">inputs</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">input</span><span class="p">;</span><span class="w">  </span><span class="c1">// suppress unused variable warning</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_buffers</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">buffers</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">j</span><span class="p">];</span><span class="w"></span>
+<span class="w">          </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_offsets</span><span class="p">[</span><span class="n">j</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">          </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">outputs_</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span><span class="w"></span>
+<span class="w">          </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">outputs_</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">setData</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">RequestBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InferenceRequestBuilder</span><span class="o">&lt;</span><span class="n">CallDataModelInfer</span><span class="o">*&gt;</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// CALLDATA_IMPL(StreamModelInfer, ServerStream);</span>
+
+<span class="c1">//  public:</span>
+<span class="c1">//   const inference::ModelInferRequest&amp; getRequest() const {</span>
+<span class="c1">//     return this-&gt;request_;</span>
+<span class="c1">//   }</span>
+<span class="c1">// CALLDATA_IMPL_END</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">grpcUnaryCallback</span><span class="p">(</span><span class="n">CallDataModelInfer</span><span class="o">*</span><span class="w"> </span><span class="n">calldata</span><span class="p">,</span><span class="w"></span>
+<span class="w">                       </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceResponse</span><span class="o">&amp;</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">calldata</span><span class="o">-&gt;</span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">getError</span><span class="p">()));</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapResponseToProto</span><span class="p">(</span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">calldata</span><span class="o">-&gt;</span><span class="n">getReply</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">calldata</span><span class="o">-&gt;</span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// #ifdef AMDINFER_ENABLE_TRACING</span>
+<span class="w">  </span><span class="c1">//   const auto &amp;context = response.getContext();</span>
+<span class="w">  </span><span class="c1">//   propagate(resp.get(), context);</span>
+<span class="w">  </span><span class="c1">// #endif</span>
+<span class="w">  </span><span class="n">calldata</span><span class="o">-&gt;</span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GrpcApiUnary</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Interface</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">GrpcApiUnary</span><span class="p">(</span><span class="n">CallDataModelInfer</span><span class="o">*</span><span class="w"> </span><span class="n">calldata</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">calldata_</span><span class="p">(</span><span class="n">calldata</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">type_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InterfaceType</span><span class="o">::</span><span class="n">kGrpc</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">InferenceRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getRequest</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">BufferRawPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">input_offsets</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">BufferRawPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output_buffers</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">output_offsets</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span><span class="w"></span>
+<span class="cp">#endif</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="n">RequestBuilder</span><span class="o">::</span><span class="n">build</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">calldata_</span><span class="p">,</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">input_offsets</span><span class="p">,</span><span class="w"></span>
+<span class="w">                              </span><span class="n">output_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">output_offsets</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="n">Callback</span><span class="w"> </span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="n">grpcUnaryCallback</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">calldata_</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_1</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">setCallback</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">callback</span><span class="p">));</span><span class="w"></span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">      </span><span class="n">errorHandler</span><span class="p">(</span><span class="n">e</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">getInputSize</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">calldata_</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">().</span><span class="n">inputs_size</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">errorHandler</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">calldata_</span><span class="o">-&gt;</span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="n">CallDataModelInfer</span><span class="o">*</span><span class="w"> </span><span class="n">calldata_</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ServerLive</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_live</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ServerReady</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelReady</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelReady</span><span class="p">(</span><span class="n">model</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelMetadata</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">mapModelMetadataToProto</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">reply_</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ServerMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serverMetadata</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">name</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_version</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">version</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">extension</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="n">extensions</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">add_extensions</span><span class="p">(</span><span class="n">extension</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelList</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">models</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelList</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">models</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">add_models</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelLoad</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapProtoToParameters</span><span class="p">(</span><span class="n">request_</span><span class="p">.</span><span class="n">parameters</span><span class="p">());</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelUnload</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelUnload</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">WorkerLoad</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapProtoToParameters</span><span class="p">(</span><span class="n">request_</span><span class="p">.</span><span class="n">parameters</span><span class="p">());</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workerLoad</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">WorkerUnload</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workerUnload</span><span class="p">(</span><span class="o">*</span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">HasHardware</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">(</span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">num</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_found</span><span class="p">(</span><span class="n">found</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">finish</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">CALLDATA_IMPL_END</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">CallDataModelInfer</span><span class="o">::</span><span class="n">handleRequest</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">model_name</span><span class="p">();</span><span class="w"></span>
+<span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">startTrace</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">__func__</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span><span class="w"></span>
+<span class="w">  </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">model</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">startSpan</span><span class="p">(</span><span class="s">&quot;request_handler&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="cp">#endif</span>
+
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GrpcApiUnary</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">);</span><span class="w"></span>
+<span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
+<span class="w">    </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">endSpan</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">setTrace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span><span class="w"></span>
+<span class="cp">#endif</span>
+<span class="w">    </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNKNOWN</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GrpcServer</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cq_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="w"> </span><span class="nf">server</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">cq_count</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">server</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">GrpcServer</span><span class="p">(</span><span class="n">GrpcServer</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="p">(</span><span class="n">GrpcServer</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">GrpcServer</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="o">~</span><span class="n">GrpcServer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">server_</span><span class="o">-&gt;</span><span class="n">Shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Always shutdown the completion queues after the server.</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">cq</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">cq_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">cq</span><span class="o">-&gt;</span><span class="n">Shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">      </span><span class="c1">// drain the completion queue to prevent assertion errors in grpc</span>
+<span class="w">      </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cq</span><span class="o">-&gt;</span><span class="n">Next</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ok</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cq_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">ServerBuilder</span><span class="w"> </span><span class="n">builder</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">builder</span><span class="p">.</span><span class="n">SetMaxReceiveMessageSize</span><span class="p">(</span><span class="n">kMaxGrpcMessageSize</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">builder</span><span class="p">.</span><span class="n">SetMaxSendMessageSize</span><span class="p">(</span><span class="n">kMaxGrpcMessageSize</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Listen on the given address without any authentication mechanism.</span>
+<span class="w">    </span><span class="n">builder</span><span class="p">.</span><span class="n">AddListeningPort</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">InsecureServerCredentials</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Register &quot;service_&quot; as the instance through which we&#39;ll communicate</span>
+<span class="w">    </span><span class="c1">// with clients. In this case it corresponds to an *asynchronous* service.</span>
+<span class="w">    </span><span class="n">builder</span><span class="p">.</span><span class="n">RegisterService</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Get hold of the completion queue used for the asynchronous</span>
+<span class="w">    </span><span class="c1">// communication with the gRPC runtime.</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">cq_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">cq_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">AddCompletionQueue</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Finally assemble the server.</span>
+<span class="w">    </span><span class="n">server_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">BuildAndStart</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Start threads to handle incoming RPCs</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">cq_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">threads_</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">GrpcServer</span><span class="o">::</span><span class="n">handleRpcs</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="c1">// just detach threads for now to simplify shutdown</span>
+<span class="w">      </span><span class="n">threads_</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">detach</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// This can be run in multiple threads if needed.</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">handleRpcs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">my_cq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cq_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Spawn a new CallData instance to serve new clients.</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerLive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelList</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataWorkerLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataWorkerUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelInfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataHasHardware</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// new CallDataStreamModelInfer(&amp;service_, my_cq.get());</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">tag</span><span class="p">;</span><span class="w">  </span><span class="c1">// uniquely identifies a request.</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="c1">// Block waiting to read the next event from the completion queue. The</span>
+<span class="w">      </span><span class="c1">// event is uniquely identified by its tag, which in this case is the</span>
+<span class="w">      </span><span class="c1">// memory address of a CallDataBase instance.</span>
+<span class="w">      </span><span class="c1">// The return value of Next should always be checked. This return value</span>
+<span class="w">      </span><span class="c1">// tells us whether there is any kind of event or cq_ is shutting down.</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">event_received</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">my_cq</span><span class="o">-&gt;</span><span class="n">Next</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ok</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">GPR_UNLIKELY</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">ok</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">event_received</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">CallDataBase</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">proceed</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerCompletionQueue</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">cq_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">AsyncService</span><span class="w"> </span><span class="n">service_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">threads_</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">grpc</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.0.0.0:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">port</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// the GrpcServer&#39;s destructor is called automatically</span>
+<span class="w">  </span><span class="c1">// auto&amp; foo = GrpcServer::getInstance();</span>
+<span class="w">  </span><span class="c1">// foo.~GrpcServer();</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace grpc</span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          
+                  <style>
+                        .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        }
+                  </style>
+				  
+				  <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on December 08, 2022.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

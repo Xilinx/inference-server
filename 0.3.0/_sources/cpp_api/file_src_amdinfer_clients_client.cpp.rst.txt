@@ -1,0 +1,46 @@
+
+.. _file_src_amdinfer_clients_client.cpp:
+
+File client.cpp
+===============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/clients/client.cpp``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_clients_client.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/client.hpp`` (:ref:`file_include_amdinfer_clients_client.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file_src_amdinfer_observation_logging.hpp`)
+
+- ``queue`` (:ref:`file_src_amdinfer_util_queue.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

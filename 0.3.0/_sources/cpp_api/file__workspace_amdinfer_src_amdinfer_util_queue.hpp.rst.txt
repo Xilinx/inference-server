@@ -1,0 +1,82 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_util_queue.hpp:
+
+File queue.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_util>` (``/workspace/amdinfer/src/amdinfer/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/util/queue.hpp``)
+----------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_util_queue.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``concurrentqueue/blockingconcurrentqueue.h``
+
+- ``memory``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_queue_8hpp_1a3221a88db26ee77b2f820bb75bc2ff24`
+
+- :ref:`exhale_typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849`
+
+- :ref:`exhale_typedef_queue_8hpp_1ad6d1b639ebd1fcf68a289f9d3cbd061d`
+
+- :ref:`exhale_typedef_queue_8hpp_1a11e139757fcec15a84a47b968f7aa685`
+

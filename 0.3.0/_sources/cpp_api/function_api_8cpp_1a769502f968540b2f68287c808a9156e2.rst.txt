@@ -1,0 +1,14 @@
+.. _exhale_function_api_8cpp_1a769502f968540b2f68287c808a9156e2:
+
+Function amdinfer::modelUnload
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::modelUnload(const std::string&)
+   :project: amdinfer

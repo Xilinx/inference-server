@@ -1,0 +1,64 @@
+
+.. _file_src_amdinfer_core_api.hpp:
+
+File api.hpp
+============
+
+
+Defines the client-server API used in the inference server. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/core/api.hpp``)
+------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_core_api.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``memory``
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``vector`` (:ref:`file_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_amdinfer_clients_native.cpp`
+
+- :ref:`file_src_amdinfer_core_api.cpp`
+
+- :ref:`file_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file_src_amdinfer_servers_http_server.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

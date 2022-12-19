@@ -1,0 +1,14 @@
+.. _exhale_typedef_namespaceamdinfer_1a08788239a50c8739700f08f0a6ede4e5:
+
+Typedef amdinfer::Callback
+==========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::Callback
+   :project: amdinfer

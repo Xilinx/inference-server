@@ -1,0 +1,14 @@
+.. _exhale_function_api_8cpp_1a451d6aeeb8de699b4cfc8f632f8e78b6:
+
+Function amdinfer::getHardware
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::getHardware()
+   :project: amdinfer

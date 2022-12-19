@@ -1,0 +1,73 @@
+
+.. _file_src_amdinfer_clients_native_internal.hpp:
+
+File native_internal.hpp
+========================
+
+
+Defines the internal objects used for the C++ API. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/clients/native_internal.hpp``)
+---------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_clients_native_internal.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/interface.hpp`` (:ref:`file_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``cstddef``
+
+- ``exception`` (:ref:`file_src_amdinfer_bindings_python_core_exceptions.cpp`)
+
+- ``future``
+
+- ``memory``
+
+- ``vector`` (:ref:`file_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_amdinfer_clients_native.cpp`
+
+- :ref:`file_src_amdinfer_clients_native_internal.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1CppNativeApi`
+

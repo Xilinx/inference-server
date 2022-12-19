@@ -1,0 +1,13 @@
+
+.. _namespace_pybind11:
+
+Namespace pybind11
+==================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+

@@ -1,0 +1,117 @@
+
+.. _file_src_amdinfer_workers_migraphx.cpp:
+
+File migraphx.cpp
+=================
+
+
+Implements the Migraphx worker. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/workers/migraphx.cpp``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_workers_migraphx.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/hard.hpp`` (:ref:`file_src_amdinfer_batching_hard.hpp`)
+
+- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file_src_amdinfer_buffers_vector_buffer.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/workers/worker.hpp`` (:ref:`file_src_amdinfer_workers_worker.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``fstream``
+
+- ``memory``
+
+- ``migraphx/filesystem.hpp``
+
+- ``migraphx/migraphx.hpp``
+
+- ``numeric``
+
+- ``opencv2/core.hpp``
+
+- ``opencv2/imgcodecs.hpp``
+
+- ``opencv2/imgproc.hpp``
+
+- ``stdio.h``
+
+- ``string`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``thread`` (:ref:`file_src_amdinfer_util_thread.hpp`)
+
+- ``utility``
+
+- ``vector`` (:ref:`file_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1workers_1_1MIGraphXWorker`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_migraphx_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_migraphx_8cpp_1a39cb9803524b6f3b783344b2f89867b4`
+

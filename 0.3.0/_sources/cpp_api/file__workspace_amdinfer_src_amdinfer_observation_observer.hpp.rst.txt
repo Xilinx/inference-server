@@ -1,0 +1,80 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_observation_observer.hpp:
+
+File observer.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_observation>` (``/workspace/amdinfer/src/amdinfer/observation``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/observation/observer.hpp``)
+--------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_observation_observer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1Observer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_observer_8hpp_1a53f99a75a6bfc6f5dda8db77a7ea047c`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_observer_8hpp_1ad1d17f4a2117c6141e8dfe1727c6cb92`
+

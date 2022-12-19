@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1workers_1_1XModel:
+
+Class XModel
+============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::workers::Worker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Worker`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::workers::XModel
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

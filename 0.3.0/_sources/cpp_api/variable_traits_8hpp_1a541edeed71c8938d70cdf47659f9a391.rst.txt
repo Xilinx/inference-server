@@ -1,0 +1,14 @@
+.. _exhale_variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391:
+
+Variable amdinfer::util::is_any_v
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::util::is_any_v
+   :project: amdinfer

@@ -1,0 +1,77 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_clients_http.hpp:
+
+File http.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer_clients>` (``/workspace/amdinfer/include/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines the methods for interacting with the server with HTTP/REST. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/clients/http.hpp``)
+----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_clients_http.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/client.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_client.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``memory``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1HttpClient`
+

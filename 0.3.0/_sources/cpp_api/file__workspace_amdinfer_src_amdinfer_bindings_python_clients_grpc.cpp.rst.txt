@@ -1,0 +1,67 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_bindings_python_clients_grpc.cpp:
+
+File grpc.cpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_bindings_python_clients>` (``/workspace/amdinfer/src/amdinfer/bindings/python/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the Python bindings for the :ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp` header. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/bindings/python/clients/grpc.cpp``)
+----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_bindings_python_clients_grpc.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/bindings/python/helpers/docstrings.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``amdinfer/clients/grpc.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``pybind11/cast.h``
+
+- ``pybind11/pybind11.h``
+
+- ``pybind11/stl.h``
+
+- ``unordered_map``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_bindings_2python_2clients_2grpc_8cpp_1a398952d871442babf477c11cbeae05b4`
+

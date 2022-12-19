@@ -1,0 +1,14 @@
+.. _exhale_typedef_grpc__server_8cpp_1a2571f3485e82379ee4c555e64c58dc32:
+
+Typedef ServerBuilder
+=====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: ServerBuilder
+   :project: amdinfer

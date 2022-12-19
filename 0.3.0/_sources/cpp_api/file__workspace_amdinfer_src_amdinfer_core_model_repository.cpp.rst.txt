@@ -1,0 +1,78 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp:
+
+File model_repository.cpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/model_repository.cpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/api.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/manager.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`)
+
+- ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``chrono``
+
+- ``fcntl.h``
+
+- ``filesystem``
+
+- ``google/protobuf/io/zero_copy_stream_impl.h``
+
+- ``google/protobuf/repeated_ptr_field.h``
+
+- ``google/protobuf/text_format.h``
+
+- ``model_config.pb.h``
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_model__repository_8cpp_1a9635913e10f284c7c36fa430aab3e865`
+

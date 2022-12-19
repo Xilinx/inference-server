@@ -1,0 +1,23 @@
+.. _exhale_class_classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl:
+
+Class WebSocketClient::WebSocketClientImpl
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp`
+
+
+Nested Relationships
+--------------------
+
+This class is a nested type of :ref:`exhale_class_classamdinfer_1_1WebSocketClient`.
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::WebSocketClient::WebSocketClientImpl
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,104 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp:
+
+File http_internal.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_clients>` (``/workspace/amdinfer/src/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines the internal objects used for HTTP/REST. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/clients/http_internal.hpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``cstddef``
+
+- ``drogon/HttpRequest.h``
+
+- ``drogon/HttpResponse.h``
+
+- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``functional``
+
+- ``json/value.h``
+
+- ``memory``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1DrogonHttp`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_http__internal_8hpp_1a7137f2088c425db6fdd74b1be1fe0663`
+

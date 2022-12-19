@@ -1,0 +1,14 @@
+.. _exhale_define_docstrings_8hpp_1a270b0132ffb1cd4c3854df9b0bc19082:
+
+Define DOCS
+===========
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_helpers_docstrings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: DOCS
+   :project: amdinfer

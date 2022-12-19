@@ -1,0 +1,14 @@
+.. _exhale_enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370:
+
+Enum WorkerStatus
+=================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: amdinfer::workers::WorkerStatus
+   :project: amdinfer

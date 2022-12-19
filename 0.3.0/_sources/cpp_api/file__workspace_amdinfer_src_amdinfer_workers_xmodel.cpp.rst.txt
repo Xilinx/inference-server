@@ -1,0 +1,142 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp:
+
+File xmodel.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_workers>` (``/workspace/amdinfer/src/amdinfer/workers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Implements the XModel worker. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/workers/xmodel.cpp``)
+--------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+- ``amdinfer/buffers/buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`)
+
+- ``amdinfer/buffers/vart_tensor_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
+
+- ``amdinfer/util/ctpl.h`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.h`)
+
+- ``amdinfer/util/parse_env.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp`)
+
+- ``amdinfer/util/queue.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+
+- ``atomic``
+
+- ``chrono``
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstdlib``
+
+- ``cstring``
+
+- ``cxxabi.h``
+
+- ``ext/alloc_traits.h``
+
+- ``functional``
+
+- ``memory``
+
+- ``numeric``
+
+- ``queue`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``utility``
+
+- ``vart/runner.hpp``
+
+- ``vart/runner_ext.hpp``
+
+- ``vart/tensor_buffer.hpp``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+- ``vitis/ai/target_factory.hpp``
+
+- ``xir/graph/graph.hpp``
+
+- ``xir/graph/subgraph.hpp``
+
+- ``xir/tensor/tensor.hpp``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1workers_1_1XModel`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_xmodel_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+
+- :ref:`exhale_function_xmodel_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141`
+

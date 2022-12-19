@@ -1,0 +1,169 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_build_options.hpp:
+
+File build_options.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer>` (``/workspace/amdinfer/include/amdinfer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines the build information. This file is updated automatically by CMake. To update, recompile the amdinfer source code. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/build_options.hpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_build_options.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+
+
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_build__options_8hpp_1a1484c3c44013e93fc359073380f8e553`
+
+- :ref:`exhale_define_build__options_8hpp_1ac3e7216973ef4daa1c5b39274aa06451`
+
+- :ref:`exhale_define_build__options_8hpp_1adef0f0719db03d778f708c7a408e5122`
+
+- :ref:`exhale_define_build__options_8hpp_1ace1a0cbb9332b2372676164bbb1dcf44`
+
+- :ref:`exhale_define_build__options_8hpp_1a91fd304b96357ddd7156566a8bcf0121`
+
+- :ref:`exhale_define_build__options_8hpp_1a1d18cfe00c47ea32eee897db8c259810`
+
+- :ref:`exhale_define_build__options_8hpp_1a09f1b0969760f1246ed1119f0dd21b07`
+
+- :ref:`exhale_define_build__options_8hpp_1a38bb3a11b32b47c7085751e7ad658fc1`
+
+- :ref:`exhale_define_build__options_8hpp_1a5f100257574974f2ab3c02fdee919c1b`
+
+- :ref:`exhale_define_build__options_8hpp_1a1cb70e7b50dde20c79c992b551337b16`
+
+- :ref:`exhale_define_build__options_8hpp_1ab49ae259d264ae7e7d23bc0b77d39b22`
+
+- :ref:`exhale_define_build__options_8hpp_1ae2d322a6adf460982c1581a05df756f5`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_build__options_8hpp_1a1be3dbd430e5f181a95ba6fbac904899`
+
+- :ref:`exhale_variable_build__options_8hpp_1a976e70326e2282ae2b88a2117db22687`
+
+- :ref:`exhale_variable_build__options_8hpp_1a002b97a750e7bcc073424b03ebb1dcb5`
+
+- :ref:`exhale_variable_build__options_8hpp_1ae6319372d397b1a8b649e2ebdf45d2bd`
+
+- :ref:`exhale_variable_build__options_8hpp_1ad2b344ab5401aa8dc82b6421c364fada`
+
+- :ref:`exhale_variable_build__options_8hpp_1a2cbbae723c01d1e388932882efbf9264`
+

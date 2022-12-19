@@ -1,0 +1,14 @@
+.. _exhale_define_build__options_8hpp_1a09f1b0969760f1246ed1119f0dd21b07:
+
+Define AMDINFER_ENABLE_MIGRAPHX
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AMDINFER_ENABLE_MIGRAPHX
+   :project: amdinfer

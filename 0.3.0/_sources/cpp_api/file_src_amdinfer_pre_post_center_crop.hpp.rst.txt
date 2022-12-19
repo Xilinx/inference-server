@@ -1,0 +1,53 @@
+
+.. _file_src_amdinfer_pre_post_center_crop.hpp:
+
+File center_crop.hpp
+====================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/pre_post/center_crop.hpp``)
+------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_pre_post_center_crop.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``opencv2/core.hpp``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_amdinfer_pre_post_image_preprocess.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer__pre_post`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_center__crop_8hpp_1a38fcd76500e2a2a6f82b483f40898886`
+

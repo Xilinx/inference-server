@@ -1,0 +1,53 @@
+
+.. _file_include_amdinfer_core_mixins.hpp:
+
+File mixins.hpp
+===============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/amdinfer/core/mixins.hpp``)
+-------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_amdinfer_core_mixins.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstddef``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_include_amdinfer_core_predict_api.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1Serializable`
+

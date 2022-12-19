@@ -1,0 +1,14 @@
+.. _exhale_function_namespaceamdinfer_1a96f12abbea879eab96fc3a7677c27c4d:
+
+Function amdinfer::mapParametersToJson
+======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapParametersToJson(RequestParameters *)
+   :project: amdinfer

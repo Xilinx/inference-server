@@ -1,0 +1,14 @@
+.. _exhale_function_aks__detect_8cpp_1a601552e385edb19c4596c0c81cabb7fe:
+
+Function getWorker()
+====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: getWorker()
+   :project: amdinfer

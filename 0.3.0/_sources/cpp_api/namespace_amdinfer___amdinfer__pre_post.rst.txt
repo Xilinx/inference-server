@@ -1,0 +1,13 @@
+
+.. _namespace_amdinfer___amdinfer__pre_post:
+
+Namespace amdinfer::_amdinfer::pre_post
+=======================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+

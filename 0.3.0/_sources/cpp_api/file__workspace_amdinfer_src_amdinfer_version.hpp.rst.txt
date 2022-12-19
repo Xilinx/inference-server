@@ -1,0 +1,58 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_version.hpp:
+
+File version.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer>` (``/workspace/amdinfer/src/amdinfer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines the version information. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/version.hpp``)
+-------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_version.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_version_8hpp_1ad3c3d0b978d86f9e3cec272acdb15766`
+
+- :ref:`exhale_variable_version_8hpp_1a0cfff96254bdc960863abdcc6199f7cf`
+
+- :ref:`exhale_variable_version_8hpp_1a09dc0ce6af2ec98bf41a1fee3e892918`
+
+- :ref:`exhale_variable_version_8hpp_1a7d0f0ec1f70724c293b7d692a857dcf7`
+
+- :ref:`exhale_variable_version_8hpp_1a4707efc5cabb44fbeaf180cc785da651`
+

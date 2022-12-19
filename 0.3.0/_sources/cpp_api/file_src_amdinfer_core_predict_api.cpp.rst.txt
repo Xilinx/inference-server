@@ -1,0 +1,65 @@
+
+.. _file_src_amdinfer_core_predict_api.cpp:
+
+File predict_api.cpp
+====================
+
+
+Implements the objects used to hold incoming inference requests. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/core/predict_api.cpp``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_core_predict_api.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/build_options.hpp`` (:ref:`file_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file_include_amdinfer_core_predict_api.hpp`)
+
+- ``cassert``
+
+- ``cstring`` (:ref:`file_src_amdinfer_bindings_python_helpers_docstrings.hpp`)
+
+- ``iterator``
+
+- ``numeric``
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1InferenceRequestInputSizes`
+

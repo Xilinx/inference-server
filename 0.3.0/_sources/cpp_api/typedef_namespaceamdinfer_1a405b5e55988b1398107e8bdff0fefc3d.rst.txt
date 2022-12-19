@@ -1,0 +1,14 @@
+.. _exhale_typedef_namespaceamdinfer_1a405b5e55988b1398107e8bdff0fefc3d:
+
+Typedef amdinfer::InferenceResponseFuture
+=========================================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::InferenceResponseFuture
+   :project: amdinfer

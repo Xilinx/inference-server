@@ -1,0 +1,14 @@
+.. _exhale_typedef_grpc__server_8cpp_1aa51ad0e9f1a23127a07cdfc18412904d:
+
+Typedef StatusCode
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: StatusCode
+   :project: amdinfer

@@ -1,0 +1,14 @@
+.. _exhale_typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849:
+
+Typedef amdinfer::BufferPtrsQueue
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::BufferPtrsQueue
+   :project: amdinfer

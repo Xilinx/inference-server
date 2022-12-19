@@ -1,0 +1,38 @@
+
+.. _file_src_amdinfer_observation_status.hpp:
+
+File status.hpp
+===============
+
+
+Defines the status codes. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/amdinfer/observation/status.hpp``)
+----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_amdinfer_observation_status.hpp.rst
+
+
+
+
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

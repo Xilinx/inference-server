@@ -1,0 +1,14 @@
+.. _exhale_function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724:
+
+Function amdinfer::waitUntilServerReady
+=======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::waitUntilServerReady(const Client *)
+   :project: amdinfer

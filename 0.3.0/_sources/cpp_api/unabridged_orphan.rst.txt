@@ -1,0 +1,1020 @@
+:orphan:
+
+
+Full API
+========
+
+Variables
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_echo__multi_8cpp_1afa0b765105e95ab377c99ba05b254d06.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_worker_8hpp_1afff06a8b4498d235dc378329775cf03d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_observer_8hpp_1ad1d17f4a2117c6141e8dfe1727c6cb92.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_echo__multi_8cpp_1a416f1fc1c3bce51d97065301d41db581.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_echo__multi_8cpp_1af0ec89de1369c878ed2a32a0e0227448.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_resnet50__stream_8cpp_1a3cf9bf5036efcc4d92cb4b5faec907a6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_aks__detect_8cpp_1a04c17f159348c95b8f43e30dd5870d13.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_aks__detect_8cpp_1a42d9aa2fce61d9debb309bcea9830853.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_aks__detect_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_aks__detect_8cpp_1aef4b7872e7395e2c7fdf950685bc2c94.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_resnet50__stream_8cpp_1afe3341a020a5ae7f03cbd635abaa90fc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_resnet50__stream_8cpp_1af570cb232c9a5846340eae70c6c53ec6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_version_8hpp_1ad3c3d0b978d86f9e3cec272acdb15766.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_version_8hpp_1a0cfff96254bdc960863abdcc6199f7cf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_version_8hpp_1a09dc0ce6af2ec98bf41a1fee3e892918.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_version_8hpp_1a7d0f0ec1f70724c293b7d692a857dcf7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_version_8hpp_1a4707efc5cabb44fbeaf180cc785da651.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_build__options_8hpp_1a1be3dbd430e5f181a95ba6fbac904899.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_build__options_8hpp_1a976e70326e2282ae2b88a2117db22687.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_build__options_8hpp_1a002b97a750e7bcc073424b03ebb1dcb5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_soft_8cpp_1a668387f6df1819f5cb56113bdd3ef62a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_build__options_8hpp_1ae6319372d397b1a8b649e2ebdf45d2bd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_build__options_8hpp_1ad2b344ab5401aa8dc82b6421c364fada.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_build__options_8hpp_1a2cbbae723c01d1e388932882efbf9264.rst
+
+Defines
+*******
+
+
+.. toctree::
+   :maxdepth: 5
+
+   define_ctpl_8h_1af7b93233312c932691af436d4e7fd9d6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a1484c3c44013e93fc359073380f8e553.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1ac3e7216973ef4daa1c5b39274aa06451.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1adef0f0719db03d778f708c7a408e5122.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1ace1a0cbb9332b2372676164bbb1dcf44.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a91fd304b96357ddd7156566a8bcf0121.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a1d18cfe00c47ea32eee897db8c259810.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a09f1b0969760f1246ed1119f0dd21b07.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a38bb3a11b32b47c7085751e7ad658fc1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a5f100257574974f2ab3c02fdee919c1b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1a1cb70e7b50dde20c79c992b551337b16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1ab49ae259d264ae7e7d23bc0b77d39b22.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_build__options_8hpp_1ae2d322a6adf460982c1581a05df756f5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_logging_8hpp_1aa0607a02582d3aef0021738df1b73c93.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_logging_8hpp_1ae84d7184cf490593444dac190212096d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_logging_8hpp_1ab634321b716a4c9ef274de1d61af0631.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_logging_8hpp_1a5465abe98bc6673e563a64fb17acd8de.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_logging_8hpp_1a93baa2614a5bf97d13ae1ce3d9b90c87.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_logging_8hpp_1a4efec5253d1317f18d57455a7f0f4c9d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_base64_8cpp_1ac3146f1e9227301bb4aa518f4d336cee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_grpc__server_8cpp_1a5d3e066a99cdd4f1f413e6e44dc0dcd3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_grpc__server_8cpp_1aa8804898829de032ded6a07028b0af36.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_migraphx_8cpp_1a39cb9803524b6f3b783344b2f89867b4.rst
+
+Typedefs
+********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1a91acc2ad2e6156eccc10d01384ef8506.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_queue_8hpp_1a3221a88db26ee77b2f820bb75bc2ff24.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_queue_8hpp_1afeeb9f145c6244366d3c5fbf59a5f849.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_queue_8hpp_1ad6d1b639ebd1fcf68a289f9d3cbd061d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1ae43152e77216115d2665d62c4c8020ca.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_predict__api_8hpp_1a08788239a50c8739700f08f0a6ede4e5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_http__internal_8hpp_1a7137f2088c425db6fdd74b1be1fe0663.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_data__types_8hpp_1ae6aa5769eb83832379c792c300d4566c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_queue_8hpp_1a11e139757fcec15a84a47b968f7aa685.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1a69968e7d35b8ae122d52452c7e00ed9d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_predict__api_8hpp_1a68c2a90f38823c9713e56fd203b2b88d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_http__internal_8cpp_1a78092124400e8e02cce73782a3ed0832.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1aa4fc4532a6cc2a392046e1a720d80ad4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_http__internal_8cpp_1ac0c25a8d874c058c0256360834443885.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_predict__api_8hpp_1af874429ad00786b2a05f30c311422e4c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_http__internal_8cpp_1a9a8b533ecefc7f30d6f3377cf897f1c8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_predict__api_8hpp_1aecb5618c912edd1c1537ec7da1befebc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_manager_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1aa3ba85be01ef9f3abcaf7b476cf8d588.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1a3b67a1f4b15f6f8988d8e5172649fb00.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1a2571f3485e82379ee4c555e64c58dc32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1a522cc0269bb90723a0841f2d0a2be7fb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1a0795844bf8bd399665e38979b3bbe186.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_grpc__server_8cpp_1aa51ad0e9f1a23127a07cdfc18412904d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_resnet50__stream_8cpp_1a91ed90b284d1c6942686de273a3cd850.rst
+
+Directories
+***********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_include.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_include_amdinfer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_include_amdinfer_clients.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_include_amdinfer_core.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_include_amdinfer_servers.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_batching.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_buffers.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_clients.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_core.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_observation.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_pre_post.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_servers.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_util.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__workspace_amdinfer_src_amdinfer_workers.rst
+
+Files
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_amdinfer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_api.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_api.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_base64.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_base64.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_batching_batcher.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_buffer.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_build_options.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_pre_post_center_crop.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_client.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_clients_client.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_compression.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_compression.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_ctpl.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_data_types.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_core_data_types.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_declarations.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_exec.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_exec.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_pre_post_get_top_k.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_grpc_server.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_batching_hard.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_batching_hard.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_http.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_clients_http.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_interface.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_interface.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_logging.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_logging.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_main.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_manager.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_manager.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_core_mixins.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_native.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_clients_native.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_observer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_parse_env.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_queue.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_read_nth_line.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_read_nth_line.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_pre_post_resnet50_postprocess.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_server.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_servers_server.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_batching_soft.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_batching_soft.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_status.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_string.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_thread.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_tracing.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_traits.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_version.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_worker.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp.rst

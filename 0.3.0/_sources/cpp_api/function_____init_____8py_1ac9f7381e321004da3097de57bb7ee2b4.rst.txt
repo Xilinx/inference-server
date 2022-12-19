@@ -1,0 +1,14 @@
+.. _exhale_function_____init_____8py_1ac9f7381e321004da3097de57bb7ee2b4:
+
+Function amdinfer::_set_data
+============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_bindings_python_src_amdinfer___init__.py`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::_set_data(input_n, image)
+   :project: amdinfer
