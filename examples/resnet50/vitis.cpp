@@ -170,74 +170,85 @@ Args getArgs(int argc, char** argv) {
 }
 
 int main(int argc, char* argv[]) {
-  std::cout << "Running the Vitis example for ResNet50 in C++\n";
+  try {
+    std::cout << "Running the Vitis example for ResNet50 in C++\n";
 
-  Args args = getArgs(argc, argv);
+    Args args = getArgs(argc, argv);
 
-  // +create client:
-  // vitis.cpp
-  const auto http_port_str = std::to_string(args.http_port);
-  const auto server_addr = "http://" + args.ip + ":" + http_port_str;
-  amdinfer::HttpClient client{server_addr};
-  // -create client:
-
-  // +initialize:
-  std::optional<amdinfer::Server> server;
-  // -initialize:
-  // +start protocol:
-  if (args.ip == "127.0.0.1" && !client.serverLive()) {
-    std::cout << "No server detected. Starting locally...\n";
-    server.emplace();
-    server.value().startHttp(args.http_port);
-  } else if (!client.serverLive()) {
-    throw amdinfer::connection_error("Could not connect to server at " +
-                                     server_addr);
-  }
-  // -start protocol:
-
-  std::cout << "Waiting until the server is ready...\n";
-  amdinfer::waitUntilServerReady(&client);
-
-  std::cout << "Loading worker...\n";
-  std::string endpoint = load(&client, args);
-  // +wait model ready:
-  amdinfer::waitUntilModelReady(&client, endpoint);
-  // -wait model ready:
-
-  // +prepare images:
-  std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
-  Images images = preprocess(paths);
-  // -prepare images:
-
-  std::vector<amdinfer::InferenceRequest> requests =
-    constructRequests(images, args.input_size);
-
-  assert(paths.size() == requests.size());
-  const auto num_requests = requests.size();
-
-  std::cout << "Making inferences...\n";
-  auto start = std::chrono::high_resolution_clock::now();
-  for (auto i = 0U; i < num_requests; ++i) {
-    const amdinfer::InferenceRequest& request = requests[i];
-    const std::string& image_path = paths[i];
-
-    // +validate:
+    // +create client:
     // vitis.cpp
-    amdinfer::InferenceResponse response = client.modelInfer(endpoint, request);
-    assert(!response.isError());
+    const auto http_port_str = std::to_string(args.http_port);
+    const auto server_addr = "http://" + args.ip + ":" + http_port_str;
+    amdinfer::HttpClient client{server_addr};
+    // -create client:
 
-    std::vector<amdinfer::InferenceResponseOutput> outputs =
-      response.getOutputs();
-    // for resnet50, we expect a single output tensor
-    assert(outputs.size() == 1);
-    std::vector<int> top_indices = postprocess(outputs[0], args.top);
-    printLabel(top_indices, args.path_to_labels, image_path);
-    // -validate:
+    // +initialize:
+    std::optional<amdinfer::Server> server;
+    // -initialize:
+    // +start protocol:
+    if (args.ip == "127.0.0.1" && !client.serverLive()) {
+      std::cout << "No server detected. Starting locally...\n";
+      server.emplace();
+      server.value().startHttp(args.http_port);
+    } else if (!client.serverLive()) {
+      throw amdinfer::connection_error("Could not connect to server at " +
+                                       server_addr);
+    } else {
+      // the server is reachable so continue on
+    }
+    // -start protocol:
+
+    std::cout << "Waiting until the server is ready...\n";
+    amdinfer::waitUntilServerReady(&client);
+
+    std::cout << "Loading worker...\n";
+    std::string endpoint = load(&client, args);
+    // +wait model ready:
+    amdinfer::waitUntilModelReady(&client, endpoint);
+    // -wait model ready:
+
+    // +prepare images:
+    std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
+    Images images = preprocess(paths);
+    // -prepare images:
+
+    std::vector<amdinfer::InferenceRequest> requests =
+      constructRequests(images, args.input_size);
+
+    assert(paths.size() == requests.size());
+    const auto num_requests = requests.size();
+
+    std::cout << "Making inferences...\n";
+    auto start = std::chrono::high_resolution_clock::now();
+    for (auto i = 0U; i < num_requests; ++i) {
+      const amdinfer::InferenceRequest& request = requests[i];
+      const std::string& image_path = paths[i];
+
+      // +validate:
+      // vitis.cpp
+      amdinfer::InferenceResponse response =
+        client.modelInfer(endpoint, request);
+      assert(!response.isError());
+
+      std::vector<amdinfer::InferenceResponseOutput> outputs =
+        response.getOutputs();
+      // for resnet50, we expect a single output tensor
+      assert(outputs.size() == 1);
+      std::vector<int> top_indices = postprocess(outputs[0], args.top);
+      printLabel(top_indices, args.path_to_labels, image_path);
+      // -validate:
+    }
+    auto stop = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = stop - start;
+    std::cout << "Time taken for inference, postprocessing and printing: "
+              << duration.count() << " ms\n";
+
+    return 0;
+  } catch (const amdinfer::runtime_error& e) {
+    std::cerr << e.what() << "\n";
+    return 1;
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << "\n";
+    return 1;
   }
-  auto stop = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double, std::milli> duration = stop - start;
-  std::cout << "Time taken for inference, postprocessing and printing: "
-            << duration.count() << " ms\n";
-
-  return 0;
 }

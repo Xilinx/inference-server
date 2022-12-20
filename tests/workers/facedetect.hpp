@@ -84,10 +84,13 @@ std::string load(int workers) {
   parameters.put("share", false);
 
   amdinfer::NativeClient client;
+  std::string endpoint;
+  endpoint = client.workerLoad("AksDetect", &parameters);
   for (int i = 0; i < workers - 1; i++) {
-    client.workerLoad("AksDetect", &parameters);
+    const auto new_endpoint = client.workerLoad("AksDetect", &parameters);
+    assert(endpoint == new_endpoint);
   }
-  return client.workerLoad("AksDetect", &parameters);
+  return endpoint;
 }
 
 std::vector<std::string> getImages(std::string imgDirPath) {

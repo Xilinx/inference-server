@@ -49,21 +49,33 @@ class HttpClient : public Client {
    * @brief Construct a new HttpClient object
    *
    * @param address Address of the server to connect to
+   */
+  explicit HttpClient(const std::string& address);
+  /**
+   * @brief Construct a new HttpClient object
+   *
+   * @param address Address of the server to connect to
    * @param headers Key-value pairs that should be added to the HTTP headers for
    * all requests
    * @param parallelism Max number of requests that can be sent in parallel
    */
-  HttpClient(std::string address, const StringMap& headers = {},
-             int parallelism = 32);
+  HttpClient(const std::string& address, const StringMap& headers,
+             int parallelism);
+
   /// Copy constructor
-  HttpClient(HttpClient const&);
-  /// Copy assignment constructor deleted
-  HttpClient& operator=(const HttpClient&) const = delete;
+  HttpClient(HttpClient const&) = delete;
+  /// Copy assignment constructor
+  HttpClient& operator=(const HttpClient&) = delete;
   /// Move constructor
-  HttpClient(HttpClient&& other) noexcept;
-  /// Move assignment constructor deleted
-  HttpClient& operator=(HttpClient&& other) const noexcept = delete;
-  /// Destructor
+  HttpClient(HttpClient&& other) = default;
+  /// Move assignment constructor
+  HttpClient& operator=(HttpClient&& other) = default;
+  /**
+   * @brief Destructor. This is needed because HttpClientImpl is an incomplete
+   * type. The destructor is defaulted in the implementation. But having a non-
+   * default destructor here forces the need to explicitly specify the other
+   * special member functions by the Rule of 5.
+   */
   ~HttpClient() override;
 
   /**
@@ -71,33 +83,34 @@ class HttpClient : public Client {
    *
    * @return ServerMetadata
    */
-  ServerMetadata serverMetadata() const override;
+  [[nodiscard]] ServerMetadata serverMetadata() const override;
   /**
    * @brief Checks if the server is live
    *
    * @return bool - true if server is live, false otherwise
    */
-  bool serverLive() const override;
+  [[nodiscard]] bool serverLive() const override;
   /**
    * @brief Checks if the server is ready
    *
    * @return bool - true if server is ready, false otherwise
    */
-  bool serverReady() const override;
+  [[nodiscard]] bool serverReady() const override;
   /**
    * @brief Checks if a model/worker is ready
    *
    * @param model name of the model to check
    * @return bool - true if model is ready, false otherwise
    */
-  bool modelReady(const std::string& model) const override;
+  [[nodiscard]] bool modelReady(const std::string& model) const override;
   /**
    * @brief Returns the metadata associated with a ready model/worker
    *
    * @param model name of the model/worker to get metadata
    * @return ModelMetadata
    */
-  ModelMetadata modelMetadata(const std::string& model) const override;
+  [[nodiscard]] ModelMetadata modelMetadata(
+    const std::string& model) const override;
 
   /**
    * @brief Loads a model with the given name and load-time parameters. This
@@ -127,8 +140,8 @@ class HttpClient : public Client {
    * @param request the request
    * @return InferenceResponse
    */
-  InferenceResponse modelInfer(const std::string& model,
-                               const InferenceRequest& request) const override;
+  [[nodiscard]] InferenceResponse modelInfer(
+    const std::string& model, const InferenceRequest& request) const override;
   /**
    * @brief Makes an asynchronous inference request to the given model/worker.
    * The contents of the request depends on the model/worker that the request
@@ -139,14 +152,14 @@ class HttpClient : public Client {
    * @param request the request
    * @return InferenceResponseFuture
    */
-  InferenceResponseFuture modelInferAsync(
+  [[nodiscard]] InferenceResponseFuture modelInferAsync(
     const std::string& model, const InferenceRequest& request) const override;
   /**
    * @brief Gets a list of active models on the server, returning their names
    *
    * @return std::vector<std::string>
    */
-  std::vector<std::string> modelList() const override;
+  [[nodiscard]] std::vector<std::string> modelList() const override;
 
   /**
    * @brief Loads a worker with the given name and load-time parameters.
@@ -155,8 +168,8 @@ class HttpClient : public Client {
    * @param parameters load-time parameters for the worker
    * @return std::string
    */
-  std::string workerLoad(const std::string& worker,
-                         RequestParameters* parameters) const override;
+  [[nodiscard]] std::string workerLoad(
+    const std::string& worker, RequestParameters* parameters) const override;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.
@@ -174,21 +187,10 @@ class HttpClient : public Client {
    * @return bool - true if server has at least the requested number of the
    * hardware device, false otherwise
    */
-  bool hasHardware(const std::string& name, int num) const override;
-
-  /// Returns the HTTP address
-  const std::string& getAddress() const&;
-  /// Returns the HTTP address
-  std::string getAddress() const&&;
-  /// Returns the HTTP headers
-  const StringMap& getHeaders() const&;
-  /// Returns the HTTP headers
-  StringMap getHeaders() const&&;
+  [[nodiscard]] bool hasHardware(const std::string& name,
+                                 int num) const override;
 
  private:
-  std::string address_;
-  StringMap headers_;
-
   class HttpClientImpl;
   std::unique_ptr<HttpClientImpl> impl_;
 };

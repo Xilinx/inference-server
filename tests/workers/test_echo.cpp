@@ -111,15 +111,15 @@ class EchoParamFixture
 
 TEST_P(EchoParamFixture, EchoNative) {
   amdinfer::NativeClient client;
-  client.workerLoad("echo", nullptr);
+  const auto endpoint = client.workerLoad("echo", nullptr);
 
   auto request = this->construct_request();
 
-  auto response = client.modelInfer("echo", request);
+  auto response = client.modelInfer(endpoint, request);
 
   validate(response);
 
-  client.modelUnload("echo");
+  client.modelUnload(endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
@@ -130,14 +130,14 @@ TEST_P(EchoParamFixture, EchoGrpc) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
-  client.workerLoad("echo", nullptr);
+  const auto endpoint = client.workerLoad("echo", nullptr);
 
   auto request = this->construct_request();
 
-  auto response = client.modelInfer("echo", request);
+  auto response = client.modelInfer(endpoint, request);
   validate(response);
 
-  client.modelUnload("echo");
+  client.modelUnload(endpoint);
 }
 #endif
 

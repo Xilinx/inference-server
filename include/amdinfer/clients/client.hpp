@@ -43,33 +43,34 @@ class Client {
    *
    * @return ServerMetadata
    */
-  virtual ServerMetadata serverMetadata() const = 0;
+  [[nodiscard]] virtual ServerMetadata serverMetadata() const = 0;
   /**
    * @brief Checks if the server is live
    *
    * @return bool - true if server is live, false otherwise
    */
-  virtual bool serverLive() const = 0;
+  [[nodiscard]] virtual bool serverLive() const = 0;
   /**
    * @brief Checks if the server is ready
    *
    * @return bool - true if server is ready, false otherwise
    */
-  virtual bool serverReady() const = 0;
+  [[nodiscard]] virtual bool serverReady() const = 0;
   /**
    * @brief Checks if a model/worker is ready
    *
    * @param model name of the model to check
    * @return bool - true if model is ready, false otherwise
    */
-  virtual bool modelReady(const std::string& model) const = 0;
+  [[nodiscard]] virtual bool modelReady(const std::string& model) const = 0;
   /**
    * @brief Returns the metadata associated with a ready model/worker
    *
    * @param model name of the model/worker to get metadata
    * @return ModelMetadata
    */
-  virtual ModelMetadata modelMetadata(const std::string& model) const = 0;
+  [[nodiscard]] virtual ModelMetadata modelMetadata(
+    const std::string& model) const = 0;
 
   /**
    * @brief Loads a model with the given name and load-time parameters. This
@@ -99,7 +100,7 @@ class Client {
    * @param request the request
    * @return InferenceResponse
    */
-  virtual InferenceResponse modelInfer(
+  [[nodiscard]] virtual InferenceResponse modelInfer(
     const std::string& model, const InferenceRequest& request) const = 0;
   /**
    * @brief Makes an asynchronous inference request to the given model/worker.
@@ -111,14 +112,14 @@ class Client {
    * @param request the request
    * @return InferenceResponseFuture
    */
-  virtual InferenceResponseFuture modelInferAsync(
+  [[nodiscard]] virtual InferenceResponseFuture modelInferAsync(
     const std::string& model, const InferenceRequest& request) const = 0;
   /**
    * @brief Gets a list of active models on the server, returning their names
    *
    * @return std::vector<std::string>
    */
-  virtual std::vector<std::string> modelList() const = 0;
+  [[nodiscard]] virtual std::vector<std::string> modelList() const = 0;
 
   /**
    * @brief Loads a worker with the given name and load-time parameters.
@@ -146,7 +147,8 @@ class Client {
    * @return bool - true if server has at least the requested number of the
    * hardware device, false otherwise
    */
-  virtual bool hasHardware(const std::string& name, int num) const = 0;
+  [[nodiscard]] virtual bool hasHardware(const std::string& name,
+                                         int num) const = 0;
 
  protected:
   Client();

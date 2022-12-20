@@ -62,10 +62,10 @@ int main(int argc, char* argv[]) {
   signal(SIGINT, signal_callback_handler);
   signal(SIGTERM, signal_callback_handler);
 #ifdef AMDINFER_ENABLE_HTTP
-  int http_port = kDefaultHttpPort;
+  uint16_t http_port = kDefaultHttpPort;
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-  int grpc_port = kDefaultGrpcPort;
+  uint16_t grpc_port = kDefaultGrpcPort;
 #endif
   std::string model_repository = "/mnt/models";
   bool enable_repository_watcher = false;
@@ -76,17 +76,17 @@ int main(int argc, char* argv[]) {
     // clang-format off
     options.add_options()
     ("model-repository", "Path to the model repository",
-      cxxopts::value<std::string>(model_repository))
+      cxxopts::value(model_repository))
     ("enable-repository-watcher",
       "Actively monitor the model-repository directory for new models",
-      cxxopts::value<bool>(enable_repository_watcher))
+      cxxopts::value(enable_repository_watcher))
     ("use-polling-watcher", "Use polling to monitor model-repository directory",
-      cxxopts::value<bool>(use_polling_watcher))
+      cxxopts::value(use_polling_watcher))
 #ifdef AMDINFER_ENABLE_HTTP
-    ("http-port", "Port to use for HTTP server", cxxopts::value<int>(http_port))
+    ("http-port", "Port to use for HTTP server", cxxopts::value(http_port))
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-    ("grpc-port", "Port to use for gRPC server", cxxopts::value<int>(grpc_port))
+    ("grpc-port", "Port to use for gRPC server", cxxopts::value(grpc_port))
 #endif
     ("help", "Print help");
     // clang-format on

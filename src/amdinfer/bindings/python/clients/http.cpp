@@ -67,17 +67,7 @@ void wrapHttpClient(py::module_ &m) {
     //      py::arg("request"), DOCS(HttpClient, modelInferAsync))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
     .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
-         py::arg("num"), DOCS(HttpClient, hasHardware))
-    .def(py::pickle(
-      [](const HttpClient &p) {  // __getstate__
-        return py::make_tuple(p.getAddress(), p.getHeaders());
-      },
-      [](py::tuple t) -> HttpClient {  // __setstate__
-        if (t.size() != 2) {
-          throw amdinfer::runtime_error("Invalid state!");
-        }
-        return {t[0].cast<std::string>(), t[1].cast<amdinfer::StringMap>()};
-      }));
+         py::arg("num"), DOCS(HttpClient, hasHardware));
 }
 
 }  // namespace amdinfer
