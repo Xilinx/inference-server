@@ -57,9 +57,9 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
   bool run = true;
 
-  auto kTimeout = duration_cast<milliseconds>(kDefaultTimeout);
+  auto timeout = duration_cast<milliseconds>(kDefaultTimeout);
   if (this->parameters_.has("timeout")) {
-    kTimeout = duration_cast<milliseconds>(
+    timeout = duration_cast<milliseconds>(
       milliseconds(this->parameters_.get<int32_t>("timeout")));
   }
 
@@ -93,7 +93,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
                            "Got request of a new batch for " + this->model_);
       } else {
         auto remaining_time =
-          kTimeout - (std::chrono::high_resolution_clock::now() - start_time);
+          timeout - (std::chrono::high_resolution_clock::now() - start_time);
         auto duration = std::max(remaining_time, std::chrono::nanoseconds(0));
         bool valid = this->input_queue_->wait_dequeue_timed(req, duration);
         if (!valid) {

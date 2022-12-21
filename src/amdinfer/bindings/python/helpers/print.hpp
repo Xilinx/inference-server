@@ -22,7 +22,7 @@
 namespace amdinfer {
 
 template <typename T>
-std::string to_string(const T& self) {
+std::string toString(const T& self) {
   std::ostringstream os;
   os << self;
   return os.str();

@@ -36,12 +36,15 @@ namespace amdinfer {
 void wrapHttpClient(py::module_ &m) {
   using amdinfer::HttpClient;
 
+  // default number of clients to create for parallelism
+  const int parallelism = 32;
+
   py::class_<HttpClient, amdinfer::Client>(m, "HttpClient")
     .def(py::init<const std::string &,
                   const std::unordered_map<std::string, std::string>, int>(),
          py::arg("address"),
          py::arg("headers") = std::unordered_map<std::string, std::string>(),
-         py::arg("parallelism") = 32, DOCS(HttpClient, HttpClient))
+         py::arg("parallelism") = parallelism, DOCS(HttpClient, HttpClient))
     .def("serverMetadata", &HttpClient::serverMetadata,
          DOCS(HttpClient, serverMetadata))
     .def("serverLive", &HttpClient::serverLive, DOCS(HttpClient, serverLive))

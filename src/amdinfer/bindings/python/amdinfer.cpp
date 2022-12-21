@@ -31,6 +31,7 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
 PYBIND11_MODULE(_amdinfer, m) {
   py::module t = m.def_submodule("testing", "testing documentation");
   py::module p = m.def_submodule("pre_post", "pre/post documentation");

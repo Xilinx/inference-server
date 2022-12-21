@@ -183,7 +183,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
     }
     AMDINFER_LOG_INFO(logger, "Got request in AksDetect");
     std::vector<InferenceResponse> responses;
-    responses.reserve(batch->input_size());
+    responses.reserve(batch->getInputSize());
 
     std::vector<std::unique_ptr<vart::TensorBuffer>> v;
     v.reserve(batch->size());

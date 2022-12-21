@@ -42,39 +42,40 @@ void wrapDataType(py::module_& m) {
     .def(py::init<>())
     .def(py::init<const char*>())
     .def(py::init<DataType::Value>())
-    .def_property_readonly_static("BOOL",
-                                  [](py::object) { return DataType("BOOL"); })
-    .def_property_readonly_static("UINT8",
-                                  [](py::object) { return DataType("UINT8"); })
-    .def_property_readonly_static("UINT16",
-                                  [](py::object) { return DataType("UINT16"); })
-    .def_property_readonly_static("UINT32",
-                                  [](py::object) { return DataType("UINT32"); })
-    .def_property_readonly_static("UINT64",
-                                  [](py::object) { return DataType("UINT64"); })
-    .def_property_readonly_static("INT8",
-                                  [](py::object) { return DataType("INT8"); })
-    .def_property_readonly_static("INT16",
-                                  [](py::object) { return DataType("INT16"); })
-    .def_property_readonly_static("INT32",
-                                  [](py::object) { return DataType("INT32"); })
-    .def_property_readonly_static("INT64",
-                                  [](py::object) { return DataType("INT64"); })
-    .def_property_readonly_static("FP16",
-                                  [](py::object) { return DataType("FP16"); })
-    .def_property_readonly_static("FP32",
-                                  [](py::object) { return DataType("FP32"); })
-    .def_property_readonly_static("FLOAT32",
-                                  [](py::object) { return DataType("FP32"); })
-    .def_property_readonly_static("FP64",
-                                  [](py::object) { return DataType("FP64"); })
-    .def_property_readonly_static("FLOAT64",
-                                  [](py::object) { return DataType("FP64"); })
-    .def_property_readonly_static("STRING",
-                                  [](py::object) { return DataType("STRING"); })
+    .def_property_readonly_static(
+      "BOOL", [](const py::object& /*self*/) { return DataType("BOOL"); })
+    .def_property_readonly_static(
+      "UINT8", [](const py::object& /*self*/) { return DataType("UINT8"); })
+    .def_property_readonly_static(
+      "UINT16", [](const py::object& /*self*/) { return DataType("UINT16"); })
+    .def_property_readonly_static(
+      "UINT32", [](const py::object& /*self*/) { return DataType("UINT32"); })
+    .def_property_readonly_static(
+      "UINT64", [](const py::object& /*self*/) { return DataType("UINT64"); })
+    .def_property_readonly_static(
+      "INT8", [](const py::object& /*self*/) { return DataType("INT8"); })
+    .def_property_readonly_static(
+      "INT16", [](const py::object& /*self*/) { return DataType("INT16"); })
+    .def_property_readonly_static(
+      "INT32", [](const py::object& /*self*/) { return DataType("INT32"); })
+    .def_property_readonly_static(
+      "INT64", [](const py::object& /*self*/) { return DataType("INT64"); })
+    .def_property_readonly_static(
+      "FP16", [](const py::object& /*self*/) { return DataType("FP16"); })
+    .def_property_readonly_static(
+      "FP32", [](const py::object& /*self*/) { return DataType("FP32"); })
+    .def_property_readonly_static(
+      "FLOAT32", [](const py::object& /*self*/) { return DataType("FP32"); })
+    .def_property_readonly_static(
+      "FP64", [](const py::object& /*self*/) { return DataType("FP64"); })
+    .def_property_readonly_static(
+      "FLOAT64", [](const py::object& /*self*/) { return DataType("FP64"); })
+    .def_property_readonly_static(
+      "STRING", [](const py::object& /*self*/) { return DataType("STRING"); })
     .def("size", &DataType::size)
     .def("str", &DataType::str)
-    .def(py::self == py::self)
+    // defines the __eq__ operator for the class
+    .def(py::self == py::self)  // NOLINT(misc-redundant-expression)
     .def("__repr__",
          [](const DataType& self) {
            return "DataType(" + std::string(self.str()) + ")\n";

@@ -27,6 +27,14 @@ class Server {
  public:
   /// Constructs a new Server object
   Server();
+  /// Copy constructor
+  Server(Server const&) = delete;
+  /// Copy assignment constructor
+  Server& operator=(const Server&) = delete;
+  /// Move constructor
+  Server(Server&& other) = default;
+  /// Move assignment constructor
+  Server& operator=(Server&& other) = default;
   /// Destructor
   ~Server();
 

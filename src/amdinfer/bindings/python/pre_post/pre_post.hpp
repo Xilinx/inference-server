@@ -22,7 +22,7 @@
 
 namespace pybind11 {
 class module_;
-}
+}  // namespace pybind11
 
 namespace amdinfer {
 

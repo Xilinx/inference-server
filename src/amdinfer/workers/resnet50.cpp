@@ -168,7 +168,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     responses.reserve(batch->size());
 
     std::vector<std::unique_ptr<vart::TensorBuffer>> v;
-    v.reserve(batch->input_size());
+    v.reserve(batch->getInputSize());
 
     size_t tensor_count = 0;
     for (unsigned int j = 0; j < batch->size(); j++) {

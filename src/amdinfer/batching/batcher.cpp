@@ -75,7 +75,7 @@ void Batcher::setBatchSize(size_t batch_size) {
 
 void Batcher::setName(const std::string& name) { this->model_ = name; }
 
-std::string Batcher::getName() { return this->model_; }
+std::string Batcher::getName() const { return this->model_; }
 
 BlockingQueue<InterfacePtr>* Batcher::getInputQueue() {
   return this->input_queue_.get();
@@ -160,9 +160,9 @@ size_t Batch::size() const {
   return requests_.size();
 }
 
-size_t Batch::input_size() const { return input_buffers_.size(); }
+size_t Batch::getInputSize() const { return input_buffers_.size(); }
 
-size_t Batch::output_size() const { return output_buffers_.size(); }
+size_t Batch::getOutputSize() const { return output_buffers_.size(); }
 
 #ifdef AMDINFER_ENABLE_TRACING
 void Batch::addTrace(TracePtr trace) { traces_.push_back(std::move(trace)); }
@@ -172,7 +172,7 @@ TracePtr& Batch::getTrace(int index) { return traces_.at(index); }
 
 #ifdef AMDINFER_ENABLE_METRICS
 void Batch::addTime(std::chrono::high_resolution_clock::time_point timestamp) {
-  start_times_.push_back(std::move(timestamp));
+  start_times_.push_back(timestamp);
 }
 
 std::chrono::high_resolution_clock::time_point Batch::getTime(int index) {
