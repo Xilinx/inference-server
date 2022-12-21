@@ -30,10 +30,6 @@
 
 // IWYU pragma: no_forward_declare xir::Datatype
 
-#ifdef AMDINFER_ENABLE_VITIS
-#include <xir/util/data_type.hpp>  // IWYU pragma: keep
-#endif
-
 namespace py = pybind11;
 
 namespace amdinfer {
@@ -89,32 +85,23 @@ void wrapDataType(py::module_& m) {
       return os.str();
     });
 
-  value.value("BOOL", DataType::BOOL)
-    .value("UINT8", DataType::UINT8)
-    .value("UINT16", DataType::UINT16)
-    .value("UINT32", DataType::UINT32)
-    .value("UINT64", DataType::UINT64)
-    .value("INT8", DataType::INT8)
-    .value("INT16", DataType::INT16)
-    .value("INT32", DataType::INT32)
-    .value("INT64", DataType::INT64)
-    .value("FP16", DataType::FP16)
-    .value("FP32", DataType::FP32)
-    .value("FLOAT32", DataType::FP32)
-    .value("FP64", DataType::FP64)
-    .value("FLOAT64", DataType::FP64)
-    .value("STRING", DataType::STRING);
+  value.value("BOOL", DataType::Bool)
+    .value("UINT8", DataType::Uint8)
+    .value("UINT16", DataType::Uint16)
+    .value("UINT32", DataType::Uint32)
+    .value("UINT64", DataType::Uint64)
+    .value("INT8", DataType::Int8)
+    .value("INT16", DataType::Int16)
+    .value("INT32", DataType::Int32)
+    .value("INT64", DataType::Int64)
+    .value("FP16", DataType::Fp16)
+    .value("FP32", DataType::Fp32)
+    .value("FLOAT32", DataType::Fp32)
+    .value("FP64", DataType::Fp64)
+    .value("FLOAT64", DataType::Fp64)
+    .value("STRING", DataType::String);
 
   py::implicitly_convertible<DataType::Value, DataType>();
-}
-
-void wrapTypeMaps([[maybe_unused]] py::module_& m) {
-#ifdef AMDINFER_ENABLE_VITIS
-  py::module_::import("xir").attr("DataType");
-
-  m.def("mapXirType", amdinfer::mapXirToType, py::arg("type"));
-  m.def("mapTypeToXir", amdinfer::mapTypeToXir, py::arg("type"));
-#endif
 }
 
 }  // namespace amdinfer

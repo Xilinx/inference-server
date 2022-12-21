@@ -246,7 +246,7 @@ InferenceRequestInput::InferenceRequestInput(void *data,
   this->parameters_ = std::make_unique<RequestParameters>();
 }
 
-InferenceRequestInput::InferenceRequestInput() : dataType_(DataType::UINT32) {
+InferenceRequestInput::InferenceRequestInput() : dataType_(DataType::Uint32) {
   this->data_ = nullptr;
   this->name_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
@@ -346,7 +346,7 @@ void InferenceRequestInput::deserialize(const std::byte *data_in) {
   uint8_t type;
   std::memcpy(&type, data_in, metadata.dataType);
   data_in += metadata.dataType;
-  dataType_ = DataType(static_cast<DataType::Value>(type));
+  dataType_ = static_cast<DataType::Value>(type);
 
   parameters_ = std::make_shared<RequestParameters>();
   parameters_->deserialize(data_in);

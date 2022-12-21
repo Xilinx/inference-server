@@ -37,7 +37,7 @@
 #include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT8
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint8
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -129,18 +129,18 @@ size_t InvertImage::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::UINT8);
+                         kBufferSize * this->batch_size_, DataType::Uint8);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::UINT8);
+                         kBufferSize * this->batch_size_, DataType::Uint8);
   return buffer_num;
 }
 
 void InvertImage::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::UINT8,
+  this->metadata_.addInputTensor("input", DataType::Uint8,
                                  {this->batch_size_, 1080, 1920, 3});
-  this->metadata_.addOutputTensor("output", DataType::UINT32,
+  this->metadata_.addOutputTensor("output", DataType::Uint32,
                                   {this->batch_size_, 1080, 1920, 3});
 }
 
@@ -180,7 +180,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         // invert image, store in output
         InferenceResponseOutput output;
-        if (input_dtype == DataType::UINT8) {
+        if (input_dtype == DataType::Uint8) {
           // Output will have the same shape as input
           output.setShape(input_shape);
 
@@ -196,8 +196,8 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           buffer.resize(input_size);
           memcpy(buffer.data(), output_data, input_size);
           output.setData(std::move(buffer));
-          output.setDatatype(DataType::UINT8);
-        } else if (input_dtype == DataType::STRING) {
+          output.setDatatype(DataType::Uint8);
+        } else if (input_dtype == DataType::String) {
           auto* idata = static_cast<char*>(input_buffer);
           auto decoded_str = util::base64_decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
@@ -225,7 +225,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           buffer.resize(encoded.size());
           memcpy(buffer.data(), encoded.data(), encoded.length());
           output.setData(std::move(buffer));
-          output.setDatatype(DataType::STRING);
+          output.setDatatype(DataType::String);
           output.setShape({encoded.size()});
         }
 

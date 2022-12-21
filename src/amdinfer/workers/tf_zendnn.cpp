@@ -98,7 +98,7 @@ class TfZendnn : public Worker {
 
   // Input / Output nodes
   std::string input_node_, output_node_;
-  DataType input_dt_ = DataType::FP32;
+  DataType input_dt_ = DataType::Fp32;
 };
 
 std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
@@ -171,7 +171,7 @@ size_t TfZendnn::doAllocate(size_t num) {
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
                          image_size_ * this->batch_size_, input_dt_);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         output_classes_ * this->batch_size_, DataType::FP32);
+                         output_classes_ * this->batch_size_, DataType::Fp32);
   return buffer_num;
 }
 
@@ -224,7 +224,7 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   this->metadata_.addInputTensor(
     "input", input_dt_,
     {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", DataType::FP32, {output_classes_});
+  this->metadata_.addOutputTensor("output", DataType::Fp32, {output_classes_});
   this->metadata_.setName("TfZendnn");
 }
 
@@ -345,7 +345,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
         }
 
         output.setShape(new_shape);
-        output.setDatatype(DataType::FP32);
+        output.setDatatype(DataType::Fp32);
         resp.addOutput(output);
       }
 

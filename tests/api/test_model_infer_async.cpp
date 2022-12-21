@@ -33,7 +33,7 @@ void test(amdinfer::Client* client) {
 
   amdinfer::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         amdinfer::DataType::UINT32);
+                         amdinfer::DataType::Uint32);
 
   const auto num_requests = 16;
   std::queue<amdinfer::InferenceResponseFuture> q;

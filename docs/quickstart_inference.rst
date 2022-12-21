@@ -94,7 +94,7 @@ Each tensor must have a name, a data type, an associated shape and the data itse
         amdinfer::InferenceRequestInput input_tensor;
         // depending on the implementation, the string used here may be significant
         input_tensor.setName("input_0");
-        input_tensor.setDatatype(amdinfer::DataType::INT64);
+        input_tensor.setDatatype(amdinfer::DataType::Int64);
         input_tensor.setShape({2, 3});
         // the data should be flattened
         std::vector<uint64_t> data{{1, 2, 3, 4, 5, 6}};

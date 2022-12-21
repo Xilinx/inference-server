@@ -32,7 +32,7 @@ void test(amdinfer::Client* client) {
 
   amdinfer::InferenceRequest request;
   request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         amdinfer::DataType::UINT32);
+                         amdinfer::DataType::Uint32);
 
   auto response = client->modelInfer(endpoint, request);
 

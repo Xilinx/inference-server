@@ -100,13 +100,13 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     for (size_t i = 0; i < kBufferNum; i++) {
       BufferPtrs vec;
       vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
-                                                      DataType::UINT8));
+                                                      DataType::Uint8));
       this->worker_->putInputBuffer(std::move(vec));
     }
     for (size_t i = 0; i < kBufferNum; i++) {
       BufferPtrs vec;
       vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
-                                                      DataType::UINT8));
+                                                      DataType::Uint8));
       this->worker_->putOutputBuffer(std::move(vec));
     }
 
@@ -172,7 +172,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
   InferenceRequest create_request() {
     InferenceRequest request;
     request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
-                           DataType::UINT8);
+                           DataType::Uint8);
     return request;
   }
 

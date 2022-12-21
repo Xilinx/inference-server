@@ -44,7 +44,7 @@
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -124,9 +124,9 @@ size_t AksDetect::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::UINT8);
+                         kImageSize * this->batch_size_, DataType::Uint8);
   VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::Uint32);
   return buffer_num;
 }
 
@@ -162,10 +162,10 @@ void AksDetect::doAcquire(RequestParameters* parameters) {
   this->graph_ = this->sysMan_->getGraph(this->graphName_);
 
   this->metadata_.addInputTensor(
-    "input", DataType::INT8,
+    "input", DataType::Int8,
     {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
   // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", DataType::UINT32, {0});
+  this->metadata_.addOutputTensor("output", DataType::Uint32, {0});
   this->metadata_.setName(this->graphName_);
 }
 
@@ -212,7 +212,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
         auto input_dtype = input.getDatatype();
 
         std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
-        if (input_dtype == DataType::UINT8) {
+        if (input_dtype == DataType::Uint8) {
           if (tensor_count == 0) {
             tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
                                 input_shape.end());
@@ -224,7 +224,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
           memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
                    ((tensor_count % this->batch_size_) * input_size),
                  input_buffer, input_size);
-        } else if (input_dtype == DataType::STRING) {
+        } else if (input_dtype == DataType::String) {
           auto* idata = static_cast<char*>(input_buffer);
           auto decoded_str = util::base64_decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
@@ -289,7 +289,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
       for (unsigned int i = 0; i < inputs.size(); i++) {
         InferenceResponseOutput output;
 
-        output.setDatatype(DataType::FP32);
+        output.setDatatype(DataType::Fp32);
 
         std::string output_name = outputs[i].getName();
         if (output_name.empty()) {

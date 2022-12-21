@@ -124,8 +124,6 @@ CheckOptions:
     value: CamelCase
   - key:   readability-identifier-naming.EnumConstantCase
     value: CamelCase
-  - key:   readability-identifier-naming.EnumConstantPrefix
-    value: k
   - key:   readability-identifier-naming.FunctionCase
     value: camelBack
   - key:   readability-identifier-naming.GlobalConstantCase
@@ -145,9 +143,13 @@ CheckOptions:
   - key:   readability-identifier-naming.InlineNamespaceCase
     value: lower_case
   - key:   readability-identifier-naming.LocalConstantCase
-    value: lower_case
+    value: CamelCase
+  - key:   readability-identifier-naming.LocalConstantPrefix
+    value: k
   - key:   readability-identifier-naming.LocalConstantPointerCase
-    value: lower_case
+    value: CamelCase
+  - key:   readability-identifier-naming.LocalConstantPointerPrefix
+    value: k
   - key:   readability-identifier-naming.LocalPointerCase
     value: lower_case
   - key:   readability-identifier-naming.LocalVariableCase

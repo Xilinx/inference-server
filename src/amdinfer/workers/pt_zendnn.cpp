@@ -38,7 +38,7 @@
 #include "amdinfer/batching/hard.hpp"          // for Batch, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Fp32
 #include "amdinfer/core/exceptions.hpp"        // for external_error, file_no...
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Requ...
 #include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
@@ -93,7 +93,7 @@ class PtZendnn : public Worker {
   unsigned image_width_, image_height_, image_channels_, image_size_;
   unsigned output_classes_;
 
-  DataType input_dt_ = DataType::FP32;
+  DataType input_dt_ = DataType::Fp32;
 };
 
 std::thread PtZendnn::spawn(BatchPtrQueue* input_queue) {
@@ -147,7 +147,7 @@ size_t PtZendnn::doAllocate(size_t num) {
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
                          image_size_ * this->batch_size_, input_dt_);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         output_classes_ * this->batch_size_, DataType::FP32);
+                         output_classes_ * this->batch_size_, DataType::Fp32);
   return buffer_num;
 }
 
@@ -195,7 +195,7 @@ void PtZendnn::doAcquire(RequestParameters* parameters) {
   this->metadata_.addInputTensor(
     "input", input_dt_,
     {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", DataType::FP32, {0});
+  this->metadata_.addOutputTensor("output", DataType::Fp32, {0});
   this->metadata_.setName("PtZendnn");
 }
 
@@ -321,7 +321,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
         }
 
         output.setShape(new_shape);
-        output.setDatatype(DataType::FP32);
+        output.setDatatype(DataType::Fp32);
         resp.addOutput(output);
       }
 

@@ -64,7 +64,7 @@ std::vector<InferenceRequest> constructRequests(const Images& images) {
   for (const auto& image : images) {
     requests.emplace_back();
     requests.back().addInputTensor(const_cast<float*>(image.data()), shape,
-                                   DataType::INT8);
+                                   DataType::Int8);
   }
 
   return requests;

@@ -49,7 +49,7 @@ void test(amdinfer::Client* client) {
 
   InferenceRequestInput input_0;
   input_0.setName("input0");
-  input_0.setDatatype(DataType::FP32);
+  input_0.setDatatype(DataType::Fp32);
   input_0.setShape({28, 28, 1});
   input_0.setData(img.data);
 
@@ -62,7 +62,7 @@ void test(amdinfer::Client* client) {
   EXPECT_EQ(outputs.size(), 1);
   const auto& output = outputs[0];
   EXPECT_EQ(output.getSize(), 10);
-  EXPECT_EQ(output.getDatatype(), DataType::FP32);
+  EXPECT_EQ(output.getDatatype(), DataType::Fp32);
   const auto* data = static_cast<float*>(output.getData());
 
   float max = 0;

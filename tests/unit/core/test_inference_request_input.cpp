@@ -29,7 +29,7 @@ TEST(UnitInferenceRequestInput, SerDes) {
     data.push_back(static_cast<char>('a' + i));
   }
 
-  InferenceRequestInput req(data.data(), {data_size}, DataType::UINT8, "test");
+  InferenceRequestInput req(data.data(), {data_size}, DataType::Uint8, "test");
 
   std::vector<std::byte> serial_data;
   serial_data.reserve(req.serializeSize());
@@ -62,7 +62,7 @@ TEST(UnitInferenceRequestInput, SerDes2) {
     data.push_back(c);
   }
 
-  InferenceRequestInput req(nullptr, {data_size}, DataType::UINT8, "test");
+  InferenceRequestInput req(nullptr, {data_size}, DataType::Uint8, "test");
   req.setData(std::move(data));
 
   std::vector<std::byte> serial_data;

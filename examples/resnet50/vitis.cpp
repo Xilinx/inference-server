@@ -103,7 +103,7 @@ std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
   for (const auto& image : images) {
     requests.emplace_back();
     requests.back().addInputTensor((void*)image.data(), shape,
-                                   amdinfer::DataType::INT8);
+                                   amdinfer::DataType::Int8);
   }
   // -construct request:
 

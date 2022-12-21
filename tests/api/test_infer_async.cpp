@@ -36,7 +36,7 @@ TEST_F(HttpFixture, Ordered) {
   imgData.push_back(1);
 
   amdinfer::InferenceRequest request;
-  request.addInputTensor(imgData.data(), shape, amdinfer::DataType::UINT32);
+  request.addInputTensor(imgData.data(), shape, amdinfer::DataType::Uint32);
 
   const auto data_size = 10;
   std::vector<InferenceRequest> reqs;

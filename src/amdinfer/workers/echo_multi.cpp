@@ -31,7 +31,7 @@
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -107,7 +107,7 @@ size_t EchoMulti::doAllocate(size_t num) {
     BufferPtrs vec;
     for (auto j = 0; j < kInputTensors; ++j) {
       vec.emplace_back(std::make_unique<VectorBuffer>(
-        kInputLengths[j] * this->batch_size_, DataType::UINT32));
+        kInputLengths[j] * this->batch_size_, DataType::Uint32));
     }
     this->input_buffers_->enqueue(std::move(vec));
   }
@@ -115,7 +115,7 @@ size_t EchoMulti::doAllocate(size_t num) {
     BufferPtrs vec;
     for (auto j = 0; j < kOutputTensors; ++j) {
       vec.emplace_back(std::make_unique<VectorBuffer>(
-        kOutputLengths[j] * this->batch_size_, DataType::UINT32));
+        kOutputLengths[j] * this->batch_size_, DataType::Uint32));
     }
     this->output_buffers_->enqueue(std::move(vec));
   }
@@ -125,12 +125,12 @@ size_t EchoMulti::doAllocate(size_t num) {
 void EchoMulti::doAcquire([[maybe_unused]] RequestParameters* parameters) {
   for (auto i = 0; i < kInputTensors; ++i) {
     this->metadata_.addInputTensor("input" + std::to_string(i),
-                                   DataType::UINT32,
+                                   DataType::Uint32,
                                    {static_cast<uint64_t>(kInputLengths[i])});
   }
   for (auto i = 0; i < kOutputTensors; ++i) {
     this->metadata_.addInputTensor("input" + std::to_string(i),
-                                   DataType::UINT32,
+                                   DataType::Uint32,
                                    {static_cast<uint64_t>(kOutputLengths[i])});
   }
 }
@@ -188,7 +188,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
         }
 
         InferenceResponseOutput output;
-        output.setDatatype(DataType::UINT32);
+        output.setDatatype(DataType::Uint32);
         std::string output_name = outputs[i].getName();
         if (output_name.empty()) {
           output.setName(inputs[0].getName());

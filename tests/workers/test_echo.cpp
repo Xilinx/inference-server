@@ -34,7 +34,7 @@ class EchoParamFixture
 
     InferenceRequestInput input_0;
     input_0.setName("echo");
-    input_0.setDatatype(DataType::UINT32);
+    input_0.setDatatype(DataType::Uint32);
     input_0.setShape({1});
     input_0.setData((void*)(&(inputs_[0])));
     if (add_input_parameters) {
@@ -89,7 +89,7 @@ class EchoParamFixture
       const auto& output = outputs[i];
       const auto* data = static_cast<uint32_t*>(output.getData());
       EXPECT_EQ(data[0], golden_outputs_[0]);
-      EXPECT_EQ(output.getDatatype(), DataType::UINT32);
+      EXPECT_EQ(output.getDatatype(), DataType::Uint32);
       EXPECT_EQ(output.getName(), "echo");
       EXPECT_TRUE(output.getParameters()->empty());
       auto shape = output.getShape();

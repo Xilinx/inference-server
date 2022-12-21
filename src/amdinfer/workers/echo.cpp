@@ -31,7 +31,7 @@
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -99,17 +99,17 @@ size_t Echo::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::Uint32);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::Uint32);
   return buffer_num;
 }
 
 void Echo::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::UINT32, {1});
-  this->metadata_.addOutputTensor("output", DataType::UINT32, {1});
+  this->metadata_.addInputTensor("input", DataType::Uint32, {1});
+  this->metadata_.addOutputTensor("output", DataType::Uint32, {1});
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {
@@ -161,7 +161,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         // output_buffer->write(value);
 
         InferenceResponseOutput output;
-        output.setDatatype(DataType::UINT32);
+        output.setDatatype(DataType::Uint32);
         std::string output_name = outputs[i].getName();
         if (output_name.empty()) {
           output.setName(inputs[i].getName());

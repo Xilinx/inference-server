@@ -32,7 +32,7 @@
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
@@ -94,31 +94,31 @@ class MIGraphXWorker : public Worker {
     switch (in) {
       // case 0 is tuple_type which we don't support here
       case migraphx_shape_bool_type:
-        return DataType::BOOL;
+        return DataType::Bool;
       case migraphx_shape_half_type:
-        return DataType::FP16;
+        return DataType::Fp16;
       case migraphx_shape_float_type:
-        return DataType::FP32;
+        return DataType::Fp32;
       case migraphx_shape_double_type:
-        return DataType::FP64;
+        return DataType::Fp64;
       case migraphx_shape_uint8_type:
-        return DataType::UINT8;
+        return DataType::Uint8;
       case migraphx_shape_int8_type:
-        return DataType::INT8;
+        return DataType::Int8;
       case migraphx_shape_uint16_type:
-        return DataType::UINT16;
+        return DataType::Uint16;
       case migraphx_shape_int16_type:
-        return DataType::INT16;
+        return DataType::Int16;
       case migraphx_shape_int32_type:
-        return DataType::INT32;
+        return DataType::Int32;
       case migraphx_shape_int64_type:
-        return DataType::INT64;
+        return DataType::Int64;
       case migraphx_shape_uint32_type:
-        return DataType::UINT32;
+        return DataType::Uint32;
       case migraphx_shape_uint64_type:
-        return DataType::UINT64;
+        return DataType::Uint64;
       default:
-        return DataType::UNKNOWN;
+        return DataType::Unknown;
     }
   }
 };
@@ -343,7 +343,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
       // be called in a loop like this.  Using 1 in place of kBufferNum
 
       buffer_vec.emplace_back(
-        std::make_unique<VectorBuffer>(max_buffer, DataType::UINT8));
+        std::make_unique<VectorBuffer>(max_buffer, DataType::Uint8));
     }
     this->input_buffers_->enqueue(std::move(buffer_vec));
 
@@ -357,7 +357,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
     // Output buffers aren't used by the engine at time of writing this,
     // but allocate them anyway. (Use number of outputs for kBufferNum)
     VectorBuffer::allocate(this->output_buffers_, output_shapes.size(),
-                           out_buffer_size, amdinfer::DataType::INT8);
+                           out_buffer_size, amdinfer::DataType::Int8);
   } catch (...) {
     AMDINFER_LOG_ERROR(
       logger,

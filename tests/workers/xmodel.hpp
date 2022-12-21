@@ -182,7 +182,7 @@ int run(std::string xmodel, int images, int threads, int runners) {
   }
 
   std::vector<uint64_t> shape;
-  amdinfer::DataType type = amdinfer::DataType::INT8;
+  amdinfer::DataType type = amdinfer::DataType::Int8;
   {
     std::unique_ptr<xir::Graph> graph = xir::Graph::deserialize(xmodel);
     auto subgraphs = get_dpu_subgraphs(graph.get());

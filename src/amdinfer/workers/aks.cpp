@@ -38,7 +38,7 @@
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Fp32
 #include "amdinfer/core/exceptions.hpp"        // for external_error
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
@@ -105,9 +105,9 @@ size_t Aks::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::FP32);
+                         1 * this->batch_size_, DataType::Fp32);
   VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::FP32);
+                         1 * this->batch_size_, DataType::Fp32);
   return buffer_num;
 }
 
@@ -127,9 +127,9 @@ void Aks::doAcquire(RequestParameters* parameters) {
     throw external_error("AKS graph " + graph_name + " not found");
   }
 
-  this->metadata_.addInputTensor("input", DataType::FP32,
+  this->metadata_.addInputTensor("input", DataType::Fp32,
                                  {this->batch_size_, 1});
-  this->metadata_.addOutputTensor("output", DataType::FP32,
+  this->metadata_.addOutputTensor("output", DataType::Fp32,
                                   {this->batch_size_, 1});
   this->metadata_.setName(graph_name);
 }
@@ -183,7 +183,7 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
         value = (reinterpret_cast<float*>(outDD[0]->data().first))[0];
 
         InferenceResponseOutput output;
-        output.setDatatype(DataType::FP32);
+        output.setDatatype(DataType::Fp32);
         output.setName("aks");
         output.setShape({1});
         std::vector<std::byte> buffer;

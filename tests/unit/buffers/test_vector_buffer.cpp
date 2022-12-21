@@ -26,7 +26,7 @@
 namespace amdinfer {
 
 constexpr auto kBufferSize = 10;
-// constexpr auto kDataType = DataType::INT32;
+// constexpr auto kDataType = DataType::Int32;
 // constexpr auto kDataSize = types::getSize(kDataType);
 constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
 
@@ -95,12 +95,12 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
-DataType datatypes[] = {amdinfer::DataType::BOOL,   amdinfer::DataType::UINT8,
-                        amdinfer::DataType::UINT16, amdinfer::DataType::UINT32,
-                        amdinfer::DataType::UINT64, amdinfer::DataType::INT8,
-                        amdinfer::DataType::INT16,  amdinfer::DataType::INT32,
-                        amdinfer::DataType::INT64,  amdinfer::DataType::FP16,
-                        amdinfer::DataType::FP32,   amdinfer::DataType::FP64};
+DataType datatypes[] = {amdinfer::DataType::Bool,   amdinfer::DataType::Uint8,
+                        amdinfer::DataType::Uint16, amdinfer::DataType::Uint32,
+                        amdinfer::DataType::Uint64, amdinfer::DataType::Int8,
+                        amdinfer::DataType::Int16,  amdinfer::DataType::Int32,
+                        amdinfer::DataType::Int64,  amdinfer::DataType::Fp16,
+                        amdinfer::DataType::Fp32,   amdinfer::DataType::Fp64};
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitVectorBufferFixture,
                          testing::ValuesIn(datatypes));
 

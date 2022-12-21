@@ -136,9 +136,9 @@ TEST_P(Fixture, TestRequestToProto) {
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
 const std::array<DataType, 12> datatypes = {
-  DataType::BOOL,   DataType::UINT8, DataType::UINT16, DataType::UINT32,
-  DataType::UINT64, DataType::INT8,  DataType::INT16,  DataType::INT32,
-  DataType::INT64,  DataType::FP16,  DataType::FP32,   DataType::FP64};
+  DataType::Bool,   DataType::Uint8, DataType::Uint16, DataType::Uint32,
+  DataType::Uint64, DataType::Int8,  DataType::Int16,  DataType::Int32,
+  DataType::Int64,  DataType::Fp16,  DataType::Fp32,   DataType::Fp64};
 INSTANTIATE_TEST_SUITE_P(UnitClientsGrpcInternal, Fixture,
                          testing::ValuesIn(datatypes));
 

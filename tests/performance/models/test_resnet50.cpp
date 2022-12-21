@@ -153,7 +153,7 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
       [&](const ImagePreprocessOptions<float, 3>& options_) {
         auto images = amdinfer::pre_post::imagePreprocess(paths, options_);
         request.addInputTensor(images[0].data(), {3, kInputSize, kInputSize},
-                               amdinfer::DataType::FLOAT32);
+                               amdinfer::DataType::Fp32);
       },
     },
     options);

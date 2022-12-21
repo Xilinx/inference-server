@@ -55,7 +55,7 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
 
     amdinfer::InferenceRequest request;
     request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                           amdinfer::DataType::UINT8);
+                           amdinfer::DataType::Uint8);
 
     auto future = client.modelInferAsync(workerName, request);
     my_queue.enqueue(std::move(future));
