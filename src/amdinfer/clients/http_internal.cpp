@@ -249,7 +249,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
 #ifdef AMDINFER_ENABLE_LOGGING
     Logger logger{Loggers::kServer};
 #endif
-    input.data_ = input_buffer->data();
+    input.data_ = input_buffer->data(0);
 
     if (!req->isMember("name")) {
       throw invalid_argument("No 'name' key present in request input");
@@ -372,7 +372,7 @@ InferenceRequestPtr RequestBuilder::build(
 
       auto output =
         OutputBuilder::build(std::make_shared<Json::Value>(json_output));
-      output.setData(static_cast<std::byte *>(buffer->data()) + offset);
+      output.setData(static_cast<std::byte *>(buffer->data(offset)));
       request->outputs_.push_back(std::move(output));
       // output += request->outputs_.back().getSize(); // see TODO
     }
@@ -383,7 +383,7 @@ InferenceRequestPtr RequestBuilder::build(
 
       request->outputs_.emplace_back();
       request->outputs_.back().setData(
-        static_cast<std::byte *>(buffer->data()) + offset);
+        static_cast<std::byte *>(buffer->data(offset)));
     }
   }
 

@@ -252,7 +252,7 @@ class InferenceRequestInputBuilder<
     input.parameters_ = mapProtoToParameters(req.parameters());
 
     auto size = input.getSize();
-    auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
+    auto* dest = static_cast<std::byte*>(input_buffer->data(offset));
     AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
                                           " elements of type " +
                                           input.data_type_.str() + " to " +
@@ -373,7 +373,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
-            static_cast<std::byte*>(buffer->data()) + offset);
+            static_cast<std::byte*>(buffer->data(offset)));
           index++;
         }
       }
@@ -387,7 +387,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
-            static_cast<std::byte*>(buffer->data()) + offset);
+            static_cast<std::byte*>(buffer->data(offset)));
         }
       }
     }

@@ -57,7 +57,7 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
     auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
                                 std::multiplies<>()) *
                 input.data_type_.size();
-    auto *dest = static_cast<std::byte *>(input_buffer->data()) + offset;
+    auto *dest = static_cast<std::byte *>(input_buffer->data(offset));
     memcpy(dest, req.data_, size);
 
     input.data_ = dest;
@@ -105,7 +105,7 @@ class InferenceRequestBuilder<InferenceRequest> {
 
           request->outputs_.emplace_back(output);
           request->outputs_.back().setData(
-            static_cast<std::byte *>(buffer->data()) + offset);
+            static_cast<std::byte *>(buffer->data(offset)));
           index++;
         }
       }
@@ -119,7 +119,7 @@ class InferenceRequestBuilder<InferenceRequest> {
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
-            static_cast<std::byte *>(buffer->data()) + offset);
+            static_cast<std::byte *>(buffer->data(offset)));
           index++;
         }
       }

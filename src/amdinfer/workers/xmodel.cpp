@@ -262,7 +262,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       outputsPtr.reserve(output_buffers.size());
 
       for (const auto& buffer : input_buffers) {
-        logTraceBuffer(getLogger(), buffer->data());
+        logTraceBuffer(getLogger(), buffer->data(0));
       }
 
       for (const auto& buffer : input_buffers) {
@@ -312,7 +312,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 
         const auto num_outputs = outputs.size();
         for (unsigned int i = 0; i < num_outputs; i++) {
-          auto* output_index = output_buffers[i]->data();
+          auto* output_index = output_buffers[i]->data(0);
           InferenceResponseOutput output;
           auto output_tensors = getRunner()->get_output_tensors();
           auto output_shape = output_tensors[i]->get_shape();
