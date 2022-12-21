@@ -58,18 +58,18 @@ void NativeClient::modelLoad(const std::string& model,
   }
 }
 
-std::string NativeClient::workerLoad(const std::string& model,
+std::string NativeClient::workerLoad(const std::string& worker,
                                      RequestParameters* parameters) const {
-  auto model_lower = util::toLower(model);
+  auto worker_lower = util::toLower(worker);
   if (parameters == nullptr) {
     RequestParameters params;
-    return ::amdinfer::workerLoad(model_lower, &params);
+    return ::amdinfer::workerLoad(worker_lower, &params);
   }
-  return ::amdinfer::workerLoad(model_lower, parameters);
+  return ::amdinfer::workerLoad(worker_lower, parameters);
 }
 
 InferenceResponseFuture NativeClient::modelInferAsync(
-  const std::string& workerName, const InferenceRequest& request) const {
+  const std::string& model, const InferenceRequest& request) const {
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
 #endif
@@ -84,7 +84,7 @@ InferenceResponseFuture NativeClient::modelInferAsync(
   trace->endSpan();
   api->setTrace(std::move(trace));
 #endif
-  ::amdinfer::modelInfer(workerName, std::move(api));
+  ::amdinfer::modelInfer(model, std::move(api));
 
   return future;
 }
@@ -97,12 +97,12 @@ InferenceResponse NativeClient::modelInfer(
 
 void NativeClient::modelUnload(const std::string& model) const {
   auto model_lower = util::toLower(model);
-  ::amdinfer::modelUnload(model);
+  ::amdinfer::modelUnload(model_lower);
 }
 
-void NativeClient::workerUnload(const std::string& model) const {
-  auto model_lower = util::toLower(model);
-  ::amdinfer::workerUnload(model);
+void NativeClient::workerUnload(const std::string& worker) const {
+  auto worker_lower = util::toLower(worker);
+  ::amdinfer::workerUnload(worker_lower);
 }
 
 bool NativeClient::modelReady(const std::string& model) const {

@@ -84,7 +84,7 @@ class InferenceRequestBuilder<InferenceRequest> {
     for (const auto &input : req.inputs_) {
       const auto &buffers = input_buffers;
       auto index = 0;
-      for (auto &buffer : buffers) {
+      for (const auto &buffer : buffers) {
         auto &offset = input_offsets[index];
 
         request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
@@ -100,7 +100,7 @@ class InferenceRequestBuilder<InferenceRequest> {
       for (const auto &output : req.outputs_) {
         const auto &buffers = output_buffers;
         auto index = 0;
-        for (auto &buffer : buffers) {
+        for (const auto &buffer : buffers) {
           const auto &offset = output_offsets[index];
 
           request->outputs_.emplace_back(output);
@@ -114,7 +114,7 @@ class InferenceRequestBuilder<InferenceRequest> {
         (void)input;  // suppress unused variable warning
         const auto &buffers = output_buffers;
         auto index = 0;
-        for (auto &buffer : buffers) {
+        for (const auto &buffer : buffers) {
           const auto &offset = output_offsets[index];
 
           request->outputs_.emplace_back();

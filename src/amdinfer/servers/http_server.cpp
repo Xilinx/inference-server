@@ -181,7 +181,7 @@ void v2::AmdinferHttpServer::getModelMetadata(
   bool error = false;
   try {
     auto metadata = ::amdinfer::modelMetadata(model);
-    ret = ModelMetadataToJson(metadata);
+    ret = modelMetadataToJson(metadata);
   } catch (const runtime_error &e) {
     ret["error"] = e.what();
     error = true;

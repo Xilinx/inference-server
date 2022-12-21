@@ -55,7 +55,7 @@ class WebSocketClient::WebSocketClientImpl {
       [&](const std::string& message, const drogon::WebSocketClientPtr& client,
           const drogon::WebSocketMessageType& type) {
         (void)client;
-        std::string messageType = "Unknown";
+        std::string message_type = "Unknown";
         switch (type) {
           case WebSocketMessageType::Text: {
             // Json::CharReaderBuilder builder;
@@ -88,7 +88,7 @@ class WebSocketClient::WebSocketClientImpl {
       });
 
     ws_client_->setConnectionClosedHandler(
-      [&](const drogon::WebSocketClientPtr&) {});
+      [&](const drogon::WebSocketClientPtr& /* client */) {});
   }
 
   ~WebSocketClientImpl() {
@@ -161,71 +161,71 @@ void WebSocketClient::close() const {
 }
 
 ServerMetadata WebSocketClient::serverMetadata() const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->serverMetadata();
 }
 
 bool WebSocketClient::serverLive() const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->serverLive();
 }
 
 bool WebSocketClient::serverReady() const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->serverReady();
 }
 
 bool WebSocketClient::modelReady(const std::string& model) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->modelReady(model);
 }
 
 ModelMetadata WebSocketClient::modelMetadata(const std::string& model) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->modelMetadata(model);
 }
 
 void WebSocketClient::modelLoad(const std::string& model,
                                 RequestParameters* parameters) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   client->modelLoad(model, parameters);
 }
 
 void WebSocketClient::modelUnload(const std::string& model) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   client->modelUnload(model);
 }
 
-std::string WebSocketClient::workerLoad(const std::string& model,
+std::string WebSocketClient::workerLoad(const std::string& worker,
                                         RequestParameters* parameters) const {
-  auto* client = this->impl_->getHttpClient();
-  return client->workerLoad(model, parameters);
+  const auto* client = this->impl_->getHttpClient();
+  return client->workerLoad(worker, parameters);
 }
 
-void WebSocketClient::workerUnload(const std::string& model) const {
-  auto* client = this->impl_->getHttpClient();
-  client->workerUnload(model);
+void WebSocketClient::workerUnload(const std::string& worker) const {
+  const auto* client = this->impl_->getHttpClient();
+  client->workerUnload(worker);
 }
 
 InferenceResponseFuture WebSocketClient::modelInferAsync(
   const std::string& model, const InferenceRequest& request) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->modelInferAsync(model, request);
 }
 
 InferenceResponse WebSocketClient::modelInfer(
   const std::string& model, const InferenceRequest& request) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->modelInfer(model, request);
 }
 
 std::vector<std::string> WebSocketClient::modelList() const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->modelList();
 }
 
 bool WebSocketClient::hasHardware(const std::string& name, int num) const {
-  auto* client = this->impl_->getHttpClient();
+  const auto* client = this->impl_->getHttpClient();
   return client->hasHardware(name, num);
 }
 

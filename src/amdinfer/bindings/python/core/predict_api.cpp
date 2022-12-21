@@ -206,7 +206,8 @@ void setData(amdinfer::InferenceRequestInput &self, py::array_t<T> &b) {
 
 void wrapInferenceRequestInput(py::module_ &m) {
   // need to use function pointer to disambiguate overloaded function
-  auto set_shape =
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  auto setShape =
     static_cast<void (InferenceRequestInput::*)(const std::vector<uint64_t> &)>(
       &InferenceRequestInput::setShape);
 
@@ -250,7 +251,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def("getStringData", &getData<char>, keep_alive_return())
     .def_property("name", &InferenceRequestInput::getName,
                   &InferenceRequestInput::setName)
-    .def_property("shape", &InferenceRequestInput::getShape, set_shape)
+    .def_property("shape", &InferenceRequestInput::getShape, setShape)
     .def_property("datatype", &InferenceRequestInput::getDatatype,
                   &InferenceRequestInput::setDatatype)
     .def_property("parameters", &InferenceRequestInput::getParameters,
@@ -316,7 +317,8 @@ void wrapInferenceResponse(py::module_ &m) {
 
 void wrapInferenceRequest(py::module_ &m) {
   // need to use a function pointer to disambiguate overloaded function
-  auto add_input_tensor =
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  auto addInputTensor =
     static_cast<void (InferenceRequest::*)(InferenceRequestInput)>(
       &InferenceRequest::addInputTensor);
   py::class_<InferenceRequest>(m, "InferenceRequest")
@@ -332,7 +334,7 @@ void wrapInferenceRequest(py::module_ &m) {
          DOCS(InferenceRequest, getInputs))
     .def("getInputSize", &InferenceRequest::getInputSize,
          DOCS(InferenceRequest, getInputSize))
-    .def("addInputTensor", add_input_tensor, py::arg("input"),
+    .def("addInputTensor", addInputTensor, py::arg("input"),
          keep_alive_assign(), DOCS(InferenceRequest, addInputTensor))
     .def("addOutputTensor", &InferenceRequest::addOutputTensor,
          py::arg("output"), keep_alive_assign(),

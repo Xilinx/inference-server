@@ -86,12 +86,12 @@ void mapProtoToParameters(
 // refer to cppreference for std::visit
 // helper type for the visitor #4
 template <class... Ts>
-struct overloaded : Ts... {
+struct Overloaded : Ts... {
   using Ts::operator()...;
 };
 // explicit deduction guide (not needed as of C++20)
 template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
+Overloaded(Ts...) -> Overloaded<Ts...>;
 
 void mapParametersToProto(
   const std::map<std::string, amdinfer::Parameter, std::less<>>& parameters,
@@ -100,7 +100,7 @@ void mapParametersToProto(
   for (const auto& [key, value] : parameters) {
     inference::InferParameter param;
     std::visit(
-      overloaded{[&](bool arg) { param.set_bool_param(arg); },
+      Overloaded{[&](bool arg) { param.set_bool_param(arg); },
                  [&](double arg) { param.set_double_param(arg); },
                  [&](int32_t arg) { param.set_int64_param(arg); },
                  [&](const std::string& arg) { param.set_string_param(arg); }},

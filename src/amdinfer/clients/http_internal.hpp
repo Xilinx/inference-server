@@ -108,7 +108,7 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
                                           int status_code);
 
 /// convert the metadata to a JSON representation compatible with the server
-Json::Value ModelMetadataToJson(const ModelMetadata &metadata);
+Json::Value modelMetadataToJson(const ModelMetadata &metadata);
 ModelMetadata mapJsonToModelMetadata(const Json::Value *json);
 
 }  // namespace amdinfer

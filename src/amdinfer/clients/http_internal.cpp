@@ -47,33 +47,33 @@
 
 namespace amdinfer {
 
-RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
-  auto parameters_ = std::make_shared<RequestParameters>();
-  for (auto const &id : parameters.getMemberNames()) {
-    if (parameters[id].isString()) {
-      parameters_->put(id, parameters[id].asString());
-    } else if (parameters[id].isBool()) {
-      parameters_->put(id, parameters[id].asBool());
-    } else if (parameters[id].isUInt()) {
-      parameters_->put(id, static_cast<int32_t>(parameters[id].asInt()));
-    } else if (parameters[id].isDouble()) {
-      parameters_->put(id, parameters[id].asDouble());
+RequestParametersPtr mapJsonToParameters(Json::Value json) {
+  auto parameters = std::make_shared<RequestParameters>();
+  for (auto const &id : json.getMemberNames()) {
+    if (json[id].isString()) {
+      parameters->put(id, json[id].asString());
+    } else if (json[id].isBool()) {
+      parameters->put(id, json[id].asBool());
+    } else if (json[id].isUInt()) {
+      parameters->put(id, json[id].asInt());
+    } else if (json[id].isDouble()) {
+      parameters->put(id, json[id].asDouble());
     } else {
       throw invalid_argument("Unknown parameter type, skipping");
     }
   }
-  return parameters_;
+  return parameters;
 }
 
 // refer to cppreference for std::visit
 // helper type for the visitor #4
 template <class... Ts>
-struct overloaded : Ts... {
+struct Overloaded : Ts... {
   using Ts::operator()...;
 };
 // explicit deduction guide (not needed as of C++20)
 template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
+Overloaded(Ts...) -> Overloaded<Ts...>;
 
 Json::Value mapParametersToJson(RequestParameters *parameters) {
   Json::Value json = Json::objectValue;
@@ -81,7 +81,7 @@ Json::Value mapParametersToJson(RequestParameters *parameters) {
   for (const auto &parameter : *parameters) {
     const auto &key = parameter.first;
     const auto &value = parameter.second;
-    std::visit(overloaded{[&](bool arg) { json[key] = arg; },
+    std::visit(Overloaded{[&](bool arg) { json[key] = arg; },
                           [&](double arg) { json[key] = arg; },
                           [&](int32_t arg) { json[key] = arg; },
                           [&](const std::string &arg) { json[key] = arg; }},
@@ -174,6 +174,7 @@ struct SetInputData {
       std::string str{data, src_size};
       json->append(str);
     } else {
+      // NOLINTNEXTLINE(readability-identifier-naming)
       constexpr auto getData = [](const T *data_ptr, size_t index) {
         if constexpr (std::is_same_v<T, uint64_t>) {
           return static_cast<Json::UInt64>(data_ptr[index]);
@@ -543,7 +544,7 @@ void DrogonHttp::errorHandler(const std::exception &e) {
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
 }
 
-Json::Value ModelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
+Json::Value modelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
   ret["datatype"] = metadata.getDataType().str();
@@ -554,18 +555,18 @@ Json::Value ModelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   return ret;
 }
 
-Json::Value ModelMetadataToJson(const ModelMetadata &metadata) {
+Json::Value modelMetadataToJson(const ModelMetadata &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
   ret["versions"] = Json::arrayValue;
   ret["platform"] = metadata.getPlatform();
   ret["inputs"] = Json::arrayValue;
   for (const auto &input : metadata.getInputs()) {
-    ret["inputs"].append(ModelMetadataTensorToJson(input));
+    ret["inputs"].append(modelMetadataTensorToJson(input));
   }
   ret["outputs"] = Json::arrayValue;
   for (const auto &output : metadata.getOutputs()) {
-    ret["inputs"].append(ModelMetadataTensorToJson(output));
+    ret["inputs"].append(modelMetadataTensorToJson(output));
   }
   return ret;
 }

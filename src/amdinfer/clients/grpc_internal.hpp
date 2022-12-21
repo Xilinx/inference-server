@@ -32,7 +32,7 @@
 namespace google::protobuf {
 template <typename T, typename U>
 class Map;
-}
+}  // namespace google::protobuf
 
 namespace inference {
 class InferParameter;
