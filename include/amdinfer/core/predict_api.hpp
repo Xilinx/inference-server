@@ -121,24 +121,24 @@ class RequestParameters : public Serializable {
   /// Checks if the parameters are empty
   [[nodiscard]] bool empty() const;
   /// Gets the underlying data structure holding the parameters
-  [[nodiscard]] std::map<std::string, Parameter> data() const;
+  [[nodiscard]] std::map<std::string, Parameter, std::less<>> data() const;
 
   /// Returns a read/write iterator to the first parameter in the object
   auto begin() { return parameters_.begin(); }
   /// Returns a read iterator to the first parameter in the object
-  auto cbegin() const { return parameters_.cbegin(); }
+  [[nodiscard]] auto cbegin() const { return parameters_.cbegin(); }
 
   /// Returns a read/write iterator to one past the last parameter in the object
   auto end() { return parameters_.end(); }
   /// Returns a read iterator to one past the last parameter in the object
-  auto cend() const { return parameters_.cend(); }
+  [[nodiscard]] auto cend() const { return parameters_.cend(); }
 
   /**
    * @brief Returns the size of the serialized data
    *
    * @return size_t
    */
-  size_t serializeSize() const override;
+  [[nodiscard]] size_t serializeSize() const override;
   /**
    * @brief Serializes the object to the provided memory address. There should
    * be sufficient space to store the serialized object.
@@ -161,7 +161,7 @@ class RequestParameters : public Serializable {
     ss << "RequestParameters(" << &self << "):\n";
     for (const auto &[key, value] : self.parameters_) {
       ss << "  " << key << ": ";
-      std::visit([&](auto &&c) { ss << c; }, value);
+      std::visit([&](const auto &c) { ss << c; }, value);
       ss << "\n";
     }
     auto tmp = ss.str();
@@ -171,7 +171,7 @@ class RequestParameters : public Serializable {
   }
 
  private:
-  std::map<std::string, Parameter> parameters_;
+  std::map<std::string, Parameter, std::less<>> parameters_;
 };
 
 using RequestParametersPtr = std::shared_ptr<RequestParameters>;
@@ -213,18 +213,20 @@ class InferenceRequestInput : public Serializable {
   /// Sets the request's shared data
   void setData(std::vector<std::byte> &&buffer);
   /// Checks if the stored data is shared
-  bool sharedData() const;
+  [[nodiscard]] bool sharedData() const;
 
   /// Gets a pointer to the request's data
   [[nodiscard]] void *getData() const;
 
   /// Gets the input tensor's name
-  const std::string &getName() const { return this->name_; }
+  [[nodiscard]] const std::string &getName() const { return this->name_; }
   /// Sets the input tensor's name
   void setName(std::string name);
 
   /// Gets the input tensor's shape
-  const std::vector<uint64_t> &getShape() const { return this->shape_; }
+  [[nodiscard]] const std::vector<uint64_t> &getShape() const {
+    return this->shape_;
+  }
   /// Sets the tensor's shape
   void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
   /// Sets the tensor's shape
@@ -238,30 +240,32 @@ class InferenceRequestInput : public Serializable {
   }
 
   /// Gets the input tensor's datatype
-  DataType getDatatype() const { return this->dataType_; }
+  [[nodiscard]] DataType getDatatype() const { return this->data_type_; }
   /// Set the tensor's data type
   void setDatatype(DataType type);
 
   /// Gets the input tensor's parameters
-  RequestParameters *getParameters() const { return this->parameters_.get(); }
+  [[nodiscard]] RequestParameters *getParameters() const {
+    return this->parameters_.get();
+  }
   /**
    * @brief Sets the input tensor's parameters
    *
    * @param parameters pointer to parameters to assign
    */
   void setParameters(RequestParametersPtr parameters) {
-    parameters_ = parameters;
+    parameters_ = std::move(parameters);
   }
 
   /// Get the tensor's size (number of elements)
-  size_t getSize() const;
+  [[nodiscard]] size_t getSize() const;
 
   /**
    * @brief Returns the size of the serialized data
    *
    * @return size_t
    */
-  size_t serializeSize() const override;
+  [[nodiscard]] size_t serializeSize() const override;
   /**
    * @brief Serializes the object to the provided memory address. There should
    * be sufficient space to store the serialized object.
@@ -287,7 +291,7 @@ class InferenceRequestInput : public Serializable {
       os << index << ",";
     }
     os << "\n";
-    os << "  Datatype: " << my_class.dataType_.str() << "\n";
+    os << "  Datatype: " << my_class.data_type_.str() << "\n";
     os << "  Parameters:\n";
     if (my_class.parameters_ != nullptr) {
       os << *(my_class.parameters_.get()) << "\n";
@@ -299,7 +303,7 @@ class InferenceRequestInput : public Serializable {
  private:
   std::string name_;
   std::vector<uint64_t> shape_;
-  DataType dataType_;
+  DataType data_type_;
   RequestParametersPtr parameters_;
   void *data_;
   std::vector<std::byte> shared_data_;
@@ -324,7 +328,7 @@ class InferenceRequestOutput {
   void *getData() { return this->data_; }
 
   /// Gets the output tensor's name
-  std::string getName() { return this->name_; }
+  std::string getName() const { return this->name_; }
   /// Set the output tensor's name
   void setName(const std::string &name);
 
@@ -334,7 +338,7 @@ class InferenceRequestOutput {
    * @param parameters pointer to parameters to assign
    */
   void setParameters(RequestParametersPtr parameters) {
-    parameters_ = parameters;
+    parameters_ = std::move(parameters);
   }
   /// @brief Gets the output tensor's parameters
   RequestParameters *getParameters() { return parameters_.get(); }
@@ -370,7 +374,7 @@ class InferenceResponse {
   void addOutput(const InferenceResponseOutput &output);
 
   /// Gets the ID of the response
-  std::string getID() { return id_; }
+  std::string getID() const { return id_; }
   /// Sets the ID of the response
   void setID(const std::string &id);
   /// sets the model name of the response
@@ -469,11 +473,11 @@ class InferenceRequest {
    *
    * @param data pointer to data to add
    * @param shape shape of the data
-   * @param dataType the datatype of the data
+   * @param data_type the datatype of the data
    * @param name the name of the input tensor
    */
   void addInputTensor(void *data, const std::vector<uint64_t> &shape,
-                      DataType dataType, const std::string &name = "");
+                      DataType data_type, const std::string &name = "");
 
   /**
    * @brief Adds a new input tensor to this request
@@ -489,35 +493,37 @@ class InferenceRequest {
   void addOutputTensor(const InferenceRequestOutput &output);
 
   /// Gets a vector of all the input request objects
-  const std::vector<InferenceRequestInput> &getInputs() const;
+  [[nodiscard]] const std::vector<InferenceRequestInput> &getInputs() const;
   /// Get the number of input request objects
-  size_t getInputSize();
+  size_t getInputSize() const;
 
   /// Gets a vector of the requested output information
-  const std::vector<InferenceRequestOutput> &getOutputs() const;
+  [[nodiscard]] const std::vector<InferenceRequestOutput> &getOutputs() const;
 
   /**
    * @brief Gets the ID associated with this request
    *
    * @return std::string
    */
-  const std::string &getID() const { return id_; }
+  [[nodiscard]] const std::string &getID() const { return id_; }
   /**
    * @brief Sets the ID associated with this request
    *
    * @param id ID to set
    */
-  void setID(const std::string &id) { id_ = id; }
+  void setID(std::string_view id) { id_ = id; }
 
   /// Get a pointer to the request's parameters
-  RequestParameters *getParameters() const { return this->parameters_.get(); }
+  [[nodiscard]] RequestParameters *getParameters() const {
+    return this->parameters_.get();
+  }
   /**
    * @brief Sets the parameters for the request
    *
    * @param parameters pointer to the parameters
    */
   void setParameters(RequestParametersPtr parameters) {
-    parameters_ = parameters;
+    parameters_ = std::move(parameters);
   }
 
  private:
@@ -552,11 +558,11 @@ class ModelMetadataTensor final {
                       std::vector<uint64_t> shape);
 
   /// @brief Gets the name of the tensor
-  const std::string &getName() const;
+  [[nodiscard]] const std::string &getName() const;
   /// @brief Gets the datatype that this tensor accepts
-  const DataType &getDataType() const;
+  [[nodiscard]] const DataType &getDataType() const;
   /// @brief Gets the expected shape of the data
-  const std::vector<uint64_t> &getShape() const;
+  [[nodiscard]] const std::vector<uint64_t> &getShape() const;
 
  private:
   std::string name_;
@@ -603,7 +609,7 @@ class ModelMetadata final {
    *
    * @return const std::vector<ModelMetadataTensor>&
    */
-  const std::vector<ModelMetadataTensor> &getInputs() const;
+  [[nodiscard]] const std::vector<ModelMetadataTensor> &getInputs() const;
 
   /**
    * @brief Adds an output tensor to this model
@@ -625,14 +631,14 @@ class ModelMetadata final {
                        std::vector<int> shape);
 
   /// @brief Gets the output tensors' metadata for this model
-  const std::vector<ModelMetadataTensor> &getOutputs() const;
+  [[nodiscard]] const std::vector<ModelMetadataTensor> &getOutputs() const;
 
   /// Sets the model's name
   void setName(const std::string &name);
   /// Gets the model's name
-  const std::string &getName() const;
+  [[nodiscard]] const std::string &getName() const;
 
-  const std::string &getPlatform() const;
+  [[nodiscard]] const std::string &getPlatform() const;
 
   /// Marks this model as ready/not ready
   void setReady(bool ready);

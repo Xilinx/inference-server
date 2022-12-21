@@ -44,7 +44,7 @@ class ModelInferRequest;
 namespace amdinfer {
 
 void mapParametersToProto(
-  const std::map<std::string, amdinfer::Parameter>& parameters,
+  const std::map<std::string, amdinfer::Parameter, std::less<>>& parameters,
   google::protobuf::Map<std::string, inference::InferParameter>*
     grpc_parameters);
 RequestParametersPtr mapProtoToParameters(

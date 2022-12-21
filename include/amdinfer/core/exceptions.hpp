@@ -29,7 +29,7 @@ namespace amdinfer {
 /**
  * @brief The base class for all exceptions thrown by the inference server
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class runtime_error : public std::runtime_error {
   using std::runtime_error::runtime_error;
 };
@@ -38,7 +38,7 @@ class runtime_error : public std::runtime_error {
  * @brief This exception gets thrown by the clients if a method fails or the
  * server raises an error.
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class bad_status : public runtime_error {
   using runtime_error::runtime_error;
 };
@@ -47,7 +47,7 @@ class bad_status : public runtime_error {
  * @brief This exception gets thrown by the clients if the connection to the
  * server fails.
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class connection_error : public bad_status {
   using bad_status::bad_status;
 };
@@ -55,7 +55,7 @@ class connection_error : public bad_status {
 /**
  * @brief This exception gets thrown if a requested file cannot be found
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class file_not_found_error : public runtime_error {
   using runtime_error::runtime_error;
 };
@@ -63,7 +63,7 @@ class file_not_found_error : public runtime_error {
 /**
  * @brief This exception gets thrown if a requested file cannot be read
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class file_read_error : public runtime_error {
   using runtime_error::runtime_error;
 };
@@ -72,7 +72,7 @@ class file_read_error : public runtime_error {
  * @brief This exception gets thrown if a third-party library raises an
  * exception
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class external_error : public runtime_error {
   using runtime_error::runtime_error;
 };
@@ -81,7 +81,7 @@ class external_error : public runtime_error {
  * @brief This exception gets thrown if an invalid argument is passed to a
  * function
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class invalid_argument : public runtime_error {
   using runtime_error::runtime_error;
 };
@@ -90,7 +90,7 @@ class invalid_argument : public runtime_error {
  * @brief This exception gets thrown if an expected environment variable is not
  * set
  *
- */
+ */ // NOLINTNEXTLINE(readability-identifier-naming)
 class environment_not_set_error : public runtime_error {
   using runtime_error::runtime_error;
 };

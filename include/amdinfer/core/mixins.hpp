@@ -18,7 +18,7 @@ class Serializable {
    *
    * @return size_t
    */
-  virtual size_t serializeSize() const = 0;
+  [[nodiscard]] virtual size_t serializeSize() const = 0;
   /**
    * @brief Serializes the object to the provided memory address. There should
    * be sufficient space to store the serialized object.

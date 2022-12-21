@@ -102,6 +102,7 @@ std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
 
   for (const auto& image : images) {
     requests.emplace_back();
+    // NOLINTNEXTLINE(google-readability-casting)
     requests.back().addInputTensor((void*)image.data(), shape,
                                    amdinfer::DataType::Int8);
   }

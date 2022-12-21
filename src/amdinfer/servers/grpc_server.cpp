@@ -247,7 +247,7 @@ class InferenceRequestInputBuilder<
     for (const auto& index : req.shape()) {
       input.shape_.push_back(static_cast<size_t>(index));
     }
-    input.dataType_ = DataType(req.datatype().c_str());
+    input.data_type_ = DataType(req.datatype().c_str());
 
     input.parameters_ = mapProtoToParameters(req.parameters());
 
@@ -255,7 +255,7 @@ class InferenceRequestInputBuilder<
     auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
     AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
                                           " elements of type " +
-                                          input.dataType_.str() + " to " +
+                                          input.data_type_.str() + " to " +
                                           util::addressToString(dest));
 
     switchOverTypes(WriteData(), input.getDatatype(), input_buffer, &req,

@@ -18,6 +18,7 @@ Checks: >
   *,
   -altera-*,
   -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -fuchsia-*,
@@ -37,6 +38,9 @@ Checks: >
 #
 # cppcoreguidelines-non-private-member-variables-in-classes
 #   We allow protected member variables in virtual classes.
+#
+# cppcoreguidelines-pro-bounds-array-to-pointer-decay
+#   This gets triggered on using assert() in clang-tidy-10
 #
 # cppcoreguidelines-pro-bounds-pointer-arithmetic
 #   We use pointer math to get at underlying buffer data
@@ -91,9 +95,7 @@ CheckOptions:
   - key:   readability-identifier-naming.ClassCase
     value: CamelCase
   - key:   readability-identifier-naming.ClassConstantCase
-    value: CamelCase
-  - key:   readability-identifier-naming.ClassConstantPrefix
-    value: k
+    value: lower_case
   - key:   readability-identifier-naming.ClassMemberCase
     value: lower_case
   - key:   readability-identifier-naming.ClassMemberSuffix
@@ -101,13 +103,9 @@ CheckOptions:
   - key:   readability-identifier-naming.ClassMethodCase
     value: camelBack
   - key:   readability-identifier-naming.ConstantCase
-    value: CamelCase
-  - key:   readability-identifier-naming.ConstantPrefix
-    value: k
+    value: lower_case
   - key:   readability-identifier-naming.ConstantMemberCase
-    value: CamelCase
-  - key:   readability-identifier-naming.ConstantMemberPrefix
-    value: k
+    value: lower_case
   - key:   readability-identifier-naming.ConstantParameterCase
     value: lower_case
   - key:   readability-identifier-naming.ConstantPointerParameterCase
@@ -143,13 +141,9 @@ CheckOptions:
   - key:   readability-identifier-naming.InlineNamespaceCase
     value: lower_case
   - key:   readability-identifier-naming.LocalConstantCase
-    value: CamelCase
-  - key:   readability-identifier-naming.LocalConstantPrefix
-    value: k
+    value: lower_case
   - key:   readability-identifier-naming.LocalConstantPointerCase
-    value: CamelCase
-  - key:   readability-identifier-naming.LocalConstantPointerPrefix
-    value: k
+    value: lower_case
   - key:   readability-identifier-naming.LocalPointerCase
     value: lower_case
   - key:   readability-identifier-naming.LocalVariableCase

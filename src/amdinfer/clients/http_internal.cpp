@@ -269,7 +269,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
       throw invalid_argument("No 'datatype' key present in request input");
     }
     std::string data_type_str = req->get("datatype", "").asString();
-    input.dataType_ = DataType(data_type_str.c_str());
+    input.data_type_ = DataType(data_type_str.c_str());
     if (req->isMember("parameters")) {
       auto parameters = req->get("parameters", Json::objectValue);
       input.parameters_ = mapJsonToParameters(parameters);
@@ -282,7 +282,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
     auto data = req->get("data", Json::arrayValue);
     try {
       for (auto const &i : data) {
-        offset = switchOverTypes(WriteData(), input.dataType_, input_buffer, i,
+        offset = switchOverTypes(WriteData(), input.data_type_, input_buffer, i,
                                  offset);
       }
     } catch (const Json::LogicError &) {

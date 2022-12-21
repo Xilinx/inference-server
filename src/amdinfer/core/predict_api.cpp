@@ -65,7 +65,7 @@ size_t RequestParameters::size() const { return parameters_.size(); }
 
 bool RequestParameters::empty() const { return parameters_.empty(); }
 
-std::map<std::string, Parameter> RequestParameters::data() const {
+std::map<std::string, Parameter, std::less<>> RequestParameters::data() const {
   return parameters_;
 }
 
@@ -224,7 +224,7 @@ const std::vector<InferenceRequestInput> &InferenceRequest::getInputs() const {
   return this->inputs_;
 }
 
-size_t InferenceRequest::getInputSize() { return this->inputs_.size(); }
+size_t InferenceRequest::getInputSize() const { return this->inputs_.size(); }
 
 const std::vector<InferenceRequestOutput> &InferenceRequest::getOutputs()
   const {
@@ -239,14 +239,14 @@ InferenceRequestInput::InferenceRequestInput(void *data,
                                              std::vector<uint64_t> shape,
                                              DataType dataType,
                                              std::string name)
-  : dataType_(dataType) {
+  : data_type_(dataType) {
   this->data_ = data;
   this->shape_ = std::move(shape);
   this->name_ = std::move(name);
   this->parameters_ = std::make_unique<RequestParameters>();
 }
 
-InferenceRequestInput::InferenceRequestInput() : dataType_(DataType::Uint32) {
+InferenceRequestInput::InferenceRequestInput() : data_type_(DataType::Uint32) {
   this->data_ = nullptr;
   this->name_ = "";
   this->parameters_ = std::make_unique<RequestParameters>();
@@ -257,7 +257,7 @@ void InferenceRequestInput::setName(std::string name) {
 }
 
 void InferenceRequestInput::setDatatype(DataType type) {
-  this->dataType_ = type;
+  this->data_type_ = type;
 }
 
 void InferenceRequestInput::setData(void *buffer) { this->data_ = buffer; }
@@ -313,14 +313,15 @@ void InferenceRequestInput::serialize(std::byte *data_out) const {
                                       0,
                                       0};
   if (!shared_data_.empty()) {
-    metadata.shared_data = this->getSize() * dataType_.size();
+    metadata.shared_data = this->getSize() * data_type_.size();
   } else {
     metadata.data = sizeof(data_);
   }
   data_out = copy(metadata, data_out, sizeof(InferenceRequestInputSizes));
   data_out = copy(name_.c_str(), data_out, metadata.name);
   data_out = copy(shape_.data(), data_out, metadata.shape);
-  data_out = copy(static_cast<uint8_t>(dataType_), data_out, metadata.dataType);
+  data_out =
+    copy(static_cast<uint8_t>(data_type_), data_out, metadata.dataType);
   parameters_->serialize(data_out);
   data_out += metadata.parameters;
   if (!shared_data_.empty()) {
@@ -346,7 +347,7 @@ void InferenceRequestInput::deserialize(const std::byte *data_in) {
   uint8_t type;
   std::memcpy(&type, data_in, metadata.dataType);
   data_in += metadata.dataType;
-  dataType_ = static_cast<DataType::Value>(type);
+  data_type_ = static_cast<DataType::Value>(type);
 
   parameters_ = std::make_shared<RequestParameters>();
   parameters_->deserialize(data_in);
