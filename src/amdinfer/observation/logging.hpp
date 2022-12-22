@@ -40,25 +40,37 @@
 
 #include <spdlog/spdlog.h>
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_TRACE(logger, message) \
-  SPDLOG_LOGGER_TRACE(logger.get(), message)
+  SPDLOG_LOGGER_TRACE((logger.get()), message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_DEBUG(logger, message) \
-  SPDLOG_LOGGER_DEBUG(logger.get(), message)
+  SPDLOG_LOGGER_DEBUG((logger.get()), message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_INFO(logger, message) \
-  SPDLOG_LOGGER_INFO(logger.get(), message)
+  SPDLOG_LOGGER_INFO((logger.get()), message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_WARN(logger, message) \
-  SPDLOG_LOGGER_WARN(logger.get(), message)
+  SPDLOG_LOGGER_WARN((logger.get()), message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_ERROR(logger, message) \
-  SPDLOG_LOGGER_ERROR(logger.get(), message)
+  SPDLOG_LOGGER_ERROR((logger.get()), message)
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_IF_LOGGING(args) args
 #else
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_TRACE(logger, message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_DEBUG(logger, message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_INFO(logger, message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_WARN(logger, message)
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_ERROR(logger, message)
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_IF_LOGGING(args)
 #endif
 
@@ -95,7 +107,7 @@ class Logger {
   explicit Logger(Loggers name);
 
   void set(Loggers name);
-  spdlog::logger* get() const { return logger_.get(); }
+  [[nodiscard]] spdlog::logger* get() const { return logger_.get(); }
 
  private:
   std::shared_ptr<spdlog::logger> logger_;

@@ -21,6 +21,7 @@
 #ifndef GUARD_AMDINFER_OBSERVATION_METRICS
 #define GUARD_AMDINFER_OBSERVATION_METRICS
 
+#include <prometheus/registry.h>    // for Registry
 #include <prometheus/serializer.h>  // for Serializer
 #include <prometheus/summary.h>     // for Summary, BuildSummary, Summa...
 
@@ -42,7 +43,6 @@ class Counter;
 class Gauge;
 template <class T>
 class Family;
-class Registry;
 }  // namespace prometheus
 
 namespace amdinfer {
@@ -217,7 +217,8 @@ class Metrics {
   /// Destroy the Metrics object
   ~Metrics() = default;
 
-  std::shared_ptr<prometheus::Registry> registry_;
+  std::shared_ptr<prometheus::Registry> registry_ =
+    std::make_shared<prometheus::Registry>();
   std::unique_ptr<prometheus::Serializer> serializer_;
   std::vector<std::weak_ptr<prometheus::Collectable>> collectables_;
   std::mutex collectables_mutex_;

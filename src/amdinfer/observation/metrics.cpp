@@ -25,7 +25,6 @@
 #include <prometheus/family.h>           // for Family
 #include <prometheus/gauge.h>            // for Gauge, BuildGauge
 #include <prometheus/metric_family.h>    // for MetricFamily
-#include <prometheus/registry.h>         // for Registry
 #include <prometheus/serializer.h>       // for Serializer
 #include <prometheus/text_serializer.h>  // for TextSerializer
 
@@ -59,7 +58,7 @@ void CounterFamily::increment(MetricCounterIDs id) {
 void CounterFamily::increment(MetricCounterIDs id, size_t increment) {
   if (this->counters_.find(id) != this->counters_.end()) {
     auto& counter = this->counters_.at(id);
-    counter.Increment(increment);
+    counter.Increment(static_cast<double>(increment));
   }
 }
 
@@ -101,10 +100,13 @@ void SummaryFamily::observe(MetricSummaryIDs id, double value) {
   }
 }
 
-Metrics::Metrics()
-  : registry_(std::make_shared<prometheus::Registry>()),
+// the arguments are percentile and error
+const prometheus::detail::CKMSQuantiles::Quantile percentile_50{0.5, 0.05};
+const prometheus::detail::CKMSQuantiles::Quantile percentile_90{0.9, 0.01};
+const prometheus::detail::CKMSQuantiles::Quantile percentile_99{0.99, 0.001};
 
-    ingress_requests_total_(
+Metrics::Metrics()
+  : ingress_requests_total_(
       "amdinfer_requests_ingress_total",
       "Number of incoming requests to amdinfer-server", registry_.get(),
       {{MetricCounterIDs::kCppNative, {{"api", "cpp"}, {"method", "native"}}},
@@ -144,14 +146,14 @@ Metrics::Metrics()
                     registry_.get(),
                     {{MetricSummaryIDs::kMetricLatency,
                       prometheus::Summary::Quantiles{
-                        {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}}}}),
+                        percentile_50, percentile_90, percentile_99}}}),
     request_latency_("amdinfer_request_latency",
                      "Latencies of serving requests, in microseconds",
                      registry_.get(),
                      {{MetricSummaryIDs::kRequestLatency,
                        prometheus::Summary::Quantiles{
-                         {0.5, 0.05}, {0.9, 0.01}, {0.99, 0.001}}}}) {
-  std::lock_guard<std::mutex> lock{this->collectables_mutex_};
+                         percentile_50, percentile_90, percentile_99}}}) {
+  std::lock_guard lock{this->collectables_mutex_};
   collectables_.push_back(this->registry_);
 
   this->serializer_ = std::make_unique<prometheus::TextSerializer>();
@@ -230,7 +232,7 @@ std::string Metrics::getMetrics() {
   }
 
   std::string response = serializer_->Serialize(metrics);
-  auto bodySize = response.length();
+  auto body_size = response.length();
 
   auto stop_time_of_request = std::chrono::steady_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -238,7 +240,7 @@ std::string Metrics::getMetrics() {
   this->observeSummary(MetricSummaryIDs::kMetricLatency, duration.count());
 
   this->bytes_transferred_.increment(MetricCounterIDs::kTransferredBytes,
-                                     bodySize);
+                                     body_size);
   this->num_scrapes_.increment(MetricCounterIDs::kMetricScrapes);
 
   return response;
