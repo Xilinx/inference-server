@@ -197,6 +197,7 @@ void v2::AmdinferHttpServer::getModelMetadata(
 void v2::AmdinferHttpServer::modelList(
   const drogon::HttpRequestPtr &req,
   std::function<void(const drogon::HttpResponsePtr &)> &&callback) const {
+  AMDINFER_LOG_INFO(logger_, "Received modelList request");
   (void)req;  // suppress unused variable warning
   const auto models = ::amdinfer::modelList();
 
@@ -217,7 +218,7 @@ void v2::AmdinferHttpServer::hasHardware(
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
 #endif
-  auto &json = req->jsonObject();
+  const auto &json = req->jsonObject();
 
   if (json == nullptr) {
     auto resp = errorHttpResponse("No JSON body in hasHardware request",

@@ -38,11 +38,11 @@ namespace amdinfer {
 
 struct Server::ServerImpl {
 #ifdef AMDINFER_ENABLE_HTTP
-  bool http_started_ = false;
-  std::thread http_thread_;
+  bool http_started = false;
+  std::thread http_thread;
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-  bool grpc_started_ = false;
+  bool grpc_started = false;
 #endif
 };
 
@@ -105,19 +105,19 @@ Server::~Server() {
 
 void Server::startHttp([[maybe_unused]] uint16_t port) const {
 #ifdef AMDINFER_ENABLE_HTTP
-  if (!impl_->http_started_) {
-    impl_->http_thread_ = std::thread{http::start, port};
-    impl_->http_started_ = true;
+  if (!impl_->http_started) {
+    impl_->http_thread = std::thread{http::start, port};
+    impl_->http_started = true;
   }
 #endif
 }
 
 void Server::stopHttp() const {
 #ifdef AMDINFER_ENABLE_HTTP
-  if (impl_->http_started_) {
+  if (impl_->http_started) {
     http::stop();
-    if (impl_->http_thread_.joinable()) {
-      impl_->http_thread_.join();
+    if (impl_->http_thread.joinable()) {
+      impl_->http_thread.join();
     }
   }
 #endif
@@ -125,16 +125,16 @@ void Server::stopHttp() const {
 
 void Server::startGrpc([[maybe_unused]] uint16_t port) const {
 #ifdef AMDINFER_ENABLE_GRPC
-  if (!impl_->grpc_started_) {
+  if (!impl_->grpc_started) {
     grpc::start(port);
-    impl_->grpc_started_ = true;
+    impl_->grpc_started = true;
   }
 #endif
 }
 
 void Server::stopGrpc() const {
 #ifdef AMDINFER_ENABLE_GRPC
-  if (impl_->grpc_started_) {
+  if (impl_->grpc_started) {
     grpc::stop();
   }
 #endif

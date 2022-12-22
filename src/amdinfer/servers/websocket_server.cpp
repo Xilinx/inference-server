@@ -59,12 +59,12 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
   std::string errors;
   Json::CharReaderBuilder builder;
   Json::CharReader *reader = builder.newCharReader();
-  bool parsingSuccessful = reader->parse(
+  bool parsing_successful = reader->parse(
     message.data(), message.data() + message.size(), json.get(), &errors);
   delete reader;  // NOLINT(cppcoreguidelines-owning-memory)
 
   // if we fail to get the JSON object, return
-  if (!parsingSuccessful) {
+  if (!parsing_successful) {
     AMDINFER_LOG_INFO(logger_, "Failed to parse JSON request to websocket");
     conn->shutdown(drogon::CloseCode::kInvalidMessage,
                    "No JSON could be parsed in the request");

@@ -32,9 +32,10 @@
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
-namespace Json {
+namespace Json {  // NOLINT(readability-identifier-naming)
 class Value;
 }  // namespace Json
+
 namespace amdinfer {
 class InferenceRequest;
 }  // namespace amdinfer
