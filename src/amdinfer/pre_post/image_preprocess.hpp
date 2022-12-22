@@ -41,11 +41,13 @@ enum class ResizeAlgorithm {
   LetterBoxCrop,
 };
 
-template <typename T, int C>
+const auto kDefaultImageSize = 224;
+
+template <typename T, int kChannels>
 struct ImagePreprocessOptions {
-  int height = 224;
-  int width = 224;
-  int channels = C;
+  int height = kDefaultImageSize;
+  int width = kDefaultImageSize;
+  int channels = kChannels;
 
   bool resize = true;
   ResizeAlgorithm resize_algorithm = ResizeAlgorithm::Simple;
@@ -53,7 +55,7 @@ struct ImagePreprocessOptions {
   bool convert_color = false;
   // this should be cv::ColorConversionCodes but we can't bind it to Python
   // conveniently
-  int color_code;
+  int color_code = 0;
 
   bool convert_type = false;
   int type = 0;
@@ -61,8 +63,8 @@ struct ImagePreprocessOptions {
 
   bool normalize = false;
   ImageOrder order = ImageOrder::NHWC;
-  std::array<T, C> mean;
-  std::array<T, C> std;
+  std::array<T, kChannels> mean;
+  std::array<T, kChannels> std;
 
   bool assign = false;
 };
