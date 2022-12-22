@@ -42,7 +42,7 @@ void Manager::init() {
   // default constructed threads are not joinable
   if (!update_thread_.joinable()) {
     update_thread_ =
-      std::thread(&Manager::update_manager, this, update_queue_.get());
+      std::thread(&Manager::updateManager, this, update_queue_.get());
   }
 }
 
@@ -75,11 +75,11 @@ void Manager::unloadWorker(const std::string& key) {
   }
 }
 
-WorkerInfo* Manager::getWorker(const std::string& key) {
+WorkerInfo* Manager::getWorker(const std::string& key) const {
   return this->endpoints_.get(key);
 }
 
-bool Manager::workerReady(const std::string& key) {
+bool Manager::workerReady(const std::string& key) const {
   std::shared_ptr<amdinfer::UpdateCommand> request;
   int ready = -1;
   request = std::make_shared<UpdateCommand>(UpdateCommandType::Ready, key,
@@ -91,11 +91,11 @@ bool Manager::workerReady(const std::string& key) {
   if (request->eptr != nullptr) {
     std::rethrow_exception(request->eptr);
   }
-  return ready;
+  return ready != 0;
 }
 
 // FIXME(varunsh): potential race condition if the worker is being deleted
-ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
+ModelMetadata Manager::getWorkerMetadata(const std::string& key) const {
   auto* worker = this->getWorker(key);
   if (worker == nullptr) {
     throw invalid_argument("Worker " + key + " not found");
@@ -134,7 +134,7 @@ void Manager::shutdown() {
   }
 }
 
-void Manager::update_manager(UpdateCommandQueue* input_queue) {
+void Manager::updateManager(UpdateCommandQueue* input_queue) {
   AMDINFER_LOG_DEBUG(logger_, "Starting the Manager update thread");
   util::setThreadName("manager");
   std::shared_ptr<UpdateCommand> request;
@@ -179,13 +179,14 @@ void Manager::update_manager(UpdateCommandQueue* input_queue) {
         break;
       case UpdateCommandType::Ready:
         try {
-          auto* workerInfo = this->getWorker(request->key);
-          if (workerInfo == nullptr) {
+          auto* worker_info = this->getWorker(request->key);
+          if (worker_info == nullptr) {
             throw invalid_argument("Worker " + request->key + " not found");
           }
-          auto* worker = workerInfo->workers_.begin()->second;
+          auto* worker = worker_info->workers_.begin()->second;
           auto metadata = worker->getMetadata();
-          *static_cast<int*>(request->retval) = metadata.isReady();
+          *static_cast<int*>(request->retval) =
+            static_cast<int>(metadata.isReady());
         } catch (...) {
           request->eptr = std::current_exception();
         }
@@ -259,7 +260,7 @@ bool Manager::Endpoints::exists(const std::string& endpoint) {
   return workers_.find(endpoint) != workers_.end();
 }
 
-std::vector<std::string> Manager::Endpoints::list() {
+std::vector<std::string> Manager::Endpoints::list() const {
   std::vector<std::string> workers;
   workers.reserve(this->workers_.size());
   for (const auto& [worker, _] : workers_) {
@@ -268,7 +269,7 @@ std::vector<std::string> Manager::Endpoints::list() {
   return workers;
 }
 
-WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) {
+WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) const {
   auto iterator = workers_.find(endpoint);
   if (iterator != workers_.end()) {
     return iterator->second.get();
@@ -296,7 +297,7 @@ std::string Manager::Endpoints::add(const std::string& worker,
   try {
     if (worker_info == nullptr) {
       auto new_worker = std::make_unique<WorkerInfo>(worker_name, &parameters);
-      this->workers_.insert(std::make_pair(endpoint, std::move(new_worker)));
+      this->workers_.try_emplace(endpoint, std::move(new_worker));
       // if the worker exists but the share parameter is false, we need to add
       // one
     } else if (!share) {

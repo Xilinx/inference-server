@@ -43,16 +43,16 @@ void Manager::unloadWorker(const std::string& key) {
   }
 }
 
-WorkerInfo* Manager::getWorker(const std::string& key) {
+WorkerInfo* Manager::getWorker(const std::string& key) const {
   return this->endpoints_.get(key);
 }
 
-bool Manager::workerReady(const std::string& key) {
+bool Manager::workerReady(const std::string& key) const {
   auto metadata = this->getWorkerMetadata(key);
   return metadata.isReady();
 }
 
-ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
+ModelMetadata Manager::getWorkerMetadata(const std::string& key) const {
   auto* worker = this->getWorker(key);
   if (worker == nullptr) {
     throw invalid_argument("Worker " + key + " not found");
@@ -77,7 +77,7 @@ void Manager::shutdown() {
   }
 }
 
-void Manager::update_manager(UpdateCommandQueue* input_queue) {
+void Manager::updateManager(UpdateCommandQueue* input_queue) {
   (void)input_queue;
 }
 
@@ -144,7 +144,7 @@ bool Manager::Endpoints::exists(const std::string& endpoint) {
   return workers_.find(endpoint) != workers_.end();
 }
 
-WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) {
+WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) const {
   auto iterator = workers_.find(endpoint);
   if (iterator != workers_.end()) {
     return iterator->second.get();

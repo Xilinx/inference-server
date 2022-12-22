@@ -106,17 +106,18 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
 
   inference::Config config;
 
-  int fileDescriptor = open(config_path.c_str(), O_RDONLY);
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
+  int file_descriptor = open(config_path.c_str(), O_RDONLY | O_CLOEXEC);
   Logger logger{Loggers::kServer};
-  if (fileDescriptor < 0) {
+  if (file_descriptor < 0) {
     throw file_not_found_error("Config file " + config_path.string() +
                                " could not be opened");
   }
 
-  google::protobuf::io::FileInputStream fileInput(fileDescriptor);
-  fileInput.SetCloseOnDelete(true);
+  google::protobuf::io::FileInputStream file_input(file_descriptor);
+  file_input.SetCloseOnDelete(true);
 
-  if (!google::protobuf::TextFormat::Parse(&fileInput, &config)) {
+  if (!google::protobuf::TextFormat::Parse(&file_input, &config)) {
     throw file_read_error("Config file " + config_path.string() +
                           " could not be parsed");
   }
@@ -167,12 +168,13 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
                                       const std::string& dir,
                                       const std::string& filename,
                                       efsw::Action action,
-                                      std::string oldFilename) {
+                                      std::string old_filename) {
   Logger logger{Loggers::kServer};
+  // arbitrary delay to make sure filesystem has settled
+  const std::chrono::milliseconds delay{100};
   if (filename == "config.pbtxt") {
     if (action == efsw::Actions::Add) {
-      // arbitrary delay to make sure filesystem has settled
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
       // TODO(varunsh): replace with native client
       RequestParameters params;
@@ -184,7 +186,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       }
     } else if (action == efsw::Actions::Delete) {
       // arbitrary delay to make sure filesystem has settled
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
       // TODO(varunsh): replace with native client
       Manager::getInstance().unloadWorker(model);
@@ -206,7 +208,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       break;
     case efsw::Actions::Moved:
       AMDINFER_LOG_DEBUG(logger, "DIR (" + dir + ") FILE (" + filename +
-                                   ") has event Moved from (" + oldFilename +
+                                   ") has event Moved from (" + old_filename +
                                    ")");
       break;
     default:

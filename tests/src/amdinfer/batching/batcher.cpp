@@ -136,7 +136,7 @@ void Batcher::run(WorkerInfo *worker) {
     batch->addTrace(std::move(trace));
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
-    batch->addTime(req->get_time());
+    batch->addTime(req->getTime());
 #endif
     // batch_size += 1;
 

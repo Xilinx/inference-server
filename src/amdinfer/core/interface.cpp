@@ -37,12 +37,12 @@ TracePtr&& Interface::getTrace() { return std::move(this->trace_); }
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS
-void Interface::set_time(
+void Interface::setTime(
   const std::chrono::high_resolution_clock::time_point& start_time) {
   this->start_time_ = start_time;
 }
 
-std::chrono::high_resolution_clock::time_point Interface::get_time() const {
+std::chrono::high_resolution_clock::time_point Interface::getTime() const {
   return this->start_time_;
 }
 #endif

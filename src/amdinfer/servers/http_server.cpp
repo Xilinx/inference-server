@@ -258,7 +258,7 @@ void v2::AmdinferHttpServer::modelInfer(
   try {
     auto request = std::make_unique<DrogonHttp>(req, std::move(callback));
 #ifdef AMDINFER_ENABLE_METRICS
-    request->set_time(now);
+    request->setTime(now);
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();

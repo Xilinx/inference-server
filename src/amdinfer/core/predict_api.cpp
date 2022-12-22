@@ -32,23 +32,23 @@
 namespace amdinfer {
 
 void RequestParameters::put(const std::string &key, bool value) {
-  this->parameters_.insert(std::make_pair(key, value));
+  this->parameters_.try_emplace(key, value);
 }
 
 void RequestParameters::put(const std::string &key, double value) {
-  this->parameters_.insert(std::make_pair(key, value));
+  this->parameters_.try_emplace(key, value);
 }
 
 void RequestParameters::put(const std::string &key, int32_t value) {
-  this->parameters_.insert(std::make_pair(key, value));
+  this->parameters_.try_emplace(key, value);
 }
 
 void RequestParameters::put(const std::string &key, const std::string &value) {
-  this->parameters_.insert(std::make_pair(key, value));
+  this->parameters_.try_emplace(key, value);
 }
 
 void RequestParameters::put(const std::string &key, const char *value) {
-  this->parameters_.insert(std::make_pair(key, std::string(value)));
+  this->parameters_.try_emplace(key, std::string{value});
 }
 
 void RequestParameters::erase(const std::string &key) {
@@ -143,11 +143,11 @@ void RequestParameters::serialize(std::byte *data_out) const {
  * https://www.reddit.com/r/cpp/comments/f8cbzs/comment/fimjm2f/?context=3
  */
 template <typename... Ts>
-[[nodiscard]] std::variant<Ts...> expand_type(std::size_t i) {
+[[nodiscard]] std::variant<Ts...> expandType(std::size_t i) {
   assert(i < sizeof...(Ts));
   static constexpr auto table =
     std::array{+[]() { return std::variant<Ts...>{Ts{}}; }...};
-  return table[i]();
+  return table.at(i)();
 }
 
 void RequestParameters::deserialize(const std::byte *data_in) {
@@ -171,7 +171,7 @@ void RequestParameters::deserialize(const std::byte *data_in) {
     key.resize(key_size);
     std::memcpy(key.data(), data_in, key_size);
     data_in += key_size;
-    Parameter param = expand_type<bool, int32_t, double, std::string>(index);
+    Parameter param = expandType<bool, int32_t, double, std::string>(index);
     const auto &n = data_size;
     std::visit(
       [&](auto &value) {
@@ -211,9 +211,9 @@ void InferenceRequest::runCallbackError(std::string_view error_msg) {
 
 void InferenceRequest::addInputTensor(void *data,
                                       const std::vector<uint64_t> &shape,
-                                      DataType dataType,
+                                      DataType data_type,
                                       const std::string &name) {
-  this->inputs_.emplace_back(data, shape, dataType, name);
+  this->inputs_.emplace_back(data, shape, data_type, name);
 }
 
 void InferenceRequest::addInputTensor(InferenceRequestInput input) {
@@ -285,7 +285,7 @@ void *InferenceRequestInput::getData() const {
 struct InferenceRequestInputSizes {
   size_t name;
   size_t shape;
-  size_t dataType;
+  size_t data_type;
   size_t parameters;
   size_t data;
   size_t shared_data;
@@ -321,7 +321,7 @@ void InferenceRequestInput::serialize(std::byte *data_out) const {
   data_out = copy(name_.c_str(), data_out, metadata.name);
   data_out = copy(shape_.data(), data_out, metadata.shape);
   data_out =
-    copy(static_cast<uint8_t>(data_type_), data_out, metadata.dataType);
+    copy(static_cast<uint8_t>(data_type_), data_out, metadata.data_type);
   parameters_->serialize(data_out);
   data_out += metadata.parameters;
   if (!shared_data_.empty()) {
@@ -344,9 +344,9 @@ void InferenceRequestInput::deserialize(const std::byte *data_in) {
   std::memcpy(shape_.data(), data_in, metadata.shape);
   data_in += metadata.shape;
 
-  uint8_t type;
-  std::memcpy(&type, data_in, metadata.dataType);
-  data_in += metadata.dataType;
+  uint8_t type = 0;
+  std::memcpy(&type, data_in, metadata.data_type);
+  data_in += metadata.data_type;
   data_type_ = static_cast<DataType::Value>(type);
 
   parameters_ = std::make_shared<RequestParameters>();

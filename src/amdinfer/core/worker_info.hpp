@@ -142,7 +142,7 @@ class WorkerInfo {
   void allocate(size_t request_size);
 
   /// get the number of workers in the group
-  size_t getGroupSize() const;
+  [[nodiscard]] size_t getGroupSize() const;
 
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }

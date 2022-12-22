@@ -25,10 +25,12 @@
 
 namespace amdinfer {
 
+const auto kBitsInByte = 8;
+
 #ifdef AMDINFER_ENABLE_VITIS
 DataType mapXirToType(xir::DataType type) {
   auto data_type = type.type;
-  size_t width = type.bit_width >> 3;  // bit -> byte
+  size_t width = type.bit_width / kBitsInByte;
   if (data_type == xir::DataType::FLOAT) {
     if (width == DataType("FP32").size()) {
       return DataType::Fp32;
@@ -76,7 +78,7 @@ DataType mapXirToType(xir::DataType type) {
 
 xir::DataType mapTypeToXir(DataType type) {
   xir::DataType retval;
-  auto bit_width = static_cast<int32_t>(type.size()) * 8;
+  auto bit_width = static_cast<int32_t>(type.size()) * kBitsInByte;
   switch (type) {
     case DataType::Bool:
     case DataType::Uint8:

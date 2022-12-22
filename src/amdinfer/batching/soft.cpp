@@ -149,7 +149,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         batch->addTrace(std::move(trace));
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
-        batch->addTime(req->get_time());
+        batch->addTime(req->getTime());
 #endif
       }
     } while (batch_size % this->batch_size_ != 0 && run);
