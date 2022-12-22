@@ -211,7 +211,7 @@ void WorkerInfo::unload() {
   bool found = false;
   while (!found) {
     for (const auto& [thread_id, worker] : this->workers_) {
-      if (worker->getStatus() == workers::WorkerStatus::kInactive) {
+      if (worker->getStatus() == workers::WorkerStatus::Inactive) {
         id = thread_id;
         found = true;
         this->join(thread_id);

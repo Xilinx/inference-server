@@ -51,9 +51,10 @@
 #include "amdinfer/util/base64.hpp"            // for base64_encode
 #include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/workers/aks_detect.hpp"     // for DetectResponse
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
-namespace AKS {
+namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
 }  // namespace AKS
 
@@ -86,7 +87,7 @@ class AksDetectStream : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
-  AKS::SysManagerExt* sysMan_ = nullptr;
+  AKS::SysManagerExt* sys_manager_ = nullptr;
   AKS::AIGraph* graph_ = nullptr;
 };
 
@@ -99,7 +100,7 @@ void AksDetectStream::doInit(RequestParameters* parameters) {
   constexpr auto kBatchSize = 4;
 
   /// Get AKS System Manager instance
-  this->sysMan_ = AKS::SysManagerExt::getGlobal();
+  this->sys_manager_ = AKS::SysManagerExt::getGlobal();
 
   this->batch_size_ = kBatchSize;
 }
@@ -122,22 +123,19 @@ size_t AksDetectStream::doAllocate(size_t num) {
 }
 
 void AksDetectStream::doAcquire(RequestParameters* parameters) {
-  auto kPath =
-    std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json");
-  std::string kGraphName = "yolov3";
-
-  auto path = kPath;
+  std::string path{
+    "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
   util::autoExpandEnvironmentVariables(path);
-  this->sysMan_->loadGraphs(path);
+  this->sys_manager_->loadGraphs(path);
 
-  auto graph_name = kGraphName;
+  std::string graph_name{"yolov3"};
   if (parameters->has("aks_graph_name")) {
     graph_name = parameters->get<std::string>("aks_graph_name");
   }
-  this->graph_ = this->sysMan_->getGraph(graph_name);
+  this->graph_ = this->sys_manager_->getGraph(graph_name);
 
   this->metadata_.addInputTensor(
     "input", DataType::Int8,
@@ -162,9 +160,9 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
 
     AMDINFER_LOG_INFO(logger, "Got request in AksDetectStream");
     for (unsigned int k = 0; k < batch->size(); k++) {
-      const auto& req = batch->getRequest(k);
+      const auto& req = batch->getRequest(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(k);
+      const auto& trace = batch->getTrace(static_cast<int>(k));
       trace->startSpan("aks_detect_stream");
 #endif
       auto inputs = req->getInputs();
@@ -218,8 +216,8 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
           std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>>
           futures;
         std::queue<std::string> frames;
-        for (unsigned int frameNum = 0; frameNum < count_adjusted;
-             frameNum += this->batch_size_) {
+        for (unsigned int frame_num = 0; frame_num < count_adjusted;
+             frame_num += this->batch_size_) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> v;
           v.reserve(1);
 
@@ -255,31 +253,32 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             frames.push("data:image/jpg;base64," + encoded);
           }
           AMDINFER_LOG_INFO(logger, "Enqueuing in " + key);
-          futures.push(
-            this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr));
+          futures.push(this->sys_manager_->enqueueJob(this->graph_, "",
+                                                      std::move(v), nullptr));
 #ifdef AMDINFER_ENABLE_TRACING
           trace->endSpan();
 #endif
           auto status = futures.front().wait_for(std::chrono::seconds(0));
           if (status == std::future_status::ready) {
-            std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
-              futures.front().get();
+            std::vector<std::unique_ptr<vart::TensorBuffer>>
+              out_data_descriptor = futures.front().get();
             futures.pop();
-            auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
-            auto shape = outDD[0]->get_tensor()->get_shape();
+            const auto* top_k_data =
+              reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
+            auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
             std::vector<std::string> labels;
             labels.reserve(this->batch_size_);
             for (unsigned int j = 0; j < this->batch_size_; j++) {
               labels.emplace_back("[");
             }
             for (int i = 0; i < shape[0] * shape[1]; i += 7) {
-              auto batch_id = static_cast<int>(topKData[i]);
-              auto class_id = std::to_string(topKData[i + 1]);
-              auto score = std::to_string(topKData[i + 2]);
-              auto x = std::to_string(topKData[i + 3]);
-              auto y = std::to_string(topKData[i + 4]);
-              auto w = std::to_string(topKData[i + 5]);
-              auto h = std::to_string(topKData[i + 6]);
+              auto batch_id = static_cast<int>(top_k_data[i]);
+              auto class_id = std::to_string(top_k_data[i + 1]);
+              auto score = std::to_string(top_k_data[i + 2]);
+              auto x = std::to_string(top_k_data[i + 3]);
+              auto y = std::to_string(top_k_data[i + 4]);
+              auto w = std::to_string(top_k_data[i + 5]);
+              auto h = std::to_string(top_k_data[i + 6]);
               labels[batch_id] += R"({"fill": false, "box": [)" + x + "," + y +
                                   "," + w + "," + h + R"(], "label": ")" +
                                   class_id + "\"},";
@@ -306,28 +305,31 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
           }
         }
         while (!futures.empty()) {
-          std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
+          std::vector<std::unique_ptr<vart::TensorBuffer>> out_data_descriptor =
             futures.front().get();
           AMDINFER_LOG_INFO(logger, "Got future with key " + key);
           futures.pop();
-          auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
-          auto shape = outDD[0]->get_tensor()->get_shape();
+          auto* top_k_data =
+            reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
+          auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
           std::vector<std::string> labels;
           labels.reserve(this->batch_size_);
           for (unsigned int j = 0; j < this->batch_size_; j++) {
             labels.emplace_back("[");
           }
           for (int i = 0; i < shape[0] * shape[1]; i += 7) {
-            auto batch_id = static_cast<int>(topKData[i]);
-            auto class_id = std::to_string(topKData[i + 1]);
-            auto score = std::to_string(topKData[i + 2]);
-            auto x = std::to_string(topKData[i + 3]);
-            auto y = std::to_string(topKData[i + 4]);
-            auto w = std::to_string(topKData[i + 5]);
-            auto h = std::to_string(topKData[i + 6]);
-            labels[batch_id] += R"({"fill": false, "box": [)" + x + "," + y +
-                                "," + w + "," + h + R"(], "label": ")" +
-                                class_id + "\"},";
+            auto batch_id = static_cast<int>(top_k_data[i]);
+            const auto* detect_response =
+              reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));
+
+            labels[batch_id].append(R"({"fill": false, "box": [)");
+            labels[batch_id].append(std::to_string(detect_response->x) + ",");
+            labels[batch_id].append(std::to_string(detect_response->y) + ",");
+            labels[batch_id].append(std::to_string(detect_response->w) + ",");
+            labels[batch_id].append(std::to_string(detect_response->h));
+            labels[batch_id].append(R"(], "label": ")");
+            labels[batch_id].append(std::to_string(detect_response->class_id) +
+                                    "\"},");
           }
           for (unsigned int j = 0; j < this->batch_size_; j++) {
             if (labels[j].size() > 1) {

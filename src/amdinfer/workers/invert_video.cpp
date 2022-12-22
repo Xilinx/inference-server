@@ -87,14 +87,23 @@ void InvertVideo::doInit(RequestParameters* parameters) {
   this->batch_size_ = kBatchSize;
 }
 
+// Support up to Full HD
+const auto kMaxImageHeight = 1080;
+const auto kMaxImageWidth = 1920;
+const auto kMaxImageChannels = 3;
+
+// arbitrarily choose max URL length for the video
+const auto kMaxUrlLength = 128;
+
 size_t InvertVideo::doAllocate(size_t num) {
   constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize = 128;
+  constexpr auto kBufferSize = kMaxUrlLength;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num, kBufferSize,
                          DataType::String);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num, 1920 * 1080 * 3,
+  VectorBuffer::allocate(this->output_buffers_, buffer_num,
+                         kMaxImageWidth * kMaxImageHeight * kMaxImageChannels,
                          DataType::Int8);
   return buffer_num;
 }
@@ -102,9 +111,11 @@ size_t InvertVideo::doAllocate(size_t num) {
 void InvertVideo::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::String, {128});
+  this->metadata_.addInputTensor("input", DataType::String, {kMaxUrlLength});
   // TODO(varunsh): output is variable
-  this->metadata_.addOutputTensor("output", DataType::Int8, {1080, 1920, 3});
+  this->metadata_.addOutputTensor(
+    "output", DataType::Int8,
+    {kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
@@ -163,11 +174,11 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
-        for (int frameNum = 0; frameNum < count; frameNum++) {
+        for (int num_frames = 0; num_frames < count; num_frames++) {
           cv::Mat frame;
           cap >> frame;  // get the next frame from video
           if (frame.empty()) {
-            frameNum--;
+            num_frames--;
             continue;
           }
           cv::bitwise_not(frame, frame);

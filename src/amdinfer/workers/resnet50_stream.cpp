@@ -53,11 +53,11 @@
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
-namespace AKS {
+namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
 }  // namespace AKS
 
-using vidProps = cv::VideoCaptureProperties;
+using VidProps = cv::VideoCaptureProperties;
 
 namespace amdinfer {
 
@@ -88,7 +88,7 @@ class ResNet50Stream : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
-  AKS::SysManagerExt* sysMan_ = nullptr;
+  AKS::SysManagerExt* sys_manager_ = nullptr;
   std::string graphName_;
   AKS::AIGraph* graph_ = nullptr;
 };
@@ -102,7 +102,7 @@ void ResNet50Stream::doInit(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
   /// Get AKS System Manager instance
-  this->sysMan_ = AKS::SysManagerExt::getGlobal();
+  this->sys_manager_ = AKS::SysManagerExt::getGlobal();
   this->graphName_ = "resnet50";
 
   this->batch_size_ = kBatchSize;
@@ -115,8 +115,8 @@ constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
 
 constexpr auto kBoxHeight = 10;  // height in pixels
 
-constexpr auto kImageWidthStr = "224";
-constexpr auto kBoxHeightStr = "10";
+const std::string kImageWidthStr{"224"};
+const std::string kBoxHeightStr{"10"};
 
 /// number of categories returned for the image
 constexpr auto kResnetClassifications = 5;
@@ -133,17 +133,15 @@ size_t ResNet50Stream::doAllocate(size_t num) {
 }
 
 void ResNet50Stream::doAcquire(RequestParameters* parameters) {
-  auto kPath = std::string(
-    "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json");
-
-  auto path = kPath;
+  std::string path{
+    "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
   util::autoExpandEnvironmentVariables(path);
-  this->sysMan_->loadGraphs(path);
+  this->sys_manager_->loadGraphs(path);
 
-  this->graph_ = this->sysMan_->getGraph(this->graphName_);
+  this->graph_ = this->sys_manager_->getGraph(this->graphName_);
 
   this->metadata_.addInputTensor(
     "input", DataType::Int8,
@@ -192,14 +190,14 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
 
         // contains the number of frames in the video;
         auto count =
-          static_cast<size_t>(cap.get(vidProps::CAP_PROP_FRAME_COUNT));
+          static_cast<size_t>(cap.get(VidProps::CAP_PROP_FRAME_COUNT));
         if (input.getParameters()->has("count")) {
           auto requested_count = input.getParameters()->get<int32_t>("count");
           count = std::min(count, static_cast<size_t>(requested_count));
         }
-        double fps = cap.get(vidProps::CAP_PROP_FPS);
-        auto video_width = cap.get(vidProps::CAP_PROP_FRAME_WIDTH);
-        auto video_height = cap.get(vidProps::CAP_PROP_FRAME_HEIGHT);
+        double fps = cap.get(VidProps::CAP_PROP_FPS);
+        auto video_width = cap.get(VidProps::CAP_PROP_FRAME_WIDTH);
+        auto video_height = cap.get(VidProps::CAP_PROP_FRAME_HEIGHT);
 
         InferenceResponseOutput output;
         output.setName("key");
@@ -217,8 +215,8 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
           std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>>
           futures;
         std::queue<std::string> frames;
-        for (unsigned int frameNum = 0; frameNum < count_adjusted;
-             frameNum += this->batch_size_) {
+        for (unsigned int num_frames = 0; num_frames < count_adjusted;
+             num_frames += this->batch_size_) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> v;
           v.reserve(1);
           v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
@@ -245,23 +243,26 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
             std::string encoded = util::base64Encode(enc_msg, buf.size());
             frames.push("data:image/jpg;base64," + encoded);
           }
-          futures.push(
-            this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr));
+          futures.push(this->sys_manager_->enqueueJob(this->graph_, "",
+                                                      std::move(v), nullptr));
           auto status = futures.front().wait_for(std::chrono::seconds(0));
           if (status == std::future_status::ready) {
-            std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
-              futures.front().get();
+            std::vector<std::unique_ptr<vart::TensorBuffer>>
+              out_data_descriptor = futures.front().get();
             futures.pop();
-            int* topKData = reinterpret_cast<int*>(outDD[0]->data().first);
+            int* top_k_data =
+              reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
             for (unsigned int i = 0; i < this->batch_size_; i++) {
               std::string labels = "[";
               for (unsigned int j = 0; j < kResnetClassifications; j++) {
                 auto y = std::to_string(j * kBoxHeight);
                 auto label =
-                  std::to_string(topKData[(i * kResnetClassifications) + j]);
-                labels += R"({"fill": true, "box": [0,)" + y + "," +
-                          kImageWidthStr + "," + kBoxHeightStr +
-                          R"(], "label": ")" + label + "\"},";
+                  std::to_string(top_k_data[(i * kResnetClassifications) + j]);
+                labels.append(R"({"fill": true, "box": [0,)");
+                labels.append(y + ",");
+                labels.append(kImageWidthStr + ",");
+                labels.append(kBoxHeightStr + R"(], "label": ")");
+                labels.append(label + "\"},");
               }
               labels.pop_back();  // trim trailing comma
               labels += "]";
@@ -282,16 +283,17 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
           }
         }
         while (!futures.empty()) {
-          std::vector<std::unique_ptr<vart::TensorBuffer>> outDD =
+          std::vector<std::unique_ptr<vart::TensorBuffer>> out_data_descriptor =
             futures.front().get();
           futures.pop();
-          int* topKData = reinterpret_cast<int*>(outDD[0]->data().first);
+          int* top_k_data =
+            reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
           for (unsigned int i = 0; i < this->batch_size_; i++) {
             std::string labels = "[";
             for (unsigned int j = 0; j < kResnetClassifications; j++) {
               auto y = std::to_string(j * kBoxHeight);
               auto label =
-                std::to_string(topKData[(i * kResnetClassifications) + j]);
+                std::to_string(top_k_data[(i * kResnetClassifications) + j]);
               labels += R"({"fill": true, "box": [0,)" + y + "," +
                         kImageWidthStr + "," + kBoxHeightStr +
                         R"(], "label": ")" + label + "\"},";

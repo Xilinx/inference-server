@@ -28,8 +28,7 @@ set -eo pipefail
 # turn on extended globbing
 shopt -s extglob
 
-iwyu=0
-tidy=0
+tool=""
 run=0
 check=0
 
@@ -39,8 +38,7 @@ max_processes=$(( $(nproc) / 2 ))
 while true
 do
   case "$1" in
-    --iwyu      ) iwyu=1           ; shift 1 ;;
-    --tidy      ) tidy=1           ; shift 1 ;;
+    --tool      ) tool="$2"        ; shift 2 ;;
     --run       ) run=1            ; shift 1 ;;
     --check     ) check=1          ; shift 1 ;;
     -p          ) max_processes=$2 ; shift 2 ;;
@@ -54,15 +52,16 @@ if [[ $run == 0 && $check == 0 ]]; then
     exit 1
 fi
 
-if [[ $iwyu == 0 && $tidy == 0 ]]; then
-    echo "At least one of --iwyu or --tidy must be set"
+if [[ "$tool" != "iwyu" && "$tool" != "tidy" ]]; then
+    echo "--tool must be set to iwyu or tidy"
     exit 1
 fi
 
 run() {
     source_file="$1"
     linter="$2"
-    cmd="$3"
+    new_config_hash="$3"
+    cmd="$4"
 
     echo $source_file
     # strip the root_dir from the source file path
@@ -71,12 +70,14 @@ run() {
     new_hash=$(md5sum $source_file | cut -d ' ' -f 1)
     if [[ -f "$cache_entry" ]]; then
         old_hash=$(tail -n 1 $cache_entry)
-        if [[ $old_hash == $new_hash ]]; then
+        old_config_hash=$(tail -n 2 $cache_entry | head -n 1)
+        if [[ $old_hash == $new_hash && $old_config_hash == $new_config_hash ]]; then
             return
         fi
     fi
     mkdir -p $(dirname $cache_entry)
     $cmd > $cache_entry 2>&1
+    echo $new_config_hash >> $cache_entry
     echo $new_hash >> $cache_entry
 }
 
@@ -120,6 +121,9 @@ if [[ ! -d $build_dir ]]; then
     exit 1
 fi
 
+tidy_hash=$(md5sum $root_dir/.clang-tidy | cut -d ' ' -f 1)
+iwyu_hash=$(md5sum $root_dir/tools/.iwyu.json | cut -d ' ' -f 1)
+
 cache_dir="$build_dir/lint_cache"
 mkdir -p "$cache_dir"
 
@@ -136,11 +140,11 @@ done
 process_counter=0
 for source_file in ${source_files[@]}; do
     if [[ $run == 1 ]]; then
-        if [[ $iwyu == 1 ]]; then
-            run $source_file "iwyu" run_iwyu &
+        if [[ "$tool" == "iwyu" ]]; then
+            run $source_file "iwyu" $iwyu_hash run_iwyu  &
         fi
-        if [[ $tidy == 1 ]]; then
-            run "$source_file" "tidy" run_tidy &
+        if [[ "$tool" == "tidy" ]]; then
+            run "$source_file" "tidy" $tidy_hash run_tidy &
         fi
         process_counter=$(( process_counter + 1 ))
         if [ "$process_counter" -ge "$max_processes" ]; then
@@ -149,10 +153,10 @@ for source_file in ${source_files[@]}; do
         fi
     fi
     if [[ $check == 1 ]]; then
-        if [[ $iwyu == 1 ]]; then
+        if [[ "$tool" == "iwyu" ]]; then
             check $source_file iwyu
         fi
-        if [[ $tidy == 1 ]]; then
+        if [[ "$tool" == "tidy" ]]; then
             check $source_file tidy
         fi
     fi

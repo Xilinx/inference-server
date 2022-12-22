@@ -40,9 +40,7 @@
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Echo worker is a simple worker that accepts a single uint32_t
@@ -200,9 +198,7 @@ void Echo::doRelease() {}
 void Echo::doDeallocate() {}
 void Echo::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

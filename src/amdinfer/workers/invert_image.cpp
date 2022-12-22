@@ -50,7 +50,7 @@
 namespace {
 
 /// Invert the pixel color. Assumes RGB in some order with optional alpha
-template <typename T, bool alphaPresent>
+template <typename T, bool kAlphaPresent>
 void invert(void* ibuf, void* obuf, uint64_t size) {
   static_assert(std::is_pointer<T>::value, "T must be a pointer type");
   auto* idata = static_cast<T>(ibuf);
@@ -59,27 +59,25 @@ void invert(void* ibuf, void* obuf, uint64_t size) {
 
   // mask to get the largest value. E.g. for uint8_t, mask will be 255.
   constexpr auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
-  constexpr uint64_t incr = alphaPresent ? 4 : 3;
+  constexpr uint64_t incr = kAlphaPresent ? 4 : 3;
   for (uint64_t i = 0; i < size; i += incr) {
     odata[i] = mask - idata[i];
     odata[i + 1] = mask - idata[i + 1];
     odata[i + 2] = mask - idata[i + 2];
-    if constexpr (alphaPresent) {
+    if constexpr (kAlphaPresent) {
       odata[i + 3] = idata[i + 3];
     }
   }
 }
 
 /// Reduce vector to a product of its elements
-uint64_t reduce_mult(std::vector<uint64_t>& v) {
+uint64_t reduceMult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
 }  // namespace
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The InvertImage worker is a simple worker that accepts an array
@@ -123,9 +121,15 @@ void InvertImage::doInit(RequestParameters* parameters) {
   this->batch_size_ = batch_size;
 }
 
+// Support up to Full HD
+const auto kMaxImageHeight = 1080;
+const auto kMaxImageWidth = 1920;
+const auto kMaxImageChannels = 3;
+
 size_t InvertImage::doAllocate(size_t num) {
   constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize = 1920 * 1080 * 3;  // Support up to Full HD
+  constexpr auto kBufferSize =
+    kMaxImageWidth * kMaxImageHeight * kMaxImageChannels;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
@@ -138,10 +142,12 @@ size_t InvertImage::doAllocate(size_t num) {
 void InvertImage::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::Uint8,
-                                 {this->batch_size_, 1080, 1920, 3});
-  this->metadata_.addOutputTensor("output", DataType::Uint32,
-                                  {this->batch_size_, 1080, 1920, 3});
+  this->metadata_.addInputTensor(
+    "input", DataType::Uint8,
+    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
+  this->metadata_.addOutputTensor(
+    "output", DataType::Uint32,
+    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
 }
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
@@ -175,7 +181,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         auto input_shape = inputs[i].getShape();
 
-        auto input_size = reduce_mult(input_shape);
+        auto input_size = reduceMult(input_shape);
         auto input_dtype = inputs[i].getDatatype();
 
         // invert image, store in output
@@ -260,9 +266,7 @@ void InvertImage::doRelease() {}
 void InvertImage::doDeallocate() {}
 void InvertImage::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

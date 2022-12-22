@@ -36,14 +36,12 @@
 #include "amdinfer/servers/http_server.hpp"    // for stop
 #include "amdinfer/servers/server.hpp"         // for Server
 
-namespace fs = std::filesystem;
-
 /**
  * @brief Handler for incoming interrupt signals
  *
  * @param signum Integer ID for the caught interrupt
  */
-void signal_callback_handler(int signum) {
+void signalCallbackHandler(int signum) {
   std::cout << "Caught interrupt " << signum
             << ". amdinfer-server is ending...\n";
 #ifdef AMDINFER_ENABLE_HTTP
@@ -59,8 +57,8 @@ void signal_callback_handler(int signum) {
  * @return int Return value at termination
  */
 int main(int argc, char* argv[]) {
-  signal(SIGINT, signal_callback_handler);
-  signal(SIGTERM, signal_callback_handler);
+  signal(SIGINT, signalCallbackHandler);
+  signal(SIGTERM, signalCallbackHandler);
 #ifdef AMDINFER_ENABLE_HTTP
   uint16_t http_port = kDefaultHttpPort;
 #endif

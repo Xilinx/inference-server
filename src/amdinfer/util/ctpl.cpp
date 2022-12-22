@@ -67,8 +67,8 @@ void thread_pool::resize(int thread_num) {
         std::unique_lock lock(mutex_);
         cv_.notify_all();
       }
-      threads_.resize(
-        thread_num);  // safe to delete because the threads are detached
+      // safe to delete because the threads are detached
+      threads_.resize(thread_num);
       flags_.resize(
         thread_num);  // safe to delete because the threads have copies of
                       // shared_ptr of the flags, not originals
@@ -88,8 +88,9 @@ void thread_pool::clearQueue() {
 std::function<void(int)> thread_pool::pop() {
   std::function<void(int id)> *_f = nullptr;
   q_.try_dequeue(_f);
-  std::unique_ptr<std::function<void(int id)>> func(
-    _f);  // at return, delete the function even if an exception occurred
+  // at return, delete the function even if an exception occurred
+  std::unique_ptr<std::function<void(int id)>> func;
+  func.reset(_f);
 
   std::function<void(int)> f;
   if (_f) {

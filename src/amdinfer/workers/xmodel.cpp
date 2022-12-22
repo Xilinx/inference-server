@@ -59,13 +59,7 @@
 #include "amdinfer/util/thread.hpp"                 // for setThreadName
 #include "amdinfer/workers/worker.hpp"              // for Worker, kNumBuffer...
 
-uint64_t reduce_mult(std::vector<uint64_t>& v) {
-  return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
-}
-
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The XModel worker accepts a path to an XModel from the user and runs
@@ -107,22 +101,21 @@ vart::RunnerExt* XModel::getRunner() {
 }
 
 void XModel::doInit(RequestParameters* parameters) {
-  constexpr auto kMaxBufferNum = 50;
+  const auto max_buffer_num = 50;
   const auto* aks_xmodel_root = std::getenv("AKS_XMODEL_ROOT");
   if (aks_xmodel_root == nullptr) {
     throw environment_not_set_error("AKS_XMODEL_ROOT not set");
   }
-  const auto kPath =
+  const auto default_path =
     std::string{aks_xmodel_root} +
     "/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel";
 
-  auto max_buffer_num = kMaxBufferNum;
+  max_buffer_num_ = max_buffer_num;
   if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
+    max_buffer_num_ = parameters->get<int32_t>("max_buffer_num");
   }
-  this->max_buffer_num_ = max_buffer_num;
 
-  auto path = kPath;
+  auto path = default_path;
   if (parameters->has("model")) {
     path = parameters->get<std::string>("model");
   }
@@ -227,6 +220,8 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
   const auto& logger = this->getLogger();
 #endif
 
+  const auto pool_delay = std::chrono::milliseconds(10);
+
   while (true) {
     BatchPtr batch;
     input_queue->wait_dequeue(batch);
@@ -241,7 +236,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #endif
     pool_size++;
     if (pool_size > max_pool_size) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      std::this_thread::sleep_for(pool_delay);
     }
     this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
       (void)id;  // suppress unused variable warning
@@ -253,13 +248,13 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #endif
 
       std::queue<std::pair<uint32_t, int>> futures;
-      std::vector<vart::TensorBuffer*> inputsPtr;
-      std::vector<vart::TensorBuffer*> outputsPtr;
+      std::vector<vart::TensorBuffer*> inputs_ptr;
+      std::vector<vart::TensorBuffer*> outputs_ptr;
 
-      auto& input_buffers = batch->getInputBuffers();
-      inputsPtr.reserve(input_buffers.size());
-      auto& output_buffers = batch->getOutputBuffers();
-      outputsPtr.reserve(output_buffers.size());
+      const auto& input_buffers = batch->getInputBuffers();
+      inputs_ptr.reserve(input_buffers.size());
+      const auto& output_buffers = batch->getOutputBuffers();
+      outputs_ptr.reserve(output_buffers.size());
 
       for (const auto& buffer : input_buffers) {
         logTraceBuffer(getLogger(), buffer->data(0));
@@ -267,20 +262,20 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 
       for (const auto& buffer : input_buffers) {
         auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-        inputsPtr.emplace_back(vart->getTensorBuffer());
+        inputs_ptr.emplace_back(vart->getTensorBuffer());
       }
       for (const auto& buffer : output_buffers) {
         auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-        outputsPtr.emplace_back(vart->getTensorBuffer());
+        outputs_ptr.emplace_back(vart->getTensorBuffer());
       }
 
-      for (auto* input : inputsPtr) {
+      for (auto* input : inputs_ptr) {
         const auto* tensor = input->get_tensor();
         input->sync_for_write(
           0, tensor->get_element_num() / (tensor->get_shape())[0]);
       }
 
-      futures.push(getRunner()->execute_async(inputsPtr, outputsPtr));
+      futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
 
       std::vector<InferenceResponse> responses;
       responses.reserve(batch->size());
@@ -297,7 +292,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         getRunner()->wait(job_id.first, -1);
       }
 
-      for (auto* output : outputsPtr) {
+      for (auto* output : outputs_ptr) {
         const auto* tensor = output->get_tensor();
         output->sync_for_read(
           0, tensor->get_element_num() / (tensor->get_shape())[0]);
@@ -369,9 +364,7 @@ void XModel::doRelease() {}
 void XModel::doDeallocate() { this->pool_.stop(true); }
 void XModel::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

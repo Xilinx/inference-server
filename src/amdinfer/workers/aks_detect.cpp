@@ -18,6 +18,8 @@
  * @brief Implements the AKS detect worker
  */
 
+#include "amdinfer/workers/aks_detect.hpp"
+
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
@@ -55,17 +57,15 @@
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
-namespace AKS {
+namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
 }  // namespace AKS
 
-uint64_t reduce_mult(std::vector<uint64_t>& v) {
+uint64_t reduceMult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Resnet50 worker accepts a 224x224 image and returns an array of
@@ -86,7 +86,7 @@ class AksDetect : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
-  AKS::SysManagerExt* sysMan_ = nullptr;
+  AKS::SysManagerExt* sys_manager_ = nullptr;
   std::string graphName_;
   AKS::AIGraph* graph_ = nullptr;
 };
@@ -96,18 +96,17 @@ std::thread AksDetect::spawn(BatchPtrQueue* input_queue) {
 }
 
 void AksDetect::doInit(RequestParameters* parameters) {
-  std::string kGraphName = "yolov3";
-  constexpr auto kBatchSize = 4;
+  this->sys_manager_ = AKS::SysManagerExt::getGlobal();
 
-  this->sysMan_ = AKS::SysManagerExt::getGlobal();
-
-  auto batch_size = kBatchSize;
+  // arbitrarily choose 4 as the default
+  const auto default_batch_size = 4;
+  auto batch_size = default_batch_size;
   if (parameters->has("batch_size")) {
     batch_size = parameters->get<int32_t>("batch_size");
   }
   this->batch_size_ = batch_size;
 
-  auto graph_name = kGraphName;
+  std::string graph_name{"yolov3"};
   if (parameters->has("aks_graph_name")) {
     graph_name = parameters->get<std::string>("aks_graph_name");
   }
@@ -130,15 +129,6 @@ size_t AksDetect::doAllocate(size_t num) {
   return buffer_num;
 }
 
-struct DetectResponse {
-  float class_id;
-  float score;
-  float x;
-  float y;
-  float w;
-  float h;
-};
-
 void AksDetect::doAcquire(RequestParameters* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -153,13 +143,13 @@ void AksDetect::doAcquire(RequestParameters* parameters) {
   util::autoExpandEnvironmentVariables(path);
 
   try {
-    this->sysMan_->loadGraphs(path);
+    this->sys_manager_->loadGraphs(path);
   } catch (const std::exception& e) {
     AMDINFER_LOG_ERROR(logger, e.what());
     throw;
   }
 
-  this->graph_ = this->sysMan_->getGraph(this->graphName_);
+  this->graph_ = this->sys_manager_->getGraph(this->graphName_);
 
   this->metadata_.addInputTensor(
     "input", DataType::Int8,
@@ -190,9 +180,9 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
 
     size_t tensor_count = 0;
     for (unsigned int j = 0; j < batch->size(); j++) {
-      const auto& req = batch->getRequest(j);
+      const auto& req = batch->getRequest(static_cast<int>(j));
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
+      const auto& trace = batch->getTrace(static_cast<int>(j));
       trace->startSpan("AksDetect");
 #endif
       auto& resp = responses.emplace_back();
@@ -208,7 +198,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
 
         auto input_shape = input.getShape();
 
-        input_size = reduce_mult(input_shape);
+        input_size = reduceMult(input_shape);
         auto input_dtype = input.getDatatype();
 
         std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
@@ -257,30 +247,31 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
       }
     }
 
-    std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> futureObj =
-      this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr);
+    std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> future =
+      this->sys_manager_->enqueueJob(this->graph_, "", std::move(v), nullptr);
 
-    auto outDD = futureObj.get();
+    auto out_data_descriptor = future.get();
 
-    auto shape = outDD[0]->get_tensor()->get_shape();
+    auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
     // shape[0] is number of boxes, shape[1] is the number of values per box
     int size = shape.size() > 1 ? shape[0] * shape[1] : 0;
 
-    auto* topKData = reinterpret_cast<float*>(outDD[0]->data().first);
+    auto* top_k_data =
+      reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
     auto my_data_2 = std::vector<std::vector<std::byte>>();
     my_data_2.resize(this->batch_size_);
-    for (int i = 0; i < size; i += 7) {
-      auto batch_id = static_cast<int>(topKData[i]);
+    for (int i = 0; i < size; i += kAkdDetectResponseSize) {
+      auto batch_id = static_cast<int>(top_k_data[i]);
       auto len = my_data_2[batch_id].size();
       my_data_2[batch_id].resize(len + sizeof(DetectResponse));
 
-      memcpy(my_data_2[batch_id].data() + len, &(topKData[i + 1]),
+      memcpy(my_data_2[batch_id].data() + len, &(top_k_data[i + 1]),
              sizeof(DetectResponse));
     }
 
     tensor_count = 0;
     for (unsigned int k = 0; k < batch->size(); k++) {
-      const auto& req = batch->getRequest(k);
+      const auto& req = batch->getRequest(static_cast<int>(k));
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       auto& resp = responses[k];
@@ -299,7 +290,8 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
         }
 
         output.setShape(
-          {6, my_data_2[tensor_count].size() / sizeof(DetectResponse)});
+          {kAkdDetectResponseSize - 1,
+           my_data_2[tensor_count].size() / sizeof(DetectResponse)});
         output.setData(std::move(my_data_2[tensor_count]));
         resp.addOutput(output);
         tensor_count++;
@@ -307,13 +299,14 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(k));
+        std::chrono::high_resolution_clock::now() -
+        batch->getTime(static_cast<int>(k)));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
 
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(k);
+      const auto& trace = batch->getTrace(static_cast<int>(k));
       auto context = trace->propagate();
       resp.setContext(std::move(context));
 #endif
@@ -327,9 +320,7 @@ void AksDetect::doRelease() {}
 void AksDetect::doDeallocate() {}
 void AksDetect::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

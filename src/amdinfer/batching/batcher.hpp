@@ -66,8 +66,8 @@ class Batch {
 
   void addRequest(InferenceRequestPtr request);
 
-  [[nodiscard]] const InferenceRequestPtr& getRequest(int index);
-  [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests();
+  [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
+  [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
   [[nodiscard]] const BufferPtrs& getInputBuffers() const;
   [[nodiscard]] const BufferPtrs& getOutputBuffers() const;
   [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
@@ -80,11 +80,11 @@ class Batch {
 
 #ifdef AMDINFER_ENABLE_TRACING
   void addTrace(TracePtr trace);
-  TracePtr& getTrace(int index);
+  TracePtr& getTrace(size_t index);
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
   void addTime(std::chrono::high_resolution_clock::time_point timestamp);
-  std::chrono::high_resolution_clock::time_point getTime(int index);
+  std::chrono::high_resolution_clock::time_point getTime(size_t index);
 #endif
 
   [[nodiscard]] auto begin() const { return requests_.begin(); }

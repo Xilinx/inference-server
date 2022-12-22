@@ -59,13 +59,11 @@
 
 namespace tf = ::tensorflow;
 
-uint64_t reduce_mult(std::vector<uint64_t>& v) {
+uint64_t reduceMult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The TfZendnn worker is a simple worker that accepts a single uint32_t
@@ -93,11 +91,15 @@ class TfZendnn : public Worker {
   tf::Status status_;
 
   // Image properties
-  unsigned output_classes_;
-  unsigned image_width_, image_height_, image_channels_, image_size_;
+  unsigned int output_classes_ = 1000;
+  unsigned int image_width_ = 224;
+  unsigned int image_height_ = 224;
+  unsigned int image_channels_ = 3;
+  unsigned int image_size_ = image_width_ * image_height_ * image_channels_;
 
   // Input / Output nodes
-  std::string input_node_, output_node_;
+  std::string input_node_{"input"};
+  std::string output_node_{"predict"};
   DataType input_dt_ = DataType::Fp32;
 };
 
@@ -106,54 +108,41 @@ std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
 }
 
 void TfZendnn::doInit(RequestParameters* parameters) {
-  constexpr auto kMaxBufferNum = 64;
-  constexpr auto kBatchSize = 1;
+  const auto default_batch_size = 1;
 
-  auto max_buffer_num = kMaxBufferNum;
-  if (parameters->has("max_buffer_num"))
+  auto max_buffer_num = 64;
+  if (parameters->has("max_buffer_num")) {
     max_buffer_num = parameters->get<int32_t>("max_buffer_num");
+  }
   this->max_buffer_num_ = max_buffer_num;
 
-  auto batch_size = kBatchSize;
-  if (parameters->has("batch_size"))
+  auto batch_size = default_batch_size;
+  if (parameters->has("batch_size")) {
     batch_size = parameters->get<int32_t>("batch_size");
+  }
   this->batch_size_ = batch_size;
-
-  // Image properties
-  const unsigned kTotalClasses = 1001;
-  const unsigned kImageWidth = 224;
-  const unsigned kImageHeight = 224;
-  const unsigned kImageChannels = 3;
 
   if (parameters->has("input_size")) {
     image_height_ = parameters->get<int32_t>("input_size");
     image_width_ = parameters->get<int32_t>("input_size");
-  } else {
-    image_height_ = kImageWidth;
-    image_width_ = kImageHeight;
   }
-  if (parameters->has("image_channels"))
+
+  if (parameters->has("image_channels")) {
     image_channels_ = parameters->get<int32_t>("image_channels");
-  else
-    image_channels_ = kImageChannels;
+  }
   image_size_ = image_height_ * image_width_ * image_channels_;
 
-  if (parameters->has("output_classes"))
+  if (parameters->has("output_classes")) {
     output_classes_ = parameters->get<int32_t>("output_classes");
-  else
-    output_classes_ = kTotalClasses;
+  }
 
-  // Input / Output nodes
-  std::string kInputNode = "input";
-  std::string kOutputNode = "predict";
-  if (parameters->has("input_node"))
+  if (parameters->has("input_node")) {
     input_node_ = parameters->get<std::string>("input_node");
-  else
-    input_node_ = kInputNode;
-  if (parameters->has("output_node"))
+  }
+
+  if (parameters->has("output_node")) {
     output_node_ = parameters->get<std::string>("output_node");
-  else
-    output_node_ = kOutputNode;
+  }
 
   std::string logmsg =
     "TensorFlow C/C++ library version: " + std::string(TF_Version());
@@ -186,9 +175,14 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   config.set_use_per_session_threads(false);
 
   // Parallelism parameters
-  unsigned inter_op = 1, intra_op = 64;
-  if (parameters->has("inter_op")) inter_op = parameters->get<int>("inter_op");
-  if (parameters->has("intra_op")) inter_op = parameters->get<int>("intra_op");
+  unsigned int inter_op = 1;
+  unsigned int intra_op = 64;
+  if (parameters->has("inter_op")) {
+    inter_op = parameters->get<int>("inter_op");
+  }
+  if (parameters->has("intra_op")) {
+    inter_op = parameters->get<int>("intra_op");
+  }
   config.set_intra_op_parallelism_threads(intra_op);
   config.set_inter_op_parallelism_threads(inter_op);
 
@@ -251,7 +245,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       MetricCounterIDs::kPipelineIngressWorker);
 #endif
 
-    auto TotalStart = std::chrono::high_resolution_clock::now();
+    auto total_start = std::chrono::high_resolution_clock::now();
 
     // Find total number of images to initialize for TF tensor
     auto tensor_count = static_cast<int>(batch->size());
@@ -265,10 +259,10 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     size_t vec_size = 0;
 
     for (unsigned int j = 0; j < batch->size(); j++) {
-      auto& req = batch->getRequest(j);
+      const auto& req = batch->getRequest(j);
 
 #ifdef AMDINFER_ENABLE_TRACING
-      auto& trace = batch->getTrace(j);
+      const auto& trace = batch->getTrace(j);
       trace->startSpan("tfzendnn");
 #endif
       auto& resp = responses.emplace_back();
@@ -283,8 +277,8 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       // Get all the inputs from the requests and copy to the TensorFlow tensor
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
-        const auto* floatBuffer = static_cast<float*>(input_buffer);
-        std::copy(floatBuffer, floatBuffer + input_size,
+        const auto* float_buffer = static_cast<float*>(input_buffer);
+        std::copy(float_buffer, float_buffer + input_size,
                   input_tensor.flat<float>().data() + vec_size);
         vec_size = vec_size + input_size;
       }
@@ -354,9 +348,9 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       resp.setContext(std::move(context));
 #endif
 
-      auto TotalStop = std::chrono::high_resolution_clock::now();
+      auto total_stop = std::chrono::high_resolution_clock::now();
       auto d = std::chrono::duration_cast<std::chrono::milliseconds>(
-        TotalStop - TotalStart);
+        total_stop - total_start);
 #ifdef AMDINFER_ENABLE_LOGGING
       float tt = d.count();
       AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
@@ -375,13 +369,14 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
   AMDINFER_LOG_INFO(logger, "TfZendnn ending");
 }
 
-void TfZendnn::doRelease() { this->session_->Close(); }
+void TfZendnn::doRelease() {
+  auto retval = this->session_->Close();
+  assert(retval.ok());
+}
 void TfZendnn::doDeallocate() {}
 void TfZendnn::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

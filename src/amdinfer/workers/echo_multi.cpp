@@ -107,7 +107,7 @@ size_t EchoMulti::doAllocate(size_t num) {
     BufferPtrs vec;
     for (auto j = 0; j < kInputTensors; ++j) {
       vec.emplace_back(std::make_unique<VectorBuffer>(
-        kInputLengths[j] * this->batch_size_, DataType::Uint32));
+        kInputLengths.at(j) * this->batch_size_, DataType::Uint32));
     }
     this->input_buffers_->enqueue(std::move(vec));
   }
@@ -115,7 +115,7 @@ size_t EchoMulti::doAllocate(size_t num) {
     BufferPtrs vec;
     for (auto j = 0; j < kOutputTensors; ++j) {
       vec.emplace_back(std::make_unique<VectorBuffer>(
-        kOutputLengths[j] * this->batch_size_, DataType::Uint32));
+        kOutputLengths.at(j) * this->batch_size_, DataType::Uint32));
     }
     this->output_buffers_->enqueue(std::move(vec));
   }
@@ -124,14 +124,14 @@ size_t EchoMulti::doAllocate(size_t num) {
 
 void EchoMulti::doAcquire([[maybe_unused]] RequestParameters* parameters) {
   for (auto i = 0; i < kInputTensors; ++i) {
-    this->metadata_.addInputTensor("input" + std::to_string(i),
-                                   DataType::Uint32,
-                                   {static_cast<uint64_t>(kInputLengths[i])});
+    this->metadata_.addInputTensor(
+      "input" + std::to_string(i), DataType::Uint32,
+      {static_cast<uint64_t>(kInputLengths.at(i))});
   }
   for (auto i = 0; i < kOutputTensors; ++i) {
-    this->metadata_.addInputTensor("input" + std::to_string(i),
-                                   DataType::Uint32,
-                                   {static_cast<uint64_t>(kOutputLengths[i])});
+    this->metadata_.addInputTensor(
+      "input" + std::to_string(i), DataType::Uint32,
+      {static_cast<uint64_t>(kOutputLengths.at(i))});
   }
 }
 
@@ -154,9 +154,9 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
 #endif
     const auto batch_size = batch->size();
     for (unsigned int j = 0; j < batch_size; j++) {
-      const auto& req = batch->getRequest(j);
+      const auto& req = batch->getRequest(static_cast<int>(j));
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
+      const auto& trace = batch->getTrace(static_cast<int>(j));
       trace->startSpan("echoMulti");
 #endif
       InferenceResponse resp;
@@ -168,10 +168,11 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
       std::vector<int> args;
       const auto input_num =
         std::accumulate(kInputLengths.begin(), kInputLengths.end(), 0);
+      assert(input_num != 0);
       args.reserve(input_num);
       for (auto i = 0; i < kInputTensors; ++i) {
         const auto* input_buffer = static_cast<uint32_t*>(inputs[i].getData());
-        for (auto k = 0; k < kInputLengths[i]; ++k) {
+        for (auto k = 0; k < kInputLengths.at(i); ++k) {
           args.push_back(input_buffer[k]);
         }
       }
@@ -182,7 +183,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
       output_args.reserve(
         std::accumulate(kOutputLengths.begin(), kOutputLengths.end(), 0));
       for (auto i = 0; i < kOutputTensors; ++i) {
-        for (auto k = 0; k < kOutputLengths[i]; ++k) {
+        for (auto k = 0; k < kOutputLengths.at(i); ++k) {
           output_args.push_back(args[input_index]);
           input_index = (input_index + 1) % input_num;
         }
@@ -197,12 +198,12 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
         }
         output.setShape({static_cast<uint64_t>(kOutputLengths[i])});
         std::vector<std::byte> buffer;
-        buffer.resize(kOutputLengths[i] * sizeof(uint32_t));
+        buffer.resize(kOutputLengths.at(i) * sizeof(uint32_t));
         memcpy(buffer.data(), &(output_args[offset]),
-               kOutputLengths[i] * sizeof(uint32_t));
+               kOutputLengths.at(i) * sizeof(uint32_t));
         output.setData(std::move(buffer));
         resp.addOutput(output);
-        offset += kOutputLengths[i];
+        offset += kOutputLengths.at(i);
       }
 
 #ifdef AMDINFER_ENABLE_TRACING
@@ -216,7 +217,8 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::kPipelineEgressWorker);
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(j));
+        std::chrono::high_resolution_clock::now() -
+        batch->getTime(static_cast<int>(j)));
       Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
                                             duration.count());
 #endif
