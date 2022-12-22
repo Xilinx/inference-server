@@ -27,7 +27,7 @@
 #include "amdinfer/pre_post/image_preprocess.hpp"
 #include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
 #include "amdinfer/testing/gtest_fixtures.hpp"     // for GrpcFixture
-#include "amdinfer/util/ctpl.h"                    // for thread_pool
+#include "amdinfer/util/ctpl.hpp"                  // for thread_pool
 
 namespace fs = std::filesystem;
 

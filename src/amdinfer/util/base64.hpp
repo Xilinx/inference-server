@@ -32,7 +32,7 @@ namespace amdinfer::util {
  * @param in the encoded string
  * @return std::string decoded string
  */
-std::string base64_decode(std::string in);
+std::string base64Decode(std::string in);
 
 /**
  * @brief Decodes a base64-encoded string and returns it
@@ -41,7 +41,7 @@ std::string base64_decode(std::string in);
  * @param in_len length of the encoded string
  * @return std::string decoded string
  */
-std::string base64_decode(const char* in, size_t in_len);
+std::string base64Decode(const char* in, size_t in_len);
 
 /**
  * @brief Encodes a string with base64 and returns it
@@ -49,7 +49,7 @@ std::string base64_decode(const char* in, size_t in_len);
  * @param in string to encode
  * @return std::string encoded string
  */
-std::string base64_encode(std::string in);
+std::string base64Encode(std::string in);
 
 /**
  * @brief Encodes a string with base64 and returns it
@@ -58,7 +58,7 @@ std::string base64_encode(std::string in);
  * @param in_len length of the string
  * @return std::string encoded string
  */
-std::string base64_encode(const char* in, size_t in_len);
+std::string base64Encode(const char* in, size_t in_len);
 }  // namespace amdinfer::util
 
 #endif  // GUARD_AMDINFER_UTIL_BASE64

@@ -207,7 +207,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
                  input_buffer, input_size);
         } else if (input_dtype == DataType::String) {
           auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = util::base64_decode(idata, input_size);
+          auto decoded_str = util::base64Decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {

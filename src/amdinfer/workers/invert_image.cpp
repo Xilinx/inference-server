@@ -199,7 +199,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           output.setDatatype(DataType::Uint8);
         } else if (input_dtype == DataType::String) {
           auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = util::base64_decode(idata, input_size);
+          auto decoded_str = util::base64Decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img;
           try {
@@ -220,7 +220,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           std::vector<unsigned char> buf;
           cv::imencode(".jpg", img, buf);
           const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-          auto encoded = util::base64_encode(enc_msg, buf.size());
+          auto encoded = util::base64Encode(enc_msg, buf.size());
           std::vector<std::byte> buffer;
           buffer.resize(encoded.size());
           memcpy(buffer.data(), encoded.data(), encoded.length());

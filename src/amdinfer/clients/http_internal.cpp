@@ -42,7 +42,7 @@
 #include "amdinfer/core/interface.hpp"             // for InterfaceType, Inte...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "amdinfer/observation/logging.hpp"        // for Logger
-#include "amdinfer/util/compression.hpp"           // for z_decompress
+#include "amdinfer/util/compression.hpp"           // for zDecompress
 #include "amdinfer/util/traits.hpp"                // for is_any
 
 namespace amdinfer {
@@ -433,7 +433,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
   AMDINFER_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
 
   // if it's still not valid, attempt to uncompress the body and convert to JSON
-  auto body_decompress = util::z_decompress(body.data(), body.length());
+  auto body_decompress = util::zDecompress(body.data(), body.length());
   success = reader->parse(body_decompress.data(),
                           body_decompress.data() + body_decompress.size(),
                           root.get(), &errors);

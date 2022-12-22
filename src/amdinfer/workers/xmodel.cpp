@@ -52,7 +52,7 @@
 #include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
 #include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
-#include "amdinfer/util/ctpl.h"                     // for thread_pool
+#include "amdinfer/util/ctpl.hpp"                   // for thread_pool
 #include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
 #include "amdinfer/util/string.hpp"                 // for endsWith
@@ -95,7 +95,7 @@ class XModel : public Worker {
   std::unique_ptr<vart::Runner> runner_;
   std::vector<DataType> output_type_;
   std::vector<uint32_t> output_size_;
-  ctpl::thread_pool pool_;
+  util::thread_pool pool_;
 };
 
 std::thread XModel::spawn(BatchPtrQueue* input_queue) {
@@ -221,7 +221,7 @@ void XModel::doAcquire(RequestParameters* parameters) {
 
 void XModel::doRun(BatchPtrQueue* input_queue) {
   std::atomic_int32_t pool_size = 0;
-  const int max_pool_size = this->pool_.size() * 4;  // 4 is arbitrary
+  const int max_pool_size = this->pool_.getSize() * 4;  // 4 is arbitrary
   util::setThreadName("XModel");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();

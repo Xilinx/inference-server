@@ -175,7 +175,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
           cv::imencode(".jpg", frame, buf);
           const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
           std::string encoded =
-            "data:image/jpg;base64," + util::base64_encode(enc_msg, buf.size());
+            "data:image/jpg;base64," + util::base64Encode(enc_msg, buf.size());
 
           InferenceResponse resp;
           resp.setID(req->getID());

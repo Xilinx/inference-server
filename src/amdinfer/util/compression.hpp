@@ -28,7 +28,7 @@ namespace amdinfer::util {
  * @param len length of the deflated string
  * @return std::string the inflated string
  */
-std::string z_decompress(const char *str, int len);
+std::string zDecompress(const char *str, int len);
 
 }  // namespace amdinfer::util
 

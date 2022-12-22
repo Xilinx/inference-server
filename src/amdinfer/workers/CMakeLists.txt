@@ -75,6 +75,7 @@ target_link_libraries(
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
     workerXmodel PRIVATE parse_env vart-runner target-factory xir observation
+                         util
   )
 endif()
 

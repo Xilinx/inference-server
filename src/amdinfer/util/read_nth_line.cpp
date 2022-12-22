@@ -18,7 +18,7 @@
 
 namespace amdinfer::util {
 
-std::string readNthLine(const std::string& filename, int N) {
+std::string readNthLine(const std::string& filename, int n) {
   std::ifstream in(filename);
   std::string line;
   // for performance, reserve some initial space in the string
@@ -26,7 +26,7 @@ std::string readNthLine(const std::string& filename, int N) {
   line.reserve(kDefaultLineLength);
 
   // skip N lines
-  for (int i = 0; i < N; ++i) {
+  for (int i = 0; i < n; ++i) {
     std::getline(in, line);
   }
 
