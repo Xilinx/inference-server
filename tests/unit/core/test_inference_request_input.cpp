@@ -13,11 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstddef>
-#include <iostream>
+#include <algorithm>  // for max
+#include <cstddef>    // for byte
+#include <cstdint>    // for uint64_t
+#include <string>     // for allocator, string
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include "amdinfer/core/predict_api.hpp"
-#include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::Uint8
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
+#include "gtest/gtest.h"                  // for Message, TestPartResult, Test
 
 namespace amdinfer {
 

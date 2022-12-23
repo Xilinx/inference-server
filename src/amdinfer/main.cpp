@@ -20,21 +20,16 @@
  */
 
 #include <csignal>              // for signal, SIGINT, SIGTERM
+#include <cstdint>              // for uint16_t
 #include <cstdlib>              // for exit
-#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Opt...
-#include <efsw/efsw.hpp>        // for FileWatcher
-#include <filesystem>           // for path, directory_iterator
-#include <iostream>             // for operator<<, basic_ostre...
-#include <memory>               // for unique_ptr, make_unique
-#include <string>               // for string, allocator, char...
+#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Options
+#include <iostream>             // for operator<<, basic_ostream
+#include <string>               // for string, allocator, char_...
 
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
-#include "amdinfer/clients/native.hpp"         // for NativeClient
-#include "amdinfer/core/exceptions.hpp"        // for runtime_error
-#include "amdinfer/core/model_repository.hpp"  // for UpdateListener, ModelRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
-#include "amdinfer/servers/http_server.hpp"    // for stop
-#include "amdinfer/servers/server.hpp"         // for Server
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_HTTP
+#include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_INFO, Logger
+#include "amdinfer/servers/http_server.hpp"  // for stop
+#include "amdinfer/servers/server.hpp"       // for Server
 
 /**
  * @brief Handler for incoming interrupt signals

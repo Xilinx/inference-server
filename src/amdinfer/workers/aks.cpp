@@ -25,6 +25,7 @@
 #include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for int32_t
+#include <cstring>                 // for memcpy
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, allocator
 #include <string>                  // for string, operator+, char...

@@ -27,7 +27,6 @@
 #include <unordered_map>  // for unordered_map
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 

@@ -17,16 +17,18 @@
  * @brief Implements the EchoMulti worker
  */
 
-#include <chrono>     // for microseconds, duration_...
-#include <cstddef>    // for size_t, byte
-#include <cstdint>    // for uint32_t, int32_t
-#include <exception>  // for exception
-#include <memory>     // for unique_ptr, allocator
-#include <numeric>    // for accumulate
-#include <string>     // for string
-#include <thread>     // for thread
-#include <utility>    // for move
-#include <vector>     // for vector
+#include <array>    // for array
+#include <cassert>  // for assert
+#include <chrono>   // for microseconds, duration_...
+#include <cstddef>  // for size_t, byte
+#include <cstdint>  // for uint32_t, int32_t
+#include <cstring>  // for memcpy
+#include <memory>   // for unique_ptr, allocator
+#include <numeric>  // for accumulate
+#include <string>   // for string
+#include <thread>   // for thread
+#include <utility>  // for move
+#include <vector>   // for vector
 
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
@@ -37,6 +39,7 @@
 #include "amdinfer/observation/logging.hpp"    // for Logger
 #include "amdinfer/observation/metrics.hpp"    // for Metrics
 #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker
 

@@ -31,6 +31,7 @@
 #include <tensorflow/core/public/session_options.h>     // for SessionOptions
 
 #include <algorithm>   // for copy, max
+#include <cassert>     // for assert
 #include <chrono>      // for milliseconds
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for int32_t, uint...
@@ -53,7 +54,6 @@
 #include "amdinfer/observation/logging.hpp"    // for Logger, PROTE...
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, Metr...
 #include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/string.hpp"            // for endsWith
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumB...
 

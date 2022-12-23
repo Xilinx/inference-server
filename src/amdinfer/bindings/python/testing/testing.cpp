@@ -21,7 +21,6 @@
 #include <pybind11/pybind11.h>  // for class_, init
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include "amdinfer/bindings/python/helpers/docstrings.hpp"
 #include "amdinfer/testing/get_path_to_asset.hpp"
 
 namespace py = pybind11;

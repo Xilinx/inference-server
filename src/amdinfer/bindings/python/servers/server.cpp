@@ -23,7 +23,7 @@
 #include <pybind11/cast.h>            // for arg
 #include <pybind11/pybind11.h>        // for class_, init
 #include <pybind11/stl.h>             // IWYU pragma: keep
-#include <pybind11/stl/filesystem.h>  // for filesystem
+#include <pybind11/stl/filesystem.h>  // IWYU pragma: keep
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"
 

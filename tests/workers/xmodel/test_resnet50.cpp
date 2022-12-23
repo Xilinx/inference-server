@@ -12,14 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string>
-#include <vector>
+#include <array>             // for array
+#include <cstdint>           // for int8_t, uint64_t
+#include <initializer_list>  // for initializer_list
+#include <memory>            // for unique_ptr
+#include <opencv2/core.hpp>  // for int8_t
+#include <string>            // for string, allocator
+#include <vector>            // for vector
 
-#include "amdinfer/clients/client.hpp"
-#include "amdinfer/pre_post/image_preprocess.hpp"
-#include "amdinfer/pre_post/resnet50_postprocess.hpp"
-#include "amdinfer/testing/get_path_to_asset.hpp"
-#include "amdinfer/testing/gtest_fixtures.hpp"
+#include "amdinfer/amdinfer.hpp"                       // for InferenceRequest
+#include "amdinfer/pre_post/image_preprocess.hpp"      // for ImagePreproces...
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Postpr...
+#include "amdinfer/testing/get_path_to_asset.hpp"      // for getPathToAsset
+#include "amdinfer/testing/gtest_fixtures.hpp"         // for Message, Suite...
 
 namespace amdinfer {
 

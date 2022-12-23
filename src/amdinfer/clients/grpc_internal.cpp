@@ -21,18 +21,22 @@
 #include "amdinfer/clients/grpc_internal.hpp"
 
 #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
+#include <google/protobuf/stubs/common.h>        // for string
 
-#include <cstddef>   // for size_t
-#include <cstdint>   // for int16_t, int32_t
-#include <iostream>  // for operator<<, cout
-#include <memory>    // for make_shared, shared...
-#include <vector>    // for vector, _Bit_reference
+#include <cstddef>  // for size_t
+#include <cstdint>  // for int16_t, int32_t
+#include <cstring>  // for memcpy
+#include <memory>   // for make_shared, shared...
+#include <utility>  // for move
+#include <variant>  // for visit
+#include <vector>   // for vector, _Bit_reference
 
+#include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LO...
 #include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
 #include "amdinfer/core/predict_api_internal.hpp"  // for RequestParameters
 #include "amdinfer/declarations.hpp"               // for InferenceResponseOu...
 #include "amdinfer/observation/observer.hpp"       // for kNumTraceData
-#include "amdinfer/util/traits.hpp"                // for is_any
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
 #include "predict_api.pb.h"                        // for ModelInferResponse_...
 
 namespace amdinfer {

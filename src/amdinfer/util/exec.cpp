@@ -16,6 +16,7 @@
 #include "amdinfer/util/exec.hpp"
 
 #include <array>         // for array
+#include <cerrno>        // for EPIPE
 #include <cstdio>        // for pclose, fgets, popen, FILE
 #include <memory>        // for unique_ptr
 #include <string>        // for string

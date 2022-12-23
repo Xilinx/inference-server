@@ -22,10 +22,12 @@
 #ifndef GUARD_AMDINFER_BUFFERS_BUFFER
 #define GUARD_AMDINFER_BUFFERS_BUFFER
 
-#include <cstddef>  // for size_t
-#include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uint...
-#include <cstring>  // for memcpy, size_t
+#include <cstddef>  // for size_t, byte
+#include <cstring>  // for memcpy
 #include <string>   // for string
+
+// IWYU is creating a cycle with adding/removing this header
+// IWYU pragma: no_include <algorithm>
 
 namespace amdinfer {
 

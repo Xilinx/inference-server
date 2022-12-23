@@ -20,11 +20,7 @@
 
 #include "amdinfer/buffers/buffer.hpp"
 
-#include <algorithm>  // for copy
-#include <cstring>    // for memcpy, size_t
-#include <string>     // for string
-
-#include "amdinfer/core/data_types.hpp"  // for getSize, DataType, DataType::...
+#include <cstring>  // for memcpy, size_t
 
 namespace amdinfer {
 

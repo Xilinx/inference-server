@@ -21,10 +21,12 @@
 #ifndef GUARD_AMDINFER_CLIENTS_CLIENT
 #define GUARD_AMDINFER_CLIENTS_CLIENT
 
-#include <string>
-#include <vector>
+#include <cstddef>  // for size_t
+#include <string>   // for string
+#include <vector>   // for vector
 
 #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
 
 namespace amdinfer {
 

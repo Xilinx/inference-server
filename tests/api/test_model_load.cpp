@@ -13,10 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <memory>  // for allocator, unique_ptr
-#include <string>  // for string
-#include <thread>  // for yield
-#include <vector>  // for vector
+#include <memory>         // for allocator, unique_ptr
+#include <string>         // for string
+#include <thread>         // for yield
+#include <unordered_set>  // for operator==, unordered...
+#include <vector>         // for vector
 
 #include "amdinfer/amdinfer.hpp"                // for NativeClient, GrpcClient
 #include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...

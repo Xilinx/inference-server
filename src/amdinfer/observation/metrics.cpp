@@ -34,6 +34,8 @@
 #include <string>    // for string
 #include <vector>    // for vector
 
+#include "prometheus/summary.h"  // for CKMSQuantiles, CKMSQuantiles...
+
 namespace amdinfer {
 
 CounterFamily::CounterFamily(

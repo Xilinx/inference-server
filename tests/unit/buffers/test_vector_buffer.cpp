@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>    // for array
 #include <cstddef>  // for size_t
-#include <cstdint>  // for uint16_t, int16_t, int32_t
 #include <memory>   // for allocator
 
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
+#include "amdinfer/buffers/vector_buffer.hpp"  // for Buffer, VectorBuffer
 #include "amdinfer/core/data_types.hpp"        // for DataType, getSize, oper...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs
 #include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue

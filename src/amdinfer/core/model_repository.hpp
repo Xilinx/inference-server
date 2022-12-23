@@ -16,9 +16,10 @@
 #ifndef GUARD_AMDINFER_CORE_MODEL_REPOSITORY
 #define GUARD_AMDINFER_CORE_MODEL_REPOSITORY
 
-#include <efsw/efsw.hpp>
-#include <filesystem>
-#include <string>
+#include <efsw/efsw.hpp>  // for FileWatcher, Action, FileWatchListener, Wat...
+#include <filesystem>     // for path
+#include <memory>         // for unique_ptr
+#include <string>         // for string
 
 namespace amdinfer {
 

@@ -21,7 +21,6 @@
 
 #include "amdinfer/clients/http.hpp"
 
-#include <drogon/HttpAppFramework.h>      // for HttpAppFramework, app
 #include <drogon/HttpClient.h>            // for HttpClient, HttpClientPtr
 #include <drogon/HttpRequest.h>           // for HttpRequest, HttpReques...
 #include <drogon/HttpResponse.h>          // for HttpResponse
@@ -29,8 +28,8 @@
 #include <json/value.h>                   // for Value, arrayValue, obje...
 #include <trantor/net/EventLoopThread.h>  // for EventLoopThread
 
-#include <atomic>
 #include <cassert>        // for assert
+#include <future>         // for promise
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for tuple_element<>::type
 #include <vector>

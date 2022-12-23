@@ -17,15 +17,23 @@
  * @brief Implements the Python bindings for pre_post
  */
 
-#include <pybind11/cast.h>  // for arg
-#include <pybind11/numpy.h>
-#include <pybind11/pybind11.h>  // for class_, init
+#include <pybind11/cast.h>      // for arg, cast
+#include <pybind11/numpy.h>     // for array_t
+#include <pybind11/pybind11.h>  // for sequence, module_
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include "amdinfer/bindings/python/helpers/docstrings.hpp"
-#include "amdinfer/core/predict_api.hpp"
-#include "amdinfer/pre_post/image_preprocess.hpp"
-#include "amdinfer/pre_post/resnet50_postprocess.hpp"
+#include <array>    // for array
+#include <cstdint>  // for int8_t
+#include <opencv2/core.hpp>
+#include <string>  // for string
+#include <vector>  // for vector
+
+#include "amdinfer/core/predict_api.hpp"               // IWYU pragma: keep
+#include "amdinfer/pre_post/image_preprocess.hpp"      // for ImageOrder
+#include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Postpr...
+
+// InferenceResponseOutput needs the full definition, not a forward declare
+// IWYU pragma: no_include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 

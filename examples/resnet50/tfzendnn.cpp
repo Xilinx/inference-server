@@ -19,10 +19,12 @@
  * documentation online for discussion around this example.
  */
 
+#include <algorithm>            // for copy, max
 #include <cassert>              // for assert
 #include <chrono>               // for duration
 #include <cstdint>              // for uint64_t
 #include <cstdlib>              // for exit, getenv
+#include <exception>            // for exception
 #include <filesystem>           // for path, oper...
 #include <initializer_list>     // for initialize...
 #include <iostream>             // for operator<<

@@ -20,11 +20,6 @@
 
 #include "amdinfer/core/data_types.hpp"
 
-#include <cstddef>  // for size_t
-
-#include "amdinfer/build_options.hpp"
-#include "amdinfer/core/exceptions.hpp"
-
 namespace amdinfer {
 
 std::ostream& operator<<(std::ostream& os, const DataType& value) {

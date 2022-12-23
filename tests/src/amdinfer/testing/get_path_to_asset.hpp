@@ -15,7 +15,6 @@
 #ifndef GUARD_SRC_AMDINFER_TESTING_GET_PATH_TO_ASSET
 #define GUARD_SRC_AMDINFER_TESTING_GET_PATH_TO_ASSET
 
-#include <filesystem>
 #include <string>
 
 namespace amdinfer {

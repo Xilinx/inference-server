@@ -26,7 +26,8 @@
 #include <vector>  // for vector
 
 #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+#include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
 
 namespace grpc {
 class Channel;

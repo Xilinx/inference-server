@@ -31,7 +31,7 @@
 #include <cassert>      // for assert
 #include <cstddef>      // for size_t, byte
 #include <cstdint>      // for uint64_t, int32_t
-#include <iostream>     // for operator<<, cout
+#include <cstring>      // for memcpy
 #include <string_view>  // for basic_string_view
 #include <utility>      // for move
 #include <variant>      // for visit
@@ -43,7 +43,8 @@
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "amdinfer/observation/logging.hpp"        // for Logger
 #include "amdinfer/util/compression.hpp"           // for zDecompress
-#include "amdinfer/util/traits.hpp"                // for is_any
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+#include "half/half.hpp"                           // for half
 
 namespace amdinfer {
 

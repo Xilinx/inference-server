@@ -21,6 +21,7 @@
 #include <thread>   // for thread
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
+#include "amdinfer/core/exceptions.hpp"        // for environment_not_set_error
 #include "amdinfer/core/manager.hpp"           // for Manager
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/observation/logging.hpp"    // for initLogger, getLogDirec...

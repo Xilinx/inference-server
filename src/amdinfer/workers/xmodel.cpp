@@ -48,14 +48,15 @@
 #include "amdinfer/buffers/buffer.hpp"              // for Buffer
 #include "amdinfer/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
 #include "amdinfer/build_options.hpp"               // for AMDINFER_ENABLE_ME...
-#include "amdinfer/core/data_types_internal.hpp"    // for mapXirType, DataType
+#include "amdinfer/core/data_types.hpp"             // for DataType
+#include "amdinfer/core/data_types_internal.hpp"    // for mapXirToType
+#include "amdinfer/core/exceptions.hpp"             // for invalid_argument
 #include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
 #include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
 #include "amdinfer/util/ctpl.hpp"                   // for ThreadPool
 #include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
-#include "amdinfer/util/string.hpp"                 // for endsWith
 #include "amdinfer/util/thread.hpp"                 // for setThreadName
 #include "amdinfer/workers/worker.hpp"              // for Worker, kNumBuffer...
 

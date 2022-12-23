@@ -13,11 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>    // for array
 #include <chrono>   // for seconds
 #include <cstdint>  // for uint32_t
 #include <memory>   // for allocator, make_shared, __shared_ptr_...
+#include <string>   // for string
 #include <thread>   // for sleep_for
-#include <tuple>    // for tuple, get
 #include <vector>   // for vector
 
 #include "amdinfer/amdinfer.hpp"  // for RequestParameters, InferenceRequestInput

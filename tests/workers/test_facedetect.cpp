@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>    // for array
 #include <cstdlib>  // for getenv, abs
 
 #include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset

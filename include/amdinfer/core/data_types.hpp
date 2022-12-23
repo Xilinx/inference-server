@@ -21,11 +21,11 @@
 #ifndef GUARD_AMDINFER_CORE_DATA_TYPES
 #define GUARD_AMDINFER_CORE_DATA_TYPES
 
-#include <cassert>   // for assert
-#include <cstddef>   // for size_t
-#include <cstdint>   // for uint8_t, int16_t, int32_t
-#include <iostream>  // for ostream
-#include <string>    // for string
+#include <cstddef>      // for size_t
+#include <cstdint>      // for uint8_t, int16_t, int32_t
+#include <iostream>     // for ostream
+#include <string>       // for string
+#include <string_view>  // for string_view
 
 #include "amdinfer/core/exceptions.hpp"  // for invalid_argument
 #include "half/half.hpp"                 // for half

@@ -17,8 +17,6 @@
  * @brief Implements the PtZendnn worker
  */
 
-#include <torch/script.h>  // for IValue, Tensor, Device
-
 #include <algorithm>   // for copy
 #include <chrono>      // for duration, operator-
 #include <cstddef>     // for size_t, byte
@@ -47,6 +45,7 @@
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "torch/script.h"                      // for IValue, Tensor, Device
 
 namespace fs = std::filesystem;
 

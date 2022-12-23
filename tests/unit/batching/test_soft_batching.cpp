@@ -24,7 +24,6 @@
 #include <vector>            // for vector
 
 #include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "amdinfer/buffers/buffer.hpp"           // for Buffer
 #include "amdinfer/buffers/vector_buffer.hpp"    // for VectorBuffer
 #include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi

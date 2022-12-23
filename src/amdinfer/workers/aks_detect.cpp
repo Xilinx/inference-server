@@ -28,7 +28,7 @@
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for uint64_t, uint8_t, int32_t
 #include <cstring>                 // for memcpy
-#include <ext/alloc_traits.h>      // for __alloc_traits<>::value...
+#include <exception>               // for exception
 #include <functional>              // for multiplies
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, shared_ptr

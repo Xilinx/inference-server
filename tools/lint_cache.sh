@@ -124,7 +124,7 @@ check() {
 source_directories=(examples include src tests)
 
 # file extensions to search for
-extensions=(".c" ".cpp" ".cc" ".h" ".hpp")
+extensions=(".c" ".cpp" ".cc")
 
 root_dir="$AMDINFER_ROOT"
 if [[ -z "$root_dir" ]]; then

@@ -17,29 +17,38 @@
  * @brief Implements the Migraphx worker.
  */
 
-#include <cstddef>                // for size_t, byte
-#include <cstdint>                // for uint32_t, int32_t
+#include <migraphx/migraphx.h>  // for migraphx_shape_datatype_t
+
+#include <algorithm>              // for max
+#include <chrono>                 // for microseconds, duration...
+#include <cstddef>                // for byte, size_t
+#include <cstring>                // for memcpy
+#include <exception>              // for exception
 #include <filesystem>             // for path
-#include <fstream>                // for ifstream
-#include <memory>                 // for unique_ptr, allocator
-#include <migraphx/migraphx.hpp>  // MIGraphX C++ API
+#include <fstream>                // for ifstream, operator<<
+#include <functional>             // for multiplies
+#include <map>                    // for map
+#include <memory>                 // for allocator, unique_ptr
+#include <migraphx/migraphx.hpp>  // for shape, program, progra...
 #include <numeric>                // for accumulate
-#include <string>                 // for string
+#include <stdexcept>              // for invalid_argument, runt...
+#include <string>                 // for string, operator+, to_...
 #include <thread>                 // for thread
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for HardBatcher
+#include "amdinfer/batching/hard.hpp"          // for BatchPtr, Batch, Batch...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
-#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-#include "amdinfer/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
-#include "amdinfer/observation/metrics.hpp"    // for Metrics
-#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"        // for DataType, operator<<
+#include "amdinfer/core/exceptions.hpp"        // for invalid_argument, runt...
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infe...
+#include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
+#include "amdinfer/observation/logging.hpp"    // for AMDINFER_LOG_INFO, AMD...
+#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
+#include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/workers/worker.hpp"         // for Worker
+#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace amdinfer::workers {
 

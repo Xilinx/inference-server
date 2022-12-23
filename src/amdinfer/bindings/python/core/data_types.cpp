@@ -20,15 +20,10 @@
 
 #include "amdinfer/core/data_types.hpp"
 
-#include <pybind11/cast.h>       // for arg
 #include <pybind11/operators.h>  // for self, operator==, self_t
 #include <pybind11/pybind11.h>   // for class_, enum_, object, init, module_
 
 #include <sstream>  // IWYU pragma: keep
-
-#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_VITIS
-
-// IWYU pragma: no_forward_declare xir::Datatype
 
 namespace py = pybind11;
 

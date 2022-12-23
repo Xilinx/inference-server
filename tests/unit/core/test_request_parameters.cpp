@@ -13,11 +13,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstddef>
-#include <iostream>
+#include <array>    // for array
+#include <cstddef>  // for byte, size_t
+#include <string>   // for string, basic_string, alloc...
+#include <vector>   // for vector
 
-#include "amdinfer/core/predict_api.hpp"
-#include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
+#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
+#include "gtest/gtest.h"                  // for AssertionResult, Message
 
 namespace amdinfer {
 

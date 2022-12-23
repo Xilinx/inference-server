@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>     // for array
 #include <chrono>    // for duration, operator-
 #include <cstddef>   // for size_t
 #include <cstdint>   // for uint8_t, uint64_t
@@ -21,6 +22,7 @@
 #include <memory>    // for allocator, make_unique
 #include <optional>  // for optional
 #include <ratio>     // for ratio
+#include <string>    // for string
 #include <thread>    // for sleep_for
 #include <tuple>     // for tuple
 #include <utility>   // for move
@@ -33,6 +35,7 @@
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
 #include "amdinfer/declarations.hpp"             // for BufferPtrs
+#include "amdinfer/observation/logging.hpp"      // for LogOptions, initLogger
 #include "gtest/gtest.h"                         // for UnitTest, EXPECT_NEAR
 
 namespace amdinfer {

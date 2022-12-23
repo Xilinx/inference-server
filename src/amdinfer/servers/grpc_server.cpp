@@ -24,12 +24,11 @@
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
 #include <grpcpp/grpcpp.h>                       // for ServerCompletionQueue
 
+#include <cassert>        // for assert
 #include <cstddef>        // for size_t, byte
 #include <cstdint>        // for uint64_t, int16_t
 #include <cstring>        // for memcpy
 #include <exception>      // for exception
-#include <functional>     // for _Bind_helper<>::type
-#include <iostream>       // for operator<<, cout
 #include <memory>         // for unique_ptr, shared_ptr
 #include <string>         // for allocator, string
 #include <thread>         // for thread, yield
@@ -46,12 +45,11 @@
 #include "amdinfer/core/interface.hpp"         // for Interface, Interfac...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/observation/logging.hpp"        // for Logger, Loggers
-#include "amdinfer/observation/tracing.hpp"        // for Trace, startTrace
-#include "amdinfer/util/string.hpp"                // for toLower
-#include "amdinfer/util/traits.hpp"                // for is_any
-#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
-#include "predict_api.pb.h"                        // for InferTensorContents
+#include "amdinfer/observation/observer.hpp"
+#include "amdinfer/util/string.hpp"  // for toLower
+#include "amdinfer/util/traits.hpp"  // IWYU pragma: keep
+#include "predict_api.grpc.pb.h"     // for GRPCInferenceServic...
+#include "predict_api.pb.h"          // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;

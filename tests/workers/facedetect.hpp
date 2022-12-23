@@ -20,6 +20,7 @@
 #include <concurrentqueue/blockingconcurrentqueue.h>  // for BlockingConcurr...
 
 #include <algorithm>              // for max
+#include <cassert>                // for assert
 #include <cstdint>                // for uint64_t
 #include <cstring>                // for memcpy
 #include <filesystem>             // for path, directory...

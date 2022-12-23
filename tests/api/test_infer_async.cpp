@@ -13,14 +13,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstddef>
-#include <iostream>
+#include <cstdint>  // for uint32_t, uint64_t
+#include <vector>   // for vector, allocator
 
-#include "amdinfer/clients/client.hpp"
-#include "amdinfer/clients/native.hpp"
-#include "amdinfer/core/predict_api.hpp"
-#include "amdinfer/testing/gtest_fixtures.hpp"  // for BaseFixture
-#include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
+#include "amdinfer/clients/native.hpp"          // for NativeClient, inferAs...
+#include "amdinfer/core/data_types.hpp"         // for DataType, DataType::U...
+#include "amdinfer/core/predict_api.hpp"        // for InferenceRequest, Inf...
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
 namespace amdinfer {
 

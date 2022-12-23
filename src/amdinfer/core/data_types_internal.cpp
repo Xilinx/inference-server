@@ -19,6 +19,12 @@
 
 #include "amdinfer/core/data_types_internal.hpp"
 
+#include <cstddef>  // for size_t
+#include <cstdint>  // for int32_t
+#include <string>   // for operator+, to_string
+
+#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
+
 #ifdef AMDINFER_ENABLE_VITIS
 #include <xir/util/data_type.hpp>  // for DataType, DataType::FLOAT, DataTyp...
 #endif

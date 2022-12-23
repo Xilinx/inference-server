@@ -20,8 +20,9 @@
 
 #include "amdinfer/core/manager.hpp"
 
-#include <thread>   // for yield, thread
-#include <utility>  // for pair, make_pair, move
+#include <thread>       // for yield, thread
+#include <type_traits>  // for __decay_and_strip<>::__type
+#include <utility>      // for pair, make_pair, move
 
 #include "amdinfer/build_options.hpp"     // for kMaxModelNameSize
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument

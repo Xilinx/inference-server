@@ -20,14 +20,13 @@
 
 #include "amdinfer/batching/batcher.hpp"
 
-#include <cstddef>     // for size_t
-#include <exception>   // for exception
-#include <functional>  // for _Bind_helper<>::type
-#include <future>      // for promise
-#include <memory>      // for shared_ptr, unique_ptr
-#include <string>      // for operator+, char_traits
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <cstddef>    // for size_t
+#include <exception>  // for exception
+#include <future>     // for promise
+#include <memory>     // for shared_ptr, unique_ptr
+#include <string>     // for operator+, char_traits
+#include <utility>    // for move
+#include <vector>     // for vector
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest

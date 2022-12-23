@@ -21,13 +21,14 @@
 #ifndef GUARD_AMDINFER_CLIENTS_GRPC_INTERNAL
 #define GUARD_AMDINFER_CLIENTS_GRPC_INTERNAL
 
-#include <map>
-#include <string>
+#include <cstdint>     // for int16_t, int32_t
+#include <functional>  // for less
+#include <map>         // for map
+#include <string>      // for string
 
-#include "amdinfer/core/interface.hpp"  // for Interface
-#include "amdinfer/core/predict_api_internal.hpp"
-#include "amdinfer/observation/observer.hpp"  // for Observer
-#include "amdinfer/util/traits.hpp"           // for is_any
+#include "amdinfer/core/data_types.hpp"            // for fp16
+#include "amdinfer/core/predict_api_internal.hpp"  // for Parameter, Request...
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
 
 namespace google::protobuf {
 template <typename T, typename U>
@@ -42,6 +43,8 @@ class ModelInferRequest;
 }  // namespace inference
 
 namespace amdinfer {
+
+struct Observer;
 
 void mapParametersToProto(
   const std::map<std::string, amdinfer::Parameter, std::less<>>& parameters,

@@ -30,7 +30,6 @@
 #include <opencv2/imgcodecs.hpp>  // for imdecode, imencode, IMRE...
 #include <string>                 // for string, basic_string
 #include <thread>                 // for thread
-#include <type_traits>            // for is_pointer
 #include <utility>                // for move
 #include <vector>                 // for vector
 

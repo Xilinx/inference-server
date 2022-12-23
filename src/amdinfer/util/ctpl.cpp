@@ -16,6 +16,11 @@
 
 #include "amdinfer/util/ctpl.hpp"
 
+#include <algorithm>           // for max
+#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
+
+#include "amdinfer/util/thread.hpp"  // for setThreadName
+
 namespace amdinfer::util {
 
 constexpr auto kThreadPoolLength = 100;

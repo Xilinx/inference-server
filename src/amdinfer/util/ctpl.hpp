@@ -17,19 +17,17 @@
 #ifndef GUARD_AMDINFER_UTIL_CTPL
 #define GUARD_AMDINFER_UTIL_CTPL
 
-#include <concurrentqueue/concurrentqueue.h>
+#include <concurrentqueue/concurrentqueue.h>  // for ConcurrentQueue
 
-#include <atomic>
-#include <exception>
-#include <functional>
-#include <future>
-#include <memory>
-#include <mutex>
-#include <thread>
-#include <utility>
-#include <vector>
-
-#include "amdinfer/util/thread.hpp"
+#include <atomic>              // for atomic
+#include <condition_variable>  // for condition_variable
+#include <functional>          // for function, _1, bind
+#include <future>              // for future, packaged_task
+#include <memory>              // for make_shared, shared_ptr
+#include <mutex>               // for mutex
+#include <thread>              // for thread
+#include <utility>             // for forward
+#include <vector>              // for vector
 
 // thread pool to run user's functors with signature
 //      ret func(int id, other_params)

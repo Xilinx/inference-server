@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdlib>                // for getenv
 #include <memory>                 // for allocator, unique_ptr
 #include <opencv2/core.hpp>       // for Mat, CV_32FC3
 #include <opencv2/imgcodecs.hpp>  // for imread

@@ -17,17 +17,27 @@
  * @brief Performance testing for the native client
  */
 
-#include <chrono>
-#include <filesystem>
-#include <queue>
-#include <string>
-#include <vector>
+#include <array>                // for array
+#include <cassert>              // for assert
+#include <chrono>               // for duration, operator-
+#include <cstdint>              // for uint64_t
+#include <cstdlib>              // for getenv
+#include <filesystem>           // for path, operator/
+#include <iostream>             // for operator<<, basic_...
+#include <memory>               // for unique_ptr, alloca...
+#include <opencv2/core.hpp>     // for CV_32FC3
+#include <opencv2/imgproc.hpp>  // for COLOR_BGR2RGB
+#include <ratio>                // for milli
+#include <string>               // for string, allocator
+#include <thread>               // for sleep_for
+#include <tuple>                // for tuple, _Swallow_as...
+#include <variant>              // for variant, visit
+#include <vector>               // for vector
 
-#include "amdinfer/amdinfer.hpp"  // for InferenceResponse, Grp...
-#include "amdinfer/pre_post/image_preprocess.hpp"
+#include "amdinfer/amdinfer.hpp"                   // for InferenceRequest
+#include "amdinfer/pre_post/image_preprocess.hpp"  // for ImagePreprocessOpt...
 #include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
-#include "amdinfer/testing/gtest_fixtures.hpp"     // for GrpcFixture
-#include "amdinfer/util/ctpl.hpp"                  // for thread_pool
+#include "amdinfer/testing/gtest_fixtures.hpp"     // for ParamIteratorInter...
 
 namespace fs = std::filesystem;
 

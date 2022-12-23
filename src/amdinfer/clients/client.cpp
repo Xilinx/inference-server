@@ -15,9 +15,15 @@
 
 #include "amdinfer/clients/client.hpp"
 
-#include <queue>
+#include <algorithm>      // for copy, copy_backward
+#include <chrono>         // for seconds
+#include <future>         // for future
+#include <queue>          // for queue
+#include <thread>         // for sleep_for
+#include <unordered_set>  // for operator!=, unordered_set
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/exceptions.hpp"      // for connection_error
 #include "amdinfer/observation/logging.hpp"  // for getLogDirectory, initLogger
 
 namespace amdinfer {

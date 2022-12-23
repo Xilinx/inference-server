@@ -14,6 +14,7 @@
 // limitations under the License.
 
 #include <cstdint>  // for uint8_t, uint64_t, uin...
+#include <future>   // for future
 #include <memory>   // for allocator, unique_ptr
 #include <queue>    // for queue
 #include <vector>   // for vector

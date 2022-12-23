@@ -26,10 +26,6 @@
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
 
-namespace amdinfer {
-class DataType;
-}  // namespace amdinfer
-
 namespace py = pybind11;
 
 namespace amdinfer {

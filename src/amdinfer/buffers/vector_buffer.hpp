@@ -24,7 +24,7 @@
 #include <cstddef>  // for size_t, byte
 #include <vector>   // for vector
 
-#include "amdinfer/buffers/buffer.hpp"   // for Buffer
+#include "amdinfer/buffers/buffer.hpp"   // IWYU pragma: export
 #include "amdinfer/core/data_types.hpp"  // for DataType
 #include "amdinfer/util/queue.hpp"       // for BufferPtrsQueue
 

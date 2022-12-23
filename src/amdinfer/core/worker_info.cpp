@@ -24,11 +24,13 @@
 
 #include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
 
-#include <cctype>   // for toupper
-#include <climits>  // for UINT_MAX
-#include <cstdint>  // for int32_t
-#include <string>   // for string, operator+, basic_string
-#include <utility>  // for pair, move, make_pair
+#include <cctype>       // for toupper
+#include <climits>      // for UINT_MAX
+#include <cstdint>      // for int32_t
+#include <exception>    // for exception
+#include <string>       // for string, operator+, basic_string
+#include <type_traits>  // for __decay_and_strip<>::__type
+#include <utility>      // for pair, move, make_pair
 
 #include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument, file_not_f...

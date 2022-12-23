@@ -27,6 +27,7 @@
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
 #include <array>          // for array
+#include <cstring>        // for memcpy
 #include <sstream>        // IWYU pragma: keep
 #include <unordered_map>  // for unordered_map
 
