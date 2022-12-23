@@ -45,10 +45,11 @@ class BaseFixtureWithParams : public BaseFixture,
 class GrpcFixture : public BaseFixture {
  protected:
   void SetUp() override {
-    client_ = std::make_unique<amdinfer::GrpcClient>("localhost:50051");
+    client_ = std::make_unique<amdinfer::GrpcClient>(
+      "localhost:" + std::to_string(kDefaultGrpcPort));
     if (!client_->serverLive()) {
       BaseFixture::SetUp();
-      server_.startGrpc(50051);
+      server_.startGrpc(kDefaultGrpcPort);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
@@ -73,7 +74,7 @@ class HttpFixture : public BaseFixture {
     // void SetUp() override {
     client_ = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
-      server_.startHttp(8998);
+      server_.startHttp(kDefaultHttpPort);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
@@ -99,13 +100,15 @@ template <typename T>
 class HttpFixtureWithParams : public HttpFixture,
                               public testing::WithParamInterface<T> {};
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define EXPECT_THROW_CHECK(statement, check, exception) \
   EXPECT_THROW(                                         \
     {                                                   \
       try {                                             \
         statement                                       \
       } catch (const exception& e) {                    \
-        check throw;                                    \
+        check;                                          \
+        throw;                                          \
       }                                                 \
     },                                                  \
     exception)

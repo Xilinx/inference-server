@@ -57,45 +57,46 @@ struct Workers {
 
 struct PtzendnnWorker : public Workers {
   PtzendnnWorker() {
+    assert(root != nullptr);
     extension = "ptzendnn";
     name = "ptzendnn";
-    if (root != nullptr) {
-      graph = fs::path{root} / "external/pytorch_models/resnet50_pretrained.pt";
-    } else {
-      throw amdinfer::environment_not_set_error("AMDINFER_ROOT not set");
-    }
+    graph = fs::path{root} / "external/pytorch_models/resnet50_pretrained.pt";
 
     parameters.put("model", graph.string());
+
+    const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
+    const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
+    const auto convert_scale = 1 / 255.0;
 
     amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
     options.normalize = true;
     options.order = amdinfer::pre_post::ImageOrder::NCHW;
-    options.mean = {0.485, 0.456, 0.406};
-    options.std = {4.367, 4.464, 4.444};
+    options.mean = mean;
+    options.std = std;
     options.convert_color = true;
     options.color_code = cv::COLOR_BGR2RGB;
     options.convert_type = true;
     options.type = CV_32FC3;
-    options.convert_scale = 1.0 / 255.0;
+    options.convert_scale = convert_scale;
     preprocessing = options;
   }
 };
 
 struct TfzendnnWorker : public Workers {
   TfzendnnWorker() {
+    assert(root != nullptr);
     extension = "tfzendnn";
     name = "tfzendnn";
-    if (root != nullptr) {
-      graph = fs::path{root} /
-              "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
-    } else {
-      throw amdinfer::environment_not_set_error("AMDINFER_ROOT not set");
-    }
+    graph = fs::path{root} /
+            "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
+
+    // arbitrarily set to 64
+    const int inter_op = 64;
 
     parameters.put("model", graph.string());
     parameters.put("input_node", "input");
     parameters.put("output_node", "resnet_v1_50/predictions/Reshape_1");
-    parameters.put("inter_op", 64);
+    parameters.put("inter_op", inter_op);
     parameters.put("intra_op", 1);
 
     amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
@@ -125,60 +126,60 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
     GTEST_SKIP() << worker->extension << " support required but not found.\n";
   }
 
-  const auto kImageLocation =
+  const auto image_location =
     amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
-  const auto kInputSize = 224;
-  const auto kOutputClasses = 1000;
-  const auto kBatchSize = config.batch_size;
+  const auto input_size = 224;
+  const auto output_classes = 1000;
+  const auto batch_size = config.batch_size;
 
-  const auto kWarmupRequests = 4;
-  const auto kRequests = config.requests;
+  const auto warmup_requests = 4;
+  const auto num_requests = config.requests;
 
   const auto& name = worker->name;
 
   auto& parameters = worker->parameters;
-  parameters.put("input_size", kInputSize);
-  parameters.put("output_classes", kOutputClasses);
-  parameters.put("batch_size", kBatchSize);
+  parameters.put("input_size", input_size);
+  parameters.put("output_classes", output_classes);
+  parameters.put("batch_size", batch_size);
 
   auto endpoint = client->workerLoad(name, &parameters);
   EXPECT_EQ(endpoint, name);
 
-  std::vector<std::string> paths{kImageLocation};
+  std::vector<std::string> paths{image_location};
   auto& options = worker->preprocessing;
 
   amdinfer::InferenceRequest request;
   std::visit(
     Overload{
-      [&](const ImagePreprocessOptions<float, 3>& options_) {
-        auto images = amdinfer::pre_post::imagePreprocess(paths, options_);
-        request.addInputTensor(images[0].data(), {3, kInputSize, kInputSize},
+      [&](const ImagePreprocessOptions<float, 3>& opts) {
+        auto images = amdinfer::pre_post::imagePreprocess(paths, opts);
+        request.addInputTensor(images[0].data(), {3, input_size, input_size},
                                amdinfer::DataType::Fp32);
       },
     },
     options);
 
   // warm up
-  for (auto i = 0; i < kWarmupRequests; ++i) {
-    client->modelInfer(endpoint, request);
+  for (auto i = 0; i < warmup_requests; ++i) {
+    std::ignore = client->modelInfer(endpoint, request);
   }
 
   auto start = std::chrono::high_resolution_clock::now();
-  for (auto i = 0; i < kRequests; ++i) {
+  for (auto i = 0; i < num_requests; ++i) {
     auto response = client->modelInfer(endpoint, request);
     EXPECT_FALSE(response.isError());
   }
   auto stop = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double, std::milli> duration = stop - start;
   std::cout << "-----\n";
-  std::cout << "sync time taken for " << kRequests << " images with batch size "
-            << kBatchSize << " on " << name << ": " << duration.count() << "ms"
-            << std::endl;
+  std::cout << "sync time taken for " << num_requests
+            << " images with batch size " << batch_size << " on " << name
+            << ": " << duration.count() << "ms" << std::endl;
   std::cout << "-----\n";
 
   std::vector<amdinfer::InferenceRequest> requests;
-  requests.reserve(kRequests);
-  for (auto i = 0; i < kRequests; ++i) {
+  requests.reserve(num_requests);
+  for (auto i = 0; i < num_requests; ++i) {
     requests.push_back(request);
   }
   start = std::chrono::high_resolution_clock::now();
@@ -186,8 +187,8 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
   stop = std::chrono::high_resolution_clock::now();
   duration = stop - start;
   std::cout << "-----\n";
-  std::cout << "async time taken for " << kRequests
-            << " images with batch size " << kBatchSize << " on " << name
+  std::cout << "async time taken for " << num_requests
+            << " images with batch size " << batch_size << " on " << name
             << ": " << duration.count() << "ms" << std::endl;
   std::cout << "-----\n";
 
@@ -197,8 +198,8 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
   }
 }
 
-const std::array<Config, 4> configs = {Config{1, 10}, Config{2, 20},
-                                       Config{20, 40}, Config{40, 40}};
+const std::array<Config, 4> kConfigs = {Config{1, 10}, Config{2, 20},
+                                        Config{20, 40}, Config{40, 40}};
 
 inline static PtzendnnWorker ptzendnn;
 inline static TfzendnnWorker tfzendnn;
@@ -219,7 +220,7 @@ TEST_P(PerfModelsResnetGrpcFixture, ModelInfer) {
 }
 
 INSTANTIATE_TEST_SUITE_P(PerfModelsResnetGrpc, PerfModelsResnetGrpcFixture,
-                         testing::Combine(testing::ValuesIn(configs),
+                         testing::Combine(testing::ValuesIn(kConfigs),
                                           testing::ValuesIn(workers)));
 #endif
 
@@ -231,8 +232,9 @@ TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {
   test(&client, config, worker);
 }
 
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(PerfModelsResnetBase, PerfModelsResnetBaseFixture,
-                         testing::Combine(testing::ValuesIn(configs),
+                         testing::Combine(testing::ValuesIn(kConfigs),
                                           testing::ValuesIn(workers)));
 
 #ifdef AMDINFER_ENABLE_HTTP
@@ -243,7 +245,8 @@ TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {
   test(client_.get(), config, worker);
 }
 
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(PerfModelsResnetHttp, PerfModelsResnetHttpFixture,
-                         testing::Combine(testing::ValuesIn(configs),
+                         testing::Combine(testing::ValuesIn(kConfigs),
                                           testing::ValuesIn(workers)));
 #endif

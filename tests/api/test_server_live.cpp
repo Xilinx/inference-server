@@ -32,5 +32,6 @@ TEST_F(BaseFixture, ServerLive) {
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, ServerLive) { test(client_.get()); }
 #endif

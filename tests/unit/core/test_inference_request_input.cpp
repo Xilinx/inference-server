@@ -21,6 +21,7 @@
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitInferenceRequestInput, SerDes) {
   const auto data_size = 10;
   std::vector<char> data;
@@ -52,6 +53,7 @@ TEST(UnitInferenceRequestInput, SerDes) {
   EXPECT_EQ(req.getSize(), new_req.getSize());
 }
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitInferenceRequestInput, SerDes2) {
   const auto data_size = 10;
   std::vector<std::byte> data;

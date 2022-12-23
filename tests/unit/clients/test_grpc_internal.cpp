@@ -30,12 +30,12 @@ const int8_t kInt8Value = -1;
 const int16_t kInt16Value = -2;
 const int32_t kInt32Value = -3;
 const int64_t kInt64Value = -4;
-const fp16 kFp16Value{1.4f};
-const float kFloatValue = 2.7f;
+const fp16 kFp16Value{1.4F};  // NOLINT(cert-err58-cpp)
+const float kFloatValue = 2.7F;
 const double kDoubleValue = 3.6;
 const char kCharValue = 'x';
 
-struct assignData {
+struct AssignData {
   template <typename T>
   void operator()(std::byte* data) const {
     auto* data_cast = reinterpret_cast<T*>(data);
@@ -66,12 +66,12 @@ struct assignData {
     } else if constexpr (std::is_same_v<T, char>) {
       data_cast[0] = kCharValue;
     } else {
-      throw invalid_argument("Unsupported datatype to assignData");
+      throw invalid_argument("Unsupported datatype to AssignData");
     }
   }
 };
 
-struct checkData {
+struct CheckData {
   template <typename T>
   void operator()(
     const inference::ModelInferRequest_InferInputTensor* tensor) const {
@@ -103,14 +103,14 @@ struct checkData {
     } else if constexpr (std::is_same_v<T, char>) {
       EXPECT_EQ(contents[0][0][0], kCharValue);
     } else {
-      throw invalid_argument("Unsupported datatype to checkData");
+      throw invalid_argument("Unsupported datatype to CheckData");
     }
   }
 };
 
 class Fixture : public testing::TestWithParam<DataType> {};
 
-TEST_P(Fixture, TestRequestToProto) {
+TEST_P(Fixture, TestRequestToProto) {  // NOLINT
   initializeTestLogging();
   Observer observer;
   AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kTest});
@@ -123,7 +123,7 @@ TEST_P(Fixture, TestRequestToProto) {
   InferenceRequest request;
   InferenceRequestInput input;
   input.setData(data.data());
-  switchOverTypes(assignData(), datatype, data.data());
+  switchOverTypes(AssignData(), datatype, data.data());
   input.setDatatype(datatype);
   request.addInputTensor(input);
 
@@ -131,15 +131,17 @@ TEST_P(Fixture, TestRequestToProto) {
   mapRequestToProto(request, proto_request, observer);
 
   const auto& tensor = proto_request.inputs().at(0);
-  switchOverTypes(checkData(), datatype, &tensor);
+  switchOverTypes(CheckData(), datatype, &tensor);
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
-const std::array<DataType, 12> datatypes = {
+const std::array<DataType, 12> kDataTypes{
   DataType::Bool,   DataType::Uint8, DataType::Uint16, DataType::Uint32,
   DataType::Uint64, DataType::Int8,  DataType::Int16,  DataType::Int32,
   DataType::Int64,  DataType::Fp16,  DataType::Fp32,   DataType::Fp64};
+
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(UnitClientsGrpcInternal, Fixture,
-                         testing::ValuesIn(datatypes));
+                         testing::ValuesIn(kDataTypes));
 
 }  // namespace amdinfer

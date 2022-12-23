@@ -26,9 +26,13 @@ namespace amdinfer {
 using Images = std::vector<std::vector<float>>;
 
 Images preprocess(const std::vector<std::string>& paths) {
+  // this model uses images of 416x416
+  const int image_size = 416;
+  const auto convert_scale = 1 / 255.0;
+
   amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
-  options.height = 416;
-  options.width = 416;
+  options.height = image_size;
+  options.width = image_size;
 
   options.resize_algorithm = pre_post::ResizeAlgorithm::CenterCrop;
 
@@ -37,7 +41,7 @@ Images preprocess(const std::vector<std::string>& paths) {
 
   options.convert_type = true;
   options.type = CV_32FC3;
-  options.convert_scale = 1 / 255.0;
+  options.convert_scale = convert_scale;
 
   options.normalize = true;
   options.order = amdinfer::pre_post::ImageOrder::NHWC;
@@ -61,10 +65,9 @@ std::vector<InferenceRequest> constructRequests(const Images& images) {
 
   const std::initializer_list<uint64_t> shape = {224, 224, 3};
 
-  for (const auto& image : images) {
+  for (auto& image : images) {
     requests.emplace_back();
-    requests.back().addInputTensor(const_cast<float*>(image.data()), shape,
-                                   DataType::Int8);
+    requests.back().addInputTensor((void*)image.data(), shape, DataType::Int8);
   }
 
   return requests;
@@ -78,7 +81,7 @@ void validate(const std::vector<InferenceResponse>& responses) {
   }
 }
 
-void test_0(Client* client) {
+void test0(Client* client) {
   if (!serverHasExtension(client, "vitis")) {
     GTEST_SKIP() << "Vitis AI support required from the server but not found";
   }
@@ -87,13 +90,13 @@ void test_0(Client* client) {
     GTEST_SKIP() << "At least one DPUCADF8H required on the server";
   }
 
-  const auto kTestAsset = getPathToAsset("asset_bicycle-384566_640.jpg");
-  const auto kXmodel = getPathToAsset("u250_yolov3");
+  const auto test_asset = getPathToAsset("asset_bicycle-384566_640.jpg");
+  const auto xmodel = getPathToAsset("u250_yolov3");
 
   amdinfer::RequestParameters parameters;
-  parameters.put("model", kXmodel);
+  parameters.put("model", xmodel);
 
-  auto images = preprocess({kTestAsset});
+  auto images = preprocess({test_asset});
   auto endpoint = workerLoad(client, &parameters);
   auto requests = constructRequests(images);
   auto responses = inferAsyncOrdered(client, endpoint, requests);
@@ -104,7 +107,7 @@ void test_0(Client* client) {
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, WorkersXmodelYolov3) { test_0(client_.get()); }
+TEST_F(GrpcFixture, WorkersXmodelYolov3) { test0(client_.get()); }
 #endif
 
 // @pytest.mark.extensions(["vitis"])
@@ -112,14 +115,14 @@ TEST_F(GrpcFixture, WorkersXmodelYolov3) { test_0(client_.get()); }
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, WorkersXmodelYolov3) {
   NativeClient client;
-  test_0(&client);
+  test0(&client);
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, WorkersXmodelYolov3) { test_0(client_.get()); }
+TEST_F(HttpFixture, WorkersXmodelYolov3) { test0(client_.get()); }
 #endif
 
 }  // namespace amdinfer

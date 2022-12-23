@@ -28,6 +28,11 @@
 
 namespace amdinfer {
 
+// mnist dataset uses images of size 28x28x1
+const int kImageSize = 28;
+// mnist classifies 10 digits
+const int kOutputClasses = 10;
+
 void test(amdinfer::Client* client) {
   if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
@@ -45,12 +50,14 @@ void test(amdinfer::Client* client) {
 
   auto img = cv::imread(path);
   cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
-  img.convertTo(img, CV_32FC3, 1.0 / 255.0);
+  const auto scale = 1.0 / 255.0;
+  img.convertTo(img, CV_32FC3, scale);
 
   InferenceRequestInput input_0;
   input_0.setName("input0");
   input_0.setDatatype(DataType::Fp32);
-  input_0.setShape({28, 28, 1});
+
+  input_0.setShape({kImageSize, kImageSize, 1});
   input_0.setData(img.data);
 
   InferenceRequest request;
@@ -67,7 +74,7 @@ void test(amdinfer::Client* client) {
 
   float max = 0;
   int index = -1;
-  for (auto i = 0; i < 10; i++) {
+  for (auto i = 0; i < kOutputClasses; i++) {
     if (data[i] > max) {
       max = data[i];
       index = i;

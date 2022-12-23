@@ -24,19 +24,20 @@
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client;
   auto endpoint = client.workerLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
-  std::vector<uint32_t> imgData;
+  std::vector<uint32_t> img_data;
   const auto shape = {1UL};
   const auto size = 1;
-  imgData.reserve(size);
-  imgData.push_back(1);
+  img_data.reserve(size);
+  img_data.push_back(1);
 
   amdinfer::InferenceRequest request;
-  request.addInputTensor(imgData.data(), shape, amdinfer::DataType::Uint32);
+  request.addInputTensor(img_data.data(), shape, amdinfer::DataType::Uint32);
 
   const auto data_size = 10;
   std::vector<InferenceRequest> reqs;

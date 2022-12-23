@@ -21,7 +21,7 @@
 
 namespace amdinfer {
 
-void initializeTestLogging() {
+inline void initializeTestLogging() {
 #ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "test",  // logger_name

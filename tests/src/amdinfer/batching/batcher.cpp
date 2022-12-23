@@ -88,8 +88,9 @@ std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
   auto request = std::make_shared<FakeInferenceRequest>(
     this->request_, input_buffers, input_offsets, output_buffers,
     output_offsets);
-  Callback callback =
-    std::bind(fakeCppCallback, this->promise_, std::placeholders::_1);
+  Callback callback = [this](const InferenceResponse &response) {
+    fakeCppCallback(this->promise_, response);
+  };
   request->setCallback(std::move(callback));
   return request;
 }

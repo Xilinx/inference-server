@@ -39,10 +39,11 @@ namespace fs = std::filesystem;
 using FutureQueue =
   moodycamel::BlockingConcurrentQueue<std::future<amdinfer::InferenceResponse>>;
 
-std::vector<char> imgData;
+std::vector<char> img_data;
 
-void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
-             const std::string& workerName, FutureQueue& my_queue) {
+inline void enqueue(std::vector<std::string>& image_paths, int start_index,
+                    int count, const std::string& workerName,
+                    FutureQueue& my_queue) {
   amdinfer::NativeClient client;
   for (int i = 0; i < count; i++) {
     auto img = cv::imread(image_paths[start_index]);
@@ -50,11 +51,11 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
                   static_cast<uint64_t>(img.size[1]),
                   static_cast<uint64_t>(img.channels())};
     auto size = img.size[0] * img.size[1] * 3;
-    imgData.reserve(size);
-    memcpy(imgData.data(), img.data, size);
+    img_data.reserve(size);
+    memcpy(img_data.data(), img.data, size);
 
     amdinfer::InferenceRequest request;
-    request.addInputTensor(static_cast<void*>(imgData.data()), shape,
+    request.addInputTensor(static_cast<void*>(img_data.data()), shape,
                            amdinfer::DataType::Uint8);
 
     auto future = client.modelInferAsync(workerName, request);
@@ -62,8 +63,8 @@ void enqueue(std::vector<std::string>& image_paths, int start_index, int count,
   }
 }
 
-void run(std::vector<std::string> image_paths, int threads,
-         const std::string& workerName, FutureQueue& my_queue) {
+inline void run(std::vector<std::string> image_paths, int threads,
+                const std::string& workerName, FutureQueue& my_queue) {
   std::vector<std::future<void>> futures;
   auto images_per_thread = image_paths.size() / threads;
 
@@ -75,7 +76,7 @@ void run(std::vector<std::string> image_paths, int threads,
   }
 }
 
-std::string load(int workers) {
+inline std::string load(int workers) {
   amdinfer::RequestParameters parameters;
   parameters.put("aks_graph_name", "facedetect");
   parameters.put("aks_graph",
@@ -93,25 +94,25 @@ std::string load(int workers) {
   return endpoint;
 }
 
-std::vector<std::string> getImages(std::string imgDirPath) {
+inline std::vector<std::string> getImages(const std::string& image_directory) {
   std::vector<std::string> images;
 
   std::queue<std::future<amdinfer::InferenceResponse>> my_queue;
   std::vector<std::string> image_paths;
 
   // Load Dataset
-  for (const auto& p : fs::directory_iterator(imgDirPath)) {
-    std::string fileExtension = p.path().extension().string();
-    if (fileExtension == ".jpg" || fileExtension == ".JPEG" ||
-        fileExtension == ".png") {
+  for (const auto& p : fs::directory_iterator(image_directory)) {
+    std::string file_extension = p.path().extension().string();
+    if (file_extension == ".jpg" || file_extension == ".JPEG" ||
+        file_extension == ".png") {
       image_paths.push_back(p.path().string());
     }
   }
 
-  constexpr int bt = 4;  // DPU batch size
-  int left_out = image_paths.size() % bt;
+  const int batch_size = 4;  // DPU batch size
+  auto left_out = image_paths.size() % batch_size;
   if (left_out != 0) {  // Make a batch complete
-    for (int b = 0; b < (bt - left_out); b++) {
+    for (auto b = 0U; b < (batch_size - left_out); b++) {
       image_paths.push_back(image_paths[0]);
     }
   }

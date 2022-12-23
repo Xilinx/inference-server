@@ -24,6 +24,7 @@
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitSoftBatcher, ConstructAndStart) {
 #ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{

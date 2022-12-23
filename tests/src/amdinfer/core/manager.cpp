@@ -33,7 +33,7 @@ Manager::Manager() = default;
 
 std::string Manager::loadWorker(std::string const& key,
                                 RequestParameters parameters) {
-  auto endpoint = this->endpoints_.add(key, parameters);
+  auto endpoint = this->endpoints_.add(key, std::move(parameters));
   return endpoint;
 }
 
@@ -77,8 +77,9 @@ void Manager::shutdown() {
   }
 }
 
-void Manager::updateManager(UpdateCommandQueue* input_queue) {
-  (void)input_queue;
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+void Manager::updateManager([[maybe_unused]] UpdateCommandQueue* input_queue) {
+  // empty
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,

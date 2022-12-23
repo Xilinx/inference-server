@@ -28,7 +28,7 @@ namespace amdinfer {
 constexpr auto kBufferSize = 10;
 // constexpr auto kDataType = DataType::Int32;
 // constexpr auto kDataSize = types::getSize(kDataType);
-constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
+constexpr auto timeout = 1E6;  // 1E6 us = 1 s timeout
 
 struct WriteData {
   template <typename T>
@@ -71,23 +71,23 @@ class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
   VectorBuffer buffer_;
 };
 
-TEST_P(UnitVectorBufferFixture, TestFixtureState) {
+TEST_P(UnitVectorBufferFixture, TestFixtureState) {  // NOLINT
   auto datatype = GetParam();
   for (auto i = 0; i < kBufferSize; i++) {
     switchOverTypes(ReadData(), datatype, &buffer_, i * datatype.size(), i);
   }
 }
 
-TEST_P(UnitVectorBufferFixture, TestAllocate) {
+TEST_P(UnitVectorBufferFixture, TestAllocate) {  // NOLINT
   BufferPtrsQueue buffer_queue;
-  const size_t kBufferNum = 10;
-  const size_t kBatchSize = 4;
+  const size_t buffer_num = 10;
+  const size_t batch_size = 4;
 
-  VectorBuffer::allocate(&buffer_queue, kBufferNum, 1 * kBatchSize, GetParam());
+  VectorBuffer::allocate(&buffer_queue, buffer_num, 1 * batch_size, GetParam());
 
-  for (auto i = 0U; i < kBufferNum; i++) {
+  for (auto i = 0U; i < buffer_num; i++) {
     BufferPtrs buffers;
-    if (!buffer_queue.wait_dequeue_timed(buffers, kTimeout)) {
+    if (!buffer_queue.wait_dequeue_timed(buffers, timeout)) {
       FAIL() << "Dequeuing buffers timed out";
     }
     EXPECT_EQ(buffers.size(), 1);
@@ -95,13 +95,16 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
-DataType datatypes[] = {amdinfer::DataType::Bool,   amdinfer::DataType::Uint8,
-                        amdinfer::DataType::Uint16, amdinfer::DataType::Uint32,
-                        amdinfer::DataType::Uint64, amdinfer::DataType::Int8,
-                        amdinfer::DataType::Int16,  amdinfer::DataType::Int32,
-                        amdinfer::DataType::Int64,  amdinfer::DataType::Fp16,
-                        amdinfer::DataType::Fp32,   amdinfer::DataType::Fp64};
-INSTANTIATE_TEST_SUITE_P(Datatypes, UnitVectorBufferFixture,
-                         testing::ValuesIn(datatypes));
+const std::array<DataType, 12> kDataTypes{
+  amdinfer::DataType::Bool,   amdinfer::DataType::Uint8,
+  amdinfer::DataType::Uint16, amdinfer::DataType::Uint32,
+  amdinfer::DataType::Uint64, amdinfer::DataType::Int8,
+  amdinfer::DataType::Int16,  amdinfer::DataType::Int32,
+  amdinfer::DataType::Int64,  amdinfer::DataType::Fp16,
+  amdinfer::DataType::Fp32,   amdinfer::DataType::Fp64};
+
+// NOLINTNEXTLINE(cert-err58-cpp)
+INSTANTIATE_TEST_SUITE_P(DataTypes, UnitVectorBufferFixture,
+                         testing::ValuesIn(kDataTypes));
 
 }  // namespace amdinfer

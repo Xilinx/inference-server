@@ -80,13 +80,13 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     const auto& batch_config = GetParam();
     int batch_size = batch_config.batch_size;
 
-    const auto kBufferNum = 10;
-    const auto kDataShape = {1UL, 2UL, 50UL};
+    const auto buffer_num = 10;
+    const auto data_shape = {1UL, 2UL, 50UL};
     // the product of the data shape < 255 to fit into uint8
-    const uint8_t kDataSize = 100;
+    const uint8_t data_size = 100;
 
-    this->data_size_ = kDataSize;
-    this->data_shape_ = kDataShape;
+    this->data_size_ = data_size;
+    this->data_shape_ = data_shape;
 
     RequestParameters parameters;
     parameters.put("timeout", kTimeoutMs);
@@ -97,23 +97,23 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     this->batcher_->setBatchSize(batch_size);
 
     this->worker_.emplace("", &parameters);
-    for (size_t i = 0; i < kBufferNum; i++) {
+    for (size_t i = 0; i < buffer_num; i++) {
       BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
+      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
                                                       DataType::Uint8));
       this->worker_->putInputBuffer(std::move(vec));
     }
-    for (size_t i = 0; i < kBufferNum; i++) {
+    for (size_t i = 0; i < buffer_num; i++) {
       BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
+      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
                                                       DataType::Uint8));
       this->worker_->putOutputBuffer(std::move(vec));
     }
 
     this->batcher_->start(&this->worker_.value());
 
-    data_.resize(kDataSize);
-    for (uint8_t i = 0; i < kDataSize; i++) {
+    data_.resize(data_size);
+    for (uint8_t i = 0; i < data_size; i++) {
       data_[i] = i;
     }
   }
@@ -123,14 +123,14 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     batcher_->end();
   }
 
-  void compare_data(Buffer* tensor, int offset) const {
+  void compareData(Buffer* tensor, int offset) const {
     for (auto k = 0; k < data_size_; k++) {
       auto data = *(static_cast<uint8_t*>(tensor->data(k + offset)));
       EXPECT_EQ(data, k);
     }
   }
 
-  void check_batch() {
+  void checkBatch() {
     const auto& batch_config = GetParam();
     auto requests = std::vector(batch_config.requests);
     auto golden = batch_config.golden;
@@ -154,7 +154,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
       EXPECT_EQ(buffers.size(), 1);
       for (const auto& buffer : buffers) {
         for (auto j = 0; j < num_tensors; j++) {
-          compare_data(buffer.get(), j * data_size_);
+          compareData(buffer.get(), j * data_size_);
         }
       }
 
@@ -169,7 +169,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     batcher_->enqueue(std::move(req));
   }
 
-  InferenceRequest create_request() {
+  InferenceRequest createRequest() {
     InferenceRequest request;
     request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
                            DataType::Uint8);
@@ -177,7 +177,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
   }
 
  private:
-  int data_size_;
+  int data_size_ = 0;
   std::vector<uint8_t> data_;
   std::initializer_list<uint64_t> data_shape_;
   InferenceRequest request_;
@@ -185,19 +185,19 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
   std::optional<SoftBatcher> batcher_;
 };
 
-TEST_P(UnitSoftBatcherFixture, BasicBatching) {
+TEST_P(UnitSoftBatcherFixture, BasicBatching) {  // NOLINT
   const auto& batch_config = GetParam();
   auto requests = batch_config.requests;
 
   for (const auto& i : requests) {
     for (auto j = 0; j < i; ++j) {
-      auto request = create_request();
+      auto request = createRequest();
       auto req = std::make_unique<CppNativeApi>(request);
       this->enqueue(std::move(req));
     }
   }
 
-  this->check_batch();
+  this->checkBatch();
 }
 
 // batch size, requests, golden # tensors per response,
@@ -213,13 +213,15 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {
  *    corresponding tensors associated with them from b
  *
  */
-const std::array<BatchConfig, 7> configs = {
+const std::array kConfigs{
   BatchConfig{1, {1}, {1}},          BatchConfig{1, {1, 1}, {1, 1}},
   BatchConfig{2, {1}, {1}},          BatchConfig{2, {1, 1}, {2}},
   BatchConfig{2, {1, 1, 1}, {2, 1}}, BatchConfig{4, {1, 1, 1, 1, 1}, {4, 1}},
   BatchConfig{4, {1, 1, 1, 1}, {4}},
 };
+
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(Datatypes, UnitSoftBatcherFixture,
-                         testing::ValuesIn(configs));
+                         testing::ValuesIn(kConfigs));
 
 }  // namespace amdinfer

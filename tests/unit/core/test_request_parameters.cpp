@@ -21,6 +21,7 @@
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitRequestParameters, SerDes) {
   std::array<std::string, 4> keys = {"string", "int", "bool", "double"};
 
