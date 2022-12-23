@@ -36,18 +36,16 @@ namespace detail {
 // taken from https://stackoverflow.com/a/46711735
 // used for hashing strings for switch statements
 constexpr unsigned int hash(std::string_view str) {
-  const int kHash = 5381;
-  const int kShift = 5;
+  const int initial_hash = 5381;
+  const int shift = 5;
 
-  const auto* const kData = str.data();
-  const auto kSize = str.size();
+  const auto* const data = str.data();
+  const auto size = str.size();
 
-  uint32_t hash = kHash;
-
-  for (const char* c = kData; c < kData + kSize; ++c) {
-    hash = ((hash << kShift) + hash) + static_cast<int>(*c);
+  uint32_t hash = initial_hash;
+  for (const char* c = data; c < data + size; ++c) {
+    hash = ((hash << shift) + hash) + static_cast<int>(*c);
   }
-
   return hash;
 }
 }  // namespace detail

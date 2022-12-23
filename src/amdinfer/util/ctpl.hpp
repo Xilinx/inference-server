@@ -43,19 +43,19 @@ namespace amdinfer::util {
  * lambdas as functions to run in one of the threads in the pool.
  *
  */
-class thread_pool {
+class ThreadPool {
  public:
-  thread_pool();
-  explicit thread_pool(int nThreads);
-  thread_pool(int nThreads, int queueSize);
+  ThreadPool();
+  explicit ThreadPool(int thread_num);
+  ThreadPool(int thread_num, int queue_size);
 
-  thread_pool(const thread_pool &) = delete;
-  thread_pool(thread_pool &&) = delete;
-  thread_pool &operator=(const thread_pool &) = delete;
-  thread_pool &operator=(thread_pool &&) = delete;
+  ThreadPool(const ThreadPool &) = delete;
+  ThreadPool(ThreadPool &&) = delete;
+  ThreadPool &operator=(const ThreadPool &) = delete;
+  ThreadPool &operator=(ThreadPool &&) = delete;
 
   // the destructor waits for all the functions in the queue to be finished
-  ~thread_pool();
+  ~ThreadPool();
 
   // get the number of running threads in the pool
   int getSize() const;
@@ -88,9 +88,13 @@ class thread_pool {
         std::bind(std::forward<F>(f), std::placeholders::_1,
                   std::forward<Rest>(rest)...));
 
-    auto *_f = new std::function<void(int id)>([pck](int id) { (*pck)(id); });
-    q_.enqueue(_f);
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
+    auto *f_new =
+      new std::function<void(int id)>([pck](int id) { (*pck)(id); });
+    q_.enqueue(f_new);
 
+    // tidy thinks this may leak f_new. Should refactor to use smart pointers
+    // NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks)
     std::unique_lock lock(mutex_);
     cv_.notify_one();
 
@@ -105,9 +109,13 @@ class thread_pool {
     auto pck = std::make_shared<std::packaged_task<decltype(f(0))(int)>>(
       std::forward<F>(f));
 
-    auto *_f = new std::function<void(int id)>([pck](int id) { (*pck)(id); });
-    q_.enqueue(_f);
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
+    auto *f_new =
+      new std::function<void(int id)>([pck](int id) { (*pck)(id); });
+    q_.enqueue(f_new);
 
+    // tidy thinks this may leak f_new. Should refactor to use smart pointers
+    // NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks)
     std::unique_lock lock(mutex_);
     cv_.notify_one();
 

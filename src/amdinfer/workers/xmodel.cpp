@@ -52,7 +52,7 @@
 #include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
 #include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
-#include "amdinfer/util/ctpl.hpp"                   // for thread_pool
+#include "amdinfer/util/ctpl.hpp"                   // for ThreadPool
 #include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
 #include "amdinfer/util/string.hpp"                 // for endsWith
@@ -89,7 +89,7 @@ class XModel : public Worker {
   std::unique_ptr<vart::Runner> runner_;
   std::vector<DataType> output_type_;
   std::vector<uint32_t> output_size_;
-  util::thread_pool pool_;
+  util::ThreadPool pool_;
 };
 
 std::thread XModel::spawn(BatchPtrQueue* input_queue) {
@@ -232,7 +232,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       logger, "Got request in xmodel: " + std::to_string(batch->size()));
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
     pool_size++;
     if (pool_size > max_pool_size) {
@@ -347,10 +347,10 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
-          MetricCounterIDs::kPipelineEgressWorker);
+          MetricCounterIDs::PipelineEgressWorker);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::high_resolution_clock::now() - batch->getTime(k));
-        Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+        Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                               duration.count());
 #endif
       }

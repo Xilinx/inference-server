@@ -41,9 +41,9 @@ namespace amdinfer {
 Batcher::Batcher() {
   this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
-  this->status_ = BatcherStatus::kNew;
+  this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
-  this->logger_ = Logger(Loggers::kServer);
+  this->logger_ = Logger(Loggers::Server);
 #endif
 }
 
@@ -57,15 +57,15 @@ Batcher::Batcher(const Batcher& batcher) {
   this->input_queue_ = batcher.input_queue_;
   this->output_queue_ = batcher.output_queue_;
   this->batch_size_ = batcher.batch_size_;
-  this->status_ = BatcherStatus::kNew;
+  this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
-  this->logger_ = Logger(Loggers::kServer);
+  this->logger_ = Logger(Loggers::Server);
 #endif
   this->model_ = batcher.model_;
 }
 
 void Batcher::start(WorkerInfo* worker) {
-  this->status_ = BatcherStatus::kRun;
+  this->status_ = BatcherStatus::Run;
   this->thread_ = std::thread(&Batcher::run, this, worker);
 }
 
@@ -89,14 +89,14 @@ void Batcher::enqueue(InterfacePtr request) {
 
 void Batcher::run(WorkerInfo* worker) {
   this->doRun(worker);
-  this->status_ = BatcherStatus::kInactive;
+  this->status_ = BatcherStatus::Inactive;
 }
 
 BatcherStatus Batcher::getStatus() { return this->status_; }
 
 void Batcher::end() {
   this->thread_.join();
-  this->status_ = BatcherStatus::kDead;
+  this->status_ = BatcherStatus::Dead;
 }
 
 #ifdef AMDINFER_ENABLE_LOGGING

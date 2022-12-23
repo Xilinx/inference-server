@@ -87,7 +87,7 @@ class AksDetect : public Worker {
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
-  std::string graphName_;
+  std::string graph_name_;
   AKS::AIGraph* graph_ = nullptr;
 };
 
@@ -110,7 +110,7 @@ void AksDetect::doInit(RequestParameters* parameters) {
   if (parameters->has("aks_graph_name")) {
     graph_name = parameters->get<std::string>("aks_graph_name");
   }
-  this->graphName_ = graph_name;
+  this->graph_name_ = graph_name;
 }
 
 constexpr auto kImageWidth = 1920;
@@ -133,10 +133,8 @@ void AksDetect::doAcquire(RequestParameters* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
-  auto kPath =
-    std::string("${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json");
-
-  auto path = kPath;
+  std::string path{
+    "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
@@ -149,14 +147,14 @@ void AksDetect::doAcquire(RequestParameters* parameters) {
     throw;
   }
 
-  this->graph_ = this->sys_manager_->getGraph(this->graphName_);
+  this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
   this->metadata_.addInputTensor(
     "input", DataType::Int8,
     {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
   // TODO(varunsh): what should we return here?
   this->metadata_.addOutputTensor("output", DataType::Uint32, {0});
-  this->metadata_.setName(this->graphName_);
+  this->metadata_.setName(this->graph_name_);
 }
 
 void AksDetect::doRun(BatchPtrQueue* input_queue) {
@@ -187,7 +185,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
 #endif
       auto& resp = responses.emplace_back();
       resp.setID(req->getID());
-      resp.setModel(this->graphName_);
+      resp.setModel(this->graph_name_);
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -207,7 +205,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
             tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
                                 input_shape.end());
             v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-              xir::Tensor::create(this->graphName_, tensor_shape,
+              xir::Tensor::create(this->graph_name_, tensor_shape,
                                   xir::create_data_type<unsigned char>())));
           }
           /// Copy input to AKS Buffers: Find a better way to share buffers
@@ -233,7 +231,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
               tensor_shape.end(),
               {img.size().height, img.size().width, kImageChannels});
             v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-              xir::Tensor::create(this->graphName_, tensor_shape,
+              xir::Tensor::create(this->graph_name_, tensor_shape,
                                   xir::create_data_type<unsigned char>())));
           }
 
@@ -301,7 +299,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() -
         batch->getTime(static_cast<int>(k)));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 

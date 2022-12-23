@@ -44,11 +44,11 @@ namespace amdinfer {
  *
  */
 enum class InterfaceType {
-  kUnknown,
-  kDrogonHttp,
-  kDrogonWs,
-  kCpp,
-  kGrpc,
+  Unknown,
+  DrogonHttp,
+  DrogonWs,
+  Cpp,
+  Grpc,
 };
 
 /**
@@ -113,7 +113,7 @@ class Interface {
 
  private:
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 };
 

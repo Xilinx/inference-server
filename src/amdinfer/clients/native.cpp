@@ -71,7 +71,7 @@ std::string NativeClient::workerLoad(const std::string& worker,
 InferenceResponseFuture NativeClient::modelInferAsync(
   const std::string& model, const InferenceRequest& request) const {
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kCppNative);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::CppNative);
 #endif
 
 #ifdef AMDINFER_ENABLE_TRACING

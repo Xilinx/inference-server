@@ -109,7 +109,7 @@ class WebsocketServer
 
 #ifdef AMDINFER_ENABLE_LOGGING
  private:
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 };
 

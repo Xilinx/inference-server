@@ -263,7 +263,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             std::vector<std::unique_ptr<vart::TensorBuffer>>
               out_data_descriptor = futures.front().get();
             futures.pop();
-            const auto* top_k_data =
+            auto* top_k_data =
               reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
             auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
             std::vector<std::string> labels;
@@ -271,17 +271,20 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             for (unsigned int j = 0; j < this->batch_size_; j++) {
               labels.emplace_back("[");
             }
-            for (int i = 0; i < shape[0] * shape[1]; i += 7) {
+            for (int i = 0; i < shape[0] * shape[1];
+                 i += kAkdDetectResponseSize) {
               auto batch_id = static_cast<int>(top_k_data[i]);
-              auto class_id = std::to_string(top_k_data[i + 1]);
-              auto score = std::to_string(top_k_data[i + 2]);
-              auto x = std::to_string(top_k_data[i + 3]);
-              auto y = std::to_string(top_k_data[i + 4]);
-              auto w = std::to_string(top_k_data[i + 5]);
-              auto h = std::to_string(top_k_data[i + 6]);
-              labels[batch_id] += R"({"fill": false, "box": [)" + x + "," + y +
-                                  "," + w + "," + h + R"(], "label": ")" +
-                                  class_id + "\"},";
+              const auto* detect_response =
+                reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));
+
+              labels[batch_id].append(R"({"fill": false, "box": [)");
+              labels[batch_id].append(std::to_string(detect_response->x) + ",");
+              labels[batch_id].append(std::to_string(detect_response->y) + ",");
+              labels[batch_id].append(std::to_string(detect_response->w) + ",");
+              labels[batch_id].append(std::to_string(detect_response->h));
+              labels[batch_id].append(R"(], "label": ")");
+              labels[batch_id].append(
+                std::to_string(detect_response->class_id) + "\"},");
             }
             for (unsigned int j = 0; j < this->batch_size_; j++) {
               if (labels[j].size() > 1) {
@@ -317,7 +320,8 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
           for (unsigned int j = 0; j < this->batch_size_; j++) {
             labels.emplace_back("[");
           }
-          for (int i = 0; i < shape[0] * shape[1]; i += 7) {
+          for (int i = 0; i < shape[0] * shape[1];
+               i += kAkdDetectResponseSize) {
             auto batch_id = static_cast<int>(top_k_data[i]);
             const auto* detect_response =
               reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));

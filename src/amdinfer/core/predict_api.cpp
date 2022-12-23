@@ -145,9 +145,9 @@ void RequestParameters::serialize(std::byte *data_out) const {
 template <typename... Ts>
 [[nodiscard]] std::variant<Ts...> expandType(std::size_t i) {
   assert(i < sizeof...(Ts));
-  static constexpr auto table =
+  static constexpr auto kTable =
     std::array{+[]() { return std::variant<Ts...>{Ts{}}; }...};
-  return table.at(i)();
+  return kTable.at(i)();
 }
 
 void RequestParameters::deserialize(const std::byte *data_in) {
@@ -237,9 +237,9 @@ void InferenceRequest::addOutputTensor(const InferenceRequestOutput &output) {
 
 InferenceRequestInput::InferenceRequestInput(void *data,
                                              std::vector<uint64_t> shape,
-                                             DataType dataType,
+                                             DataType data_type,
                                              std::string name)
-  : data_type_(dataType) {
+  : data_type_(data_type) {
   this->data_ = data;
   this->shape_ = std::move(shape);
   this->name_ = std::move(name);
@@ -277,7 +277,7 @@ size_t InferenceRequestInput::getSize() const {
 
 void *InferenceRequestInput::getData() const {
   if (!this->shared_data_.empty()) {
-    return (void *)shared_data_.data();
+    return (void *)shared_data_.data();  // NOLINT(google-readability-casting)
   }
   return this->data_;
 }

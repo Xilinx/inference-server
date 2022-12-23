@@ -42,8 +42,8 @@ constexpr auto kKeepAliveReturn = 0;
 constexpr auto kKeepAliveSelf = 1;
 constexpr auto kKeepAliveArg0 = 2;
 
-using keep_alive_return = py::keep_alive<kKeepAliveReturn, kKeepAliveSelf>;
-using keep_alive_assign = py::keep_alive<kKeepAliveSelf, kKeepAliveArg0>;
+using KeepAliveReturn = py::keep_alive<kKeepAliveReturn, kKeepAliveSelf>;
+using KeepAliveAssign = py::keep_alive<kKeepAliveSelf, kKeepAliveArg0>;
 
 void wrapRequestParameters(py::module_ &m) {
   using amdinfer::RequestParameters;
@@ -90,7 +90,7 @@ void wrapRequestParameters(py::module_ &m) {
       [](const RequestParameters &self) {
         return py::make_iterator(self.cbegin(), self.cend());
       },
-      keep_alive_return())
+      KeepAliveReturn())
     .def("__repr__",
          [](const RequestParameters &self) {
            return "RequestParameters(" + std::to_string(self.size()) + ")\n";
@@ -217,17 +217,17 @@ void wrapInferenceRequestInput(py::module_ &m) {
                   std::string>(),
          DOCS(InferenceRequestInput, 2), py::arg("data"), py::arg("shape"),
          py::arg("dataType"), py::arg("name") = "")
-    .def("setUint8Data", &setData<uint8_t>, keep_alive_assign())
-    .def("setUint16Data", &setData<uint16_t>, keep_alive_assign())
-    .def("setUint32Data", &setData<uint32_t>, keep_alive_assign())
-    .def("setUint64Data", &setData<uint64_t>, keep_alive_assign())
-    .def("setInt8Data", &setData<int8_t>, keep_alive_assign())
-    .def("setInt16Data", &setData<int16_t>, keep_alive_assign())
-    .def("setInt32Data", &setData<int32_t>, keep_alive_assign())
-    .def("setInt64Data", &setData<int64_t>, keep_alive_assign())
-    .def("setFp16Data", &setData<amdinfer::fp16>, keep_alive_assign())
-    .def("setFp32Data", &setData<float>, keep_alive_assign())
-    .def("setFp64Data", &setData<double>, keep_alive_assign())
+    .def("setUint8Data", &setData<uint8_t>, KeepAliveAssign())
+    .def("setUint16Data", &setData<uint16_t>, KeepAliveAssign())
+    .def("setUint32Data", &setData<uint32_t>, KeepAliveAssign())
+    .def("setUint64Data", &setData<uint64_t>, KeepAliveAssign())
+    .def("setInt8Data", &setData<int8_t>, KeepAliveAssign())
+    .def("setInt16Data", &setData<int16_t>, KeepAliveAssign())
+    .def("setInt32Data", &setData<int32_t>, KeepAliveAssign())
+    .def("setInt64Data", &setData<int64_t>, KeepAliveAssign())
+    .def("setFp16Data", &setData<amdinfer::fp16>, KeepAliveAssign())
+    .def("setFp32Data", &setData<float>, KeepAliveAssign())
+    .def("setFp64Data", &setData<double>, KeepAliveAssign())
     .def(
       "setStringData",
       [](amdinfer::InferenceRequestInput &self, std::string &str) {
@@ -236,19 +236,19 @@ void wrapInferenceRequestInput(py::module_ &m) {
         memcpy(data.data(), str.data(), str.length());
         self.setData(std::move(data));
       },
-      keep_alive_assign())
-    .def("getUint8Data", &getData<uint8_t>, keep_alive_return())
-    .def("getUint16Data", &getData<uint16_t>, keep_alive_return())
-    .def("getUint32Data", &getData<uint32_t>, keep_alive_return())
-    .def("getUint64Data", &getData<uint64_t>, keep_alive_return())
-    .def("getInt8Data", &getData<int8_t>, keep_alive_return())
-    .def("getInt16Data", &getData<int16_t>, keep_alive_return())
-    .def("getInt32Data", &getData<int32_t>, keep_alive_return())
-    .def("getInt64Data", &getData<int64_t>, keep_alive_return())
-    .def("getFp16Data", &getData<amdinfer::fp16>, keep_alive_return())
-    .def("getFp32Data", &getData<float>, keep_alive_return())
-    .def("getFp64Data", &getData<double>, keep_alive_return())
-    .def("getStringData", &getData<char>, keep_alive_return())
+      KeepAliveAssign())
+    .def("getUint8Data", &getData<uint8_t>, KeepAliveReturn())
+    .def("getUint16Data", &getData<uint16_t>, KeepAliveReturn())
+    .def("getUint32Data", &getData<uint32_t>, KeepAliveReturn())
+    .def("getUint64Data", &getData<uint64_t>, KeepAliveReturn())
+    .def("getInt8Data", &getData<int8_t>, KeepAliveReturn())
+    .def("getInt16Data", &getData<int16_t>, KeepAliveReturn())
+    .def("getInt32Data", &getData<int32_t>, KeepAliveReturn())
+    .def("getInt64Data", &getData<int64_t>, KeepAliveReturn())
+    .def("getFp16Data", &getData<amdinfer::fp16>, KeepAliveReturn())
+    .def("getFp32Data", &getData<float>, KeepAliveReturn())
+    .def("getFp64Data", &getData<double>, KeepAliveReturn())
+    .def("getStringData", &getData<char>, KeepAliveReturn())
     .def_property("name", &InferenceRequestInput::getName,
                   &InferenceRequestInput::setName)
     .def_property("shape", &InferenceRequestInput::getShape, setShape)
@@ -302,7 +302,7 @@ void wrapInferenceResponse(py::module_ &m) {
          py::return_value_policy::reference_internal,
          DOCS(InferenceResponse, getOutputs))
     .def("addOutput", &InferenceResponse::addOutput, py::arg("output"),
-         keep_alive_assign(), DOCS(InferenceResponse, addOutput))
+         KeepAliveAssign(), DOCS(InferenceResponse, addOutput))
     .def("isError", &InferenceResponse::isError,
          DOCS(InferenceResponse, isError))
     .def("getError", &InferenceResponse::getError,
@@ -334,10 +334,10 @@ void wrapInferenceRequest(py::module_ &m) {
          DOCS(InferenceRequest, getInputs))
     .def("getInputSize", &InferenceRequest::getInputSize,
          DOCS(InferenceRequest, getInputSize))
-    .def("addInputTensor", addInputTensor, py::arg("input"),
-         keep_alive_assign(), DOCS(InferenceRequest, addInputTensor))
+    .def("addInputTensor", addInputTensor, py::arg("input"), KeepAliveAssign(),
+         DOCS(InferenceRequest, addInputTensor))
     .def("addOutputTensor", &InferenceRequest::addOutputTensor,
-         py::arg("output"), keep_alive_assign(),
+         py::arg("output"), KeepAliveAssign(),
          DOCS(InferenceRequest, addOutputTensor))
     // .def("setCallback", [](InferenceRequest& self, amdinfer::Callback
     // callback) {
@@ -366,19 +366,21 @@ void wrapModelMetadata(py::module_ &m) {
     .def("getShape", &ModelMetadataTensor::getShape,
          DOCS(ModelMetadataTensor, getShape));
 
+  // NOLINTNEXTLINE(readability-identifier-naming)
   auto addInputTensor = static_cast<void (ModelMetadata::*)(
     const std::string &, amdinfer::DataType, std::vector<int>)>(
     &ModelMetadata::addInputTensor);
+  // NOLINTNEXTLINE(readability-identifier-naming)
   auto addOutputTensor = static_cast<void (ModelMetadata::*)(
     const std::string &, amdinfer::DataType, std::vector<int>)>(
     &ModelMetadata::addOutputTensor);
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),
          DOCS(ModelMetadata, ModelMetadata))
-    .def("addInputTensor", addInputTensor, keep_alive_assign(),
+    .def("addInputTensor", addInputTensor, KeepAliveAssign(),
          DOCS(ModelMetadata, addInputTensor))
     .def("addOutputTensor", addOutputTensor, py::arg("name"),
-         py::arg("datatype"), py::arg("shape"), keep_alive_assign(),
+         py::arg("datatype"), py::arg("shape"), KeepAliveAssign(),
          DOCS(ModelMetadata, addOutputTensor))
     .def_property("name", &ModelMetadata::getName, &ModelMetadata::setName)
     .def("getPlatform", &ModelMetadata::getPlatform,

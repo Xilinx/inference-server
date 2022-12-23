@@ -393,7 +393,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       std::chrono::high_resolution_clock::now();
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
 
     // The MIGraphX operation: run the migraphx eval() method.
@@ -403,7 +403,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     // its input pointers (one for each input) are the base addresses of the
     // data for the entire batch. The different input tensors are not required
     // to be contiguous with each other.
-    auto& req0 = batch->getRequest(0);
+    const auto& req0 = batch->getRequest(0);
     auto inputs0 =
       req0->getInputs();  // const std::vector<InferenceRequestInput>
 
@@ -506,7 +506,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
       // for each request in the batch
       for (unsigned int j = 0; j < batch->size(); j++) {
-        auto& req = batch->getRequest(j);
+        const auto& req = batch->getRequest(j);
         try {
           InferenceResponse resp;
           resp.setID(req->getID());
@@ -591,11 +591,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
           Metrics::getInstance().incrementCounter(
-            MetricCounterIDs::kPipelineEgressWorker);
+            MetricCounterIDs::PipelineEgressWorker);
           auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::high_resolution_clock::now() - batch->getTime(j));
           Metrics::getInstance().observeSummary(
-            MetricSummaryIDs::kRequestLatency, duration.count());
+            MetricSummaryIDs::RequestLatency, duration.count());
 #endif
         } catch (const std::exception& e) {
           AMDINFER_LOG_ERROR(logger, e.what());

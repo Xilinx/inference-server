@@ -88,11 +88,11 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) const {
+void WorkerInfo::putInputBuffer(BufferPtrs&& buffer) const {
   this->input_buffer_ptr_->enqueue(std::move(buffer));
 }
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const {
+void WorkerInfo::putOutputBuffer(BufferPtrs&& buffer) const {
   this->output_buffer_ptr_->enqueue(std::move(buffer));
 }
 

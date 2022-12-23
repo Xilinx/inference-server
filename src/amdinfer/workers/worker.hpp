@@ -205,7 +205,7 @@ class Worker {
   virtual void doDestroy() = 0;
 
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 
   WorkerStatus status_;

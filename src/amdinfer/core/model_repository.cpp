@@ -108,7 +108,7 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
   int file_descriptor = open(config_path.c_str(), O_RDONLY | O_CLOEXEC);
-  Logger logger{Loggers::kServer};
+  Logger logger{Loggers::Server};
   if (file_descriptor < 0) {
     throw file_not_found_error("Config file " + config_path.string() +
                                " could not be opened");
@@ -169,7 +169,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
                                       const std::string& filename,
                                       efsw::Action action,
                                       std::string old_filename) {
-  Logger logger{Loggers::kServer};
+  Logger logger{Loggers::Server};
   // arbitrary delay to make sure filesystem has settled
   const std::chrono::milliseconds delay{100};
   if (filename == "config.pbtxt") {
@@ -224,7 +224,7 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
   file_watcher_->addWatch(repository_.string(), listener_.get(), true);
   file_watcher_->watch();
 
-  Logger logger{Loggers::kServer};
+  Logger logger{Loggers::Server};
   for (const auto& path : fs::directory_iterator(repository_)) {
     if (path.is_directory()) {
       auto model = path.path().filename();

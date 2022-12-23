@@ -68,7 +68,7 @@ void HardBatcher::doRun(WorkerInfo* worker) {
 
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineIngressBatcher);
+        MetricCounterIDs::PipelineIngressBatcher);
 #endif
 
       auto input_size = req->getInputSize();
@@ -108,7 +108,7 @@ void HardBatcher::doRun(WorkerInfo* worker) {
       this->output_queue_->enqueue(std::move(batch));
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressBatcher);
+        MetricCounterIDs::PipelineEgressBatcher);
 #endif
     }
   }

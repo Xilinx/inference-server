@@ -115,7 +115,7 @@ class WebSocketClient::WebSocketClientImpl {
       req->setMethod(drogon::Get);
       req->setPath("/models/infer");
       ws_client_->connectToServer(
-        req, [](drogon::ReqResult r, const drogon::HttpResponsePtr&,
+        req, [](drogon::ReqResult r, const drogon::HttpResponsePtr& /*resp*/,
                 const drogon::WebSocketClientPtr& wsptr) {
           if (r != drogon::ReqResult::Ok) {
             wsptr->stop();

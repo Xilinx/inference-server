@@ -42,19 +42,19 @@
 
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_TRACE(logger, message) \
-  SPDLOG_LOGGER_TRACE((logger.get()), message)
+  SPDLOG_LOGGER_TRACE((logger).get(), message)
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_DEBUG(logger, message) \
-  SPDLOG_LOGGER_DEBUG((logger.get()), message)
+  SPDLOG_LOGGER_DEBUG((logger).get(), message)
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_INFO(logger, message) \
-  SPDLOG_LOGGER_INFO((logger.get()), message)
+  SPDLOG_LOGGER_INFO((logger).get(), message)
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_WARN(logger, message) \
-  SPDLOG_LOGGER_WARN((logger.get()), message)
+  SPDLOG_LOGGER_WARN((logger).get(), message)
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_LOG_ERROR(logger, message) \
-  SPDLOG_LOGGER_ERROR((logger.get()), message)
+  SPDLOG_LOGGER_ERROR((logger).get(), message)
 
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AMDINFER_IF_LOGGING(args) args
@@ -76,15 +76,15 @@
 
 namespace amdinfer {
 
-enum class Loggers { kServer, kClient, kTest };
+enum class Loggers { Server, Client, Test };
 
 enum class LogLevel {
-  kTrace,
-  kDebug,
-  kInfo,
-  kWarn,
-  kError,
-  kOff,
+  Trace,
+  Debug,
+  Info,
+  Warn,
+  Error,
+  Off,
 };
 
 struct LogOptions {

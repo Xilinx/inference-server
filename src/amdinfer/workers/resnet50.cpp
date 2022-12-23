@@ -62,9 +62,7 @@ uint64_t reduceMult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Resnet50 worker accepts a 224x224 image and returns an array of
@@ -289,7 +287,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(k));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
@@ -306,9 +304,7 @@ void ResNet50::doRelease() {}
 void ResNet50::doDeallocate() {}
 void ResNet50::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

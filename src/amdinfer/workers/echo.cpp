@@ -125,7 +125,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     AMDINFER_LOG_INFO(logger, "Got request in echo");
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
@@ -183,10 +183,10 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
       req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressWorker);
+        MetricCounterIDs::PipelineEgressWorker);
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(j));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
     }

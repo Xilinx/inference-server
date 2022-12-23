@@ -56,6 +56,10 @@ uint64_t reduceMult(std::vector<uint64_t>& v) {
 
 namespace amdinfer::workers {
 
+const int kResNetImageSize = 224;
+const int kResNetImageChannels = 3;
+const int kResNetOutputClasses = 1000;
+
 /**
  * @brief The PtZendnn worker is a simple worker that accepts a single uint32_t
  * argument and adds 1 to it and returns. It accepts multiple input tensors and
@@ -88,11 +92,11 @@ class PtZendnn : public Worker {
   torch::jit::script::Module model_;
 
   // Image properties
-  unsigned int image_width_ = 224;
-  unsigned int image_height_ = 224;
-  unsigned int image_channels_ = 3;
+  unsigned int image_width_ = kResNetImageSize;
+  unsigned int image_height_ = kResNetImageSize;
+  unsigned int image_channels_ = kResNetImageChannels;
   unsigned int image_size_ = image_width_ * image_height_ * image_channels_;
-  unsigned int output_classes_ = 1000;
+  unsigned int output_classes_ = kResNetOutputClasses;
 
   DataType input_dt_ = DataType::FP32;
 };
@@ -225,7 +229,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
     size_t vec_size = 0;
     auto total_start = std::chrono::high_resolution_clock::now();
@@ -324,8 +328,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       resp.setContext(std::move(context));
 #endif
 
-      auto TotalStop = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<float, std::milli> d = TotalStop - total_start;
+      auto total_stop = std::chrono::high_resolution_clock::now();
+      std::chrono::duration<float, std::milli> d = total_stop - total_start;
       float tt = d.count();
       AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
 
@@ -335,7 +339,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       auto now = std::chrono::high_resolution_clock::now();
       std::chrono::duration<double, std::micro> duration =
         now - batch->getTime(k);
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
     }

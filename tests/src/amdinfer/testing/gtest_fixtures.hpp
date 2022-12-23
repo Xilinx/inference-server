@@ -25,6 +25,7 @@
 class BaseFixture : public testing::Test {
  public:
   // because of the session scoped HTTP fixture, the server needs to be static
+  // NOLINTNEXTLINE(cert-err58-cpp)
   inline static amdinfer::Server server_;
 
  protected:
@@ -33,8 +34,8 @@ class BaseFixture : public testing::Test {
     if (root == nullptr) {
       throw amdinfer::environment_not_set_error("AMDINFER_ROOT is not set");
     }
-    server_.setModelRepository(std::string{root} +
-                               "/external/artifacts/repository");
+    amdinfer::Server::setModelRepository(std::string{root} +
+                                         "/external/artifacts/repository");
   }
 };
 

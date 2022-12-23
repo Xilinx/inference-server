@@ -65,6 +65,10 @@ uint64_t reduceMult(std::vector<uint64_t>& v) {
 
 namespace amdinfer::workers {
 
+const int kResNetImageSize = 224;
+const int kResNetImageChannels = 3;
+const int kResNetOutputClasses = 1000;
+
 /**
  * @brief The TfZendnn worker is a simple worker that accepts a single uint32_t
  * argument and adds 1 to it and returns. It accepts multiple input tensors and
@@ -86,15 +90,15 @@ class TfZendnn : public Worker {
   void doDestroy() override;
 
   // TF session and graphs
-  tf::Session* session_;
+  tf::Session* session_ = nullptr;
   tf::GraphDef graph_def_;
   tf::Status status_;
 
   // Image properties
-  unsigned int output_classes_ = 1000;
-  unsigned int image_width_ = 224;
-  unsigned int image_height_ = 224;
-  unsigned int image_channels_ = 3;
+  unsigned int output_classes_ = kResNetOutputClasses;
+  unsigned int image_width_ = kResNetImageSize;
+  unsigned int image_height_ = kResNetImageSize;
+  unsigned int image_channels_ = kResNetImageChannels;
   unsigned int image_size_ = image_width_ * image_height_ * image_channels_;
 
   // Input / Output nodes
@@ -109,12 +113,12 @@ std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
 
 void TfZendnn::doInit(RequestParameters* parameters) {
   const auto default_batch_size = 1;
+  const int default_max_buffer_num = 64;
 
-  auto max_buffer_num = 64;
+  max_buffer_num_ = default_max_buffer_num;
   if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
+    max_buffer_num_ = parameters->get<int32_t>("max_buffer_num");
   }
-  this->max_buffer_num_ = max_buffer_num;
 
   auto batch_size = default_batch_size;
   if (parameters->has("batch_size")) {
@@ -153,9 +157,9 @@ void TfZendnn::doInit(RequestParameters* parameters) {
 }
 
 size_t TfZendnn::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
+  const auto default_buffer_num = 10U;
   size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
+    static_cast<int>(num) == kNumBufferAuto ? default_buffer_num : num;
 
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
                          image_size_ * this->batch_size_, input_dt_);
@@ -175,11 +179,14 @@ void TfZendnn::doAcquire(RequestParameters* parameters) {
   config.set_use_per_session_threads(false);
 
   // Parallelism parameters
-  unsigned int inter_op = 1;
-  unsigned int intra_op = 64;
+  const unsigned int default_inter_op = 1;
+  const unsigned int default_intra_op = 64;
+
+  auto inter_op = default_inter_op;
   if (parameters->has("inter_op")) {
     inter_op = parameters->get<int>("inter_op");
   }
+  auto intra_op = default_intra_op;
   if (parameters->has("intra_op")) {
     inter_op = parameters->get<int>("intra_op");
   }
@@ -242,7 +249,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
 
     auto total_start = std::chrono::high_resolution_clock::now();
@@ -361,7 +368,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(k));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
     }

@@ -156,7 +156,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   }
 
   for (const auto& batcher : this->batchers_) {
-    if (batcher->getStatus() != BatcherStatus::kRun) {
+    if (batcher->getStatus() != BatcherStatus::Run) {
       batcher->start(this);
     }
   }
@@ -202,7 +202,7 @@ void WorkerInfo::unload() {
       do {
         i = (i + 1) % this->batchers_.size();
         status = batchers_[i]->getStatus();
-      } while (status != BatcherStatus::kInactive);
+      } while (status != BatcherStatus::Inactive);
       this->batchers_[i]->end();
     }
   }
@@ -251,11 +251,11 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) const {
+void WorkerInfo::putInputBuffer(BufferPtrs&& buffer) const {
   this->input_buffer_ptr_->enqueue(std::move(buffer));
 }
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const {
+void WorkerInfo::putOutputBuffer(BufferPtrs&& buffer) const {
   this->output_buffer_ptr_->enqueue(std::move(buffer));
 }
 

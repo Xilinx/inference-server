@@ -39,7 +39,7 @@
 #include "amdinfer/amdinfer.hpp"
 #include "amdinfer/core/data_types_internal.hpp"
 
-std::vector<const xir::Subgraph*> getDpuSubgraphs(xir::Graph* graph) {
+inline std::vector<const xir::Subgraph*> getDpuSubgraphs(xir::Graph* graph) {
   std::vector<xir::Subgraph*> subgraphs =
     graph->get_root_subgraph()->children_topological_sort();
   auto dpu_graphs = std::vector<const xir::Subgraph*>();
@@ -54,8 +54,9 @@ std::vector<const xir::Subgraph*> getDpuSubgraphs(xir::Graph* graph) {
 
 using PairQueue = moodycamel::BlockingConcurrentQueue<std::pair<uint32_t, int>>;
 
-void queueReference(int images, vart::Runner* runner, PairQueue& my_queue) {
-  auto dpu_runner = dynamic_cast<vart::RunnerExt*>(runner);
+inline void queueReference(int images, vart::Runner* runner,
+                           PairQueue& my_queue) {
+  auto* dpu_runner = dynamic_cast<vart::RunnerExt*>(runner);
   auto inputs = dpu_runner->get_inputs();
   auto outputs = dpu_runner->get_outputs();
   // std::pair<uint32_t, int> elem;
@@ -76,8 +77,8 @@ void queueReference(int images, vart::Runner* runner, PairQueue& my_queue) {
   (void)my_queue;
 }
 
-int runReference(const std::string& xmodel, int images, int threads,
-                 int runners) {
+inline int runReference(const std::string& xmodel, int images, int threads,
+                        int runners) {
   std::unique_ptr<xir::Graph> graph = xir::Graph::deserialize(xmodel);
   auto subgraphs = getDpuSubgraphs(graph.get());
 
@@ -128,6 +129,7 @@ int runReference(const std::string& xmodel, int images, int threads,
   // }
 
   std::vector<std::future<void>> futures;
+  futures.reserve(threads);
   for (int i = 0; i < threads; i++) {
     futures.push_back(
       std::async(std::launch::async, queueReference, batches / threads,
@@ -139,11 +141,12 @@ int runReference(const std::string& xmodel, int images, int threads,
   }
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> elapsed = t1 - t0;
+  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
+  auto elapsed_s = std::chrono::duration_cast<std::chrono::seconds>(t1 - t0);
 
   std::cout << "Total Execution time for " << images
-            << " queries: " << elapsed.count() * 1000 << " ms" << std::endl;
-  std::cout << "Average queries per second: " << images / elapsed.count()
+            << " queries: " << elapsed.count() << " ms" << std::endl;
+  std::cout << "Average queries per second: " << images / elapsed_s.count()
             << " qps" << std::endl;
 
   return 0;
@@ -152,8 +155,9 @@ int runReference(const std::string& xmodel, int images, int threads,
 using FutureQueue =
   moodycamel::BlockingConcurrentQueue<std::future<amdinfer::InferenceResponse>>;
 
-void enqueue(int images, const std::string& worker_name,
-             const amdinfer::InferenceRequest& request, FutureQueue& my_queue) {
+inline void enqueue(int images, const std::string& worker_name,
+                    const amdinfer::InferenceRequest& request,
+                    FutureQueue& my_queue) {
   amdinfer::NativeClient client;
   for (int i = 0; i < images; i++) {
     auto future = client.modelInferAsync(worker_name, request);
@@ -161,7 +165,7 @@ void enqueue(int images, const std::string& worker_name,
   }
 }
 
-void dequeue(int images, FutureQueue& my_queue) {
+inline void dequeue(int images, FutureQueue& my_queue) {
   std::future<amdinfer::InferenceResponse> element;
   for (auto i = 0; i < images; i++) {
     my_queue.wait_dequeue(element);
@@ -169,7 +173,8 @@ void dequeue(int images, FutureQueue& my_queue) {
   }
 }
 
-int run(const std::string& xmodel, int images, int threads, int runners) {
+inline int run(const std::string& xmodel, int images, int threads,
+               int runners) {
   amdinfer::RequestParameters parameters;
   parameters.put("model", xmodel);
   parameters.put("share", false);

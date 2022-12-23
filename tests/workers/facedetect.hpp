@@ -39,10 +39,11 @@ namespace fs = std::filesystem;
 using FutureQueue =
   moodycamel::BlockingConcurrentQueue<std::future<amdinfer::InferenceResponse>>;
 
+// NOLINTNEXTLINE(misc-definitions-in-headers)
 std::vector<char> img_data;
 
 inline void enqueue(std::vector<std::string>& image_paths, int start_index,
-                    int count, const std::string& workerName,
+                    int count, const std::string& worker_name,
                     FutureQueue& my_queue) {
   amdinfer::NativeClient client;
   for (int i = 0; i < count; i++) {
@@ -58,20 +59,20 @@ inline void enqueue(std::vector<std::string>& image_paths, int start_index,
     request.addInputTensor(static_cast<void*>(img_data.data()), shape,
                            amdinfer::DataType::Uint8);
 
-    auto future = client.modelInferAsync(workerName, request);
+    auto future = client.modelInferAsync(worker_name, request);
     my_queue.enqueue(std::move(future));
   }
 }
 
 inline void run(std::vector<std::string> image_paths, int threads,
-                const std::string& workerName, FutureQueue& my_queue) {
+                const std::string& worker_name, FutureQueue& my_queue) {
   std::vector<std::future<void>> futures;
   auto images_per_thread = image_paths.size() / threads;
 
   for (int i = 0; i < threads; i++) {
     auto future = std::async(std::launch::async, enqueue, std::ref(image_paths),
                              i * images_per_thread, images_per_thread,
-                             workerName, std::ref(my_queue));
+                             worker_name, std::ref(my_queue));
     (void)future;
   }
 }

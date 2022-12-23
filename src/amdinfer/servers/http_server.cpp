@@ -23,7 +23,7 @@
 #include <drogon/HttpAppFramework.h>  // for HttpAppFramework, app
 #include <drogon/HttpRequest.h>       // for HttpRequestPtr, Htt...
 #include <json/value.h>               // for Value, arrayValue
-#include <trantor/utils/Logger.h>     // for Logger, Logger::kWarn
+#include <trantor/utils/Logger.h>     // for Logger, Logger::Warn
 
 #include <chrono>         // for high_resolution_clock
 #include <memory>         // for shared_ptr, __share...
@@ -91,7 +91,7 @@ void v2::AmdinferHttpServer::getServerLive(
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerLive request");
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]), req->getHeaders());
@@ -112,7 +112,7 @@ void v2::AmdinferHttpServer::getServerReady(
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerReady request");
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -129,7 +129,7 @@ void v2::AmdinferHttpServer::getModelReady(
   std::string const &model) const {
   AMDINFER_LOG_INFO(logger_, "Received getModelReady request");
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -150,7 +150,7 @@ void v2::AmdinferHttpServer::getServerMetadata(
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerMetadata request");
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -173,7 +173,7 @@ void v2::AmdinferHttpServer::getModelMetadata(
   const std::string &model) const {
   AMDINFER_LOG_INFO(logger_, "Received getModelMetadata request");
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
   (void)req;  // suppress unused variable warning
 
@@ -216,7 +216,7 @@ void v2::AmdinferHttpServer::hasHardware(
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received hasHardware request");
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestGet);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
   const auto &json = req->jsonObject();
 
@@ -249,7 +249,7 @@ void v2::AmdinferHttpServer::modelInfer(
   AMDINFER_LOG_INFO(logger_, "Received modelInfer request for " + model);
 #ifdef AMDINFER_ENABLE_METRICS
   auto now = std::chrono::high_resolution_clock::now();
-  Metrics::getInstance().incrementCounter(MetricCounterIDs::kRestPost);
+  Metrics::getInstance().incrementCounter(MetricCounterIDs::RestPost);
 #endif
 
 #ifdef AMDINFER_ENABLE_TRACING

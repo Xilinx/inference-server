@@ -183,7 +183,7 @@ class Manager {
   std::unique_ptr<UpdateCommandQueue> update_queue_;
   std::thread update_thread_;
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 
   /**

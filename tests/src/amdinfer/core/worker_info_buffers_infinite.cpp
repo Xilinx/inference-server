@@ -87,10 +87,10 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-void WorkerInfo::putInputBuffer([[maybe_unused]] BufferPtrs buffer) const {}
+void WorkerInfo::putInputBuffer([[maybe_unused]] BufferPtrs&& buffer) const {}
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-void WorkerInfo::putOutputBuffer([[maybe_unused]] BufferPtrs buffer) const {}
+void WorkerInfo::putOutputBuffer([[maybe_unused]] BufferPtrs&& buffer) const {}
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 bool WorkerInfo::inputSizeValid([[maybe_unused]] size_t size) const {

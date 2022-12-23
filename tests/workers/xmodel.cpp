@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
   auto xmodel = std::string{aks_model_root} +
                 "/artifacts/u200_u250/resnet_v1_50_tf/"
                 "resnet_v1_50_tf.xmodel";
-  const default_images = 100;  // arbitrary
+  const auto default_images = 100;  // arbitrary
 
   int images = default_images;
   int threads = 4;
@@ -66,20 +66,25 @@ int main(int argc, char* argv[]) {
     }
   } catch (const cxxopts::OptionException& e) {
     std::cout << "Error parsing options: " << e.what() << std::endl;
-    exit(1);
+    return 1;
   }
 
   if (runners < 1 || threads < 1) {
     std::cerr << "There must be at least one runner and thread" << std::endl;
-    exit(1);
+    return 1;
   }
 
   amdinfer::Server server;
   server.startHttp(kDefaultHttpPort);
 
-  if (run_ref) {
-    run_reference(xmodel, images, threads, runners);
-  } else {
-    run(xmodel, images, threads, runners);
+  try {
+    if (run_ref) {
+      runReference(xmodel, images, threads, runners);
+    } else {
+      run(xmodel, images, threads, runners);
+    }
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << "\n";
+    return 1;
   }
 }

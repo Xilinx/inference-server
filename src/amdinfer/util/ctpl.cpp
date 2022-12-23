@@ -20,32 +20,32 @@ namespace amdinfer::util {
 
 constexpr auto kThreadPoolLength = 100;
 
-thread_pool::thread_pool() : thread_pool(0, kThreadPoolLength) {}
+ThreadPool::ThreadPool() : ThreadPool(0, kThreadPoolLength) {}
 
-thread_pool::thread_pool(int thread_num)
-  : thread_pool(thread_num, kThreadPoolLength) {}
+ThreadPool::ThreadPool(int thread_num)
+  : ThreadPool(thread_num, kThreadPoolLength) {}
 
-thread_pool::thread_pool(int thread_num, int queue_size) : q_(queue_size) {
+ThreadPool::ThreadPool(int thread_num, int queue_size) : q_(queue_size) {
   if (thread_num > 0) {
     this->resize(thread_num);
   }
 }
 
 // the destructor waits for all the functions in the queue to be finished
-thread_pool::~thread_pool() { this->stop(true); }
+ThreadPool::~ThreadPool() { this->stop(true); }
 
 // get the number of running threads in the pool
-int thread_pool::getSize() const { return static_cast<int>(threads_.size()); }
+int ThreadPool::getSize() const { return static_cast<int>(threads_.size()); }
 
 // number of idle threads
-int thread_pool::getIdle() const { return waiting_; }
+int ThreadPool::getIdle() const { return waiting_; }
 
-std::thread &thread_pool::getThread(int i) { return *threads_[i]; }
+std::thread &ThreadPool::getThread(int i) { return *threads_[i]; }
 
 // change the number of threads in the pool
 // should be called from one thread, otherwise be careful to not interleave,
-// also with this->stop() nThreads must be >= 0
-void thread_pool::resize(int thread_num) {
+// also with this->stop() thread_num must be >= 0
+void ThreadPool::resize(int thread_num) {
   if (!stop_ && !done_) {
     auto old_thread_num = static_cast<int>(threads_.size());
     if (old_thread_num <=
@@ -77,24 +77,25 @@ void thread_pool::resize(int thread_num) {
 }
 
 // empty the queue
-void thread_pool::clearQueue() {
-  std::function<void(int id)> *_f;
-  while (q_.try_dequeue(_f)) {
-    delete _f;  // empty the queue
+void ThreadPool::clearQueue() {
+  std::function<void(int id)> *f_new = nullptr;
+  while (q_.try_dequeue(f_new)) {
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
+    delete f_new;  // empty the queue
   }
 }
 
 // pops a functional wrapper to the original function
-std::function<void(int)> thread_pool::pop() {
-  std::function<void(int id)> *_f = nullptr;
-  q_.try_dequeue(_f);
+std::function<void(int)> ThreadPool::pop() {
+  std::function<void(int id)> *f_new = nullptr;
+  q_.try_dequeue(f_new);
   // at return, delete the function even if an exception occurred
   std::unique_ptr<std::function<void(int id)>> func;
-  func.reset(_f);
+  func.reset(f_new);
 
   std::function<void(int)> f;
-  if (_f) {
-    f = *_f;
+  if (f_new != nullptr) {
+    f = *f_new;
   }
   return f;
 }
@@ -103,7 +104,7 @@ std::function<void(int)> thread_pool::pop() {
 // may be called asynchronously to not pause the calling thread while waiting
 // if wait == true, all the functions in the queue are run, otherwise the
 // queue is cleared without running the functions
-void thread_pool::stop(bool wait) {
+void ThreadPool::stop(bool wait) {
   if (!wait) {
     if (stop_) {
       return;
@@ -135,45 +136,43 @@ void thread_pool::stop(bool wait) {
   flags_.clear();
 }
 
-void thread_pool::setThread(int i) {
+void ThreadPool::setThread(int i) {
   std::shared_ptr<std::atomic<bool>> flag(
     flags_[i]);  // a copy of the shared ptr to the flag
   auto f = [this, i, flag /* a copy of the shared ptr to the flag */]() {
     amdinfer::util::setThreadName("ctplPool");
-    const std::atomic<bool> &_flag = *flag;
-    std::function<void(int id)> *_f;
-    bool isPop = q_.try_dequeue(_f);
+    const std::atomic<bool> &flag_ref = *flag;
+    std::function<void(int id)> *f_new = nullptr;
+    bool is_pop = q_.try_dequeue(f_new);
     while (true) {
-      while (isPop) {  // if there is anything in the queue
+      while (is_pop) {  // if there is anything in the queue
         // at return, delete the function even if an exception occurred
-        std::unique_ptr<std::function<void(int id)>> func(_f);
-        (*_f)(i);
+        std::unique_ptr<std::function<void(int id)>> func(f_new);
+        (*f_new)(i);
 
         // the thread is wanted to stop, return even if queue is not empty yet
-        if (_flag) {
+        if (flag_ref) {
           return;
-        } else {
-          isPop = q_.try_dequeue(_f);
         }
+        is_pop = q_.try_dequeue(f_new);
       }
 
       // the queue is empty here, wait for the next command
       std::unique_lock lock(mutex_);
       ++waiting_;
-      cv_.wait(lock, [this, &_f, &isPop, &_flag]() {
-        isPop = q_.try_dequeue(_f);
-        return isPop || done_ || _flag;
+      cv_.wait(lock, [this, &f_new, &is_pop, &flag_ref]() {
+        is_pop = q_.try_dequeue(f_new);
+        return is_pop || done_ || flag_ref;
       });
       --waiting_;
 
       // if the queue is empty and done_ == true or *flag then return
-      if (!isPop) {
+      if (!is_pop) {
         return;
       }
     }
   };
-  // compiler may not support std::make_unique()
-  threads_[i].reset(new std::thread(f));
+  threads_[i] = std::make_unique<std::thread>(f);
 }
 
 }  // namespace amdinfer::util

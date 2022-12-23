@@ -227,7 +227,7 @@ void mapProtoToResponse(const inference::ModelInferResponse& reply,
 void mapResponseToProto(InferenceResponse response,
                         inference::ModelInferResponse& reply) {
   Observer observer;
-  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
   AMDINFER_LOG_TRACE(observer.logger,
                      "Mapping the InferenceResponse to proto object");

@@ -83,21 +83,24 @@ void nestedLoop(int a, int b, int c, T* output, F f) {
   }
 }
 
-template <typename T, int C>
+template <typename T, int kChannels>
 void normalize(const cv::Mat& img, ImageOrder order, T* output, const T* mean,
                const T* std) {
   auto height = img.size[0];
   auto width = img.size[1];
   switch (order) {
     case ImageOrder::NHWC:
-      nestedLoop(height, width, C, output, [&](int h, int w, int c) -> T {
-        return (static_cast<T>(img.at<cv::Vec<T, C>>(h, w)[c]) - mean[c]) *
-               std[c];
-      });
+      nestedLoop(
+        height, width, kChannels, output, [&](int h, int w, int c) -> T {
+          return (static_cast<T>(img.at<cv::Vec<T, kChannels>>(h, w)[c]) -
+                  mean[c]) *
+                 std[c];
+        });
       break;
     case ImageOrder::NCHW:
-      nestedLoop(C, height, width, output, [&](int c, int h, int w) {
-        return (static_cast<T>(img.at<cv::Vec<T, C>>(h, w)[c]) - mean[c]) *
+      nestedLoop(kChannels, height, width, output, [&](int c, int h, int w) {
+        return (static_cast<T>(img.at<cv::Vec<T, kChannels>>(h, w)[c]) -
+                mean[c]) *
                std[c];
       });
       break;
@@ -119,8 +122,8 @@ std::vector<std::vector<T>> imagePreprocess(
   const auto& width = options.width;
   const auto& channels = options.channels;
 
-  constexpr auto C = 3;
-  assert(channels == C);
+  constexpr auto kChannels = 3;
+  assert(channels == kChannels);
 
   auto index = 0;
   for (const auto& path : paths) {
@@ -158,7 +161,8 @@ std::vector<std::vector<T>> imagePreprocess(
     if (options.normalize) {
       const auto* mean = options.mean.data();
       const auto* std = options.std.data();
-      detail::normalize<T, C>(img, options.order, output.data(), mean, std);
+      detail::normalize<T, kChannels>(img, options.order, output.data(), mean,
+                                      std);
     }
 
     if (options.assign) {

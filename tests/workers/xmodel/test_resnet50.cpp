@@ -53,8 +53,9 @@ std::vector<InferenceRequest> constructRequests(const Images& images) {
 
   const std::initializer_list<uint64_t> shape = {224, 224, 3};
 
-  for (auto& image : images) {
+  for (const auto& image : images) {
     requests.emplace_back();
+    // NOLINTNEXTLINE(google-readability-casting)
     requests.back().addInputTensor((void*)image.data(), shape, DataType::Int8);
   }
 

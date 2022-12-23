@@ -202,11 +202,11 @@ class InferenceRequestInput : public Serializable {
    *
    * @param data pointer to data
    * @param shape shape of the data
-   * @param dataType type of the data
+   * @param data_type type of the data
    * @param name name to assign
    */
   InferenceRequestInput(void *data, std::vector<uint64_t> shape,
-                        DataType dataType, std::string name = "");
+                        DataType data_type, std::string name = "");
 
   /// Sets the request's data
   void setData(void *buffer);
@@ -328,7 +328,7 @@ class InferenceRequestOutput {
   void *getData() { return this->data_; }
 
   /// Gets the output tensor's name
-  std::string getName() const { return this->name_; }
+  [[nodiscard]] std::string getName() const { return this->name_; }
   /// Set the output tensor's name
   void setName(const std::string &name);
 
@@ -495,7 +495,7 @@ class InferenceRequest {
   /// Gets a vector of all the input request objects
   [[nodiscard]] const std::vector<InferenceRequestInput> &getInputs() const;
   /// Get the number of input request objects
-  size_t getInputSize() const;
+  [[nodiscard]] size_t getInputSize() const;
 
   /// Gets a vector of the requested output information
   [[nodiscard]] const std::vector<InferenceRequestOutput> &getOutputs() const;

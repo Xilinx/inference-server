@@ -28,7 +28,7 @@ namespace amdinfer {
 constexpr auto kBufferSize = 10;
 // constexpr auto kDataType = DataType::Int32;
 // constexpr auto kDataSize = types::getSize(kDataType);
-constexpr auto timeout = 1E6;  // 1E6 us = 1 s timeout
+constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
 
 struct WriteData {
   template <typename T>
@@ -87,7 +87,7 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {  // NOLINT
 
   for (auto i = 0U; i < buffer_num; i++) {
     BufferPtrs buffers;
-    if (!buffer_queue.wait_dequeue_timed(buffers, timeout)) {
+    if (!buffer_queue.wait_dequeue_timed(buffers, kTimeout)) {
       FAIL() << "Dequeuing buffers timed out";
     }
     EXPECT_EQ(buffers.size(), 1);
@@ -95,6 +95,7 @@ TEST_P(UnitVectorBufferFixture, TestAllocate) {  // NOLINT
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
+// NOLINTNEXTLINE(cert-err58-cpp)
 const std::array<DataType, 12> kDataTypes{
   amdinfer::DataType::Bool,   amdinfer::DataType::Uint8,
   amdinfer::DataType::Uint16, amdinfer::DataType::Uint32,

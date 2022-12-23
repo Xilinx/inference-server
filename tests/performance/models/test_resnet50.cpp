@@ -42,8 +42,9 @@ struct Config {
   }
 };
 
-template <typename T, int C>
-using ImagePreprocessOptions = amdinfer::pre_post::ImagePreprocessOptions<T, C>;
+template <typename T, int kChannels>
+using ImagePreprocessOptions =
+  amdinfer::pre_post::ImagePreprocessOptions<T, kChannels>;
 
 struct Workers {
   char* root = std::getenv("AMDINFER_ROOT");
@@ -108,11 +109,11 @@ struct TfzendnnWorker : public Workers {
 };
 
 class PerfModelsResnetBaseFixture
-  : public BaseFixtureWithParams<std::tuple<Config, Workers*>> {};
+  : public BaseFixtureWithParams<std::tuple<Config, const Workers*>> {};
 class PerfModelsResnetHttpFixture
-  : public HttpFixtureWithParams<std::tuple<Config, Workers*>> {};
+  : public HttpFixtureWithParams<std::tuple<Config, const Workers*>> {};
 class PerfModelsResnetGrpcFixture
-  : public GrpcFixtureWithParams<std::tuple<Config, Workers*>> {};
+  : public GrpcFixtureWithParams<std::tuple<Config, const Workers*>> {};
 
 template <class... Fs>
 struct Overload : Fs... {
@@ -121,7 +122,8 @@ struct Overload : Fs... {
 template <class... Fs>
 Overload(Fs...) -> Overload<Fs...>;
 
-void test(amdinfer::Client* client, const Config& config, Workers* worker) {
+void test(amdinfer::Client* client, const Config& config,
+          const Workers* worker) {
   if (!amdinfer::serverHasExtension(client, worker->extension)) {
     GTEST_SKIP() << worker->extension << " support required but not found.\n";
   }
@@ -129,6 +131,7 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
   const auto image_location =
     amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
   const auto input_size = 224;
+  const auto channels = 3;
   const auto output_classes = 1000;
   const auto batch_size = config.batch_size;
 
@@ -137,7 +140,7 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
 
   const auto& name = worker->name;
 
-  auto& parameters = worker->parameters;
+  auto parameters = worker->parameters;
   parameters.put("input_size", input_size);
   parameters.put("output_classes", output_classes);
   parameters.put("batch_size", batch_size);
@@ -146,14 +149,15 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
   EXPECT_EQ(endpoint, name);
 
   std::vector<std::string> paths{image_location};
-  auto& options = worker->preprocessing;
+  const auto& options = worker->preprocessing;
 
   amdinfer::InferenceRequest request;
   std::visit(
     Overload{
-      [&](const ImagePreprocessOptions<float, 3>& opts) {
+      [&](const ImagePreprocessOptions<float, channels>& opts) {
         auto images = amdinfer::pre_post::imagePreprocess(paths, opts);
-        request.addInputTensor(images[0].data(), {3, input_size, input_size},
+        request.addInputTensor(images[0].data(),
+                               {channels, input_size, input_size},
                                amdinfer::DataType::Fp32);
       },
     },
@@ -201,32 +205,33 @@ void test(amdinfer::Client* client, const Config& config, Workers* worker) {
 const std::array<Config, 4> kConfigs = {Config{1, 10}, Config{2, 20},
                                         Config{20, 40}, Config{40, 40}};
 
-inline static PtzendnnWorker ptzendnn;
-inline static TfzendnnWorker tfzendnn;
+// NOLINTNEXTLINE(cert-err58-cpp)
+const PtzendnnWorker kPtZendnn{};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const TfzendnnWorker kTfZendnn{};
 
-const std::array<Workers*, 1> workers = {
+const std::array<const Workers*, 1> kWorkers = {
   // TODO(amuralee): why does TFzendnn slow down dramatically if included
   // together
-  //  &ptzendnn, &tfzendnn
-  &tfzendnn};
+  //  &kPtZendnn, &kTfZendnn
+  &kTfZendnn};
 
 #ifdef AMDINFER_ENABLE_GRPC
 
 // @pytest.mark.perf(group="clients")
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_P(PerfModelsResnetGrpcFixture, ModelInfer) {
+TEST_P(PerfModelsResnetGrpcFixture, ModelInfer) {  // NOLINT
   const auto& [config, worker] = GetParam();
   test(client_.get(), config, worker);
 }
 
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(PerfModelsResnetGrpc, PerfModelsResnetGrpcFixture,
                          testing::Combine(testing::ValuesIn(kConfigs),
-                                          testing::ValuesIn(workers)));
+                                          testing::ValuesIn(kWorkers)));
 #endif
 
 // @pytest.mark.perf(group="clients")
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {
+TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {  // NOLINT
   amdinfer::NativeClient client;
   const auto& [config, worker] = GetParam();
   test(&client, config, worker);
@@ -235,12 +240,12 @@ TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {
 // NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(PerfModelsResnetBase, PerfModelsResnetBaseFixture,
                          testing::Combine(testing::ValuesIn(kConfigs),
-                                          testing::ValuesIn(workers)));
+                                          testing::ValuesIn(kWorkers)));
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.perf(group="clients")
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {
+TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {  // NOLINT
   const auto& [config, worker] = GetParam();
   test(client_.get(), config, worker);
 }
@@ -248,5 +253,5 @@ TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {
 // NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(PerfModelsResnetHttp, PerfModelsResnetHttpFixture,
                          testing::Combine(testing::ValuesIn(kConfigs),
-                                          testing::ValuesIn(workers)));
+                                          testing::ValuesIn(kWorkers)));
 #endif

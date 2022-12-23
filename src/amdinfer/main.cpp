@@ -102,13 +102,13 @@ int main(int argc, char* argv[]) {
 
   amdinfer::Server server;
 
-  amdinfer::Logger logger{amdinfer::Loggers::kServer};
+  amdinfer::Logger logger{amdinfer::Loggers::Server};
 
-  server.setModelRepository(model_repository);
+  amdinfer::Server::setModelRepository(model_repository);
   AMDINFER_LOG_INFO(logger, "Using model repository: " + model_repository);
 
   if (enable_repository_watcher) {
-    server.enableRepositoryMonitoring(use_polling_watcher);
+    amdinfer::Server::enableRepositoryMonitoring(use_polling_watcher);
   }
 
 #ifdef AMDINFER_ENABLE_GRPC

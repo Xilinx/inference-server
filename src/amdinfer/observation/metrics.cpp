@@ -101,58 +101,61 @@ void SummaryFamily::observe(MetricSummaryIDs id, double value) {
 }
 
 // the arguments are percentile and error
-const prometheus::detail::CKMSQuantiles::Quantile percentile_50{0.5, 0.05};
-const prometheus::detail::CKMSQuantiles::Quantile percentile_90{0.9, 0.01};
-const prometheus::detail::CKMSQuantiles::Quantile percentile_99{0.99, 0.001};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const prometheus::detail::CKMSQuantiles::Quantile kPercentile50{0.5, 0.05};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const prometheus::detail::CKMSQuantiles::Quantile kPercentile90{0.9, 0.01};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const prometheus::detail::CKMSQuantiles::Quantile kPercentile99{0.99, 0.001};
 
 Metrics::Metrics()
   : ingress_requests_total_(
       "amdinfer_requests_ingress_total",
       "Number of incoming requests to amdinfer-server", registry_.get(),
-      {{MetricCounterIDs::kCppNative, {{"api", "cpp"}, {"method", "native"}}},
-       {MetricCounterIDs::kRestGet, {{"api", "rest"}, {"method", "GET"}}},
-       {MetricCounterIDs::kRestPost, {{"api", "rest"}, {"method", "POST"}}}}),
+      {{MetricCounterIDs::CppNative, {{"api", "cpp"}, {"method", "native"}}},
+       {MetricCounterIDs::RestGet, {{"api", "rest"}, {"method", "GET"}}},
+       {MetricCounterIDs::RestPost, {{"api", "rest"}, {"method", "POST"}}}}),
     pipeline_ingress_total_(
       "amdinfer_pipeline_ingress_total",
       "Number of incoming requests at different pipeline stages",
       registry_.get(),
-      {{MetricCounterIDs::kPipelineIngressBatcher, {{"stage", "batcher"}}},
-       {MetricCounterIDs::kPipelineIngressWorker, {{"stage", "worker"}}}}),
+      {{MetricCounterIDs::PipelineIngressBatcher, {{"stage", "batcher"}}},
+       {MetricCounterIDs::PipelineIngressWorker, {{"stage", "worker"}}}}),
     pipeline_egress_total_(
       "amdinfer_pipeline_egress_total",
       "Number of outgoing requests at different pipeline stages",
       registry_.get(),
-      {{MetricCounterIDs::kPipelineEgressBatcher, {{"stage", "batcher"}}},
-       {MetricCounterIDs::kPipelineEgressWorker, {{"stage", "worker"}}}}),
+      {{MetricCounterIDs::PipelineEgressBatcher, {{"stage", "batcher"}}},
+       {MetricCounterIDs::PipelineEgressWorker, {{"stage", "worker"}}}}),
     bytes_transferred_("exposer_transferred_bytes_total",
                        "Transferred bytes to metrics services", registry_.get(),
-                       {{MetricCounterIDs::kTransferredBytes, {}}}),
+                       {{MetricCounterIDs::TransferredBytes, {}}}),
     num_scrapes_("exposer_scrapes_total",
                  "Number of times metrics were scraped", registry_.get(),
-                 {{MetricCounterIDs::kMetricScrapes, {}}}),
+                 {{MetricCounterIDs::MetricScrapes, {}}}),
     queue_sizes_total_("amdinfer_queue_sizes_total",
                        "Number of elements in the queues in amdinfer-server",
                        registry_.get(),
-                       {{MetricGaugeIDs::kQueuesBatcherInput,
+                       {{MetricGaugeIDs::QueuesBatcherInput,
                          {{"direction", "input"}, {"stage", "batcher"}}},
-                        {MetricGaugeIDs::kQueuesBatcherOutput,
+                        {MetricGaugeIDs::QueuesBatcherOutput,
                          {{"direction", "output"}, {"stage", "batcher"}}},
-                        {MetricGaugeIDs::kQueuesBufferInput,
+                        {MetricGaugeIDs::QueuesBufferInput,
                          {{"direction", "input"}, {"stage", "buffer"}}},
-                        {MetricGaugeIDs::kQueuesBufferOutput,
+                        {MetricGaugeIDs::QueuesBufferOutput,
                          {{"direction", "output"}, {"stage", "buffer"}}}}),
     metric_latency_("exposer_request_latencies",
                     "Latencies of serving scrape requests, in microseconds",
                     registry_.get(),
-                    {{MetricSummaryIDs::kMetricLatency,
+                    {{MetricSummaryIDs::MetricLatency,
                       prometheus::Summary::Quantiles{
-                        percentile_50, percentile_90, percentile_99}}}),
+                        kPercentile50, kPercentile90, kPercentile99}}}),
     request_latency_("amdinfer_request_latency",
                      "Latencies of serving requests, in microseconds",
                      registry_.get(),
-                     {{MetricSummaryIDs::kRequestLatency,
+                     {{MetricSummaryIDs::RequestLatency,
                        prometheus::Summary::Quantiles{
-                         percentile_50, percentile_90, percentile_99}}}) {
+                         kPercentile50, kPercentile90, kPercentile99}}}) {
   std::lock_guard lock{this->collectables_mutex_};
   collectables_.push_back(this->registry_);
 
@@ -161,23 +164,23 @@ Metrics::Metrics()
 
 void Metrics::incrementCounter(MetricCounterIDs id, size_t increment) {
   switch (id) {
-    case MetricCounterIDs::kRestGet:
-    case MetricCounterIDs::kRestPost:
-    case MetricCounterIDs::kCppNative:
+    case MetricCounterIDs::RestGet:
+    case MetricCounterIDs::RestPost:
+    case MetricCounterIDs::CppNative:
       this->ingress_requests_total_.increment(id);
       break;
-    case MetricCounterIDs::kPipelineIngressBatcher:
-    case MetricCounterIDs::kPipelineIngressWorker:
+    case MetricCounterIDs::PipelineIngressBatcher:
+    case MetricCounterIDs::PipelineIngressWorker:
       this->pipeline_ingress_total_.increment(id);
       break;
-    case MetricCounterIDs::kPipelineEgressBatcher:
-    case MetricCounterIDs::kPipelineEgressWorker:
+    case MetricCounterIDs::PipelineEgressBatcher:
+    case MetricCounterIDs::PipelineEgressWorker:
       this->pipeline_egress_total_.increment(id);
       break;
-    case MetricCounterIDs::kTransferredBytes:
+    case MetricCounterIDs::TransferredBytes:
       this->bytes_transferred_.increment(id, increment);
       break;
-    case MetricCounterIDs::kMetricScrapes:
+    case MetricCounterIDs::MetricScrapes:
       this->num_scrapes_.increment(id);
       break;
     default:
@@ -187,10 +190,10 @@ void Metrics::incrementCounter(MetricCounterIDs id, size_t increment) {
 
 void Metrics::setGauge(MetricGaugeIDs id, double value) {
   switch (id) {
-    case MetricGaugeIDs::kQueuesBatcherInput:
-    case MetricGaugeIDs::kQueuesBatcherOutput:
-    case MetricGaugeIDs::kQueuesBufferInput:
-    case MetricGaugeIDs::kQueuesBufferOutput:
+    case MetricGaugeIDs::QueuesBatcherInput:
+    case MetricGaugeIDs::QueuesBatcherOutput:
+    case MetricGaugeIDs::QueuesBufferInput:
+    case MetricGaugeIDs::QueuesBufferOutput:
       this->queue_sizes_total_.set(id, value);
       break;
     default:
@@ -200,10 +203,10 @@ void Metrics::setGauge(MetricGaugeIDs id, double value) {
 
 void Metrics::observeSummary(MetricSummaryIDs id, double value) {
   switch (id) {
-    case MetricSummaryIDs::kMetricLatency:
+    case MetricSummaryIDs::MetricLatency:
       this->metric_latency_.observe(id, value);
       break;
-    case MetricSummaryIDs::kRequestLatency:
+    case MetricSummaryIDs::RequestLatency:
       this->request_latency_.observe(id, value);
       break;
     default:
@@ -237,11 +240,11 @@ std::string Metrics::getMetrics() {
   auto stop_time_of_request = std::chrono::steady_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
     stop_time_of_request - start_time_of_request);
-  this->observeSummary(MetricSummaryIDs::kMetricLatency, duration.count());
+  this->observeSummary(MetricSummaryIDs::MetricLatency, duration.count());
 
-  this->bytes_transferred_.increment(MetricCounterIDs::kTransferredBytes,
+  this->bytes_transferred_.increment(MetricCounterIDs::TransferredBytes,
                                      body_size);
-  this->num_scrapes_.increment(MetricCounterIDs::kMetricScrapes);
+  this->num_scrapes_.increment(MetricCounterIDs::MetricScrapes);
 
   return response;
 }

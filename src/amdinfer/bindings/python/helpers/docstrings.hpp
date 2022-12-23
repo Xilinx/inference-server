@@ -18,6 +18,7 @@
 
 #include "auto_docstrings.hpp"  // IWYU pragma: export
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define DOCS(...) DOC(amdinfer, __VA_ARGS__)
 
 #endif  // GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_DOCSTRINGS

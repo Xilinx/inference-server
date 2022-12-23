@@ -248,7 +248,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
                                      Buffer *input_buffer, size_t offset) {
     InferenceRequestInput input;
 #ifdef AMDINFER_ENABLE_LOGGING
-    Logger logger{Loggers::kServer};
+    Logger logger{Loggers::Server};
 #endif
     input.data_ = input_buffer->data(0);
 
@@ -406,7 +406,7 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
 
 std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger{Loggers::kServer};
+  Logger logger{Loggers::Server};
 #endif
 
   // attempt to get the JSON object directly first
@@ -447,7 +447,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
 DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
                        DrogonCallback callback)
   : req_(req), callback_(std::move(callback)) {
-  this->type_ = InterfaceType::kDrogonHttp;
+  this->type_ = InterfaceType::DrogonHttp;
   this->json_ = parseJson(req.get());
 }
 

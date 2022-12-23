@@ -27,7 +27,7 @@
 
 namespace amdinfer {
 
-Interface::Interface() { this->type_ = InterfaceType::kUnknown; }
+Interface::Interface() { this->type_ = InterfaceType::Unknown; }
 
 InterfaceType Interface::getType() const { return this->type_; }
 

@@ -165,17 +165,17 @@ TEST_P(PerfSoftBatcherFixture, BasicBatching) {  // NOLINT
   std::cerr << "Throughput (req/s): " << throughput << std::endl;
 }
 
-const std::array batch_sizes{1, 2, 4};
+const std::array kBatchSizes{1, 2, 4};
 
-const std::array buffer_nums{1, 10, 100};
+const std::array kBufferNums{1, 10, 100};
 
 // delay after dequeue per request in microseconds
-const std::array work_delay{0, 1, 10};
+const std::array kWorkDelay{0, 1, 10};
 
 // NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(Datatypes, PerfSoftBatcherFixture,
-                         testing::Combine(testing::ValuesIn(batch_sizes),
-                                          testing::ValuesIn(buffer_nums),
-                                          testing::ValuesIn(work_delay)));
+                         testing::Combine(testing::ValuesIn(kBatchSizes),
+                                          testing::ValuesIn(kBufferNums),
+                                          testing::ValuesIn(kWorkDelay)));
 
 }  // namespace amdinfer

@@ -111,9 +111,7 @@ size_t Aks::doAllocate(size_t num) {
 }
 
 void Aks::doAcquire(RequestParameters* parameters) {
-  auto kPath = std::string("${AKS_ROOT}/graph_zoo/graph_adder.json");
-
-  auto path = kPath;
+  std::string path{"${AKS_ROOT}/graph_zoo/graph_adder.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
@@ -197,7 +195,7 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() -
         batch->getTime(static_cast<int>(j)));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 #ifdef AMDINFER_ENABLE_TRACING

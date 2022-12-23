@@ -22,8 +22,8 @@ std::string readNthLine(const std::string& filename, int n) {
   std::ifstream in(filename);
   std::string line;
   // for performance, reserve some initial space in the string
-  const auto kDefaultLineLength = 100;
-  line.reserve(kDefaultLineLength);
+  const auto default_line_length = 100;
+  line.reserve(default_line_length);
 
   // skip N lines
   for (int i = 0; i < n; ++i) {

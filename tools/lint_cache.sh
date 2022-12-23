@@ -31,6 +31,22 @@ shopt -s extglob
 tool=""
 run=0
 check=0
+clean=0
+
+usage_lint_cache() {
+cat << EOF
+Run linting tools with caching
+
+usage: ./tools/lint_cache.sh [flags]
+
+flags: provide options for this command
+  --tool      - tool to run: iwyu or tidy
+  --run       - run the specified tool
+  --check     - print the results from the specified tool
+  -p          - max number of processes to use. Defaults to nproc / 2
+  -h | --help - prints this message and exits
+EOF
+}
 
 # arbitrarily use half the available processes to run linting
 max_processes=$(( $(nproc) / 2 ))
@@ -41,8 +57,9 @@ do
     --tool      ) tool="$2"        ; shift 2 ;;
     --run       ) run=1            ; shift 1 ;;
     --check     ) check=1          ; shift 1 ;;
+    --clean     ) clean=1          ; shift 1 ;;
     -p          ) max_processes=$2 ; shift 2 ;;
-    -h | --help ) usage            ; exit  0 ;;
+    -h | --help ) usage_lint_cache ; exit  0 ;;
     *) break ;;
   esac
 done
@@ -68,7 +85,7 @@ run() {
     relative_path=${source_file##${root_dir}/}
     cache_entry="$cache_dir/$linter/$relative_path"
     new_hash=$(md5sum $source_file | cut -d ' ' -f 1)
-    if [[ -f "$cache_entry" ]]; then
+    if [[ -f "$cache_entry" && $clean != 1 ]]; then
         old_hash=$(tail -n 1 $cache_entry)
         old_config_hash=$(tail -n 2 $cache_entry | head -n 1)
         if [[ $old_hash == $new_hash && $old_config_hash == $new_config_hash ]]; then

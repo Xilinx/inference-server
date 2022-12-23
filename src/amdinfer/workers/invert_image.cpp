@@ -52,14 +52,14 @@ namespace {
 /// Invert the pixel color. Assumes RGB in some order with optional alpha
 template <typename T, bool kAlphaPresent>
 void invert(void* ibuf, void* obuf, uint64_t size) {
-  static_assert(std::is_pointer<T>::value, "T must be a pointer type");
+  static_assert(std::is_pointer_v<T>, "T must be a pointer type");
   auto* idata = static_cast<T>(ibuf);
   auto* odata = static_cast<T>(obuf);
   static_assert(sizeof(idata[0]) < sizeof(uint64_t), "T must be <8 bytes");
 
   // mask to get the largest value. E.g. for uint8_t, mask will be 255.
-  constexpr auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
-  constexpr uint64_t incr = kAlphaPresent ? 4 : 3;
+  const auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
+  const uint64_t incr = kAlphaPresent ? 4 : 3;
   for (uint64_t i = 0; i < size; i += incr) {
     odata[i] = mask - idata[i];
     odata[i + 1] = mask - idata[i + 1];
@@ -249,7 +249,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(j));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 #ifdef AMDINFER_ENABLE_TRACING

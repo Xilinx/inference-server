@@ -27,10 +27,10 @@ void initializeClientLogging() {
   LogOptions options{
     "client",  // logger_name
     getLogDirectory(),
-    true,              // enable file logging
-    LogLevel::kDebug,  // file log level
-    true,              // enable console logging
-    LogLevel::kWarn    // console log level
+    true,             // enable file logging
+    LogLevel::Debug,  // file log level
+    true,             // enable console logging
+    LogLevel::Warn    // console log level
   };
   initLogger(options);
 #endif

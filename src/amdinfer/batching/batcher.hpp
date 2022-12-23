@@ -42,7 +42,7 @@ class WorkerInfo;
 
 namespace amdinfer {
 
-enum class BatcherStatus { kNew, kRun, kInactive, kDead };
+enum class BatcherStatus { New, Run, Inactive, Dead };
 
 /**
  * @brief The Batch is what the batcher produces and pushes to the workers. It
@@ -150,7 +150,7 @@ class Batcher {
    */
   void setName(const std::string& name);
   /// Get the batcher's worker group name
-  std::string getName() const;
+  [[nodiscard]] std::string getName() const;
 
   /// Get the batcher's input queue (used to enqueue new requests)
   BlockingQueue<InterfacePtr>* getInputQueue();
@@ -195,7 +195,7 @@ class Batcher {
   BatcherStatus status_;
 
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 };
 

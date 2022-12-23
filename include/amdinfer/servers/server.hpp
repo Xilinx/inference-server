@@ -60,7 +60,7 @@ class Server {
    *
    * @param path path to the model repository
    */
-  void setModelRepository(const std::filesystem::path& path) const;
+  static void setModelRepository(const std::filesystem::path& path);
   /**
    * @brief Turn on active monitoring of the model repository path for new
    * files
@@ -69,7 +69,7 @@ class Server {
    * new files, false to use events. Note that events may not work well on all
    * platforms.
    */
-  void enableRepositoryMonitoring(bool use_polling) const;
+  static void enableRepositoryMonitoring(bool use_polling);
 
  private:
   struct ServerImpl;

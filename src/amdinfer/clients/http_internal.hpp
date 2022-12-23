@@ -45,7 +45,7 @@ namespace amdinfer {
  * @param parameters
  * @return RequestParametersPtr
  */
-RequestParametersPtr mapJsonToParameters(Json::Value parameters);
+RequestParametersPtr mapJsonToParameters(Json::Value json);
 Json::Value mapParametersToJson(RequestParameters *parameters);
 
 InferenceResponse mapJsonToResponse(Json::Value *json);

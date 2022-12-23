@@ -73,10 +73,10 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().setGauge(
-      MetricGaugeIDs::kQueuesBatcherInput,
+      MetricGaugeIDs::QueuesBatcherInput,
       static_cast<double>(input_queue_->size_approx()));
     Metrics::getInstance().setGauge(
-      MetricGaugeIDs::kQueuesBatcherOutput,
+      MetricGaugeIDs::QueuesBatcherOutput,
       static_cast<double>(output_queue_->size_approx()));
 #endif
 
@@ -126,7 +126,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineIngressBatcher);
+        MetricCounterIDs::PipelineIngressBatcher);
 #endif
 
       auto old_input_offset = input_offset;
@@ -160,7 +160,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
       this->output_queue_->enqueue(std::move(batch));
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressBatcher);
+        MetricCounterIDs::PipelineEgressBatcher);
 #endif
     }
   }

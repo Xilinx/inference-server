@@ -89,7 +89,7 @@ class ResNet50Stream : public Worker {
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
-  std::string graphName_;
+  std::string graph_name_;
   AKS::AIGraph* graph_ = nullptr;
 };
 
@@ -103,7 +103,7 @@ void ResNet50Stream::doInit(RequestParameters* parameters) {
 
   /// Get AKS System Manager instance
   this->sys_manager_ = AKS::SysManagerExt::getGlobal();
-  this->graphName_ = "resnet50";
+  this->graph_name_ = "resnet50";
 
   this->batch_size_ = kBatchSize;
 }
@@ -115,7 +115,9 @@ constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
 
 constexpr auto kBoxHeight = 10;  // height in pixels
 
+// NOLINTNEXTLINE(cert-err58-cpp)
 const std::string kImageWidthStr{"224"};
+// NOLINTNEXTLINE(cert-err58-cpp)
 const std::string kBoxHeightStr{"10"};
 
 /// number of categories returned for the image
@@ -141,14 +143,14 @@ void ResNet50Stream::doAcquire(RequestParameters* parameters) {
   util::autoExpandEnvironmentVariables(path);
   this->sys_manager_->loadGraphs(path);
 
-  this->graph_ = this->sys_manager_->getGraph(this->graphName_);
+  this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
   this->metadata_.addInputTensor(
     "input", DataType::Int8,
     {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
   // TODO(varunsh): what should we return here?
   this->metadata_.addOutputTensor("output", DataType::Uint32, {0});
-  this->metadata_.setName(this->graphName_);
+  this->metadata_.setName(this->graph_name_);
 }
 
 void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
@@ -294,9 +296,11 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
               auto y = std::to_string(j * kBoxHeight);
               auto label =
                 std::to_string(top_k_data[(i * kResnetClassifications) + j]);
-              labels += R"({"fill": true, "box": [0,)" + y + "," +
-                        kImageWidthStr + "," + kBoxHeightStr +
-                        R"(], "label": ")" + label + "\"},";
+              labels.append(R"({"fill": true, "box": [0,)");
+              labels.append(y + ",");
+              labels.append(kImageWidthStr + ",");
+              labels.append(kBoxHeightStr + R"(], "label": ")");
+              labels.append(label + "\"},");
             }
             labels.pop_back();  // trim trailing comma
             labels += "]";

@@ -51,10 +51,10 @@ void initializeServerLogging() {
   LogOptions options{
     "server",  // logger_name
     getLogDirectory(),
-    true,              // enable file logging
-    LogLevel::kTrace,  // file log level
-    true,              // enable console logging
-    LogLevel::kWarn    // console log level
+    true,             // enable file logging
+    LogLevel::Trace,  // file log level
+    true,             // enable console logging
+    LogLevel::Warn    // console log level
   };
   initLogger(options);
 #endif
@@ -140,11 +140,11 @@ void Server::stopGrpc() const {
 #endif
 }
 
-void Server::setModelRepository(const fs::path& path) const {
+void Server::setModelRepository(const fs::path& path) {
   ModelRepository::setRepository(path.string());
 }
 
-void Server::enableRepositoryMonitoring(bool use_polling) const {
+void Server::enableRepositoryMonitoring(bool use_polling) {
   ModelRepository::enableRepositoryMonitoring(use_polling);
 }
 

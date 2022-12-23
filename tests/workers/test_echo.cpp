@@ -35,14 +35,18 @@ struct Params {
 
 class EchoParamFixture : public testing::TestWithParam<Params> {
  public:
-  InferenceRequest constructRequest() const {
+  const std::array<int, 1> inputs{3};
+  const std::array<int, 1> golden_outputs{4};
+
+  [[nodiscard]] InferenceRequest constructRequest() const {
     const auto params = GetParam();
 
     InferenceRequestInput input_0;
     input_0.setName("echo");
     input_0.setDatatype(DataType::Uint32);
     input_0.setShape({1});
-    input_0.setData((void*)(&(inputs_[0])));
+    // NOLINTNEXTLINE(google-readability-casting)
+    input_0.setData((void*)(&(inputs[0])));
     if (params.add_input_parameters) {
       auto parameters = std::make_shared<RequestParameters>();
       parameters->put("key_0", "value");
@@ -95,7 +99,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
     for (auto i = 0; i < multiplier; i++) {
       const auto& output = outputs[i];
       const auto* data = static_cast<uint32_t*>(output.getData());
-      EXPECT_EQ(data[0], golden_outputs_[0]);
+      EXPECT_EQ(data[0], golden_outputs[0]);
       EXPECT_EQ(output.getDatatype(), DataType::Uint32);
       EXPECT_EQ(output.getName(), "echo");
       EXPECT_TRUE(output.getParameters()->empty());
@@ -110,13 +114,9 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
   }
 
   amdinfer::Server server;
-
- private:
-  const std::array<int, 1> inputs_{3};
-  const std::array<int, 1> golden_outputs_{4};
 };
 
-TEST_P(EchoParamFixture, EchoNative) {
+TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
   amdinfer::NativeClient client;
   const auto endpoint = client.workerLoad("echo", nullptr);
 

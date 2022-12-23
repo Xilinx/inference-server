@@ -23,7 +23,7 @@
 
 namespace amdinfer {
 /// used status codes
-enum class Status { kOK, kNotFound, kNotImplemented };
+enum class Status { OK, NotFound, NotImplemented };
 
 }  // namespace amdinfer
 

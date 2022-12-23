@@ -187,7 +187,7 @@ class CallDataServerStream : public CallData<RequestType, ReplyType> {
 
   void write(const ReplyType& response) { responder_->Write(response, this); }
 
-  void finish(const ::grpc::Status& status = ::grpc::Status::OK) override {
+  void finish(const ::grpc::Status& status) override {
     // And we are done! Let the gRPC runtime know we've finished, using the
     // memory address of this instance as the uniquely identifying tag for
     // the event.
@@ -236,7 +236,7 @@ class InferenceRequestInputBuilder<
     const inference::ModelInferRequest_InferInputTensor& req,
     Buffer* input_buffer, size_t offset) {
     Observer observer;
-    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
     AMDINFER_LOG_TRACE(observer.logger,
                        "Creating InferenceRequestInput from proto tensor");
@@ -282,7 +282,7 @@ using InputBuilder =
     }                                                                         \
                                                                               \
    private:                                                                   \
-    Logger logger_{Loggers::kServer};                                         \
+    Logger logger_{Loggers::Server};                                          \
                                                                               \
    protected:                                                                 \
     void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
@@ -335,7 +335,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
                                    const BufferRawPtrs& output_buffers,
                                    std::vector<size_t>& output_offsets) {
     Observer observer;
-    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
     AMDINFER_LOG_TRACE(observer.logger,
                        "Creating InferenceRequest from proto tensor");
@@ -352,7 +352,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     for (const auto& input : grpc_request.inputs()) {
       const auto& buffers = input_buffers;
       auto index = 0;
-      for (auto& buffer : buffers) {
+      for (const auto& buffer : buffers) {
         auto& offset = input_offsets[index];
 
         request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
@@ -437,7 +437,7 @@ class GrpcApiUnary : public Interface {
    * @param callback
    */
   explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {
-    this->type_ = InterfaceType::kGrpc;
+    this->type_ = InterfaceType::Grpc;
   }
 
   std::shared_ptr<InferenceRequest> getRequest(

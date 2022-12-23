@@ -150,7 +150,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
     AMDINFER_LOG_INFO(logger, "Got request in echoMulti");
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
     const auto batch_size = batch->size();
     for (unsigned int j = 0; j < batch_size; j++) {
@@ -196,7 +196,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
         } else {
           output.setName(output_name);
         }
-        output.setShape({static_cast<uint64_t>(kOutputLengths[i])});
+        output.setShape({static_cast<uint64_t>(kOutputLengths.at(i))});
         std::vector<std::byte> buffer;
         buffer.resize(kOutputLengths.at(i) * sizeof(uint32_t));
         memcpy(buffer.data(), &(output_args[offset]),
@@ -215,11 +215,11 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
       req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressWorker);
+        MetricCounterIDs::PipelineEgressWorker);
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() -
         batch->getTime(static_cast<int>(j)));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
     }

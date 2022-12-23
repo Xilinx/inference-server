@@ -62,7 +62,7 @@ void dequeueValidate(FutureQueue& my_queue, int num_images) {
       const auto tolerance = 0.05;
       for (size_t j = 0; j < kGoldResponseSize; j++) {
         // expect that the response values are within 5% of the golden
-        const float abs_error = std::abs(kGoldResponseOutput.at(j) * tolerance);
+        const auto abs_error = std::abs(kGoldResponseOutput.at(j) * tolerance);
         EXPECT_NEAR(data[j], kGoldResponseOutput.at(j), abs_error);
       }
     }

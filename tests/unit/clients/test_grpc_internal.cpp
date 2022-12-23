@@ -16,8 +16,8 @@
 
 #include "amdinfer/clients/grpc_internal.hpp"  // for mapRequestToProto
 #include "amdinfer/testing/observation.hpp"
-#include "gtest/gtest.h"  // for EXPECT_EQ, FAIL, UnitTest
-#include "predict_api.pb.h"
+#include "gtest/gtest.h"     // for EXPECT_EQ, FAIL, UnitTest
+#include "predict_api.pb.h"  // for ModelInferRequest_InferInputTensor, Model...
 
 namespace amdinfer {
 
@@ -113,12 +113,12 @@ class Fixture : public testing::TestWithParam<DataType> {};
 TEST_P(Fixture, TestRequestToProto) {  // NOLINT
   initializeTestLogging();
   Observer observer;
-  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kTest});
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Test});
 
   auto datatype = GetParam();
 
   // create an array large enough to hold any data type
-  std::array<std::byte, sizeof(double)> data;
+  std::array<std::byte, sizeof(double)> data{};
 
   InferenceRequest request;
   InferenceRequestInput input;
@@ -135,6 +135,7 @@ TEST_P(Fixture, TestRequestToProto) {  // NOLINT
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
+// NOLINTNEXTLINE(cert-err58-cpp)
 const std::array<DataType, 12> kDataTypes{
   DataType::Bool,   DataType::Uint8, DataType::Uint16, DataType::Uint32,
   DataType::Uint64, DataType::Int8,  DataType::Int16,  DataType::Int32,

@@ -49,29 +49,29 @@ namespace amdinfer {
 
 /// Defines the IDs of the tracked counters
 enum class MetricCounterIDs {
-  kRestGet,
-  kRestPost,
-  kCppNative,
-  kPipelineIngressBatcher,
-  kPipelineIngressWorker,
-  kPipelineEgressBatcher,
-  kPipelineEgressWorker,
-  kTransferredBytes,
-  kMetricScrapes,
+  RestGet,
+  RestPost,
+  CppNative,
+  PipelineIngressBatcher,
+  PipelineIngressWorker,
+  PipelineEgressBatcher,
+  PipelineEgressWorker,
+  TransferredBytes,
+  MetricScrapes,
 };
 
 /// Defines the IDs of the tracked gauges
 enum class MetricGaugeIDs {
-  kQueuesBatcherInput,
-  kQueuesBatcherOutput,
-  kQueuesBufferInput,
-  kQueuesBufferOutput,
+  QueuesBatcherInput,
+  QueuesBatcherOutput,
+  QueuesBufferInput,
+  QueuesBufferOutput,
 };
 
 /// Defines the IDs of the tracked summaries
 enum class MetricSummaryIDs {
-  kMetricLatency,
-  kRequestLatency,
+  MetricLatency,
+  RequestLatency,
 };
 
 /**

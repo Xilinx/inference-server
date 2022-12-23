@@ -100,13 +100,13 @@ class WorkerInfo {
    *
    * @param buffer the buffer to return
    */
-  void putInputBuffer(BufferPtrs buffer) const;
+  void putInputBuffer(BufferPtrs&& buffer) const;
   /**
    * @brief Return an output buffer to the worker
    *
    * @param buffer the buffer to return
    */
-  void putOutputBuffer(BufferPtrs buffer) const;
+  void putOutputBuffer(BufferPtrs&& buffer) const;
 
   /**
    * @brief Checks if this worker group supports a particular number of input
