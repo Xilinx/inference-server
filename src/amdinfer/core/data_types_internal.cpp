@@ -111,6 +111,6 @@ xir::DataType mapTypeToXir(DataType type) {
   return retval;
 }
 
-}  // namespace amdinfer
-
 #endif
+
+}  // namespace amdinfer
