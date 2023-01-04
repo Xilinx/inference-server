@@ -18,7 +18,6 @@
  * @brief Implements the Echo worker
  */
 
-#include <chrono>     // for microseconds, duration_...
 #include <cstddef>    // for size_t, byte
 #include <cstdint>    // for uint32_t, int32_t
 #include <cstring>    // for memcpy
@@ -39,6 +38,7 @@
 #include "amdinfer/observation/metrics.hpp"    // for Metrics
 #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker
 
 namespace amdinfer::workers {
@@ -185,10 +185,11 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::PipelineEgressWorker);
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(j));
+      util::Timer timer{batch->getTime(j)};
+      timer.stop();
+      auto duration = timer.count<std::micro>();
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
     }
   }

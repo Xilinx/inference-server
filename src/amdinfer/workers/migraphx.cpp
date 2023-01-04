@@ -20,7 +20,6 @@
 #include <migraphx/migraphx.h>  // for migraphx_shape_datatype_t
 
 #include <algorithm>              // for max
-#include <chrono>                 // for microseconds, duration...
 #include <cstddef>                // for byte, size_t
 #include <cstring>                // for memcpy
 #include <exception>              // for exception
@@ -48,6 +47,7 @@
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
 #include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace amdinfer::workers {
@@ -398,8 +398,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       break;
     }
     AMDINFER_LOG_INFO(logger, "New batch request in migraphx");
-    std::chrono::time_point batch_tp =
-      std::chrono::high_resolution_clock::now();
+    util::Timer timer;
+    timer.add("batch_start");
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::PipelineIngressWorker);
@@ -494,17 +494,16 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       //
 
       AMDINFER_LOG_INFO(logger, "Beginning migraphx eval");
-      std::chrono::time_point eval_tp =
-        std::chrono::high_resolution_clock::now();
+      timer.add("eval_start");
       migraphx::api::arguments migraphx_output = this->prog_.eval(params);
-      auto eval_duration =
-        std::chrono::duration_cast<std::chrono::microseconds>(
-          std::chrono::high_resolution_clock::now() - eval_tp);
+      timer.add("eval_end");
+      auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
+      auto eval_duration_s = eval_duration_us * std::mega::num;
       AMDINFER_LOG_INFO(
         logger, std::string("Finished migraphx eval; batch size: ") +
                   std::to_string(batch_size_) + "  elapsed time: " +
-                  std::to_string(eval_duration.count()) + " us.  Images/sec: " +
-                  std::to_string(1.e6 * batch_size_ / (eval_duration.count())));
+                  std::to_string(eval_duration_us) + " us.  Images/sec: " +
+                  std::to_string(batch_size_ / (eval_duration_s)));
 
       //
       //           Fetch the results and populate response to each request in
@@ -599,10 +598,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
           Metrics::getInstance().incrementCounter(
             MetricCounterIDs::PipelineEgressWorker);
-          auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::high_resolution_clock::now() - batch->getTime(j));
+          timer.add("batch_time", batch->getTime(j));
+          timer.add("request_latency");
+          auto duration = timer.count<std::micro>();
           Metrics::getInstance().observeSummary(
-            MetricSummaryIDs::RequestLatency, duration.count());
+            MetricSummaryIDs::RequestLatency, duration);
 #endif
         } catch (const std::exception& e) {
           AMDINFER_LOG_ERROR(logger, e.what());
@@ -624,12 +624,12 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       }
     }
 
-    auto batch_duration = std::chrono::duration_cast<std::chrono::microseconds>(
-      std::chrono::high_resolution_clock::now() - batch_tp);
+    timer.add("batch_stop");
+    auto duration = timer.count<std::micro>("batch_start", "batch_stop");
     AMDINFER_LOG_INFO(
       logger, std::string("Finished migraphx batch processing; batch size: ") +
-                std::to_string(batch_size_) + "  elapsed time: " +
-                std::to_string(batch_duration.count()) + " us");
+                std::to_string(batch_size_) +
+                "  elapsed time: " + std::to_string(duration) + " us");
   }  // end while (batch)
   AMDINFER_LOG_INFO(logger, "Migraphx::doRun ending");
 }

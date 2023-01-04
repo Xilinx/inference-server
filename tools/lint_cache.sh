@@ -169,6 +169,11 @@ for source_file in ${source_files[@]}; do
             process_counter=0
         fi
     fi
+done
+
+wait
+
+for source_file in ${source_files[@]}; do
     if [[ $check == 1 ]]; then
         if [[ "$tool" == "iwyu" ]]; then
             check $source_file iwyu
@@ -178,5 +183,3 @@ for source_file in ${source_files[@]}; do
         fi
     fi
 done
-
-wait

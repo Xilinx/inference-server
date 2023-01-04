@@ -58,7 +58,7 @@ foreach(worker ${workers})
   add_library(${worker_name} SHARED ${file_name}.cpp)
   target_link_options(${worker_name} PUBLIC "LINKER:-E")
   target_link_libraries(
-    ${worker_name} PRIVATE batching buffers core observation
+    ${worker_name} PRIVATE batching buffers core observation timer
   )
   target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${worker_name})
@@ -129,6 +129,7 @@ if(${AMDINFER_ENABLE_AKS})
               core
               base64
               parse_env
+              timer
               observation
               aks
               vart-runner
@@ -153,7 +154,7 @@ if(${AMDINFER_ENABLE_AKS})
   target_link_options(workerAks PUBLIC "LINKER:-E")
   target_link_libraries(
     workerAks PRIVATE batching buffers core parse_env observation
-    PRIVATE aks vart-runner xir
+    PRIVATE aks vart-runner xir timer
   )
   target_include_directories(workerAks PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(workerAks)

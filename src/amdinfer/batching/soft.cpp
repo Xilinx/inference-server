@@ -40,11 +40,13 @@
 #include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
 #include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
 
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 
-constexpr auto kDefaultTimeout = milliseconds(100);
+// default batcher timeout in milliseconds
+constexpr auto kDefaultTimeout = 100;
 
 namespace amdinfer {
 
@@ -57,10 +59,9 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
   bool run = true;
 
-  auto timeout = duration_cast<milliseconds>(kDefaultTimeout);
+  auto timeout = kDefaultTimeout;
   if (this->parameters_.has("timeout")) {
-    timeout = duration_cast<milliseconds>(
-      milliseconds(this->parameters_.get<int32_t>("timeout")));
+    timeout = this->parameters_.get<int32_t>("timeout");
   }
 
   while (run) {
@@ -81,20 +82,21 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 #endif
 
     bool first_request = true;
-    auto start_time = std::chrono::high_resolution_clock::now();
+    util::Timer timer{true};
 
     do {
       InterfacePtr req;
       if (first_request) {
         // wait for the first request
         this->input_queue_->wait_dequeue(req);
-        start_time = std::chrono::high_resolution_clock::now();
+        timer.add("start");
         AMDINFER_LOG_DEBUG(logger,
                            "Got request of a new batch for " + this->model_);
       } else {
-        auto remaining_time =
-          timeout - (std::chrono::high_resolution_clock::now() - start_time);
-        auto duration = std::max(remaining_time, std::chrono::nanoseconds(0));
+        timer.stop();
+
+        auto remaining_time = timeout - timer.count<std::milli, int>();
+        auto duration = std::max(remaining_time, 0);
         bool valid = this->input_queue_->wait_dequeue_timed(req, duration);
         if (!valid) {
           break;

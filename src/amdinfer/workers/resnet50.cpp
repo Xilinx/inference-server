@@ -22,7 +22,6 @@
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
 #include <algorithm>               // for max
-#include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for uint64_t, uint8_t, int32_t
 #include <cstring>                 // for memcpy
@@ -52,6 +51,7 @@
 #include "amdinfer/util/base64.hpp"            // for base64_decode
 #include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {  // NOLINT(readability-identifier-naming)
@@ -285,10 +285,11 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
       }
 
 #ifdef AMDINFER_ENABLE_METRICS
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(k));
+      util::Timer timer{batch->getTime(k)};
+      timer.stop();
+      auto duration = timer.count<std::micro>();
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
       auto context = batch->getTrace(k)->propagate();

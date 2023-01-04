@@ -18,7 +18,6 @@
  */
 
 #include <algorithm>   // for copy
-#include <chrono>      // for duration, operator-
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for int32_t, uint64_t
 #include <cstring>     // for memcpy
@@ -44,6 +43,7 @@
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 #include "torch/script.h"                      // for IValue, Tensor, Device
 
@@ -231,7 +231,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       MetricCounterIDs::PipelineIngressWorker);
 #endif
     size_t vec_size = 0;
-    auto total_start = std::chrono::high_resolution_clock::now();
+    util::Timer timer{true};
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
 
@@ -266,7 +266,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     c10::IValue prediction;
 
     // Run through the model to get the predictions
-    auto start = std::chrono::high_resolution_clock::now();
+    timer.add("infer_start");
     try {
       prediction = this->model_.forward(input_vec);
     } catch (const c10::Error& e) {
@@ -275,14 +275,12 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
         req->runCallbackError("Something went wrong");
       }
     }
-
-    auto stop = std::chrono::high_resolution_clock::now();
+    timer.add("infer_stop");
     {
-      std::chrono::duration<float, std::milli> duration = stop - start;
-      float time_tmp = duration.count();
-      AMDINFER_LOG_INFO(logger, "Time taken for " +
+      auto duration = timer.count<std::milli>("infer_start", "infer_stop");
+      AMDINFER_LOG_INFO(logger, "Time (ms) taken for " +
                                   std::to_string(batch->size()) +
-                                  " images: " + std::to_string(time_tmp));
+                                  " images: " + std::to_string(duration));
     }
     at::Tensor output_tensor;
     if (!prediction.isTuple()) {
@@ -326,20 +324,18 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       auto context = batch->getTrace(k)->propagate();
       resp.setContext(std::move(context));
 #endif
-
-      auto total_stop = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<float, std::milli> d = total_stop - total_start;
-      float tt = d.count();
-      AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
+      timer.stop();
+      auto duration = timer.count<std::milli>();
+      AMDINFER_LOG_DEBUG(logger,
+                         "Total time taken: " + std::to_string(duration));
 
       req->runCallbackOnce(resp);
 
 #ifdef AMDINFER_ENABLE_METRICS
-      auto now = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double, std::micro> duration =
-        now - batch->getTime(k);
+      timer.add("metrics", batch->getTime(k));
+      duration = timer.count<std::micro>("metrics", "stop");
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
     }
   }

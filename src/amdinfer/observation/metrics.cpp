@@ -26,15 +26,15 @@
 #include <prometheus/gauge.h>            // for Gauge, BuildGauge
 #include <prometheus/metric_family.h>    // for MetricFamily
 #include <prometheus/serializer.h>       // for Serializer
+#include <prometheus/summary.h>          // for CKMSQuantiles, CKMSQuantiles...
 #include <prometheus/text_serializer.h>  // for TextSerializer
 
-#include <chrono>    // for microseconds, duration, dura...
 #include <iterator>  // for move_iterator, make_move_ite...
 #include <memory>    // for weak_ptr, allocator, shared_ptr
 #include <string>    // for string
 #include <vector>    // for vector
 
-#include "prometheus/summary.h"  // for CKMSQuantiles, CKMSQuantiles...
+#include "amdinfer/util/timer.hpp"  // for Timer
 
 namespace amdinfer {
 
@@ -217,7 +217,7 @@ void Metrics::observeSummary(MetricSummaryIDs id, double value) {
 }
 
 std::string Metrics::getMetrics() {
-  auto start_time_of_request = std::chrono::steady_clock::now();
+  util::Timer timer{true};
 
   std::vector<prometheus::MetricFamily> metrics;
 
@@ -239,10 +239,9 @@ std::string Metrics::getMetrics() {
   std::string response = serializer_->Serialize(metrics);
   auto body_size = response.length();
 
-  auto stop_time_of_request = std::chrono::steady_clock::now();
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-    stop_time_of_request - start_time_of_request);
-  this->observeSummary(MetricSummaryIDs::MetricLatency, duration.count());
+  timer.stop();
+  auto duration = timer.count<std::micro>();
+  this->observeSummary(MetricSummaryIDs::MetricLatency, duration);
 
   this->bytes_transferred_.increment(MetricCounterIDs::TransferredBytes,
                                      body_size);

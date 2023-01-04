@@ -58,6 +58,7 @@
 #include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"                 // for setThreadName
+#include "amdinfer/util/timer.hpp"                  // for Timer
 #include "amdinfer/workers/worker.hpp"              // for Worker, kNumBuffer...
 
 namespace amdinfer::workers {
@@ -349,10 +350,11 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
         Metrics::getInstance().incrementCounter(
           MetricCounterIDs::PipelineEgressWorker);
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-          std::chrono::high_resolution_clock::now() - batch->getTime(k));
+        util::Timer timer{batch->getTime(k)};
+        timer.stop();
+        auto duration = timer.count<std::micro>();
         Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                              duration.count());
+                                              duration);
 #endif
       }
       pool_size--;
