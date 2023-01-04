@@ -21,75 +21,97 @@
 #ifndef GUARD_AMDINFER_CORE_DATA_TYPES
 #define GUARD_AMDINFER_CORE_DATA_TYPES
 
-#include <cassert>   // for assert
-#include <cstddef>   // for size_t
-#include <cstdint>   // for uint8_t, int16_t, int32_t
-#include <iostream>  // for ostream
-#include <string>    // for string
+#include <cstddef>      // for size_t
+#include <cstdint>      // for uint8_t, int16_t, int32_t
+#include <iostream>     // for ostream
+#include <string>       // for string
+#include <string_view>  // for string_view
 
-#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_VITIS
 #include "amdinfer/core/exceptions.hpp"  // for invalid_argument
 #include "half/half.hpp"                 // for half
-
-#ifdef AMDINFER_ENABLE_VITIS
-namespace xir {
-class DataType;
-}  // namespace xir
-#endif
 
 namespace amdinfer {
 
 namespace detail {
 // taken from https://stackoverflow.com/a/46711735
 // used for hashing strings for switch statements
-constexpr unsigned int hash(const char* s, int off = 0) {
-  // NOLINTNEXTLINE
-  return !s[off] ? 5381 : (hash(s, off + 1) * 33) ^ s[off];
+constexpr unsigned int hash(std::string_view str) {
+  const int initial_hash = 5381;
+  const int shift = 5;
+
+  const auto* const data = str.data();
+  const auto size = str.size();
+
+  uint32_t hash = initial_hash;
+  for (const char* c = data; c < data + size; ++c) {
+    hash = ((hash << shift) + hash) + static_cast<int>(*c);
+  }
+  return hash;
 }
 }  // namespace detail
 
-using fp16 = half_float::half;
+// this is kept lower-case for visual consistency with other POD types
+using fp16 = half_float::half;  // NOLINT(readability-identifier-naming)
 
 /**
- * @brief Supported data types
+ * @brief Supported data types. The ALL_CAPS aliases are deprecated and will
+ * be removed.
  */
 class DataType {
  public:
   enum Value : uint8_t {
-    BOOL,
-    UINT8,
-    UINT16,
-    UINT32,
-    UINT64,
-    INT8,
-    INT16,
-    INT32,
-    INT64,
-    FP16,
-    FP32,
-    FLOAT32 = FP32,
-    FP64,
-    FLOAT64 = FP64,
-    STRING,
-    UNKNOWN
+    Bool,
+    BOOL = Bool,
+    Uint8,
+    UINT8 = Uint8,
+    Uint16,
+    UINT16 = Uint16,
+    Uint32,
+    UINT32 = Uint32,
+    Uint64,
+    UINT64 = Uint64,
+    Int8,
+    INT8 = Int8,
+    Int16,
+    INT16 = Int16,
+    Int32,
+    INT32 = Int32,
+    Int64,
+    INT64 = Int64,
+    Fp16,
+    Float16 = Fp16,
+    FP16 = Fp16,
+    Fp32,
+    Float32 = Fp32,
+    FP32 = Fp32,
+    Fp64,
+    Float64 = Fp64,
+    FP64 = Fp64,
+    String,
+    STRING = String,
+    Unknown,
+    UNKNOWN = Unknown
   };
 
   /// Constructs a new DataType object
-  constexpr DataType() : value_(Value::UNKNOWN) {}
+  constexpr DataType() = default;
   /**
    * @brief Constructs a new DataType object
    *
    * @param value string to identify the initial value of the new datatype
    */
-  constexpr DataType(const char* value) : value_(mapStrToType(value)) {}
+  constexpr explicit DataType(const char* value)
+    : value_(mapStrToType(value)) {}
   /**
    * @brief Constructs a new DataType object
    *
    * @param value datatype to identify the initial value of the new datatype
    */
+  // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
   constexpr DataType(DataType::Value value) : value_(value) {}
 
   /// Implicit conversion between the Datatype class and its internal value
+  // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
   constexpr operator Value() const { return value_; }
 
   /**
@@ -106,114 +128,128 @@ class DataType {
    *
    * @return constexpr size_t
    */
-  constexpr size_t size() const {
+  [[nodiscard]] constexpr size_t size() const {
     switch (value_) {
-      case DataType::BOOL:
+      case DataType::Bool:
         return sizeof(bool);
-      case DataType::UINT8:
+      case DataType::Uint8:
         return sizeof(uint8_t);
-      case DataType::UINT16:
+      case DataType::Uint16:
         return sizeof(uint16_t);
-      case DataType::UINT32:
+      case DataType::Uint32:
         return sizeof(uint32_t);
-      case DataType::UINT64:
+      case DataType::Uint64:
         return sizeof(uint64_t);
-      case DataType::INT8:
+      case DataType::Int8:
         return sizeof(int8_t);
-      case DataType::INT16:
+      case DataType::Int16:
         return sizeof(int16_t);
-      case DataType::INT32:
+      case DataType::Int32:
         return sizeof(int32_t);
-      case DataType::INT64:
+      case DataType::Int64:
         return sizeof(int64_t);
-      case DataType::FP16:
+      case DataType::Fp16:
         return sizeof(fp16);
-      case DataType::FP32:
+      case DataType::Fp32:
         return sizeof(float);
-      case DataType::FP64:
+      case DataType::Fp64:
         return sizeof(double);
-      case DataType::STRING:
+      case DataType::String:
         return sizeof(std::string);
       default:
-        throw invalid_argument("Size requested of unknown data type");
+        throw invalid_argument("Unknown datatype passed");
     }
   }
 
   /**
-   * @brief Given a type, return a string corresponding to the type
+   * @brief Given a type, return a string corresponding to the type. KServe
+   * requires the string form to be specific values and in all caps. This
+   * adheres to that. If these string values are changed, then each server will
+   * need to map the values to the ones KServe expects.
    *
    * @return const char*
    */
-  constexpr const char* str() const {
+  [[nodiscard]] constexpr const char* str() const {
     switch (value_) {
-      case DataType::BOOL:
+      case DataType::Bool:
         return "BOOL";
-      case DataType::UINT8:
+      case DataType::Uint8:
         return "UINT8";
-      case DataType::UINT16:
+      case DataType::Uint16:
         return "UINT16";
-      case DataType::UINT32:
+      case DataType::Uint32:
         return "UINT32";
-      case DataType::UINT64:
+      case DataType::Uint64:
         return "UINT64";
-      case DataType::INT8:
+      case DataType::Int8:
         return "INT8";
-      case DataType::INT16:
+      case DataType::Int16:
         return "INT16";
-      case DataType::INT32:
+      case DataType::Int32:
         return "INT32";
-      case DataType::INT64:
+      case DataType::Int64:
         return "INT64";
-      case DataType::FP16:
+      case DataType::Fp16:
         return "FP16";
-      case DataType::FP32:
+      case DataType::Fp32:
         return "FP32";
-      case DataType::FP64:
+      case DataType::Fp64:
         return "FP64";
-      case DataType::STRING:
+      case DataType::String:
         return "STRING";
       default:
-        throw invalid_argument("String requested of unknown data type");
+        throw invalid_argument("Unknown datatype passed");
     }
   }
 
  private:
-  constexpr DataType::Value mapStrToType(const char* value) const {
+  constexpr DataType::Value static mapStrToType(const char* value) {
     switch (detail::hash(value)) {
       case detail::hash("BOOL"):
-        return DataType::BOOL;
+      case detail::hash("Bool"):
+        return DataType::Bool;
       case detail::hash("UINT8"):
-        return DataType::UINT8;
+      case detail::hash("Uint8"):
+        return DataType::Uint8;
       case detail::hash("UINT16"):
-        return DataType::UINT16;
+      case detail::hash("Uint16"):
+        return DataType::Uint16;
       case detail::hash("UINT32"):
-        return DataType::UINT32;
+      case detail::hash("Uint32"):
+        return DataType::Uint32;
       case detail::hash("UINT64"):
-        return DataType::UINT64;
+      case detail::hash("Uint64"):
+        return DataType::Uint64;
       case detail::hash("INT8"):
-        return DataType::INT8;
+      case detail::hash("Int8"):
+        return DataType::Int8;
       case detail::hash("INT16"):
-        return DataType::INT16;
+      case detail::hash("Int16"):
+        return DataType::Int16;
       case detail::hash("INT32"):
-        return DataType::INT32;
+      case detail::hash("Int32"):
+        return DataType::Int32;
       case detail::hash("INT64"):
-        return DataType::INT64;
+      case detail::hash("Int64"):
+        return DataType::Int64;
       case detail::hash("FP16"):
-        return DataType::FP16;
+      case detail::hash("Fp16"):
+        return DataType::Fp16;
       case detail::hash("FP32"):
-        return DataType::FP32;
+      case detail::hash("Fp32"):
+        return DataType::Fp32;
       case detail::hash("FP64"):
-        return DataType::FP64;
+      case detail::hash("Fp64"):
+        return DataType::Fp64;
       case detail::hash("STRING"):
-        return DataType::STRING;
-      case detail::hash("UNKNOWN"):
-        return DataType::UNKNOWN;
+      case detail::hash("String"):
+        return DataType::String;
       default:
-        throw invalid_argument("Unknown data type construction");
+        throw invalid_argument("Unknown datatype passed");
     }
   }
 
-  Value value_;
+  Value value_ = Value::Unknown;
 };
 
 /**
@@ -230,67 +266,49 @@ class DataType {
 template <typename F, typename... Args>
 auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
   switch (type) {
-    case DataType::BOOL: {
+    case DataType::Bool: {
       return f.template operator()<bool>(args...);
     }
-    case DataType::UINT8: {
+    case DataType::Uint8: {
       return f.template operator()<uint8_t>(args...);
     }
-    case DataType::UINT16: {
+    case DataType::Uint16: {
       return f.template operator()<uint16_t>(args...);
     }
-    case DataType::UINT32: {
+    case DataType::Uint32: {
       return f.template operator()<uint32_t>(args...);
     }
-    case DataType::UINT64: {
+    case DataType::Uint64: {
       return f.template operator()<uint64_t>(args...);
     }
-    case DataType::INT8: {
+    case DataType::Int8: {
       return f.template operator()<int8_t>(args...);
     }
-    case DataType::INT16: {
+    case DataType::Int16: {
       return f.template operator()<int16_t>(args...);
     }
-    case DataType::INT32: {
+    case DataType::Int32: {
       return f.template operator()<int32_t>(args...);
     }
-    case DataType::INT64: {
+    case DataType::Int64: {
       return f.template operator()<int64_t>(args...);
     }
-    case DataType::FP16: {
+    case DataType::Fp16: {
       return f.template operator()<fp16>(args...);
     }
-    case DataType::FP32: {
+    case DataType::Fp32: {
       return f.template operator()<float>(args...);
     }
-    case DataType::FP64: {
+    case DataType::Fp64: {
       return f.template operator()<double>(args...);
     }
-    case DataType::STRING: {
+    case DataType::String: {
       return f.template operator()<char>(args...);
     }
     default:
       throw invalid_argument("Unknown datatype passed");
   }
 }
-
-#ifdef AMDINFER_ENABLE_VITIS
-/**
- * @brief Given an XIR type, return the corresponding AMDinfer type
- *
- * @param type XIR datatype
- * @return DataType
- */
-DataType mapXirToType(xir::DataType type);
-
-/**
- * @brief Given a AMDinfer type, return the corresponding XIR type, if it exists
- *
- * @param type Datatype
- * @return xir::DataType
- */
-xir::DataType mapTypeToXir(DataType type);
-#endif
 
 }  // namespace amdinfer
 #endif  // GUARD_AMDINFER_CORE_DATA_TYPES

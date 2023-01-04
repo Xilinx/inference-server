@@ -41,8 +41,11 @@ void test(amdinfer::Client* client) {
   const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
 
+  // arbitrarily set to 10ms
+  const auto delay = std::chrono::milliseconds(10);
+
   while (!client->modelReady(endpoint)) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(delay);
   }
 
   auto models = client->modelList();
@@ -51,7 +54,7 @@ void test(amdinfer::Client* client) {
   client->modelUnload(endpoint);
 
   while (isReady(client, endpoint)) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(delay);
   }
 
   while (!client->modelList().empty()) {
@@ -71,5 +74,6 @@ TEST_F(BaseFixture, ModelReady) {
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, ModelReady) { test(client_.get()); }
 #endif

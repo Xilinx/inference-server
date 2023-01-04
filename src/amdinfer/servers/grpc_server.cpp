@@ -24,12 +24,11 @@
 #include <grpc/support/log.h>                    // for GPR_ASSERT, GPR_UNL...
 #include <grpcpp/grpcpp.h>                       // for ServerCompletionQueue
 
+#include <cassert>        // for assert
 #include <cstddef>        // for size_t, byte
 #include <cstdint>        // for uint64_t, int16_t
 #include <cstring>        // for memcpy
 #include <exception>      // for exception
-#include <functional>     // for _Bind_helper<>::type
-#include <iostream>       // for operator<<, cout
 #include <memory>         // for unique_ptr, shared_ptr
 #include <string>         // for allocator, string
 #include <thread>         // for thread, yield
@@ -46,12 +45,11 @@
 #include "amdinfer/core/interface.hpp"         // for Interface, Interfac...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/observation/logging.hpp"        // for Logger, Loggers
-#include "amdinfer/observation/tracing.hpp"        // for Trace, startTrace
-#include "amdinfer/util/string.hpp"                // for toLower
-#include "amdinfer/util/traits.hpp"                // for is_any
-#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
-#include "predict_api.pb.h"                        // for InferTensorContents
+#include "amdinfer/observation/observer.hpp"
+#include "amdinfer/util/string.hpp"  // for toLower
+#include "amdinfer/util/traits.hpp"  // IWYU pragma: keep
+#include "predict_api.grpc.pb.h"     // for GRPCInferenceServic...
+#include "predict_api.pb.h"          // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;
@@ -98,28 +96,28 @@ class CallData : public CallDataBase {
   // server) and the completion queue "cq" used for asynchronous communication
   // with the gRPC runtime.
   CallData(AsyncService* service, ::grpc::ServerCompletionQueue* cq)
-    : service_(service), cq_(cq), status_(CREATE) {}
+    : service_(service), cq_(cq), status_(Create) {}
 
   virtual ~CallData() = default;
 
   void proceed() override {
-    if (status_ == CREATE) {
-      // Make this instance progress to the PROCESS state.
-      status_ = PROCESS;
+    if (status_ == Create) {
+      // Make this instance progress to the Process state.
+      status_ = Process;
 
       waitForRequest();
-    } else if (status_ == PROCESS) {
+    } else if (status_ == Process) {
       addNewCallData();
 
       // queue_->enqueue(this);
-      // status_ = WAIT;
+      // status_ = Wait;
       handleRequest();
-      status_ = WAIT;
-    } else if (status_ == WAIT) {
+      status_ = Wait;
+    } else if (status_ == Wait) {
       std::this_thread::yield();
     } else {
-      GPR_ASSERT(status_ == FINISH);
-      // Once in the FINISH state, deallocate ourselves (CallData).
+      assert(status_ == Finish);
+      // Once in the Finish state, deallocate ourselves (CallData).
       delete this;
     }
   }
@@ -150,7 +148,7 @@ class CallData : public CallDataBase {
   ReplyType reply_;
 
   // Let's implement a tiny state machine with the following states.
-  enum CallStatus { CREATE, PROCESS, WAIT, FINISH };
+  enum CallStatus { Create, Process, Wait, Finish };
   CallStatus status_;  // The current serving state.
 };
 
@@ -163,11 +161,11 @@ class CallDataUnary : public CallData<RequestType, ReplyType> {
   CallDataUnary(AsyncService* service, ::grpc::ServerCompletionQueue* cq)
     : CallData<RequestType, ReplyType>(service, cq), responder_(&this->ctx_) {}
 
-  void finish(const ::grpc::Status& status = ::grpc::Status::OK) override {
+  void finish(const ::grpc::Status& status) override {
     // And we are done! Let the gRPC runtime know we've finished, using the
     // memory address of this instance as the uniquely identifying tag for
     // the event.
-    this->status_ = this->FINISH;
+    this->status_ = this->Finish;
     responder_.Finish(this->reply_, status, this);
   }
 
@@ -187,11 +185,11 @@ class CallDataServerStream : public CallData<RequestType, ReplyType> {
 
   void write(const ReplyType& response) { responder_->Write(response, this); }
 
-  void finish(const ::grpc::Status& status = ::grpc::Status::OK) override {
+  void finish(const ::grpc::Status& status) override {
     // And we are done! Let the gRPC runtime know we've finished, using the
     // memory address of this instance as the uniquely identifying tag for
     // the event.
-    this->status_ = this->FINISH;
+    this->status_ = this->Finish;
     responder_.Finish(this->reply_, status, this);
   }
 
@@ -236,7 +234,7 @@ class InferenceRequestInputBuilder<
     const inference::ModelInferRequest_InferInputTensor& req,
     Buffer* input_buffer, size_t offset) {
     Observer observer;
-    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
     AMDINFER_LOG_TRACE(observer.logger,
                        "Creating InferenceRequestInput from proto tensor");
@@ -247,15 +245,15 @@ class InferenceRequestInputBuilder<
     for (const auto& index : req.shape()) {
       input.shape_.push_back(static_cast<size_t>(index));
     }
-    input.dataType_ = DataType(req.datatype().c_str());
+    input.data_type_ = DataType(req.datatype().c_str());
 
     input.parameters_ = mapProtoToParameters(req.parameters());
 
     auto size = input.getSize();
-    auto* dest = static_cast<std::byte*>(input_buffer->data()) + offset;
+    auto* dest = static_cast<std::byte*>(input_buffer->data(offset));
     AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
                                           " elements of type " +
-                                          input.dataType_.str() + " to " +
+                                          input.data_type_.str() + " to " +
                                           util::addressToString(dest));
 
     switchOverTypes(WriteData(), input.getDatatype(), input_buffer, &req,
@@ -270,6 +268,7 @@ using InputBuilder =
   InferenceRequestInputBuilder<inference::ModelInferRequest_InferInputTensor>;
 
 #ifdef AMDINFER_ENABLE_LOGGING
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define CALLDATA_IMPL(endpoint, type)                                         \
   class CallData##endpoint                                                    \
     : public CallData##type<inference::endpoint##Request,                     \
@@ -281,7 +280,7 @@ using InputBuilder =
     }                                                                         \
                                                                               \
    private:                                                                   \
-    Logger logger_{Loggers::kServer};                                         \
+    Logger logger_{Loggers::Server};                                          \
                                                                               \
    protected:                                                                 \
     void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
@@ -310,6 +309,7 @@ using InputBuilder =
     void handleRequest() noexcept override
 #endif
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define CALLDATA_IMPL_END \
   }                       \
   ;  // NOLINT
@@ -333,7 +333,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
                                    const BufferRawPtrs& output_buffers,
                                    std::vector<size_t>& output_offsets) {
     Observer observer;
-    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
     AMDINFER_LOG_TRACE(observer.logger,
                        "Creating InferenceRequest from proto tensor");
@@ -350,7 +350,7 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
     for (const auto& input : grpc_request.inputs()) {
       const auto& buffers = input_buffers;
       auto index = 0;
-      for (auto& buffer : buffers) {
+      for (const auto& buffer : buffers) {
         auto& offset = input_offsets[index];
 
         request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
@@ -368,12 +368,12 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
         (void)output;
         const auto& buffers = output_buffers;
         auto index = 0;
-        for (auto& buffer : buffers) {
+        for (const auto& buffer : buffers) {
           auto& offset = output_offsets[index];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
-            static_cast<std::byte*>(buffer->data()) + offset);
+            static_cast<std::byte*>(buffer->data(offset)));
           index++;
         }
       }
@@ -382,12 +382,12 @@ class InferenceRequestBuilder<CallDataModelInfer*> {
         (void)input;  // suppress unused variable warning
         const auto& buffers = output_buffers;
         for (size_t j = 0; j < buffers.size(); j++) {
-          auto& buffer = buffers[j];
+          const auto& buffer = buffers[j];
           const auto& offset = output_offsets[j];
 
           request->outputs_.emplace_back();
           request->outputs_.back().setData(
-            static_cast<std::byte*>(buffer->data()) + offset);
+            static_cast<std::byte*>(buffer->data(offset)));
         }
       }
     }
@@ -423,7 +423,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
   //   const auto &context = response.getContext();
   //   propagate(resp.get(), context);
   // #endif
-  calldata->finish();
+  calldata->finish(::grpc::Status::OK);
 }
 
 class GrpcApiUnary : public Interface {
@@ -435,7 +435,7 @@ class GrpcApiUnary : public Interface {
    * @param callback
    */
   explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {
-    this->type_ = InterfaceType::kGrpc;
+    this->type_ = InterfaceType::Grpc;
   }
 
   std::shared_ptr<InferenceRequest> getRequest(
@@ -449,8 +449,12 @@ class GrpcApiUnary : public Interface {
       auto request =
         RequestBuilder::build(this->calldata_, input_buffers, input_offsets,
                               output_buffers, output_offsets);
+      // Callback callback =
+      //   std::bind(grpcUnaryCallback, this->calldata_, std::placeholders::_1);
       Callback callback =
-        std::bind(grpcUnaryCallback, this->calldata_, std::placeholders::_1);
+        [calldata = this->calldata_](const InferenceResponse& response) {
+          grpcUnaryCallback(calldata, response);
+        };
       request->setCallback(std::move(callback));
       return request;
     } catch (const invalid_argument& e) {
@@ -475,13 +479,13 @@ class GrpcApiUnary : public Interface {
 
 CALLDATA_IMPL(ServerLive, Unary) {
   reply_.set_live(true);
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ServerReady, Unary) {
   reply_.set_ready(true);
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
@@ -489,7 +493,7 @@ CALLDATA_IMPL(ModelReady, Unary) {
   const auto& model = request_.name();
   try {
     reply_.set_ready(::amdinfer::modelReady(model));
-    finish();
+    finish(::grpc::Status::OK);
   } catch (const invalid_argument& e) {
     reply_.set_ready(false);
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -505,7 +509,7 @@ CALLDATA_IMPL(ModelMetadata, Unary) {
   try {
     auto metadata = ::amdinfer::modelMetadata(model);
     mapModelMetadataToProto(metadata, reply_);
-    finish();
+    finish(::grpc::Status::OK);
   } catch (const invalid_argument& e) {
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
   } catch (const std::exception& e) {
@@ -521,7 +525,7 @@ CALLDATA_IMPL(ServerMetadata, Unary) {
   for (const auto& extension : metadata.extensions) {
     reply_.add_extensions(extension);
   }
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
@@ -530,7 +534,7 @@ CALLDATA_IMPL(ModelList, Unary) {
   for (const auto& model : models) {
     reply_.add_models(model);
   }
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
@@ -550,7 +554,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
     return;
   }
 
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
@@ -558,7 +562,7 @@ CALLDATA_IMPL(ModelUnload, Unary) {
   auto* model = request_.mutable_name();
   util::toLower(model);
   ::amdinfer::modelUnload(*model);
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
@@ -571,7 +575,7 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   try {
     auto endpoint = ::amdinfer::workerLoad(*model, parameters.get());
     reply_.set_endpoint(endpoint);
-    finish();
+    finish(::grpc::Status::OK);
   } catch (const runtime_error& e) {
     AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -586,14 +590,14 @@ CALLDATA_IMPL(WorkerUnload, Unary) {
   auto* worker = request_.mutable_name();
   util::toLower(worker);
   ::amdinfer::workerUnload(*worker);
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(HasHardware, Unary) {
   auto found = ::amdinfer::hasHardware(request_.name(), request_.num());
   reply_.set_found(found);
-  finish();
+  finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
 
@@ -695,8 +699,8 @@ class GrpcServer final {
     new CallDataModelInfer(&service_, my_cq.get());
     new CallDataHasHardware(&service_, my_cq.get());
     // new CallDataStreamModelInfer(&service_, my_cq.get());
-    void* tag;  // uniquely identifies a request.
-    bool ok;
+    void* tag = nullptr;  // uniquely identifies a request.
+    bool ok = false;
     while (true) {
       // Block waiting to read the next event from the completion queue. The
       // event is uniquely identified by its tag, which in this case is the

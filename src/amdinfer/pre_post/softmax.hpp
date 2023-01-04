@@ -29,7 +29,7 @@ namespace amdinfer::pre_post {
  * @param result pointer to store the computed results
  */
 template <typename T>
-void calc_softmax(const T* data, size_t size, double* result) {
+void calcSoftmax(const T* data, size_t size, double* result) {
   double sum = 0;
 
   auto max = data[0];

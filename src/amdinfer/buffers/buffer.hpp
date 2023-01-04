@@ -22,10 +22,12 @@
 #ifndef GUARD_AMDINFER_BUFFERS_BUFFER
 #define GUARD_AMDINFER_BUFFERS_BUFFER
 
-#include <cstddef>  // for size_t
-#include <cstdint>  // for int16_t, int32_t, int64_t, int8_t, uint16_t, uint...
-#include <cstring>  // for memcpy, size_t
+#include <cstddef>  // for size_t, byte
+#include <cstring>  // for memcpy
 #include <string>   // for string
+
+// IWYU is creating a cycle with adding/removing this header
+// IWYU pragma: no_include <algorithm>
 
 namespace amdinfer {
 
@@ -47,7 +49,7 @@ class Buffer {
    *
    * @return void*
    */
-  virtual void* data(size_t offset = 0) = 0;
+  virtual void* data(size_t offset) = 0;
 
   /**
    * @brief Reset the buffer. This should be called prior to returning the
@@ -77,7 +79,7 @@ class Buffer {
       // is other attempts. This works but may be non-optimal.
       char null_term = '\0';
       std::copy(value.begin(), value.end(),
-                reinterpret_cast<char*>(this->data(offset)));
+                static_cast<char*>(this->data(offset)));
       // strcpy(reinterpret_cast<char*>(static_cast<std::byte*>(this->data()) +
       // this->write_counter_),
       // value.c_str());

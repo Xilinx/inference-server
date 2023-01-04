@@ -24,11 +24,13 @@
 
 #include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
 
-#include <cctype>   // for toupper
-#include <climits>  // for UINT_MAX
-#include <cstdint>  // for int32_t
-#include <string>   // for string, operator+, basic_string
-#include <utility>  // for pair, move, make_pair
+#include <cctype>       // for toupper
+#include <climits>      // for UINT_MAX
+#include <cstdint>      // for int32_t
+#include <exception>    // for exception
+#include <string>       // for string, operator+, basic_string
+#include <type_traits>  // for __decay_and_strip<>::__type
+#include <utility>      // for pair, move, make_pair
 
 #include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument, file_not_f...
@@ -42,11 +44,11 @@ namespace amdinfer {
  * @brief Find the named function in a *.so file
  *
  * @param func name of the symbol  to find
- * @param soPath path to the *.so file to search
+ * @param so_path path to the *.so file to search
  * @return void* pointer to the function
  */
-void* findFunc(const std::string& func, const std::string& soPath) {
-  if (func.empty() || soPath.empty()) {
+void* findFunc(const std::string& func, const std::string& so_path) {
+  if (func.empty() || so_path.empty()) {
     throw invalid_argument("Function or .so path empty");
   }
 
@@ -54,7 +56,7 @@ void* findFunc(const std::string& func, const std::string& soPath) {
   dlerror();
 
   /* open the needed object */
-  void* handle = dlopen(soPath.c_str(), RTLD_LOCAL | RTLD_LAZY);
+  void* handle = dlopen(so_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
   if (handle == nullptr) {
     const char* error_str = dlerror();
     throw file_not_found_error(error_str);
@@ -80,11 +82,11 @@ workers::Worker* getWorker(const std::string& name) {
   std::string library =
     std::string("libworker") + lib_name + std::string(".so");
 
-  void* funcPtr = findFunc("getWorker", library);
+  void* func_ptr = findFunc("getWorker", library);
 
   // cast the void pointer from dlsym to a function pointer. This assumes that
   // void* is same size as function pointer, which should be true on POSIX
-  auto* worker = reinterpret_cast<workers::Worker* (*)()>(funcPtr)();
+  auto* worker = reinterpret_cast<workers::Worker* (*)()>(func_ptr)();
   return worker;
 }
 
@@ -104,7 +106,7 @@ WorkerInfo::~WorkerInfo() {
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
                                    RequestParameters* parameters) {
-  auto worker = getWorker(name);
+  auto* worker = getWorker(name);
   worker->init(parameters);
   this->batch_size_ = worker->getBatchSize();
 
@@ -156,7 +158,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   }
 
   for (const auto& batcher : this->batchers_) {
-    if (batcher->getStatus() != BatcherStatus::kRun) {
+    if (batcher->getStatus() != BatcherStatus::Run) {
       batcher->start(this);
     }
   }
@@ -202,7 +204,7 @@ void WorkerInfo::unload() {
       do {
         i = (i + 1) % this->batchers_.size();
         status = batchers_[i]->getStatus();
-      } while (status != BatcherStatus::kInactive);
+      } while (status != BatcherStatus::Inactive);
       this->batchers_[i]->end();
     }
   }
@@ -211,7 +213,7 @@ void WorkerInfo::unload() {
   bool found = false;
   while (!found) {
     for (const auto& [thread_id, worker] : this->workers_) {
-      if (worker->getStatus() == workers::WorkerStatus::kInactive) {
+      if (worker->getStatus() == workers::WorkerStatus::Inactive) {
         id = thread_id;
         found = true;
         this->join(thread_id);
@@ -251,11 +253,11 @@ BufferPtrs WorkerInfo::getOutputBuffer() const {
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) const {
+void WorkerInfo::putInputBuffer(BufferPtrs&& buffer) const {
   this->input_buffer_ptr_->enqueue(std::move(buffer));
 }
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const {
+void WorkerInfo::putOutputBuffer(BufferPtrs&& buffer) const {
   this->output_buffer_ptr_->enqueue(std::move(buffer));
 }
 

@@ -27,7 +27,7 @@ void test(amdinfer::Client* client) {
   const std::string worker = "echo";
 
   auto models_0 = client->modelList();
-  EXPECT_EQ(models_0.size(), 0);
+  EXPECT_TRUE(models_0.empty());
 
   const auto endpoint = client->workerLoad(worker, nullptr);
   EXPECT_EQ(endpoint, worker);
@@ -53,7 +53,7 @@ void test(amdinfer::Client* client) {
   client->modelUnload(endpoint_2);
 
   auto models_3 = client->modelList();
-  while (models_3.size() > 0) {
+  while (!models_3.empty()) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
     models_3 = client->modelList();
   }
@@ -71,5 +71,6 @@ TEST_F(BaseFixture, ModelList) {
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, ModelList) { test(client_.get()); }
 #endif

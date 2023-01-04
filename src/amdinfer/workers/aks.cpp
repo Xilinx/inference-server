@@ -25,6 +25,7 @@
 #include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for int32_t
+#include <cstring>                 // for memcpy
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, allocator
 #include <string>                  // for string, operator+, char...
@@ -38,7 +39,7 @@
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Fp32
 #include "amdinfer/core/exceptions.hpp"        // for external_error
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
@@ -49,13 +50,11 @@
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
-namespace AKS {
+namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
 }  // namespace AKS
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Aks worker is a simple worker that accepts a single uint32_t
@@ -78,7 +77,7 @@ class Aks : public Worker {
   void doDestroy() override;
 
   /// the AKS system manager
-  AKS::SysManagerExt* sysMan_ = nullptr;
+  AKS::SysManagerExt* sys_manager_ = nullptr;
   /// the corresponding graph to the name
   AKS::AIGraph* graph_ = nullptr;
 };
@@ -88,12 +87,13 @@ std::thread Aks::spawn(BatchPtrQueue* input_queue) {
 }
 
 void Aks::doInit(RequestParameters* parameters) {
-  constexpr auto kBatchSize = 1;
+  // arbitrarily set the default batch size to 1
+  const int default_batch_size = 1;
 
   /// Get AKS System Manager instance
-  this->sysMan_ = AKS::SysManagerExt::getGlobal();
+  this->sys_manager_ = AKS::SysManagerExt::getGlobal();
 
-  auto batch_size = kBatchSize;
+  auto batch_size = default_batch_size;
   if (parameters->has("batch_size")) {
     batch_size = parameters->get<int32_t>("batch_size");
   }
@@ -105,31 +105,29 @@ size_t Aks::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::FP32);
+                         1 * this->batch_size_, DataType::Fp32);
   VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::FP32);
+                         1 * this->batch_size_, DataType::Fp32);
   return buffer_num;
 }
 
 void Aks::doAcquire(RequestParameters* parameters) {
-  auto kPath = std::string("${AKS_ROOT}/graph_zoo/graph_adder.json");
-
-  auto path = kPath;
+  std::string path{"${AKS_ROOT}/graph_zoo/graph_adder.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
   util::autoExpandEnvironmentVariables(path);
-  this->sysMan_->loadGraphs(path);
+  this->sys_manager_->loadGraphs(path);
 
   std::string graph_name = "graph_adder";
-  this->graph_ = sysMan_->getGraph(graph_name);
+  this->graph_ = sys_manager_->getGraph(graph_name);
   if (this->graph_ == nullptr) {
     throw external_error("AKS graph " + graph_name + " not found");
   }
 
-  this->metadata_.addInputTensor("input", DataType::FP32,
+  this->metadata_.addInputTensor("input", DataType::Fp32,
                                  {this->batch_size_, 1});
-  this->metadata_.addOutputTensor("output", DataType::FP32,
+  this->metadata_.addOutputTensor("output", DataType::Fp32,
                                   {this->batch_size_, 1});
   this->metadata_.setName(graph_name);
 }
@@ -148,9 +146,9 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
     }
     AMDINFER_LOG_INFO(logger, "Got request in aks");
     for (unsigned int j = 0; j < batch->size(); j++) {
-      const auto& req = batch->getRequest(j);
+      const auto& req = batch->getRequest(static_cast<int>(j));
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
+      const auto& trace = batch->getTrace(static_cast<int>(j));
       trace->startSpan("aks");
 #endif
       InferenceResponse resp;
@@ -171,19 +169,20 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
         v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
           xir::Tensor::create("aks-echo", {1}, xir::create_data_type<int>())));
 
-        auto* inDataPtr = reinterpret_cast<float*>(v[0]->data().first);
-        inDataPtr[0] = value;
+        auto* data_in_ptr = reinterpret_cast<float*>(v[0]->data().first);
+        data_in_ptr[0] = value;
 
-        std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>
-          futureObj =
-            this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr);
+        std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> future =
+          this->sys_manager_->enqueueJob(this->graph_, "", std::move(v),
+                                         nullptr);
 
-        auto outDD = futureObj.get();
+        auto out_data_descriptor = future.get();
 
-        value = (reinterpret_cast<float*>(outDD[0]->data().first))[0];
+        value =
+          (reinterpret_cast<float*>(out_data_descriptor[0]->data().first))[0];
 
         InferenceResponseOutput output;
-        output.setDatatype(DataType::FP32);
+        output.setDatatype(DataType::Fp32);
         output.setName("aks");
         output.setShape({1});
         std::vector<std::byte> buffer;
@@ -195,8 +194,9 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
 
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(j));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+        std::chrono::high_resolution_clock::now() -
+        batch->getTime(static_cast<int>(j)));
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
@@ -213,9 +213,7 @@ void Aks::doRelease() {}
 void Aks::doDeallocate() {}
 void Aks::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

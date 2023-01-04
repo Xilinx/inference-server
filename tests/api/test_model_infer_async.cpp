@@ -14,6 +14,7 @@
 // limitations under the License.
 
 #include <cstdint>  // for uint8_t, uint64_t, uin...
+#include <future>   // for future
 #include <memory>   // for allocator, unique_ptr
 #include <queue>    // for queue
 #include <vector>   // for vector
@@ -25,15 +26,15 @@ void test(amdinfer::Client* client) {
   auto endpoint = client->workerLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 
-  std::vector<uint32_t> imgData;
+  std::vector<uint32_t> img_data;
   auto shape = {1UL};
   auto size = 1;
-  imgData.reserve(size);
-  imgData.push_back(1);
+  img_data.reserve(size);
+  img_data.push_back(1);
 
   amdinfer::InferenceRequest request;
-  request.addInputTensor(static_cast<void*>(imgData.data()), shape,
-                         amdinfer::DataType::UINT32);
+  request.addInputTensor(static_cast<void*>(img_data.data()), shape,
+                         amdinfer::DataType::Uint32);
 
   const auto num_requests = 16;
   std::queue<amdinfer::InferenceResponseFuture> q;
@@ -73,5 +74,6 @@ TEST_F(BaseFixture, ModelInfer) {
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, ModelInfer) { test(client_.get()); }
 #endif

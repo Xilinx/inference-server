@@ -13,16 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>    // for array
 #include <cstdlib>  // for getenv, abs
 
 #include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
 #include "facedetect.hpp"                          // IWYU pragma: associated
 #include "gtest/gtest.h"  // for Test, AssertionResult, EXPECT_EQ
 
-const int gold_response_size = 6;
-const float gold_response_output[gold_response_size] = {
-  -1, 0.9937100410461426, 268, 78.728, 158, 170.800,
+const std::array kGoldResponseOutput{
+  -1.0F, 0.9937100410461426F, 268.0F, 78.728F, 158.0F, 170.800F,
 };
+const auto kGoldResponseSize = kGoldResponseOutput.size();
 
 std::string prepareDirectory() {
   fs::path temp_dir =
@@ -35,7 +36,7 @@ std::string prepareDirectory() {
   return temp_dir;
 }
 
-void dequeue_validate(FutureQueue& my_queue, int num_images) {
+void dequeueValidate(FutureQueue& my_queue, int num_images) {
   std::future<amdinfer::InferenceResponse> element;
   for (int i = 0; i < num_images; i++) {
     my_queue.wait_dequeue(element);
@@ -53,16 +54,17 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
       auto* parameters = output.getParameters();
       ASSERT_NE(parameters, nullptr);
       EXPECT_TRUE(parameters->empty());
-      auto num_boxes = gold_response_size / 6;
+      auto num_boxes = 1;
       auto shape = output.getShape();
       EXPECT_EQ(shape.size(), 2);
-      EXPECT_EQ(shape[0], 6);
+      EXPECT_EQ(shape[0], kGoldResponseSize);
       EXPECT_EQ(shape[1], num_boxes);
-      EXPECT_EQ(size, gold_response_size);
-      for (size_t i = 0; i < gold_response_size; i++) {
-        // expect that the response values are within 1% of the golden
-        const float abs_error = std::abs(gold_response_output[i] * 0.05);
-        EXPECT_NEAR(data[i], gold_response_output[i], abs_error);
+      EXPECT_EQ(size, kGoldResponseSize);
+      const auto tolerance = 0.05;
+      for (size_t j = 0; j < kGoldResponseSize; j++) {
+        // expect that the response values are within 5% of the golden
+        const auto abs_error = std::abs(kGoldResponseOutput.at(j) * tolerance);
+        EXPECT_NEAR(data[j], kGoldResponseOutput.at(j), abs_error);
       }
     }
   }
@@ -70,6 +72,7 @@ void dequeue_validate(FutureQueue& my_queue, int num_images) {
 
 // @pytest.mark.extensions(["vitis"])
 // @pytest.mark.fpgas("DPUCADF8H", 1)
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(Native, Facedetect) {
   amdinfer::Server server;
   amdinfer::NativeClient client;
@@ -87,5 +90,5 @@ TEST(Native, Facedetect) {
   FutureQueue my_queue;
   run(image_paths, 1, worker_name, my_queue);
 
-  dequeue_validate(my_queue, num_images);
+  dequeueValidate(my_queue, num_images);
 }

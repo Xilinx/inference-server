@@ -17,40 +17,40 @@
  * @brief Implements the Migraphx worker.
  */
 
-#include <stdio.h>  // debug only
+#include <migraphx/migraphx.h>  // for migraphx_shape_datatype_t
 
-#include <cstddef>  // for size_t, byte
-#include <cstdint>  // for uint32_t, int32_t
-#include <fstream>
-#include <memory>   // for unique_ptr, allocator
-#include <numeric>  // for accumulate
-#include <string>   // for string
-#include <thread>   // for thread
-#include <utility>  // for move
-#include <vector>   // for vector
+#include <algorithm>              // for max
+#include <chrono>                 // for microseconds, duration...
+#include <cstddef>                // for byte, size_t
+#include <cstring>                // for memcpy
+#include <exception>              // for exception
+#include <filesystem>             // for path
+#include <fstream>                // for ifstream, operator<<
+#include <functional>             // for multiplies
+#include <map>                    // for map
+#include <memory>                 // for allocator, unique_ptr
+#include <migraphx/migraphx.hpp>  // for shape, program, progra...
+#include <numeric>                // for accumulate
+#include <stdexcept>              // for invalid_argument, runt...
+#include <string>                 // for string, operator+, to_...
+#include <thread>                 // for thread
+#include <utility>                // for move
+#include <vector>                 // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for HardBatcher
+#include "amdinfer/batching/hard.hpp"          // for BatchPtr, Batch, Batch...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
-#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-#include "amdinfer/observation/logging.hpp"    // for SPDLOG_LOGGER_INFO, SPD...
-#include "amdinfer/observation/metrics.hpp"    // for Metrics
-#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"        // for DataType, operator<<
+#include "amdinfer/core/exceptions.hpp"        // for invalid_argument, runt...
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infe...
+#include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
+#include "amdinfer/observation/logging.hpp"    // for AMDINFER_LOG_INFO, AMD...
+#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
+#include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/workers/worker.hpp"         // for Worker
+#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
-// opencv for debugging only --
-#include <migraphx/filesystem.hpp>
-#include <migraphx/migraphx.hpp>  // MIGraphX C++ API
-#include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
-#include <opencv2/imgcodecs.hpp>  // for imread
-#include <opencv2/imgproc.hpp>    // for resize
-
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Migraphx worker accepts the name of an migraphx model file as an
@@ -82,54 +82,55 @@ class MIGraphXWorker : public Worker {
   // with uninitialized data may crash migraphx, for certain models.
   // If pad_batch_ is true, this worker will pad any unused request slots
   // in a batch with dummy copies of the first request.
-  bool pad_batch_;
+  bool pad_batch_ = true;
   // Calculated sizes in bytes for each input tensor, by input name
   std::map<std::string, size_t> input_sizes_;
-
-  // Enum-to-enum conversion to let us read data type from migraphx model.
-  // The definitions are taken from the MIGraphX macro
-  // MIGRAPHX_SHAPE_VISIT_TYPES
-
-  DataType toDataType(migraphx_shape_datatype_t in) {
-    switch (in) {
-      // case 0 is tuple_type which we don't support here
-      case migraphx_shape_bool_type:
-        return DataType::BOOL;
-      case migraphx_shape_half_type:
-        return DataType::FP16;
-      case migraphx_shape_float_type:
-        return DataType::FP32;
-      case migraphx_shape_double_type:
-        return DataType::FP64;
-      case migraphx_shape_uint8_type:
-        return DataType::UINT8;
-      case migraphx_shape_int8_type:
-        return DataType::INT8;
-      case migraphx_shape_uint16_type:
-        return DataType::UINT16;
-      case migraphx_shape_int16_type:
-        return DataType::INT16;
-      case migraphx_shape_int32_type:
-        return DataType::INT32;
-      case migraphx_shape_int64_type:
-        return DataType::INT64;
-      case migraphx_shape_uint32_type:
-        return DataType::UINT32;
-      case migraphx_shape_uint64_type:
-        return DataType::UINT64;
-      default:
-        return DataType::UNKNOWN;
-    }
-  }
 };
 
 std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&MIGraphXWorker::run, this, input_queue);
 }
 
+// Enum-to-enum conversion to let us read data type from migraphx model.
+// The definitions are taken from the MIGraphX macro
+// MIGRAPHX_SHAPE_VISIT_TYPES
+DataType toDataType(migraphx_shape_datatype_t in) {
+  switch (in) {
+    // case 0 is tuple_type which we don't support here
+    case migraphx_shape_bool_type:
+      return DataType::Bool;
+    case migraphx_shape_half_type:
+      return DataType::Fp16;
+    case migraphx_shape_float_type:
+      return DataType::Fp32;
+    case migraphx_shape_double_type:
+      return DataType::Fp64;
+    case migraphx_shape_uint8_type:
+      return DataType::Uint8;
+    case migraphx_shape_int8_type:
+      return DataType::Int8;
+    case migraphx_shape_uint16_type:
+      return DataType::Uint16;
+    case migraphx_shape_int16_type:
+      return DataType::Int16;
+    case migraphx_shape_int32_type:
+      return DataType::Int32;
+    case migraphx_shape_int64_type:
+      return DataType::Int64;
+    case migraphx_shape_uint32_type:
+      return DataType::Uint32;
+    case migraphx_shape_uint64_type:
+      return DataType::Uint64;
+    default:
+      return DataType::Unknown;
+  }
+}
+
 void MIGraphXWorker::doInit(RequestParameters* parameters) {
-  // default batch size; client may request a change
-  batch_size_ = 64;
+  // default batch size; client may request a change. Arbitrarily set to 64
+  const int default_batch_size = 64;
+
+  batch_size_ = default_batch_size;
   pad_batch_ = true;
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -231,13 +232,9 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
 
       // migraphx can support a reference (cpu) target as a fallback if GPU is
       // not found; not implemented here
-#define GPU 1
-      std::string target_str;
-      if (GPU)
-        target_str = "gpu";
-      else
-        target_str = "ref";
-      migraphx::target targ = migraphx::target(target_str.c_str());
+      const bool use_gpu = true;
+      std::string target_str = use_gpu ? "gpu" : "ref";
+      migraphx::target targ{target_str.c_str()};
       // The hip library will throw a cryptic error if unable to connect with
       // a GPU at this point.
       try {
@@ -278,7 +275,7 @@ void MIGraphXWorker::doInit(RequestParameters* parameters) {
   // Fetch the expected dimensions of the input from the parsed model.
   migraphx::program_parameter_shapes input_shapes =
     this->prog_.get_parameter_shapes();
-  auto input_name = input_shapes.names()[0];
+  const auto* input_name = input_shapes.names()[0];
   auto sh = input_shapes[input_name];
   auto length = sh.lengths();
   migraphx::api::shapes output_shapes = prog_.get_output_shapes();
@@ -321,7 +318,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
   // Work out the max. size of any input buffer, in bytes.  We'll allocate all
   // of them the same size in case a request puts them in mixed-up order.
   size_t max_buffer(0);
-  for (auto aname : input_shapes.names()) {
+  for (const auto* aname : input_shapes.names()) {
     migraphx::shape ashape = input_shapes[aname];
     auto llen = ashape.lengths();
     // size of the buffer needed for this input
@@ -334,7 +331,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
   // Now, allocate the input and output buffers.
 
   try {
-    for (auto aname : input_shapes.names()) {
+    for (const auto* aname : input_shapes.names()) {
       auto ashape = input_shapes[aname];
       auto llen = ashape.lengths();
 
@@ -343,27 +340,27 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
       // be called in a loop like this.  Using 1 in place of kBufferNum
 
       buffer_vec.emplace_back(
-        std::make_unique<VectorBuffer>(max_buffer, DataType::UINT8));
+        std::make_unique<VectorBuffer>(max_buffer, DataType::Uint8));
     }
     this->input_buffers_->enqueue(std::move(buffer_vec));
 
     // Calculate max. output buffer size
     size_t out_buffer_size{0};
     migraphx::shapes output_shapes = this->prog_.get_output_shapes();
-    for (auto ash : output_shapes) {
+    for (const auto& ash : output_shapes) {
       out_buffer_size = std::max(out_buffer_size, ash.bytes());
     }
 
     // Output buffers aren't used by the engine at time of writing this,
     // but allocate them anyway. (Use number of outputs for kBufferNum)
     VectorBuffer::allocate(this->output_buffers_, output_shapes.size(),
-                           out_buffer_size, amdinfer::DataType::INT8);
+                           out_buffer_size, amdinfer::DataType::Int8);
   } catch (...) {
     AMDINFER_LOG_ERROR(
       logger,
       std::string("MIGraphXWorker couldn't allocate buffer (batch size ") +
         std::to_string(batch_size_) + ")");
-    throw "MIGraphXWorker couldn't allocate buffer";
+    throw runtime_error{"MIGraphXWorker couldn't allocate buffer"};
   }
   AMDINFER_LOG_INFO(logger, std::string("MIGraphXWorker::doAllocate() added ") +
                               std::to_string(buffer_num) + " buffers");
@@ -405,7 +402,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       std::chrono::high_resolution_clock::now();
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
 
     // The MIGraphX operation: run the migraphx eval() method.
@@ -415,7 +412,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     // its input pointers (one for each input) are the base addresses of the
     // data for the entire batch. The different input tensors are not required
     // to be contiguous with each other.
-    auto& req0 = batch->getRequest(0);
+    const auto& req0 = batch->getRequest(0);
     auto inputs0 =
       req0->getInputs();  // const std::vector<InferenceRequestInput>
 
@@ -426,9 +423,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       // model.
       auto param_shapes = prog_.get_parameter_shapes();
 
-      for (auto aninput : inputs0) {  // InferenceRequestInput
+      for (const auto& aninput : inputs0) {  // InferenceRequestInput
         auto aname = aninput.getName();
-        auto avShape = aninput.getShape();  // vector<int64>
 
         // Look up the shape by name in the model, but if there's only 1 input
         // then the name in the request isn't required to match.
@@ -449,44 +445,45 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
         auto llen = modelshape.lengths();
         // clang-format off
         //    compare each dimension of shapes except the 0'th (batch size)
-        //  TODO: the following check works inconsistently between different example client scripts.
+        //  TODO(bpickrel): the following check works inconsistently between different example client scripts.
         // It accepts inputs from the yolo script but rejects hello_migraphx.py inputs
-        // for(size_t ii = 1; ii < avShape.size(); ii++)
+        // const auto& av_shape = aninput.getShape();  // vector<int64>
+        // for(size_t ii = 1; ii < av_shape.size(); ii++)
         // {
-        //   if( avShape.size() != llen.size() || avShape[ii] != llen[ii])
+        //   if( av_shape.size() != llen.size() || av_shape[ii] != llen[ii])
         //   {
         //     smsg.str("");
         //     smsg << "Migraph worker model and input shapes don't match for input \"" << aname << "\":   ";
         //     for(auto j : llen) smsg << j << ", ";
         //     smsg << " vs " ;
-        //     for(auto j : avShape) smsg << j << ", ";
+        //     for(auto j : av_shape) smsg << j << ", ";
         //     AMDINFER_LOG_DEBUG(logger, smsg.str());
         //     throw invalid_argument(smsg.str());
         //   }
         // }
         // clang-format on
 
-        auto aData = aninput.getData();  //  void *
-        params.add(aname.c_str(), migraphx::argument(modelshape, aData));
+        auto* a_data = aninput.getData();  //  void *
+        params.add(aname.c_str(), migraphx::argument(modelshape, a_data));
       }
       // If there were fewer requests in the batch than the stated batch size,
       // pad the various input tensors with copies of the 0'th request's data.
 
       if (pad_batch_) {
         // for each named input channel
-        for (auto aninput : inputs0) {
+        for (const auto& aninput : inputs0) {
           auto aname = aninput.getName();
           // Look up the shape by name in the model, but if there's only 1 input
           // then the name in the request isn't required to match.
           if (inputs0.size() == 1) {
             aname = param_shapes.names().front();
           }
-          char* aData = static_cast<char*>(aninput.getData());
+          auto* a_data = static_cast<char*>(aninput.getData());
           // For each empty slot in buffer, i.e. from end of real requests up to
           // batch size
-          for (size_t reqIdx = batch->getRequests().size();
-               reqIdx < batch_size_; reqIdx++) {
-            memcpy(aData + reqIdx * input_sizes_[aname], aData,
+          for (size_t req_idx = batch->getRequests().size();
+               req_idx < batch_size_; req_idx++) {
+            memcpy(a_data + req_idx * input_sizes_[aname], a_data,
                    input_sizes_[aname]);
           }
         }
@@ -516,7 +513,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
       // for each request in the batch
       for (unsigned int j = 0; j < batch->size(); j++) {
-        auto& req = batch->getRequest(j);
+        const auto& req = batch->getRequest(j);
         try {
           InferenceResponse resp;
           resp.setID(req->getID());
@@ -558,7 +555,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             auto lengths = shape.lengths();
 
             size_t num_results = std::accumulate(
-              lengths.begin() + 1, lengths.end(), 1, std::multiplies<size_t>());
+              lengths.begin() + 1, lengths.end(), 1, std::multiplies<>());
 
             // remove the 0'th dimension (batch size) from lengths
             lengths.erase(lengths.begin());
@@ -577,8 +574,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             auto outputs =
               req->getOutputs();  // one result vector for each request
 
-            std::string output_name{""};
-            if (i < outputs.size()) output_name = outputs[i].getName();
+            std::string output_name;
+            if (i < outputs.size()) {
+              output_name = outputs[i].getName();
+            }
+
             if (output_name.empty()) {
               output.setName(inputs0[0].getName());
             } else {
@@ -598,11 +598,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
           req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
           Metrics::getInstance().incrementCounter(
-            MetricCounterIDs::kPipelineEgressWorker);
+            MetricCounterIDs::PipelineEgressWorker);
           auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::high_resolution_clock::now() - batch->getTime(j));
           Metrics::getInstance().observeSummary(
-            MetricSummaryIDs::kRequestLatency, duration.count());
+            MetricSummaryIDs::RequestLatency, duration.count());
 #endif
         } catch (const std::exception& e) {
           AMDINFER_LOG_ERROR(logger, e.what());
@@ -618,7 +618,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       AMDINFER_LOG_ERROR(logger, e.what());
       // Pass error message back as reply for each request in the batch
       const auto& requests = batch->getRequests();
-      for (auto& req_e : requests) {
+      for (const auto& req_e : requests) {
         req_e->runCallbackError(std::string("Migraphx inference error: ") +
                                 e.what());
       }
@@ -638,9 +638,7 @@ void MIGraphXWorker::doRelease() {}
 void MIGraphXWorker::doDeallocate() {}
 void MIGraphXWorker::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

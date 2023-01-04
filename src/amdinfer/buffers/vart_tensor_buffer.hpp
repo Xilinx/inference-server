@@ -21,8 +21,7 @@
 #ifndef GUARD_AMDINFER_BUFFERS_VART_TENSOR_BUFFER
 #define GUARD_AMDINFER_BUFFERS_VART_TENSOR_BUFFER
 
-#include <stddef.h>  // for size_t
-
+#include <cstddef>                              // for size_t
 #include <cstdint>                              // for int32_t
 #include <memory>                               // for unique_ptr
 #include <string>                               // for string
@@ -35,7 +34,7 @@
 
 namespace vart {
 class TensorBuffer;
-}
+}  // namespace vart
 
 namespace amdinfer {
 

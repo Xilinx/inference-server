@@ -27,7 +27,6 @@
 #include <unordered_map>  // for unordered_map
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 
@@ -36,12 +35,15 @@ namespace amdinfer {
 void wrapHttpClient(py::module_ &m) {
   using amdinfer::HttpClient;
 
+  // default number of clients to create for parallelism
+  const int parallelism = 32;
+
   py::class_<HttpClient, amdinfer::Client>(m, "HttpClient")
     .def(py::init<const std::string &,
                   const std::unordered_map<std::string, std::string>, int>(),
          py::arg("address"),
          py::arg("headers") = std::unordered_map<std::string, std::string>(),
-         py::arg("parallelism") = 32, DOCS(HttpClient, HttpClient))
+         py::arg("parallelism") = parallelism, DOCS(HttpClient, HttpClient))
     .def("serverMetadata", &HttpClient::serverMetadata,
          DOCS(HttpClient, serverMetadata))
     .def("serverLive", &HttpClient::serverLive, DOCS(HttpClient, serverLive))
@@ -67,17 +69,7 @@ void wrapHttpClient(py::module_ &m) {
     //      py::arg("request"), DOCS(HttpClient, modelInferAsync))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
     .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
-         py::arg("num"), DOCS(HttpClient, hasHardware))
-    .def(py::pickle(
-      [](const HttpClient &p) {  // __getstate__
-        return py::make_tuple(p.getAddress(), p.getHeaders());
-      },
-      [](py::tuple t) -> HttpClient {  // __setstate__
-        if (t.size() != 2) {
-          throw amdinfer::runtime_error("Invalid state!");
-        }
-        return {t[0].cast<std::string>(), t[1].cast<amdinfer::StringMap>()};
-      }));
+         py::arg("num"), DOCS(HttpClient, hasHardware));
 }
 
 }  // namespace amdinfer

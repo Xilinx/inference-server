@@ -39,7 +39,7 @@ void wrapWebSocketClient(pybind11::module_ &);
 void wrapGrpcClient(pybind11::module_ &);
 #endif
 
-void wrapClients(pybind11::module_ &m) {
+void inline wrapClients(pybind11::module_ &m) {
   wrapClient(m);
   wrapNativeClient(m);
 #ifdef AMDINFER_ENABLE_HTTP

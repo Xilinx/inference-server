@@ -20,30 +20,23 @@
  */
 
 #include <csignal>              // for signal, SIGINT, SIGTERM
+#include <cstdint>              // for uint16_t
 #include <cstdlib>              // for exit
-#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Opt...
-#include <efsw/efsw.hpp>        // for FileWatcher
-#include <filesystem>           // for path, directory_iterator
-#include <iostream>             // for operator<<, basic_ostre...
-#include <memory>               // for unique_ptr, make_unique
-#include <string>               // for string, allocator, char...
+#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Options
+#include <iostream>             // for operator<<, basic_ostream
+#include <string>               // for string, allocator, char_...
 
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
-#include "amdinfer/clients/native.hpp"         // for NativeClient
-#include "amdinfer/core/exceptions.hpp"        // for runtime_error
-#include "amdinfer/core/model_repository.hpp"  // for UpdateListener, ModelRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
-#include "amdinfer/servers/http_server.hpp"    // for stop
-#include "amdinfer/servers/server.hpp"         // for Server
-
-namespace fs = std::filesystem;
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_HTTP
+#include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_INFO, Logger
+#include "amdinfer/servers/http_server.hpp"  // for stop
+#include "amdinfer/servers/server.hpp"       // for Server
 
 /**
  * @brief Handler for incoming interrupt signals
  *
  * @param signum Integer ID for the caught interrupt
  */
-void signal_callback_handler(int signum) {
+void signalCallbackHandler(int signum) {
   std::cout << "Caught interrupt " << signum
             << ". amdinfer-server is ending...\n";
 #ifdef AMDINFER_ENABLE_HTTP
@@ -59,13 +52,13 @@ void signal_callback_handler(int signum) {
  * @return int Return value at termination
  */
 int main(int argc, char* argv[]) {
-  signal(SIGINT, signal_callback_handler);
-  signal(SIGTERM, signal_callback_handler);
+  signal(SIGINT, signalCallbackHandler);
+  signal(SIGTERM, signalCallbackHandler);
 #ifdef AMDINFER_ENABLE_HTTP
-  int http_port = kDefaultHttpPort;
+  uint16_t http_port = kDefaultHttpPort;
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-  int grpc_port = kDefaultGrpcPort;
+  uint16_t grpc_port = kDefaultGrpcPort;
 #endif
   std::string model_repository = "/mnt/models";
   bool enable_repository_watcher = false;
@@ -76,17 +69,17 @@ int main(int argc, char* argv[]) {
     // clang-format off
     options.add_options()
     ("model-repository", "Path to the model repository",
-      cxxopts::value<std::string>(model_repository))
+      cxxopts::value(model_repository))
     ("enable-repository-watcher",
       "Actively monitor the model-repository directory for new models",
-      cxxopts::value<bool>(enable_repository_watcher))
+      cxxopts::value(enable_repository_watcher))
     ("use-polling-watcher", "Use polling to monitor model-repository directory",
-      cxxopts::value<bool>(use_polling_watcher))
+      cxxopts::value(use_polling_watcher))
 #ifdef AMDINFER_ENABLE_HTTP
-    ("http-port", "Port to use for HTTP server", cxxopts::value<int>(http_port))
+    ("http-port", "Port to use for HTTP server", cxxopts::value(http_port))
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-    ("grpc-port", "Port to use for gRPC server", cxxopts::value<int>(grpc_port))
+    ("grpc-port", "Port to use for gRPC server", cxxopts::value(grpc_port))
 #endif
     ("help", "Print help");
     // clang-format on
@@ -104,13 +97,13 @@ int main(int argc, char* argv[]) {
 
   amdinfer::Server server;
 
-  amdinfer::Logger logger{amdinfer::Loggers::kServer};
+  amdinfer::Logger logger{amdinfer::Loggers::Server};
 
-  server.setModelRepository(model_repository);
+  amdinfer::Server::setModelRepository(model_repository);
   AMDINFER_LOG_INFO(logger, "Using model repository: " + model_repository);
 
   if (enable_repository_watcher) {
-    server.enableRepositoryMonitoring(use_polling_watcher);
+    amdinfer::Server::enableRepositoryMonitoring(use_polling_watcher);
   }
 
 #ifdef AMDINFER_ENABLE_GRPC

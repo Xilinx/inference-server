@@ -19,11 +19,13 @@
  * online for discussion around this example.
  */
 
+#include <algorithm>            // for copy, max
 #include <array>                // for array
 #include <cassert>              // for assert
 #include <chrono>               // for duration
 #include <cstdint>              // for uint64_t
 #include <cstdlib>              // for exit, getenv
+#include <exception>            // for exception
 #include <filesystem>           // for path, oper...
 #include <initializer_list>     // for initialize...
 #include <iostream>             // for operator<<
@@ -55,6 +57,7 @@ Images preprocess(const std::vector<std::string>& paths) {
   const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
   const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
   const auto image_size = 224;
+  const auto convert_scale = 1 / 255.0;
 
   // this example uses a custom image preprocessing function. You may use any
   // preprocessing logic or skip it entirely if your input data is already
@@ -70,7 +73,7 @@ Images preprocess(const std::vector<std::string>& paths) {
   options.color_code = cv::COLOR_BGR2RGB;
   options.convert_type = true;
   options.type = CV_32FC3;
-  options.convert_scale = 1.0 / 255.0;
+  options.convert_scale = convert_scale;
   return amdinfer::pre_post::imagePreprocess(paths, options);
 }
 
@@ -106,8 +109,9 @@ std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
 
   for (const auto& image : images) {
     requests.emplace_back();
+    // NOLINTNEXTLINE(google-readability-casting)
     requests.back().addInputTensor((void*)image.data(), shape,
-                                   amdinfer::DataType::FP32);
+                                   amdinfer::DataType::Fp32);
   }
 
   return requests;
@@ -182,64 +186,74 @@ Args getArgs(int argc, char** argv) {
 }
 
 int main(int argc, char* argv[]) {
-  std::cout << "Running the MIGraphX example for ResNet50 in C++\n";
+  try {
+    std::cout << "Running the MIGraphX example for ResNet50 in C++\n";
 
-  Args args = getArgs(argc, argv);
+    Args args = getArgs(argc, argv);
 
-  const auto http_port_str = std::to_string(args.http_port);
-  const auto server_addr = "http://" + args.ip + ":" + http_port_str;
-  amdinfer::HttpClient client{server_addr};
+    const auto http_port_str = std::to_string(args.http_port);
+    const auto server_addr = "http://" + args.ip + ":" + http_port_str;
+    amdinfer::HttpClient client{server_addr};
 
-  std::optional<amdinfer::Server> server;
-  if (args.ip == "127.0.0.1" && !client.serverLive()) {
-    std::cout << "No server detected. Starting locally...\n";
-    server.emplace();
-    server.value().startHttp(args.http_port);
-  } else if (!client.serverLive()) {
-    throw amdinfer::connection_error("Could not connect to server at " +
-                                     server_addr);
+    std::optional<amdinfer::Server> server;
+    if (args.ip == "127.0.0.1" && !client.serverLive()) {
+      std::cout << "No server detected. Starting locally...\n";
+      server.emplace();
+      server.value().startHttp(args.http_port);
+    } else if (!client.serverLive()) {
+      std::cerr << "Could not connect to server at " << server_addr << "\n";
+      return 1;
+    } else {
+      // the server is reachable so continue on
+    }
+
+    std::cout << "Waiting until the server is ready...\n";
+    amdinfer::waitUntilServerReady(&client);
+
+    std::cout << "Loading worker...\n";
+    std::string endpoint = load(&client, args);
+
+    std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
+    Images images = preprocess(paths);
+
+    std::vector<amdinfer::InferenceRequest> requests =
+      constructRequests(images, args.input_size);
+
+    assert(paths.size() == requests.size());
+    const auto num_requests = requests.size();
+
+    std::cout << "Making inference...\n";
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // +validate:
+    // migraphx.cpp
+    std::vector<amdinfer::InferenceResponse> responses =
+      amdinfer::inferAsyncOrdered(&client, endpoint, requests);
+    assert(num_requests == responses.size());
+
+    for (auto i = 0U; i < num_requests; ++i) {
+      const amdinfer::InferenceResponse& response = responses[i];
+      assert(!response.isError());
+
+      std::vector<amdinfer::InferenceResponseOutput> outputs =
+        response.getOutputs();
+      // for resnet50, we expect a single output tensor
+      assert(outputs.size() == 1);
+      std::vector<int> top_indices = postprocess(outputs[0], args.top);
+      printLabel(top_indices, args.path_to_labels, paths[i]);
+    }
+    // -validate:
+    auto stop = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = stop - start;
+    std::cout << "Time taken for inference, postprocessing and printing: "
+              << duration.count() << " ms\n";
+
+    return 0;
+  } catch (const amdinfer::runtime_error& e) {
+    std::cerr << e.what() << "\n";
+    return 1;
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << "\n";
+    return 1;
   }
-
-  std::cout << "Waiting until the server is ready...\n";
-  amdinfer::waitUntilServerReady(&client);
-
-  std::cout << "Loading worker...\n";
-  std::string endpoint = load(&client, args);
-
-  std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
-  Images images = preprocess(paths);
-
-  std::vector<amdinfer::InferenceRequest> requests =
-    constructRequests(images, args.input_size);
-
-  assert(paths.size() == requests.size());
-  const auto num_requests = requests.size();
-
-  std::cout << "Making inference...\n";
-  auto start = std::chrono::high_resolution_clock::now();
-
-  // +validate:
-  // migraphx.cpp
-  std::vector<amdinfer::InferenceResponse> responses =
-    amdinfer::inferAsyncOrdered(&client, endpoint, requests);
-  assert(num_requests == responses.size());
-
-  for (auto i = 0U; i < num_requests; ++i) {
-    const amdinfer::InferenceResponse& response = responses[i];
-    assert(!response.isError());
-
-    std::vector<amdinfer::InferenceResponseOutput> outputs =
-      response.getOutputs();
-    // for resnet50, we expect a single output tensor
-    assert(outputs.size() == 1);
-    std::vector<int> top_indices = postprocess(outputs[0], args.top);
-    printLabel(top_indices, args.path_to_labels, paths[i]);
-  }
-  // -validate:
-  auto stop = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double, std::milli> duration = stop - start;
-  std::cout << "Time taken for inference, postprocessing and printing: "
-            << duration.count() << " ms\n";
-
-  return 0;
 }

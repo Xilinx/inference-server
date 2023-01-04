@@ -43,7 +43,7 @@ class InferenceRequestBuilder {
    * @param batch_offset current batch offset to start with
    */
   static InferenceRequestPtr build(
-    const T req, size_t &buffer_index,
+    T req, size_t &buffer_index,
     const std::vector<BufferRawPtrs> &input_buffers,
     std::vector<size_t> &input_offsets,
     const std::vector<BufferRawPtrs> &output_buffers,

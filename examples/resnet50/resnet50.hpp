@@ -24,22 +24,29 @@
 
 namespace fs = std::filesystem;
 
+const auto kHttpPort = 8998;    // default HTTP port for the inference server
+const auto kGrpcPort = 50'051;  // default gRPC port for the inference server
+const auto kTop = 5;     // default to print top 5 categories for ResNet50
+const auto kSize = 224;  // default image size to 224 x 224 pixels
+// default number of output categories for ResNet50
+const auto kOutputClasses = 1000;
+
 struct Args {
   fs::path path_to_model;
   fs::path path_to_image;
   fs::path path_to_labels;
   int batch_size = 1;
   std::string ip = "127.0.0.1";
-  uint16_t http_port = 8998;
-  uint16_t grpc_port = 50'051;
-  int top = 5;
-  int input_size = 224;
-  int output_classes = 1000;
+  uint16_t http_port = kHttpPort;
+  uint16_t grpc_port = kGrpcPort;
+  int top = kTop;
+  int input_size = kSize;
+  int output_classes = kOutputClasses;
   std::string input_node;
   std::string output_node;
 };
 
-Args parseArgs(int argc, char** argv) {
+inline Args parseArgs(int argc, char** argv) {
   Args args;
 
   try {
@@ -113,7 +120,8 @@ Args parseArgs(int argc, char** argv) {
   return args;
 }
 
-std::vector<std::string> resolveImagePaths(const fs::path& path_to_image) {
+inline std::vector<std::string> resolveImagePaths(
+  const fs::path& path_to_image) {
   std::vector<std::string> image_paths;
   if (fs::is_directory(path_to_image)) {
     for (const auto& entry : fs::directory_iterator(path_to_image)) {
@@ -125,8 +133,9 @@ std::vector<std::string> resolveImagePaths(const fs::path& path_to_image) {
   return image_paths;
 }
 
-void printLabel(const std::vector<int>& indices, const fs::path& path_to_labels,
-                const std::string& name) {
+inline void printLabel(const std::vector<int>& indices,
+                       const fs::path& path_to_labels,
+                       const std::string& name) {
   std::ifstream in(path_to_labels);
   std::vector<std::string> labels;
 

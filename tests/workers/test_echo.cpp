@@ -13,11 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>    // for array
 #include <chrono>   // for seconds
 #include <cstdint>  // for uint32_t
 #include <memory>   // for allocator, make_shared, __shared_ptr_...
+#include <string>   // for string
 #include <thread>   // for sleep_for
-#include <tuple>    // for tuple, get
 #include <vector>   // for vector
 
 #include "amdinfer/amdinfer.hpp"  // for RequestParameters, InferenceRequestInput
@@ -25,50 +26,61 @@
 
 namespace amdinfer {
 
-class EchoParamFixture
-  : public testing::TestWithParam<std::tuple<bool, bool, bool, bool, int>> {
+struct Params {
+  bool add_id;
+  bool add_input_parameters;
+  bool add_request_parameters;
+  bool add_outputs;
+  int multiplier;
+};
+
+class EchoParamFixture : public testing::TestWithParam<Params> {
  public:
-  InferenceRequest construct_request() {
-    const auto [add_id, add_input_parameters, add_request_parameters,
-                add_outputs, multiplier] = GetParam();
+  const std::array<int, 1> inputs{3};
+  const std::array<int, 1> golden_outputs{4};
+
+  [[nodiscard]] InferenceRequest constructRequest() const {
+    const auto params = GetParam();
 
     InferenceRequestInput input_0;
     input_0.setName("echo");
-    input_0.setDatatype(DataType::UINT32);
+    input_0.setDatatype(DataType::Uint32);
     input_0.setShape({1});
-    input_0.setData((void*)(&(inputs_[0])));
-    if (add_input_parameters) {
+    // NOLINTNEXTLINE(google-readability-casting)
+    input_0.setData((void*)(&(inputs[0])));
+    if (params.add_input_parameters) {
       auto parameters = std::make_shared<RequestParameters>();
       parameters->put("key_0", "value");
       input_0.setParameters(parameters);
     }
 
     InferenceRequest request;
-    for (auto i = 0; i < multiplier; i++) {
+    for (auto i = 0; i < params.multiplier; i++) {
       request.addInputTensor(input_0);
     }
 
-    if (add_outputs) {
+    if (params.add_outputs) {
       InferenceRequestOutput output;
       output.setName("echo");
-      if (add_input_parameters) {
+      if (params.add_input_parameters) {
         auto parameters = std::make_shared<RequestParameters>();
         parameters->put("key", "another_value");
         output.setParameters(parameters);
       }
-      for (auto i = 0; i < multiplier; i++) {
+      for (auto i = 0; i < params.multiplier; i++) {
         request.addOutputTensor(output);
       }
     }
 
-    if (add_id) {
+    if (params.add_id) {
       request.setID("hello_world");
     }
 
-    if (add_request_parameters) {
+    if (params.add_request_parameters) {
+      const auto key_3 = 1.2;  // arbitrary value
       auto parameters = std::make_shared<RequestParameters>();
       parameters->put("key_2", true);
-      parameters->put("key_3", 1.2);
+      parameters->put("key_3", key_3);
       request.setParameters(parameters);
     }
 
@@ -77,8 +89,8 @@ class EchoParamFixture
 
   void validate(InferenceResponse response) {
     const auto params = GetParam();
-    auto add_id = std::get<0>(params);
-    auto multiplier = std::get<4>(params);
+    auto add_id = params.add_id;
+    auto multiplier = params.multiplier;
 
     EXPECT_FALSE(response.isError());
     EXPECT_EQ(response.getModel(), "echo");
@@ -88,8 +100,8 @@ class EchoParamFixture
     for (auto i = 0; i < multiplier; i++) {
       const auto& output = outputs[i];
       const auto* data = static_cast<uint32_t*>(output.getData());
-      EXPECT_EQ(data[0], golden_outputs_[0]);
-      EXPECT_EQ(output.getDatatype(), DataType::UINT32);
+      EXPECT_EQ(data[0], golden_outputs[0]);
+      EXPECT_EQ(output.getDatatype(), DataType::Uint32);
       EXPECT_EQ(output.getName(), "echo");
       EXPECT_TRUE(output.getParameters()->empty());
       auto shape = output.getShape();
@@ -102,51 +114,50 @@ class EchoParamFixture
     }
   }
 
-  amdinfer::Server server_;
-
- private:
-  const int inputs_[1] = {3};
-  const int golden_outputs_[1] = {4};
+  amdinfer::Server server;
 };
 
-TEST_P(EchoParamFixture, EchoNative) {
+TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
   amdinfer::NativeClient client;
-  client.workerLoad("echo", nullptr);
+  const auto endpoint = client.workerLoad("echo", nullptr);
 
-  auto request = this->construct_request();
+  auto request = this->constructRequest();
 
-  auto response = client.modelInfer("echo", request);
+  auto response = client.modelInfer(endpoint, request);
 
   validate(response);
 
-  client.modelUnload("echo");
+  client.modelUnload(endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
-TEST_P(EchoParamFixture, EchoGrpc) {
-  server_.startGrpc(50051);
-  auto client = amdinfer::GrpcClient("localhost:50051");
+TEST_P(EchoParamFixture, EchoGrpc) {  // NOLINT
+  server.startGrpc(kDefaultGrpcPort);
+  auto client =
+    amdinfer::GrpcClient("localhost:" + std::to_string(kDefaultGrpcPort));
   while (!client.serverLive()) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
-  client.workerLoad("echo", nullptr);
+  const auto endpoint = client.workerLoad("echo", nullptr);
 
-  auto request = this->construct_request();
+  auto request = this->constructRequest();
 
-  auto response = client.modelInfer("echo", request);
+  auto response = client.modelInfer(endpoint, request);
   validate(response);
 
-  client.modelUnload("echo");
+  client.modelUnload(endpoint);
 }
 #endif
 
 // add_id, add_input_parameters, add_request_parameters, add_outputs, multiplier
-const std::tuple<bool, bool, bool, bool, int> configs[] = {
-  {true, true, true, true, 1},     {true, true, false, true, 1},
-  {true, false, false, true, 1},   {false, false, false, true, 1},
-  {false, false, false, false, 1},
+const std::array kConfigs{
+  Params{true, true, true, true, 1},     Params{true, true, false, true, 1},
+  Params{true, false, false, true, 1},   Params{false, false, false, true, 1},
+  Params{false, false, false, false, 1},
 };
-INSTANTIATE_TEST_SUITE_P(Echo, EchoParamFixture, testing::ValuesIn(configs));
+
+// NOLINTNEXTLINE(cert-err58-cpp)
+INSTANTIATE_TEST_SUITE_P(Echo, EchoParamFixture, testing::ValuesIn(kConfigs));
 
 }  // namespace amdinfer

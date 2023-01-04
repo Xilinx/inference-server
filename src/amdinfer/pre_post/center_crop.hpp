@@ -30,9 +30,9 @@ namespace amdinfer::pre_post {
  * @return cv::Mat: Image cropped to required shape
  */
 inline cv::Mat centerCrop(cv::Mat img, int height, int width) {
-  const int offsetW = (img.cols - width) / 2;
-  const int offsetH = (img.rows - height) / 2;
-  const cv::Rect roi(offsetW, offsetH, width, height);
+  const int offset_width = (img.cols - width) / 2;
+  const int offset_height = (img.rows - height) / 2;
+  const cv::Rect roi(offset_width, offset_height, width, height);
   img = img(roi);
   return img;
 }

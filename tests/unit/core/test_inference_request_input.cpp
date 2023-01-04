@@ -13,14 +13,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstddef>
-#include <iostream>
+#include <algorithm>  // for max
+#include <cstddef>    // for byte
+#include <cstdint>    // for uint64_t
+#include <string>     // for allocator, string
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include "amdinfer/core/predict_api.hpp"
-#include "gtest/gtest.h"  // for Test, SuiteApiResolver, TEST
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::Uint8
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
+#include "gtest/gtest.h"                  // for Message, TestPartResult, Test
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitInferenceRequestInput, SerDes) {
   const auto data_size = 10;
   std::vector<char> data;
@@ -29,7 +35,7 @@ TEST(UnitInferenceRequestInput, SerDes) {
     data.push_back(static_cast<char>('a' + i));
   }
 
-  InferenceRequestInput req(data.data(), {data_size}, DataType::UINT8, "test");
+  InferenceRequestInput req(data.data(), {data_size}, DataType::Uint8, "test");
 
   std::vector<std::byte> serial_data;
   serial_data.reserve(req.serializeSize());
@@ -52,6 +58,7 @@ TEST(UnitInferenceRequestInput, SerDes) {
   EXPECT_EQ(req.getSize(), new_req.getSize());
 }
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitInferenceRequestInput, SerDes2) {
   const auto data_size = 10;
   std::vector<std::byte> data;
@@ -62,7 +69,7 @@ TEST(UnitInferenceRequestInput, SerDes2) {
     data.push_back(c);
   }
 
-  InferenceRequestInput req(nullptr, {data_size}, DataType::UINT8, "test");
+  InferenceRequestInput req(nullptr, {data_size}, DataType::Uint8, "test");
   req.setData(std::move(data));
 
   std::vector<std::byte> serial_data;

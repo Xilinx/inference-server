@@ -31,7 +31,7 @@
 #include <cassert>      // for assert
 #include <cstddef>      // for size_t, byte
 #include <cstdint>      // for uint64_t, int32_t
-#include <iostream>     // for operator<<, cout
+#include <cstring>      // for memcpy
 #include <string_view>  // for basic_string_view
 #include <utility>      // for move
 #include <variant>      // for visit
@@ -42,38 +42,39 @@
 #include "amdinfer/core/interface.hpp"             // for InterfaceType, Inte...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "amdinfer/observation/logging.hpp"        // for Logger
-#include "amdinfer/util/compression.hpp"           // for z_decompress
-#include "amdinfer/util/traits.hpp"                // for is_any
+#include "amdinfer/util/compression.hpp"           // for zDecompress
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+#include "half/half.hpp"                           // for half
 
 namespace amdinfer {
 
-RequestParametersPtr mapJsonToParameters(Json::Value parameters) {
-  auto parameters_ = std::make_shared<RequestParameters>();
-  for (auto const &id : parameters.getMemberNames()) {
-    if (parameters[id].isString()) {
-      parameters_->put(id, parameters[id].asString());
-    } else if (parameters[id].isBool()) {
-      parameters_->put(id, parameters[id].asBool());
-    } else if (parameters[id].isUInt()) {
-      parameters_->put(id, static_cast<int32_t>(parameters[id].asInt()));
-    } else if (parameters[id].isDouble()) {
-      parameters_->put(id, parameters[id].asDouble());
+RequestParametersPtr mapJsonToParameters(Json::Value json) {
+  auto parameters = std::make_shared<RequestParameters>();
+  for (auto const &id : json.getMemberNames()) {
+    if (json[id].isString()) {
+      parameters->put(id, json[id].asString());
+    } else if (json[id].isBool()) {
+      parameters->put(id, json[id].asBool());
+    } else if (json[id].isUInt()) {
+      parameters->put(id, json[id].asInt());
+    } else if (json[id].isDouble()) {
+      parameters->put(id, json[id].asDouble());
     } else {
       throw invalid_argument("Unknown parameter type, skipping");
     }
   }
-  return parameters_;
+  return parameters;
 }
 
 // refer to cppreference for std::visit
 // helper type for the visitor #4
 template <class... Ts>
-struct overloaded : Ts... {
+struct Overloaded : Ts... {
   using Ts::operator()...;
 };
 // explicit deduction guide (not needed as of C++20)
 template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
+Overloaded(Ts...) -> Overloaded<Ts...>;
 
 Json::Value mapParametersToJson(RequestParameters *parameters) {
   Json::Value json = Json::objectValue;
@@ -81,7 +82,7 @@ Json::Value mapParametersToJson(RequestParameters *parameters) {
   for (const auto &parameter : *parameters) {
     const auto &key = parameter.first;
     const auto &value = parameter.second;
-    std::visit(overloaded{[&](bool arg) { json[key] = arg; },
+    std::visit(Overloaded{[&](bool arg) { json[key] = arg; },
                           [&](double arg) { json[key] = arg; },
                           [&](int32_t arg) { json[key] = arg; },
                           [&](const std::string &arg) { json[key] = arg; }},
@@ -174,6 +175,7 @@ struct SetInputData {
       std::string str{data, src_size};
       json->append(str);
     } else {
+      // NOLINTNEXTLINE(readability-identifier-naming)
       constexpr auto getData = [](const T *data_ptr, size_t index) {
         if constexpr (std::is_same_v<T, uint64_t>) {
           return static_cast<Json::UInt64>(data_ptr[index]);
@@ -247,9 +249,9 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
                                      Buffer *input_buffer, size_t offset) {
     InferenceRequestInput input;
 #ifdef AMDINFER_ENABLE_LOGGING
-    Logger logger{Loggers::kServer};
+    Logger logger{Loggers::Server};
 #endif
-    input.data_ = input_buffer->data();
+    input.data_ = input_buffer->data(0);
 
     if (!req->isMember("name")) {
       throw invalid_argument("No 'name' key present in request input");
@@ -269,7 +271,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
       throw invalid_argument("No 'datatype' key present in request input");
     }
     std::string data_type_str = req->get("datatype", "").asString();
-    input.dataType_ = DataType(data_type_str.c_str());
+    input.data_type_ = DataType(data_type_str.c_str());
     if (req->isMember("parameters")) {
       auto parameters = req->get("parameters", Json::objectValue);
       input.parameters_ = mapJsonToParameters(parameters);
@@ -282,7 +284,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
     auto data = req->get("data", Json::arrayValue);
     try {
       for (auto const &i : data) {
-        offset = switchOverTypes(WriteData(), input.dataType_, input_buffer, i,
+        offset = switchOverTypes(WriteData(), input.data_type_, input_buffer, i,
                                  offset);
       }
     } catch (const Json::LogicError &) {
@@ -372,7 +374,7 @@ InferenceRequestPtr RequestBuilder::build(
 
       auto output =
         OutputBuilder::build(std::make_shared<Json::Value>(json_output));
-      output.setData(static_cast<std::byte *>(buffer->data()) + offset);
+      output.setData(static_cast<std::byte *>(buffer->data(offset)));
       request->outputs_.push_back(std::move(output));
       // output += request->outputs_.back().getSize(); // see TODO
     }
@@ -383,7 +385,7 @@ InferenceRequestPtr RequestBuilder::build(
 
       request->outputs_.emplace_back();
       request->outputs_.back().setData(
-        static_cast<std::byte *>(buffer->data()) + offset);
+        static_cast<std::byte *>(buffer->data(offset)));
     }
   }
 
@@ -405,7 +407,7 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
 
 std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger{Loggers::kServer};
+  Logger logger{Loggers::Server};
 #endif
 
   // attempt to get the JSON object directly first
@@ -432,7 +434,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
   AMDINFER_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
 
   // if it's still not valid, attempt to uncompress the body and convert to JSON
-  auto body_decompress = util::z_decompress(body.data(), body.length());
+  auto body_decompress = util::zDecompress(body.data(), body.length());
   success = reader->parse(body_decompress.data(),
                           body_decompress.data() + body_decompress.size(),
                           root.get(), &errors);
@@ -446,7 +448,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
 DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
                        DrogonCallback callback)
   : req_(req), callback_(std::move(callback)) {
-  this->type_ = InterfaceType::kDrogonHttp;
+  this->type_ = InterfaceType::DrogonHttp;
   this->json_ = parseJson(req.get());
 }
 
@@ -543,7 +545,7 @@ void DrogonHttp::errorHandler(const std::exception &e) {
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
 }
 
-Json::Value ModelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
+Json::Value modelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
   ret["datatype"] = metadata.getDataType().str();
@@ -554,18 +556,18 @@ Json::Value ModelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   return ret;
 }
 
-Json::Value ModelMetadataToJson(const ModelMetadata &metadata) {
+Json::Value modelMetadataToJson(const ModelMetadata &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
   ret["versions"] = Json::arrayValue;
   ret["platform"] = metadata.getPlatform();
   ret["inputs"] = Json::arrayValue;
   for (const auto &input : metadata.getInputs()) {
-    ret["inputs"].append(ModelMetadataTensorToJson(input));
+    ret["inputs"].append(modelMetadataTensorToJson(input));
   }
   ret["outputs"] = Json::arrayValue;
   for (const auto &output : metadata.getOutputs()) {
-    ret["inputs"].append(ModelMetadataTensorToJson(output));
+    ret["inputs"].append(modelMetadataTensorToJson(output));
   }
   return ret;
 }

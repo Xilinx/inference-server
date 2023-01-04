@@ -20,14 +20,13 @@
 
 #include "amdinfer/batching/batcher.hpp"
 
-#include <cstddef>     // for size_t
-#include <exception>   // for exception
-#include <functional>  // for _Bind_helper<>::type
-#include <future>      // for promise
-#include <memory>      // for shared_ptr, unique_ptr
-#include <string>      // for operator+, char_traits
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <cstddef>    // for size_t
+#include <exception>  // for exception
+#include <future>     // for promise
+#include <memory>     // for shared_ptr, unique_ptr
+#include <string>     // for operator+, char_traits
+#include <utility>    // for move
+#include <vector>     // for vector
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
@@ -88,8 +87,9 @@ std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
   auto request = std::make_shared<FakeInferenceRequest>(
     this->request_, input_buffers, input_offsets, output_buffers,
     output_offsets);
-  Callback callback =
-    std::bind(fakeCppCallback, this->promise_, std::placeholders::_1);
+  Callback callback = [this](const InferenceResponse &response) {
+    fakeCppCallback(this->promise_, response);
+  };
   request->setCallback(std::move(callback));
   return request;
 }
@@ -136,7 +136,7 @@ void Batcher::run(WorkerInfo *worker) {
     batch->addTrace(std::move(trace));
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
-    batch->addTime(req->get_time());
+    batch->addTime(req->getTime());
 #endif
     // batch_size += 1;
 

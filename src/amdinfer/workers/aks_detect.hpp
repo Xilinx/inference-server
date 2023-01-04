@@ -1,4 +1,3 @@
-// Copyright 2022 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +14,26 @@
 
 /**
  * @file
- * @brief If PybindMkdocs is not installed, this header is used to create empty
- * docstrings for Python bindings
+ * @brief Defines shared objects for AksDetect workers
  */
 
-#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_DOCSTRINGS
-#define GUARD_AMDINFER_BINDINGS_PYTHON_DOCSTRINGS
+#ifndef GUARD_AMDINFER_WORKERS_AKS_DETECT
+#define GUARD_AMDINFER_WORKERS_AKS_DETECT
 
-#define DOC(...) ""
+namespace amdinfer::workers {
 
-#endif // GUARD_AMDINFER_BINDINGS_PYTHON_DOCSTRINGS
+struct DetectResponse {
+  float class_id;
+  float score;
+  float x;
+  float y;
+  float w;
+  float h;
+};
+
+// the number of float values per response
+const int kAkdDetectResponseSize = 7;
+
+}  // namespace amdinfer::workers
+
+#endif  // GUARD_AMDINFER_WORKERS_AKS_DETECT

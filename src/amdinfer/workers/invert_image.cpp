@@ -30,14 +30,13 @@
 #include <opencv2/imgcodecs.hpp>  // for imdecode, imencode, IMRE...
 #include <string>                 // for string, basic_string
 #include <thread>                 // for thread
-#include <type_traits>            // for is_pointer
 #include <utility>                // for move
 #include <vector>                 // for vector
 
 #include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT8
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint8
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -50,36 +49,34 @@
 namespace {
 
 /// Invert the pixel color. Assumes RGB in some order with optional alpha
-template <typename T, bool alphaPresent>
+template <typename T, bool kAlphaPresent>
 void invert(void* ibuf, void* obuf, uint64_t size) {
-  static_assert(std::is_pointer<T>::value, "T must be a pointer type");
+  static_assert(std::is_pointer_v<T>, "T must be a pointer type");
   auto* idata = static_cast<T>(ibuf);
   auto* odata = static_cast<T>(obuf);
   static_assert(sizeof(idata[0]) < sizeof(uint64_t), "T must be <8 bytes");
 
   // mask to get the largest value. E.g. for uint8_t, mask will be 255.
-  constexpr auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
-  constexpr uint64_t incr = alphaPresent ? 4 : 3;
+  const auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
+  const uint64_t incr = kAlphaPresent ? 4 : 3;
   for (uint64_t i = 0; i < size; i += incr) {
     odata[i] = mask - idata[i];
     odata[i + 1] = mask - idata[i + 1];
     odata[i + 2] = mask - idata[i + 2];
-    if constexpr (alphaPresent) {
+    if constexpr (kAlphaPresent) {
       odata[i + 3] = idata[i + 3];
     }
   }
 }
 
 /// Reduce vector to a product of its elements
-uint64_t reduce_mult(std::vector<uint64_t>& v) {
+uint64_t reduceMult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
 }  // namespace
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The InvertImage worker is a simple worker that accepts an array
@@ -123,25 +120,33 @@ void InvertImage::doInit(RequestParameters* parameters) {
   this->batch_size_ = batch_size;
 }
 
+// Support up to Full HD
+const auto kMaxImageHeight = 1080;
+const auto kMaxImageWidth = 1920;
+const auto kMaxImageChannels = 3;
+
 size_t InvertImage::doAllocate(size_t num) {
   constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize = 1920 * 1080 * 3;  // Support up to Full HD
+  constexpr auto kBufferSize =
+    kMaxImageWidth * kMaxImageHeight * kMaxImageChannels;
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::UINT8);
+                         kBufferSize * this->batch_size_, DataType::Uint8);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::UINT8);
+                         kBufferSize * this->batch_size_, DataType::Uint8);
   return buffer_num;
 }
 
 void InvertImage::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::UINT8,
-                                 {this->batch_size_, 1080, 1920, 3});
-  this->metadata_.addOutputTensor("output", DataType::UINT32,
-                                  {this->batch_size_, 1080, 1920, 3});
+  this->metadata_.addInputTensor(
+    "input", DataType::Uint8,
+    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
+  this->metadata_.addOutputTensor(
+    "output", DataType::Uint32,
+    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
 }
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {
@@ -175,12 +180,12 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         auto input_shape = inputs[i].getShape();
 
-        auto input_size = reduce_mult(input_shape);
+        auto input_size = reduceMult(input_shape);
         auto input_dtype = inputs[i].getDatatype();
 
         // invert image, store in output
         InferenceResponseOutput output;
-        if (input_dtype == DataType::UINT8) {
+        if (input_dtype == DataType::Uint8) {
           // Output will have the same shape as input
           output.setShape(input_shape);
 
@@ -196,10 +201,10 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           buffer.resize(input_size);
           memcpy(buffer.data(), output_data, input_size);
           output.setData(std::move(buffer));
-          output.setDatatype(DataType::UINT8);
-        } else if (input_dtype == DataType::STRING) {
+          output.setDatatype(DataType::Uint8);
+        } else if (input_dtype == DataType::String) {
           auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = util::base64_decode(idata, input_size);
+          auto decoded_str = util::base64Decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img;
           try {
@@ -220,12 +225,12 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
           std::vector<unsigned char> buf;
           cv::imencode(".jpg", img, buf);
           const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-          auto encoded = util::base64_encode(enc_msg, buf.size());
+          auto encoded = util::base64Encode(enc_msg, buf.size());
           std::vector<std::byte> buffer;
           buffer.resize(encoded.size());
           memcpy(buffer.data(), encoded.data(), encoded.length());
           output.setData(std::move(buffer));
-          output.setDatatype(DataType::STRING);
+          output.setDatatype(DataType::String);
           output.setShape({encoded.size()});
         }
 
@@ -243,7 +248,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(j));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
@@ -260,9 +265,7 @@ void InvertImage::doRelease() {}
 void InvertImage::doDeallocate() {}
 void InvertImage::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

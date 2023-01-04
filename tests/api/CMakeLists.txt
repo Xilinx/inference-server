@@ -24,6 +24,7 @@ list(
          model_ready
          server_live
          server_ready
+         worker_load
 )
 
 amdinfer_add_system_tests("${tests}")

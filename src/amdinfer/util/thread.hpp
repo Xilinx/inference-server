@@ -34,7 +34,7 @@ namespace amdinfer::util {
  */
 inline void setThreadName(const char* name) {
 #ifdef __linux__
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
   prctl(PR_SET_NAME, name);
 #endif
 }

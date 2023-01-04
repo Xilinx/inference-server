@@ -32,18 +32,17 @@ namespace amdinfer::util {
 
 constexpr size_t minDecodeLength(size_t length) { return (length * 3 + 3) / 4; }
 
-std::string base64_decode(std::string in) {
-  return base64_decode(in.data(), in.length());
+std::string base64Decode(std::string in) {
+  return base64Decode(in.data(), in.length());
 }
 
-std::string base64_decode(const char* in, size_t in_length) {
+std::string base64Decode(const char* in, size_t in_length) {
   std::string s;
   s.resize(minDecodeLength(in_length));
 
-  base64::base64_decodestate state_;
-  base64::base64_init_decodestate(&state_);
-  int out_length =
-    base64::base64_decode_block(in, in_length, s.data(), &state_);
+  base64::base64_decodestate state;
+  base64::base64_init_decodestate(&state);
+  int out_length = base64::base64_decode_block(in, in_length, s.data(), &state);
 
   if (out_length < 0) {
     throw std::length_error("Base64 decoded string failed");
@@ -64,24 +63,25 @@ constexpr size_t minEncodeLength(size_t length) {
   return (((4 * length / 3) + 3) & ~3);
 }
 
-std::string base64_encode(std::string in) {
-  return base64_encode(in.data(), in.length());
+std::string base64Encode(std::string in) {
+  return base64Encode(in.data(), in.length());
 }
 
-std::string base64_encode(const char* in, size_t in_length) {
+std::string base64Encode(const char* in, size_t in_length) {
   std::string s;
   s.resize(minEncodeLength(in_length));
 
   base64::base64_encodestate state;
   base64::base64_init_encodestate(&state);
-  int codelength = base64::base64_encode_block(in, in_length, s.data(), &state);
-  codelength += base64::base64_encode_blockend(s.data() + codelength, &state);
+  int code_length =
+    base64::base64_encode_block(in, in_length, s.data(), &state);
+  code_length += base64::base64_encode_blockend(s.data() + code_length, &state);
 
-  if (codelength < 0) {
+  if (code_length < 0) {
     throw std::length_error("Base64 encoding string failed");
   }
 
-  s.resize(codelength);
+  s.resize(code_length);
   return s;
 }
 

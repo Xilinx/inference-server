@@ -22,8 +22,8 @@
 
 namespace amdinfer::util {
 
-std::string z_decompress(const char *str, int len) {
-  constexpr auto buffer_size = 32768;
+std::string zDecompress(const char *str, int len) {
+  const auto buffer_size = 32'768;
 
   z_stream zs;  // z_stream is zlib's control structure
   memset(&zs, 0, sizeof(zs));

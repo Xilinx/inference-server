@@ -21,15 +21,15 @@
 
 namespace amdinfer {
 
-void initializeTestLogging() {
+inline void initializeTestLogging() {
 #ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
     "test",  // logger_name
     getLogDirectory(),
-    true,             // enable file logging
-    LogLevel::kInfo,  // file log level
-    true,             // enable console logging
-    LogLevel::kWarn   // console log level
+    true,            // enable file logging
+    LogLevel::Info,  // file log level
+    true,            // enable console logging
+    LogLevel::Warn   // console log level
   };
   initLogger(options);
 #endif

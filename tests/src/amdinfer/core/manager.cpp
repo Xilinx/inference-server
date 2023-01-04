@@ -20,8 +20,9 @@
 
 #include "amdinfer/core/manager.hpp"
 
-#include <thread>   // for thread
-#include <utility>  // for pair, make_pair, move
+#include <thread>       // for thread
+#include <type_traits>  // for __decay_and_strip<>::__type
+#include <utility>      // for pair, make_pair, move
 
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument
 #include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
@@ -33,7 +34,7 @@ Manager::Manager() = default;
 
 std::string Manager::loadWorker(std::string const& key,
                                 RequestParameters parameters) {
-  auto endpoint = this->endpoints_.add(key, parameters);
+  auto endpoint = this->endpoints_.add(key, std::move(parameters));
   return endpoint;
 }
 
@@ -43,16 +44,16 @@ void Manager::unloadWorker(const std::string& key) {
   }
 }
 
-WorkerInfo* Manager::getWorker(const std::string& key) {
+WorkerInfo* Manager::getWorker(const std::string& key) const {
   return this->endpoints_.get(key);
 }
 
-bool Manager::workerReady(const std::string& key) {
+bool Manager::workerReady(const std::string& key) const {
   auto metadata = this->getWorkerMetadata(key);
   return metadata.isReady();
 }
 
-ModelMetadata Manager::getWorkerMetadata(const std::string& key) {
+ModelMetadata Manager::getWorkerMetadata(const std::string& key) const {
   auto* worker = this->getWorker(key);
   if (worker == nullptr) {
     throw invalid_argument("Worker " + key + " not found");
@@ -77,8 +78,9 @@ void Manager::shutdown() {
   }
 }
 
-void Manager::update_manager(UpdateCommandQueue* input_queue) {
-  (void)input_queue;
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+void Manager::updateManager([[maybe_unused]] UpdateCommandQueue* input_queue) {
+  // empty
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,
@@ -144,7 +146,7 @@ bool Manager::Endpoints::exists(const std::string& endpoint) {
   return workers_.find(endpoint) != workers_.end();
 }
 
-WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) {
+WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) const {
   auto iterator = workers_.find(endpoint);
   if (iterator != workers_.end()) {
     return iterator->second.get();

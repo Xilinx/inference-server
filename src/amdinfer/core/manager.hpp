@@ -60,9 +60,9 @@ enum class UpdateCommandType {
  */
 struct UpdateCommand {
   /// Constructor for UpdateCommand
-  explicit UpdateCommand(UpdateCommandType cmd_, std::string key_ = "",
-                         void* object_ = nullptr, void* retval_ = nullptr)
-    : cmd(cmd_), key(std::move(key_)), object(object_), retval(retval_) {}
+  explicit UpdateCommand(UpdateCommandType cmd, std::string key = "",
+                         void* object = nullptr, void* retval = nullptr)
+    : cmd(cmd), key(std::move(key)), object(object), retval(retval) {}
   /// the command ID
   UpdateCommandType cmd;
   /// a string key that a command can make use of. Usually identifies the worker
@@ -112,12 +112,12 @@ class Manager {
    * @param key name of the worker
    * @return WorkerInfo*
    */
-  WorkerInfo* getWorker(std::string const& key);
+  WorkerInfo* getWorker(std::string const& key) const;
 
   std::vector<std::string> getWorkerEndpoints();
 
-  bool workerReady(std::string const& key);
-  ModelMetadata getWorkerMetadata(std::string const& key);
+  bool workerReady(const std::string& key) const;
+  ModelMetadata getWorkerMetadata(const std::string& key) const;
 
   /**
    * @brief Request that a worker support a request with num inputs. This means
@@ -150,7 +150,7 @@ class Manager {
   /**
    * @brief The Endpoints class is a helper class to bundle up all the worker
    * state data structures and operations within the Manager. Its methods should
-   * be called from the update_manager.
+   * be called from the updateManager.
    */
   class Endpoints {
    public:
@@ -158,8 +158,8 @@ class Manager {
     void unload(const std::string& endpoint);
 
     bool exists(const std::string& endpoint);
-    WorkerInfo* get(const std::string& endpoint);
-    std::vector<std::string> list();
+    WorkerInfo* get(const std::string& endpoint) const;
+    std::vector<std::string> list() const;
 
     std::string add(const std::string& worker, RequestParameters parameters);
 
@@ -183,7 +183,7 @@ class Manager {
   std::unique_ptr<UpdateCommandQueue> update_queue_;
   std::thread update_thread_;
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 
   /**
@@ -194,7 +194,7 @@ class Manager {
    *
    * @param input_queue queue where update requests will arrive
    */
-  void update_manager(UpdateCommandQueue* input_queue);
+  void updateManager(UpdateCommandQueue* input_queue);
 };
 
 }  // namespace amdinfer

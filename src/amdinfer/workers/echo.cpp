@@ -21,6 +21,7 @@
 #include <chrono>     // for microseconds, duration_...
 #include <cstddef>    // for size_t, byte
 #include <cstdint>    // for uint32_t, int32_t
+#include <cstring>    // for memcpy
 #include <exception>  // for exception
 #include <memory>     // for unique_ptr, allocator
 #include <string>     // for string
@@ -31,7 +32,7 @@
 #include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -40,9 +41,7 @@
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Echo worker is a simple worker that accepts a single uint32_t
@@ -99,17 +98,17 @@ size_t Echo::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::Uint32);
   VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::Uint32);
   return buffer_num;
 }
 
 void Echo::doAcquire(RequestParameters* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::UINT32, {1});
-  this->metadata_.addOutputTensor("output", DataType::UINT32, {1});
+  this->metadata_.addInputTensor("input", DataType::Uint32, {1});
+  this->metadata_.addOutputTensor("output", DataType::Uint32, {1});
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {
@@ -127,7 +126,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
     AMDINFER_LOG_INFO(logger, "Got request in echo");
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::kPipelineIngressWorker);
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
@@ -161,7 +160,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
         // output_buffer->write(value);
 
         InferenceResponseOutput output;
-        output.setDatatype(DataType::UINT32);
+        output.setDatatype(DataType::Uint32);
         std::string output_name = outputs[i].getName();
         if (output_name.empty()) {
           output.setName(inputs[i].getName());
@@ -185,10 +184,10 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
       req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressWorker);
+        MetricCounterIDs::PipelineEgressWorker);
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(j));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
     }
@@ -200,9 +199,7 @@ void Echo::doRelease() {}
 void Echo::doDeallocate() {}
 void Echo::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

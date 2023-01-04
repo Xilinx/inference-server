@@ -36,8 +36,8 @@ std::vector<int> resnet50Postprocess(const T* data, size_t size, int k) {
   std::vector<double> softmax;
   softmax.resize(size, 0);
 
-  calc_softmax(data, size, softmax.data());
-  return get_top_k(softmax.data(), size, k);
+  calcSoftmax(data, size, softmax.data());
+  return getTopK(softmax.data(), size, k);
 }
 
 }  // namespace amdinfer::pre_post

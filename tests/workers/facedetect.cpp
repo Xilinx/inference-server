@@ -20,10 +20,11 @@
 
 #include "facedetect.hpp"
 
-#include <chrono>               // for duration, operator-, steady_clock
-#include <cstdlib>              // for exit, getenv
-#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Options, OptionEx...
-#include <iostream>             // for operator<<, basic_ostream, endl, cout
+#include <chrono>    // for duration, operator-, steady_clock
+#include <cstdlib>   // for exit, getenv
+#include <iostream>  // for operator<<, basic_ostream, endl, cout
+
+#include "cxxopts/cxxopts.hpp"  // for value, OptionAdder, Options, OptionEx...
 
 void dequeue(FutureQueue& my_queue, int num_images) {
   for (int i = 0; i < num_images; i++) {
@@ -36,7 +37,8 @@ void dequeue(FutureQueue& my_queue, int num_images) {
 int main(int argc, char* argv[]) {
   const auto* root = std::getenv("AMDINFER_ROOT");
   if (root == nullptr) {
-    throw amdinfer::environment_not_set_error("AMDINFER_ROOT not set");
+    std::cerr << "AMDINFER_ROOT not set in the environment\n";
+    return 1;
   }
   auto path = std::string{root} + "/tests/assets";
   int threads = 4;
@@ -69,7 +71,7 @@ int main(int argc, char* argv[]) {
 
   amdinfer::Server server;
 
-  auto workerName = load(runners);
+  auto worker_name = load(runners);
   auto image_paths = getImages(path);
   if (max_images > 0) {
     auto images = static_cast<size_t>(max_images);
@@ -89,7 +91,7 @@ int main(int argc, char* argv[]) {
   auto t1 = std::chrono::steady_clock::now();
 
   FutureQueue my_queue;
-  run(image_paths, threads, workerName, my_queue);
+  run(image_paths, threads, worker_name, my_queue);
 
   // auto t2 = std::chrono::steady_clock::now();
 
@@ -107,14 +109,17 @@ int main(int argc, char* argv[]) {
   auto t3 = std::chrono::steady_clock::now();
   // auto run_time_taken = std::chrono::duration<double>(t2 - t1).count();
   // auto dequeue_time_taken = std::chrono::duration<double>(t3 - t2).count();
-  auto time_taken = std::chrono::duration<double>(t3 - t1).count();
-  auto throughput = static_cast<double>(num_images) / time_taken;
+  auto time_taken = std::chrono::duration_cast<std::chrono::seconds>(t3 - t1);
+  auto throughput =
+    static_cast<double>(num_images) / static_cast<double>(time_taken.count());
 
   // Print Stats
   // std::cout << "Run time: " << run_time_taken << std::endl;
   // std::cout << "dequeue time: " << dequeue_time_taken << std::endl;
-  std::cout << "Total Execution time for " << num_images
-            << " queries: " << time_taken * 1000 << " ms" << std::endl;
+  std::cout
+    << "Total Execution time for " << num_images << " queries: "
+    << std::chrono::duration_cast<std::chrono::milliseconds>(time_taken).count()
+    << " ms" << std::endl;
   std::cout << "Average queries per second: " << throughput << " qps"
             << std::endl;
 }

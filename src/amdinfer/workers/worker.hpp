@@ -41,16 +41,16 @@ constexpr auto kNumBufferAuto = -1;
 namespace workers {
 
 enum class WorkerStatus {
-  kNew,
-  kInit,
-  kAllocate,
-  kAcquire,
-  kRun,
-  kInactive,
-  kRelease,
-  kDeallocate,
-  kDestroy,
-  kDead
+  New,
+  Init,
+  Allocate,
+  Acquire,
+  Run,
+  Inactive,
+  Release,
+  Deallocate,
+  Destroy,
+  Dead
 };
 
 /**
@@ -62,7 +62,7 @@ class Worker {
   /// The constructor only initializes the private class members
   Worker(const std::string& name, const std::string& platform)
     : metadata_(name, platform) {
-    this->status_ = WorkerStatus::kNew;
+    this->status_ = WorkerStatus::New;
     this->input_buffers_ = nullptr;
     this->output_buffers_ = nullptr;
     this->max_buffer_num_ = UINT_MAX;
@@ -80,17 +80,17 @@ class Worker {
 
   /// Perform low-cost initialization of the worker
   void init(RequestParameters* parameters) {
-    this->status_ = WorkerStatus::kInit;
+    this->status_ = WorkerStatus::Init;
     this->doInit(parameters);
   }
   /// Allocate some buffers that are used to hold input and output data
   size_t allocate(size_t num) {
-    this->status_ = WorkerStatus::kAllocate;
+    this->status_ = WorkerStatus::Allocate;
     return this->doAllocate(num);
   }
   /// Acquire any hardware resources or perform high-cost initialization
   void acquire(RequestParameters* parameters) {
-    this->status_ = WorkerStatus::kAcquire;
+    this->status_ = WorkerStatus::Acquire;
     this->doAcquire(parameters);
     this->metadata_.setReady(true);
   }
@@ -100,28 +100,28 @@ class Worker {
    * @param input_queue queue that receives incoming requests
    */
   void run(BatchPtrQueue* input_queue) {
-    this->status_ = WorkerStatus::kRun;
+    this->status_ = WorkerStatus::Run;
     this->doRun(input_queue);
-    this->status_ = WorkerStatus::kInactive;
+    this->status_ = WorkerStatus::Inactive;
   }
   /// Release any hardware resources
   void release() {
-    this->status_ = WorkerStatus::kRelease;
+    this->status_ = WorkerStatus::Release;
     this->metadata_.setReady(false);
     this->doRelease();
   }
   /// Free the input and output buffers
   void deallocate() {
-    this->status_ = WorkerStatus::kDeallocate;
+    this->status_ = WorkerStatus::Deallocate;
     this->doDeallocate();
     this->input_buffers_ = nullptr;
     this->output_buffers_ = nullptr;
   }
   /// Perform any final operations before the worker thread is joined
   void destroy() {
-    this->status_ = WorkerStatus::kDestroy;
+    this->status_ = WorkerStatus::Destroy;
     this->doDestroy();
-    this->status_ = WorkerStatus::kDead;
+    this->status_ = WorkerStatus::Dead;
   }
 
   /**
@@ -175,7 +175,7 @@ class Worker {
 
  protected:
 #ifdef AMDINFER_ENABLE_LOGGING
-  const Logger& getLogger() const { return logger_; };
+  [[nodiscard]] const Logger& getLogger() const { return logger_; };
 #endif
 
   BufferPtrsQueue* input_buffers_;
@@ -205,7 +205,7 @@ class Worker {
   virtual void doDestroy() = 0;
 
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 
   WorkerStatus status_;

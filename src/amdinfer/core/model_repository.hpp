@@ -16,9 +16,10 @@
 #ifndef GUARD_AMDINFER_CORE_MODEL_REPOSITORY
 #define GUARD_AMDINFER_CORE_MODEL_REPOSITORY
 
-#include <efsw/efsw.hpp>
-#include <filesystem>
-#include <string>
+#include <efsw/efsw.hpp>  // for FileWatcher, Action, FileWatchListener, Wat...
+#include <filesystem>     // for path
+#include <memory>         // for unique_ptr
+#include <string>         // for string
 
 namespace amdinfer {
 
@@ -28,7 +29,7 @@ class UpdateListener : public efsw::FileWatchListener {
  public:
   void handleFileAction(efsw::WatchID watchid, const std::string& dir,
                         const std::string& filename, efsw::Action action,
-                        std::string oldFilename) override;
+                        std::string old_filename) override;
 };
 
 class ModelRepository {

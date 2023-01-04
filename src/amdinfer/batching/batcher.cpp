@@ -41,9 +41,9 @@ namespace amdinfer {
 Batcher::Batcher() {
   this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
-  this->status_ = BatcherStatus::kNew;
+  this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
-  this->logger_ = Logger(Loggers::kServer);
+  this->logger_ = Logger(Loggers::Server);
 #endif
 }
 
@@ -57,15 +57,15 @@ Batcher::Batcher(const Batcher& batcher) {
   this->input_queue_ = batcher.input_queue_;
   this->output_queue_ = batcher.output_queue_;
   this->batch_size_ = batcher.batch_size_;
-  this->status_ = BatcherStatus::kNew;
+  this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
-  this->logger_ = Logger(Loggers::kServer);
+  this->logger_ = Logger(Loggers::Server);
 #endif
   this->model_ = batcher.model_;
 }
 
 void Batcher::start(WorkerInfo* worker) {
-  this->status_ = BatcherStatus::kRun;
+  this->status_ = BatcherStatus::Run;
   this->thread_ = std::thread(&Batcher::run, this, worker);
 }
 
@@ -75,7 +75,7 @@ void Batcher::setBatchSize(size_t batch_size) {
 
 void Batcher::setName(const std::string& name) { this->model_ = name; }
 
-std::string Batcher::getName() { return this->model_; }
+std::string Batcher::getName() const { return this->model_; }
 
 BlockingQueue<InterfacePtr>* Batcher::getInputQueue() {
   return this->input_queue_.get();
@@ -89,14 +89,14 @@ void Batcher::enqueue(InterfacePtr request) {
 
 void Batcher::run(WorkerInfo* worker) {
   this->doRun(worker);
-  this->status_ = BatcherStatus::kInactive;
+  this->status_ = BatcherStatus::Inactive;
 }
 
 BatcherStatus Batcher::getStatus() { return this->status_; }
 
 void Batcher::end() {
   this->thread_.join();
-  this->status_ = BatcherStatus::kDead;
+  this->status_ = BatcherStatus::Dead;
 }
 
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -139,11 +139,11 @@ std::vector<Buffer*> Batch::getRawOutputBuffers() const {
 
 const BufferPtrs& Batch::getOutputBuffers() const { return output_buffers_; }
 
-const std::vector<InferenceRequestPtr>& Batch::getRequests() {
+const std::vector<InferenceRequestPtr>& Batch::getRequests() const {
   return requests_;
 }
 
-const InferenceRequestPtr& Batch::getRequest(int index) {
+const InferenceRequestPtr& Batch::getRequest(size_t index) {
   return requests_.at(index);
 }
 
@@ -160,22 +160,22 @@ size_t Batch::size() const {
   return requests_.size();
 }
 
-size_t Batch::input_size() const { return input_buffers_.size(); }
+size_t Batch::getInputSize() const { return input_buffers_.size(); }
 
-size_t Batch::output_size() const { return output_buffers_.size(); }
+size_t Batch::getOutputSize() const { return output_buffers_.size(); }
 
 #ifdef AMDINFER_ENABLE_TRACING
 void Batch::addTrace(TracePtr trace) { traces_.push_back(std::move(trace)); }
 
-TracePtr& Batch::getTrace(int index) { return traces_.at(index); }
+TracePtr& Batch::getTrace(size_t index) { return traces_.at(index); }
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS
 void Batch::addTime(std::chrono::high_resolution_clock::time_point timestamp) {
-  start_times_.push_back(std::move(timestamp));
+  start_times_.push_back(timestamp);
 }
 
-std::chrono::high_resolution_clock::time_point Batch::getTime(int index) {
+std::chrono::high_resolution_clock::time_point Batch::getTime(size_t index) {
   return start_times_.at(index);
 }
 #endif

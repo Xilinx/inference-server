@@ -13,12 +13,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <memory>     // for allocator, unique_ptr
-#include <stdexcept>  // for runtime_error
-#include <string>     // for string
+#include <memory>  // for allocator, unique_ptr
+#include <string>  // for basic_string, string
+#include <thread>  // for yield
+#include <vector>  // for vector
 
-#include "amdinfer/amdinfer.hpp"                // for GrpcClient, NativeClient
-#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
+#include "amdinfer/amdinfer.hpp"                // for Client, RequestParame...
+#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
 void test(amdinfer::Client* client) {
   std::string worker = "echo";
@@ -34,7 +35,9 @@ void test(amdinfer::Client* client) {
 
   // load the same worker with a different config
   amdinfer::RequestParameters parameters;
-  parameters.put("max_buffer_num", 100);
+  // arbitrarily set to 100 just to create a different config
+  const auto max_buffer_num = 100;
+  parameters.put("max_buffer_num", max_buffer_num);
   auto endpoint_1 = client->workerLoad(worker, &parameters);
   EXPECT_EQ(endpoint_1, "echo-0");
 
@@ -67,5 +70,6 @@ TEST_F(BaseFixture, workerLoad) {
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, workerLoad) { test(client_.get()); }
 #endif

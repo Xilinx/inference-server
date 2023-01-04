@@ -82,9 +82,14 @@ class HttpTextMapCarrier
 
   void Set(opentelemetry::nostd::string_view key,
            opentelemetry::nostd::string_view value) noexcept override {
-    headers_.try_emplace(std::string(key), std::string(value));
+    headers_.try_emplace(std::string(key), value);
   }
 
+  [[nodiscard]] StringMap getHeaders() const&& { return headers_; }
+
+  [[nodiscard]] const StringMap& getHeaders() const& { return headers_; }
+
+ private:
   StringMap headers_;
 };
 
@@ -118,19 +123,19 @@ void startTracer() {
     SetGlobalPropagator(propagator);
 }
 
-nostd::shared_ptr<trace_api::Tracer> get_tracer() {
+nostd::shared_ptr<trace_api::Tracer> getTracer() {
   auto provider = trace_api::Provider::GetTracerProvider();
   return provider->GetTracer("amdinfer");
 }
 
 void stopTracer() {
-  auto tracer = get_tracer();
+  auto tracer = getTracer();
   tracer->Close(std::chrono::milliseconds(1));
 }
 
 Trace::Trace(const char* name,
              const opentelemetry::v1::trace::StartSpanOptions& options) {
-  auto tracer = get_tracer();
+  auto tracer = getTracer();
   this->spans_.emplace(tracer->StartSpan(name, options));
 }
 
@@ -138,7 +143,7 @@ Trace::~Trace() { this->endTrace(); }
 
 void Trace::startSpan(const char* name) {
   auto scope = trace_api::Scope(this->spans_.top());  // mark last span active
-  auto tracer = get_tracer();
+  auto tracer = getTracer();
   this->spans_.emplace(tracer->StartSpan(name));
 }
 
@@ -151,9 +156,9 @@ void Trace::setAttributes(RequestParameters* parameters) {
   auto data = parameters->data();
   // a range-based for loop doesn't work here because we can't pass the key when
   // it's a structured binding.
-  for (auto it = data.begin(); it != data.end(); it++) {
-    auto key = it->first;
-    auto value = it->second;
+  for (auto& it : data) {
+    const auto& key = it.first;
+    const auto& value = it.second;
     std::visit(
       [key, this](Parameter&& arg) {
         if (std::holds_alternative<bool>(arg)) {
@@ -187,7 +192,7 @@ StringMap Trace::propagate() {
   auto prop = opentelemetry::context::propagation::GlobalTextMapPropagator::
     GetGlobalPropagator();
   prop->Inject(carrier, current_ctx);
-  return carrier.headers_;
+  return carrier.getHeaders();
 }
 
 void Trace::endTrace() {

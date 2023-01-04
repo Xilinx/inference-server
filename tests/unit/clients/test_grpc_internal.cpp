@@ -12,12 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdint>  // for uint16_t, int16_t, int32_t
+#include <array>    // for array
+#include <cstddef>  // for byte
+#include <cstdint>  // for int16_t, int32_t
+#include <iomanip>  // for operator<<
+#include <memory>   // for allocator
 
-#include "amdinfer/clients/grpc_internal.hpp"  // for mapRequestToProto
-#include "amdinfer/testing/observation.hpp"
-#include "gtest/gtest.h"  // for EXPECT_EQ, FAIL, UnitTest
-#include "predict_api.pb.h"
+#include "amdinfer/clients/grpc_internal.hpp"    // for mapRequestToProto
+#include "amdinfer/core/data_types.hpp"          // for DataType, switchOver...
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/predict_api.hpp"         // for InferenceRequestInput
+#include "amdinfer/observation/observer.hpp"     // for Logger, Observer
+#include "amdinfer/testing/observation.hpp"      // for initializeTestLogging
+#include "google/protobuf/repeated_ptr_field.h"  // for RepeatedPtrField
+#include "gtest/gtest.h"                         // for Message, TestPartResult
+#include "predict_api.pb.h"                      // for ModelInferRequest
 
 namespace amdinfer {
 
@@ -30,12 +39,12 @@ const int8_t kInt8Value = -1;
 const int16_t kInt16Value = -2;
 const int32_t kInt32Value = -3;
 const int64_t kInt64Value = -4;
-const fp16 kFp16Value{1.4f};
-const float kFloatValue = 2.7f;
+const fp16 kFp16Value{1.4F};  // NOLINT(cert-err58-cpp)
+const float kFloatValue = 2.7F;
 const double kDoubleValue = 3.6;
 const char kCharValue = 'x';
 
-struct assignData {
+struct AssignData {
   template <typename T>
   void operator()(std::byte* data) const {
     auto* data_cast = reinterpret_cast<T*>(data);
@@ -66,12 +75,12 @@ struct assignData {
     } else if constexpr (std::is_same_v<T, char>) {
       data_cast[0] = kCharValue;
     } else {
-      throw invalid_argument("Unsupported datatype to assignData");
+      throw invalid_argument("Unsupported datatype to AssignData");
     }
   }
 };
 
-struct checkData {
+struct CheckData {
   template <typename T>
   void operator()(
     const inference::ModelInferRequest_InferInputTensor* tensor) const {
@@ -103,27 +112,27 @@ struct checkData {
     } else if constexpr (std::is_same_v<T, char>) {
       EXPECT_EQ(contents[0][0][0], kCharValue);
     } else {
-      throw invalid_argument("Unsupported datatype to checkData");
+      throw invalid_argument("Unsupported datatype to CheckData");
     }
   }
 };
 
 class Fixture : public testing::TestWithParam<DataType> {};
 
-TEST_P(Fixture, TestRequestToProto) {
+TEST_P(Fixture, TestRequestToProto) {  // NOLINT
   initializeTestLogging();
   Observer observer;
-  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kTest});
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Test});
 
   auto datatype = GetParam();
 
   // create an array large enough to hold any data type
-  std::array<std::byte, sizeof(double)> data;
+  std::array<std::byte, sizeof(double)> data{};
 
   InferenceRequest request;
   InferenceRequestInput input;
   input.setData(data.data());
-  switchOverTypes(assignData(), datatype, data.data());
+  switchOverTypes(AssignData(), datatype, data.data());
   input.setDatatype(datatype);
   request.addInputTensor(input);
 
@@ -131,15 +140,18 @@ TEST_P(Fixture, TestRequestToProto) {
   mapRequestToProto(request, proto_request, observer);
 
   const auto& tensor = proto_request.inputs().at(0);
-  switchOverTypes(checkData(), datatype, &tensor);
+  switchOverTypes(CheckData(), datatype, &tensor);
 }
 
 // we exclude STRING as it doesn't have a defined size we can pre-allocate
-const std::array<DataType, 12> datatypes = {
-  DataType::BOOL,   DataType::UINT8, DataType::UINT16, DataType::UINT32,
-  DataType::UINT64, DataType::INT8,  DataType::INT16,  DataType::INT32,
-  DataType::INT64,  DataType::FP16,  DataType::FP32,   DataType::FP64};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const std::array<DataType, 12> kDataTypes{
+  DataType::Bool,   DataType::Uint8, DataType::Uint16, DataType::Uint32,
+  DataType::Uint64, DataType::Int8,  DataType::Int16,  DataType::Int32,
+  DataType::Int64,  DataType::Fp16,  DataType::Fp32,   DataType::Fp64};
+
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(UnitClientsGrpcInternal, Fixture,
-                         testing::ValuesIn(datatypes));
+                         testing::ValuesIn(kDataTypes));
 
 }  // namespace amdinfer

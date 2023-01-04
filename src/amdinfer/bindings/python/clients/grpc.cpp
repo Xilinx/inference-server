@@ -23,10 +23,7 @@
 #include <pybind11/pybind11.h>  // for class_, init
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
-#include <unordered_map>  // for unordered_map
-
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "amdinfer/declarations.hpp"
 
 namespace py = pybind11;
 

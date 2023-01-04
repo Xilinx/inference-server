@@ -20,8 +20,9 @@
 
 #include "amdinfer/clients/client.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>  // IWYU pragma: keep
+#include <pybind11/cast.h>      // for arg
+#include <pybind11/pybind11.h>  // for module_, sequence, class_, pybind11
+#include <pybind11/stl.h>       // IWYU pragma: keep
 
 namespace py = pybind11;
 

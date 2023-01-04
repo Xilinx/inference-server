@@ -125,14 +125,15 @@ Kernels getHardware() {
   Kernels kernels;
 
 #ifdef AMDINFER_ENABLE_VITIS
-  sockpp::socket_initializer sockInit;
-  sockpp::tcp_connector conn({"localhost", 9763});
+  sockpp::socket_initializer sock_init;
+  const auto default_xrm_port = 9763;
+  sockpp::tcp_connector conn({"localhost", default_xrm_port});
   if (!conn) {
     std::cerr << "Error connecting to server"
               << "\n\t" << conn.last_error_str() << std::endl;
   }
 
-  std::string request("{\"request\":{\"name\":\"list\",\"requestId\":\"1\"}}");
+  std::string request(R"({"request":{"name":"list","requestId":"1"}})");
 
   auto bar = conn.write(request);
   if (bar == -1) {

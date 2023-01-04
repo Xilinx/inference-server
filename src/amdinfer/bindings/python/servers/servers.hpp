@@ -22,13 +22,13 @@
 
 namespace pybind11 {
 class module_;
-}
+}  // namespace pybind11
 
 namespace amdinfer {
 
 void wrapServer(pybind11::module_&);
 
-void wrapServers(pybind11::module_& m) { wrapServer(m); }
+void inline wrapServers(pybind11::module_& m) { wrapServer(m); }
 
 }  // namespace amdinfer
 

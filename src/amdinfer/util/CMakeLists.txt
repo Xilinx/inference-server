@@ -17,6 +17,7 @@ list(
   APPEND targets
          base64
          compression
+         ctpl
          parse_env
          exec
          read_nth_line

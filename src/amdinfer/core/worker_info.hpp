@@ -100,13 +100,13 @@ class WorkerInfo {
    *
    * @param buffer the buffer to return
    */
-  void putInputBuffer(BufferPtrs buffer) const;
+  void putInputBuffer(BufferPtrs&& buffer) const;
   /**
    * @brief Return an output buffer to the worker
    *
    * @param buffer the buffer to return
    */
-  void putOutputBuffer(BufferPtrs buffer) const;
+  void putOutputBuffer(BufferPtrs&& buffer) const;
 
   /**
    * @brief Checks if this worker group supports a particular number of input
@@ -142,7 +142,7 @@ class WorkerInfo {
   void allocate(size_t request_size);
 
   /// get the number of workers in the group
-  size_t getGroupSize() const;
+  [[nodiscard]] size_t getGroupSize() const;
 
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }

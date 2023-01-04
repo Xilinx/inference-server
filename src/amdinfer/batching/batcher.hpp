@@ -42,7 +42,7 @@ class WorkerInfo;
 
 namespace amdinfer {
 
-enum class BatcherStatus { kNew, kRun, kInactive, kDead };
+enum class BatcherStatus { New, Run, Inactive, Dead };
 
 /**
  * @brief The Batch is what the batcher produces and pushes to the workers. It
@@ -53,33 +53,42 @@ enum class BatcherStatus { kNew, kRun, kInactive, kDead };
 class Batch {
  public:
   explicit Batch(const WorkerInfo* worker);
+  /// Copy constructor
+  Batch(Batch const&) = delete;
+  /// Copy assignment constructor
+  Batch& operator=(const Batch&) = delete;
+  /// Move constructor
+  Batch(Batch&& other) = default;
+  /// Move assignment constructor
+  Batch& operator=(Batch&& other) = default;
+  /// Destructor
   ~Batch();
 
   void addRequest(InferenceRequestPtr request);
 
-  const InferenceRequestPtr& getRequest(int index);
-  const std::vector<InferenceRequestPtr>& getRequests();
-  const BufferPtrs& getInputBuffers() const;
-  const BufferPtrs& getOutputBuffers() const;
-  std::vector<Buffer*> getRawInputBuffers() const;
-  std::vector<Buffer*> getRawOutputBuffers() const;
+  [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
+  [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
+  [[nodiscard]] const BufferPtrs& getInputBuffers() const;
+  [[nodiscard]] const BufferPtrs& getOutputBuffers() const;
+  [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
+  [[nodiscard]] std::vector<Buffer*> getRawOutputBuffers() const;
 
-  bool empty() const;
-  size_t size() const;
-  size_t input_size() const;
-  size_t output_size() const;
+  [[nodiscard]] bool empty() const;
+  [[nodiscard]] size_t size() const;
+  [[nodiscard]] size_t getInputSize() const;
+  [[nodiscard]] size_t getOutputSize() const;
 
 #ifdef AMDINFER_ENABLE_TRACING
   void addTrace(TracePtr trace);
-  TracePtr& getTrace(int index);
+  TracePtr& getTrace(size_t index);
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
   void addTime(std::chrono::high_resolution_clock::time_point timestamp);
-  std::chrono::high_resolution_clock::time_point getTime(int index);
+  std::chrono::high_resolution_clock::time_point getTime(size_t index);
 #endif
 
-  auto begin() const { return requests_.begin(); }
-  auto end() const { return requests_.end(); }
+  [[nodiscard]] auto begin() const { return requests_.begin(); }
+  [[nodiscard]] auto end() const { return requests_.end(); }
 
  private:
   const WorkerInfo* worker_;
@@ -141,7 +150,7 @@ class Batcher {
    */
   void setName(const std::string& name);
   /// Get the batcher's worker group name
-  std::string getName();
+  [[nodiscard]] std::string getName() const;
 
   /// Get the batcher's input queue (used to enqueue new requests)
   BlockingQueue<InterfacePtr>* getInputQueue();
@@ -164,10 +173,10 @@ class Batcher {
 
  protected:
 #ifdef AMDINFER_ENABLE_LOGGING
-  const Logger& getLogger() const;
+  [[nodiscard]] const Logger& getLogger() const;
 #endif
 
-  size_t batch_size_;
+  size_t batch_size_ = 1;
   std::shared_ptr<BlockingQueue<InterfacePtr>> input_queue_;
   std::shared_ptr<BatchPtrQueue> output_queue_;
   std::thread thread_;
@@ -186,7 +195,7 @@ class Batcher {
   BatcherStatus status_;
 
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 };
 

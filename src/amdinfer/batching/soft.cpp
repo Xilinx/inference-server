@@ -57,9 +57,9 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
   bool run = true;
 
-  auto kTimeout = duration_cast<milliseconds>(kDefaultTimeout);
+  auto timeout = duration_cast<milliseconds>(kDefaultTimeout);
   if (this->parameters_.has("timeout")) {
-    kTimeout = duration_cast<milliseconds>(
+    timeout = duration_cast<milliseconds>(
       milliseconds(this->parameters_.get<int32_t>("timeout")));
   }
 
@@ -73,10 +73,10 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().setGauge(
-      MetricGaugeIDs::kQueuesBatcherInput,
+      MetricGaugeIDs::QueuesBatcherInput,
       static_cast<double>(input_queue_->size_approx()));
     Metrics::getInstance().setGauge(
-      MetricGaugeIDs::kQueuesBatcherOutput,
+      MetricGaugeIDs::QueuesBatcherOutput,
       static_cast<double>(output_queue_->size_approx()));
 #endif
 
@@ -93,7 +93,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
                            "Got request of a new batch for " + this->model_);
       } else {
         auto remaining_time =
-          kTimeout - (std::chrono::high_resolution_clock::now() - start_time);
+          timeout - (std::chrono::high_resolution_clock::now() - start_time);
         auto duration = std::max(remaining_time, std::chrono::nanoseconds(0));
         bool valid = this->input_queue_->wait_dequeue_timed(req, duration);
         if (!valid) {
@@ -126,7 +126,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
 
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineIngressBatcher);
+        MetricCounterIDs::PipelineIngressBatcher);
 #endif
 
       auto old_input_offset = input_offset;
@@ -149,7 +149,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         batch->addTrace(std::move(trace));
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
-        batch->addTime(req->get_time());
+        batch->addTime(req->getTime());
 #endif
       }
     } while (batch_size % this->batch_size_ != 0 && run);
@@ -160,7 +160,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
       this->output_queue_->enqueue(std::move(batch));
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressBatcher);
+        MetricCounterIDs::PipelineEgressBatcher);
 #endif
     }
   }

@@ -43,7 +43,7 @@
 #include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::UINT32
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -54,17 +54,15 @@
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
-namespace AKS {
+namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
 }  // namespace AKS
 
-uint64_t reduce_mult(std::vector<uint64_t>& v) {
+uint64_t reduceMult(std::vector<uint64_t>& v) {
   return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
-namespace amdinfer {
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Resnet50 worker accepts a 224x224 image and returns an array of
@@ -85,8 +83,8 @@ class ResNet50 : public Worker {
   void doDeallocate() override;
   void doDestroy() override;
 
-  AKS::SysManagerExt* sysMan_ = nullptr;
-  std::string graphName_;
+  AKS::SysManagerExt* sys_manager_ = nullptr;
+  std::string graph_name_;
   AKS::AIGraph* graph_ = nullptr;
 };
 
@@ -95,22 +93,22 @@ std::thread ResNet50::spawn(BatchPtrQueue* input_queue) {
 }
 
 void ResNet50::doInit(RequestParameters* parameters) {
-  std::string kGraphName = "resnet50";
-  constexpr auto kBatchSize = 4;
+  // DPUCADF8H uses batch size of 4 by default
+  const auto default_batch_size = 4;
 
-  this->sysMan_ = AKS::SysManagerExt::getGlobal();
+  this->sys_manager_ = AKS::SysManagerExt::getGlobal();
 
-  auto batch_size = kBatchSize;
+  auto batch_size = default_batch_size;
   if (parameters->has("batch_size")) {
     batch_size = parameters->get<int32_t>("batch_size");
   }
   this->batch_size_ = batch_size;
 
-  auto graph_name = kGraphName;
+  std::string graph_name{"resnet50"};
   if (parameters->has("aks_graph_name")) {
     graph_name = parameters->get<std::string>("aks_graph_name");
   }
-  this->graphName_ = graph_name;
+  this->graph_name_ = graph_name;
 }
 
 constexpr auto kImageWidth = 1920;
@@ -123,31 +121,29 @@ size_t ResNet50::doAllocate(size_t num) {
   size_t buffer_num =
     static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::UINT8);
+                         kImageSize * this->batch_size_, DataType::Uint8);
   VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::UINT32);
+                         1 * this->batch_size_, DataType::Uint32);
   return buffer_num;
 }
 
 void ResNet50::doAcquire(RequestParameters* parameters) {
-  auto kPath = std::string(
-    "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json");
-
-  auto path = kPath;
+  std::string path{
+    "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
   }
   util::autoExpandEnvironmentVariables(path);
-  this->sysMan_->loadGraphs(path);
+  this->sys_manager_->loadGraphs(path);
 
-  this->graph_ = this->sysMan_->getGraph(this->graphName_);
+  this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
   this->metadata_.addInputTensor(
-    "input", DataType::INT8,
+    "input", DataType::Int8,
     {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
   // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", DataType::UINT32, {0});
-  this->metadata_.setName(this->graphName_);
+  this->metadata_.addOutputTensor("output", DataType::Uint32, {0});
+  this->metadata_.setName(this->graph_name_);
 }
 
 void ResNet50::doRun(BatchPtrQueue* input_queue) {
@@ -168,7 +164,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
     responses.reserve(batch->size());
 
     std::vector<std::unique_ptr<vart::TensorBuffer>> v;
-    v.reserve(batch->input_size());
+    v.reserve(batch->getInputSize());
 
     size_t tensor_count = 0;
     for (unsigned int j = 0; j < batch->size(); j++) {
@@ -179,7 +175,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 #endif
       auto& resp = responses.emplace_back();
       resp.setID(req->getID());
-      resp.setModel(this->graphName_);
+      resp.setModel(this->graph_name_);
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
 
@@ -189,25 +185,25 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 
         auto input_shape = input.getShape();
 
-        input_size = reduce_mult(input_shape);
+        input_size = reduceMult(input_shape);
         auto input_dtype = input.getDatatype();
 
         std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
-        if (input_dtype == DataType::UINT8) {
+        if (input_dtype == DataType::Uint8) {
           if (tensor_count == 0) {
             tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
                                 input_shape.end());
             v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-              xir::Tensor::create(this->graphName_, tensor_shape,
+              xir::Tensor::create(this->graph_name_, tensor_shape,
                                   xir::create_data_type<unsigned char>())));
           }
           /// Copy input to AKS Buffers: Find a better way to share buffers
           memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
                    (tensor_count * input_size),
                  input_buffer, input_size);
-        } else if (input_dtype == DataType::STRING) {
+        } else if (input_dtype == DataType::String) {
           auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = util::base64_decode(idata, input_size);
+          auto decoded_str = util::base64Decode(idata, input_size);
           std::vector<char> data(decoded_str.begin(), decoded_str.end());
           cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
           if (img.empty()) {
@@ -224,7 +220,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
               tensor_shape.end(),
               {img.size().height, img.size().width, kImageChannels});
             v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-              xir::Tensor::create(this->graphName_, tensor_shape,
+              xir::Tensor::create(this->graph_name_, tensor_shape,
                                   xir::create_data_type<unsigned char>())));
           }
 
@@ -237,13 +233,14 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
       }
     }
 
-    std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> futureObj =
-      this->sysMan_->enqueueJob(this->graph_, "", std::move(v), nullptr);
+    std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> future =
+      this->sys_manager_->enqueueJob(this->graph_, "", std::move(v), nullptr);
 
-    auto outDD = futureObj.get();
+    auto out_data_descriptor = future.get();
 
-    int* topKData = reinterpret_cast<int*>(outDD[0]->data().first);
-    auto shape = outDD[0]->get_tensor()->get_shape();
+    int* top_k_data =
+      reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
+    auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
 
     int response_size = 0;
     std::vector<uint64_t> new_shape;
@@ -260,7 +257,6 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
       response_size = shape[0];
     }
 
-    tensor_count = 0;
     for (unsigned int k = 0; k < batch->size(); k++) {
       const auto& req = batch->getRequest(k);
       auto inputs = req->getInputs();
@@ -271,7 +267,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
         InferenceResponseOutput output;
         std::vector<std::byte> buffer;
         buffer.resize(response_size * sizeof(int));
-        memcpy(buffer.data(), topKData + (i * response_size),
+        memcpy(buffer.data(), top_k_data + (i * response_size),
                response_size * sizeof(int));
         output.setData(std::move(buffer));
 
@@ -284,14 +280,14 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 
         output.setShape(new_shape);
 
-        output.setDatatype(DataType::UINT32);
+        output.setDatatype(DataType::Uint32);
         resp.addOutput(output);
       }
 
 #ifdef AMDINFER_ENABLE_METRICS
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - batch->getTime(k));
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
+      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
                                             duration.count());
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
@@ -308,9 +304,7 @@ void ResNet50::doRelease() {}
 void ResNet50::doDeallocate() {}
 void ResNet50::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

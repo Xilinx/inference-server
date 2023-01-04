@@ -44,11 +44,11 @@ namespace amdinfer {
  *
  */
 enum class InterfaceType {
-  kUnknown,
-  kDrogonHttp,
-  kDrogonWs,
-  kCpp,
-  kGrpc,
+  Unknown,
+  DrogonHttp,
+  DrogonWs,
+  Cpp,
+  Grpc,
 };
 
 /**
@@ -62,7 +62,7 @@ class Interface {
   Interface();                     ///< Constructor
   virtual ~Interface() = default;  ///< Destructor
   /// Get the type of the interface
-  InterfaceType getType() const;
+  [[nodiscard]] InterfaceType getType() const;
 #ifdef AMDINFER_ENABLE_TRACING
   /// Store the active trace into the Interface for propagation
   void setTrace(TracePtr &&trace);
@@ -71,10 +71,10 @@ class Interface {
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
   /// Store a time. This is used to track how long requests take
-  void set_time(
+  void setTime(
     const std::chrono::high_resolution_clock::time_point &start_time);
   /// Get the stored time
-  std::chrono::high_resolution_clock::time_point get_time() const;
+  [[nodiscard]] std::chrono::high_resolution_clock::time_point getTime() const;
 #endif
   /// Get the number of input tensors in the request
   virtual size_t getInputSize() = 0;
@@ -108,12 +108,12 @@ class Interface {
   std::chrono::_V2::system_clock::time_point start_time_;
 #endif
 #ifdef AMDINFER_ENABLE_LOGGING
-  const Logger &getLogger() const;
+  [[nodiscard]] const Logger &getLogger() const;
 #endif
 
  private:
 #ifdef AMDINFER_ENABLE_LOGGING
-  Logger logger_{Loggers::kServer};
+  Logger logger_{Loggers::Server};
 #endif
 };
 

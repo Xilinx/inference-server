@@ -37,15 +37,15 @@ namespace amdinfer {
 
 constexpr spdlog::level::level_enum getLevel(LogLevel level) {
   switch (level) {
-    case LogLevel::kTrace:
+    case LogLevel::Trace:
       return spdlog::level::trace;
-    case LogLevel::kDebug:
+    case LogLevel::Debug:
       return spdlog::level::debug;
-    case LogLevel::kInfo:
+    case LogLevel::Info:
       return spdlog::level::info;
-    case LogLevel::kWarn:
+    case LogLevel::Warn:
       return spdlog::level::warn;
-    case LogLevel::kError:
+    case LogLevel::Error:
       return spdlog::level::err;
     default:
       return spdlog::level::off;
@@ -90,13 +90,13 @@ Logger::Logger(Loggers name) { set(name); }
 
 void Logger::set(Loggers name) {
   switch (name) {
-    case Loggers::kClient:
+    case Loggers::Client:
       logger_ = spdlog::get("client");
       break;
-    case Loggers::kServer:
+    case Loggers::Server:
       logger_ = spdlog::get("server");
       break;
-    case Loggers::kTest:
+    case Loggers::Test:
       logger_ = spdlog::get("test");
       break;
     default:

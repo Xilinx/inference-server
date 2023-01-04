@@ -25,6 +25,7 @@
 class BaseFixture : public testing::Test {
  public:
   // because of the session scoped HTTP fixture, the server needs to be static
+  // NOLINTNEXTLINE(cert-err58-cpp)
   inline static amdinfer::Server server_;
 
  protected:
@@ -33,8 +34,8 @@ class BaseFixture : public testing::Test {
     if (root == nullptr) {
       throw amdinfer::environment_not_set_error("AMDINFER_ROOT is not set");
     }
-    server_.setModelRepository(std::string{root} +
-                               "/external/artifacts/repository");
+    amdinfer::Server::setModelRepository(std::string{root} +
+                                         "/external/artifacts/repository");
   }
 };
 
@@ -45,10 +46,11 @@ class BaseFixtureWithParams : public BaseFixture,
 class GrpcFixture : public BaseFixture {
  protected:
   void SetUp() override {
-    client_ = std::make_unique<amdinfer::GrpcClient>("localhost:50051");
+    client_ = std::make_unique<amdinfer::GrpcClient>(
+      "localhost:" + std::to_string(kDefaultGrpcPort));
     if (!client_->serverLive()) {
       BaseFixture::SetUp();
-      server_.startGrpc(50051);
+      server_.startGrpc(kDefaultGrpcPort);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
@@ -73,7 +75,7 @@ class HttpFixture : public BaseFixture {
     // void SetUp() override {
     client_ = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
     if (!client_->serverLive()) {
-      server_.startHttp(8998);
+      server_.startHttp(kDefaultHttpPort);
       started_ = true;
       while (!client_->serverLive()) {
         std::this_thread::yield();
@@ -99,13 +101,15 @@ template <typename T>
 class HttpFixtureWithParams : public HttpFixture,
                               public testing::WithParamInterface<T> {};
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define EXPECT_THROW_CHECK(statement, check, exception) \
   EXPECT_THROW(                                         \
     {                                                   \
       try {                                             \
         statement                                       \
       } catch (const exception& e) {                    \
-        check throw;                                    \
+        check;                                          \
+        throw;                                          \
       }                                                 \
     },                                                  \
     exception)

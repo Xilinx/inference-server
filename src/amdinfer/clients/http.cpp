@@ -21,7 +21,6 @@
 
 #include "amdinfer/clients/http.hpp"
 
-#include <drogon/HttpAppFramework.h>      // for HttpAppFramework, app
 #include <drogon/HttpClient.h>            // for HttpClient, HttpClientPtr
 #include <drogon/HttpRequest.h>           // for HttpRequest, HttpReques...
 #include <drogon/HttpResponse.h>          // for HttpResponse
@@ -29,8 +28,8 @@
 #include <json/value.h>                   // for Value, arrayValue, obje...
 #include <trantor/net/EventLoopThread.h>  // for EventLoopThread
 
-#include <atomic>
 #include <cassert>        // for assert
+#include <future>         // for promise
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for tuple_element<>::type
 #include <vector>
@@ -40,7 +39,7 @@
 
 namespace amdinfer {
 
-void addHeaders(drogon::HttpRequestPtr req, const StringMap& headers) {
+void addHeaders(const drogon::HttpRequestPtr& req, const StringMap& headers) {
   for (const auto& [field, value] : headers) {
     req->addHeader(field, value);
   }
@@ -48,11 +47,12 @@ void addHeaders(drogon::HttpRequestPtr req, const StringMap& headers) {
 
 class HttpClient::HttpClientImpl {
  public:
-  explicit HttpClientImpl(const std::string& address, int parallelism)
-    : num_clients_(parallelism) {
+  explicit HttpClientImpl(const std::string& address, StringMap headers,
+                          int parallelism)
+    : headers_(std::move(headers)), num_clients_(parallelism) {
     // arbitrarily use ratio of 16:1 between HttpClients and EventLoops
-    const auto kClientThreadRatio = 16;
-    const auto threads = (parallelism / kClientThreadRatio) + 1;
+    const auto client_thread_ratio = 16;
+    const auto threads = (parallelism / client_thread_ratio) + 1;
 
     loops_.reserve(threads);
     clients_.reserve(num_clients_);
@@ -76,37 +76,34 @@ class HttpClient::HttpClientImpl {
     return client.get();
   }
 
+  const StringMap& getHeaders() const { return headers_; }
+
   auto getClientNum() const { return num_clients_; }
 
  private:
+  StringMap headers_;
   int counter_ = 0;
   int num_clients_;
   std::vector<std::unique_ptr<trantor::EventLoopThread>> loops_;
   std::vector<drogon::HttpClientPtr> clients_;
 };
 
-HttpClient::HttpClient(std::string address, const StringMap& headers,
-                       int parallelism)
-  : address_(std::move(address)), headers_(headers) {
-  this->impl_ =
-    std::make_unique<HttpClient::HttpClientImpl>(address_, parallelism);
-}
-
-HttpClient::HttpClient(const HttpClient& other)
-  : address_(other.address_), headers_(other.headers_) {
+HttpClient::HttpClient(const std::string& address) {
+  const auto parallelism = 32;
   this->impl_ = std::make_unique<HttpClient::HttpClientImpl>(
-    address_, other.impl_->getClientNum());
+    address, StringMap{}, parallelism);
 }
 
-HttpClient::HttpClient(HttpClient&& other) noexcept
-  : address_(std::move(other.address_)),
-    headers_(std::move(other.headers_)),
-    impl_(std::move(other.impl_)) {}
+HttpClient::HttpClient(const std::string& address, const StringMap& headers,
+                       int parallelism) {
+  this->impl_ =
+    std::make_unique<HttpClient::HttpClientImpl>(address, headers, parallelism);
+}
 
 // needed for HttpClientImpl forward declaration in WebSocket client
 HttpClient::~HttpClient() = default;
 
-void check_error(drogon::ReqResult result) {
+void checkError(drogon::ReqResult result) {
   using drogon::ReqResult;
 
   std::string error_msg;
@@ -152,10 +149,10 @@ drogon::HttpRequestPtr createPostRequest(const Json::Value& json,
 
 ServerMetadata HttpClient::serverMetadata() const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2", headers_);
+  auto req = createGetRequest("/v2", impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   if (response->statusCode() != drogon::k200OK) {
     throw bad_status(response->getJsonError());
   }
@@ -172,10 +169,11 @@ ServerMetadata HttpClient::serverMetadata() const {
 
 bool HttpClient::serverLive() const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2/health/live", headers_);
+  auto req = createGetRequest("/v2/health/live", impl_->getHeaders());
 
   // arbitrarily setting a 10 second timeout
-  auto [result, response] = client->sendRequest(req, 10.0);
+  const auto timeout_s = 10.0;
+  auto [result, response] = client->sendRequest(req, timeout_s);
   if (result != drogon::ReqResult::Ok) {
     return false;
   }
@@ -184,28 +182,29 @@ bool HttpClient::serverLive() const {
 
 bool HttpClient::serverReady() const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2/health/ready", headers_);
+  auto req = createGetRequest("/v2/health/ready", impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   return response->statusCode() == drogon::k200OK;
 }
 
 bool HttpClient::modelReady(const std::string& model) const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2/models/" + model + "/ready", headers_);
+  auto req =
+    createGetRequest("/v2/models/" + model + "/ready", impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   return response->statusCode() == drogon::k200OK;
 }
 
 ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2/models/" + model, headers_);
+  auto req = createGetRequest("/v2/models/" + model, impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   auto resp = response->jsonObject();
   return mapJsonToModelMetadata(resp.get());
 }
@@ -220,10 +219,10 @@ void HttpClient::modelLoad(const std::string& model,
   }
 
   auto req = createPostRequest(json, "/v2/repository/models/" + model + "/load",
-                               headers_);
+                               impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   if (response->statusCode() != drogon::k200OK) {
     throw bad_status(std::string(response->body()));
   }
@@ -234,17 +233,17 @@ void HttpClient::modelUnload(const std::string& model) const {
 
   Json::Value json;
   auto req = createPostRequest(
-    json, "/v2/repository/models/" + model + "/unload", headers_);
+    json, "/v2/repository/models/" + model + "/unload", impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   auto status = response->statusCode();
   if (status != drogon::k200OK) {
     throw bad_status(std::string(response->body()));
   }
 }
 
-std::string HttpClient::workerLoad(const std::string& model,
+std::string HttpClient::workerLoad(const std::string& worker,
                                    RequestParameters* parameters) const {
   auto* client = this->impl_->getClient();
 
@@ -253,26 +252,26 @@ std::string HttpClient::workerLoad(const std::string& model,
     json = mapParametersToJson(parameters);
   }
 
-  auto req =
-    createPostRequest(json, "/v2/workers/" + model + "/load", headers_);
+  auto req = createPostRequest(json, "/v2/workers/" + worker + "/load",
+                               impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   if (response->statusCode() != drogon::k200OK) {
     throw bad_status(std::string(response->body()));
   }
   return std::string(response->body());
 }
 
-void HttpClient::workerUnload(const std::string& model) const {
+void HttpClient::workerUnload(const std::string& worker) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json;
-  auto req =
-    createPostRequest(json, "/v2/workers/" + model + "/unload", headers_);
+  auto req = createPostRequest(json, "/v2/workers/" + worker + "/unload",
+                               impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   auto status = response->statusCode();
   if (status != drogon::k200OK) {
     throw bad_status(std::string(response->body()));
@@ -290,35 +289,34 @@ auto createInferenceRequest(const std::string& model,
 
 InferenceResponseFuture HttpClient::modelInferAsync(
   const std::string& model, const InferenceRequest& request) const {
-  auto req = createInferenceRequest(model, request, headers_);
+  auto req = createInferenceRequest(model, request, impl_->getHeaders());
   auto prom = std::make_shared<std::promise<amdinfer::InferenceResponse>>();
   auto fut = prom->get_future();
 
   auto* client = this->impl_->getClient();
-  client->sendRequest(
-    req, [prom = std::move(prom)](drogon::ReqResult result,
+  client->sendRequest(req, [prom](drogon::ReqResult result,
                                   const drogon::HttpResponsePtr& response) {
-      check_error(result);
-      if (response->statusCode() != drogon::k200OK) {
-        throw bad_status(std::string(response->body()));
-      }
+    checkError(result);
+    if (response->statusCode() != drogon::k200OK) {
+      throw bad_status(std::string(response->body()));
+    }
 
-      auto resp = response->jsonObject();
-      prom->set_value(mapJsonToResponse(resp.get()));
-    });
+    auto resp = response->jsonObject();
+    prom->set_value(mapJsonToResponse(resp.get()));
+  });
 
   return fut;
 }
 
 InferenceResponse HttpClient::modelInfer(
   const std::string& model, const InferenceRequest& request) const {
-  auto req = createInferenceRequest(model, request, headers_);
+  auto req = createInferenceRequest(model, request, impl_->getHeaders());
 
   auto* client = this->impl_->getClient();
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   if (response->statusCode() != drogon::k200OK) {
-    throw bad_status(std::string(response->body()));
+    throw bad_status(std::string{response->body()});
   }
 
   auto resp = response->jsonObject();
@@ -327,10 +325,10 @@ InferenceResponse HttpClient::modelInfer(
 
 std::vector<std::string> HttpClient::modelList() const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2/models", headers_);
+  auto req = createGetRequest("/v2/models", impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   if (response->statusCode() != drogon::k200OK) {
     throw bad_status(response->getJsonError());
   }
@@ -351,17 +349,11 @@ bool HttpClient::hasHardware(const std::string& name, int num) const {
   Json::Value json;
   json["name"] = name;
   json["num"] = num;
-  auto req = createPostRequest(json, "/v2/hardware", headers_);
+  auto req = createPostRequest(json, "/v2/hardware", impl_->getHeaders());
 
   auto [result, response] = client->sendRequest(req);
-  check_error(result);
+  checkError(result);
   return response->statusCode() == drogon::k200OK;
 }
-
-const std::string& HttpClient::getAddress() const& { return address_; }
-std::string HttpClient::getAddress() const&& { return address_; }
-
-const StringMap& HttpClient::getHeaders() const& { return headers_; }
-StringMap HttpClient::getHeaders() const&& { return headers_; }
 
 }  // namespace amdinfer

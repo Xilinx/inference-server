@@ -16,6 +16,7 @@
 #include "amdinfer/util/parse_env.hpp"
 
 #include <cstdlib>  // for getenv
+#include <iosfwd>   // for _GLIBCXX_USE_CXX11_ABI
 #include <regex>    // for match_results<>::_Base_type, match_results, rege...
 #include <string>   // for string, basic_string, allocator
 #include <vector>   // for vector

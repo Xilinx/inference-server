@@ -21,6 +21,7 @@
 #include <thread>   // for thread
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
+#include "amdinfer/core/exceptions.hpp"        // for environment_not_set_error
 #include "amdinfer/core/manager.hpp"           // for Manager
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/observation/logging.hpp"    // for initLogger, getLogDirec...
@@ -38,11 +39,11 @@ namespace amdinfer {
 
 struct Server::ServerImpl {
 #ifdef AMDINFER_ENABLE_HTTP
-  bool http_started_ = false;
-  std::thread http_thread_;
+  bool http_started = false;
+  std::thread http_thread;
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-  bool grpc_started_ = false;
+  bool grpc_started = false;
 #endif
 };
 
@@ -51,10 +52,10 @@ void initializeServerLogging() {
   LogOptions options{
     "server",  // logger_name
     getLogDirectory(),
-    true,              // enable file logging
-    LogLevel::kTrace,  // file log level
-    true,              // enable console logging
-    LogLevel::kWarn    // console log level
+    true,             // enable file logging
+    LogLevel::Trace,  // file log level
+    true,             // enable console logging
+    LogLevel::Warn    // console log level
   };
   initLogger(options);
 #endif
@@ -105,19 +106,19 @@ Server::~Server() {
 
 void Server::startHttp([[maybe_unused]] uint16_t port) const {
 #ifdef AMDINFER_ENABLE_HTTP
-  if (!impl_->http_started_) {
-    impl_->http_thread_ = std::thread{http::start, port};
-    impl_->http_started_ = true;
+  if (!impl_->http_started) {
+    impl_->http_thread = std::thread{http::start, port};
+    impl_->http_started = true;
   }
 #endif
 }
 
 void Server::stopHttp() const {
 #ifdef AMDINFER_ENABLE_HTTP
-  if (impl_->http_started_) {
+  if (impl_->http_started) {
     http::stop();
-    if (impl_->http_thread_.joinable()) {
-      impl_->http_thread_.join();
+    if (impl_->http_thread.joinable()) {
+      impl_->http_thread.join();
     }
   }
 #endif
@@ -125,26 +126,26 @@ void Server::stopHttp() const {
 
 void Server::startGrpc([[maybe_unused]] uint16_t port) const {
 #ifdef AMDINFER_ENABLE_GRPC
-  if (!impl_->grpc_started_) {
+  if (!impl_->grpc_started) {
     grpc::start(port);
-    impl_->grpc_started_ = true;
+    impl_->grpc_started = true;
   }
 #endif
 }
 
 void Server::stopGrpc() const {
 #ifdef AMDINFER_ENABLE_GRPC
-  if (impl_->grpc_started_) {
+  if (impl_->grpc_started) {
     grpc::stop();
   }
 #endif
 }
 
-void Server::setModelRepository(const fs::path& path) const {
+void Server::setModelRepository(const fs::path& path) {
   ModelRepository::setRepository(path.string());
 }
 
-void Server::enableRepositoryMonitoring(bool use_polling) const {
+void Server::enableRepositoryMonitoring(bool use_polling) {
   ModelRepository::enableRepositoryMonitoring(use_polling);
 }
 

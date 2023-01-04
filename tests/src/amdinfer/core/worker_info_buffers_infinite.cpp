@@ -59,37 +59,44 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   }
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 Batcher* WorkerInfo::getBatcher() { return nullptr; }
 
-void WorkerInfo::join(std::thread::id id) { (void)id; }
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+void WorkerInfo::join([[maybe_unused]] std::thread::id id) {}
 
 void WorkerInfo::joinAll() {}
 
 void WorkerInfo::unload() {}
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 size_t WorkerInfo::getGroupSize() const { return 1; }
 
 void WorkerInfo::shutdown() {}
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 BufferPtrs WorkerInfo::getInputBuffer() const {
   BufferPtrs buffer;
   return buffer;
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 BufferPtrs WorkerInfo::getOutputBuffer() const {
   BufferPtrs buffer;
   return buffer;
 }
 
-void WorkerInfo::putInputBuffer(BufferPtrs buffer) const { (void)buffer; }
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+void WorkerInfo::putInputBuffer([[maybe_unused]] BufferPtrs&& buffer) const {}
 
-void WorkerInfo::putOutputBuffer(BufferPtrs buffer) const { (void)buffer; }
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+void WorkerInfo::putOutputBuffer([[maybe_unused]] BufferPtrs&& buffer) const {}
 
-bool WorkerInfo::inputSizeValid(size_t size) const {
-  (void)size;
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+bool WorkerInfo::inputSizeValid([[maybe_unused]] size_t size) const {
   return true;
 }
 
-void WorkerInfo::allocate(size_t request_size) { (void)request_size; }
+void WorkerInfo::allocate([[maybe_unused]] size_t request_size) {}
 
 }  // namespace amdinfer

@@ -53,19 +53,19 @@ class NativeClient : public Client {
    *
    * @return ServerMetadata
    */
-  ServerMetadata serverMetadata() const override;
+  [[nodiscard]] ServerMetadata serverMetadata() const override;
   /**
    * @brief Checks if the server is live
    *
    * @return bool - true if server is live, false otherwise
    */
-  bool serverLive() const override;
+  [[nodiscard]] bool serverLive() const override;
   /**
    * @brief Checks if the server is ready
    *
    * @return bool - true if server is ready, false otherwise
    */
-  bool serverReady() const override;
+  [[nodiscard]] bool serverReady() const override;
 
   /**
    * @brief Checks if a model/worker is ready
@@ -73,14 +73,15 @@ class NativeClient : public Client {
    * @param model name of the model to check
    * @return bool - true if model is ready, false otherwise
    */
-  bool modelReady(const std::string& model) const override;
+  [[nodiscard]] bool modelReady(const std::string& model) const override;
   /**
    * @brief Returns the metadata associated with a ready model/worker
    *
    * @param model name of the model/worker to get metadata
    * @return ModelMetadata
    */
-  ModelMetadata modelMetadata(const std::string& model) const override;
+  [[nodiscard]] ModelMetadata modelMetadata(
+    const std::string& model) const override;
 
   /**
    * @brief Loads a model with the given name and load-time parameters. This
@@ -110,8 +111,8 @@ class NativeClient : public Client {
    * @param request the request
    * @return InferenceResponse
    */
-  InferenceResponse modelInfer(const std::string& model,
-                               const InferenceRequest& request) const override;
+  [[nodiscard]] InferenceResponse modelInfer(
+    const std::string& model, const InferenceRequest& request) const override;
   /**
    * @brief Makes an asynchronous inference request to the given model/worker.
    * The contents of the request depends on the model/worker that the request
@@ -122,14 +123,14 @@ class NativeClient : public Client {
    * @param request the request
    * @return InferenceResponseFuture
    */
-  InferenceResponseFuture modelInferAsync(
+  [[nodiscard]] InferenceResponseFuture modelInferAsync(
     const std::string& model, const InferenceRequest& request) const override;
   /**
    * @brief Gets a list of active models on the server, returning their names
    *
    * @return std::vector<std::string>
    */
-  std::vector<std::string> modelList() const override;
+  [[nodiscard]] std::vector<std::string> modelList() const override;
 
   /**
    * @brief Loads a worker with the given name and load-time parameters.
@@ -138,8 +139,8 @@ class NativeClient : public Client {
    * @param parameters load-time parameters for the worker
    * @return std::string
    */
-  std::string workerLoad(const std::string& worker,
-                         RequestParameters* parameters) const override;
+  [[nodiscard]] std::string workerLoad(
+    const std::string& worker, RequestParameters* parameters) const override;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.
@@ -157,7 +158,8 @@ class NativeClient : public Client {
    * @return bool - true if server has at least the requested number of the
    * hardware device, false otherwise
    */
-  bool hasHardware(const std::string& name, int num) const override;
+  [[nodiscard]] bool hasHardware(const std::string& name,
+                                 int num) const override;
 };
 
 }  // namespace amdinfer

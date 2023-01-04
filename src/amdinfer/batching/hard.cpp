@@ -68,7 +68,7 @@ void HardBatcher::doRun(WorkerInfo* worker) {
 
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineIngressBatcher);
+        MetricCounterIDs::PipelineIngressBatcher);
 #endif
 
       auto input_size = req->getInputSize();
@@ -99,7 +99,7 @@ void HardBatcher::doRun(WorkerInfo* worker) {
         batch->addTrace(std::move(trace));
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
-        batch->addTime(req->get_time());
+        batch->addTime(req->getTime());
 #endif
       }
     } while (batch_size % this->batch_size_ != 0);
@@ -108,7 +108,7 @@ void HardBatcher::doRun(WorkerInfo* worker) {
       this->output_queue_->enqueue(std::move(batch));
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::kPipelineEgressBatcher);
+        MetricCounterIDs::PipelineEgressBatcher);
 #endif
     }
   }

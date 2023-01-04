@@ -24,15 +24,16 @@
 
 namespace amdinfer {
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitSoftBatcher, ConstructAndStart) {
 #ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
-    "server",          // logger_name
-    "",                // log directory
-    false,             // enable file logging
-    LogLevel::kDebug,  // file log level
-    true,              // enable console logging
-    LogLevel::kWarn    // console log level
+    "server",         // logger_name
+    "",               // log directory
+    false,            // enable file logging
+    LogLevel::Debug,  // file log level
+    true,             // enable console logging
+    LogLevel::Warn    // console log level
   };
   initLogger(options);
 #endif

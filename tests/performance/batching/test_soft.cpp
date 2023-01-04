@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>     // for array
 #include <chrono>    // for duration, operator-
 #include <cstddef>   // for size_t
 #include <cstdint>   // for uint8_t, uint64_t
@@ -21,6 +22,7 @@
 #include <memory>    // for allocator, make_unique
 #include <optional>  // for optional
 #include <ratio>     // for ratio
+#include <string>    // for string
 #include <thread>    // for sleep_for
 #include <tuple>     // for tuple
 #include <utility>   // for move
@@ -33,6 +35,7 @@
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
 #include "amdinfer/declarations.hpp"             // for BufferPtrs
+#include "amdinfer/observation/logging.hpp"      // for LogOptions, initLogger
 #include "gtest/gtest.h"                         // for UnitTest, EXPECT_NEAR
 
 namespace amdinfer {
@@ -64,7 +67,7 @@ class PerfSoftBatcherFixture
 
   int dequeue() {
     const auto [batch_size, num_buffers, delay] = GetParam();
-    bool valid_read;
+    bool valid_read = false;
     int count = 0;
     do {
       BatchPtr batch;
@@ -82,11 +85,11 @@ class PerfSoftBatcherFixture
   void SetUp() override {
     const auto [batch_size, num_buffers, delay] = GetParam();
 
-    const auto kBufferNum = static_cast<size_t>(num_buffers);
-    const auto kDataShape = {1UL, 2UL, 50UL};
-    const auto kDataSize = 100;
+    const auto buffer_num = static_cast<size_t>(num_buffers);
+    const auto data_shape = {1UL, 2UL, 50UL};
+    const auto data_size = 100;
 
-    this->data_size_ = kDataSize;
+    this->data_size_ = data_size;
 
     RequestParameters parameters;
     parameters.put("timeout", kTimeoutMs);
@@ -103,29 +106,29 @@ class PerfSoftBatcherFixture
     this->batcher_->setBatchSize(batch_size);
 
     this->worker_.emplace("", &parameters);
-    for (size_t i = 0; i < kBufferNum; i++) {
+    for (size_t i = 0; i < buffer_num; i++) {
       BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
-                                                      DataType::UINT8));
+      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
+                                                      DataType::Uint8));
       this->worker_->putInputBuffer(std::move(vec));
     }
-    for (size_t i = 0; i < kBufferNum; i++) {
+    for (size_t i = 0; i < buffer_num; i++) {
       BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * kDataSize,
-                                                      DataType::UINT8));
+      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
+                                                      DataType::Uint8));
       this->worker_->putOutputBuffer(std::move(vec));
     }
 
     this->batcher_->start(&this->worker_.value());
 
-    data_.resize(kDataSize);
-    for (auto i = 0; i < kDataSize; i++) {
+    data_.resize(data_size);
+    for (auto i = 0; i < data_size; i++) {
       data_[i] = i;
     }
 
     this->request_ = InferenceRequest();
-    this->request_.addInputTensor(static_cast<void*>(data_.data()), kDataShape,
-                                  DataType::UINT8);
+    this->request_.addInputTensor(static_cast<void*>(data_.data()), data_shape,
+                                  DataType::Uint8);
   }
 
   void TearDown() override {
@@ -133,7 +136,7 @@ class PerfSoftBatcherFixture
     batcher_->end();
   }
 
-  int data_size_;
+  int data_size_ = 0;
   std::vector<uint8_t> data_;
   InferenceRequest request_;
   std::optional<WorkerInfo> worker_;
@@ -141,7 +144,7 @@ class PerfSoftBatcherFixture
 };
 
 // @pytest.mark.perf(group="batcher")
-TEST_P(PerfSoftBatcherFixture, BasicBatching) {
+TEST_P(PerfSoftBatcherFixture, BasicBatching) {  // NOLINT
   const auto [batch_size, num_buffers, delay] = GetParam();
   auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -157,23 +160,25 @@ TEST_P(PerfSoftBatcherFixture, BasicBatching) {
   std::chrono::duration<double> duration = end_time - start_time;
   auto throughput = static_cast<double>(enqueue_count) / duration.count();
 
-  EXPECT_NEAR(enqueue_count / batch_size, dequeue_count, enqueue_count * 0.01);
+  EXPECT_NEAR(enqueue_count / float(batch_size), dequeue_count,
+              enqueue_count * 0.01);
 
   std::cerr << "Enqueue count: " << enqueue_count << std::endl;
   std::cerr << "Dequeue count: " << dequeue_count << std::endl;
   std::cerr << "Throughput (req/s): " << throughput << std::endl;
 }
 
-int batch_sizes[] = {1, 2, 4};
+const std::array kBatchSizes{1, 2, 4};
 
-int buffer_nums[] = {1, 10, 100};
+const std::array kBufferNums{1, 10, 100};
 
 // delay after dequeue per request in microseconds
-int work_delay[] = {0, 1, 10};
+const std::array kWorkDelay{0, 1, 10};
 
+// NOLINTNEXTLINE(cert-err58-cpp)
 INSTANTIATE_TEST_SUITE_P(Datatypes, PerfSoftBatcherFixture,
-                         testing::Combine(testing::ValuesIn(batch_sizes),
-                                          testing::ValuesIn(buffer_nums),
-                                          testing::ValuesIn(work_delay)));
+                         testing::Combine(testing::ValuesIn(kBatchSizes),
+                                          testing::ValuesIn(kBufferNums),
+                                          testing::ValuesIn(kWorkDelay)));
 
 }  // namespace amdinfer

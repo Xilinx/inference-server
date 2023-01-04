@@ -198,7 +198,7 @@ You can also make a single asynchronous request to the server where you get back
     :start-after: +validate
     :end-before: -validate
     :language: cpp
-    :dedent: 2
+    :dedent: 6
 
 There are also some helper methods that wrap the basic inference APIs provided by the client.
 The ``inferAsyncOrdered`` method accepts a vector of requests, makes all the requests asynchronously using the ``modelInferAsync`` API, waits until each request completes, and then returns a vector of responses.

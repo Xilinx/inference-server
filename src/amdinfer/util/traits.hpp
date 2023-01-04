@@ -28,9 +28,11 @@ namespace amdinfer::util {
  * @tparam Ts list of types to compare against
  */
 template <typename T, typename... Ts>
+// NOLINTNEXTLINE(readability-identifier-naming)
 struct is_any : std::disjunction<std::is_same<T, Ts>...> {};
 
 template <typename T, typename... Ts>
+// NOLINTNEXTLINE(readability-identifier-naming)
 inline constexpr bool is_any_v = is_any<T, Ts...>::value;
 
 }  // namespace amdinfer::util
