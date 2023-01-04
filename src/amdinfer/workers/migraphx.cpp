@@ -500,13 +500,11 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       auto eval_duration =
         std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::high_resolution_clock::now() - eval_tp);
-      auto eval_duration_sec =
-        std::chrono::duration_cast<std::chrono::seconds>(eval_duration);
       AMDINFER_LOG_INFO(
         logger, std::string("Finished migraphx eval; batch size: ") +
                   std::to_string(batch_size_) + "  elapsed time: " +
                   std::to_string(eval_duration.count()) + " us.  Images/sec: " +
-                  std::to_string(batch_size_ / (eval_duration_sec.count())));
+                  std::to_string(1.e6 * batch_size_ / (eval_duration.count())));
 
       //
       //           Fetch the results and populate response to each request in
