@@ -498,7 +498,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       migraphx::api::arguments migraphx_output = this->prog_.eval(params);
       timer.add("eval_end");
       auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
-      auto eval_duration_s = eval_duration_us * std::mega::num;
+      auto eval_duration_s = eval_duration_us / std::mega::num;
       AMDINFER_LOG_INFO(
         logger, std::string("Finished migraphx eval; batch size: ") +
                   std::to_string(batch_size_) + "  elapsed time: " +
@@ -600,7 +600,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             MetricCounterIDs::PipelineEgressWorker);
           timer.add("batch_time", batch->getTime(j));
           timer.add("request_latency");
-          auto duration = timer.count<std::micro>();
+          auto duration =
+            timer.count<std::micro>("batch_time", "request_latency");
           Metrics::getInstance().observeSummary(
             MetricSummaryIDs::RequestLatency, duration);
 #endif
