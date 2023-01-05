@@ -22,7 +22,6 @@
 
 #include <algorithm>                    // for copy, copy_backward
 #include <atomic>                       // for atomic_int32_t
-#include <chrono>                       // for microseconds, dura...
 #include <cstddef>                      // for size_t, byte
 #include <cstdint>                      // for uint64_t, uint32_t
 #include <cstdlib>                      // for getenv
@@ -32,6 +31,7 @@
 #include <memory>                       // for unique_ptr, allocator
 #include <numeric>                      // for accumulate
 #include <queue>                        // for queue
+#include <ratio>                        // for micro
 #include <string>                       // for string, operator!=
 #include <thread>                       // for thread, sleep_for
 #include <utility>                      // for pair, move

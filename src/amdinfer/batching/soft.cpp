@@ -21,7 +21,6 @@
 #include "amdinfer/batching/soft.hpp"
 
 #include <algorithm>  // for max
-#include <chrono>     // for milliseconds, duration_cast
 #include <cstddef>    // for size_t
 #include <cstdint>    // for int32_t
 #include <memory>     // for unique_ptr, allocator
@@ -41,9 +40,6 @@
 #include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
 #include "amdinfer/util/thread.hpp"          // for setThreadName
 #include "amdinfer/util/timer.hpp"           // for Timer
-
-using std::chrono::duration_cast;
-using std::chrono::milliseconds;
 
 // default batcher timeout in milliseconds
 constexpr auto kDefaultTimeout = 100;

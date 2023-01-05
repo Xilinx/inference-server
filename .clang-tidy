@@ -26,6 +26,7 @@ Checks: >
   -hicpp-no-array-decay,
   -hicpp-signed-bitwise,
   -llvm-header-guard,
+  -llvm-include-order,
   -llvmlibc-*,
   -misc-non-private-member-variables-in-classes,
   -misc-unused-parameters,
@@ -62,6 +63,9 @@ Checks: >
 #
 # llvm-header-guard
 #   Doesn't seem to be satisfied easily
+#
+# llvm-include-order
+#   clang-format takes care of the include order
 #
 # llvmlibc-*
 #   These guidelines are particular to llvm-libc and unnecessary here

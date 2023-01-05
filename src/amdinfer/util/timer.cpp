@@ -19,6 +19,8 @@
 
 #include "amdinfer/util/timer.hpp"
 
+#include <utility>  // for pair
+
 namespace amdinfer::util {
 
 TimePoint getTime() { return std::chrono::high_resolution_clock::now(); }

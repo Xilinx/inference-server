@@ -21,6 +21,7 @@
 #define GUARD_AMDINFER_UTIL_TIMER
 
 #include <chrono>         // IWYU pragma: export
+#include <ratio>          // for ratio
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 

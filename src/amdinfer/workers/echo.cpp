@@ -23,6 +23,7 @@
 #include <cstring>    // for memcpy
 #include <exception>  // for exception
 #include <memory>     // for unique_ptr, allocator
+#include <ratio>      // for micro
 #include <string>     // for string
 #include <thread>     // for thread
 #include <utility>    // for move

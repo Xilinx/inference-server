@@ -24,6 +24,7 @@
 #include <cstring>  // for memcpy
 #include <memory>   // for unique_ptr, allocator
 #include <numeric>  // for accumulate
+#include <ratio>    // for micro
 #include <string>   // for string
 #include <thread>   // for thread
 #include <utility>  // for move

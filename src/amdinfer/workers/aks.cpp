@@ -27,6 +27,7 @@
 #include <cstring>                 // for memcpy
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, allocator
+#include <ratio>                   // for micro
 #include <string>                  // for string, operator+, char...
 #include <thread>                  // for thread
 #include <utility>                 // for move, pair

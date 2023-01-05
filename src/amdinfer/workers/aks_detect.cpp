@@ -34,6 +34,7 @@
 #include <numeric>                 // for accumulate
 #include <opencv2/core.hpp>        // for Mat, MatSize, Size, Mat...
 #include <opencv2/imgcodecs.hpp>   // for imdecode, IMREAD_UNCHANGED
+#include <ratio>                   // for micro
 #include <string>                  // for string, basic_string
 #include <thread>                  // for thread
 #include <utility>                 // for move, pair

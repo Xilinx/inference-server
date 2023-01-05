@@ -31,6 +31,7 @@
 
 #include <iterator>  // for move_iterator, make_move_ite...
 #include <memory>    // for weak_ptr, allocator, shared_ptr
+#include <ratio>     // for micro
 #include <string>    // for string
 #include <vector>    // for vector
 

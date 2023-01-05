@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <algorithm>            // for max
 #include <array>                // for array
 #include <cstdint>              // for uint64_t
 #include <initializer_list>     // for initializer_list
