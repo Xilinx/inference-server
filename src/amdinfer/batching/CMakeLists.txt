@@ -31,6 +31,8 @@ foreach(file ${files})
   list(APPEND targets ${target})
 endforeach()
 
+target_link_libraries(softBatcher INTERFACE timer)
+
 add_library(batching STATIC ${BATCHING_OBJS})
 target_link_libraries(batching INTERFACE batcher ${targets})
 

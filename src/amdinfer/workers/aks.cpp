@@ -22,12 +22,12 @@
 #include <aks/AksTensorBuffer.h>   // for AksTensorBuffer
 
 #include <algorithm>               // for max
-#include <chrono>                  // for microseconds, duration_...
 #include <cstddef>                 // for size_t, byte
 #include <cstdint>                 // for int32_t
 #include <cstring>                 // for memcpy
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, allocator
+#include <ratio>                   // for micro
 #include <string>                  // for string, operator+, char...
 #include <thread>                  // for thread
 #include <utility>                 // for move, pair
@@ -48,6 +48,7 @@
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 
 namespace AKS {  // NOLINT(readability-identifier-naming)
@@ -193,11 +194,11 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
       }
 
 #ifdef AMDINFER_ENABLE_METRICS
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() -
-        batch->getTime(static_cast<int>(j)));
+      util::Timer timer{batch->getTime(j)};
+      timer.stop();
+      auto duration = timer.count<std::micro>();
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
       auto context = trace->propagate();

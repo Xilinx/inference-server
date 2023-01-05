@@ -32,13 +32,13 @@
 
 #include <algorithm>   // for copy, max
 #include <cassert>     // for assert
-#include <chrono>      // for milliseconds
 #include <cstddef>     // for size_t, byte
 #include <cstdint>     // for int32_t, uint...
 #include <cstring>     // for memcpy
 #include <functional>  // for multiplies
 #include <memory>      // for allocator
 #include <numeric>     // for accumulate
+#include <ratio>       // for micro, milli
 #include <string>      // for string, opera...
 #include <thread>      // for thread
 #include <utility>     // for pair, move
@@ -55,6 +55,7 @@
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, Metr...
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumB...
 
 namespace tf = ::tensorflow;
@@ -252,7 +253,7 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       MetricCounterIDs::PipelineIngressWorker);
 #endif
 
-    auto total_start = std::chrono::high_resolution_clock::now();
+    util::Timer timer{true};
 
     // Find total number of images to initialize for TF tensor
     auto tensor_count = static_cast<int>(batch->size());
@@ -299,17 +300,13 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     std::vector<tensorflow::Tensor> output_tensor;
 
     // Run the session to get the predictions
-    auto start = std::chrono::high_resolution_clock::now();
+    timer.add("infer_start");
     status_ =
       this->session_->Run(input_pair, {output_node_}, {}, &output_tensor);
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration =
-      std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-#ifdef AMDINFER_ENABLE_LOGGING
-    float time_tmp = duration.count();
+    timer.add("infer_stop");
+    auto duration = timer.count<std::milli>("infer_start", "infer_stop");
     AMDINFER_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
-                                " images: " + std::to_string(time_tmp));
-#endif
+                                " images: " + std::to_string(duration));
 
     if (!status_.ok()) {
       AMDINFER_LOG_ERROR(logger, status_.ToString());
@@ -355,21 +352,18 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
       resp.setContext(std::move(context));
 #endif
 
-      auto total_stop = std::chrono::high_resolution_clock::now();
-      auto d = std::chrono::duration_cast<std::chrono::milliseconds>(
-        total_stop - total_start);
-#ifdef AMDINFER_ENABLE_LOGGING
-      float tt = d.count();
-      AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
-#endif
+      timer.stop();
+      duration = timer.count<std::milli>();
+      AMDINFER_LOG_DEBUG(logger,
+                         "Total time taken: " + std::to_string(duration));
 
       req->runCallbackOnce(resp);
 
 #ifdef AMDINFER_ENABLE_METRICS
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(k));
+      timer.add("metrics", batch->getTime(k));
+      duration = timer.count<std::micro>("metrics", "stop");
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
     }
   }

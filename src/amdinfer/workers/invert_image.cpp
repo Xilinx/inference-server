@@ -18,7 +18,6 @@
  * @brief Implements the InvertImage worker
  */
 
-#include <chrono>                 // for microseconds, duration_...
 #include <climits>                // for CHAR_BIT
 #include <cstddef>                // for size_t, byte
 #include <cstdint>                // for uint8_t, uint64_t, int32_t
@@ -28,6 +27,7 @@
 #include <numeric>                // for accumulate
 #include <opencv2/core.hpp>       // for bitwise_not, Mat
 #include <opencv2/imgcodecs.hpp>  // for imdecode, imencode, IMRE...
+#include <ratio>                  // for micro
 #include <string>                 // for string, basic_string
 #include <thread>                 // for thread
 #include <utility>                // for move
@@ -44,6 +44,7 @@
 #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "amdinfer/util/base64.hpp"            // for base64_decode, base64_e...
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker
 
 namespace {
@@ -246,10 +247,11 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
         resp.addOutput(output);
       }
 #ifdef AMDINFER_ENABLE_METRICS
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() - batch->getTime(j));
+      util::Timer timer{batch->getTime(j)};
+      timer.stop();
+      auto duration = timer.count<std::micro>();
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
       auto context = trace->propagate();

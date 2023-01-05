@@ -17,6 +17,7 @@
  * @brief Performance testing for the native client
  */
 
+#include <algorithm>            // for copy, max
 #include <array>                // for array
 #include <cassert>              // for assert
 #include <chrono>               // for duration, operator-

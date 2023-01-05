@@ -21,6 +21,7 @@ list(
          parse_env
          exec
          read_nth_line
+         timer
 )
 
 list(APPEND UTIL_OBJS)

@@ -29,7 +29,7 @@ endif()
 
 if(${AMDINFER_ENABLE_METRICS})
   add_library(metrics OBJECT metrics.cpp)
-  target_link_libraries(metrics INTERFACE prometheus-cpp-core)
+  target_link_libraries(metrics INTERFACE prometheus-cpp-core util)
   target_include_directories(metrics PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(metrics)
 

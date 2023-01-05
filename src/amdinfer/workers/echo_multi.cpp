@@ -19,12 +19,12 @@
 
 #include <array>    // for array
 #include <cassert>  // for assert
-#include <chrono>   // for microseconds, duration_...
 #include <cstddef>  // for size_t, byte
 #include <cstdint>  // for uint32_t, int32_t
 #include <cstring>  // for memcpy
 #include <memory>   // for unique_ptr, allocator
 #include <numeric>  // for accumulate
+#include <ratio>    // for micro
 #include <string>   // for string
 #include <thread>   // for thread
 #include <utility>  // for move
@@ -41,6 +41,7 @@
 #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker
 
 namespace amdinfer {
@@ -219,11 +220,11 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::PipelineEgressWorker);
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now() -
-        batch->getTime(static_cast<int>(j)));
+      util::Timer timer{batch->getTime(j)};
+      timer.stop();
+      auto duration = timer.count<std::micro>();
       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration.count());
+                                            duration);
 #endif
     }
   }
