@@ -65,17 +65,20 @@ class TestTfZendnn:
     Test the TfZendnn worker
     """
 
-    model = "TfZendnn"
-    parameters = {
-        "model": amdinfer.testing.getPathToAsset("tf_resnet50"),
-        "input_node": "input",
-        "output_node": "resnet_v1_50/predictions/Reshape_1",
-        "input_size": 224,
-        "output_classes": 1000,
-        "inter_op": 64,
-        "intra_op": 1,
-        "batch_size": 8,
-    }
+    @staticmethod
+    def get_config():
+        model = "TfZendnn"
+        parameters = {
+            "model": amdinfer.testing.getPathToAsset("tf_resnet50"),
+            "input_node": "input",
+            "output_node": "resnet_v1_50/predictions/Reshape_1",
+            "input_size": 224,
+            "output_classes": 1000,
+            "inter_op": 64,
+            "intra_op": 1,
+            "batch_size": 8,
+        }
+        return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
         """

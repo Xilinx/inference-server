@@ -27,8 +27,11 @@ class TestEcho:
     Test the Echo worker
     """
 
-    model = "echo"
-    parameters = None
+    @staticmethod
+    def get_config():
+        model = "echo"
+        parameters = None
+        return (model, parameters)
 
     inputs = [3]
     golden_outputs = [4]

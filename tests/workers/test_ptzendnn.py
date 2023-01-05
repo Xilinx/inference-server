@@ -71,13 +71,16 @@ class TestPtZendnn:
     Test the PtZendnn worker
     """
 
-    model = "PtZendnn"
-    parameters = {
-        "model": amdinfer.testing.getPathToAsset("pt_resnet50"),
-        "input_size": 224,
-        "output_classes": 1000,
-        "batch_size": 8,
-    }
+    @staticmethod
+    def get_config():
+        model = "PtZendnn"
+        parameters = {
+            "model": amdinfer.testing.getPathToAsset("pt_resnet50"),
+            "input_size": 224,
+            "output_classes": 1000,
+            "batch_size": 8,
+        }
+        return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
         """

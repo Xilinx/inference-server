@@ -208,8 +208,7 @@ def server(xprocess, request):
 
 @pytest.fixture(scope="class")
 def load(request, server):
-    test_model: str = request.cls.model
-    test_parameters: dict = request.cls.parameters
+    test_model, test_parameters = request.cls.get_config()
 
     assert test_model
 

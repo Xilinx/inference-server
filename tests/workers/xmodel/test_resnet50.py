@@ -60,8 +60,11 @@ class TestXmodel:
     Test the Xmodel worker
     """
 
-    model = "Xmodel"
-    parameters = {"model": amdinfer.testing.getPathToAsset("u250_resnet50")}
+    @staticmethod
+    def get_config():
+        model = "Xmodel"
+        parameters = {"model": amdinfer.testing.getPathToAsset("u250_resnet50")}
+        return (model, parameters)
 
     def test_xmodel_0(self):
         """

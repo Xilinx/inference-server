@@ -32,11 +32,14 @@ class TestInferImageFacedetectDPUCADF8H:
     Test the facedetect worker
     """
 
-    model = "AksDetect"
-    parameters = {
-        "aks_graph_name": "facedetect",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
-    }
+    @staticmethod
+    def get_config():
+        model = "AksDetect"
+        parameters = {
+            "aks_graph_name": "facedetect",
+            "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
+        }
+        return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
         """

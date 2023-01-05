@@ -31,8 +31,11 @@ class TestResnet50Stream:
     Test the Resnet50Stream
     """
 
-    model = "Resnet50Stream"
-    parameters = None
+    @staticmethod
+    def get_config():
+        model = "Resnet50Stream"
+        parameters = None
+        return (model, parameters)
 
     def construct_request(self, requested_frames_count):
         video_path = amdinfer.testing.getPathToAsset("asset_Physicsworks.ogv")

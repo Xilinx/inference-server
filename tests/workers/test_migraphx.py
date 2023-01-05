@@ -74,8 +74,11 @@ class TestMigraphx:
     Test the Migraphx worker
     """
 
-    model = "Migraphx"
-    parameters = {"model": amdinfer.testing.getPathToAsset("onnx_resnet50")}
+    @staticmethod
+    def get_config():
+        model = "Migraphx"
+        parameters = {"model": amdinfer.testing.getPathToAsset("onnx_resnet50")}
+        return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
         """

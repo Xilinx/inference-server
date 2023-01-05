@@ -24,8 +24,11 @@ class TestEchoMulti:
     Test the EchoMulti worker
     """
 
-    model = "echoMulti"
-    parameters = {"batch_size": 2, "timeout": 1000}
+    @staticmethod
+    def get_config():
+        model = "echoMulti"
+        parameters = {"batch_size": 2, "timeout": 1000}
+        return (model, parameters)
 
     inputs = [[3], [2, 7]]
     golden_outputs = [[3], [2, 7, 3, 2], [7, 3, 2]]
