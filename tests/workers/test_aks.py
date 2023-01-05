@@ -22,8 +22,11 @@ import amdinfer
 @pytest.mark.usefixtures("load")
 @pytest.mark.extensions(["aks", "vitis"])
 class TestAks:
-    model = "aks"
-    parameters = {"batch_size": 1}
+    @staticmethod
+    def get_config():
+        model = "aks"
+        parameters = {"batch_size": 1}
+        return (model, parameters)
 
     def test_aks_0(self):
         numbers = [3.0]

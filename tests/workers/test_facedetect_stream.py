@@ -29,11 +29,14 @@ class TestFacedetectStream:
     Test the streaming version of facedetect
     """
 
-    model = "AksDetectStream"
-    parameters = {
-        "aks_graph_name": "facedetect",
-        "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
-    }
+    @staticmethod
+    def get_config():
+        model = "AksDetectStream"
+        parameters = {
+            "aks_graph_name": "facedetect",
+            "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
+        }
+        return (model, parameters)
 
     def construct_request(self, requested_frames_count):
         asset_key = "asset_Physicsworks.ogv"

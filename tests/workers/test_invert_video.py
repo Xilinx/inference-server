@@ -31,8 +31,11 @@ class TestInvertVideo:
     Test the InvertVideo
     """
 
-    model = "InvertVideo"
-    parameters = None
+    @staticmethod
+    def get_config():
+        model = "InvertVideo"
+        parameters = None
+        return (model, parameters)
 
     def construct_request(self, video_path, requested_frames_count):
         input_0 = amdinfer.InferenceRequestInput()

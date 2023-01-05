@@ -56,8 +56,11 @@ class TestInvertImage:
     Test the InvertImage worker
     """
 
-    model = "InvertImage"
-    parameters = None
+    @staticmethod
+    def get_config():
+        model = "InvertImage"
+        parameters = None
+        return (model, parameters)
 
     def send_request(self, request, image):
         """
