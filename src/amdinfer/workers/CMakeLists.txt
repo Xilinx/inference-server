@@ -90,7 +90,9 @@ if(${AMDINFER_ENABLE_TFZENDNN})
   target_include_directories(
     workerTfzendnn SYSTEM PRIVATE /usr/include/tfzendnn
   )
-  target_link_libraries(workerTfzendnn PRIVATE tensorflow_cc)
+  target_link_libraries(
+    workerTfzendnn PRIVATE tensorflow_cc tensorflow_framework
+  )
 endif()
 
 if(${AMDINFER_ENABLE_PTZENDNN})
