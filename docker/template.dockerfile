@@ -372,7 +372,7 @@ RUN VERSION=0.15.0 \
 
 # install opentelemetry 1.1.0 for tracing
 RUN VERSION=1.1.0 \
-    && wget https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
+    && wget --quiet https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd opentelemetry-cpp-${VERSION} \
     && mkdir build && cd build \
@@ -414,8 +414,10 @@ RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc
     && rm -fr /tmp/*
 
 # install efsw for directory monitoring
-RUN git clone https://github.com/SpartanJ/efsw.git \
-    && cd efsw && mkdir build && cd build \
+RUN COMMIT=6b51944994b5c77dbd7edce66846e378a3bf4d8e \
+    && wget --quiet https://github.com/SpartanJ/efsw/archive/${COMMIT}.tar.gz \
+    && tar -xzf ${COMMIT}.tar.gz \
+    && cd efsw-${COMMIT}/ && mkdir build && cd build \
     && cmake .. \
     && make -j \
     && make install \
@@ -540,23 +542,12 @@ FROM common_builder AS tfzendnn_builder
 
 ARG COPY_DIR
 ARG MANIFESTS_DIR
-ARG TFZENDNN_PATH
 WORKDIR /tmp
 
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-COPY $TFZENDNN_PATH /tmp/
-
-RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \
-    && unzip $(basename $TFZENDNN_PATH) \
-    && cd $(basename ${TFZENDNN_PATH%.*}) \
-    # To avoid protobuf version issues, create subfolder and copy include files
-    && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \
-    && mkdir -p ${COPY_DIR}/usr/lib \
-    # copy and list files that are copied
-    && cp -rv include/* ${COPY_DIR}/usr/include/tfzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/tfzendnn.txt \
-    && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/tfzendnn.txt
+$[BUILD_TFZENDNN]
 
 FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_no
 
@@ -570,38 +561,12 @@ FROM common_builder AS ptzendnn_builder
 
 ARG COPY_DIR
 ARG MANIFESTS_DIR
-ARG PTZENDNN_PATH
 WORKDIR /tmp
 
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-COPY $PTZENDNN_PATH /tmp/
-
-RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \
-    && unzip $(basename $PTZENDNN_PATH) \
-    && cd $(basename ${PTZENDNN_PATH%.*}) \
-    # To avoid protobuf version issues, create subfolder and copy include files
-    && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \
-    && mkdir -p ${COPY_DIR}/usr/lib \
-    # copy and list files that are copied
-    && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/ptzendnn.txt \
-    && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/ptzendnn.txt
-
-# build jemalloc 5.3.0. Build uses autoconf implicitly
-RUN VERSION=5.3.0 \
-    && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/${VERSION}.tar.gz \
-    && tar -xzf ${VERSION}.tar.gz \
-    && cd jemalloc-${VERSION} && ./autogen.sh \
-    && make -j \
-    && INSTALL_DIR=/tmp/installed \
-    && mkdir -p ${INSTALL_DIR} \
-    && make install DESTDIR=${INSTALL_DIR} \
-    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
-    && cp -rP ${INSTALL_DIR}/* / \
-    && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
-    && cd /tmp \
-    && rm -rf /tmp/*
+$[BUILD_PTZENDNN]
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 

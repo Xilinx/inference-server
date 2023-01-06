@@ -14,6 +14,8 @@
 
 import abc
 import argparse
+import importlib.machinery
+import importlib.util
 import pathlib
 import sys
 import textwrap
@@ -419,6 +421,57 @@ def install_vitis(manager: PackageManager):
     )
 
 
+def build_tfzendnn():
+    return textwrap.dedent(
+        """\
+        ARG TFZENDNN_PATH
+        COPY $TFZENDNN_PATH /tmp/
+
+        RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \\
+            && unzip $(basename $TFZENDNN_PATH) \\
+            && cd $(basename ${TFZENDNN_PATH%.*}) \\
+            # To avoid protobuf version issues, create subfolder and copy include files
+            && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \\
+            && mkdir -p ${COPY_DIR}/usr/lib \\
+            # copy and list files that are copied
+            && cp -rv include/* ${COPY_DIR}/usr/include/tfzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/tfzendnn.txt \\
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/tfzendnn.txt"""
+    )
+
+
+def build_ptzendnn():
+    return textwrap.dedent(
+        """\
+        ARG PTZENDNN_PATH
+        COPY $PTZENDNN_PATH /tmp/
+
+        RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \\
+            && unzip $(basename $PTZENDNN_PATH) \\
+            && cd $(basename ${PTZENDNN_PATH%.*}) \\
+            # To avoid protobuf version issues, create subfolder and copy include files
+            && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \\
+            && mkdir -p ${COPY_DIR}/usr/lib \\
+            # copy and list files that are copied
+            && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/ptzendnn.txt \\
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/ptzendnn.txt
+
+        # build jemalloc 5.3.0. Build uses autoconf implicitly
+        RUN VERSION=5.3.0 \\
+            && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/${VERSION}.tar.gz \\
+            && tar -xzf ${VERSION}.tar.gz \\
+            && cd jemalloc-${VERSION} && ./autogen.sh \\
+            && make -j \\
+            && INSTALL_DIR=/tmp/installed \\
+            && mkdir -p ${INSTALL_DIR} \\
+            && make install DESTDIR=${INSTALL_DIR} \\
+            && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \\
+            && cp -rP ${INSTALL_DIR}/* / \\
+            && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \\
+            && cd /tmp \\
+            && rm -rf /tmp/*"""
+    )
+
+
 def install_dev_packages(manager: PackageManager, core):
     if manager.name == "apt":
         if not core:
@@ -609,6 +662,13 @@ def install_python_packages():
 
 
 def generate(args: argparse.Namespace):
+    if args.nightly:
+        # https://stackoverflow.com/a/19011259
+        loader = importlib.machinery.SourceFileLoader("nightly", args.nightly)
+        spec = importlib.util.spec_from_loader(loader.name, loader)
+        nightly_lib = importlib.util.module_from_spec(spec)
+        loader.exec_module(nightly_lib)
+
     template = pathlib.Path(__file__).parent.resolve() / "template.dockerfile"
     with open(template, "r") as f:
         dockerfile = f.read()
@@ -652,6 +712,20 @@ def generate(args: argparse.Namespace):
     dockerfile = dockerfile.replace("$[INSTALL_XRT]", install_xrt(manager))
 
     dockerfile = dockerfile.replace("$[INSTALL_VITIS]", install_vitis(manager))
+
+    if args.nightly:
+        dockerfile = dockerfile.replace(
+            "$[BUILD_TFZENDNN]", nightly_lib.build_tfzendnn()
+        )
+    else:
+        dockerfile = dockerfile.replace("$[BUILD_TFZENDNN]", build_tfzendnn())
+
+    if args.nightly:
+        dockerfile = dockerfile.replace(
+            "$[BUILD_PTZENDNN]", nightly_lib.build_ptzendnn()
+        )
+    else:
+        dockerfile = dockerfile.replace("$[BUILD_PTZENDNN]", build_ptzendnn())
 
     dockerfile = dockerfile.replace(
         "$[INSTALL_DEV_PACKAGES]", install_dev_packages(manager, args.core)
@@ -720,6 +794,12 @@ def get_parser():
         "--cibuildwheel",
         action="store_true",
         help="build for cibuildwheel",
+    )
+    command_group.add_argument(
+        "--nightly",
+        action="store",
+        default="",
+        help="path to a custom script for building and installing backends",
     )
     command_group.add_argument(
         "--output-name",
