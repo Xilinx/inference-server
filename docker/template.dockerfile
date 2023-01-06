@@ -119,7 +119,7 @@ RUN VERSION=3.19.4 \
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install pybind11 2.9.1 - used by Vitis AI
+# install pybind11 2.9.1 - used by Vitis AI and inference server
 RUN VERSION=2.9.1 \
     && wget https://github.com/pybind/pybind11/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
@@ -464,57 +464,10 @@ ARG TARGETPLATFORM
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-# install json-c 0.15 for Vitis AI runtime
-RUN wget --quiet https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
-    && tar -xzf json-c-0.15-20200726.tar.gz \
-    && cd json-c-json-c-0.15-20200726 \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-        -DBUILD_SHARED_LIBS=ON \
-        -DBUILD_STATIC_LIBS=OFF \
-        -DBUILD_TESTING=OFF \
-        -DCMAKE_BUILD_TYPE=Release \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/json-c.txt
-
 # Install XRT and XRM
 $[INSTALL_XRT]
 
-# Install Vitis AI runtime and build dependencies
-RUN git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
-    && export VITIS_ROOT=/tmp/Vitis-AI/src/Vitis-AI-Runtime/VART \
-    && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
-    cd ${VITIS_ROOT}/unilog \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/unilog.txt \
-    && cd ${VITIS_ROOT}/xir \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build --build-python \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/xir.txt \
-    && cd ${VITIS_ROOT}/target_factory \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/target_factory.txt \
-    && cd ${VITIS_ROOT}/vart \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --cmake-options="-DBUILD_TEST=OFF" --build-python --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/vart.txt \
-    && cd ${VITIS_ROOT}/rt-engine \
-    # find the required components. Adding this was needed when using Boost from Ubuntu apt repositories
-    && sed -i '42i find_package(Boost COMPONENTS system filesystem thread serialization)' ./CMakeLists.txt \
-    && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --cmake-options="-DBUILD_TESTS=OFF" --install-prefix /usr/local/ \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/rt-engine.txt \
-    && cd /tmp/Vitis-AI/src/AKS \
-    # fix bug in AKS
-    && sed -i '46i _global = nullptr;' ./src/AksTopContainer.cpp \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/aks.txt
+$[BUILD_VITIS]
 
 RUN COMMIT=e5c51b541d5cbcf353d4165499103f5e6d7e7ea9 \
     && wget --quiet https://github.com/fpagliughi/sockpp/archive/${COMMIT}.tar.gz \
