@@ -490,8 +490,8 @@ def build_tfzendnn():
         COPY $TFZENDNN_PATH /tmp/
 
         RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \\
-            && unzip $(basename $TFZENDNN_PATH) \\
-            && cd $(basename ${TFZENDNN_PATH%.*}) \\
+            && unzip -q -d ./tfzendnn $(basename $TFZENDNN_PATH) \\
+            && cd ./tfzendnn/*/ \\
             # To avoid protobuf version issues, create subfolder and copy include files
             && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
@@ -508,8 +508,8 @@ def build_ptzendnn():
         COPY $PTZENDNN_PATH /tmp/
 
         RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \\
-            && unzip $(basename $PTZENDNN_PATH) \\
-            && cd $(basename ${PTZENDNN_PATH%.*}) \\
+            && unzip -q -d ./ptzendnn $(basename $PTZENDNN_PATH) \\
+            && cd ./ptzendnn/*/ \\
             # To avoid protobuf version issues, create subfolder and copy include files
             && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
@@ -770,7 +770,12 @@ def generate(args: argparse.Namespace):
     else:
         dockerfile = dockerfile.replace("$[BUILD_OPTIONAL]", build_optional())
 
-    dockerfile = dockerfile.replace("$[INSTALL_XRT]", install_xrt(manager))
+    if args.nightly:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_XRT]", install_xrt(manager, nightly_lib)
+        )
+    else:
+        dockerfile = dockerfile.replace("$[INSTALL_XRT]", install_xrt(manager, None))
 
     if args.nightly:
         dockerfile = dockerfile.replace("$[BUILD_VITIS]", nightly_lib.build_vitis())
