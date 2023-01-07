@@ -321,12 +321,12 @@ def get_xrm_xrt_packages(package_manager):
     raise ValueError(f"Unknown base image type: {package_manager}")
 
 
-def install_xrt(manager: PackageManager, nightly):
+def install_xrt(manager: PackageManager, custom_backends):
 
     packages = (
         get_xrm_xrt_packages(manager.name)
-        if nightly is None
-        else nightly.get_xrm_xrt_packages(manager.name)
+        if custom_backends is None
+        else custom_backends.get_xrm_xrt_packages(manager.name)
     )
 
     return textwrap.dedent(
@@ -634,14 +634,22 @@ def install_dev_packages(manager: PackageManager, core):
     )
 
 
-def install_migraphx(manager: PackageManager, nightly):
+def install_migraphx(manager: PackageManager, custom_backends):
     migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.4.1/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
     migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.4.1/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
 
     if manager.name == "apt":
-        add_repo = migraphx_apt_repo if nightly is None else nightly.migraphx_apt_repo
+        add_repo = (
+            migraphx_apt_repo
+            if custom_backends is None
+            else custom_backends.migraphx_apt_repo
+        )
     elif manager.name == "yum":
-        add_repo = migraphx_yum_repo if nightly is None else nightly.migraphx_yum_repo
+        add_repo = (
+            migraphx_yum_repo
+            if custom_backends is None
+            else custom_backends.migraphx_yum_repo
+        )
     else:
         raise ValueError(f"Unknown base image type: {manager.name}")
 
@@ -723,12 +731,14 @@ def install_python_packages():
 
 
 def generate(args: argparse.Namespace):
-    if args.nightly:
+    if args.custom_backends:
         # https://stackoverflow.com/a/19011259
-        loader = importlib.machinery.SourceFileLoader("nightly", args.nightly)
+        loader = importlib.machinery.SourceFileLoader(
+            "custom_backends", args.custom_backends
+        )
         spec = importlib.util.spec_from_loader(loader.name, loader)
-        nightly_lib = importlib.util.module_from_spec(spec)
-        loader.exec_module(nightly_lib)
+        custom_backends = importlib.util.module_from_spec(spec)
+        loader.exec_module(custom_backends)
 
     template = pathlib.Path(__file__).parent.resolve() / "template.dockerfile"
     with open(template, "r") as f:
@@ -770,30 +780,30 @@ def generate(args: argparse.Namespace):
     else:
         dockerfile = dockerfile.replace("$[BUILD_OPTIONAL]", build_optional())
 
-    if args.nightly:
+    if args.custom_backends:
         dockerfile = dockerfile.replace(
-            "$[INSTALL_XRT]", install_xrt(manager, nightly_lib)
+            "$[INSTALL_XRT]", install_xrt(manager, custom_backends)
         )
     else:
         dockerfile = dockerfile.replace("$[INSTALL_XRT]", install_xrt(manager, None))
 
-    if args.nightly:
-        dockerfile = dockerfile.replace("$[BUILD_VITIS]", nightly_lib.build_vitis())
+    if args.custom_backends:
+        dockerfile = dockerfile.replace("$[BUILD_VITIS]", custom_backends.build_vitis())
     else:
         dockerfile = dockerfile.replace("$[BUILD_VITIS]", build_vitis())
 
     dockerfile = dockerfile.replace("$[INSTALL_VITIS]", install_vitis(manager))
 
-    if args.nightly:
+    if args.custom_backends:
         dockerfile = dockerfile.replace(
-            "$[BUILD_TFZENDNN]", nightly_lib.build_tfzendnn()
+            "$[BUILD_TFZENDNN]", custom_backends.build_tfzendnn()
         )
     else:
         dockerfile = dockerfile.replace("$[BUILD_TFZENDNN]", build_tfzendnn())
 
-    if args.nightly:
+    if args.custom_backends:
         dockerfile = dockerfile.replace(
-            "$[BUILD_PTZENDNN]", nightly_lib.build_ptzendnn()
+            "$[BUILD_PTZENDNN]", custom_backends.build_ptzendnn()
         )
     else:
         dockerfile = dockerfile.replace("$[BUILD_PTZENDNN]", build_ptzendnn())
@@ -811,9 +821,9 @@ def generate(args: argparse.Namespace):
             "$[INSTALL_PYTHON_PACKAGES]", install_python_packages()
         )
 
-    if args.nightly:
+    if args.custom_backends:
         dockerfile = dockerfile.replace(
-            "$[INSTALL_MIGRAPHX]", install_migraphx(manager, nightly_lib)
+            "$[INSTALL_MIGRAPHX]", install_migraphx(manager, custom_backends)
         )
     else:
         dockerfile = dockerfile.replace(
@@ -874,7 +884,7 @@ def get_parser():
         help="build for cibuildwheel",
     )
     command_group.add_argument(
-        "--nightly",
+        "--custom-backends",
         action="store",
         default="",
         help="path to a custom script for building and installing backends",

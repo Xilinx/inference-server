@@ -40,6 +40,8 @@ Added
 - Add batch size flag to examples (:pr:`94`)
 - Add Kubernetes test for KServe (:pr:`95`)
 - Use exhale to generate Python API documentation (:pr:`95`)
+- OpenAPI spec for REST protocol (:pr:`100`)
+- Use a timer for simpler time measurement (:pr:`104`)
 
 Changed
 ^^^^^^^
@@ -52,6 +54,18 @@ Changed
 - Reorganize Python library (:pr:`88`)
 - Rename 'proteus' to 'amdinfer' (:pr:`91`)
 - Use Ubuntu 20.04 by default for Docker (:pr:`97`)
+- Bump up to ROCm 5.4.1 (:pr:`99`)
+- Some function names changed for style (:pr:`102`)
+
+Deprecated
+^^^^^^^^^^
+
+- ALL_CAPS style enums for the DataType (:pr:`102`)
+
+Removed
+^^^^^^^
+
+- Mappings between XIR data types <-> inference server data types from public API (:pr:`102`)
 
 Fixed
 ^^^^^
@@ -61,6 +75,8 @@ Fixed
 - Align gRPC responses using non-gRPC-native data types with other input protocols (:pr:`81`)
 - Fix the Manager's destructor (:pr:`88`)
 - Fix using ``--no-user-config`` with ``proteus run`` (:pr:`89`)
+- Handle assigning user permissions if the host UID is same as UID in container (:pr:`101`)
+- Fix test discovery if some test assets are missing (:pr:`105`)
 
 :github:`0.2.0 <Xilinx/inference-server/releases/tag/v0.2.0>` - 2022-08-05
 --------------------------------------------------------------------------
