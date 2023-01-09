@@ -26,7 +26,6 @@ services:
     image: $IMAGE
     ports:
       - 127.0.0.1::8998 # used for amdinfer server
-      - 127.0.0.1::3000 # used for gui development
     stdin_open: true
     tty: true
     volumes:

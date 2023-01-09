@@ -66,11 +66,6 @@ add_custom_command(
   TARGET doxygen
   POST_BUILD
   COMMENT
-    "Linking ${DOXYGEN_OUTPUT_DIR} to the gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
-  COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen
-  COMMAND cp -rfs ${DOXYGEN_OUTPUT_DIR} ${PROJECT_SOURCE_DIR}/src/gui/public/
-  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/doxygen > /dev/null
-  COMMENT
     "Linking ${DOXYGEN_OUTPUT_DIR} to global docs at ${PROJECT_SOURCE_DIR}/build/docs/doxygen"
   COMMAND mkdir -p ${PROJECT_SOURCE_DIR}/build/docs
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/build/docs/doxygen
@@ -106,11 +101,6 @@ add_custom_target(sphinx DEPENDS ${SPHINX_INDEX_FILE})
 add_custom_command(
   TARGET sphinx
   POST_BUILD
-  COMMENT
-    "Linking ${SPHINX_BUILD} to gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
-  COMMAND rm -rf ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx
-  COMMAND cp -rfs ${SPHINX_BUILD} ${PROJECT_SOURCE_DIR}/src/gui/public/
-  COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/sphinx > /dev/null
   COMMENT
     "Linking ${SPHINX_BUILD} to global docs at ${PROJECT_SOURCE_DIR}/build/docs/sphinx"
   COMMAND rm -rf ${PROJECT_SOURCE_DIR}/build/docs/sphinx

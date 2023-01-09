@@ -172,7 +172,7 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp git-lfs/git-lfs ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
 
-# install NodeJS 14.16.0 for web gui development
+# install NodeJS 14.16.0 for web gui development and gh-pages
 RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         archive="node-v14.16.0-linux-x64.tar.xz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
@@ -613,8 +613,6 @@ RUN ldconfig \
     && ./amdinfer install \
     && ./amdinfer install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && ./amdinfer install --get-manifest > ${MANIFESTS_DIR}/amdinfer.txt \
-    # build the static GUI files
-    # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
     && cd ${AMDINFER_ROOT} \
     && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} > ${MANIFESTS_DIR}/prod.txt \
@@ -667,8 +665,6 @@ WORKDIR /home/${UNAME}
 # get all the installed files: the server, workers, C++ headers and dependencies
 COPY --from=builder_prod ${COPY_DIR} /
 
-# get the static gui files
-# COPY --from=builder_prod $AMDINFER_ROOT/src/gui/build/ /opt/xilinx/amdinfer/gui/
 # get the entrypoint script
 COPY --from=builder_prod $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the systemctl executable - pulled in by get_dynamic_dependencies.sh
