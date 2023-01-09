@@ -29,11 +29,12 @@
 #include <xir/util/data_type.hpp>  // for DataType, DataType::FLOAT, DataTyp...
 #endif
 
+#ifdef AMDINFER_ENABLE_VITIS
+
 namespace amdinfer {
 
 const auto kBitsInByte = 8;
 
-#ifdef AMDINFER_ENABLE_VITIS
 DataType mapXirToType(xir::DataType type) {
   auto data_type = type.type;
   size_t width = type.bit_width / kBitsInByte;
@@ -111,6 +112,6 @@ xir::DataType mapTypeToXir(DataType type) {
   return retval;
 }
 
-#endif
-
 }  // namespace amdinfer
+
+#endif
