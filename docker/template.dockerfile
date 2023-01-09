@@ -172,6 +172,20 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp git-lfs/git-lfs ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
 
+# install NodeJS 14.16.0 for web gui development and gh-pages
+RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
+        archive="node-v14.16.0-linux-x64.tar.xz"; \
+    elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
+        archive="node-v14.16.0-linux-arm64.tar.xz"; \
+    else false; fi; \
+    url="https://nodejs.org/dist/v14.16.0/${archive}" \
+    && wget --quiet ${url} \
+    && tar --strip-components=1 -xf ${archive} -C /usr/local \
+    && tar --strip-components=1 -xf ${archive} -C ${COPY_DIR}/usr/local \
+    # strip the leading directory and add /usr/local/
+    && ar -tf ${archive} | sed 's,^[^/]*/,/usr/local/,' > ${MANIFESTS_DIR}/nodejs.txt \
+    && rm -rf /tmp/*
+
 # install cxxopts 2.2.1 for argument parsing
 RUN wget --quiet https://github.com/jarro2783/cxxopts/archive/refs/tags/v2.2.1.tar.gz \
     && tar -xzf v2.2.1.tar.gz \
