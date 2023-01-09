@@ -172,10 +172,6 @@ configure_file(
   src/amdinfer/build_options.hpp.in
   ${PROJECT_SOURCE_DIR}/include/amdinfer/build_options.hpp
 )
-configure_file(
-  src/gui/src/build_options.ts.in
-  ${PROJECT_SOURCE_DIR}/src/gui/src/build_options.ts
-)
 if(NOT EXISTS ${PROJECT_SOURCE_DIR}/tools/benchmark.yml)
   configure_file(
     tools/benchmark.yml.in ${PROJECT_SOURCE_DIR}/tools/benchmark.yml

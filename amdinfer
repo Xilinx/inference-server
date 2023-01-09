@@ -521,16 +521,6 @@ class Clean:
             "rm -f external/aks/cmake-kernels.sh",
             "rm -rf external/aks/libs",
         ]
-        if args.gui:
-            commands.extend(
-                [
-                    "rm -rf src/gui/node_modules",
-                    "rm -rf src/gui/public/coverage",
-                    "rm -rf src/gui/public/doxygen",
-                    "rm -rf src/gui/public/sphinx",
-                    "rm -f src/gui/src/build_options.ts",
-                ]
-            )
         if args.artifacts:
             commands.append("rm -rf external/artifacts/*")
 
@@ -555,12 +545,6 @@ class Clean:
             help="Delete downloaded artifacts",
         )
         command_group.add_argument("-h", "--help", action="help", help=help_message)
-        command_group.add_argument(
-            "--no-gui",
-            dest="gui",
-            action="store_false",
-            help="Don't clean web GUI/nodeJS related files",
-        )
 
         subparser.set_defaults(func=cls.parse)
 

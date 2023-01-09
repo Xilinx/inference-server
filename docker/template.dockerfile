@@ -119,7 +119,7 @@ RUN VERSION=3.19.4 \
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install pybind11 2.9.1 - used by Vitis AI
+# install pybind11 2.9.1 - used by Vitis AI and inference server
 RUN VERSION=2.9.1 \
     && wget https://github.com/pybind/pybind11/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
@@ -172,7 +172,7 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     && mkdir -p ${COPY_DIR}/usr/local/bin/ && cp git-lfs/git-lfs ${COPY_DIR}/usr/local/bin/ \
     && rm -rf /tmp/*
 
-# install NodeJS 14.16.0 for web gui development
+# install NodeJS 14.16.0 for web gui development and gh-pages
 RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
         archive="node-v14.16.0-linux-x64.tar.xz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
@@ -372,7 +372,7 @@ RUN VERSION=0.15.0 \
 
 # install opentelemetry 1.1.0 for tracing
 RUN VERSION=1.1.0 \
-    && wget https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
+    && wget --quiet https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd opentelemetry-cpp-${VERSION} \
     && mkdir build && cd build \
@@ -414,8 +414,10 @@ RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc
     && rm -fr /tmp/*
 
 # install efsw for directory monitoring
-RUN git clone https://github.com/SpartanJ/efsw.git \
-    && cd efsw && mkdir build && cd build \
+RUN COMMIT=6b51944994b5c77dbd7edce66846e378a3bf4d8e \
+    && wget --quiet https://github.com/SpartanJ/efsw/archive/${COMMIT}.tar.gz \
+    && tar -xzf ${COMMIT}.tar.gz \
+    && cd efsw-${COMMIT}/ && mkdir build && cd build \
     && cmake .. \
     && make -j \
     && make install \
@@ -462,57 +464,10 @@ ARG TARGETPLATFORM
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-# install json-c 0.15 for Vitis AI runtime
-RUN wget --quiet https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \
-    && tar -xzf json-c-0.15-20200726.tar.gz \
-    && cd json-c-json-c-0.15-20200726 \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-        -DBUILD_SHARED_LIBS=ON \
-        -DBUILD_STATIC_LIBS=OFF \
-        -DBUILD_TESTING=OFF \
-        -DCMAKE_BUILD_TYPE=Release \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/json-c.txt
-
 # Install XRT and XRM
 $[INSTALL_XRT]
 
-# Install Vitis AI runtime and build dependencies
-RUN git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \
-    && export VITIS_ROOT=/tmp/Vitis-AI/src/Vitis-AI-Runtime/VART \
-    && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \
-    cd ${VITIS_ROOT}/unilog \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/unilog.txt \
-    && cd ${VITIS_ROOT}/xir \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build --build-python \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/xir.txt \
-    && cd ${VITIS_ROOT}/target_factory \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/target_factory.txt \
-    && cd ${VITIS_ROOT}/vart \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --cmake-options="-DBUILD_TEST=OFF" --build-python --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/vart.txt \
-    && cd ${VITIS_ROOT}/rt-engine \
-    # find the required components. Adding this was needed when using Boost from Ubuntu apt repositories
-    && sed -i '42i find_package(Boost COMPONENTS system filesystem thread serialization)' ./CMakeLists.txt \
-    && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --cmake-options="-DBUILD_TESTS=OFF" --install-prefix /usr/local/ \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/rt-engine.txt \
-    && cd /tmp/Vitis-AI/src/AKS \
-    # fix bug in AKS
-    && sed -i '46i _global = nullptr;' ./src/AksTopContainer.cpp \
-    && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \
-    && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/aks.txt
+$[BUILD_VITIS]
 
 RUN COMMIT=e5c51b541d5cbcf353d4165499103f5e6d7e7ea9 \
     && wget --quiet https://github.com/fpagliughi/sockpp/archive/${COMMIT}.tar.gz \
@@ -540,23 +495,12 @@ FROM common_builder AS tfzendnn_builder
 
 ARG COPY_DIR
 ARG MANIFESTS_DIR
-ARG TFZENDNN_PATH
 WORKDIR /tmp
 
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-COPY $TFZENDNN_PATH /tmp/
-
-RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \
-    && unzip $(basename $TFZENDNN_PATH) \
-    && cd $(basename ${TFZENDNN_PATH%.*}) \
-    # To avoid protobuf version issues, create subfolder and copy include files
-    && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \
-    && mkdir -p ${COPY_DIR}/usr/lib \
-    # copy and list files that are copied
-    && cp -rv include/* ${COPY_DIR}/usr/include/tfzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/tfzendnn.txt \
-    && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/tfzendnn.txt
+$[BUILD_TFZENDNN]
 
 FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_no
 
@@ -570,38 +514,12 @@ FROM common_builder AS ptzendnn_builder
 
 ARG COPY_DIR
 ARG MANIFESTS_DIR
-ARG PTZENDNN_PATH
 WORKDIR /tmp
 
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-COPY $PTZENDNN_PATH /tmp/
-
-RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \
-    && unzip $(basename $PTZENDNN_PATH) \
-    && cd $(basename ${PTZENDNN_PATH%.*}) \
-    # To avoid protobuf version issues, create subfolder and copy include files
-    && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \
-    && mkdir -p ${COPY_DIR}/usr/lib \
-    # copy and list files that are copied
-    && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/ptzendnn.txt \
-    && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/ptzendnn.txt
-
-# build jemalloc 5.3.0. Build uses autoconf implicitly
-RUN VERSION=5.3.0 \
-    && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/${VERSION}.tar.gz \
-    && tar -xzf ${VERSION}.tar.gz \
-    && cd jemalloc-${VERSION} && ./autogen.sh \
-    && make -j \
-    && INSTALL_DIR=/tmp/installed \
-    && mkdir -p ${INSTALL_DIR} \
-    && make install DESTDIR=${INSTALL_DIR} \
-    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \
-    && cp -rP ${INSTALL_DIR}/* / \
-    && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
-    && cd /tmp \
-    && rm -rf /tmp/*
+$[BUILD_PTZENDNN]
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 
@@ -695,8 +613,6 @@ RUN ldconfig \
     && ./amdinfer install \
     && ./amdinfer install --get-manifest | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && ./amdinfer install --get-manifest > ${MANIFESTS_DIR}/amdinfer.txt \
-    # build the static GUI files
-    # && cd src/gui && npm install && npm run build \
     # get all the runtime shared library dependencies for the server
     && cd ${AMDINFER_ROOT} \
     && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} > ${MANIFESTS_DIR}/prod.txt \
@@ -749,8 +665,6 @@ WORKDIR /home/${UNAME}
 # get all the installed files: the server, workers, C++ headers and dependencies
 COPY --from=builder_prod ${COPY_DIR} /
 
-# get the static gui files
-# COPY --from=builder_prod $AMDINFER_ROOT/src/gui/build/ /opt/xilinx/amdinfer/gui/
 # get the entrypoint script
 COPY --from=builder_prod $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 # get the systemctl executable - pulled in by get_dynamic_dependencies.sh

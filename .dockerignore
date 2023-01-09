@@ -62,15 +62,6 @@ tools/benchmark.yml
 .idea
 .devcontainer
 
-# gui ignores
-**/node_modules/
-src/gui/src/react-app-env.d.ts
-src/gui/src/build_options.ts
-src/gui/public/coverage
-src/gui/public/doxygen
-src/gui/public/sphinx
-**/.DS_Store
-
 # python ignores
 **/*.egg-info/
 **/*.pytest_cache/
