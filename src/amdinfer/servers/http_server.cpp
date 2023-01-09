@@ -67,7 +67,6 @@ void start(int port) {
 
   app.addListener("0.0.0.0", port)
     .setThreadNum(kDefaultDrogonThreads)
-    .setDocumentRoot("./src/gui/build")
     .registerPostHandlingAdvice([](const drogon::HttpRequestPtr &req,
                                    const drogon::HttpResponsePtr &resp) {
       (void)req;  // suppress unused variable warning

@@ -76,15 +76,18 @@
 #     - Fix BASE_DIRECTORY not working when defined
 #     - Change BYPRODUCT from folder to index.html to stop ninja from complaining about double defines
 #
-# 2021-03-16, Xilinx Inc.
+# 2021-03-16, Xilinx, Inc.
 #     - Add post-build command to lcov to link generated HTML to gui's directory
 #
-# 2021-08-24, Xilinx Inc.
+# 2021-08-24, Xilinx, Inc.
 #     - Delete empty .gcno files before using fastcov
 #     - Detect whether a Coverage build
 #
-# 2022-09-11, AMD Inc.
+# 2022-09-11, Advanced Micro Devices, Inc.
 #     - Formatting
+#
+# 2023-01-09, Advanced Micro Devices, Inc.
+#     - Removed post-build command to lcov to link generated HTML to gui's directory
 #
 # USAGE:
 #
@@ -417,18 +420,6 @@ function(setup_target_for_coverage_lcov)
     COMMAND ;
     COMMENT
       "Open ./${Coverage_NAME}/index.html in your browser to view the coverage report."
-  )
-
-  # Show info where to find the report
-  add_custom_command(
-    TARGET ${Coverage_NAME}
-    POST_BUILD
-    COMMAND cp -rfs ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_NAME}
-            ${PROJECT_SOURCE_DIR}/src/gui/public/
-    COMMAND symlinks -rc ${PROJECT_SOURCE_DIR}/src/gui/public/${Coverage_NAME} >
-            /dev/null
-    COMMENT
-      "Linking ${CMAKE_CURRENT_BINARY_DIR}/${Coverage_NAME} to gui at ${PROJECT_SOURCE_DIR}/src/gui/public/"
   )
 
 endfunction() # setup_target_for_coverage_lcov

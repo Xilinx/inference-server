@@ -42,6 +42,7 @@ Added
 - Use exhale to generate Python API documentation (:pr:`95`)
 - OpenAPI spec for REST protocol (:pr:`100`)
 - Use a timer for simpler time measurement (:pr:`104`)
+- Allow building containers with custom backend versions (:pr:`107`)
 
 Changed
 ^^^^^^^

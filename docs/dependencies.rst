@@ -172,7 +172,6 @@ The following packages are installed from Github.
     :github:`json-c/json-c`,0.15,MIT,Dynamically linked by Vitis libraries\ :superscript:`a 1`
     :github:`libb64/libb64`,2.0.0.1,Public Domain Certification,Statically linked by amdinfer-server for base64 codec\ :superscript:`a 0`
     :github:`linux-test-project/lcov`,1.15,GPL-2,Executable used for test coverage measurement\ :superscript:`d 0`
-    :github:`nodejs/node`,14.16.0,MIT + others,Executable used for web GUI development\ :superscript:`d 0`
     :github:`opencv/opencv`,3.4.3,Apache 2.0,Dynamically linked by amdinfer-server for image and video processing\ :superscript:`a 0`
     :github:`open-telemetry/opentelemetry-cpp`,1.1.0,Apache 2.0,Dynamically linked by amdinfer-server\ :superscript:`a 0`
     :github:`pybind/pybind11`,2.9.1,BSD-3,Headers used to build Python bindings\ :superscript:`d 0`
