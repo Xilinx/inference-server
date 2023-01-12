@@ -404,7 +404,7 @@ amdinfer::workers::Worker* getWorker() {
   // protobuf used in the inference server rather than from
   // tensorflow_framework. Using DEEPBIND addresses this problem so the protobuf
   // symbols get found correctly.
-  openLibrary("libtensorflow_cc.so", RTLD_LOCAL | RTLD_LAZY | RTLD_DEEPBIND);
+  openLibrary("libtensorflow_cc.so", RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND);
 
   return new amdinfer::workers::TfZendnn("TfZendnn", "cpu");
 }

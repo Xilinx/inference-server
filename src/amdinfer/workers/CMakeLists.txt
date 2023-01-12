@@ -88,7 +88,7 @@ if(${AMDINFER_ENABLE_TFZENDNN})
     workerTfzendnn SYSTEM BEFORE PRIVATE /usr/include/tfzendnn
   )
   target_link_libraries(
-    # not linking to tensoerflow libraries (see the tfzendnn worker)
+    # not linking to tensorflow libraries (see the tfzendnn worker)
     workerTfzendnn PRIVATE ${CMAKE_DL_LIBS}
   )
 endif()
