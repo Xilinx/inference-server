@@ -43,3 +43,5 @@ set_target_properties(util PROPERTIES OUTPUT_NAME amdinfer-util)
 set_target_properties(
   util PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/..
 )
+
+set(UTIL_OBJS ${UTIL_OBJS} PARENT_SCOPE)

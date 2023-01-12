@@ -645,12 +645,17 @@ class GrpcServer final {
   ~GrpcServer() {
     server_->Shutdown();
     // Always shutdown the completion queues after the server.
-    for (auto& cq : cq_) {
+    for (const auto& cq : cq_) {
       cq->Shutdown();
-      // drain the completion queue to prevent assertion errors in grpc
       void* tag = nullptr;
       bool ok = false;
       while (cq->Next(&tag, &ok)) {
+        // drain the completion queue to prevent assertion errors in grpc
+      }
+    }
+    for (auto& thread : threads_) {
+      if (thread.joinable()) {
+        thread.join();
       }
     }
   }
@@ -676,14 +681,12 @@ class GrpcServer final {
     // Start threads to handle incoming RPCs
     for (auto i = 0; i < cq_count; i++) {
       threads_.emplace_back(&GrpcServer::handleRpcs, this, i);
-      // just detach threads for now to simplify shutdown
-      threads_.back().detach();
     }
   }
 
   // This can be run in multiple threads if needed.
   void handleRpcs(int index) {
-    auto& my_cq = cq_.at(index);
+    const auto& my_cq = cq_.at(index);
 
     // Spawn a new CallData instance to serve new clients.
     new CallDataServerLive(&service_, my_cq.get());
@@ -702,6 +705,11 @@ class GrpcServer final {
     void* tag = nullptr;  // uniquely identifies a request.
     bool ok = false;
     while (true) {
+      // the gRPC is shutting down in this case
+      if (my_cq == nullptr) {
+        return;
+      }
+
       // Block waiting to read the next event from the completion queue. The
       // event is uniquely identified by its tag, which in this case is the
       // memory address of a CallDataBase instance.

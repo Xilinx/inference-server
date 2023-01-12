@@ -17,7 +17,8 @@
  * @brief Implements the TfZendnn worker
  */
 
-#include <tensorflow/c/c_api.h>                         // for TF_Version
+#include <dlfcn.h>               // for dlerror, dlopen, dlsym, RTLD...
+#include <tensorflow/c/c_api.h>  // for TF_Version
 #include <tensorflow/core/framework/graph.pb.h>         // for GraphDef
 #include <tensorflow/core/framework/tensor.h>           // for Tensor
 #include <tensorflow/core/framework/tensor_shape.h>     // for TensorShape
@@ -377,12 +378,34 @@ void TfZendnn::doRelease() {
 void TfZendnn::doDeallocate() {}
 void TfZendnn::doDestroy() {}
 
+void* openLibrary(const char* library, int dlopen_flags) {
+  void* handle = dlopen(library, dlopen_flags);
+  if (handle == nullptr) {
+    const char* error_str = dlerror();
+    throw amdinfer::file_not_found_error(error_str);
+  }
+  return handle;
+}
+
 }  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
+  using amdinfer::workers::openLibrary;
+  // Due to the DEEPBIND change for tensorflow_cc.so below, OMP now gives a
+  // segfault unexpectedly if the server is run from Python. Preloading iomp
+  // without DEEPBIND addresses this problem.
+  openLibrary("libiomp5.so", RTLD_LOCAL | RTLD_LAZY);
+  // Upcoming changes in Tensorflow move the Protobuf symbols defined in this
+  // library to another library called tensorflow_framework.so. AT runtime,
+  // tensorflow_cc then resolves its missing protobuf symbols against the
+  // protobuf used in the inference server rather than from
+  // tensorflow_framework. Using DEEPBIND addresses this problem so the protobuf
+  // symbols get found correctly.
+  openLibrary("libtensorflow_cc.so", RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND);
+
   return new amdinfer::workers::TfZendnn("TfZendnn", "cpu");
 }
 }  // extern C

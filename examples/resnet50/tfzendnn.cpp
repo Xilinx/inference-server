@@ -115,7 +115,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // a particular backend. This guard checks to make sure the server does
   // support the requested backend. If you already know it's supported, you can
   // skip this check.
-  if (!serverHasExtension(client, "ptzendnn")) {
+  if (!serverHasExtension(client, "tfzendnn")) {
     std::cerr
       << "TF+ZenDNN is not enabled. Please recompile with it enabled to "
       << "run this example\n";
