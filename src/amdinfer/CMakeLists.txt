@@ -22,7 +22,7 @@ set_target_properties(
 )
 
 target_link_libraries(
-  amdinfer-server-exe PRIVATE batching clients core observation util servers
+  amdinfer-server-exe PRIVATE amdinfer Jsoncpp_lib Drogon::Drogon
 )
 
 add_subdirectory(batching)
@@ -55,23 +55,29 @@ add_library(
   ${HELPER_OBJS}
   ${OBSERVATION_OBJS}
   ${SERVER_OBJS}
+  ${UTIL_OBJS}
 )
 target_link_libraries(
-  amdinfer PRIVATE batching clients core observation util servers
+  amdinfer PRIVATE batching clients core observation servers util
 )
 
 add_library(
-  amdinfer-server ${TYPE} ${BATCHING_OBJS} ${CORE_OBJS} ${HELPER_OBJS}
-                  ${OBSERVATION_OBJS} ${SERVER_OBJS}
+  amdinfer-server
+  ${TYPE}
+  ${BATCHING_OBJS}
+  ${CORE_OBJS}
+  ${HELPER_OBJS}
+  ${OBSERVATION_OBJS}
+  ${SERVER_OBJS}
+  ${UTIL_OBJS}
 )
-target_link_libraries(
-  amdinfer-server PRIVATE batching core observation util servers
-)
+target_link_libraries(amdinfer-server PRIVATE batching core observation servers)
 
 add_library(
   amdinfer-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
+                  ${UTIL_OBJS}
 )
-target_link_libraries(amdinfer-client PRIVATE clients core observation util)
+target_link_libraries(amdinfer-client PRIVATE clients core observation)
 
 set(output_libraries amdinfer amdinfer-server amdinfer-client)
 foreach(lib ${output_libraries})

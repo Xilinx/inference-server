@@ -31,7 +31,7 @@ foreach(target ${targets})
   list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
-target_link_libraries(server PRIVATE Jsoncpp_lib core)
+target_link_libraries(server PRIVATE Jsoncpp_lib core observation)
 
 if(${AMDINFER_ENABLE_AKS})
   target_link_libraries(server INTERFACE aks)

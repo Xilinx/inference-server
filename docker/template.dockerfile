@@ -602,6 +602,7 @@ ARG MANIFESTS_DIR
 ARG AMDINFER_ROOT
 ARG ENABLE_VITIS
 ARG ENABLE_MIGRAPHX
+ARG ENABLE_TFZENDNN
 
 COPY . $AMDINFER_ROOT
 
@@ -615,8 +616,9 @@ RUN ldconfig \
     && ./amdinfer install --get-manifest > ${MANIFESTS_DIR}/amdinfer.txt \
     # get all the runtime shared library dependencies for the server
     && cd ${AMDINFER_ROOT} \
-    && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} > ${MANIFESTS_DIR}/prod.txt \
-    && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS}
+    # --migraphx is not passed since it's installed from debians below
+    && ./docker/get_dynamic_dependencies.sh --vitis ${ENABLE_VITIS} --tfzendnn ${ENABLE_TFZENDNN} > ${MANIFESTS_DIR}/prod.txt \
+    && ./docker/get_dynamic_dependencies.sh --copy ${COPY_DIR} --vitis ${ENABLE_VITIS} --tfzendnn ${ENABLE_TFZENDNN}
 
 FROM ${BASE_IMAGE} AS vitis_installer_prod_yes
 
