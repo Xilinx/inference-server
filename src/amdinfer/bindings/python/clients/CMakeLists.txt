@@ -29,10 +29,7 @@ foreach(target ${targets})
     ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..
                          ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
   )
-  target_link_libraries(
-    ${target}_py PRIVATE ${Python_LIBRARIES} ${target}
-                         $<TARGET_OBJECTS:${target}>
-  )
+  target_link_libraries(${target}_py PRIVATE ${Python_LIBRARIES} amdinfer)
   add_dependencies(${target}_py pybind11Mkdoc)
 
   set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)

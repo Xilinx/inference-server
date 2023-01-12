@@ -15,10 +15,22 @@
 
 import functools
 import multiprocessing as mp
+import os
 import sys
 import time
 
+# By default, Python uses only RTLD_NOW as the dlopen flag. When using
+# RTLD_DEEPBIND to open shared libraries from the inference server, specifying
+# RTLD_GLOBAL is needed for the loaded library to resolve symbols from the main
+# library. RTLD_LAZY is added to match the settings used for dlopen in C++.
+# RTLD_DEEPBIND cannot be added here. You get a segmentation fault from Pybind11
+# if you do so.
+flags = sys.getdlopenflags()
+sys.setdlopenflags(os.RTLD_GLOBAL | os.RTLD_LAZY)
+
 from ._amdinfer import *
+
+sys.setdlopenflags(flags)
 
 
 def _set_data(input_n, image):

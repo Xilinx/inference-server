@@ -56,10 +56,7 @@ foreach(worker ${workers})
   set(worker_name worker${worker_pascal})
 
   add_library(${worker_name} SHARED ${file_name}.cpp)
-  target_link_options(${worker_name} PUBLIC "LINKER:-E")
-  target_link_libraries(
-    ${worker_name} PRIVATE batching buffers core observation timer
-  )
+  target_link_libraries(${worker_name} PRIVATE buffers)
   target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(${worker_name})
 
@@ -88,9 +85,12 @@ endif()
 
 if(${AMDINFER_ENABLE_TFZENDNN})
   target_include_directories(
-    workerTfzendnn SYSTEM PRIVATE /usr/include/tfzendnn
+    workerTfzendnn SYSTEM BEFORE PRIVATE /usr/include/tfzendnn
   )
-  target_link_libraries(workerTfzendnn PRIVATE tensorflow_cc)
+  target_link_libraries(
+    # not linking to tensoerflow libraries (see the tfzendnn worker)
+    workerTfzendnn PRIVATE ${CMAKE_DL_LIBS}
+  )
 endif()
 
 if(${AMDINFER_ENABLE_PTZENDNN})
@@ -123,19 +123,8 @@ if(${AMDINFER_ENABLE_AKS})
     add_library(${worker_name} SHARED ${file_name}.cpp)
     target_link_options(${worker_name} PUBLIC "LINKER:-E")
     target_link_libraries(
-      ${worker_name}
-      PRIVATE batching
-              buffers
-              core
-              base64
-              parse_env
-              timer
-              observation
-              aks
-              vart-runner
-              xir
-              opencv_core
-              opencv_imgcodecs
+      ${worker_name} PRIVATE buffers aks vart-runner xir opencv_core
+                             opencv_imgcodecs
     )
     target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
     add_dependencies(${worker_name} aks-kernels)
@@ -151,11 +140,7 @@ if(${AMDINFER_ENABLE_AKS})
 
   # AKS Worker
   add_library(workerAks SHARED aks.cpp)
-  target_link_options(workerAks PUBLIC "LINKER:-E")
-  target_link_libraries(
-    workerAks PRIVATE batching buffers core parse_env observation
-    PRIVATE aks vart-runner xir timer
-  )
+  target_link_libraries(workerAks PRIVATE buffers aks vart-runner xir timer)
   target_include_directories(workerAks PRIVATE ${AMDINFER_INCLUDE_DIRS})
   enable_ipo_on_target(workerAks)
   list(APPEND WORKER_TARGETS workerAks)

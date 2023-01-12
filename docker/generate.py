@@ -496,8 +496,8 @@ def build_tfzendnn():
             && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
             # copy and list files that are copied
-            && cp -rv include/* ${COPY_DIR}/usr/include/tfzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/tfzendnn.txt \\
-            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/tfzendnn.txt"""
+            && cp -rv include/* ${COPY_DIR}/usr/include/tfzendnn | cut -d"'" -f 2 | sed 's/include/\/usr\/include\/tfzendnn/' > ${MANIFESTS_DIR}/tfzendnn.txt \\
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/tfzendnn.txt"""
     )
 
 
@@ -514,8 +514,8 @@ def build_ptzendnn():
             && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
             # copy and list files that are copied
-            && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 4 > ${MANIFESTS_DIR}/ptzendnn.txt \\
-            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 4 >> ${MANIFESTS_DIR}/ptzendnn.txt
+            && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 2 | sed 's/include/\/usr\/include\/ptzendnn/' > ${MANIFESTS_DIR}/ptzendnn.txt \\
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt
 
         # build jemalloc 5.3.0. Build uses autoconf implicitly
         RUN VERSION=5.3.0 \\

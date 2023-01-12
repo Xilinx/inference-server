@@ -40,7 +40,7 @@ endif()
 project(
   amdinfer
   VERSION ${ver_major}.${ver_minor}.${ver_patch}
-  LANGUAGES CXX
+  LANGUAGES C CXX
   DESCRIPTION "AMDinfer inference library and server"
 )
 
@@ -54,12 +54,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
   set(CMAKE_CXX_LINKER_WRAPPER_FLAG "-Wl,")
   add_link_options("LINKER:--as-needed")
-  if(NOT SKBUILD)
-    # For manylinux builds, the Python extension is intentionally not linked
-    # against Python at compile time so we need to allow undefined symbols
-    add_link_options("LINKER:--no-undefined")
-    add_link_options("LINKER:--no-allow-shlib-undefined")
-  endif()
+  # cannot use linker options like --no-undefined and --no-allow-shlib-undefined
+  # because for manylinux builds, the Python extension is intentionally not
+  # linked against Python at compile time so we need to allow undefined symbols.
+  # The workers are also not fully linked either.
   set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Coverage"
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
