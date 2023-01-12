@@ -197,6 +197,19 @@ add_migraphx_deps() {
   done
 }
 
+add_tfzendnn_deps() {
+  # these files are opened with dlopen in the tfzendnn worker and so don't show
+  # up with ldd
+  other_files=(
+    /lib/libiomp5.so
+    /lib/libtensorflow_cc.so
+  )
+
+  for file in ${other_files[@]}; do
+    get_dependencies $file
+  done
+}
+
 add_other_bins() {
   # any other binary dependencies needed
 
@@ -234,6 +247,7 @@ main() {
   COPY=""
   VITIS=""
   MIGRAPHX=""
+  TFZENDNN=""
 
   # Parse Options
   while true; do
@@ -248,6 +262,7 @@ main() {
       "-c" | "--copy" ) COPY=$2    ; shift 2 ;;
       "--vitis"       ) VITIS=$2   ; shift 2 ;;
       "--migraphx"    ) MIGRAPHX=$2; shift 2 ;;
+      "--tfzendnn"    ) TFZENDNN=$2; shift 2 ;;
       *) break;;
     esac
   done
@@ -263,6 +278,10 @@ main() {
 
   if [[ $MIGRAPHX == "yes" ]]; then
     add_migraphx_deps
+  fi
+
+  if [[ $TFZENDNN == "yes" ]]; then
+    add_tfzendnn_deps
   fi
 
   add_other_bins
