@@ -513,22 +513,7 @@ def build_ptzendnn():
             && mkdir -p ${COPY_DIR}/usr/lib \\
             # copy and list files that are copied
             && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 2 | sed 's/include/\/usr\/include\/ptzendnn/' > ${MANIFESTS_DIR}/ptzendnn.txt \\
-            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt
-
-        # build jemalloc 5.3.0. Build uses autoconf implicitly
-        RUN VERSION=5.3.0 \\
-            && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/${VERSION}.tar.gz \\
-            && tar -xzf ${VERSION}.tar.gz \\
-            && cd jemalloc-${VERSION} && ./autogen.sh \\
-            && make -j \\
-            && INSTALL_DIR=/tmp/installed \\
-            && mkdir -p ${INSTALL_DIR} \\
-            && make install DESTDIR=${INSTALL_DIR} \\
-            && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \\
-            && cp -rP ${INSTALL_DIR}/* / \\
-            && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \\
-            && cd /tmp \\
-            && rm -rf /tmp/*"""
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt"""
     )
 
 
