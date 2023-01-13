@@ -398,6 +398,8 @@ amdinfer::workers::Worker* getWorker() {
   // segfault unexpectedly if the server is run from Python. Preloading iomp
   // without DEEPBIND addresses this problem.
   openLibrary("libiomp5.so", RTLD_LOCAL | RTLD_LAZY);
+  openLibrary("libtensorflow_framework.so",
+              RTLD_LOCAL | RTLD_LAZY | RTLD_DEEPBIND);
   // Upcoming changes in Tensorflow move the Protobuf symbols defined in this
   // library to another library called tensorflow_framework.so. AT runtime,
   // tensorflow_cc then resolves its missing protobuf symbols against the

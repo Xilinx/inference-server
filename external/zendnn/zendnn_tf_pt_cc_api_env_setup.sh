@@ -20,7 +20,6 @@
 #                 before before using the tf-zendnn or pt-zendnn c++ api library
 #
 #   This script does following:
-#   -Checks if important env variables are declared
 #   -Sets important environment variables for benchmarking
 #----------------------------------------------------------------------------
 
@@ -81,10 +80,6 @@ echo "ZENDNN_INT8_SUPPORT=$ZENDNN_INT8_SUPPORT"
 export ZENDNN_GEMM_ALGO=3
 echo "ZENDNN_GEMM_ALGO=$ZENDNN_GEMM_ALGO"
 
-# INT8 support  is disabled by default
-export ZENDNN_INT8_SUPPORT=0
-echo "ZENDNN_INT8_SUPPORT=$ZENDNN_INT8_SUPPORT"
-
 # Switch to enable Conv, Add fusion on users discretion. Currently it is
 # safe to enable this switch for resnet50v1_5, resnet101, and
 # inception_resnet_v2 models only. By default the switch is disabled.
@@ -106,5 +101,9 @@ echo "ZENDNN_PRIMITIVE_CACHE_CAPACITY: $ZENDNN_PRIMITIVE_CACHE_CAPACITY"
 # Enable primitive create and primitive execute logs. By default it is disabled
 export ZENDNN_PRIMITIVE_LOG_ENABLE=0
 echo "ZENDNN_PRIMITIVE_LOG_ENABLE: $ZENDNN_PRIMITIVE_LOG_ENABLE"
+
+# The system can have high utilization after inference if this isn't specified
+export KMP_BLOCKTIME=200
+echo "KMP_BLOCKTIME=$KMP_BLOCKTIME"
 
 sleep 1

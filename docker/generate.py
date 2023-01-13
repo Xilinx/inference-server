@@ -489,9 +489,8 @@ def build_tfzendnn():
         ARG TFZENDNN_PATH
         COPY $TFZENDNN_PATH /tmp/
 
-        RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \\
-            && unzip -q -d ./tfzendnn $(basename $TFZENDNN_PATH) \\
-            && cd ./tfzendnn/*/ \\
+        RUN unzip -q $(basename $TFZENDNN_PATH) \\
+            && cd $(basename ${TFZENDNN_PATH%.*}) \\
             # To avoid protobuf version issues, create subfolder and copy include files
             && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
@@ -507,9 +506,8 @@ def build_ptzendnn():
         ARG PTZENDNN_PATH
         COPY $PTZENDNN_PATH /tmp/
 
-        RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \\
-            && unzip -q -d ./ptzendnn $(basename $PTZENDNN_PATH) \\
-            && cd ./ptzendnn/*/ \\
+        RUN unzip -q $(basename $PTZENDNN_PATH) \\
+            && cd $(basename ${PTZENDNN_PATH%.*}) \\
             # To avoid protobuf version issues, create subfolder and copy include files
             && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
