@@ -27,13 +27,13 @@ fi
 
 # if the user has mounted any files/directories into /workspace, get the UID/GID
 # from the first found one and use it to adjust the UID/GID of amdinfer-user
-# Changing UID/GID taken from https://stackoverflow.com/a/46057716
+# similar to https://github.com/sudo-bmitch/docker-base/blob/main/bin/fix-perms
 for dir in /workspace/*; do  # lists the absolute path to the file/directory
   if [ ! -d "$dir" ] && [ ! -f "$dir" ]; then
     continue
   fi
 
-  # get uid/gid
+  # get uid/gid of the mounted path
   USER_UID=$(ls -nd $dir | cut -f3 -d' ')
   USER_GID=$(ls -nd $dir | cut -f4 -d' ')
 

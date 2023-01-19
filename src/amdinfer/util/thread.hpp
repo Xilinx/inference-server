@@ -26,8 +26,7 @@ namespace amdinfer::util {
 /**
  * @brief Attempt to set the calling thread's name. Note, this may or may not
  * succeed. If renaming is not possible, it should silently fail without error.
- * There is some discussion here on a cross-platform implementation:
- * https://stackoverflow.com/a/23899379
+ * There is some discussion on a cross-platform implementation (23899379)
  *
  * @param name Name to set to the thread. If it is >16 bytes, it is silently
  * truncated.

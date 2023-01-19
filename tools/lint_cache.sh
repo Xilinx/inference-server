@@ -106,17 +106,36 @@ run_tidy() {
     clang-tidy -format-style=file -p=${build_dir} --extra-arg "-DCV_STATIC_ANALYSIS=0" $source_file
 }
 
+check_iwyu() {
+    source_file="$1"
+    cache_entry="$2"
+
+    # iwyu prints ... should add ... when changes needed
+    if grep "should add" $cache_entry; then
+        cat $cache_entry
+    fi
+}
+
+check_tidy() {
+    source_file="$1"
+    cache_entry="$2"
+
+    # tidy prints the file name when changes needed
+    if grep $source_file $cache_entry; then
+        cat $cache_entry
+    fi
+}
+
 check() {
     source_file="$1"
     linter="$2"
+    cmd="$3"
 
     # strip the root_dir from the source file path
     relative_path=${source_file##${root_dir}/}
     cache_entry="$cache_dir/$linter/$relative_path"
     if [[ -f "$cache_entry" ]]; then
-        if grep $source_file $cache_entry; then
-            cat $cache_entry
-        fi
+        $cmd $source_file $cache_entry
     fi
 }
 
@@ -176,10 +195,10 @@ wait
 for source_file in ${source_files[@]}; do
     if [[ $check == 1 ]]; then
         if [[ "$tool" == "iwyu" ]]; then
-            check $source_file iwyu
+            check $source_file iwyu check_iwyu
         fi
         if [[ "$tool" == "tidy" ]]; then
-            check $source_file tidy
+            check $source_file tidy check_tidy
         fi
     fi
 done

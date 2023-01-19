@@ -33,18 +33,19 @@
 namespace amdinfer {
 
 namespace detail {
-// taken from https://stackoverflow.com/a/46711735
-// used for hashing strings for switch statements
-constexpr unsigned int hash(std::string_view str) {
-  const int initial_hash = 5381;
-  const int shift = 5;
+// used for hashing strings for switch statements. Assuming lowercase, uppercase
+// and numbers (26 + 26 + 10 chars) < 2^7 options per char and string length <
+// 9 chars
+constexpr uint64_t hash(std::string_view str) {
+  const int shift = 7;    // <2^7 options per char
+  const int offset = 47;  // 0 in ascii corresponds to 48 so map it to 1
 
   const auto* const data = str.data();
   const auto size = str.size();
 
-  uint32_t hash = initial_hash;
-  for (const char* c = data; c < data + size; ++c) {
-    hash = ((hash << shift) + hash) + static_cast<int>(*c);
+  uint64_t hash = static_cast<int>(*data);
+  for (const char* c = data + 1; c < data + size; ++c) {
+    hash = (hash << shift) + static_cast<int>(*c) - offset;
   }
   return hash;
 }

@@ -715,7 +715,8 @@ def install_python_packages():
 
 def generate(args: argparse.Namespace):
     if args.custom_backends:
-        # https://stackoverflow.com/a/19011259
+        # load a specific python file without consideration about modules/
+        # packages
         loader = importlib.machinery.SourceFileLoader(
             "custom_backends", args.custom_backends
         )
