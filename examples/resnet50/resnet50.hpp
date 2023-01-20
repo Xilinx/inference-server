@@ -39,6 +39,7 @@ struct Args {
   std::string ip = "127.0.0.1";
   uint16_t http_port = kHttpPort;
   uint16_t grpc_port = kGrpcPort;
+  std::string endpoint;
   int top = kTop;
   int input_size = kSize;
   int output_classes = kOutputClasses;
@@ -67,6 +68,8 @@ inline Args parseArgs(int argc, char** argv) {
       cxxopts::value(args.http_port))
     ("grpc-port", "Port to use for gRPC server",
       cxxopts::value(args.grpc_port))
+    ("endpoint", "Endpoint to use for inference. If empty, load a worker first",
+      cxxopts::value(args.endpoint))
     ("input-size", "Size of the square image in pixels",
       cxxopts::value(args.input_size))
     ("input-node", "Name of the input node",

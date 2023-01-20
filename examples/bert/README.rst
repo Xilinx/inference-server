@@ -18,6 +18,7 @@ BERT
 
 This example demonstrates how to make an inference using a BERT model with the MIGraphX backend in the inference server.
 Install the requirements to run this example with ``pip install -r requirements.txt``
+Use ``--help`` to see the available flags.
 
 Files
 ^^^^^

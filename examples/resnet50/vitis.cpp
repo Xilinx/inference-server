@@ -204,8 +204,19 @@ int main(int argc, char* argv[]) {
     std::cout << "Waiting until the server is ready...\n";
     amdinfer::waitUntilServerReady(&client);
 
-    std::cout << "Loading worker...\n";
-    std::string endpoint = load(&client, args);
+    std::string endpoint;
+    if (!args.endpoint.empty()) {
+      endpoint = args.endpoint;
+      if (!client.modelReady(endpoint)) {
+        std::cerr << "Model at " << endpoint
+                  << " does not exist or isn't ready. Verify the endpoint or "
+                     "omit the --endpoint flag to load a new worker\n";
+        return 1;
+      }
+    } else {
+      std::cout << "Loading worker...\n";
+      endpoint = load(&client, args);
+    }
     // +wait model ready:
     amdinfer::waitUntilModelReady(&client, endpoint);
     // -wait model ready:

@@ -213,8 +213,15 @@ def main(args):
     amdinfer.waitUntilServerReady(client)
     print("OK. Connected.")
 
-    print("Loading worker...")
-    endpoint = load(client, args)
+    if args.endpoint:
+        endpoint = args.endpoint
+        if not client.modelReady(endpoint):
+            raise ValueError(
+                f"Model at {endpoint} does not exist or isn't ready. Verify the endpoint or omit the --endpoint flag to load a new worker"
+            )
+    else:
+        print("Loading worker...")
+        endpoint = load(client, args)
 
     # Use read_squad_examples method from run_onnx_squad to read the input file
     eval_examples = read_squad_examples(input_file=args.input)

@@ -73,6 +73,12 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--endpoint",
+        default="",
+        help="Endpoint to use for inference. If empty, load a worker first",
+    )
+
+    parser.add_argument(
         "--top",
         default=5,
         type=int,

@@ -161,8 +161,15 @@ def main(args):
     print("Waiting until the server is ready...")
     amdinfer.waitUntilServerReady(client)
 
-    print("Loading worker...")
-    endpoint = load(client, args)
+    if args.endpoint:
+        endpoint = args.endpoint
+        if not client.modelReady(endpoint):
+            raise ValueError(
+                f"Model at {endpoint} does not exist or isn't ready. Verify the endpoint or omit the --endpoint flag to load a new worker"
+            )
+    else:
+        print("Loading worker...")
+        endpoint = load(client, args)
 
     print("Preprocessing...")
     paths = resolve_image_paths(pathlib.Path(args.image))

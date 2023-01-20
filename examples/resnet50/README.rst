@@ -25,6 +25,7 @@ ResNet50 is a classification model that accepts a single input tensor that conta
 For this image, it returns the probabilities that the image can be classified as any of its output classes.
 The number of output classes depends on the dataset that the network is trained on.
 In these examples, the default model is trained on the ImageNet dataset and has 1000 output classes.
+Use ``--help`` to see the available flags.
 
 Files
 ^^^^^

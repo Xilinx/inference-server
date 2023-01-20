@@ -85,6 +85,12 @@ def parse_args():
         help="Port to use for gRPC server",
     )
 
+    parser.add_argument(
+        "--endpoint",
+        default="",
+        help="Endpoint to use for inference. If empty, load a worker first",
+    )
+
     args = parser.parse_args()
 
     if (not args.image) or (not args.model) or (not args.labels) or (not args.anchors):
