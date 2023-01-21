@@ -189,6 +189,9 @@ int main(int argc, char* argv[]) {
     amdinfer::waitUntilServerReady(&client);
     // -create client
 
+    if (!args.endpoint.empty()) {
+      std::cout << "Ignoring the --endpoint flag when using the NativeClient\n";
+    }
     std::cout << "Loading worker...\n";
     std::string endpoint = load(&client, args);
 

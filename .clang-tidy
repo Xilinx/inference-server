@@ -59,7 +59,7 @@ Checks: >
 #   Alias for cppcoreguidelines-pro-bounds-array-to-pointer-decay
 #
 # hicpp-signed-bitwise
-#   This check is needlessly pedantic (https://stackoverflow.com/a/58845898)
+#   This check is needlessly pedantic (https://bugs.llvm.org/show_bug.cgi?id=36961#c9)
 #
 # llvm-header-guard
 #   Doesn't seem to be satisfied easily

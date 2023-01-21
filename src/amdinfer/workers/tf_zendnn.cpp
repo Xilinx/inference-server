@@ -399,11 +399,12 @@ amdinfer::workers::Worker* getWorker() {
   // without DEEPBIND addresses this problem.
   openLibrary("libiomp5.so", RTLD_LOCAL | RTLD_LAZY);
   // Upcoming changes in Tensorflow move the Protobuf symbols defined in this
-  // library to another library called tensorflow_framework.so. AT runtime,
-  // tensorflow_cc then resolves its missing protobuf symbols against the
-  // protobuf used in the inference server rather than from
-  // tensorflow_framework. Using DEEPBIND addresses this problem so the protobuf
-  // symbols get found correctly.
+  // library to another library called tensorflow_framework.so. At runtime,
+  // tensorflow_cc should resolve its missing protobuf symbols against this
+  // library but instead it finds the protobuf used in the inference server.
+  // Using DEEPBIND addresses this problem so the protobuf symbols get found
+  // correctly when this library uses its own dependencies to resolve missing
+  // symbols before the global scope.
   openLibrary("libtensorflow_cc.so", RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND);
 
   return new amdinfer::workers::TfZendnn("TfZendnn", "cpu");

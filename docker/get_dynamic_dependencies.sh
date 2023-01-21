@@ -203,6 +203,7 @@ add_tfzendnn_deps() {
   other_files=(
     /lib/libiomp5.so
     /lib/libtensorflow_cc.so
+    /lib/libtensorflow_framework.so
   )
 
   for file in ${other_files[@]}; do

@@ -84,8 +84,7 @@ using UpdateCommandQueue = BlockingQueue<std::shared_ptr<UpdateCommand>>;
  * @brief The Manager holds all the state information about a running
  * amdinfer-server. Read access to the state is thread-safe but all
  * modifications are handled through a separate update thread to preserve
- * consistency. It is a singleton instance and the base code is taken from
- * https://stackoverflow.com/a/1008289.
+ * consistency. It is a singleton instance
  */
 class Manager {
  public:

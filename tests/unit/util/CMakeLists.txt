@@ -1,5 +1,4 @@
-# Copyright 2022 Xilinx, Inc.
-# Copyright 2022 Advanced Micro Devices, Inc.
+# Copyright 2023 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(batching)
-add_subdirectory(buffers)
-add_subdirectory(clients)
-add_subdirectory(core)
-add_subdirectory(util)
+list(APPEND tests compression exec)
+
+list(APPEND tests_libs "compression" "exec")
+
+amdinfer_add_unit_tests("${tests}" "${tests_libs}")

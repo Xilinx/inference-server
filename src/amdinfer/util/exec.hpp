@@ -21,8 +21,7 @@
 namespace amdinfer::util {
 
 /**
- * @brief Execute an arbitrary command on the command line.
- * Taken from https://stackoverflow.com/a/478960
+ * @brief Execute an arbitrary external process
  *
  * @param cmd command to run
  * @return std::string output of the command (stdout)

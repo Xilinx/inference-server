@@ -156,6 +156,8 @@ def main(args):
     client = amdinfer.NativeClient()
     amdinfer.waitUntilServerReady(client)
 
+    if args.endpoint:
+        print("Ignoring the --endpoint flag when using the NativeClient")
     print("Loading worker...")
     endpoint = load(client, args)
 

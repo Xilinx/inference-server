@@ -489,9 +489,8 @@ def build_tfzendnn():
         ARG TFZENDNN_PATH
         COPY $TFZENDNN_PATH /tmp/
 
-        RUN echo "51b3b4093775ff2b67e06f18d01b41ac  $(basename $TFZENDNN_PATH)" | md5sum -c - \\
-            && unzip -q -d ./tfzendnn $(basename $TFZENDNN_PATH) \\
-            && cd ./tfzendnn/*/ \\
+        RUN unzip -q $(basename $TFZENDNN_PATH) \\
+            && cd $(basename ${TFZENDNN_PATH%.*}) \\
             # To avoid protobuf version issues, create subfolder and copy include files
             && mkdir -p ${COPY_DIR}/usr/include/tfzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
@@ -507,30 +506,14 @@ def build_ptzendnn():
         ARG PTZENDNN_PATH
         COPY $PTZENDNN_PATH /tmp/
 
-        RUN echo "a191f2305f1cae6e00c82a1071df9708  $(basename $PTZENDNN_PATH)" | md5sum -c - \\
-            && unzip -q -d ./ptzendnn $(basename $PTZENDNN_PATH) \\
-            && cd ./ptzendnn/*/ \\
+        RUN unzip -q $(basename $PTZENDNN_PATH) \\
+            && cd $(basename ${PTZENDNN_PATH%.*}) \\
             # To avoid protobuf version issues, create subfolder and copy include files
             && mkdir -p ${COPY_DIR}/usr/include/ptzendnn/ \\
             && mkdir -p ${COPY_DIR}/usr/lib \\
             # copy and list files that are copied
             && cp -rv include/* ${COPY_DIR}/usr/include/ptzendnn | cut -d"'" -f 2 | sed 's/include/\/usr\/include\/ptzendnn/' > ${MANIFESTS_DIR}/ptzendnn.txt \\
-            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt
-
-        # build jemalloc 5.3.0. Build uses autoconf implicitly
-        RUN VERSION=5.3.0 \\
-            && wget -q https://github.com/jemalloc/jemalloc/archive/refs/tags/${VERSION}.tar.gz \\
-            && tar -xzf ${VERSION}.tar.gz \\
-            && cd jemalloc-${VERSION} && ./autogen.sh \\
-            && make -j \\
-            && INSTALL_DIR=/tmp/installed \\
-            && mkdir -p ${INSTALL_DIR} \\
-            && make install DESTDIR=${INSTALL_DIR} \\
-            && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/jemalloc.txt \\
-            && cp -rP ${INSTALL_DIR}/* / \\
-            && cat ${MANIFESTS_DIR}/jemalloc.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \\
-            && cd /tmp \\
-            && rm -rf /tmp/*"""
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt"""
     )
 
 
@@ -732,7 +715,8 @@ def install_python_packages():
 
 def generate(args: argparse.Namespace):
     if args.custom_backends:
-        # https://stackoverflow.com/a/19011259
+        # load a specific python file without consideration about modules/
+        # packages
         loader = importlib.machinery.SourceFileLoader(
             "custom_backends", args.custom_backends
         )

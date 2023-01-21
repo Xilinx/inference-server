@@ -80,7 +80,6 @@ if ! copy_files "test"; then
   exit 1
 fi
 
-# https://stackoverflow.com/a/3232082
 read -r -p "Are you sure? [y/N] " response
 response=${response,,} # to lower
 if [[ "$response" =~ ^(yes|y)$ ]]; then

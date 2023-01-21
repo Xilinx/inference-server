@@ -63,14 +63,12 @@ void* findFunc(const std::string& func, const std::string& so_path) {
     - Cannot use std::cout in the library
       (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=42679)
     - std::regex gives a segfault
-  There are many SO posts reporting problems related to issues with DEEPBIND:
-    - https://stackoverflow.com/a/49018967
-    - https://stackoverflow.com/q/63666660
+  There are many SO posts reporting problems related to issues with DEEPBIND
   The motivation to add DEEPBIND is to isolate the loaded workers. For example,
   if the library is using a different version of a library that we are already
   using, it can link to the wrong version. Another option for isolating the
   workers is dlmopen but that also should not be used here due to its own set of
-  issues (https://stackoverflow.com/a/70043234).
+  issues (https://sourceware.org/bugzilla/show_bug.cgi?id=24776).
   */
   void* handle = dlopen(so_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
   if (handle == nullptr) {

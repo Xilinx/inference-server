@@ -21,8 +21,7 @@
 namespace amdinfer::util {
 
 /**
- * @brief Inflate a deflated (i.e. compressed) argument with zlib. Taken from
- * https://stackoverflow.com/a/50082615
+ * @brief Inflate a deflated (i.e. compressed) argument with zlib
  *
  * @param str the deflated string as a char*
  * @param len length of the deflated string

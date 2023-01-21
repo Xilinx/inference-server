@@ -162,7 +162,6 @@ print_banner
 
 if [ $TFZENDNN_FOUND -eq 1 ]; then
     echo "TF+ZenDNN found."
-    ZENDNN_FOUND=1
 fi
 
 if [ $PTZENDNN_FOUND -eq 1 ]; then
@@ -172,5 +171,5 @@ fi
 if [ $TFZENDNN_FOUND -eq 1 ] || [ $PTZENDNN_FOUND -eq 1 ]; then
     echo "Please set below environment variables explicitly as per the platform you are using!!"
     echo -e "\tOMP_NUM_THREADS, GOMP_CPU_AFFINITY"
-    echo "Please refer to documentation available at developer.amd.com/zendnn for performance"
+    echo "Please refer to documentation available at https://www.amd.com/en/developer/zendnn.html for performance"
 fi

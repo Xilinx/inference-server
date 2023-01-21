@@ -246,5 +246,13 @@
       "\"torch/script.h\"",
       "public"
     ]
+  },
+  {
+    "include": [
+      "@<boost/process/.*>",
+      "private",
+      "<boost/process.hpp>",
+      "public"
+    ]
   }
 ]

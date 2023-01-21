@@ -22,7 +22,7 @@ namespace amdinfer::util {
 
 /**
  * @brief Similar to std::is_same, returns true if T is any of the types in the
- * variadic expression. Taken from https://stackoverflow.com/a/39550575/13621369
+ * variadic expression
  *
  * @tparam T base type to check
  * @tparam Ts list of types to compare against

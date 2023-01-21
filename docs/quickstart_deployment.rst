@@ -34,7 +34,7 @@ The deployment image is optimized for size and only contains the runtime depende
 It has limited debugging capabilities and it contains a precompiled binary for the server that automatically starts when the container starts.
 In contrast, the development image is far larger in size because it also contains the build-time dependencies of the server.
 It allows you to compile the server and build the `amdinfer` library.
-You can build either the :ref:`deployment <docker:Build the production Docker image>` or development image using a script.
+You can build either the :ref:`deployment <docker:Build the production Docker image>` or :ref:`development image <quickstart_development:Build or get the Docker image>` using a script.
 
 Deploying on Docker
 -------------------

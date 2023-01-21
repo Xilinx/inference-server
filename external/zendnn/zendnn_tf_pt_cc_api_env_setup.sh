@@ -20,52 +20,27 @@
 #                 before before using the tf-zendnn or pt-zendnn c++ api library
 #
 #   This script does following:
-#   -Checks if important env variables are declared
 #   -Sets important environment variables for benchmarking
 #----------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
 
-if [ -z "$ZENDNN_LOG_OPTS" ];
-then
-    export ZENDNN_LOG_OPTS=ALL:0
-    echo "ZENDNN_LOG_OPTS=$ZENDNN_LOG_OPTS"
-else
-    echo "ZENDNN_LOG_OPTS=$ZENDNN_LOG_OPTS"
-fi
+export ZENDNN_LOG_OPTS=ALL:0
+echo "ZENDNN_LOG_OPTS=$ZENDNN_LOG_OPTS"
 
-if [ -z "$OMP_NUM_THREADS" ];
-then
-    export OMP_NUM_THREADS=64
-    echo "OMP_NUM_THREADS=$OMP_NUM_THREADS"
-else
-    echo "OMP_NUM_THREADS=$OMP_NUM_THREADS"
-fi
+export OMP_WAIT_POLICY=ACTIVE
+echo "OMP_WAIT_POLICY=$OMP_WAIT_POLICY"
 
-if [ -z "$OMP_WAIT_POLICY" ];
-then
-    export OMP_WAIT_POLICY=ACTIVE
-    echo "OMP_WAIT_POLICY=$OMP_WAIT_POLICY"
-else
-    echo "OMP_WAIT_POLICY=$OMP_WAIT_POLICY"
-fi
+export OMP_PROC_BIND=FALSE
+echo "OMP_PROC_BIND=$OMP_PROC_BIND"
 
-if [ -z "$OMP_PROC_BIND" ];
-then
-    export OMP_PROC_BIND=FALSE
-    echo "OMP_PROC_BIND=$OMP_PROC_BIND"
-else
-    echo "OMP_PROC_BIND=$OMP_PROC_BIND"
-fi
+#By default setting ZENDNN_TF_VERSION as 2.10
+export ZENDNN_TF_VERSION=2.10
+echo "ZENDNN_TF_VERSION=$ZENDNN_TF_VERSION"
 
-#By default setting ZENDNN_TF_VERSION as 2.7
-if [ -z "$ZENDNN_TF_VERSION" ];
-then
-    export ZENDNN_TF_VERSION=2.7
-    echo "ZENDNN_TF_VERSION=$ZENDNN_TF_VERSION"
-else
-    echo "ZENDNN_TF_VERSION=$ZENDNN_TF_VERSION"
-fi
+#By default setting ZENDNN_PT_VERSION as v1.12.0
+export ZENDNN_PT_VERSION="1.12.0"
+echo "ZENDNN_PT_VERSION=$ZENDNN_PT_VERSION"
 
 #If the environment variable OMP_DYNAMIC is set to true, the OpenMP implementation
 #may adjust the number of threads to use for executing parallel regions in order
@@ -73,8 +48,6 @@ fi
 #which should not be modified by runtime, doing so can cause incorrect execution
 export OMP_DYNAMIC=FALSE
 echo "OMP_DYNAMIC=$OMP_DYNAMIC"
-export KMP_BLOCKTIME=200
-echo "KMP_BLOCKTIME=$KMP_BLOCKTIME"
 
 #Disable TF check for training ops and stop execution if any training ops
 #found in TF graph. By default, its enabled
@@ -82,12 +55,12 @@ export ZENDNN_INFERENCE_ONLY=1
 echo "ZENDNN_INFERENCE_ONLY=$ZENDNN_INFERENCE_ONLY"
 
 #Disable TF memory pool optimization, By default, its enabled
-export ZENDNN_MEMPOOL_ENABLE=1
-echo "ZENDNN_MEMPOOL_ENABLE=$ZENDNN_MEMPOOL_ENABLE"
+export ZENDNN_ENABLE_MEMPOOL=1
+echo "ZENDNN_ENABLE_MEMPOOL=$ZENDNN_ENABLE_MEMPOOL"
 
 #Set the max no. of tensors that can be used inside TF memory pool, Default is
-#set to 16
-export ZENDNN_TENSOR_POOL_LIMIT=16
+#set to 32
+export ZENDNN_TENSOR_POOL_LIMIT=32
 echo "ZENDNN_TENSOR_POOL_LIMIT=$ZENDNN_TENSOR_POOL_LIMIT"
 
 #Enable fixed max size allocation for Persistent tensor with TF memory pool
@@ -95,17 +68,17 @@ echo "ZENDNN_TENSOR_POOL_LIMIT=$ZENDNN_TENSOR_POOL_LIMIT"
 export ZENDNN_TENSOR_BUF_MAXSIZE_ENABLE=0
 echo "ZENDNN_TENSOR_BUF_MAXSIZE_ENABLE=$ZENDNN_TENSOR_BUF_MAXSIZE_ENABLE"
 
-# Blocked Format is disabled by default
-export ZENDNN_BLOCKED_FORMAT=0
-echo "ZENDNN_BLOCKED_FORMAT=$ZENDNN_BLOCKED_FORMAT"
+# Convolution GEMM path is set as defualt
+export ZENDNN_CONV_ALGO=1
+echo "ZENDNN_CONV_ALGO=$ZENDNN_CONV_ALGO"
 
 # INT8 support  is disabled by default
 export ZENDNN_INT8_SUPPORT=0
 echo "ZENDNN_INT8_SUPPORT=$ZENDNN_INT8_SUPPORT"
 
-# INT8 Relu6 fusion support is disabled by default
-export ZENDNN_RELU_UPPERBOUND=0
-echo "ZENDNN_RELU_UPPERBOUND=$ZENDNN_RELU_UPPERBOUND"
+# ZENDNN_GEMM_ALGO is set to 3 by default
+export ZENDNN_GEMM_ALGO=3
+echo "ZENDNN_GEMM_ALGO=$ZENDNN_GEMM_ALGO"
 
 # Switch to enable Conv, Add fusion on users discretion. Currently it is
 # safe to enable this switch for resnet50v1_5, resnet101, and
@@ -113,29 +86,24 @@ echo "ZENDNN_RELU_UPPERBOUND=$ZENDNN_RELU_UPPERBOUND"
 export ZENDNN_TF_CONV_ADD_FUSION_SAFE=0
 echo "ZENDNN_TF_CONV_ADD_FUSION_SAFE=$ZENDNN_TF_CONV_ADD_FUSION_SAFE"
 
+#optimize_for_inference has to be called only after setting this flag for this fusion to happen
+export ZENDNN_PT_CONV_ADD_FUSION_SAFE=0
+echo "ZENDNN_PT_CONV_ADD_FUSION_SAFE=$ZENDNN_PT_CONV_ADD_FUSION_SAFE"
+
+# Primitive reuse is disabled by default
+export TF_ZEN_PRIMITIVE_REUSE_DISABLE=FALSE
+echo "TF_ZEN_PRIMITIVE_REUSE_DISABLE=$TF_ZEN_PRIMITIVE_REUSE_DISABLE"
+
 # Primitive Caching Capacity
 export ZENDNN_PRIMITIVE_CACHE_CAPACITY=1024
 echo "ZENDNN_PRIMITIVE_CACHE_CAPACITY: $ZENDNN_PRIMITIVE_CACHE_CAPACITY"
-
-# MAX_CPU_ISA
-# MAX_CPU_ISA is disabld at build time. When feature is enabled, uncomment the
-# below 2 lines
-#export ZENDNN_MAX_CPU_ISA=ALL
-#echo "ZENDNN_MAX_CPU_ISA: $ZENDNN_MAX_CPU_ISA"
 
 # Enable primitive create and primitive execute logs. By default it is disabled
 export ZENDNN_PRIMITIVE_LOG_ENABLE=0
 echo "ZENDNN_PRIMITIVE_LOG_ENABLE: $ZENDNN_PRIMITIVE_LOG_ENABLE"
 
-# Check if pt-zendnn is enabled, and if so, preload jemalloc and libomp
-ldconfig -p | grep torch_cpu >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-    ldconfig -p | grep libjemalloc.so >/dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        export LD_PRELOAD=/usr/local/lib/libjemalloc.so:$LD_PRELOAD
-        export MALLOC_CONF="oversize_threshold:1,background_thread:true,metadata_thp:auto,dirty_decay_ms:-1,muzzy_decay_ms:-1"
-        echo "PRELOADED JMALLOC"
-    fi
-fi
+# The system can have high utilization after inference if this isn't specified
+export KMP_BLOCKTIME=200
+echo "KMP_BLOCKTIME=$KMP_BLOCKTIME"
 
 sleep 1

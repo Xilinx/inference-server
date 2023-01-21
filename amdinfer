@@ -54,8 +54,9 @@ def get_version():
 help_message = "show this help message and exit"
 
 
-# https://stackoverflow.com/a/34736291/13621369
-class NegateAction(argparse.Action):
+# implements a toggle-able action to enable --no-<flag> and --<flag> flags
+# for argparse
+class ToggleAction(argparse.Action):
     def __init__(
         self,
         option_strings,
@@ -76,8 +77,8 @@ class NegateAction(argparse.Action):
             help=help,
         )
 
-    def __call__(self, parser, ns, values, option):
-        setattr(ns, self.dest, option[2:4] != "no")
+    def __call__(self, parser, ns, values, option: str):
+        setattr(ns, self.dest, not option.startswith("--no-"))
 
 
 def get_build_config(dir):
@@ -1058,7 +1059,7 @@ class Run:
             "--devices",
             "--no-devices",
             dest="devices",
-            action=NegateAction,
+            action=ToggleAction,
             help="Pass devices from host to container, if they exist",
             default=None,
         )
@@ -1073,7 +1074,7 @@ class Run:
             "--interactive",
             "--no-interactive",
             dest="interactive",
-            action=NegateAction,
+            action=ToggleAction,
             help="Keep STDIN open even if not attached and allocate a pseudo-TTY",
             default=None,
         )
@@ -1081,7 +1082,7 @@ class Run:
             "--net-host",
             "--no-net-host",
             dest="net_host",
-            action=NegateAction,
+            action=ToggleAction,
             help="Use host networking mode",
             default=None,
         )
@@ -1089,7 +1090,7 @@ class Run:
             "--rm",
             "--no-rm",
             dest="rm",
-            action=NegateAction,
+            action=ToggleAction,
             help="Remove container after exiting",
             default=None,
         )
@@ -1097,7 +1098,7 @@ class Run:
             "--user-config",
             "--no-user-config",
             dest="user_config",
-            action=NegateAction,
+            action=ToggleAction,
             help="Pass the user's git config and SSH keys to the container, if they exist",
             default=None,
         )
@@ -1105,7 +1106,7 @@ class Run:
             "--working-dir",
             "--no-working-dir",
             dest="working_dir",
-            action=NegateAction,
+            action=ToggleAction,
             help="Mount the current working directory from host to /workspace/amdinfer on the container",
             default=None,
         )
@@ -1113,7 +1114,7 @@ class Run:
             "--xclbins",
             "--no-xclbins",
             dest="xclbins",
-            action=NegateAction,
+            action=ToggleAction,
             help="Pass /opt/xilinx/overlaybins from host to container, if it exists",
             default=None,
         )
