@@ -126,20 +126,28 @@ autosectionlabel_prefix_document = True
 # is used in different sections
 autosectionlabel_maxdepth = 2
 
+tree_path = f"https://github.com/Xilinx/inference-server/tree/{release}/%s"
+blob_path = f"https://github.com/Xilinx/inference-server/blob/{release}/%s"
+raw_path = f"https://github.com/Xilinx/inference-server/raw/{release}/%s"
+
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
-    "amdinfertree": (
-        f"https://github.com/Xilinx/inference-server/tree/{release}/%s",
+    "amdinferTree": (
+        tree_path,
         "%s",
     ),
-    "amdinferblob": (
-        f"https://github.com/Xilinx/inference-server/blob/{release}/%s",
+    "amdinferBlob": (
+        blob_path,
         "%s",
     ),
-    "ubuntupackages": ("https://packages.ubuntu.com/bionic/%s", "%s"),
-    "pypipackages": ("https://pypi.org/project/%s", "%s"),
+    "amdinferRawFull": (
+        raw_path,
+        None,
+    ),
+    "ubuntuPackages": ("https://packages.ubuntu.com/focal/%s", "%s"),
+    "pypiPackages": ("https://pypi.org/project/%s", "%s"),
     "github": ("https://github.com/%s", "%s"),
-    "xilinxdownload": (
+    "xilinxDownload": (
         "https://www.xilinx.com/bin/public/openDownload?filename=%s",
         None,
     ),
@@ -219,3 +227,4 @@ html_last_updated_fmt = "%B %d, %Y"
 
 def setup(app):
     app.connect("autodoc-process-signature", hide_private_module)
+    app.add_css_file("custom.css")

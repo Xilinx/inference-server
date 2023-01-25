@@ -113,7 +113,7 @@ def parse_args():
 
     args = parser.parse_args()
 
-    if (not args.image) or (not args.model) or (not args.labels):
+    if (not args.image) or (not args.labels):
         root = os.getenv("AMDINFER_ROOT")
         if root is None:
             print("AMDINFER_ROOT is not defined in the environment")
@@ -121,14 +121,11 @@ def parse_args():
             print("Either:\n - define AMDINFER_ROOT in the environment")
             print(" - pass all the following flags:")
             print("     --image")
-            print("     --model")
             print("     --labels")
             sys.exit(1)
 
         if not args.image:
             args.image = root + "/tests/assets/dog-3619020_640.jpg"
-
-        # args.model is unset and set by each example
 
         if not args.labels:
             args.labels = root + "/examples/resnet50/imagenet_classes.txt"

@@ -17,146 +17,110 @@ Quickstart - Deployment
 =======================
 
 This quickstart is intended for a user who is deploying the inference server and configuring the available models for inference.
-
-There are a few different methods to deploy the server and make it available for remote clients:
-
-* Deploy on Docker with a development or deployment image
-* Deploy on KServe with a deployment image
-* Deploy without Docker
-
+There are multiple ways to deploy the server but this quickstart only covers a basic Docker-based deployment.
 Once the server is up, you and any clients can :ref:`make requests to it <quickstart_inference:Quickstart - Inference>`.
 
-Deployment vs. Development Images
----------------------------------
+Prerequisites
+-------------
 
-There are two kinds of Docker images you can make for the inference server: deployment and development.
-The deployment image is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
-It has limited debugging capabilities and it contains a precompiled binary for the server that automatically starts when the container starts.
-In contrast, the development image is far larger in size because it also contains the build-time dependencies of the server.
-It allows you to compile the server and build the `amdinfer` library.
-You can build either the :ref:`deployment <docker:Build the production Docker image>` or :ref:`development image <quickstart_development:Build or get the Docker image>` using a script.
+* `Docker <https://docs.docker.com/get-docker/>`__
+* Network access to enable clients to access the server
+* Sufficient disk space to host your models
 
-Deploying on Docker
--------------------
+Prepare the model repository
+----------------------------
 
-You can use either the deployment or development image to make the server available for inference with Docker.
-This approach has the fewest external dependencies but requires more manual work to set up.
+As the server administrator, you need to identify which models you want to make available for inference and organize them into a model repository.
+The model repository is a directory on your host machine where the server is running that will hold your models and their associated metadata.
+The format of the directory is as follows:
 
-Deployment image
-^^^^^^^^^^^^^^^^
+.. code-block:: text
 
-Once you have the basic deployment image, you'll need to prepare the image by adding models that you want to support.
-Follow these :ref:`instructions <docker:Prepare the image for Docker deployment>` for more information.
+    /
+    ├─ model_a/
+    │  ├─ 1/
+    │  │  ├─ saved_model.x
+    │  ├─ config.pbtxt
+    | model_b/
+    |  ...
 
-Development image
-^^^^^^^^^^^^^^^^^
+The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server.
+This name is used to name the endpoint used to make inference requests to.
+Under this directory, there must be a directory named ``1/`` containing the model file itself and a text file named ``config.pbtxt``.
+The model file must be named ``saved_model`` and the file extension depends on the type of the model.
+The ``config.pbtxt`` file contains metadata for the model.
+Consider this example of an MNIST TensorFlow model:
 
-Once you have the development image, you can start the container, compile the server, and start it.
-Follow these :ref:`instructions <quickstart_development:Compiling the AMD Inference Server>` for more information.
+.. code-block:: text
 
-Deploying on KServe
--------------------
+    name: "mnist"
+    platform: "tensorflow_graphdef"
+    inputs [
+      {
+        name: "images_in"
+        datatype: "FP32"
+        shape: [28,28,1]
+      }
+    ]
+    outputs [
+      {
+        name: "flatten/Reshape"
+        datatype: "FP32"
+        shape: [10]
+      }
+    ]
 
-You can use `KServe <https://kserve.github.io/website/0.9/>`__ to deploy the inference server on a Kubernetes cluster.
-Once KServe is installed on your Kubernetes cluster, you can use a prepared deployment image to make models available for inference.
-Follow these :ref:`instructions <kserve:KServe>` for more information.
+The name must match the name of the model directory.
+The platform identifies the type of the model and determines the file extension of the model file.
+The supported platforms are:
 
-Deploying without Docker
+.. csv-table::
+    :header: Platform,Model file extension
+    :widths: 90, 10
+    :width: 22em
+
+    ``tensorflow_graphdef``,``.pb``
+    ``pytorch_torchscript``,``.pt``
+    ``vitis_xmodel``,``.xmodel``
+    ``onnx_onnxv1``,``.onnx``
+
+The inputs and outputs define the list of input and output tensors for the model.
+The names of the tensors may be significant if the platform needs them to perform inference.
+
+Get the deployment image
 ------------------------
 
-While deploying without Docker is not an officially supported approach, it is possible to make the server available without Docker.
-The server is compiled with CMake so you can install all the dependencies on your host machine so that the CMake build can compile the server executable.
-Looking at the :ref:`dependencies <dependencies:Dependencies>` can help you identify what third-party packages are needed by the server.
+The deployment image is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
+It has limited debugging capabilities and it contains a precompiled executable for the server that automatically starts when the container starts.
+You can pull the deployment image with Docker if it exists or :ref:`build it yourself <docker:Build the deployment Docker image>`.
 
-Loading models
---------------
+Start the image
+---------------
 
-Once the server is up using one of the approaches above, you must load the models you want to make available for inference.
-The easiest way to load models is using the AMD Inference Server's library ``amdinfer``.
-The library allows you to make a client object that you can use to communicate with the server over any protocol that the server supports.
-Clients have the same base set of methods so you can easily replace one with another.
-It also allows you to make objects to hold the requests and responses and use defined methods for interacting with them.
-
-The library is natively in C++ and has Python bindings that you can use as well.
-The C++ version of the library is most easily available in the development container for the Inference Server as that has all the needed dependencies already.
-If you want to use the C++ library outside the container, you need to resolve the dependencies yourself.
-You can :ref:`install the Python version <python:Install the Python library>` on a host, in an environment or in a container using a package.
+You can start a container from the deployment image with ``docker`` as any other image:
 
 .. tabs::
 
-    .. code-tab:: c++
+    .. code-tab:: console CPU
 
-        // your server administrator must provide the values for these variables:
-        //   - http_server_addr: HTTP address of the server, if supported
-        //   - grpc_server_addr: gRPC address of the server, if supported
-        //   - endpoint: string to identify the model for inference. If there are
-        //               multiple models available, each model will have its own
-        //               endpoint that you can use to request inferences from it
-        const std::string http_server_addr = "http://127.0.0.1:8998";
-        const std::string grpc_server_addr = "127.0.0.1:50051";
-        const std::string endpoint = "endpoint";
+        $ docker run -d --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
 
-        #include "amdinfer/amdinfer.hpp"
+    .. code-tab:: console GPU
 
-        # create a client to communicate to the server over HTTP
-        const amdinfer::HttpClient http_client{http_server_addr};
+        $ docker run -d --device /dev/kfd --device /dev/dri --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
 
-        # create a client to communicate to the server over gRPC
-        const amdinfer::GrpcClient grpc_client{grpc_server_addr};
+    .. code-tab:: console FPGA
 
-    .. code-tab:: python
-
-        # your server administrator must provide the values for these variables:
-        #   - http_server_addr: HTTP address of the server, if supported
-        #   - grpc_server_addr: gRPC address of the server, if supported
-        #   - endpoint: string to identify the model for inference. If there are
-        #               multiple models available, each model will have its own
-        #               endpoint that you can use to request inferences from it
-        http_server_addr = "http://127.0.0.1:8998"
-        grpc_server_addr = "127.0.0.1:50051"
-        endpoint = "endpoint"
-
-        import amdinfer
-
-        # create a client to communicate to the server over HTTP
-        http_client = amdinfer.HttpClient(http_server_addr)
-
-        # create a client to communicate to the server over gRPC
-        grpc_client = amdinfer.GrpcClient(grpc_server_addr)
-
-The library also defines the ``workerLoad`` API that you can use to load models.
+        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
 
 .. note::
 
-    The similar ``modelLoad`` API works in a related but different way.
-    It is primarily meant for use by KServe.
+    These commands are provided as an example for different hardware devices.
+    Depending on your particular device(s) or desired container configuration, you may need to add or remove flags.
 
-.. tabs::
-
-    .. code-tab:: c++
-
-        amdinfer::RequestParameters parameters;
-
-        parameters.put("model", "/path/to/model")
-        parameters.put("batch", 8)
-
-        // the first argument should be the worker
-        const auto endpoint = client.workerLoad("migraphx", &parameters)
-
-        amdinfer::waitUntilModelReady(client, endpoint)
-
-    .. code-tab:: python
-
-        parameters = amdinfer.RequestParameters()
-
-        parameters.put("model", "/path/to/model")
-        parameters.put("batch", 8)
-
-        # the first argument should be the worker
-        endpoint = client.workerLoad("migraphx", parameters)
-
-        amdinfer.waitUntilModelReady(client, endpoint)
-
-After the model is loaded and ready, it is ready to accept inferences at the given endpoint.
-
-For more information about these objects and the available methods, look at the examples or the documentation for the :ref:`C++ <cpp_user_api:c++>` and :ref:`Python <python:API>` APIs.
+As the container starts, it will start the server and load the models from your model repository in ``/mnt/models`` in the container.
+The ``--publish`` flags will map ports 8998 and 50051 in the container to arbitrary free ports on the host machine for HTTP and gRPC requests, respectively.
+You can use ``docker ps`` to show the running containers and what ports on the host machine are used by the container.
+Your clients will need these port numbers to make requests to the server.
+The endpoints for each model will be the name of the model in the ``config.pbtxt``, which should match the name of the parent directory in the model repository.
+Once the container is started, you and any clients can :ref:`make requests to it <quickstart_inference:Quickstart - Inference>`.

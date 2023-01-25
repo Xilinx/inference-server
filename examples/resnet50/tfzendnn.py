@@ -111,6 +111,18 @@ def load(client, args):
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
+    if not args.model:
+        print(
+            "A path to the model on the server must be specified if loading a new worker"
+        )
+        print(
+            "If your model is already loaded, then pass the endpoint to it with --endpoint"
+        )
+        print(
+            "If your model needs loading, then pass the path to the model on the server with --model"
+        )
+        raise ValueError("No model argument")
+
     parameters = amdinfer.RequestParameters()
     parameters.put("model", args.model)
     parameters.put("input_size", args.input_size)
@@ -135,7 +147,9 @@ def get_args():
     """
     args = parse_args()
 
-    if not args.model:
+    # if the model is not specified and no endpoint flag is passed, attempt to
+    # set a default value for the model to use for loading
+    if (not args.model) and (not args.endpoint):
         root = os.getenv("AMDINFER_ROOT")
         assert root is not None
         args.model = (

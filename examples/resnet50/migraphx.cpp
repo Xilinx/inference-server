@@ -174,7 +174,9 @@ std::string load(const amdinfer::Client* client, const Args& args) {
 Args getArgs(int argc, char** argv) {
   Args args = parseArgs(argc, argv);
 
-  if (args.path_to_model.empty()) {
+  // if the model is not specified and no endpoint flag is passed, attempt to
+  // set a default value for the model to use for loading
+  if (args.path_to_model.empty() && args.endpoint.empty()) {
     const auto* root_str = std::getenv("AMDINFER_ROOT");
     assert(root_str != nullptr);
     fs::path root{root_str};

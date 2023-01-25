@@ -19,12 +19,12 @@ Docker
 You can use the AMD Inference Server with Docker to deploy the server.
 For more powerful and easier to use deployments, consider using :ref:`KServe <kserve:KServe>`.
 
-Build the production Docker image
+Build the deployment Docker image
 ---------------------------------
 
-The production container is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
+The deployment image is optimized for size and only contains the runtime dependencies of the server to allow for quicker deployments.
 It automatically starts the server executable as the image starts as opposed to opening a Bash shell though that can be overridden.
-To build the production container:
+To build the deployment image:
 
 .. code-block:: console
 
@@ -69,7 +69,7 @@ The SHA is visible when you push the image to the registry or you can get it by 
 Prepare the image for Docker deployment
 ---------------------------------------
 
-Once you build the basic production image or pull a pre-built version, you need to prepare it before it can be deployed on Docker.
+Once you build the basic deployment image or pull a pre-built version, you need to prepare it before it can be deployed on Docker.
 While the image has the dependencies needed to run the server, there are no models present and the default environment may not be appropriate.
 You need to modify this image for the use case that you're targeting.
 There are multiple ways of modifying an existing Docker image that are well-documented online and functionally equivalent.
@@ -85,7 +85,7 @@ For example, one approach is using a Dockerfile to build a new image:
 
 In this case, you can build and save a new image that includes the models you want to serve.
 Depending on the platform, you may need to include other files as well that the platform runtime needs.
-As with the production image, this image may need to be :ref:`pushed to a registry server <docker~push to a registry>` for your use case.
+As with the deployment image, this image may need to be :ref:`pushed to a registry server <docker~push to a registry>` for your use case.
 
 Note that the command that the image runs and its environment can also be overridden at the command-line when starting the container.
 Therefore, an alternative approach to building a new image is to mount the needed files as volumes when starting the container and set the environment then.
@@ -93,7 +93,7 @@ Therefore, an alternative approach to building a new image is to mount the neede
 Start the container
 -------------------
 
-You can start the production container with ``docker`` as any other container.
+You can start the deployment image with ``docker`` as any other container.
 You need to pass along any devices that you want to enable in your container and expose ports to access the server.
 Look at the ``docker run`` documentation for more information about what flags can be passed.
 
@@ -101,7 +101,7 @@ Look at the ``docker run`` documentation for more information about what flags c
 
     $ docker run [--device ...] [--publish ...] [--volume ...] [--env ...] <image>
 
-By default, the production container starts the server executable and it continues to run after the ``docker run`` command.
+By default, the deployment container starts the server executable and it continues to run after the ``docker run`` command.
 But before it can serve requests, you need to load the models that you added into the image.
 The easiest way to communicate with the server is using the :ref:`Python library <python:install the python library>`.
 You can install it locally or use it in the development container to load the workers on the server.

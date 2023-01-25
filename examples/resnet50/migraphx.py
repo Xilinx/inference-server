@@ -122,6 +122,18 @@ def load(client, args):
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
+    if not args.model:
+        print(
+            "A path to the model on the server must be specified if loading a new worker"
+        )
+        print(
+            "If your model is already loaded, then pass the endpoint to it with --endpoint"
+        )
+        print(
+            "If your model needs loading, then pass the path to the model on the server with --model"
+        )
+        raise ValueError("No model argument")
+
     parameters = amdinfer.RequestParameters()
     timeout_ms = 1000  # batcher timeout value in milliseconds
 
@@ -151,7 +163,9 @@ def get_args():
     """
     args = parse_args()
 
-    if not args.model:
+    # if the model is not specified and no endpoint flag is passed, attempt to
+    # set a default value for the model to use for loading
+    if (not args.model) and (not args.endpoint):
         root = os.getenv("AMDINFER_ROOT")
         assert root is not None
         args.model = root + "/external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx"
@@ -200,6 +214,11 @@ def main(args):
 
         outputs = response.getOutputs()
         assert len(outputs) == 1
+        output = outputs[0]
+        print(output.shape)
+        print(output.datatype)
+        print(type(output.getFp32Data()))
+        print(output.getSize())
         top_indices = postprocess(outputs[0], args.top)
         print_label(top_indices, args.labels, image_path)
     # -run inference

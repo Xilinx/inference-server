@@ -22,7 +22,7 @@ Set up the host and GPUs
 ------------------------
 
 Prior to installing the Inference Server, first ensure your system recognizes your GPU(s).
-Start by following the `ROCm installation instructions <https://docs.amd.com/category/ROCm%E2%84%A2%20v5.x>`__ for version 5.4.0 or newer.
+Start by following the `ROCm installation instructions <https://docs.amd.com/category/ROCm%E2%84%A2%20v5.x>`__ for version 5.4.1 or newer.
 Once your system recognizes your GPU(s), proceed to the next step.
 
 Build an image
@@ -38,7 +38,7 @@ To build an image with MIGraphX enabled, you need to add the ``--migraphx`` to t
     # build the dev image $(whoami)/amdinfer-dev-migraphx:latest
     ./amdinfer dockerize --migraphx --suffix="-migraphx"
 
-    # build the production image $(whoami)/amdinfer-migraphx:latest
+    # build the deployment image $(whoami)/amdinfer-migraphx:latest
     ./amdinfer dockerize --migraphx --suffix="-migraphx" --production
 
 Start an image
