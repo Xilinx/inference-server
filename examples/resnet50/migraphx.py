@@ -214,11 +214,6 @@ def main(args):
 
         outputs = response.getOutputs()
         assert len(outputs) == 1
-        output = outputs[0]
-        print(output.shape)
-        print(output.datatype)
-        print(type(output.getFp32Data()))
-        print(output.getSize())
         top_indices = postprocess(outputs[0], args.top)
         print_label(top_indices, args.labels, image_path)
     # -run inference
