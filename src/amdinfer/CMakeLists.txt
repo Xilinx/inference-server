@@ -156,10 +156,6 @@ if(NOT SKBUILD)
           "${CMAKE_CURRENT_BINARY_DIR}/amdinferConfigVersion.cmake"
     DESTINATION "${amdinfer_INSTALL_CMAKEDIR}" COMPONENT amdinfer_Development
   )
-
-  install(DIRECTORY "${amdinfer_SOURCE_DIR}/include/" TYPE INCLUDE
-          COMPONENT amdinfer_Development
-  )
 else()
   # auditwheel needs the location where the compiled libraries are found, which
   # is CMAKE_CURRENT_BINARY_DIR. I can't install them because then they get
@@ -220,24 +216,26 @@ if(${AMDINFER_ENABLE_METRICS})
   list(APPEND dependencies prometheus-cpp::core)
 endif()
 
-if(NOT SKBUILD)
-  install(
-    IMPORTED_RUNTIME_ARTIFACTS
-    ${dependencies}
-    RUNTIME_DEPENDENCY_SET
-    amdinfer_Dependencies
-    LIBRARY
-    COMPONENT
-    amdinfer_Runtime
-    LIBRARY
-    DESTINATION
-    "${CMAKE_INSTALL_LIBDIR}"
-  )
+# TODO(varunsh): shouldn't be installing the dependencies automatically. It can
+# lead to duplicate/conflicting libraries
+# if(NOT SKBUILD)
+#   install(
+#     IMPORTED_RUNTIME_ARTIFACTS
+#     ${dependencies}
+#     RUNTIME_DEPENDENCY_SET
+#     amdinfer_Dependencies
+#     LIBRARY
+#     COMPONENT
+#     amdinfer_Runtime
+#     LIBRARY
+#     DESTINATION
+#     "${CMAKE_INSTALL_LIBDIR}"
+#   )
 
-  install(RUNTIME_DEPENDENCY_SET amdinfer_Dependencies DESTINATION
-          "${CMAKE_INSTALL_LIBDIR}" COMPONENT amdinfer_Runtime
-  )
-endif()
+#   install(RUNTIME_DEPENDENCY_SET amdinfer_Dependencies DESTINATION
+#           "${CMAKE_INSTALL_LIBDIR}" COMPONENT amdinfer_Runtime
+#   )
+# endif()
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_NAME "libamdinfer")
