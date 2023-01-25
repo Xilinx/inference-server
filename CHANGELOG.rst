@@ -57,6 +57,7 @@ Changed
 - Use Ubuntu 20.04 by default for Docker (:pr:`97`)
 - Bump up to ROCm 5.4.1 (:pr:`99`)
 - Some function names changed for style (:pr:`102`)
+- Bump up to ZenDNN 4.0 (:pr:`113`)
 
 Deprecated
 ^^^^^^^^^^
@@ -67,6 +68,7 @@ Removed
 ^^^^^^^
 
 - Mappings between XIR data types <-> inference server data types from public API (:pr:`102`)
+- Web GUI (:pr:`110`)
 
 Fixed
 ^^^^^
@@ -78,6 +80,7 @@ Fixed
 - Fix using ``--no-user-config`` with ``proteus run`` (:pr:`89`)
 - Handle assigning user permissions if the host UID is same as UID in container (:pr:`101`)
 - Fix test discovery if some test assets are missing (:pr:`105`)
+- Fix gRPC queue shutdown race condition (:pr:`111`)
 
 :github:`0.2.0 <Xilinx/inference-server/releases/tag/v0.2.0>` - 2022-08-05
 --------------------------------------------------------------------------
