@@ -17,3 +17,8 @@ While your code changes can be seen in the diff between branches, it may not cap
 Also, depending on the size of the request, many changes may be difficult to read through.
 Consider this section as a way to provide context, commentary and an introduction to the code you've written.
 At minimum, you should address the bullet points you listed in the summary above in some capacity to guide the reviewer on where to look.
+
+# Notes
+
+Any other comments about or implications of this PR?
+For example, certain PRs could require rebuilding containers, deleting cached build files or other changes for whoever pulls in these changes on an existing repository.
