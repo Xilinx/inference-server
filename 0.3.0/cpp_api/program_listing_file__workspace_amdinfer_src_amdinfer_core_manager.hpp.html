@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -100,6 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -119,28 +122,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -168,7 +170,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -255,7 +257,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -408,113 +410,113 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#ifndef GUARD_AMDINFER_CORE_MANAGER</span>
 <span class="cp">#define GUARD_AMDINFER_CORE_MANAGER</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span><span class="c1">      // for exception_ptr</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span><span class="c1">            // for map</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for allocator, unique_ptr</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for string</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span><span class="c1">         // for thread</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span><span class="c1">  // for unordered_map</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">        // for move, pair</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span><span class="c1">      // for exception_ptr</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span><span class="c1">            // for map</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for allocator, unique_ptr</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for string</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span><span class="c1">         // for thread</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span><span class="c1">  // for unordered_map</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">        // for move, pair</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">        // for AMDINFER_ENABLE_LOGGING</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">     // for RequestParameters</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/worker_info.hpp&quot;</span><span class="c1">     // for WorkerInfo</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for LoggerPtr</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">           // for BlockingConcurrentQueue</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">        // for AMDINFER_ENABLE_LOGGING</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">     // for RequestParameters</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/worker_info.hpp&quot;</span><span class="c1">     // for WorkerInfo</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for LoggerPtr</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">           // for BlockingConcurrentQueue</span>
 
 <span class="c1">// IWYU pragma: no_forward_declare amdinfer::RequestParameters</span>
 <span class="c1">// IWYU pragma: no_forward_declare amdinfer::WorkerInfo</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UpdateCommandType</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">Shutdown</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">Allocate</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">Add</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">Delete</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">Ready</span><span class="p">,</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UpdateCommandType</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Shutdown</span><span class="p">,</span>
+<span class="w">  </span><span class="n">Allocate</span><span class="p">,</span>
+<span class="w">  </span><span class="n">Add</span><span class="p">,</span>
+<span class="w">  </span><span class="n">Delete</span><span class="p">,</span>
+<span class="w">  </span><span class="n">Ready</span><span class="p">,</span>
+<span class="p">};</span>
 
-<span class="k">struct</span><span class="w"> </span><span class="nc">UpdateCommand</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">UpdateCommand</span><span class="p">(</span><span class="n">UpdateCommandType</span><span class="w"> </span><span class="n">cmd_</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                         </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">object_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">retval_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">cmd</span><span class="p">(</span><span class="n">cmd_</span><span class="p">),</span><span class="w"> </span><span class="n">key</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">key_</span><span class="p">)),</span><span class="w"> </span><span class="n">object</span><span class="p">(</span><span class="n">object_</span><span class="p">),</span><span class="w"> </span><span class="n">retval</span><span class="p">(</span><span class="n">retval_</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
-<span class="w">  </span><span class="n">UpdateCommandType</span><span class="w"> </span><span class="n">cmd</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">object</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">exception_ptr</span><span class="w"> </span><span class="n">eptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
-<span class="k">using</span><span class="w"> </span><span class="n">UpdateCommandQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UpdateCommand</span><span class="o">&gt;&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">UpdateCommand</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">UpdateCommand</span><span class="p">(</span><span class="n">UpdateCommandType</span><span class="w"> </span><span class="n">cmd</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                         </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">object</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span><span class="w"> </span><span class="n">key</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">key</span><span class="p">)),</span><span class="w"> </span><span class="n">object</span><span class="p">(</span><span class="n">object</span><span class="p">),</span><span class="w"> </span><span class="n">retval</span><span class="p">(</span><span class="n">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="n">UpdateCommandType</span><span class="w"> </span><span class="n">cmd</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">object</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">retval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">exception_ptr</span><span class="w"> </span><span class="n">eptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">using</span><span class="w"> </span><span class="n">UpdateCommandQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">UpdateCommand</span><span class="o">&gt;&gt;</span><span class="p">;</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Manager</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">Manager</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Manager</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">Manager</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Guaranteed to be destroyed. Instantiated on first use.</span>
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Manager</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Manager</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="n">Manager</span><span class="p">(</span><span class="n">Manager</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">Manager</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Manager</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">Manager</span><span class="p">(</span><span class="n">Manager</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">Manager</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Manager</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">    </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">Manager</span><span class="p">(</span><span class="n">Manager</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Manager</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Manager</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Manager</span><span class="p">(</span><span class="n">Manager</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Manager</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Manager</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="k">delete</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">loadWorker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">unloadWorker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">loadWorker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">unloadWorker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
 
-<span class="w">  </span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="nf">getWorker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="nf">getWorker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getWorkerEndpoints</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getWorkerEndpoints</span><span class="p">();</span>
 
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="nf">workerReady</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ModelMetadata</span><span class="w"> </span><span class="nf">getWorkerMetadata</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="nf">workerReady</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ModelMetadata</span><span class="w"> </span><span class="nf">getWorkerMetadata</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">workerAllocate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">workerAllocate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">);</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">();</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">();</span>
 
-<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">Manager</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="o">~</span><span class="n">Manager</span><span class="p">();</span><span class="w"></span>
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">Manager</span><span class="p">();</span>
+<span class="w">  </span><span class="o">~</span><span class="n">Manager</span><span class="p">();</span>
 
-<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">Endpoints</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">load</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">unload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">Endpoints</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">load</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">unload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span>
 
-<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">exists</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">list</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">exists</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span>
+<span class="w">    </span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">endpoint</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">list</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
 
-<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">();</span>
 
-<span class="w">   </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="w">   </span><span class="k">private</span><span class="o">:</span>
 <span class="w">    </span><span class="c1">// worker -&gt; map[parameters -&gt; endpoint]</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">RequestParameters</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="w"></span>
-<span class="w">      </span><span class="n">worker_endpoints_</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">RequestParameters</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span>
+<span class="w">      </span><span class="n">worker_endpoints_</span><span class="p">;</span>
 <span class="w">    </span><span class="c1">// worker -&gt; index</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">worker_indices_</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">worker_indices_</span><span class="p">;</span>
 <span class="w">    </span><span class="c1">// endpoint -&gt; parameters</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="o">&gt;</span><span class="w"> </span><span class="n">worker_parameters_</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="o">&gt;</span><span class="w"> </span><span class="n">worker_parameters_</span><span class="p">;</span>
 <span class="w">    </span><span class="c1">// endpoint -&gt; Worker_Info*</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">WorkerInfo</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">workers_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">WorkerInfo</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">workers_</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
 
-<span class="w">  </span><span class="n">Endpoints</span><span class="w"> </span><span class="n">endpoints_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">UpdateCommandQueue</span><span class="o">&gt;</span><span class="w"> </span><span class="n">update_queue_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">update_thread_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">Endpoints</span><span class="w"> </span><span class="n">endpoints_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">UpdateCommandQueue</span><span class="o">&gt;</span><span class="w"> </span><span class="n">update_queue_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">update_thread_</span><span class="p">;</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
-<span class="w">  </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger_</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">kServer</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger_</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">};</span>
 <span class="cp">#endif</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">update_manager</span><span class="p">(</span><span class="n">UpdateCommandQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">);</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">updateManager</span><span class="p">(</span><span class="n">UpdateCommandQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">);</span>
+<span class="p">};</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
 <span class="cp">#endif  </span><span class="c1">// GUARD_AMDINFER_CORE_MANAGER</span>
@@ -541,7 +543,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

@@ -1,0 +1,17 @@
+.. _exhale_class_classamdinfer_1_1util_1_1ThreadPool:
+
+Class ThreadPool
+================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::util::ThreadPool
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

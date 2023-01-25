@@ -53,21 +53,29 @@ Includes
 
 - ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
 
+- ``amdinfer/util/queue.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
 - ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
-- ``chrono``
+- ``array``
+
+- ``cassert``
 
 - ``cstddef``
 
 - ``cstdint``
 
-- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+- ``cstring``
 
 - ``memory``
 
 - ``numeric``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 

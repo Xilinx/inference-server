@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -100,6 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -119,28 +122,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -168,7 +170,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -255,7 +257,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -405,318 +407,311 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// See the License for the specific language governing permissions and</span>
 <span class="c1">// limitations under the License.</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc.hpp&quot;</span><span class="cp"></span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/repeated_ptr_field.h&gt;</span><span class="c1">  // for RepeatedPtrField</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/stubs/common.h&gt;</span><span class="c1">        // for string</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;grpcpp/grpcpp.h&gt;</span><span class="c1">                       // for Status, ClientContext</span><span class="cp"></span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span><span class="c1">        // for byte, size_t</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span><span class="c1">        // for uint64_t, uint32_t</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span><span class="c1">        // for memcpy</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span><span class="c1">         // for async</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="c1">       // for operator&lt;&lt;, cout</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span><span class="c1">            // for map</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for make_shared, reinter...</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for string, basic_string</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_set&gt;</span><span class="c1">  // for unordered_set</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">        // for move</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;variant&gt;</span><span class="c1">        // for visit</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span><span class="cp"></span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc_internal.hpp&quot;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">  // for DataType, DataType::...</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">  // for bad_status</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">     // for InferenceResponseOutput</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.grpc.pb.h&quot;</span><span class="c1">         // for GRPCInferenceService...</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.pb.h&quot;</span><span class="c1">              // for RepeatedField, Infer...</span><span class="cp"></span>
-
-<span class="k">using</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">ClientContext</span><span class="p">;</span><span class="w"></span>
-<span class="k">using</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">;</span><span class="w"></span>
-
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-<span class="k">class</span><span class="w"> </span><span class="nc">GrpcClient</span><span class="o">::</span><span class="n">GrpcClientImpl</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">GrpcClientImpl</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Channel</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">stub_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">NewStub</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">Stub</span><span class="o">*</span><span class="w"> </span><span class="n">getStub</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">stub_</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-
-<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">Stub</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stub_</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
-
-<span class="n">GrpcClient</span><span class="o">::</span><span class="n">GrpcClient</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">GrpcClient</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">CreateChannel</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">InsecureChannelCredentials</span><span class="p">()))</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
-
-<span class="n">GrpcClient</span><span class="o">::</span><span class="n">GrpcClient</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Channel</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">GrpcClientImpl</span><span class="o">&gt;</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">GrpcClient</span><span class="o">::~</span><span class="n">GrpcClient</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
-
-<span class="n">ServerMetadata</span><span class="w"> </span><span class="nf">GrpcClient::serverMetadata</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerMetadataRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerMetadataResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ServerMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">ext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">extensions</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensions</span><span class="p">(</span><span class="n">ext</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">ext</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w"></span>
-<span class="w">    </span><span class="n">ServerMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">{</span><span class="n">reply</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">version</span><span class="p">(),</span><span class="w"> </span><span class="n">extensions</span><span class="p">};</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">metadata</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">bool</span><span class="w"> </span><span class="nf">GrpcClient::serverLive</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerLiveRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerLiveResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ServerLive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">live</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_code</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNAVAILABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">bool</span><span class="w"> </span><span class="nf">GrpcClient::serverReady</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerReadyRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerReadyResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">ready</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_code</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNAVAILABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">connection_error</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">bool</span><span class="w"> </span><span class="nf">GrpcClient::modelReady</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelReadyRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelReadyResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">ready</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">ModelMetadata</span><span class="w"> </span><span class="nf">mapProtoToModelMetadata</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelMetadataResponse</span><span class="o">&amp;</span><span class="w"> </span><span class="n">resp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">ModelMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">{</span><span class="n">resp</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">platform</span><span class="p">()};</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">inputs</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">shape</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">shape_size</span><span class="p">());</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">shape</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="n">shape</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">metadata</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">DataType</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">datatype</span><span class="p">().</span><span class="n">c_str</span><span class="p">()),</span><span class="w"></span>
-<span class="w">                            </span><span class="n">shape</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">outputs</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">outputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">shape</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">shape_size</span><span class="p">());</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">output</span><span class="p">.</span><span class="n">shape</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="n">shape</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">));</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">metadata</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">DataType</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">datatype</span><span class="p">().</span><span class="n">c_str</span><span class="p">()),</span><span class="w"></span>
-<span class="w">                            </span><span class="n">shape</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">metadata</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">ModelMetadata</span><span class="w"> </span><span class="nf">GrpcClient::modelMetadata</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelMetadataRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelMetadataResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapProtoToModelMetadata</span><span class="p">(</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelList</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelListRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelListResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelList</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">mods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">models</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">models</span><span class="p">(</span><span class="n">mods</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">mods</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">models</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">void</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"></span>
-<span class="w">                           </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelLoadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelLoadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">mutable_parameters</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parameters</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapParametersToProto</span><span class="p">(</span><span class="n">parameters</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">params</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">void</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelUnload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelUnloadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelUnloadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">workerLoad</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                   </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerLoadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerLoadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">mutable_parameters</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parameters</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">mapParametersToProto</span><span class="p">(</span><span class="n">parameters</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">params</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">WorkerLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">endpoint</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">void</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">workerUnload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerUnloadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerUnloadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">WorkerUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">InferenceResponse</span><span class="w"> </span><span class="n">runInference</span><span class="p">(</span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">Stub</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="p">,</span><span class="w"></span>
-<span class="w">                               </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"></span>
-<span class="w">                               </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">Observer</span><span class="w"> </span><span class="n">observer</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">AMDINFER_IF_LOGGING</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">kClient</span><span class="p">});</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">set_model_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapRequestToProto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelInfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">response</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">mapProtoToResponse</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">response</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">InferenceResponseFuture</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelInferAsync</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">runInference</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">(),</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="n">InferenceResponse</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelInfer</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">runInference</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">(),</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="kt">bool</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">HasHardwareRequest</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">HasHardwareResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">set_num</span><span class="p">(</span><span class="n">num</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">HasHardware</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">found</span><span class="p">();</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc.hpp&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/repeated_ptr_field.h&gt;</span><span class="c1">  // for RepeatedPtrField</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;grpcpp/grpcpp.h&gt;</span><span class="c1">                       // for Status, ClientContext</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;future&gt;</span><span class="c1">         // for __forced_unwind, async</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for unique_ptr, shared_ptr</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for string</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_set&gt;</span><span class="c1">  // for unordered_set</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc_internal.hpp&quot;</span><span class="c1">  // for mapParametersToProto</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">        // for DataType</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">        // for bad_status, connecti...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">           // for InferenceResponseFuture</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/observer.hpp&quot;</span><span class="c1">   // for Logger, Observer</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.grpc.pb.h&quot;</span><span class="c1">               // for GRPCInferenceService...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.pb.h&quot;</span><span class="c1">                    // for ModelMetadataRespons...</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">ClientContext</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GrpcClient</span><span class="o">::</span><span class="n">GrpcClientImpl</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">GrpcClientImpl</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Channel</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">stub_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">NewStub</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">Stub</span><span class="o">*</span><span class="w"> </span><span class="n">getStub</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">stub_</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">Stub</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stub_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">GrpcClient</span><span class="o">::</span><span class="n">GrpcClient</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">)</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">GrpcClient</span><span class="p">(</span>
+<span class="w">      </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">CreateChannel</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">InsecureChannelCredentials</span><span class="p">()))</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="n">GrpcClient</span><span class="o">::</span><span class="n">GrpcClient</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Channel</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">GrpcClientImpl</span><span class="o">&gt;</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">GrpcClient</span><span class="o">::~</span><span class="n">GrpcClient</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="n">ServerMetadata</span><span class="w"> </span><span class="nf">GrpcClient::serverMetadata</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerMetadataRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerMetadataResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ServerMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">ext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">extensions</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">extensions</span><span class="p">(</span><span class="n">ext</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">ext</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+<span class="w">    </span><span class="n">ServerMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">{</span><span class="n">reply</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">version</span><span class="p">(),</span><span class="w"> </span><span class="n">extensions</span><span class="p">};</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">metadata</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">GrpcClient::serverLive</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerLiveRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerLiveResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ServerLive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">live</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_code</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNAVAILABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">GrpcClient::serverReady</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerReadyRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ServerReadyResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">ready</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_code</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">UNAVAILABLE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">connection_error</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">GrpcClient::modelReady</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelReadyRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelReadyResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">ready</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">ModelMetadata</span><span class="w"> </span><span class="nf">mapProtoToModelMetadata</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelMetadataResponse</span><span class="o">&amp;</span><span class="w"> </span><span class="n">resp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">ModelMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">{</span><span class="n">resp</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">platform</span><span class="p">()};</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">inputs</span><span class="p">();</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="p">;</span>
+<span class="w">    </span><span class="n">shape</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">shape_size</span><span class="p">());</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">shape</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">shape</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">metadata</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">DataType</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">datatype</span><span class="p">().</span><span class="n">c_str</span><span class="p">()),</span>
+<span class="w">                            </span><span class="n">shape</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">outputs</span><span class="p">();</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">outputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="p">;</span>
+<span class="w">    </span><span class="n">shape</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">shape_size</span><span class="p">());</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">output</span><span class="p">.</span><span class="n">shape</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">shape</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">metadata</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">DataType</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">datatype</span><span class="p">().</span><span class="n">c_str</span><span class="p">()),</span>
+<span class="w">                            </span><span class="n">shape</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">metadata</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">ModelMetadata</span><span class="w"> </span><span class="nf">GrpcClient::modelMetadata</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelMetadataRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelMetadataResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapProtoToModelMetadata</span><span class="p">(</span><span class="n">reply</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelList</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelListRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelListResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelList</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">mods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">models</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">models</span><span class="p">(</span><span class="n">mods</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">mods</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">models</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelLoadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelLoadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">mutable_parameters</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parameters</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mapParametersToProto</span><span class="p">(</span><span class="n">parameters</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelUnload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelUnloadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelUnloadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">workerLoad</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span>
+<span class="w">                                   </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerLoadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerLoadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">mutable_parameters</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parameters</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mapParametersToProto</span><span class="p">(</span><span class="n">parameters</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">WorkerLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">endpoint</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">workerUnload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerUnloadRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">WorkerUnloadResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">WorkerUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">InferenceResponse</span><span class="w"> </span><span class="n">runInference</span><span class="p">(</span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">Stub</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="p">,</span>
+<span class="w">                               </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span>
+<span class="w">                               </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">Observer</span><span class="w"> </span><span class="n">observer</span><span class="p">;</span>
+<span class="w">  </span><span class="n">AMDINFER_IF_LOGGING</span><span class="p">(</span><span class="n">observer</span><span class="p">.</span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Client</span><span class="p">});</span>
+
+<span class="w">  </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">set_model_name</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+<span class="w">  </span><span class="n">mapRequestToProto</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">ModelInfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">response</span><span class="p">;</span>
+<span class="w">  </span><span class="n">mapProtoToResponse</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">response</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">InferenceResponseFuture</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelInferAsync</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">runInference</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">(),</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">InferenceResponse</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">modelInfer</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">runInference</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">(),</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">GrpcClient</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">HasHardwareRequest</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">HasHardwareResponse</span><span class="w"> </span><span class="n">reply</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ClientContext</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="w">  </span><span class="n">grpc_request</span><span class="p">.</span><span class="n">set_num</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">stub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">impl_</span><span class="o">-&gt;</span><span class="n">getStub</span><span class="p">();</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="o">-&gt;</span><span class="n">HasHardware</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">bad_status</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">reply</span><span class="p">.</span><span class="n">found</span><span class="p">();</span>
+<span class="p">}</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
 </pre></div>
@@ -742,7 +737,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

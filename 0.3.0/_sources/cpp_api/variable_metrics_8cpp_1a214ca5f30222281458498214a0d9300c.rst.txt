@@ -1,0 +1,14 @@
+.. _exhale_variable_metrics_8cpp_1a214ca5f30222281458498214a0d9300c:
+
+Variable amdinfer::kPercentile90
+================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::kPercentile90
+   :project: amdinfer

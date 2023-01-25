@@ -56,6 +56,10 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
 
 

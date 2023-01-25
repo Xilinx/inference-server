@@ -29,7 +29,7 @@ Program Listing for File status.hpp
    #define GUARD_AMDINFER_OBSERVATION_STATUS
    
    namespace amdinfer {
-   enum class Status { kOK, kNotFound, kNotImplemented };
+   enum class Status { OK, NotFound, NotImplemented };
    
    }  // namespace amdinfer
    

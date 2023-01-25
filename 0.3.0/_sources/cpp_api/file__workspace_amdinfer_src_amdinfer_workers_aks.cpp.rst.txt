@@ -65,17 +65,21 @@ Includes
 
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
-- ``chrono``
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
 - ``cstddef``
 
 - ``cstdint``
 
+- ``cstring``
+
 - ``future``
 
 - ``memory``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 

@@ -33,11 +33,12 @@ Program Listing for File grpc.hpp
    #include <vector>  // for vector
    
    #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
-   #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
+   #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+   #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
    
    namespace grpc {
    class Channel;
-   }
+   }  // namespace grpc
    
    namespace amdinfer {
    
@@ -45,29 +46,36 @@ Program Listing for File grpc.hpp
     public:
      explicit GrpcClient(const std::string& address);
      explicit GrpcClient(const std::shared_ptr<::grpc::Channel>& channel);
+   
+     GrpcClient(GrpcClient const&) = delete;
+     GrpcClient& operator=(const GrpcClient&) = delete;
+     GrpcClient(GrpcClient&& other) = default;
+     GrpcClient& operator=(GrpcClient&& other) = default;
      ~GrpcClient() override;
    
-     ServerMetadata serverMetadata() const override;
-     bool serverLive() const override;
-     bool serverReady() const override;
-     bool modelReady(const std::string& model) const override;
-     ModelMetadata modelMetadata(const std::string& model) const override;
+     [[nodiscard]] ServerMetadata serverMetadata() const override;
+     [[nodiscard]] bool serverLive() const override;
+     [[nodiscard]] bool serverReady() const override;
+     [[nodiscard]] bool modelReady(const std::string& model) const override;
+     [[nodiscard]] ModelMetadata modelMetadata(
+       const std::string& model) const override;
    
      void modelLoad(const std::string& model,
                     RequestParameters* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
-     InferenceResponse modelInfer(const std::string& model,
-                                  const InferenceRequest& request) const override;
-     InferenceResponseFuture modelInferAsync(
+     [[nodiscard]] InferenceResponse modelInfer(
        const std::string& model, const InferenceRequest& request) const override;
-     std::vector<std::string> modelList() const override;
+     [[nodiscard]] InferenceResponseFuture modelInferAsync(
+       const std::string& model, const InferenceRequest& request) const override;
+     [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     std::string workerLoad(const std::string& worker,
-                            RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(
+       const std::string& worker, RequestParameters* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
-     bool hasHardware(const std::string& name, int num) const override;
+     [[nodiscard]] bool hasHardware(const std::string& name,
+                                    int num) const override;
    
     private:
      class GrpcClientImpl;

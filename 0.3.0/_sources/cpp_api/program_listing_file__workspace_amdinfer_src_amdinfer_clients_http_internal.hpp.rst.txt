@@ -46,7 +46,7 @@ Program Listing for File http_internal.hpp
    
    namespace amdinfer {
    
-   RequestParametersPtr mapJsonToParameters(Json::Value parameters);
+   RequestParametersPtr mapJsonToParameters(Json::Value json);
    Json::Value mapParametersToJson(RequestParameters *parameters);
    
    InferenceResponse mapJsonToResponse(Json::Value *json);
@@ -97,7 +97,7 @@ Program Listing for File http_internal.hpp
    drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
                                              int status_code);
    
-   Json::Value ModelMetadataToJson(const ModelMetadata &metadata);
+   Json::Value modelMetadataToJson(const ModelMetadata &metadata);
    ModelMetadata mapJsonToModelMetadata(const Json::Value *json);
    
    }  // namespace amdinfer

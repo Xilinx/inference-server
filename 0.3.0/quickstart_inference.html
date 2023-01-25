@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
@@ -103,6 +104,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -122,28 +125,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -171,7 +173,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -258,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -392,42 +394,64 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
              
   <section id="quickstart-inference">
 <h1>Quickstart - Inference<a class="headerlink" href="#quickstart-inference" title="Permalink to this headline">¶</a></h1>
-<p>This quickstart is intended for a user who is not configuring or maintaining the inference server and is just making inference requests to an existing server.</p>
-<p>You need the address of the server and the endpoint(s) for the models you want to use for inference.
+<p>This quickstart is intended for a user who is not configuring or maintaining the inference server and is just making inference requests to an existing server.
+There are multiple ways to make requests to the server but this quickstart only covers making requests using the inference server’s client library <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code>.</p>
+<p>To make requests, you need the address of the server and the endpoint(s) for the models you want to use for inference.
 Depending on how it is configured, the server may support HTTP/REST, gRPC or both protocols.
 Your server administrator can provide this information.</p>
-<p>Once the server is running somewhere, you can communicate with it from your own machine as long as you can connect to it.</p>
-<section id="making-requests-with-the-library">
-<h2>Making requests with the library<a class="headerlink" href="#making-requests-with-the-library" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to make requests is using the AMD Inference Server’s library <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code>.
-The library allows you to make a client object that you can use to communicate with the server over any protocol that the server supports.
-Clients have the same base set of methods so you can easily replace one with another.
-It also allows you to make objects to hold the requests and responses and use defined methods for interacting with them.</p>
-<p>The library is natively in C++ and has Python bindings that you can use as well.
-The C++ version of the library is most easily available in the development container for the Inference Server as that has all the needed dependencies already.
-If you want to use the C++ library outside the container, you need to resolve the dependencies yourself.
-You can <a class="reference internal" href="python.html#install-the-python-library"><span class="std std-ref">install the Python version</span></a> on a host, in an environment or in a container using a package.</p>
-<div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-0-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// your server administrator must provide the values for these variables:</span>
-<span class="c1">//   - http_server_addr: HTTP address of the server, if supported</span>
-<span class="c1">//   - grpc_server_addr: gRPC address of the server, if supported</span>
-<span class="c1">//   - endpoint: string to identify the model for inference. If there are</span>
-<span class="c1">//               multiple models available, each model will have its own</span>
-<span class="c1">//               endpoint that you can use to request inferences from it</span>
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">http_server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://127.0.0.1:8998&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">grpc_server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;127.0.0.1:50051&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span><span class="p">;</span><span class="w"></span>
-
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/amdinfer.hpp&quot;</span><span class="cp"></span>
-
-<span class="cp"># create a client to communicate to the server over HTTP</span>
-<span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">HttpClient</span><span class="w"> </span><span class="n">http_client</span><span class="p">{</span><span class="n">http_server_addr</span><span class="p">};</span><span class="w"></span>
-
-<span class="cp"># create a client to communicate to the server over gRPC</span>
-<span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">GrpcClient</span><span class="w"> </span><span class="n">grpc_client</span><span class="p">{</span><span class="n">grpc_server_addr</span><span class="p">};</span><span class="w"></span>
+<section id="get-the-library">
+<h2>Get the library<a class="headerlink" href="#get-the-library" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> library allows you to make clients that you can use to communicate with the server over any protocol that the server supports.
+Clients for different protocols have the same base set of methods so you can easily replace one with another.
+The library can be used from C++ or Python.</p>
+<p>You can use the development container to use the C++ and Python libraries:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Xilinx/inference-server.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>inference-server
+<span class="gp">$ </span>python3<span class="w"> </span>docker/generate.py
+<span class="gp">$ </span>./amdinfer<span class="w"> </span>dockerize
+<span class="gp">$ </span>./amdinfer<span class="w"> </span>run<span class="w"> </span>--dev<span class="w"> </span>--net-host
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># your server administrator must provide the values for these variables:</span>
+<p>This will build, start the development container and drop you into a terminal in the container.
+Then, inside the container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>amdinfer<span class="w"> </span>install
+</pre></div>
+</div>
+<p>This will install both the C++ and Python libraries in the container, which you can confirm:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>amdinfer
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;#include &quot;amdinfer/amdinfer.hpp&quot;\nint main(){return 0;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>g++<span class="w"> </span>-x<span class="w"> </span>c++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-o<span class="w"> </span>test.out<span class="w"> </span>/dev/stdin
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="running-the-examples">
+<h2>Running the examples<a class="headerlink" href="#running-the-examples" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/Xilinx/inference-server">AMD Inference Server repository</a> includes examples that demonstrate running an end-to-end inference request.
+To run the examples listed here, you need to ensure that the <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> Python library is installed and that the server you’re using has a compatible model loaded.
+These examples assume a ResNet50 model trained on the ImageNet dataset is available on the server and use a sample image and labels from the inference server repository but you can also use your own.</p>
+<pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/imagenet_classes.txt">https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/imagenet_classes.txt</a>
+$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/v0.3.0/tests/assets/dog-3619020_640.jpg">https://github.com/Xilinx/inference-server/raw/v0.3.0/tests/assets/dog-3619020_640.jpg</a></pre>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Q1BV" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-1-R1BV" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-1-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-1-Q1BV" class="sphinx-tabs-panel group-tab" id="panel-1-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/tfzendnn.py">https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/tfzendnn.py</a>
+$ python3 tfzendnn.py --ip &lt;ip_address&gt; --grpc-port &lt;port&gt; --endpoint &lt;endpoint&gt; --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
+</div><div aria-labelledby="tab-1-R1BV" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-R1BV" name="R1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/migraphx.py">https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/migraphx.py</a>
+$ python3 migraphx.py --ip &lt;ip_address&gt; --http-port &lt;port&gt; --endpoint &lt;endpoint&gt; --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
+</div><div aria-labelledby="tab-1-RlBHQQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/vitis.py">https://github.com/Xilinx/inference-server/raw/v0.3.0/examples/resnet50/vitis.py</a>
+$ python3 vitis.py --ip &lt;ip_address&gt; --http-port &lt;port&gt; --endpoint &lt;endpoint&gt; --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
+</div></div>
+</section>
+<section id="using-the-library">
+<h2>Using the library<a class="headerlink" href="#using-the-library" title="Permalink to this headline">¶</a></h2>
+<p>The examples above demonstrate a full end-to-end inference using the <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> Python library on a specific ResNet50 model.
+You can write your own scripts and programs to make inference requests to other models.
+The examples work similarly and you can use them for reference.</p>
+<p>The first step is to create a client.
+The type of client you create will depend on what protocols the server you’re using supports and which protocol you want to use.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># your server administrator must provide the values for these variables:</span>
 <span class="c1">#   - http_server_addr: HTTP address of the server, if supported</span>
 <span class="c1">#   - grpc_server_addr: gRPC address of the server, if supported</span>
 <span class="c1">#   - endpoint: string to identify the model for inference. If there are</span>
@@ -446,35 +470,34 @@ You can <a class="reference internal" href="python.html#install-the-python-libra
 <span class="n">grpc_client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">GrpcClient</span><span class="p">(</span><span class="n">grpc_server_addr</span><span class="p">)</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// your server administrator must provide the values for these variables:</span>
+<span class="c1">//   - http_server_addr: HTTP address of the server, if supported</span>
+<span class="c1">//   - grpc_server_addr: gRPC address of the server, if supported</span>
+<span class="c1">//   - endpoint: string to identify the model for inference. If there are</span>
+<span class="c1">//               multiple models available, each model will have its own</span>
+<span class="c1">//               endpoint that you can use to request inferences from it</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">http_server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://127.0.0.1:8998&quot;</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">grpc_server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;127.0.0.1:50051&quot;</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span><span class="p">;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/amdinfer.hpp&quot;</span>
+
+<span class="c1">// create a client to communicate to the server over HTTP</span>
+<span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">HttpClient</span><span class="w"> </span><span class="n">http_client</span><span class="p">{</span><span class="n">http_server_addr</span><span class="p">};</span>
+
+<span class="c1">// create a client to communicate to the server over gRPC</span>
+<span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">GrpcClient</span><span class="w"> </span><span class="n">grpc_client</span><span class="p">{</span><span class="n">grpc_server_addr</span><span class="p">};</span>
+</pre></div>
+</div>
 </div></div>
-<p>The library also defines the objects that you have to populate to send a request: an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code>.
+<p>The library also defines the object that you have to populate to send a request: an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code>.
 A request is made up of, at minimum, one or more <code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code> objects that define the input tensor(s) of your request.
 Each tensor must have a name, a data type, an associated shape and the data itself.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-1-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
-
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">input_tensor</span><span class="p">;</span><span class="w"></span>
-<span class="c1">// depending on the implementation, the string used here may be significant</span>
-<span class="n">input_tensor</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&quot;input_0&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="n">input_tensor</span><span class="p">.</span><span class="n">setDatatype</span><span class="p">(</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">INT64</span><span class="p">);</span><span class="w"></span>
-<span class="n">input_tensor</span><span class="p">.</span><span class="n">setShape</span><span class="p">({</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">});</span><span class="w"></span>
-<span class="c1">// the data should be flattened</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">{{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">}};</span><span class="w"></span>
-<span class="n">input_tensor</span><span class="p">.</span><span class="n">setData</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">());</span><span class="w"></span>
-
-<span class="n">request</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span><span class="w"></span>
-
-<span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">http_client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="c1">// either client can be used relatively interchangeably</span>
-<span class="c1">// response = grpc_client.modelInfer(endpoint, request)</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">request</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">InferenceRequest</span><span class="p">()</span>
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">request</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">InferenceRequest</span><span class="p">()</span>
 
 <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">InferenceRequestInput</span><span class="p">()</span>
-<span class="c1"># depending on the implementation, the string used here may be significant</span>
+<span class="c1"># depending on the model, the string used here may be significant</span>
 <span class="n">input_tensor</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;input_0&quot;</span>
 <span class="n">input_tensor</span><span class="o">.</span><span class="n">datatype</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span>
 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
@@ -484,19 +507,58 @@ Each tensor must have a name, a data type, an associated shape and the data itse
 <span class="n">request</span><span class="o">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">http_client</span><span class="o">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-<span class="c1"># either client can be used relatively interchangeably</span>
+<span class="c1"># either client can be used interchangeably</span>
 <span class="c1"># response = grpc_client.modelInfer(endpoint, request)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">input_tensor</span><span class="p">;</span>
+<span class="c1">// depending on the endpoint, the string used here may be significant</span>
+<span class="n">input_tensor</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="s">&quot;input_0&quot;</span><span class="p">);</span>
+<span class="n">input_tensor</span><span class="p">.</span><span class="n">setDatatype</span><span class="p">(</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Int64</span><span class="p">);</span>
+<span class="n">input_tensor</span><span class="p">.</span><span class="n">setShape</span><span class="p">({</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">});</span>
+<span class="c1">// the data should be flattened</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">{{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">}};</span>
+<span class="n">input_tensor</span><span class="p">.</span><span class="n">setData</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+
+<span class="n">request</span><span class="p">.</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+
+<span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">http_client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="c1">// either client can be used interchangeably</span>
+<span class="c1">// response = grpc_client.modelInfer(endpoint, request)</span>
 </pre></div>
 </div>
 </div></div>
 <p>The result of the inference is an <code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code> object that you can examine to get the results.</p>
-<p>For more information about these objects and the available methods, look at the examples or the documentation for the <a class="reference internal" href="cpp_user_api.html#c"><span class="std std-ref">C++</span></a> and <a class="reference internal" href="python.html#api"><span class="std std-ref">Python</span></a> APIs.</p>
-</section>
-<section id="making-requests-directly">
-<h2>Making requests directly<a class="headerlink" href="#making-requests-directly" title="Permalink to this headline">¶</a></h2>
-<p>If you are unable to use the library, you can also communicate with the server directly over REST or gRPC.
-However, you will need to construct the requests yourself in the correct format.
-Both the <a class="reference internal" href="rest.html#rest-endpoints"><span class="std std-ref">REST API</span></a> and the <a class="reference external" href="https://github.com/Xilinx/inference-server/blob/v0.3.0/src/amdinfer/core/predict_api.proto">gRPC API</a> are documented.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isError</span><span class="p">()</span>
+<span class="n">output_tensors</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">output_tensor</span> <span class="ow">in</span> <span class="n">output_tensors</span><span class="p">:</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">output_tensor</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">datatype</span> <span class="o">=</span> <span class="n">output_tensor</span><span class="o">.</span><span class="n">datatype</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getFp32Data</span><span class="p">()</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getSize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-Qysr" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-4-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span>
+<span class="c1">// vector of amdinfer::InferenceResponseOutput objects</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">output_tensors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span>
+
+<span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">output_tensor</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">outputs</span><span class="p">){</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_tensor</span><span class="p">.</span><span class="n">getShape</span><span class="p">();</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">datatype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_tensor</span><span class="p">.</span><span class="n">getDataType</span><span class="p">()</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">output_tensor</span><span class="p">.</span><span class="n">getData</span><span class="p">());</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output</span><span class="p">.</span><span class="n">getSize</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+<p>These examples show how to use the library to construct a request, make an inference and examine the response.
+They do not show any model-specific pre- and post-processing that may be needed.
+If needed, you must implement it or use an existing implementation for your model.</p>
+<p>For more information about usage and the available methods, look at the examples or the documentation for the <a class="reference internal" href="cpp_user_api.html#c"><span class="std std-ref">C++</span></a> and <a class="reference internal" href="python.html#module-amdinfer"><span class="std std-ref">Python</span></a> APIs.</p>
 </section>
 </section>
 
@@ -522,7 +584,7 @@ Both the <a class="reference internal" href="rest.html#rest-endpoints"><span cla
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

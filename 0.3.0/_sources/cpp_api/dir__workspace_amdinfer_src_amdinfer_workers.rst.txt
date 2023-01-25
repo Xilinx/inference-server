@@ -18,6 +18,7 @@ Files
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`

@@ -65,8 +65,6 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`

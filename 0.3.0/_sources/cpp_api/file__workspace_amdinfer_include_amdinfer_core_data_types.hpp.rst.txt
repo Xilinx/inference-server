@@ -35,11 +35,7 @@ Includes
 --------
 
 
-- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
-
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
-
-- ``cassert``
 
 - ``cstddef``
 
@@ -51,13 +47,13 @@ Includes
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
+- ``string_view``
+
 
 
 Included By
 -----------
 
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
 
@@ -65,11 +61,15 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`
 
@@ -128,7 +128,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_data__types_8hpp_1aae326a9a1c4392c4eede674a55989e48`
+- :ref:`exhale_function_data__types_8hpp_1a9f421600e40d463aae440ef86d990f77`
 
 - :ref:`exhale_function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb`
 

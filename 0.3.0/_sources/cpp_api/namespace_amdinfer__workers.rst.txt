@@ -55,13 +55,24 @@ Enums
 - :ref:`exhale_enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370`
 
 
+Functions
+---------
+
+
+- :ref:`exhale_function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59`
+
+- :ref:`exhale_function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899`
+
+
 Variables
 ---------
 
 
+- :ref:`exhale_variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332`
+
 - :ref:`exhale_variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da`
 
-- :ref:`exhale_variable_resnet50__stream_8cpp_1a3cf9bf5036efcc4d92cb4b5faec907a6`
+- :ref:`exhale_variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab`
 
 - :ref:`exhale_variable_aks__detect_8cpp_1a04c17f159348c95b8f43e30dd5870d13`
 
@@ -71,6 +82,20 @@ Variables
 
 - :ref:`exhale_variable_aks__detect_8cpp_1aef4b7872e7395e2c7fdf950685bc2c94`
 
-- :ref:`exhale_variable_resnet50__stream_8cpp_1afe3341a020a5ae7f03cbd635abaa90fc`
+- :ref:`exhale_variable_resnet50__stream_8cpp_1aa1000a0c48850c27d70bea0534ee229f`
+
+- :ref:`exhale_variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74`
+
+- :ref:`exhale_variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0`
+
+- :ref:`exhale_variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a`
+
+- :ref:`exhale_variable_invert__video_8cpp_1ad040ac198e6b944c664091b286f73212`
 
 - :ref:`exhale_variable_resnet50__stream_8cpp_1af570cb232c9a5846340eae70c6c53ec6`
+
+- :ref:`exhale_variable_pt__zendnn_8cpp_1a6c6cc50416b27fffc4564f6457fef623`
+
+- :ref:`exhale_variable_pt__zendnn_8cpp_1a5544d4acb89db442cba40fdb51c296c3`
+
+- :ref:`exhale_variable_pt__zendnn_8cpp_1a7080de13bbb4da809cfeea4f64cfa3b1`

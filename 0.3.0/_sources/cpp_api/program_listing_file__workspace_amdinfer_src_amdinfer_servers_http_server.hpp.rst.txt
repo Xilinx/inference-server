@@ -152,7 +152,7 @@ Program Listing for File http_server.hpp
    #endif
    #ifdef AMDINFER_ENABLE_LOGGING
     private:
-     Logger logger_{Loggers::kServer};
+     Logger logger_{Loggers::Server};
    #endif
    };
    

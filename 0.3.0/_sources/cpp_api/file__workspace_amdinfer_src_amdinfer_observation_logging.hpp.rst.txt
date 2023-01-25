@@ -69,8 +69,6 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`

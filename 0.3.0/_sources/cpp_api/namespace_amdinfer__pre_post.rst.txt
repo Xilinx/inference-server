@@ -40,12 +40,19 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_softmax_8hpp_1a0751a3e558d4dc26bd1a8ca8c5f222d3`
+- :ref:`exhale_function_softmax_8hpp_1acab8d186d21c38a86ed76bb9246a58da`
 
 - :ref:`exhale_function_center__crop_8hpp_1a38fcd76500e2a2a6f82b483f40898886`
 
-- :ref:`exhale_function_get__top__k_8hpp_1a3b6421b0603fd4c79ca0263c3a582a5b`
+- :ref:`exhale_function_get__top__k_8hpp_1ae80f6fce372daf2a6692cedafc970557`
 
 - :ref:`exhale_function_image__preprocess_8hpp_1a6f99956e2db2c6e15a806fc1a0c02c1f`
 
 - :ref:`exhale_function_resnet50__postprocess_8hpp_1a50359236db961994e219d8eff7ae2aec`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_image__preprocess_8hpp_1a08c9e02a82e9fb21f8aa57bbbd33f77f`

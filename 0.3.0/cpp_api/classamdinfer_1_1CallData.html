@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -102,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -121,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -170,7 +172,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -257,7 +259,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -447,23 +449,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer8CallData10CallStatusE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatusE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CallStatus</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatusE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus6CREATEE">
-<span id="_CPPv3N8amdinfer8CallData10CallStatus6CREATEE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus6CREATEE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704ae656c3db6ce7c8ec52035978d1cf5a48"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CREATE</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus6CREATEE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus6CreateE">
+<span id="_CPPv3N8amdinfer8CallData10CallStatus6CreateE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus6CreateE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704a280692d68c683180f8bc53be8437e1f6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Create</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus6CreateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus7PROCESSE">
-<span id="_CPPv3N8amdinfer8CallData10CallStatus7PROCESSE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus7PROCESSE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704a4b30692693f407c0de796c703f2ba20f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PROCESS</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus7PROCESSE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus7ProcessE">
+<span id="_CPPv3N8amdinfer8CallData10CallStatus7ProcessE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus7ProcessE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704ae6fc231126d8d8b0a93df075e2fb6521"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Process</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus7ProcessE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus4WAITE">
-<span id="_CPPv3N8amdinfer8CallData10CallStatus4WAITE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus4WAITE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704a01f9690f73d70c625bdb5c436fe433ac"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WAIT</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus4WAITE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus4WaitE">
+<span id="_CPPv3N8amdinfer8CallData10CallStatus4WaitE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus4WaitE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704a1a359478bd8e7c177aed546e44f8d57d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Wait</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus4WaitE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus6FINISHE">
-<span id="_CPPv3N8amdinfer8CallData10CallStatus6FINISHE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus6FINISHE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704ab9c25595b276d1a643b0b1841b83b8e1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FINISH</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus6FINISHE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8CallData10CallStatus6FinishE">
+<span id="_CPPv3N8amdinfer8CallData10CallStatus6FinishE"></span><span id="_CPPv2N8amdinfer8CallData10CallStatus6FinishE"></span><span class="target" id="classamdinfer_1_1CallData_1af11a414bf11f8ed2ce62691009c78704a8a09123da595fa2787dc14433ce42a9f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Finish</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8CallData10CallStatus6FinishE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -547,7 +549,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

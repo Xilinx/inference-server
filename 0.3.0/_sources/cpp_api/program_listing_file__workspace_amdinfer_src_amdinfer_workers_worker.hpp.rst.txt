@@ -48,23 +48,23 @@ Program Listing for File worker.hpp
    namespace workers {
    
    enum class WorkerStatus {
-     kNew,
-     kInit,
-     kAllocate,
-     kAcquire,
-     kRun,
-     kInactive,
-     kRelease,
-     kDeallocate,
-     kDestroy,
-     kDead
+     New,
+     Init,
+     Allocate,
+     Acquire,
+     Run,
+     Inactive,
+     Release,
+     Deallocate,
+     Destroy,
+     Dead
    };
    
    class Worker {
     public:
      Worker(const std::string& name, const std::string& platform)
        : metadata_(name, platform) {
-       this->status_ = WorkerStatus::kNew;
+       this->status_ = WorkerStatus::New;
        this->input_buffers_ = nullptr;
        this->output_buffers_ = nullptr;
        this->max_buffer_num_ = UINT_MAX;
@@ -75,38 +75,38 @@ Program Listing for File worker.hpp
      virtual std::thread spawn(BatchPtrQueue* input_queue) = 0;
    
      void init(RequestParameters* parameters) {
-       this->status_ = WorkerStatus::kInit;
+       this->status_ = WorkerStatus::Init;
        this->doInit(parameters);
      }
      size_t allocate(size_t num) {
-       this->status_ = WorkerStatus::kAllocate;
+       this->status_ = WorkerStatus::Allocate;
        return this->doAllocate(num);
      }
      void acquire(RequestParameters* parameters) {
-       this->status_ = WorkerStatus::kAcquire;
+       this->status_ = WorkerStatus::Acquire;
        this->doAcquire(parameters);
        this->metadata_.setReady(true);
      }
      void run(BatchPtrQueue* input_queue) {
-       this->status_ = WorkerStatus::kRun;
+       this->status_ = WorkerStatus::Run;
        this->doRun(input_queue);
-       this->status_ = WorkerStatus::kInactive;
+       this->status_ = WorkerStatus::Inactive;
      }
      void release() {
-       this->status_ = WorkerStatus::kRelease;
+       this->status_ = WorkerStatus::Release;
        this->metadata_.setReady(false);
        this->doRelease();
      }
      void deallocate() {
-       this->status_ = WorkerStatus::kDeallocate;
+       this->status_ = WorkerStatus::Deallocate;
        this->doDeallocate();
        this->input_buffers_ = nullptr;
        this->output_buffers_ = nullptr;
      }
      void destroy() {
-       this->status_ = WorkerStatus::kDestroy;
+       this->status_ = WorkerStatus::Destroy;
        this->doDestroy();
-       this->status_ = WorkerStatus::kDead;
+       this->status_ = WorkerStatus::Dead;
      }
    
      void returnBuffers(std::unique_ptr<std::vector<BufferPtrs>> input_buffers,
@@ -153,7 +153,7 @@ Program Listing for File worker.hpp
    
     protected:
    #ifdef AMDINFER_ENABLE_LOGGING
-     const Logger& getLogger() const { return logger_; };
+     [[nodiscard]] const Logger& getLogger() const { return logger_; };
    #endif
    
      BufferPtrsQueue* input_buffers_;
@@ -172,7 +172,7 @@ Program Listing for File worker.hpp
      virtual void doDestroy() = 0;
    
    #ifdef AMDINFER_ENABLE_LOGGING
-     Logger logger_{Loggers::kServer};
+     Logger logger_{Loggers::Server};
    #endif
    
      WorkerStatus status_;

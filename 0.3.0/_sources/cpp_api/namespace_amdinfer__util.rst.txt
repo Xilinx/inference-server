@@ -19,6 +19,10 @@ Classes
 
 - :ref:`exhale_struct_structamdinfer_1_1util_1_1is__any`
 
+- :ref:`exhale_class_classamdinfer_1_1util_1_1ThreadPool`
+
+- :ref:`exhale_class_classamdinfer_1_1util_1_1Timer`
+
 
 Functions
 ---------
@@ -28,19 +32,19 @@ Functions
 
 - :ref:`exhale_function_parse__env_8cpp_1a4251368d5d2f3507fb4ac4296f71c1d3`
 
-- :ref:`exhale_function_base64_8cpp_1a23046fcc3e0811f2990bb9b944927510`
+- :ref:`exhale_function_base64_8cpp_1a3fab927a4086e187790fddf5d7356625`
 
-- :ref:`exhale_function_base64_8cpp_1aa4091ad73805c2d6aa1f1c05cb552ff5`
+- :ref:`exhale_function_base64_8cpp_1a726cc9124c561dfd45dfbeceeb78f3be`
 
-- :ref:`exhale_function_base64_8cpp_1aee9b0fbf15e4d37e62d2b263d546c5e8`
+- :ref:`exhale_function_base64_8cpp_1ac5e3a230a657bc4195e886fc328f4adf`
 
-- :ref:`exhale_function_base64_8cpp_1ae50b1ca52f2936e85e477f18b6c8fd50`
+- :ref:`exhale_function_base64_8cpp_1a6c38e256b28c2a5348ef810fe4e96067`
 
 - :ref:`exhale_function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327`
 
 - :ref:`exhale_function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f`
 
-- :ref:`exhale_function_parse__env_8cpp_1a8ce41d99ba53522df6ba71cffaf73f99`
+- :ref:`exhale_function_timer_8cpp_1a8a0c21722d4843898884016ab59ba783`
 
 - :ref:`exhale_function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210`
 
@@ -60,7 +64,14 @@ Functions
 
 - :ref:`exhale_function_string_8hpp_1a4414f2322f12277f964e4a7cc3ae6733`
 
-- :ref:`exhale_function_compression_8cpp_1a1a216241020e4c6fbd33c97243275bed`
+- :ref:`exhale_function_compression_8cpp_1a927c584d5b765b2f1d3ffab394fbfcac`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_timer_8hpp_1ac892ad2b905321f7e3be6dea415c4794`
 
 
 Variables
@@ -68,3 +79,5 @@ Variables
 
 
 - :ref:`exhale_variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391`
+
+- :ref:`exhale_variable_ctpl_8cpp_1a3d0e67ce722206db215f42681f069659`

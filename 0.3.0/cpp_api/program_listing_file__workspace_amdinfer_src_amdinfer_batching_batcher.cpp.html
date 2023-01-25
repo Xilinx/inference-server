@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -100,6 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -119,28 +122,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -168,7 +170,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -255,7 +257,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -405,160 +407,160 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// See the License for the specific language governing permissions and</span>
 <span class="c1">// limitations under the License.</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/batcher.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/batcher.hpp&quot;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span><span class="c1">  // for assert</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">   // for shared_ptr, make_shared</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">   // for string</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">  // for move</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span><span class="c1">  // for assert</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">   // for shared_ptr, make_shared</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">   // for string</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">  // for move</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/buffer.hpp&quot;</span><span class="c1">       // IWYU pragma: keep</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">       // IWYU pragma: keep</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/worker_info.hpp&quot;</span><span class="c1">     // for WorkerInfo</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for Logger, Loggers, Loggers:...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/buffer.hpp&quot;</span><span class="c1">       // IWYU pragma: keep</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">       // IWYU pragma: keep</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/worker_info.hpp&quot;</span><span class="c1">     // for WorkerInfo</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for Logger, Loggers, Loggers:...</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
-<span class="n">Batcher</span><span class="o">::</span><span class="n">Batcher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">InterfacePtr</span><span class="o">&gt;&gt;</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">BatchPtrQueue</span><span class="o">&gt;</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">kNew</span><span class="p">;</span><span class="w"></span>
+<span class="n">Batcher</span><span class="o">::</span><span class="n">Batcher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">InterfacePtr</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">BatchPtrQueue</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">New</span><span class="p">;</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">logger_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">(</span><span class="n">Loggers</span><span class="o">::</span><span class="n">kServer</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">logger_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">(</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">);</span>
 <span class="cp">#endif</span>
-<span class="p">}</span><span class="w"></span>
+<span class="p">}</span>
 
-<span class="n">Batcher</span><span class="o">::</span><span class="n">Batcher</span><span class="p">(</span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Batcher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parameters</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">Batcher</span><span class="o">::</span><span class="n">Batcher</span><span class="p">(</span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Batcher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parameters</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">parameters</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="n">Batcher</span><span class="o">::</span><span class="n">Batcher</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Batcher</span><span class="o">&amp;</span><span class="w"> </span><span class="n">batcher</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">input_queue_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">output_queue_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">batch_size_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">kNew</span><span class="p">;</span><span class="w"></span>
+<span class="n">Batcher</span><span class="o">::</span><span class="n">Batcher</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Batcher</span><span class="o">&amp;</span><span class="w"> </span><span class="n">batcher</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">input_queue_</span><span class="p">;</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">output_queue_</span><span class="p">;</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">batch_size_</span><span class="p">;</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">New</span><span class="p">;</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">logger_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">(</span><span class="n">Loggers</span><span class="o">::</span><span class="n">kServer</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">logger_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Logger</span><span class="p">(</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">);</span>
 <span class="cp">#endif</span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">model_</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">model_</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">start</span><span class="p">(</span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">kRun</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">thread_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Batcher</span><span class="o">::</span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">start</span><span class="p">(</span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">Run</span><span class="p">;</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">thread_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Batcher</span><span class="o">::</span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">worker</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">setBatchSize</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">batch_size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch_size</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">setBatchSize</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">batch_size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch_size</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">setName</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">setName</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">InterfacePtr</span><span class="o">&gt;*</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getInputQueue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">InterfacePtr</span><span class="o">&gt;*</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getInputQueue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="p">}</span>
 
-<span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getOutputQueue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getOutputQueue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">enqueue</span><span class="p">(</span><span class="n">InterfacePtr</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">enqueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">enqueue</span><span class="p">(</span><span class="n">InterfacePtr</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">enqueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doRun</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">kInactive</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doRun</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">Inactive</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="n">BatcherStatus</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getStatus</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="n">BatcherStatus</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getStatus</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">thread_</span><span class="p">.</span><span class="n">join</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">kDead</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">thread_</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BatcherStatus</span><span class="o">::</span><span class="n">Dead</span><span class="p">;</span>
+<span class="p">}</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
-<span class="k">const</span><span class="w"> </span><span class="n">Logger</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getLogger</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">logger_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">Logger</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batcher</span><span class="o">::</span><span class="n">getLogger</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">logger_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="cp">#endif</span>
 
-<span class="n">Batch</span><span class="o">::</span><span class="n">Batch</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">worker_</span><span class="p">(</span><span class="n">worker</span><span class="p">),</span><span class="w"></span>
-<span class="w">    </span><span class="n">input_buffers_</span><span class="p">(</span><span class="n">worker</span><span class="o">-&gt;</span><span class="n">getInputBuffer</span><span class="p">()),</span><span class="w"></span>
-<span class="w">    </span><span class="n">output_buffers_</span><span class="p">(</span><span class="n">worker</span><span class="o">-&gt;</span><span class="n">getOutputBuffer</span><span class="p">())</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="n">Batch</span><span class="o">::</span><span class="n">Batch</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">worker_</span><span class="p">(</span><span class="n">worker</span><span class="p">),</span>
+<span class="w">    </span><span class="n">input_buffers_</span><span class="p">(</span><span class="n">worker</span><span class="o">-&gt;</span><span class="n">getInputBuffer</span><span class="p">()),</span>
+<span class="w">    </span><span class="n">output_buffers_</span><span class="p">(</span><span class="n">worker</span><span class="o">-&gt;</span><span class="n">getOutputBuffer</span><span class="p">())</span><span class="w"> </span><span class="p">{}</span>
 
-<span class="n">Batch</span><span class="o">::~</span><span class="n">Batch</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">worker_</span><span class="o">-&gt;</span><span class="n">putInputBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">input_buffers_</span><span class="p">));</span><span class="w"></span>
-<span class="w">  </span><span class="n">worker_</span><span class="o">-&gt;</span><span class="n">putOutputBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">output_buffers_</span><span class="p">));</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">Batch</span><span class="o">::~</span><span class="n">Batch</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">worker_</span><span class="o">-&gt;</span><span class="n">putInputBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">input_buffers_</span><span class="p">));</span>
+<span class="w">  </span><span class="n">worker_</span><span class="o">-&gt;</span><span class="n">putOutputBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">output_buffers_</span><span class="p">));</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">addRequest</span><span class="p">(</span><span class="n">InferenceRequestPtr</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">requests_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">addRequest</span><span class="p">(</span><span class="n">InferenceRequestPtr</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">requests_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span>
+<span class="p">}</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRawInputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">input_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">buffers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRawInputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span>
+<span class="w">  </span><span class="n">buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">input_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buffers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">BufferPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getInputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">BufferPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getInputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRawOutputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">output_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">buffers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRawOutputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span>
+<span class="w">  </span><span class="n">buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">output_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">buffers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">BufferPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getOutputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">BufferPtrs</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getOutputBuffers</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">InferenceRequestPtr</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRequests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">InferenceRequestPtr</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRequests</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">InferenceRequestPtr</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRequest</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">InferenceRequestPtr</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getRequest</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="kt">bool</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
 
-<span class="kt">size_t</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">requests_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">traces_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">requests_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">traces_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 <span class="cp">#endif</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">requests_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">start_times_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">requests_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">start_times_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 <span class="cp">#endif</span>
 
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">requests_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="p">}</span>
 
-<span class="kt">size_t</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">input_size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getInputSize</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
 
-<span class="kt">size_t</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">output_size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getOutputSize</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">addTrace</span><span class="p">(</span><span class="n">TracePtr</span><span class="w"> </span><span class="n">trace</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">traces_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">addTrace</span><span class="p">(</span><span class="n">TracePtr</span><span class="w"> </span><span class="n">trace</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">traces_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span><span class="w"> </span><span class="p">}</span>
 
-<span class="n">TracePtr</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getTrace</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">traces_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="n">TracePtr</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getTrace</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">traces_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 <span class="cp">#endif</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="kt">void</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">addTime</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">timestamp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">start_times_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">timestamp</span><span class="p">));</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">addTime</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">timestamp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">start_times_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">timestamp</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getTime</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">start_times_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">Batch</span><span class="o">::</span><span class="n">getTime</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">start_times_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+<span class="p">}</span>
 <span class="cp">#endif</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
@@ -585,7 +587,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

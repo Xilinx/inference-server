@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -102,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -121,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -170,7 +172,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -257,7 +259,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -400,7 +402,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataTypeE">
 <span id="_CPPv3N8amdinfer8DataTypeE"></span><span id="_CPPv2N8amdinfer8DataTypeE"></span><span id="amdinfer::DataType"></span><span class="target" id="classamdinfer_1_1DataType"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataType</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataTypeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Supported data types. </p>
+<dd><p>Supported data types. The ALL_CAPS aliases are deprecated and will be removed. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp enum">
@@ -408,8 +410,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer8DataType5ValueE"></span><span id="_CPPv2N8amdinfer8DataType5ValueE"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1ab"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Value</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5ValueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4BoolE">
+<span id="_CPPv3N8amdinfer8DataType5Value4BoolE"></span><span id="_CPPv2N8amdinfer8DataType5Value4BoolE"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba9862b4c97a3abbc1de50b6e3cd292fd1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bool</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4BoolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4BOOLE">
 <span id="_CPPv3N8amdinfer8DataType5Value4BOOLE"></span><span id="_CPPv2N8amdinfer8DataType5Value4BOOLE"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abac01f82fe923d81dacde111dff49a4d6a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BOOL</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4BOOLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value5Uint8E">
+<span id="_CPPv3N8amdinfer8DataType5Value5Uint8E"></span><span id="_CPPv2N8amdinfer8DataType5Value5Uint8E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba1852acc6bfb9f3dbd714b74cf31a373d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Uint8</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value5Uint8E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -418,8 +430,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6Uint16E">
+<span id="_CPPv3N8amdinfer8DataType5Value6Uint16E"></span><span id="_CPPv2N8amdinfer8DataType5Value6Uint16E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba55f027747e9d97aee499c34a121a16d5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Uint16</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6Uint16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6UINT16E">
 <span id="_CPPv3N8amdinfer8DataType5Value6UINT16E"></span><span id="_CPPv2N8amdinfer8DataType5Value6UINT16E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abaf1cb791a0f9e2c80cb902844d2910db5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UINT16</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6UINT16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6Uint32E">
+<span id="_CPPv3N8amdinfer8DataType5Value6Uint32E"></span><span id="_CPPv2N8amdinfer8DataType5Value6Uint32E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abada85ae89f5a44b40feecee631abdca1d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Uint32</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6Uint32E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -428,8 +450,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6Uint64E">
+<span id="_CPPv3N8amdinfer8DataType5Value6Uint64E"></span><span id="_CPPv2N8amdinfer8DataType5Value6Uint64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba365bc4477328a03b7907d5a42e026eed"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Uint64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6Uint64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6UINT64E">
 <span id="_CPPv3N8amdinfer8DataType5Value6UINT64E"></span><span id="_CPPv2N8amdinfer8DataType5Value6UINT64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba15d5fc7da608461ccb3a0963a0d8c6f0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UINT64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6UINT64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4Int8E">
+<span id="_CPPv3N8amdinfer8DataType5Value4Int8E"></span><span id="_CPPv2N8amdinfer8DataType5Value4Int8E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abaf3fe191a01968957e02f01eadc2b1f13"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int8</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4Int8E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -438,8 +470,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value5Int16E">
+<span id="_CPPv3N8amdinfer8DataType5Value5Int16E"></span><span id="_CPPv2N8amdinfer8DataType5Value5Int16E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba805d30631410b0376d8db29395664c94"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int16</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value5Int16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value5INT16E">
 <span id="_CPPv3N8amdinfer8DataType5Value5INT16E"></span><span id="_CPPv2N8amdinfer8DataType5Value5INT16E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba88f4be63a5f884800da06eae2ce257ca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">INT16</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value5INT16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value5Int32E">
+<span id="_CPPv3N8amdinfer8DataType5Value5Int32E"></span><span id="_CPPv2N8amdinfer8DataType5Value5Int32E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abaed397d71fb37ac81c1c1f637ac453bd4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int32</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value5Int32E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -448,8 +490,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value5Int64E">
+<span id="_CPPv3N8amdinfer8DataType5Value5Int64E"></span><span id="_CPPv2N8amdinfer8DataType5Value5Int64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1ababbf22eefbecacb3492567104c17faebf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Int64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value5Int64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value5INT64E">
 <span id="_CPPv3N8amdinfer8DataType5Value5INT64E"></span><span id="_CPPv2N8amdinfer8DataType5Value5INT64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abadc2b81a08bb8991bef89656889ceb223"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">INT64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value5INT64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4Fp16E">
+<span id="_CPPv3N8amdinfer8DataType5Value4Fp16E"></span><span id="_CPPv2N8amdinfer8DataType5Value4Fp16E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abab660f925093b217428c9acefb209a613"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Fp16</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4Fp16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value7Float16E">
+<span id="_CPPv3N8amdinfer8DataType5Value7Float16E"></span><span id="_CPPv2N8amdinfer8DataType5Value7Float16E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba86a6b53e918f5bb8d0b0c1962d13a90b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float16</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value7Float16E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -458,13 +515,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4Fp32E">
+<span id="_CPPv3N8amdinfer8DataType5Value4Fp32E"></span><span id="_CPPv2N8amdinfer8DataType5Value4Fp32E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba0d975ff405f90c5e27255c6498c93ec4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Fp32</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4Fp32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value7Float32E">
+<span id="_CPPv3N8amdinfer8DataType5Value7Float32E"></span><span id="_CPPv2N8amdinfer8DataType5Value7Float32E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba40f38658e5dba1731d66f5380dd48e8e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float32</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value7Float32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4FP32E">
 <span id="_CPPv3N8amdinfer8DataType5Value4FP32E"></span><span id="_CPPv2N8amdinfer8DataType5Value4FP32E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba9feab72e07b93e3fd52097c805286f82"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FP32</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4FP32E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value7FLOAT32E">
-<span id="_CPPv3N8amdinfer8DataType5Value7FLOAT32E"></span><span id="_CPPv2N8amdinfer8DataType5Value7FLOAT32E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abacee20c3f15710f7ff3b14b455920a8b6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FLOAT32</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value7FLOAT32E" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value4Fp64E">
+<span id="_CPPv3N8amdinfer8DataType5Value4Fp64E"></span><span id="_CPPv2N8amdinfer8DataType5Value4Fp64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abaa03d23b57315661f6a2a048e21f2b0e1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Fp64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value4Fp64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value7Float64E">
+<span id="_CPPv3N8amdinfer8DataType5Value7Float64E"></span><span id="_CPPv2N8amdinfer8DataType5Value7Float64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba6c8716ac02bd95fd84930bd9f4f17008"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Float64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value7Float64E" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -473,13 +545,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value7FLOAT64E">
-<span id="_CPPv3N8amdinfer8DataType5Value7FLOAT64E"></span><span id="_CPPv2N8amdinfer8DataType5Value7FLOAT64E"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abae5ff2d16bed3b4a30db02b5bb132c710"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FLOAT64</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value7FLOAT64E" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6StringE">
+<span id="_CPPv3N8amdinfer8DataType5Value6StringE"></span><span id="_CPPv2N8amdinfer8DataType5Value6StringE"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba97487d35cd0a7db94ae5f8a9a0ac8407"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">String</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6StringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value6STRINGE">
 <span id="_CPPv3N8amdinfer8DataType5Value6STRINGE"></span><span id="_CPPv2N8amdinfer8DataType5Value6STRINGE"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1abafd53dad229667f457459846d1fcc7689"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">STRING</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value6STRINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType5Value7UnknownE">
+<span id="_CPPv3N8amdinfer8DataType5Value7UnknownE"></span><span id="_CPPv2N8amdinfer8DataType5Value7UnknownE"></span><span class="target" id="classamdinfer_1_1DataType_1ac4fe57b5c366707ca86054cd9384a1aba347ecf4f51404b9193b176bea0dfda24"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unknown</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType5Value7UnknownE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
@@ -494,13 +571,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType8DataTypeEv">
-<span id="_CPPv3N8amdinfer8DataType8DataTypeEv"></span><span id="_CPPv2N8amdinfer8DataType8DataTypeEv"></span><span id="amdinfer::DataType::DataTypeCE"></span><span class="target" id="classamdinfer_1_1DataType_1a7c0b6f2f42251790070f2f74eb397064"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType8DataTypeEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer8DataType8DataTypeEv"></span><span id="_CPPv2N8amdinfer8DataType8DataTypeEv"></span><span id="amdinfer::DataType::DataTypeCE"></span><span class="target" id="classamdinfer_1_1DataType_1ae43b3bb5526d67f9c07fd659944693c8"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType8DataTypeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1DataType"><span class="std std-ref">DataType</span></a> object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer8DataType8DataTypeEPKc">
-<span id="_CPPv3N8amdinfer8DataType8DataTypeEPKc"></span><span id="_CPPv2N8amdinfer8DataType8DataTypeEPKc"></span><span id="amdinfer::DataType::DataType__cCPCE"></span><span class="target" id="classamdinfer_1_1DataType_1a4bc601c1a97684806683f49d1916efe5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataType</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType8DataTypeEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer8DataType8DataTypeEPKc"></span><span id="_CPPv2N8amdinfer8DataType8DataTypeEPKc"></span><span id="amdinfer::DataType::DataType__cCPCE"></span><span class="target" id="classamdinfer_1_1DataType_1a4bc601c1a97684806683f49d1916efe5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataType</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer8DataType8DataTypeEPKc" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1DataType"><span class="std std-ref">DataType</span></a> object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -540,7 +617,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer8DataType3strEv">
 <span id="_CPPv3NK8amdinfer8DataType3strEv"></span><span id="_CPPv2NK8amdinfer8DataType3strEv"></span><span id="amdinfer::DataType::strCCE"></span><span class="target" id="classamdinfer_1_1DataType_1a382f822ddfa243494f8b1061823e7ba2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer8DataType3strEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Given a type, return a string corresponding to the type. </p>
+<dd><p>Given a type, return a string corresponding to the type. KServe requires the string form to be specific values and in all caps. This adheres to that. If these string values are changed, then each server will need to map the values to the ones KServe expects. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>const char* </p>
@@ -596,7 +673,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

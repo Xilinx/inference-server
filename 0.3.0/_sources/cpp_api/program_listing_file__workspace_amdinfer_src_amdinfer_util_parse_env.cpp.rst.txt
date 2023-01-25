@@ -28,38 +28,36 @@ Program Listing for File parse_env.cpp
    #include "amdinfer/util/parse_env.hpp"
    
    #include <cstdlib>  // for getenv
+   #include <iosfwd>   // for _GLIBCXX_USE_CXX11_ABI
    #include <regex>    // for match_results<>::_Base_type, match_results, rege...
    #include <string>   // for string, basic_string, allocator
    #include <vector>   // for vector
-   
-   // https://stackoverflow.com/a/23442780
    
    namespace amdinfer::util {
    
    // Update the input string.
    void autoExpandEnvironmentVariables(std::string& text) {
-     static std::regex env(R"(\$\{([^}]+)\})");
+     // match for ${...} in a string
+     static std::regex env{R"(\$\{([^}]+)\})"};
      std::smatch match;
      while (std::regex_search(text, match, env)) {
-       const char* s = getenv(match[1].str().c_str());
-       const std::string var(s == nullptr ? "" : s);
+       // match[1] corresponds to the text inside the {} in the match
+       const auto* s = getenv(match[1].str().c_str());
+       const std::string var{s == nullptr ? "" : s};
    #if _GLIBCXX_USE_CXX11_ABI == 0
+       // when compiling without CXX11 ABI, the string and iterator classes behave
+       // differently and the original code doesn't compile
        auto start = text.begin();
        std::advance(start, std::distance(text.cbegin(), match[0].first));
        auto end = text.begin();
        std::advance(end, std::distance(text.cbegin(), match[0].second));
        text.replace(start, end, var);
    #else
+       // first is the iterator to the beginning, second is the iterator to the end
+       // of the matched substring
        text.replace(match[0].first, match[0].second, var);
    #endif
      }
-   }
-   
-   // Leave input alone and return new string.
-   std::string expandEnvironmentVariables(const std::string& input) {
-     std::string text = input;
-     autoExpandEnvironmentVariables(text);
-     return text;
    }
    
    }  // namespace amdinfer::util

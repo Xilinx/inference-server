@@ -37,11 +37,11 @@ Includes
 
 - ``amdinfer/buffers/buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`)
 
+- ``cstddef``
+
 - ``cstdint``
 
 - ``memory``
-
-- ``stddef.h``
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 

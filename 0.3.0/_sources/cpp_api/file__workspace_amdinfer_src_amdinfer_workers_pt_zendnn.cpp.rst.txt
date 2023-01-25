@@ -59,9 +59,9 @@ Includes
 
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
-- ``chrono``
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
 - ``cstddef``
 
@@ -118,5 +118,16 @@ Functions
 
 - :ref:`exhale_function_pt__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
 
-- :ref:`exhale_function_pt__zendnn_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141`
+- :ref:`exhale_function_pt__zendnn_8cpp_1a68cbaa7025b065ab96dbc5b6d5276da6`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_pt__zendnn_8cpp_1a6c6cc50416b27fffc4564f6457fef623`
+
+- :ref:`exhale_variable_pt__zendnn_8cpp_1a5544d4acb89db442cba40fdb51c296c3`
+
+- :ref:`exhale_variable_pt__zendnn_8cpp_1a7080de13bbb4da809cfeea4f64cfa3b1`
 

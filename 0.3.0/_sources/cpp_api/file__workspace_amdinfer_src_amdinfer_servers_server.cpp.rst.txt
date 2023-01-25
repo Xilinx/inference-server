@@ -32,6 +32,8 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
 - ``amdinfer/core/manager.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`)
 
 - ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)

@@ -61,13 +61,15 @@ Includes
 
 - ``cstdint``
 
+- ``cstring``
+
 - ``drogon/HttpRequest.h``
 
 - ``drogon/HttpResponse.h``
 
 - ``drogon/HttpTypes.h``
 
-- ``iostream``
+- ``half/half.hpp``
 
 - ``json/config.h``
 
@@ -97,7 +99,7 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structamdinfer_1_1overloaded`
+- :ref:`exhale_struct_structamdinfer_1_1Overloaded`
 
 - :ref:`exhale_struct_structamdinfer_1_1SetInputData`
 
@@ -120,7 +122,7 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b`
 
-- :ref:`exhale_function_http__internal_8cpp_1ab124726c678d8eb69187eb82356b3fc8`
+- :ref:`exhale_function_http__internal_8cpp_1ae9a219aa864779f813bc00edc3a861c0`
 
 - :ref:`exhale_function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3`
 
@@ -128,9 +130,9 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537`
 
-- :ref:`exhale_function_http__internal_8cpp_1aa73c320adf07dfce0d9cff01c4fbaf0e`
+- :ref:`exhale_function_http__internal_8cpp_1a263e4c7efb3c93d6fc48499bc4a46548`
 
-- :ref:`exhale_function_http__internal_8cpp_1a6ea39202392964e0277721028771d11a`
+- :ref:`exhale_function_http__internal_8cpp_1a20f514dbb8f33ccf800d6fe95d9dc475`
 
 - :ref:`exhale_function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d`
 

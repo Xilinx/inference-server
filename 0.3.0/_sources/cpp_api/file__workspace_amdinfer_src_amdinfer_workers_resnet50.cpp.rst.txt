@@ -65,9 +65,9 @@ Includes
 
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
-- ``chrono``
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
 - ``cstddef``
 
@@ -86,6 +86,8 @@ Includes
 - ``opencv2/core.hpp``
 
 - ``opencv2/imgcodecs.hpp``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -130,5 +132,5 @@ Functions
 
 - :ref:`exhale_function_resnet50_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
 
-- :ref:`exhale_function_resnet50_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141`
+- :ref:`exhale_function_resnet50_8cpp_1a68cbaa7025b065ab96dbc5b6d5276da6`
 

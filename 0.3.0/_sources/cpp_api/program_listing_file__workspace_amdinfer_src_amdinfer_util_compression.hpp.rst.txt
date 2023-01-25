@@ -32,7 +32,7 @@ Program Listing for File compression.hpp
    
    namespace amdinfer::util {
    
-   std::string z_decompress(const char *str, int len);
+   std::string zDecompress(const char *str, int len);
    
    }  // namespace amdinfer::util
    

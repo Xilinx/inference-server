@@ -31,35 +31,35 @@ Program Listing for File exceptions.hpp
    #include <stdexcept>
    
    namespace amdinfer {
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class runtime_error : public std::runtime_error {
      using std::runtime_error::runtime_error;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class bad_status : public runtime_error {
      using runtime_error::runtime_error;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class connection_error : public bad_status {
      using bad_status::bad_status;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class file_not_found_error : public runtime_error {
      using runtime_error::runtime_error;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class file_read_error : public runtime_error {
      using runtime_error::runtime_error;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class external_error : public runtime_error {
      using runtime_error::runtime_error;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class invalid_argument : public runtime_error {
      using runtime_error::runtime_error;
    };
-   
+    // NOLINTNEXTLINE(readability-identifier-naming)
    class environment_not_set_error : public runtime_error {
      using runtime_error::runtime_error;
    };

@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -41,7 +42,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Function amdinfer::addHeaders" href="function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05.html" />
+    <link rel="next" title="Function amdinfer::addHeaders" href="function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d.html" />
     <link rel="prev" title="Enum UpdateCommandType" href="enum_manager_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.html" /> 
 </head>
 
@@ -102,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -121,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -170,7 +172,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -257,7 +259,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -402,53 +404,53 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer7workers12WorkerStatusE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatusE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">WorkerStatus</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatusE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><em>Values:</em></p>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus4kNewE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus4kNewE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus4kNewE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370aaf1adf7ec3673b4f5765cfbc5d43b7dc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kNew</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus4kNewE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus3NewE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus3NewE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus3NewE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a03c2e7e41ffc181a4e84080b4710e81e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">New</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus3NewE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus5kInitE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus5kInitE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus5kInitE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ab217b1cb58a6ee4ef35a6c84cf367659"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kInit</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus5kInitE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus4InitE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus4InitE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus4InitE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a95b19f7739b0b7ea7d6b07586be54f36"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Init</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus4InitE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus9kAllocateE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus9kAllocateE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus9kAllocateE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a54e5dee0493e6f41261c753982bda41a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kAllocate</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus9kAllocateE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus8AllocateE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus8AllocateE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus8AllocateE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ac9baacf6cca6c54626e594639081177f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Allocate</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus8AllocateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus8kAcquireE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus8kAcquireE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus8kAcquireE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ac0c76efff123aea7fce49c0e85ea9ef3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kAcquire</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus8kAcquireE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus7AcquireE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus7AcquireE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus7AcquireE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a993ca650a85e8e69b8f7eaa4809c4862"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Acquire</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus7AcquireE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus4kRunE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus4kRunE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus4kRunE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ac1f0a0a6528c3d1ea0c0ee22f5ac4d77"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kRun</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus4kRunE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus3RunE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus3RunE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus3RunE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ac5301693c4e792bcd5a479ef38fb8f8d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Run</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus3RunE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus9kInactiveE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus9kInactiveE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus9kInactiveE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ad7cd20f3a390a0843aa6f98d51918b16"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kInactive</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus9kInactiveE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus8InactiveE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus8InactiveE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus8InactiveE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a3cab03c00dbd11bc3569afa0748013f0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Inactive</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus8InactiveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus8kReleaseE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus8kReleaseE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus8kReleaseE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a042072d11384a0da225b50a05a939159"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kRelease</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus8kReleaseE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus7ReleaseE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus7ReleaseE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus7ReleaseE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370ab8e7b465df7c5979dc731d06e84ce2cf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Release</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus7ReleaseE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus11kDeallocateE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus11kDeallocateE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus11kDeallocateE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a8763c5b300c1f3c190f27290c3b810f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kDeallocate</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus11kDeallocateE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus10DeallocateE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus10DeallocateE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus10DeallocateE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370aea029fe4184f532d0c02162a48b22e7a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Deallocate</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus10DeallocateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus8kDestroyE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus8kDestroyE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus8kDestroyE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a76f7356e83459d55498b063860859d92"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kDestroy</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus8kDestroyE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus7DestroyE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus7DestroyE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus7DestroyE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a0e181f89f47654b86f3beb42f5cc08b8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Destroy</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus7DestroyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus5kDeadE">
-<span id="_CPPv3N8amdinfer7workers12WorkerStatus5kDeadE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus5kDeadE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370aa711a13144a2f83289804e7974611092"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kDead</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus5kDeadE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers12WorkerStatus4DeadE">
+<span id="_CPPv3N8amdinfer7workers12WorkerStatus4DeadE"></span><span id="_CPPv2N8amdinfer7workers12WorkerStatus4DeadE"></span><span class="target" id="worker_8hpp_1acca0b4f2273421d4b08225b868692370a183b62c7f067711f9c5a54913c054617"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dead</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers12WorkerStatus4DeadE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -471,14 +473,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="enum_manager_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.html" class="btn btn-neutral float-left" title="Enum UpdateCommandType" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05.html" class="btn btn-neutral float-right" title="Function amdinfer::addHeaders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d.html" class="btn btn-neutral float-right" title="Function amdinfer::addHeaders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

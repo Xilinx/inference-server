@@ -19,6 +19,8 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`

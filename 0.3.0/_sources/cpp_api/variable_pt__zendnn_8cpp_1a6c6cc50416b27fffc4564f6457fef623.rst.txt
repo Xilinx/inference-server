@@ -1,0 +1,14 @@
+.. _exhale_variable_pt__zendnn_8cpp_1a6c6cc50416b27fffc4564f6457fef623:
+
+Variable amdinfer::workers::kResNetImageChannels
+================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::workers::kResNetImageChannels
+   :project: amdinfer

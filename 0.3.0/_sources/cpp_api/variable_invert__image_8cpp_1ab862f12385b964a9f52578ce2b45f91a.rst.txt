@@ -1,0 +1,14 @@
+.. _exhale_variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a:
+
+Variable amdinfer::workers::kMaxImageWidth
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::workers::kMaxImageWidth
+   :project: amdinfer

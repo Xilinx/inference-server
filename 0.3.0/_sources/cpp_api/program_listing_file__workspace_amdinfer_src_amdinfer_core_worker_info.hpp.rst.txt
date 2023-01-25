@@ -69,8 +69,8 @@ Program Listing for File worker_info.hpp
    
      [[nodiscard]] BufferPtrs getInputBuffer() const;
      [[nodiscard]] BufferPtrs getOutputBuffer() const;
-     void putInputBuffer(BufferPtrs buffer) const;
-     void putOutputBuffer(BufferPtrs buffer) const;
+     void putInputBuffer(BufferPtrs&& buffer) const;
+     void putOutputBuffer(BufferPtrs&& buffer) const;
    
      [[nodiscard]] bool inputSizeValid(size_t size) const;
    
@@ -80,7 +80,7 @@ Program Listing for File worker_info.hpp
    
      void allocate(size_t request_size);
    
-     size_t getGroupSize() const;
+     [[nodiscard]] size_t getGroupSize() const;
    
      [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
    

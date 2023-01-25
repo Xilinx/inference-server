@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -100,6 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -119,28 +122,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -168,7 +170,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -255,7 +257,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -405,153 +407,151 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// See the License for the specific language governing permissions and</span>
 <span class="c1">// limitations under the License.</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/soft.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/soft.hpp&quot;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span><span class="c1">  // for max</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span><span class="c1">     // for milliseconds, duration_cast</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span><span class="c1">    // for size_t</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span><span class="c1">    // for int32_t</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">     // for unique_ptr, allocator</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ratio&gt;</span><span class="c1">      // for ratio</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">     // for operator+, char_traits</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">    // for move</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">     // for vector</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span><span class="c1">  // for max</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span><span class="c1">    // for size_t</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span><span class="c1">    // for int32_t</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">     // for unique_ptr, allocator</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ratio&gt;</span><span class="c1">      // for ratio</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">     // for operator+, char_traits</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">    // for move</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">     // for vector</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">        // for AMDINFER_ENABLE_METRICS</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">      // for invalid_argument</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">       // for Interface</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">     // for RequestParameters</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">         // for InterfacePtr</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for Logger, AMDINFER_LOG_DEBUG</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span><span class="c1">  // for Metrics, MetricCounterIDs</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/tracing.hpp&quot;</span><span class="c1">  // for Trace</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">           // for BlockingConcurrentQueue</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/thread.hpp&quot;</span><span class="c1">          // for setThreadName</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">        // for AMDINFER_ENABLE_METRICS</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">      // for invalid_argument</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">       // for Interface</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">     // for RequestParameters</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">         // for InterfacePtr</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for Logger, AMDINFER_LOG_DEBUG</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span><span class="c1">  // for Metrics, MetricCounterIDs</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/tracing.hpp&quot;</span><span class="c1">  // for Trace</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">           // for BlockingConcurrentQueue</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/thread.hpp&quot;</span><span class="c1">          // for setThreadName</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/timer.hpp&quot;</span><span class="c1">           // for Timer</span>
 
-<span class="k">using</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="p">;</span><span class="w"></span>
-<span class="k">using</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// default batcher timeout in milliseconds</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">kDefaultTimeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
 
-<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">kDefaultTimeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">SoftBatcher::doRun</span><span class="p">(</span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">thread_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;batch&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">setThreadName</span><span class="p">(</span><span class="n">thread_name</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">SoftBatcher::doRun</span><span class="p">(</span><span class="n">WorkerInfo</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">thread_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;batch&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">();</span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">setThreadName</span><span class="p">(</span><span class="n">thread_name</span><span class="p">);</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span>
 <span class="cp">#endif</span>
 
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">kTimeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">kDefaultTimeout</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">&quot;timeout&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">kTimeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="n">milliseconds</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;timeout&quot;</span><span class="p">)));</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kDefaultTimeout</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">&quot;timeout&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;timeout&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">run</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Batch</span><span class="o">&gt;</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">input_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRawInputBuffers</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">output_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRawOutputBuffers</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input_offset</span><span class="p">(</span><span class="n">input_buffers</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">output_offset</span><span class="p">(</span><span class="n">output_buffers</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">run</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Batch</span><span class="o">&gt;</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">input_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRawInputBuffers</span><span class="p">();</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">output_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRawOutputBuffers</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input_offset</span><span class="p">(</span><span class="n">input_buffers</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">output_offset</span><span class="p">(</span><span class="n">output_buffers</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">    </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">setGauge</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">kQueuesBatcherInput</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">size_approx</span><span class="p">()));</span><span class="w"></span>
-<span class="w">    </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">setGauge</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">kQueuesBatcherOutput</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">output_queue_</span><span class="o">-&gt;</span><span class="n">size_approx</span><span class="p">()));</span><span class="w"></span>
+<span class="w">    </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">setGauge</span><span class="p">(</span>
+<span class="w">      </span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">QueuesBatcherInput</span><span class="p">,</span>
+<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">size_approx</span><span class="p">()));</span>
+<span class="w">    </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">setGauge</span><span class="p">(</span>
+<span class="w">      </span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">QueuesBatcherOutput</span><span class="p">,</span>
+<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">output_queue_</span><span class="o">-&gt;</span><span class="n">size_approx</span><span class="p">()));</span>
 <span class="cp">#endif</span>
 
-<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">first_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">start_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">first_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="n">util</span><span class="o">::</span><span class="n">Timer</span><span class="w"> </span><span class="n">timer</span><span class="p">{</span><span class="nb">true</span><span class="p">};</span>
 
-<span class="w">    </span><span class="k">do</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="n">InterfacePtr</span><span class="w"> </span><span class="n">req</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">first_request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">InterfacePtr</span><span class="w"> </span><span class="n">req</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">first_request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// wait for the first request</span>
-<span class="w">        </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">wait_dequeue</span><span class="p">(</span><span class="n">req</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">start_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">AMDINFER_LOG_DEBUG</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"></span>
-<span class="w">                           </span><span class="s">&quot;Got request of a new batch for &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">remaining_time</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">          </span><span class="n">kTimeout</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">remaining_time</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">nanoseconds</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">wait_dequeue_timed</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">valid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">wait_dequeue</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+<span class="w">        </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;start&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">AMDINFER_LOG_DEBUG</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span>
+<span class="w">                           </span><span class="s">&quot;Got request of a new batch for &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">timer</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
 
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">remaining_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">milli</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">remaining_time</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_queue_</span><span class="o">-&gt;</span><span class="n">wait_dequeue_timed</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">valid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
 
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">input_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getInputSize</span><span class="p">();</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_size</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">          </span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;Number of input tensors do not match worker&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">errorHandler</span><span class="p">(</span><span class="n">e</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;Input size is zero&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">errorHandler</span><span class="p">(</span><span class="n">error</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">input_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getInputSize</span><span class="p">();</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_size</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span>
+<span class="w">          </span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;Number of input tensors do not match worker&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">errorHandler</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;Input size is zero&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">errorHandler</span><span class="p">(</span><span class="n">error</span><span class="p">);</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getTrace</span><span class="p">();</span><span class="w"></span>
-<span class="w">      </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">startSpan</span><span class="p">(</span><span class="s">&quot;soft_batcher&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getTrace</span><span class="p">();</span>
+<span class="w">      </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">startSpan</span><span class="p">(</span><span class="s">&quot;soft_batcher&quot;</span><span class="p">);</span>
 <span class="cp">#endif</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">      </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">incrementCounter</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kPipelineIngressBatcher</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">incrementCounter</span><span class="p">(</span>
+<span class="w">        </span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineIngressBatcher</span><span class="p">);</span>
 <span class="cp">#endif</span>
 
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">old_input_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_offset</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">old_output_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_offset</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">new_req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="n">input_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">input_offset</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                     </span><span class="n">output_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">output_offset</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">new_req</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">AMDINFER_LOG_DEBUG</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Making request for &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
-<span class="w">                                     </span><span class="s">&quot; failed. Reverting buffers.&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">input_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_input_offset</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">output_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_output_offset</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">addRequest</span><span class="p">(</span><span class="n">new_req</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">batch_size</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">first_request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">          </span><span class="n">first_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">old_input_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_offset</span><span class="p">;</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">old_output_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_offset</span><span class="p">;</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">new_req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="n">input_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">input_offset</span><span class="p">,</span>
+<span class="w">                                     </span><span class="n">output_buffers</span><span class="p">,</span><span class="w"> </span><span class="n">output_offset</span><span class="p">);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">new_req</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">AMDINFER_LOG_DEBUG</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Making request for &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                     </span><span class="s">&quot; failed. Reverting buffers.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">input_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_input_offset</span><span class="p">;</span>
+<span class="w">        </span><span class="n">output_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_output_offset</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">addRequest</span><span class="p">(</span><span class="n">new_req</span><span class="p">);</span>
+<span class="w">        </span><span class="n">batch_size</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">first_request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">first_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
-<span class="w">        </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">endSpan</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">addTrace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">endSpan</span><span class="p">();</span>
+<span class="w">        </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">addTrace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span>
 <span class="cp">#endif</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">        </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">addTime</span><span class="p">(</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">get_time</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">addTime</span><span class="p">(</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getTime</span><span class="p">());</span>
 <span class="cp">#endif</span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">batch_size</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">run</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">batch_size</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">run</span><span class="p">);</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="n">AMDINFER_LOG_DEBUG</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Enqueuing batch for &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
-<span class="w">                                   </span><span class="s">&quot; of size &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size</span><span class="p">));</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="o">-&gt;</span><span class="n">enqueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">batch</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">AMDINFER_LOG_DEBUG</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Enqueuing batch for &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">model_</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                   </span><span class="s">&quot; of size &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size</span><span class="p">));</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_queue_</span><span class="o">-&gt;</span><span class="n">enqueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">batch</span><span class="p">));</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">      </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">incrementCounter</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kPipelineEgressBatcher</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">incrementCounter</span><span class="p">(</span>
+<span class="w">        </span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineEgressBatcher</span><span class="p">);</span>
 <span class="cp">#endif</span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
 </pre></div>
@@ -577,7 +577,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

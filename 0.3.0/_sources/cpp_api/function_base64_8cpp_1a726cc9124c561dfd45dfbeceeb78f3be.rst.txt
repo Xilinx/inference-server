@@ -1,0 +1,14 @@
+.. _exhale_function_base64_8cpp_1a726cc9124c561dfd45dfbeceeb78f3be:
+
+Function amdinfer::util::base64Decode(const char \*, size_t)
+============================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::base64Decode(const char *, size_t)
+   :project: amdinfer

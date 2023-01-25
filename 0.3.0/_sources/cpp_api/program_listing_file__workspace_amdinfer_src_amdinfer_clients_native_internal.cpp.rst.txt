@@ -59,12 +59,12 @@ Program Listing for File native_internal.cpp
        input.name_ = req.name_;
        input.shape_.reserve(req.shape_.size());
        input.shape_ = req.shape_;
-       input.dataType_ = req.dataType_;
+       input.data_type_ = req.data_type_;
        input.parameters_ = req.parameters_;
        auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
                                    std::multiplies<>()) *
-                   input.dataType_.size();
-       auto *dest = static_cast<std::byte *>(input_buffer->data()) + offset;
+                   input.data_type_.size();
+       auto *dest = static_cast<std::byte *>(input_buffer->data(offset));
        memcpy(dest, req.data_, size);
    
        input.data_ = dest;
@@ -91,7 +91,7 @@ Program Listing for File native_internal.cpp
        for (const auto &input : req.inputs_) {
          const auto &buffers = input_buffers;
          auto index = 0;
-         for (auto &buffer : buffers) {
+         for (const auto &buffer : buffers) {
            auto &offset = input_offsets[index];
    
            request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
@@ -107,12 +107,12 @@ Program Listing for File native_internal.cpp
          for (const auto &output : req.outputs_) {
            const auto &buffers = output_buffers;
            auto index = 0;
-           for (auto &buffer : buffers) {
+           for (const auto &buffer : buffers) {
              const auto &offset = output_offsets[index];
    
              request->outputs_.emplace_back(output);
              request->outputs_.back().setData(
-               static_cast<std::byte *>(buffer->data()) + offset);
+               static_cast<std::byte *>(buffer->data(offset)));
              index++;
            }
          }
@@ -121,12 +121,12 @@ Program Listing for File native_internal.cpp
            (void)input;  // suppress unused variable warning
            const auto &buffers = output_buffers;
            auto index = 0;
-           for (auto &buffer : buffers) {
+           for (const auto &buffer : buffers) {
              const auto &offset = output_offsets[index];
    
              request->outputs_.emplace_back();
              request->outputs_.back().setData(
-               static_cast<std::byte *>(buffer->data()) + offset);
+               static_cast<std::byte *>(buffer->data(offset)));
              index++;
            }
          }

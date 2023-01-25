@@ -133,7 +133,7 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_resnet50__stream_8cpp_1a91ed90b284d1c6942686de273a3cd850`
+- :ref:`exhale_typedef_resnet50__stream_8cpp_1a562f5c0b8f324002221157f834830a22`
 
 
 Variables
@@ -142,9 +142,9 @@ Variables
 
 - :ref:`exhale_variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da`
 
-- :ref:`exhale_variable_resnet50__stream_8cpp_1a3cf9bf5036efcc4d92cb4b5faec907a6`
+- :ref:`exhale_variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab`
 
-- :ref:`exhale_variable_resnet50__stream_8cpp_1afe3341a020a5ae7f03cbd635abaa90fc`
+- :ref:`exhale_variable_resnet50__stream_8cpp_1aa1000a0c48850c27d70bea0534ee229f`
 
 - :ref:`exhale_variable_resnet50__stream_8cpp_1af570cb232c9a5846340eae70c6c53ec6`
 

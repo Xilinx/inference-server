@@ -45,13 +45,15 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
 
@@ -114,8 +116,6 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
-
-- :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
 

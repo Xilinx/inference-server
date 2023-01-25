@@ -41,11 +41,7 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``atomic``
-
 - ``cassert``
-
-- ``drogon/HttpAppFramework.h``
 
 - ``drogon/HttpClient.h``
 
@@ -54,6 +50,8 @@ Includes
 - ``drogon/HttpResponse.h``
 
 - ``drogon/HttpTypes.h``
+
+- ``future``
 
 - ``json/value.h``
 
@@ -88,9 +86,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_http_8cpp_1abe41107a4023b87ce71b29c188aa3f05`
+- :ref:`exhale_function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d`
 
-- :ref:`exhale_function_http_8cpp_1af1c58579846a3d1df81be93b1cd81dc6`
+- :ref:`exhale_function_http_8cpp_1a7d42e4a864836a32004fefea13cbd07f`
 
 - :ref:`exhale_function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d`
 

@@ -34,6 +34,8 @@ Includes
 
 - ``filesystem``
 
+- ``memory``
+
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 
@@ -45,8 +47,6 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
 

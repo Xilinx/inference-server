@@ -1,0 +1,14 @@
+.. _exhale_function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580:
+
+Function amdinfer::mapParametersToProto
+=======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapParametersToProto(const std::map<std::string, amdinfer::Parameter, std::less<>>&, google::protobuf::Map<std::string, inference::InferParameter> *)
+   :project: amdinfer

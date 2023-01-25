@@ -33,7 +33,8 @@ Program Listing for File websocket.hpp
    #include <vector>  // for vector
    
    #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
-   #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
+   #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
+   #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
    
    namespace amdinfer {
    
@@ -41,34 +42,41 @@ Program Listing for File websocket.hpp
     public:
      WebSocketClient(const std::string& ws_address,
                      const std::string& http_address);
+   
+     WebSocketClient(WebSocketClient const&) = delete;
+     WebSocketClient& operator=(const WebSocketClient&) = delete;
+     WebSocketClient(WebSocketClient&& other) = default;
+     WebSocketClient& operator=(WebSocketClient&& other) = default;
      ~WebSocketClient() override;
    
-     ServerMetadata serverMetadata() const override;
-     bool serverLive() const override;
-     bool serverReady() const override;
-     bool modelReady(const std::string& model) const override;
-     ModelMetadata modelMetadata(const std::string& model) const override;
+     [[nodiscard]] ServerMetadata serverMetadata() const override;
+     [[nodiscard]] bool serverLive() const override;
+     [[nodiscard]] bool serverReady() const override;
+     [[nodiscard]] bool modelReady(const std::string& model) const override;
+     [[nodiscard]] ModelMetadata modelMetadata(
+       const std::string& model) const override;
    
      void modelLoad(const std::string& model,
                     RequestParameters* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
-     InferenceResponse modelInfer(const std::string& model,
-                                  const InferenceRequest& request) const override;
-     InferenceResponseFuture modelInferAsync(
+     [[nodiscard]] InferenceResponse modelInfer(
        const std::string& model, const InferenceRequest& request) const override;
-     std::vector<std::string> modelList() const override;
+     [[nodiscard]] InferenceResponseFuture modelInferAsync(
+       const std::string& model, const InferenceRequest& request) const override;
+     [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     std::string workerLoad(const std::string& worker,
-                            RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(
+       const std::string& worker, RequestParameters* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
-     bool hasHardware(const std::string& name, int num) const override;
+     [[nodiscard]] bool hasHardware(const std::string& name,
+                                    int num) const override;
    
      void modelInferWs(const std::string& model,
                        const InferenceRequest& request) const;
      // TODO(varunsh) const: change to InferenceResponse
-     std::string modelRecv() const;
+     [[nodiscard]] std::string modelRecv() const;
      void close() const;
    
     private:

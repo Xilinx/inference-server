@@ -41,28 +41,30 @@ Program Listing for File native.hpp
    
    class NativeClient : public Client {
     public:
-     ServerMetadata serverMetadata() const override;
-     bool serverLive() const override;
-     bool serverReady() const override;
+     [[nodiscard]] ServerMetadata serverMetadata() const override;
+     [[nodiscard]] bool serverLive() const override;
+     [[nodiscard]] bool serverReady() const override;
    
-     bool modelReady(const std::string& model) const override;
-     ModelMetadata modelMetadata(const std::string& model) const override;
+     [[nodiscard]] bool modelReady(const std::string& model) const override;
+     [[nodiscard]] ModelMetadata modelMetadata(
+       const std::string& model) const override;
    
      void modelLoad(const std::string& model,
                     RequestParameters* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
-     InferenceResponse modelInfer(const std::string& model,
-                                  const InferenceRequest& request) const override;
-     InferenceResponseFuture modelInferAsync(
+     [[nodiscard]] InferenceResponse modelInfer(
        const std::string& model, const InferenceRequest& request) const override;
-     std::vector<std::string> modelList() const override;
+     [[nodiscard]] InferenceResponseFuture modelInferAsync(
+       const std::string& model, const InferenceRequest& request) const override;
+     [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     std::string workerLoad(const std::string& worker,
-                            RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(
+       const std::string& worker, RequestParameters* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
-     bool hasHardware(const std::string& name, int num) const override;
+     [[nodiscard]] bool hasHardware(const std::string& name,
+                                    int num) const override;
    };
    
    }  // namespace amdinfer

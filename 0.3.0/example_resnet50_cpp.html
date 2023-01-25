@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
@@ -102,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -121,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -170,7 +172,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -257,7 +259,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -405,7 +407,7 @@ They are not intended to show the most optimal performance for each backend.</p>
 <h2>Include the header<a class="headerlink" href="#include-the-header" title="Permalink to this headline">¶</a></h2>
 <p>AMD Inference Server’s C++ API allows you to write your own C++ client applications that can communicate with the inference server.
 You can include the entire public API by including <code class="file docutils literal notranslate"><span class="pre">amdinfer/amdinfer.hpp</span></code> or selectively include header files as needed.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/amdinfer.hpp&quot;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/amdinfer.hpp&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -413,30 +415,34 @@ You can include the entire public API by including <code class="file docutils li
 <h2>Start the server<a class="headerlink" href="#start-the-server" title="Permalink to this headline">¶</a></h2>
 <p>This example assumes that the server is not running elsewhere and starts it locally from C++ instead.
 Creating the <code class="docutils literal notranslate"><span class="pre">amdinfer::Server</span></code> object starts the inference server backend and it stays alive as long as the object remains in scope.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the <code class="docutils literal notranslate"><span class="pre">amdinfer::Server</span></code> object’s methods.</p>
 <p>For example, if you were using HTTP/REST:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startHttp</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">http_port</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">connection_error</span><span class="p">(</span><span class="s">&quot;Could not connect to server at &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
-<span class="w">                                   </span><span class="n">server_addr</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startHttp</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">http_port</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">connection_error</span><span class="p">(</span><span class="s">&quot;Could not connect to server at &quot;</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                     </span><span class="n">server_addr</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// the server is reachable so continue on</span>
+<span class="w">  </span><span class="p">}</span>
 </pre></div>
 </div>
 <p>With gRPC:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startGrpc</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">connection_error</span><span class="p">(</span><span class="s">&quot;Could not connect to server at &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
-<span class="w">                                   </span><span class="n">server_addr</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startGrpc</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">connection_error</span><span class="p">(</span><span class="s">&quot;Could not connect to server at &quot;</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                     </span><span class="n">server_addr</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// the server is reachable so continue on</span>
+<span class="w">  </span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The native C++ API does not need starting and just creating the Server object is sufficient.</p>
@@ -448,42 +454,44 @@ Creating the <code class="docutils literal notranslate"><span class="pre">amdinf
 This client protocol is based on KServe’s API.
 Each protocol inherits from this class and implements its methods.
 Some examples of clients that you can create:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// vitis.cpp</span>
-<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">http_port_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">http_port</span><span class="p">);</span><span class="w"></span>
-<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">http_port_str</span><span class="p">;</span><span class="w"></span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">HttpClient</span><span class="w"> </span><span class="n">client</span><span class="p">{</span><span class="n">server_addr</span><span class="p">};</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// vitis.cpp</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">http_port_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">http_port</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">http_port_str</span><span class="p">;</span>
+<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">HttpClient</span><span class="w"> </span><span class="n">client</span><span class="p">{</span><span class="n">server_addr</span><span class="p">};</span>
 </pre></div>
 </div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// tfzendnn.cpp</span>
-<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">grpc_port_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span><span class="w"></span>
-<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">grpc_port_str</span><span class="p">;</span><span class="w"></span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">GrpcClient</span><span class="w"> </span><span class="n">client</span><span class="p">{</span><span class="n">server_addr</span><span class="p">};</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// tfzendnn.cpp</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">grpc_port_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">server_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">grpc_port_str</span><span class="p">;</span>
+<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">GrpcClient</span><span class="w"> </span><span class="n">client</span><span class="p">{</span><span class="n">server_addr</span><span class="p">};</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server</span><span class="p">;</span><span class="w"></span>
-<span class="c1">// +start protocol</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startGrpc</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">connection_error</span><span class="p">(</span><span class="s">&quot;Could not connect to server at &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
-<span class="w">                                   </span><span class="n">server_addr</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="c1">// -start protocol:</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// +start protocol</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startGrpc</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">connection_error</span><span class="p">(</span><span class="s">&quot;Could not connect to server at &quot;</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                     </span><span class="n">server_addr</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// the server is reachable so continue on</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// -start protocol:</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Waiting until the server is ready...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Waiting until the server is ready...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">);</span>
 </pre></div>
 </div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// ptzendnn.cpp</span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">NativeClient</span><span class="w"> </span><span class="n">client</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// ptzendnn.cpp</span>
+<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">NativeClient</span><span class="w"> </span><span class="n">client</span><span class="p">;</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Starting server locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Starting server locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
 
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">;</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Waiting until the server is ready...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Waiting until the server is ready...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
@@ -495,43 +503,43 @@ After loading the worker, you get back an endpoint string that you use to make r
 If a worker is already ready on the server or you already have an endpoint, then you don’t need to do this.</p>
 <p>Here are some of the different workers you can start to perform inference on a ResNet50 model.</p>
 <p>XModel - Vitis AI on AMD FPGA:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_model</span><span class="p">);</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch_size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">);</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_model</span><span class="p">);</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch_size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;xmodel&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>TF+ZenDNN - ZenDNN on AMD CPU:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_model</span><span class="p">);</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;input_size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">input_size</span><span class="p">);</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;output_classes&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">output_classes</span><span class="p">);</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;input_node&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">input_node</span><span class="p">);</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;output_node&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">output_node</span><span class="p">);</span><span class="w"></span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch_size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">);</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;tfzendnn&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_model</span><span class="p">);</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;input_size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">input_size</span><span class="p">);</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;output_classes&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">output_classes</span><span class="p">);</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;input_node&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">input_node</span><span class="p">);</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;output_node&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">output_node</span><span class="p">);</span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch_size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;tfzendnn&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span>
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>MIGraphX - MIGraphX on AMD GPU:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">timeout_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w">  </span><span class="c1">// batcher timeout value in milliseconds</span>
 
 <span class="c1">// Required: specifies path to the model on the server for it to open</span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_model</span><span class="p">);</span><span class="w"></span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;model&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_model</span><span class="p">);</span>
 <span class="c1">// Optional: request a particular batch size to be sent to the backend. The</span>
 <span class="c1">// server will attempt to coalesce incoming requests into a single batch of</span>
 <span class="c1">// this size and pass it all to the backend.</span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">);</span><span class="w"></span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;batch&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">);</span>
 <span class="c1">// Optional: specifies how long the batcher should wait for more requests</span>
 <span class="c1">// before sending the batch on</span>
-<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;timeout&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">);</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;migraphx&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span><span class="w"></span>
-<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<span class="n">parameters</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;timeout&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;migraphx&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameters</span><span class="p">);</span>
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>After loading a worker, make sure it’s ready before attempting to make an inference.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">waitUntilModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
@@ -544,8 +552,8 @@ The implementations of the preprocessing functions can be seen in the examples�
 This single path gets converted to a vector of paths containing just the path you passed in or paths to all the files in the directory you passed in and its passed to the <code class="docutils literal notranslate"><span class="pre">preprocess</span></code> function.
 The file at each path is opened and stored in an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> depends on the data type that a backend works with.
 Since there may be many images, <code class="docutils literal notranslate"><span class="pre">preprocess</span></code> returns an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::vector&lt;T&gt;&gt;</span></code>.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resolveImagePaths</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">path_to_image</span><span class="p">);</span><span class="w"></span>
-<span class="n">Images</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">preprocess</span><span class="p">(</span><span class="n">paths</span><span class="p">);</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resolveImagePaths</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">path_to_image</span><span class="p">);</span>
+<span class="w">  </span><span class="n">Images</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">preprocess</span><span class="p">(</span><span class="n">paths</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
@@ -555,16 +563,17 @@ Since there may be many images, <code class="docutils literal notranslate"><span
 For each image, you create an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> and add input tensors to it.
 The ResNet50 model only accepts a single input tensor so you just add one by specifying the image data, its shape, and data type.
 In this example, you create a vector of such requests.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">requests</span><span class="p">;</span><span class="w"></span>
-<span class="n">requests</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">images</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">requests</span><span class="p">;</span>
+<span class="n">requests</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">images</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
 
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">addInputTensor</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                 </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">INT8</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">// NOLINTNEXTLINE(google-readability-casting)</span>
+<span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">addInputTensor</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Int8</span><span class="p">);</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
@@ -577,52 +586,53 @@ For ResNet50, the raw results from the inference server lists the probabilities 
 The postprocessing identifies the highest probability classes and the top few of these are printed using the labels file to map the indices to a human-readable name.</p>
 <p>Here are some examples of making an inference used in these examples:</p>
 <p>This is the simplest way to make an inference: a blocking single inference where you loop through all the requests and make requests to the server one at a time.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// vitis.cpp</span>
-<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// vitis.cpp</span>
+<span class="w">    </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">client</span><span class="p">.</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseOutput</span><span class="o">&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">    </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// for resnet50, we expect a single output tensor</span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">top</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">printLabel</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_labels</span><span class="p">,</span><span class="w"> </span><span class="n">image_path</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseOutput</span><span class="o">&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// for resnet50, we expect a single output tensor</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">top</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printLabel</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_labels</span><span class="p">,</span><span class="w"> </span><span class="n">image_path</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>You can also make a single asynchronous request to the server where you get back a <code class="docutils literal notranslate"><span class="pre">std::future</span></code> that you can use later to get the results of the inference.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// ptzendnn.cpp</span>
-<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseFuture</span><span class="w"> </span><span class="n">future</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">    </span><span class="n">client</span><span class="p">.</span><span class="n">modelInferAsync</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">future</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// ptzendnn.cpp</span>
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseFuture</span><span class="w"> </span><span class="n">future</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="n">client</span><span class="p">.</span><span class="n">modelInferAsync</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">future</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseOutput</span><span class="o">&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">    </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// for resnet50, we expect a single output tensor</span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">top</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">printLabel</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_labels</span><span class="p">,</span><span class="w"> </span><span class="n">image_path</span><span class="p">);</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseOutput</span><span class="o">&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span>
+<span class="c1">// for resnet50, we expect a single output tensor</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">top</span><span class="p">);</span>
+<span class="n">printLabel</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_labels</span><span class="p">,</span><span class="w"> </span><span class="n">image_path</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>There are also some helper methods that wrap the basic inference APIs provided by the client.
 The <code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered</span></code> method accepts a vector of requests, makes all the requests asynchronously using the <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> API, waits until each request completes, and then returns a vector of responses.
 If there are multiple requests sent in this way, they may be batched together by the server.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// migraphx.cpp</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="n">responses</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">requests</span><span class="p">);</span><span class="w"></span>
-<span class="n">assert</span><span class="p">(</span><span class="n">num_requests</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">responses</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// migraphx.cpp</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="n">responses</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">inferAsyncOrdered</span><span class="p">(</span><span class="o">&amp;</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">requests</span><span class="p">);</span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">num_requests</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">responses</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0U</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_requests</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="o">&amp;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">responses</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0U</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_requests</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponse</span><span class="o">&amp;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">responses</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">isError</span><span class="p">());</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseOutput</span><span class="o">&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">    </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// for resnet50, we expect a single output tensor</span>
-<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">top</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">printLabel</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_labels</span><span class="p">,</span><span class="w"> </span><span class="n">paths</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceResponseOutput</span><span class="o">&gt;</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">response</span><span class="p">.</span><span class="n">getOutputs</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// for resnet50, we expect a single output tensor</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top_indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">top</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printLabel</span><span class="p">(</span><span class="n">top_indices</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">path_to_labels</span><span class="p">,</span><span class="w"> </span><span class="n">paths</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">  </span><span class="p">}</span>
 </pre></div>
 </div>
 </section>
@@ -650,7 +660,7 @@ If there are multiple requests sent in this way, they may be batched together by
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 19, 2022.
+      <span class="lastupdated">Last updated on January 25, 2023.
       </span></p>
   </div>
 

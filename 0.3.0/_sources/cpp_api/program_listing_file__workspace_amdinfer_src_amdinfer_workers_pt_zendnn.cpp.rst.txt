@@ -24,10 +24,7 @@ Program Listing for File pt_zendnn.cpp
    // See the License for the specific language governing permissions and
    // limitations under the License.
    
-   #include <torch/script.h>  // for IValue, Tensor, Device
-   
    #include <algorithm>   // for copy
-   #include <chrono>      // for duration, operator-
    #include <cstddef>     // for size_t, byte
    #include <cstdint>     // for int32_t, uint64_t
    #include <cstring>     // for memcpy
@@ -53,17 +50,21 @@ Program Listing for File pt_zendnn.cpp
    #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
    #include "amdinfer/observation/tracing.hpp"    // for Trace
    #include "amdinfer/util/thread.hpp"            // for setThreadName
+   #include "amdinfer/util/timer.hpp"             // for Timer
    #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+   #include "torch/script.h"                      // for IValue, Tensor, Device
    
    namespace fs = std::filesystem;
    
-   uint64_t reduce_mult(std::vector<uint64_t>& v) {
+   uint64_t reduceMult(std::vector<uint64_t>& v) {
      return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
    }
    
-   namespace amdinfer {
+   namespace amdinfer::workers {
    
-   namespace workers {
+   const int kResNetImageSize = 224;
+   const int kResNetImageChannels = 3;
+   const int kResNetOutputClasses = 1000;
    
    class PtZendnn : public Worker {
     public:
@@ -88,11 +89,14 @@ Program Listing for File pt_zendnn.cpp
      // };
    
      // Load the model here
-     torch::jit::script::Module model;
+     torch::jit::script::Module model_;
    
      // Image properties
-     unsigned image_width_, image_height_, image_channels_, image_size_;
-     unsigned output_classes_;
+     unsigned int image_width_ = kResNetImageSize;
+     unsigned int image_height_ = kResNetImageSize;
+     unsigned int image_channels_ = kResNetImageChannels;
+     unsigned int image_size_ = image_width_ * image_height_ * image_channels_;
+     unsigned int output_classes_ = kResNetOutputClasses;
    
      DataType input_dt_ = DataType::FP32;
    };
@@ -106,38 +110,31 @@ Program Listing for File pt_zendnn.cpp
      constexpr auto kBatchSize = 1;
    
      auto max_buffer_num = kMaxBufferNum;
-     if (parameters->has("max_buffer_num"))
+     if (parameters->has("max_buffer_num")) {
        max_buffer_num = parameters->get<int32_t>("max_buffer_num");
+     }
      this->max_buffer_num_ = max_buffer_num;
    
      auto batch_size = kBatchSize;
-     if (parameters->has("batch_size"))
+     if (parameters->has("batch_size")) {
        batch_size = parameters->get<int32_t>("batch_size");
+     }
      this->batch_size_ = batch_size;
-   
-     // Image properties
-     unsigned kTotalClasses = 1000;
-     unsigned kImageWidth = 224;
-     unsigned kImageHeight = 224;
-     unsigned kImageChannels = 3;
    
      if (parameters->has("input_size")) {
        image_height_ = parameters->get<int32_t>("input_size");
        image_width_ = parameters->get<int32_t>("input_size");
-     } else {
-       image_height_ = kImageWidth;
-       image_width_ = kImageHeight;
      }
-     if (parameters->has("image_channels"))
+   
+     if (parameters->has("image_channels")) {
        image_channels_ = parameters->get<int32_t>("image_channels_");
-     else
-       image_channels_ = kImageChannels;
+     }
+   
      image_size_ = image_height_ * image_width_ * image_channels_;
    
-     if (parameters->has("output_classes"))
+     if (parameters->has("output_classes")) {
        output_classes_ = parameters->get<int32_t>("output_classes");
-     else
-       output_classes_ = kTotalClasses;
+     }
    }
    
    size_t PtZendnn::doAllocate(size_t num) {
@@ -190,7 +187,7 @@ Program Listing for File pt_zendnn.cpp
      }
      AMDINFER_LOG_INFO(logger, "Model Optimized, Ready for prediction");
    
-     this->model = torch_module;
+     this->model_ = torch_module;
    
      // Adding metadata for input and output
      this->metadata_.addInputTensor(
@@ -232,10 +229,10 @@ Program Listing for File pt_zendnn.cpp
    
    #ifdef AMDINFER_ENABLE_METRICS
        Metrics::getInstance().incrementCounter(
-         MetricCounterIDs::kPipelineIngressWorker);
+         MetricCounterIDs::PipelineIngressWorker);
    #endif
        size_t vec_size = 0;
-       auto TotalStart = std::chrono::high_resolution_clock::now();
+       util::Timer timer{true};
        for (unsigned int j = 0; j < batch->size(); j++) {
          const auto& req = batch->getRequest(j);
    
@@ -256,37 +253,35 @@ Program Listing for File pt_zendnn.cpp
          for (const auto& input : inputs) {
            auto* input_buffer = input.getData();
            auto input_shape = input.getShape();
-           input_size = reduce_mult(input_shape);
+           input_size = reduceMult(input_shape);
    
-           auto* floatBuffer = static_cast<float*>(input_buffer);
-           std::copy(floatBuffer, floatBuffer + input_size,
+           auto* float_buffer = static_cast<float*>(input_buffer);
+           std::copy(float_buffer, float_buffer + input_size,
                      input_tensor.data_ptr<float>() + vec_size);
            vec_size = vec_size + input_size;
          }
        }
    
        // Create the inputs and output tensor
-       input_vec.push_back(input_tensor);
+       input_vec.emplace_back(input_tensor);
        c10::IValue prediction;
    
        // Run through the model to get the predictions
-       auto start = std::chrono::high_resolution_clock::now();
+       timer.add("infer_start");
        try {
-         prediction = this->model.forward(input_vec);
+         prediction = this->model_.forward(input_vec);
        } catch (const c10::Error& e) {
          AMDINFER_LOG_ERROR(logger, "Model not suported/Issue with the model");
          for (const auto& req : *batch) {
            req->runCallbackError("Something went wrong");
          }
        }
-   
-       auto stop = std::chrono::high_resolution_clock::now();
+       timer.add("infer_stop");
        {
-         std::chrono::duration<float, std::milli> duration = stop - start;
-         float time_tmp = duration.count();
-         AMDINFER_LOG_INFO(logger, "Time taken for " +
+         auto duration = timer.count<std::milli>("infer_start", "infer_stop");
+         AMDINFER_LOG_INFO(logger, "Time (ms) taken for " +
                                      std::to_string(batch->size()) +
-                                     " images: " + std::to_string(time_tmp));
+                                     " images: " + std::to_string(duration));
        }
        at::Tensor output_tensor;
        if (!prediction.isTuple()) {
@@ -330,20 +325,18 @@ Program Listing for File pt_zendnn.cpp
          auto context = batch->getTrace(k)->propagate();
          resp.setContext(std::move(context));
    #endif
-   
-         auto TotalStop = std::chrono::high_resolution_clock::now();
-         std::chrono::duration<float, std::milli> d = TotalStop - TotalStart;
-         float tt = d.count();
-         AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
+         timer.stop();
+         auto duration = timer.count<std::milli>();
+         AMDINFER_LOG_DEBUG(logger,
+                            "Total time taken: " + std::to_string(duration));
    
          req->runCallbackOnce(resp);
    
    #ifdef AMDINFER_ENABLE_METRICS
-         auto now = std::chrono::high_resolution_clock::now();
-         std::chrono::duration<double, std::micro> duration =
-           now - batch->getTime(k);
-         Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
-                                               duration.count());
+         timer.add("metrics", batch->getTime(k));
+         duration = timer.count<std::micro>("metrics", "stop");
+         Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
+                                               duration);
    #endif
        }
      }
@@ -354,9 +347,7 @@ Program Listing for File pt_zendnn.cpp
    void PtZendnn::doDeallocate() {}
    void PtZendnn::doDestroy() {}
    
-   }  // namespace workers
-   
-   }  // namespace amdinfer
+   }  // namespace amdinfer::workers
    
    extern "C" {
    // using smart pointer here may cause problems inside shared object so managing

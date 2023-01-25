@@ -1,0 +1,68 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp:
+
+File aks_detect.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_workers>` (``/workspace/amdinfer/src/amdinfer/workers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines shared objects for AksDetect workers. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/workers/aks_detect.hpp``)
+------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1workers_1_1DetectResponse`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332`
+

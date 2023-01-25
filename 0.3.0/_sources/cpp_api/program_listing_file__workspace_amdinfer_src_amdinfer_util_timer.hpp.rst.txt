@@ -1,0 +1,70 @@
+
+.. _program_listing_file__workspace_amdinfer_src_amdinfer_util_timer.hpp:
+
+Program Listing for File timer.hpp
+==================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_src_amdinfer_util_timer.hpp>` (``/workspace/amdinfer/src/amdinfer/util/timer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_UTIL_TIMER
+   #define GUARD_AMDINFER_UTIL_TIMER
+   
+   #include <chrono>         // IWYU pragma: export
+   #include <ratio>          // for ratio
+   #include <string>         // for string
+   #include <unordered_map>  // for unordered_map
+   
+   namespace amdinfer::util {
+   
+   using TimePoint = std::chrono::_V2::system_clock::time_point;
+   
+   TimePoint getTime();
+   
+   class Timer {
+    public:
+     explicit Timer(TimePoint time);
+     explicit Timer(bool start = false);
+   
+     void start();
+     void stop();
+     void add(const std::string& label);
+     void add(const std::string& label, TimePoint time);
+   
+     void clear();
+   
+     template <typename U = std::ratio<1, 1>, typename T = double>
+     T count(const std::string& start = "start",
+             const std::string& stop = "stop") {
+       const auto& start_time = times_.at(start);
+       const auto& stop_time = times_.at(stop);
+   
+       auto duration = std::chrono::duration_cast<std::chrono::duration<T, U>>(
+         stop_time - start_time);
+       return duration.count();
+     }
+   
+    private:
+     std::unordered_map<std::string, TimePoint> times_;
+   };
+   
+   }  // namespace amdinfer::util
+   
+   #endif  // GUARD_AMDINFER_UTIL_TIMER

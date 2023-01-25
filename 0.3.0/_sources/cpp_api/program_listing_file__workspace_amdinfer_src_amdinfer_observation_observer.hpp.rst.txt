@@ -51,14 +51,14 @@ Program Listing for File observer.hpp
      AMDINFER_IF_LOGGING(Logger logger);
    };
    
-   inline void logTraceBuffer(Logger logger, void* data,
+   inline void logTraceBuffer(const Logger& logger, void* data,
                               size_t size = sizeof(char)) {
      std::string bytes;
-     const auto kBytes = kNumTraceData * size;
+     const auto num_bytes = kNumTraceData * size;
      // 6 for four characters for the byte (e.g. -128) + two for ", "
-     const auto kBytesLength = kBytes * 6;
-     bytes.reserve(kBytesLength);
-     for (auto i = 0U; i < kBytes; ++i) {
+     const auto bytes_length = num_bytes * 6;
+     bytes.reserve(bytes_length);
+     for (auto i = 0U; i < num_bytes; ++i) {
        const auto* addr = static_cast<int8_t*>(data);
        bytes += std::to_string(static_cast<int>(addr[i])) + ", ";
      }
