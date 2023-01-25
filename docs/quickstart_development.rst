@@ -18,78 +18,99 @@ Quickstart - Development
 ========================
 
 This quickstart is intended for a user who is developing, testing, debugging or otherwise working more deeply with the inference server.
+There are multiple ways to build the server but this quickstart only covers Docker-based development using the included Python run script ``amdinfer``.
 
-The easiest way to use the AMD Inference Server is to run it inside a `Docker container <https://docs.docker.com/get-docker/>`__.
-The development Docker image contains all the dependencies to compile and test the inference server.
-It does not container the source code for the inference server however.
-Using the included script to run the container, you can mount the repository into the container and build the server.
+Prerequisites
+-------------
+
+* `Docker <https://docs.docker.com/get-docker/>`__
+* `Docker-Compose <https://docs.docker.com/compose/install/>`__ (optional - used for some tests)
+* Python3
+* git
+* Network access to clone the repository
+* Sufficient disk space to download test data and assets
+
+
+Set up the host
+---------------
 
 The inference server supports multiple platforms and hardware backends.
 Ensure that you set up your host appropriately depending on which platform(s) you are using.
-For development, your host needs Git, Python3, and `Docker <https://docs.docker.com/get-docker/>`__.
-Some tests require `Docker-Compose <https://docs.docker.com/compose/install/>`__ as well.
+For example, to use GPUs, you will need to install the drivers.
 More information on host setup can be found in :ref:`each platforms' guide <platforms:Platforms>`.
-
-The helper script used for many of the commands here is :file:`amdinfer`: a Python script with many helpful options.
-The most up-to-date documentation for this script can be seen with :ref:`online <cli:command-line interface>` or on the terminal with ``--help``.
-You can also use ``--dry-run`` before any command to see the underlying commands the script is running.
 
 Get the code
 ------------
 
 Use ``git`` to clone the repository from Github:
 
-.. code-block:: bash
+.. code-block:: console
 
-    git clone https://github.com/Xilinx/inference-server.git
+    $ git clone https://github.com/Xilinx/inference-server.git
+    $ cd inference-server
 
 Tests and examples need assets like images and videos to run.
 Some of these files are stored in `Git LFS <https://git-lfs.github.com/>`__.
 Depending on your host, these files may be automatically downloaded with the ``git clone``.
 If some of the files in ``tests/assets`` are very small (less than 300 bytes), then you haven't downloaded these Git LFS artifacts.
-From your host or after entering the dev container, use ``git lfs pull`` to get these files.
+From your host or after entering the development container, use ``git lfs pull`` to get these files.
 
 Build or get the Docker image
 -----------------------------
 
-You can use ``docker pull`` to get the dev container from a Docker registry if it's already built.
-
-To build from source, you will need Docker 18.09 or newer to build the image.
-After cloning the repository, enter the directory and run:
+You can pull the development image from a Docker registry if it's already built.
 
 .. code-block:: console
 
-    $ python3 docker/generate.py
-    $ ./amdinfer dockerize <platform flags>
+    $ docker pull <image>
+
+To build a development image from source, run the following commands:
+
+.. tabs::
+
+    .. code-tab:: console CPU
+
+        $ python3 docker/generate.py
+        $ ./amdinfer dockerize --ptzendnn /path/to/ptzendnn/archive --tfzendnn /path/to/tfzendnn/archive
+
+    .. code-tab:: console GPU
+
+        $ python3 docker/generate.py
+        $ ./amdinfer dockerize --migraphx
+
+    .. code-tab:: console FPGA
+
+        $ python3 docker/generate.py
+        $ ./amdinfer dockerize --vitis
 
 The ``generate.py`` script is used to create a dockerfile in the root directory, which is then used by the ``dockerize`` command.
-Use ``--help`` to see configurable options for the ``generate.py`` script.
-If you want to enable any platforms, pass the appropriate flags.
-Look at the platform-specific documentation for more information about these flags.
+Then, this dockerfile is used to build the development image with the appropriate platform enabled.
+You can also combine the platform flags to enable multiple platforms in one image.
+Look at the :ref:`platform-specific documentation <platforms:Platforms>` for more information.
+By default, this builds the development image as ``<username>/amdinfer-dev:latest``.
 
-By default, this builds the dev image as ``<username>/amdinfer-dev:latest``.
-After the image is built, run the container:
+After the image is built, you can use it to start a container:
 
 .. code-block:: console
 
     $ ./amdinfer run --dev
 
-This command runs the ``<username>/amdinfer-dev:latest`` image, which corresponds to the latest local dev image.
-The ``--dev`` preset will mount the working directory into :file:`/workspace/amdinfer/`, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
+This command runs the default created development image created above.
+The ``--dev`` preset will mount the working directory into ``/workspace/amdinfer/``, mount some additional directories into the container, expose some ports to the host and pass in device files for any available hardware.
 Some options may be overridden on the command-line (use ``--help`` to see the options).
 By default, it will open a Bash shell in this container and show you a splash screen to show that you've entered the container.
 
 Compiling the AMD Inference Server
 ----------------------------------
 
-These commands are all run inside the dev container.
+These commands are all run inside the development container.
 Here, :file:`./amdinfer` is aliased to :command:`amdinfer`.
 
 .. code-block:: console
 
     $ amdinfer build
 
-The build command builds the :program:`amdinfer-server` executable.
+The build command builds the :program:`amdinfer-server` executable, the C++ examples and the C++ tests.
 By default, this will be the debug version.
 You can pass flags to ``build`` to control the compile options.
 
@@ -104,19 +125,18 @@ You can pass flags to ``build`` to control the compile options.
     In general, you should not use ``sudo`` to run ``amdinfer`` commands.
     Some commands create files in your working directory and using ``sudo`` creates files with mixed permissions in your container and host and will even fail in some cases.
 
-The ``build`` will also install the server's Python library in the dev container.
-You can use it from Python in the container after importing it.
+The ``build`` will also install the server's Python library in the development container.
 
-.. code-block:: python
+.. code-block:: console
 
-    import amdinfer
+    pip list | grep amdinfer
 
 Get test artifacts
 ------------------
 
-For running tests and certain examples, you need to get models and other files.
+For running tests and examples, you need to get models and other files that they use.
 Make sure you have `Git LFS <https://git-lfs.github.com/>`__ installed.
-You can download all files, as shown below with the ``--all`` flag, or download platform-specific files.
+You can download all files, as shown below with the ``--all`` flag, or download platform-specific files by passing the appropriate flag(s).
 Use ``--help`` to see the options available.
 
 .. code-block:: console
@@ -129,7 +149,14 @@ You must abide by the license agreements of these files, if you choose to downlo
 Run the AMD Inference Server
 ----------------------------
 
-Once the server is built, start the server to begin serving requests.
+Once the server is built, you can run the test suite.
+Make sure you have the relevant test artifacts as described in the previous section.
+
+.. code-block:: bash
+
+    amdinfer test
+
+You can also run the examples by starting the server in one terminal in the container, opening another terminal in the same container and running an example script.
 
 .. code-block:: bash
 
@@ -138,29 +165,18 @@ Once the server is built, start the server to begin serving requests.
 
     # this command will block and the server will idle for requests
     # from a new terminal, you can send it requests
-    # on the host:
-    amdinfer attach
 
-    # this will open a new terminal on the most recent inference server container
-    # on this new terminal, you can communicate with the server
+    # on the host, use this command to open a new terminal in the most recent
+    # inference server container:
+    ./amdinfer attach
 
-    # test that the server is ready. The server returns status 200 OK on success
-    curl -I http://localhost:8998/v2/health/ready
-
-    # the server can now accept requests over REST/gRPC
+    # run an example from the second terminal which will reuse the server from
+    # the first terminal
+    python ./examples/hello_world/echo.py
 
     # shutdown the server using Ctrl+C
 
-The :ref:`REST endpoints <rest:REST Endpoints>` available to the server are based on `KServe's v2 specification <https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md>`__.
-While using REST directly works, using the library is an easier way to communicate with the server.
+Next steps
+----------
 
-You can also try running the test suite.
-The suite is run using PyTest and you can optionally pass Pytest options to the command to filter and choose which tests to run.
-Make sure you have the relevant test artifacts as described in the previous section.
-
-.. code-block:: bash
-
-    # this will start the server and test the REST API from Python.
-    amdinfer test
-
-Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.
+Read more about the :ref:`architecture <architecture:Architecture>` of the server and dive into the code!

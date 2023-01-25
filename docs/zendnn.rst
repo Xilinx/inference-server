@@ -50,7 +50,7 @@ To build an image with ZenDNN enabled, you need to add the the appropriate flag(
     # build the dev image $(whoami)/amdinfer-dev-zendnn:latest
     ./amdinfer dockerize --tfzendnn=./TF_v2.10_ZenDNN_v4.0_C++_API.zip --ptzendnn=./PT_v1.12_ZenDNN_v4.0_C++_API.zip --suffix="-zendnn"
 
-    # build the production image $(whoami)/amdinfer-zendnn:latest
+    # build the deployment image $(whoami)/amdinfer-zendnn:latest
     ./amdinfer dockerize --tfzendnn=./TF_v2.10_ZenDNN_v4.0_C++_API.zip --ptzendnn=./PT_v1.12_ZenDNN_v4.0_C++_API.zip --suffix="-zendnn" --production
 
 You can choose to build a image with just TF+ZenDNN or just PT+ZenDNN by only passing the appropriate flag.

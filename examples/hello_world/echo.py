@@ -67,17 +67,20 @@ def main():
         server.startHttp(8998)
     amdinfer.waitUntilServerReady(client)
     # -start server:
+    print("Server ready!")
 
     # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
     endpoint = client.workerLoad("echo")
     amdinfer.waitUntilModelReady(client, endpoint)
     # -load worker
+    print("Model ready!")
 
     # +inference: construct the request and make the inference
     data = 3
     request = make_request(data)
     response = client.modelInfer(endpoint, request)
     # -inference
+    print("Made inference!")
 
     # +validate: check whether the inference succeeded by checking the response
     assert not response.isError(), response.getError()
@@ -88,7 +91,7 @@ def main():
         assert len(recv_data) == 1
         assert recv_data[0] == data + 1
     # -validate
-    print("")
+    print("Results validated!")
 
 
 if __name__ == "__main__":

@@ -242,10 +242,10 @@ class WriteComposeFile:
                 "The yaml package is required for this command but could not be imported.",
             )
 
-        with open(f"docker-compose.base.yml", "r") as f:
+        with open(f"docker/docker-compose.base.yml", "r") as f:
             config = yaml.safe_load(f)
 
-        with open(f"docker-compose.{profile}.yml", "r") as f:
+        with open(f"docker/docker-compose.{profile}.yml", "r") as f:
             supplement = yaml.safe_load(f)
 
         cls.merge(config, supplement)

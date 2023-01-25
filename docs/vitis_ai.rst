@@ -22,8 +22,8 @@ Using the AMD Inference Server with Vitis AI and FPGAs requires some additional 
 Set up the host and FPGAs
 -------------------------
 
-The details for setting up your host are available online in the :github:`Vitis AI <Xilinx/Vitis-AI/tree/master/setup>` repository.
-These instructions will depend on whether you are using :github:`Alveo cards <Xilinx/Vitis-AI/tree/master/setup/alveo>` or :github:`VCK5000 <Xilinx/Vitis-AI/tree/master/setup/vck5000>`.
+The details for setting up your host are available online in the :github:`Vitis AI <Xilinx/Vitis-AI/tree/2.5/setup>` repository.
+These instructions will depend on whether you are using :github:`Alveo cards <Xilinx/Vitis-AI/tree/2.5/setup/alveo>` or :github:`VCK5000 <Xilinx/Vitis-AI/tree/2.5/setup/vck5000>`.
 In essence, you will need to install software, program the shell on the FPGA(s) and download XCLBINs.
 
 Software
@@ -67,13 +67,13 @@ To build an image with Vitis AI enabled, you need to add the ``--vitis`` to the 
     # build the dev image $(whoami)/amdinfer-dev-vitis:latest
     ./amdinfer dockerize --vitis --suffix="-vitis"
 
-    # build the production image $(whoami)/amdinfer-vitis:latest
+    # build the deployment image $(whoami)/amdinfer-vitis:latest
     ./amdinfer dockerize --vitis --suffix="-vitis" --production
 
-The production image will need XCLBINs.
+The deployment image will need XCLBINs.
 There are a few ways to achieve this:
 
-1. Copy XCLBINs into ``./external/overlaybins/*`` before invoking the ``dockerize`` command. The ``Dockerfile`` is configured to copy any files and directories at this path into the production image under ``/opt/xilinx/overlaybins``.
+1. Copy XCLBINs into ``./external/overlaybins/*`` before invoking the ``dockerize`` command. The ``Dockerfile`` is configured to copy any files and directories at this path into the deployment image under ``/opt/xilinx/overlaybins``.
 2. Copy XCLBINs into the image after building it.
 3. Mount the XCLBINs in the container at start time
 
