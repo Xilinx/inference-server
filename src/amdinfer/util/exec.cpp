@@ -27,13 +27,14 @@ namespace bp = boost::process;
 namespace amdinfer::util {
 
 std::string exec(const char* cmd) {
+  // this function call, and the bp::system call below raise a possible nullptr
+  // warning somewhere in Boost headers. This NOLINT suppresses it
+  // NOLINTNEXTLINE(clang-analyzer-core.NonNullParamChecker)
   assert(cmd != nullptr);
   const auto chunk_size = 128;
 
   bp::ipstream is;
   // stdout and stderr cannot be redirected to the same stream
-  // this function call raises a possible nullptr warning somewhere in Boost
-  // headers. This NOLINT suppresses it
   // NOLINTNEXTLINE(clang-analyzer-core.NonNullParamChecker)
   bp::system(cmd, bp::std_out > is, bp::std_err > bp::null);
 

@@ -27,9 +27,7 @@
 #include <cstdlib>                      // for getenv
 #include <cstring>                      // for memcpy
 #include <ext/alloc_traits.h>           // for __alloc_traits<>::...
-#include <functional>                   // for multiplies
 #include <memory>                       // for unique_ptr, allocator
-#include <numeric>                      // for accumulate
 #include <queue>                        // for queue
 #include <ratio>                        // for micro
 #include <string>                       // for string, operator!=
@@ -54,6 +52,7 @@
 #include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
 #include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
+#include "amdinfer/util/containers.hpp"             // for containerProduct
 #include "amdinfer/util/ctpl.hpp"                   // for ThreadPool
 #include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
@@ -206,8 +205,8 @@ void XModel::doAcquire(RequestParameters* parameters) {
     auto output_shape = tensor->get_shape();
     output_type_.emplace_back(mapXirToType(tensor->get_data_type()));
     // +1 to skip the batch size
-    output_size_.emplace_back(std::accumulate(
-      output_shape.begin() + 1, output_shape.end(), 1, std::multiplies<>()));
+    output_size_.emplace_back(
+      util::containerProduct(output_shape.begin() + 1, output_shape.end()));
     // TODO(varunsh): what should we return here?
     this->metadata_.addOutputTensor("output", output_type_.back(),
                                     output_shape);

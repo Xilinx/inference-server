@@ -14,8 +14,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _dependencies:
-
 Dependencies
 ============
 
@@ -103,10 +101,10 @@ The following packages (and any dependencies) are installed from a Personal Pack
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `migraphx-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.4.0.50401-84~20.04,MIT,Dynamically linked by amdinfer-server for AMD GPU support\ :superscript:`a 4`
-    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.19.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
-    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.4.1/>`__,2.46.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
-    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.4.1/>`__,1.0.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `migraphx-dev <http://repo.radeon.com/rocm/apt/5.4.1/pool/main/m/migraphx-dev/migraphx-dev_2.4.0.50401-84~20.04_amd64.deb>`__,2.4.0.50401-84~20.04,MIT,Dynamically linked by amdinfer-server for AMD GPU support\ :superscript:`a 4`
+    `miopen-hip-dev <http://repo.radeon.com/rocm/apt/5.4.1/pool/main/m/miopen-hip-dev/miopen-hip-dev_2.19.0.50401-84~20.04_amd64.deb>`__,2.19.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `rocblas-dev <http://repo.radeon.com/rocm/apt/5.4.1/pool/main/r/rocblas-dev/rocblas-dev_2.46.0.50401-84~20.04_amd64.deb>`__,2.46.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
+    `rocm-device-libs <http://repo.radeon.com/rocm/apt/5.4.1/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.50401-84~20.04_amd64.deb>`__,1.0.0.50401-84~20.04,MIT,Dependency of migraphx\ :superscript:`a 4`
 
 PyPI
 ^^^^
@@ -214,8 +212,8 @@ The following packages are downloaded from AMD.
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `PT_v1.11.0_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by PT+ZenDNN worker\ :superscript:`a 3`
-    `TF_v2.9_ZenDNN_v3.3_C++_API.zip <https://developer.amd.com/zendnn/>`__,3.3,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
+    `PT_v1.11.0_ZenDNN_v3.3_C++_API.zip <https://www.amd.com/en/developer/zendnn.html>`__,4.0,AMD ZenDNN EULA,Used by PT+ZenDNN worker\ :superscript:`a 3`
+    `TF_v2.9_ZenDNN_v3.3_C++_API.zip <https://www.amd.com/en/developer/zendnn.html>`__,4.0,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
 
 
 Included
@@ -251,17 +249,17 @@ The following files can be optionally downloaded by scripts and may be needed by
 
     `Physicsworks.ogv <https://upload.wikimedia.org/wikipedia/commons/c/c4/Physicsworks.ogv>`__,`Wikimedia <https://commons.wikimedia.org/wiki/File:Physicsworks.ogv>`__,`CC Attribution 3.0 Unported <https://creativecommons.org/licenses/by/3.0/legalcode>`__,Used for testing\ :superscript:`d 0`
     `girl-1867092_640.jpg <https://cdn.pixabay.com/photo/2016/11/29/03/35/girl-1867092_640.jpg>`__,`Pixabay <https://pixabay.com/photos/girl-model-portrait-smile-smiling-1867092/>`__,`Pixabay License <https://pixabay.com/service/license/>`__,Used for testing\ :superscript:`d 0`
-    :xilinxDownload:`vitis_ai_runtime_r1.3.0_image_video.tar.gz <vitis_ai_runtime_r1.3.0_image_video.tar.gz>`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
-    :xilinxDownload:`densebox_320_320-u200-u250-r1.4.0.tar.gz <densebox_320_320-u200-u250-r1.4.0.tar.gz>`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
-    :xilinxDownload:`resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz <resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz>`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
-    :xilinxDownload:`yolov3_voc-u200-u250-r1.4.0.tar.gz <yolov3_voc-u200-u250-r1.4.0.tar.gz>`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
-    :xilinxDownload:`pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip <pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip>`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 3`
-    :xilinxDownload:`tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip <tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip>`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 2`
-    `resnet50-v2-7.onnx <https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx>`__,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    :xilinxDownload:`vitis_ai_runtime_r1.3.0_image_video.tar.gz`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 0`
+    :xilinxDownload:`densebox_320_320-u200-u250-r1.4.0.tar.gz`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxDownload:`resnet_v1_50_tf-u200-u250-r1.4.0.tar.gz`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxDownload:`yolov3_voc-u200-u250-r1.4.0.tar.gz`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 1`
+    :xilinxDownload:`pt_resnet50_imagenet_224_224_8.2G_2.5_1.0_Z3.3.zip`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 3`
+    :xilinxDownload:`tf_resnetv1_50_imagenet_224_224_6.97G_2.5_1.0_Z3.3.zip`,Xilinx~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 2`
+    :githubOnnx:`resnet50-v2-7.onnx <vision/classification/resnet/model/resnet50-v2-7.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
     `val.txt <https://github.com/mvermeulen/rocm-migraphx/raw/master/datasets/imagenet/val.txt>`__,AMD~, Inc.,?,Used for testing\ :superscript:`d 4`
-    `yolov4_anchors.txt <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt>`__,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
-    `yolov4.onnx <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx>`__,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
-    `coco.names <https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names>`__,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
-    `bertsquad-10.onnx <https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx>`__,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    :githubOnnx:`yolov4_anchors.txt <vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    :githubOnnx:`yolov4.onnx <vision/object_detection_segmentation/yolov4/model/yolov4.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    :githubOnnx:`coco.names <vision/object_detection_segmentation/yolov4/dependencies/coco.names>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
+    :githubOnnx:`bertsquad-10.onnx <text/machine_comprehension/bert-squad/model/bertsquad-10.onnx>`,ONNX,Apache 2.0,Used for testing\ :superscript:`d 4`
     `run_onnx_squad <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/run_onnx_squad.py>`__,AMD~, Inc.,Apache 2.0,Used for testing\ :superscript:`d 4`
     `inputs_amd.json <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/raw/develop/examples/nlp/python_bert_squad/inputs_amd.json>`__,AMD~, Inc.,MIT,Used for testing\ :superscript:`d 4`

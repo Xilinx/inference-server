@@ -24,12 +24,12 @@
 #include <cassert>      // for assert
 #include <cstring>      // for memcpy
 #include <iterator>     // for back_insert_iterator, back_inse...
-#include <numeric>      // for accumulate
 #include <tuple>        // for tuple
 #include <type_traits>  // for add_const<>::type, decay_t
 #include <utility>      // for pair, make_pair, move
 
-#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/util/containers.hpp"  // for containerProduct
 
 namespace amdinfer {
 
@@ -273,8 +273,7 @@ bool InferenceRequestInput::sharedData() const {
 }
 
 size_t InferenceRequestInput::getSize() const {
-  return std::accumulate(this->shape_.begin(), this->shape_.end(), 1,
-                         std::multiplies<>());
+  return util::containerProduct(shape_);
 }
 
 void *InferenceRequestInput::getData() const {

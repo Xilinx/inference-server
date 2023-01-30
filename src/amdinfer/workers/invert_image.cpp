@@ -18,13 +18,12 @@
  * @brief Implements the InvertImage worker
  */
 
+#include <algorithm>              // for max
 #include <climits>                // for CHAR_BIT
 #include <cstddef>                // for size_t, byte
 #include <cstdint>                // for uint8_t, uint64_t, int32_t
 #include <cstring>                // for memcpy
-#include <functional>             // for multiplies, function
 #include <memory>                 // for unique_ptr, allocator
-#include <numeric>                // for accumulate
 #include <opencv2/core.hpp>       // for bitwise_not, Mat
 #include <opencv2/imgcodecs.hpp>  // for imdecode, imencode, IMRE...
 #include <ratio>                  // for micro
@@ -43,6 +42,7 @@
 #include "amdinfer/observation/metrics.hpp"    // for Metrics
 #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
 #include "amdinfer/util/base64.hpp"            // for base64_decode, base64_e...
+#include "amdinfer/util/containers.hpp"        // for containerProduct
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker
@@ -68,11 +68,6 @@ void invert(void* ibuf, void* obuf, uint64_t size) {
       odata[i + 3] = idata[i + 3];
     }
   }
-}
-
-/// Reduce vector to a product of its elements
-uint64_t reduceMult(std::vector<uint64_t>& v) {
-  return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
 }
 
 }  // namespace
@@ -181,7 +176,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         auto input_shape = inputs[i].getShape();
 
-        auto input_size = reduceMult(input_shape);
+        auto input_size = util::containerProduct(input_shape);
         auto input_dtype = inputs[i].getDatatype();
 
         // invert image, store in output

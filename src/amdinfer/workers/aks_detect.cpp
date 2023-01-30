@@ -28,10 +28,8 @@
 #include <cstdint>                 // for uint64_t, uint8_t, int32_t
 #include <cstring>                 // for memcpy
 #include <exception>               // for exception
-#include <functional>              // for multiplies
 #include <future>                  // for future
 #include <memory>                  // for unique_ptr, shared_ptr
-#include <numeric>                 // for accumulate
 #include <opencv2/core.hpp>        // for Mat, MatSize, Size, Mat...
 #include <opencv2/imgcodecs.hpp>   // for imdecode, IMREAD_UNCHANGED
 #include <ratio>                   // for micro
@@ -53,6 +51,7 @@
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
 #include "amdinfer/observation/tracing.hpp"    // for Trace
 #include "amdinfer/util/base64.hpp"            // for base64_decode
+#include "amdinfer/util/containers.hpp"        // for containerProduct
 #include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/util/timer.hpp"             // for Timer
@@ -61,10 +60,6 @@
 namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
 }  // namespace AKS
-
-uint64_t reduceMult(std::vector<uint64_t>& v) {
-  return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
-}
 
 namespace amdinfer::workers {
 
@@ -197,7 +192,7 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
 
         auto input_shape = input.getShape();
 
-        input_size = reduceMult(input_shape);
+        input_size = util::containerProduct(input_shape);
         auto input_dtype = input.getDatatype();
 
         std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};

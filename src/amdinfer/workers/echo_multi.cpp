@@ -23,7 +23,6 @@
 #include <cstdint>  // for uint32_t, int32_t
 #include <cstring>  // for memcpy
 #include <memory>   // for unique_ptr, allocator
-#include <numeric>  // for accumulate
 #include <ratio>    // for micro
 #include <string>   // for string
 #include <thread>   // for thread
@@ -39,6 +38,7 @@
 #include "amdinfer/observation/logging.hpp"    // for Logger
 #include "amdinfer/observation/metrics.hpp"    // for Metrics
 #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
+#include "amdinfer/util/containers.hpp"        // for containerSum
 #include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/util/timer.hpp"             // for Timer
@@ -170,8 +170,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
       auto outputs = req->getOutputs();
 
       std::vector<int> args;
-      const auto input_num =
-        std::accumulate(kInputLengths.begin(), kInputLengths.end(), 0);
+      const auto input_num = util::containerSum(kInputLengths);
       assert(input_num != 0);
       args.reserve(input_num);
       for (auto i = 0; i < kInputTensors; ++i) {
@@ -184,8 +183,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
       std::vector<int> output_args;
       auto input_index = 0;
       auto offset = 0;
-      output_args.reserve(
-        std::accumulate(kOutputLengths.begin(), kOutputLengths.end(), 0));
+      output_args.reserve(util::containerSum(kOutputLengths));
       for (auto i = 0; i < kOutputTensors; ++i) {
         for (auto k = 0; k < kOutputLengths.at(i); ++k) {
           output_args.push_back(args[input_index]);
