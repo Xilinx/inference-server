@@ -38,19 +38,17 @@ Program Listing for File tf_zendnn.cpp
    #include <tensorflow/core/public/session.h>             // for NewSession
    #include <tensorflow/core/public/session_options.h>     // for SessionOptions
    
-   #include <algorithm>   // for copy, max
-   #include <cassert>     // for assert
-   #include <cstddef>     // for size_t, byte
-   #include <cstdint>     // for int32_t, uint...
-   #include <cstring>     // for memcpy
-   #include <functional>  // for multiplies
-   #include <memory>      // for allocator
-   #include <numeric>     // for accumulate
-   #include <ratio>       // for micro, milli
-   #include <string>      // for string, opera...
-   #include <thread>      // for thread
-   #include <utility>     // for pair, move
-   #include <vector>      // for vector
+   #include <algorithm>  // for copy, max
+   #include <cassert>    // for assert
+   #include <cstddef>    // for size_t, byte
+   #include <cstdint>    // for int32_t, uint...
+   #include <cstring>    // for memcpy
+   #include <memory>     // for allocator
+   #include <ratio>      // for micro, milli
+   #include <string>     // for string, opera...
+   #include <thread>     // for thread
+   #include <utility>    // for pair, move
+   #include <vector>     // for vector
    
    #include "amdinfer/batching/hard.hpp"          // for Batch, BatchP...
    #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
@@ -67,10 +65,6 @@ Program Listing for File tf_zendnn.cpp
    #include "amdinfer/workers/worker.hpp"         // for Worker, kNumB...
    
    namespace tf = ::tensorflow;
-   
-   uint64_t reduceMult(std::vector<uint64_t>& v) {
-     return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
-   }
    
    namespace amdinfer::workers {
    

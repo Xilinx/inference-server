@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>File pt_zendnn.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>File pt_zendnn.cpp &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="../index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                0.3.0
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -206,6 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -426,6 +427,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/logging.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_observation_logging.hpp.html#file-workspace-amdinfer-src-amdinfer-observation-logging-hpp"><span class="std std-ref">File logging.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/metrics.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.html#file-workspace-amdinfer-src-amdinfer-observation-metrics-hpp"><span class="std std-ref">File metrics.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/tracing.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp.html#file-workspace-amdinfer-src-amdinfer-observation-tracing-hpp"><span class="std std-ref">File tracing.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/containers.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_containers.hpp.html#file-workspace-amdinfer-src-amdinfer-util-containers-hpp"><span class="std std-ref">File containers.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/thread.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_thread.hpp.html#file-workspace-amdinfer-src-amdinfer-util-thread-hpp"><span class="std std-ref">File thread.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/timer.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_timer.hpp.html#file-workspace-amdinfer-src-amdinfer-util-timer-hpp"><span class="std std-ref">File timer.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/workers/worker.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_worker.hpp.html#file-workspace-amdinfer-src-amdinfer-workers-worker-hpp"><span class="std std-ref">File worker.hpp</span></a>)</p></li>
@@ -434,9 +436,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><code class="docutils literal notranslate"><span class="pre">cstring</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">exception</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp.html#file-workspace-amdinfer-include-amdinfer-core-exceptions-hpp"><span class="std std-ref">File exceptions.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">filesystem</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">functional</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">numeric</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ratio</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_declarations.hpp.html#file-workspace-amdinfer-include-amdinfer-declarations-hpp"><span class="std std-ref">File declarations.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">string</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_string.hpp.html#file-workspace-amdinfer-src-amdinfer-util-string-hpp"><span class="std std-ref">File string.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">thread</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_thread.hpp.html#file-workspace-amdinfer-src-amdinfer-util-thread-hpp"><span class="std std-ref">File thread.hpp</span></a>)</p></li>
@@ -462,7 +462,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="function_pt__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html#exhale-function-pt-zendnn-8cpp-1a601552e385edb19c4596c0c81cabb7fe"><span class="std std-ref">Function getWorker()</span></a></p></li>
-<li><p><a class="reference internal" href="function_pt__zendnn_8cpp_1a68cbaa7025b065ab96dbc5b6d5276da6.html#exhale-function-pt-zendnn-8cpp-1a68cbaa7025b065ab96dbc5b6d5276da6"><span class="std std-ref">Function reduceMult(std::vector&lt;uint64_t&gt;&amp;)</span></a></p></li>
 </ul>
 </section>
 <section id="variables">
@@ -494,7 +493,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 25, 2023.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -531,7 +530,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: 0.3.0
+      v: main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -540,7 +539,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+          <dd><a href="/inference-server/main/">en</a></dd>
            </strong> 
         
       </dl>
@@ -557,13 +556,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-           <strong> 
+          
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-           </strong> 
+          
         
-          
+           <strong> 
           <dd><a href="/inference-server/main/">main</a></dd>
-          
+           </strong> 
         
       </dl>
       

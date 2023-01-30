@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Introduction &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Introduction &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -58,7 +58,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                0.3.0
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -208,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -412,8 +413,8 @@ You can also use the server backend directly using the native C++ API to write l
 <ul class="simple">
 <li><p>TensorFlow and PyTorch models with <a class="reference external" href="https://developer.amd.com/zendnn/">ZenDNN</a> on AMD CPUs</p></li>
 <li><p>ONNX models with <a class="reference external" href="https://github.com/ROCmSoftwarePlatform/AMDMIGraphX">MIGraphX</a> on AMD GPUs</p></li>
-<li><p>XModel models with <a class="reference external" href="https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html">Vitis AI</a> on AMD FPGAs</p></li>
-<li><p>A graph of computation including pre- and post-processing for end-to-end inference with <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS">AKS</a> on AMD FPGAs</p></li>
+<li><p>XModel models with <a class="reference external" href="https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html">Vitis AI</a> on AMD (Xilinx) FPGAs</p></li>
+<li><p>A graph of computation including pre- and post-processing for end-to-end inference with <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS">AKS</a> on AMD (Xilinx) FPGAs</p></li>
 </ul>
 </section>
 <section id="documentation-overview">
@@ -421,7 +422,7 @@ You can also use the server backend directly using the native C++ API to write l
 <p>The remainder of this documentation is organized as follows:</p>
 <ul class="simple">
 <li><p>The <strong>About</strong> section continues to talk about the dependencies, licenses, roadmap and the changelog for the project</p></li>
-<li><p>The <strong>Getting Started</strong> section presents quick starts for different types of users</p></li>
+<li><p>The <strong>Quickstart</strong> section presents quick starts for different types of users</p></li>
 <li><p>The <strong>Libraries and API</strong> section goes over the different libraries, APIs and tools available to users</p></li>
 <li><p>The <strong>Examples</strong> section provides more commentary around the examples in the repository</p></li>
 <li><p>The <strong>Using the Server</strong> section discusses how to use the server in more depth</p></li>
@@ -431,7 +432,7 @@ You can also use the server backend directly using the native C++ API to write l
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
 <p>This documentation is your best source of support.
-You can also raise issues on the <a class="reference external" href="https://github.com/Xilinx/inference-server/issues">Github page</a> if you run into a bug or have a question.</p>
+You can also raise issues on <a class="reference external" href="https://github.com/Xilinx/inference-server/issues">Github</a> if you run into a bug or have a question.</p>
 <p>The AMD Inference Server is open-source and welcomes contributions.
 If you are interested in adding a feature, raise an issue first so your proposal can be discussed.
 Follow the <a class="reference internal" href="contributing.html#contributing"><span class="std std-ref">Contributing</span></a> guidelines when making a new pull request.</p>
@@ -460,7 +461,7 @@ Follow the <a class="reference internal" href="contributing.html#contributing"><
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 25, 2023.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -497,7 +498,7 @@ Follow the <a class="reference internal" href="contributing.html#contributing"><
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: 0.3.0
+      v: main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -506,7 +507,7 @@ Follow the <a class="reference internal" href="contributing.html#contributing"><
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+          <dd><a href="/inference-server/main/">en</a></dd>
            </strong> 
         
       </dl>
@@ -523,13 +524,13 @@ Follow the <a class="reference internal" href="contributing.html#contributing"><
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-           <strong> 
+          
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-           </strong> 
+          
         
-          
+           <strong> 
           <dd><a href="/inference-server/main/">main</a></dd>
-          
+           </strong> 
         
       </dl>
       

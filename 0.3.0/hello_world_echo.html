@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Hello World - Python &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Hello World - Python &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -58,7 +58,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                0.3.0
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -208,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -395,8 +396,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="id1"></span><h1>Hello World - Python<a class="headerlink" href="#hello-world-python" title="Permalink to this headline">¶</a></h1>
 <p>AMD Inference Server’s Python API allows you to start the server and send requests to it from Python.
 This example walks you through how to start the server and use Python to send requests to a simple model.
-This example and script are intended to run in the dev container.
-The complete script used here is available in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/v0.3.0/examples/hello_world">repository</a>.</p>
+This example and script are intended to run in the development container.
+The complete script used here is available in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/examples/hello_world">repository</a>.</p>
 <section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Permalink to this headline">¶</a></h2>
 <p>You need to bring in the AMD Inference Server Python library to use the API.
@@ -413,8 +414,7 @@ You can also install it using a pre-built wheel.</p>
 </section>
 <section id="create-our-client-and-server-objects">
 <h2>Create our client and server objects<a class="headerlink" href="#create-our-client-and-server-objects" title="Permalink to this headline">¶</a></h2>
-<p>We assume that the server will be running locally with the default HTTP port and pass that to the client.
-This example assumes that the server will be running locally with the default HTTP port.
+<p>This example assumes that the server will be running locally with the default HTTP port.
 Since you’ll be using HTTP/REST to communicate with the server, you should create an <cite>HttpClient</cite> using the address of the server as the argument.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">amdinfer</span><span class="o">.</span><span class="n">HttpClient</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:8998&quot;</span><span class="p">)</span>
 </pre></div>
@@ -511,6 +511,12 @@ The assertions here check these cases.</p>
 While it’s not shown here, the Python API provides an <code class="docutils literal notranslate"><span class="pre">unload()</span></code> method for this purpose.
 As the script ends, the Server object’s destructor will clean up any active workers on the server and it will shut down</p>
 </section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates the complete process from starting the server, creating a client, loading a worker, and making an inference.
+Depending on your use case, you may only be performing a subset of these actions but this provides an overview of what’s happening behind the scenes.
+You can look at more sophisticated examples for another overview of the steps associated with making inferences.</p>
+</section>
 </section>
 
 
@@ -535,7 +541,7 @@ As the script ends, the Server object’s destructor will clean up any active wo
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 25, 2023.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -572,7 +578,7 @@ As the script ends, the Server object’s destructor will clean up any active wo
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: 0.3.0
+      v: main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -581,7 +587,7 @@ As the script ends, the Server object’s destructor will clean up any active wo
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+          <dd><a href="/inference-server/main/">en</a></dd>
            </strong> 
         
       </dl>
@@ -598,13 +604,13 @@ As the script ends, the Server object’s destructor will clean up any active wo
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-           <strong> 
+          
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-           </strong> 
+          
         
-          
+           <strong> 
           <dd><a href="/inference-server/main/">main</a></dd>
-          
+           </strong> 
         
       </dl>
       

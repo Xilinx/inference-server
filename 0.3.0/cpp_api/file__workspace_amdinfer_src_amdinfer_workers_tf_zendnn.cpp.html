@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>File tf_zendnn.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>File tf_zendnn.cpp &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="../index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                0.3.0
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -206,6 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -433,9 +434,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><code class="docutils literal notranslate"><span class="pre">cstdint</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cstring</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dlfcn.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">functional</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">numeric</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ratio</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_declarations.hpp.html#file-workspace-amdinfer-include-amdinfer-declarations-hpp"><span class="std std-ref">File declarations.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">string</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_string.hpp.html#file-workspace-amdinfer-src-amdinfer-util-string-hpp"><span class="std std-ref">File string.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tensorflow/c/c_api.h</span></code></p></li>
@@ -473,7 +472,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul class="simple">
 <li><p><a class="reference internal" href="function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59.html#exhale-function-tf-zendnn-8cpp-1adf504d05611a1a3b28113b6eb6e2eb59"><span class="std std-ref">Function amdinfer::workers::openLibrary</span></a></p></li>
 <li><p><a class="reference internal" href="function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.html#exhale-function-tf-zendnn-8cpp-1a601552e385edb19c4596c0c81cabb7fe"><span class="std std-ref">Function getWorker()</span></a></p></li>
-<li><p><a class="reference internal" href="function_tf__zendnn_8cpp_1a68cbaa7025b065ab96dbc5b6d5276da6.html#exhale-function-tf-zendnn-8cpp-1a68cbaa7025b065ab96dbc5b6d5276da6"><span class="std std-ref">Function reduceMult(std::vector&lt;uint64_t&gt;&amp;)</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -497,7 +495,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 25, 2023.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -534,7 +532,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: 0.3.0
+      v: main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -543,7 +541,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+          <dd><a href="/inference-server/main/">en</a></dd>
            </strong> 
         
       </dl>
@@ -560,13 +558,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-           <strong> 
+          
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-           </strong> 
+          
         
-          
+           <strong> 
           <dd><a href="/inference-server/main/">main</a></dd>
-          
+           </strong> 
         
       </dl>
       

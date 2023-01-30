@@ -41,13 +41,13 @@ Includes
 
 - ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``cassert``
 
 - ``cstring``
 
 - ``iterator``
-
-- ``numeric``
 
 - ``tuple``
 

@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>File grpc_internal.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>File grpc_internal.cpp &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="../index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                0.3.0
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -206,6 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -452,9 +453,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul class="simple">
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf.html#exhale-function-grpc-internal-8cpp-1a9529bfb0905d019214381197735cb2bf"><span class="std std-ref">Function amdinfer::mapModelMetadataToProto</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580.html#exhale-function-grpc-internal-8cpp-1a47a63870c628bbcc0f88a7da1e3c3580"><span class="std std-ref">Function amdinfer::mapParametersToProto</span></a></p></li>
+<li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e.html#exhale-function-grpc-internal-8cpp-1a770ea8ac5d3401297d49e81b28b78c3e"><span class="std std-ref">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;, RequestParameters&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843.html#exhale-function-grpc-internal-8cpp-1ae7334f09228bbcce89265176a7067843"><span class="std std-ref">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;, RequestParameters *)</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba.html#exhale-function-grpc-internal-8cpp-1ae0fbf34987a03cce20609d5767c07eba"><span class="std std-ref">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;)</span></a></p></li>
-<li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e.html#exhale-function-grpc-internal-8cpp-1a770ea8ac5d3401297d49e81b28b78c3e"><span class="std std-ref">Function amdinfer::mapProtoToParameters(const google::protobuf::Map&lt;std::string, inference::InferParameter&gt;&amp;, RequestParameters&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9.html#exhale-function-grpc-internal-8cpp-1a95af9e6fefbe2dd323562124a33284a9"><span class="std std-ref">Function amdinfer::mapProtoToResponse</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835.html#exhale-function-grpc-internal-8cpp-1a9571eec4e243504a9649a5d1817db835"><span class="std std-ref">Function amdinfer::mapRequestToProto(const InferenceRequest&amp;, inference::ModelInferRequest&amp;, ] const Observer&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6.html#exhale-function-grpc-internal-8cpp-1a757a8b0dc668948c0d7536e955a2fcd6"><span class="std std-ref">Function amdinfer::mapResponseToProto</span></a></p></li>
@@ -482,7 +483,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 25, 2023.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -519,7 +520,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: 0.3.0
+      v: main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -528,7 +529,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+          <dd><a href="/inference-server/main/">en</a></dd>
            </strong> 
         
       </dl>
@@ -545,13 +546,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-           <strong> 
+          
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-           </strong> 
+          
         
-          
+           <strong> 
           <dd><a href="/inference-server/main/">main</a></dd>
-          
+           </strong> 
         
       </dl>
       

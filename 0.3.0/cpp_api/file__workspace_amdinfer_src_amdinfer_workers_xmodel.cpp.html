@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>File xmodel.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>File xmodel.cpp &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="../index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                0.3.0
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -206,6 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -425,6 +426,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/predict_api.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp.html#file-workspace-amdinfer-include-amdinfer-core-predict-api-hpp"><span class="std std-ref">File predict_api.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/declarations.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_declarations.hpp.html#file-workspace-amdinfer-include-amdinfer-declarations-hpp"><span class="std std-ref">File declarations.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/observer.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_observation_observer.hpp.html#file-workspace-amdinfer-src-amdinfer-observation-observer-hpp"><span class="std std-ref">File observer.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/containers.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_containers.hpp.html#file-workspace-amdinfer-src-amdinfer-util-containers-hpp"><span class="std std-ref">File containers.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/ctpl.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_ctpl.hpp.html#file-workspace-amdinfer-src-amdinfer-util-ctpl-hpp"><span class="std std-ref">File ctpl.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/parse_env.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp.html#file-workspace-amdinfer-src-amdinfer-util-parse-env-hpp"><span class="std std-ref">File parse_env.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/queue.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_queue.hpp.html#file-workspace-amdinfer-src-amdinfer-util-queue-hpp"><span class="std std-ref">File queue.hpp</span></a>)</p></li>
@@ -438,9 +440,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><code class="docutils literal notranslate"><span class="pre">cstring</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cxxabi.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ext/alloc_traits.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">functional</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">numeric</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">queue</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_queue.hpp.html#file-workspace-amdinfer-src-amdinfer-util-queue-hpp"><span class="std std-ref">File queue.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ratio</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_declarations.hpp.html#file-workspace-amdinfer-include-amdinfer-declarations-hpp"><span class="std std-ref">File declarations.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">string</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_string.hpp.html#file-workspace-amdinfer-src-amdinfer-util-string-hpp"><span class="std std-ref">File string.hpp</span></a>)</p></li>
@@ -496,7 +496,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 25, 2023.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -533,7 +533,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: 0.3.0
+      v: main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -542,7 +542,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/0.3.0/">en</a></dd>
+          <dd><a href="/inference-server/main/">en</a></dd>
            </strong> 
         
       </dl>
@@ -559,13 +559,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-           <strong> 
+          
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-           </strong> 
+          
         
-          
+           <strong> 
           <dd><a href="/inference-server/main/">main</a></dd>
-          
+           </strong> 
         
       </dl>
       

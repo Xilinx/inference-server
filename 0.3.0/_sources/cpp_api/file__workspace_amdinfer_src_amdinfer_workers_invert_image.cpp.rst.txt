@@ -35,6 +35,8 @@ Includes
 --------
 
 
+- ``algorithm``
+
 - ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
 
 - ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
@@ -55,6 +57,8 @@ Includes
 
 - ``amdinfer/util/base64.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
 - ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
@@ -69,11 +73,7 @@ Includes
 
 - ``cstring``
 
-- ``functional``
-
 - ``memory``
-
-- ``numeric``
 
 - ``opencv2/core.hpp``
 

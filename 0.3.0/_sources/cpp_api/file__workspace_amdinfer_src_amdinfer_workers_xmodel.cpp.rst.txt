@@ -57,6 +57,8 @@ Includes
 
 - ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``amdinfer/util/ctpl.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.hpp`)
 
 - ``amdinfer/util/parse_env.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp`)
@@ -83,11 +85,7 @@ Includes
 
 - ``ext/alloc_traits.h``
 
-- ``functional``
-
 - ``memory``
-
-- ``numeric``
 
 - ``queue`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
 

@@ -57,6 +57,8 @@ Includes
 
 - ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
 - ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
@@ -73,11 +75,7 @@ Includes
 
 - ``filesystem``
 
-- ``functional``
-
 - ``memory``
-
-- ``numeric``
 
 - ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -117,8 +115,6 @@ Functions
 
 
 - :ref:`exhale_function_pt__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
-
-- :ref:`exhale_function_pt__zendnn_8cpp_1a68cbaa7025b065ab96dbc5b6d5276da6`
 
 
 Variables

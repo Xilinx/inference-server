@@ -73,11 +73,7 @@ Includes
 
 - ``dlfcn.h``
 
-- ``functional``
-
 - ``memory``
-
-- ``numeric``
 
 - ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -141,6 +137,4 @@ Functions
 - :ref:`exhale_function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59`
 
 - :ref:`exhale_function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
-
-- :ref:`exhale_function_tf__zendnn_8cpp_1a68cbaa7025b065ab96dbc5b6d5276da6`
 
