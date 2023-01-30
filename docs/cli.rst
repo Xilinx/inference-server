@@ -17,7 +17,7 @@
 Command-Line Interface
 ======================
 
-The :file:`amdinfer` script provides an easy way to launch containers and build the Server.
+The :file:`amdinfer` script provides an easy way to launch containers and build the server during development.
 The documentation for the options available in this Python script can be seen here or on the terminal using the ``--help`` flag.
 
 .. argparse::

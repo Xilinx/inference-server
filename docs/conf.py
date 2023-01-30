@@ -129,28 +129,19 @@ autosectionlabel_maxdepth = 2
 tree_path = f"https://github.com/Xilinx/inference-server/tree/{release}/%s"
 blob_path = f"https://github.com/Xilinx/inference-server/blob/{release}/%s"
 raw_path = f"https://github.com/Xilinx/inference-server/raw/{release}/%s"
+xilinx_download = "https://www.xilinx.com/bin/public/openDownload?filename=%s"
+github_onnx = "https://github.com/onnx/models/raw/main/%s"
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
-    "amdinferTree": (
-        tree_path,
-        "%s",
-    ),
-    "amdinferBlob": (
-        blob_path,
-        "%s",
-    ),
-    "amdinferRawFull": (
-        raw_path,
-        None,
-    ),
+    "amdinferTree": (tree_path, "%s"),
+    "amdinferBlob": (blob_path, "%s"),
+    "amdinferRawFull": (raw_path, None),
     "ubuntuPackages": ("https://packages.ubuntu.com/focal/%s", "%s"),
     "pypiPackages": ("https://pypi.org/project/%s", "%s"),
     "github": ("https://github.com/%s", "%s"),
-    "xilinxDownload": (
-        "https://www.xilinx.com/bin/public/openDownload?filename=%s",
-        None,
-    ),
+    "xilinxDownload": (xilinx_download, "%s"),
+    "githubOnnx": (github_onnx, None),
 }
 
 # sphinx-issues configuration

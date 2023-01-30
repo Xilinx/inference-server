@@ -207,6 +207,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
     ${PROJECT_SOURCE_DIR}/tests
     ${PROJECT_SOURCE_DIR}/external
     ${PROJECT_SOURCE_DIR}/examples
+    ${PROJECT_SOURCE_DIR}/src/amdinfer/bindings
   )
 else()
   message(STATUS "Not a coverage build, not configuring coverage measurement")
