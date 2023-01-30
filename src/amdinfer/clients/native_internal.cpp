@@ -20,17 +20,16 @@
 
 #include "amdinfer/clients/native_internal.hpp"
 
-#include <cstddef>     // for byte, size_t
-#include <cstdint>     // for uint64_t
-#include <cstring>     // for memcpy
-#include <functional>  // for multiplies
-#include <numeric>     // for accumulate
-#include <string>      // for string
-#include <utility>     // for move
+#include <cstddef>  // for byte, size_t
+#include <cstdint>  // for uint64_t
+#include <cstring>  // for memcpy
+#include <string>   // for string
+#include <utility>  // for move
 
 #include "amdinfer/buffers/buffer.hpp"       // for Buffer
 #include "amdinfer/core/data_types.hpp"      // for DataType
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_ERROR
+#include "amdinfer/util/containers.hpp"      // for containerProduct
 
 namespace amdinfer {
 template <typename T>
@@ -54,9 +53,7 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
     input.shape_ = req.shape_;
     input.data_type_ = req.data_type_;
     input.parameters_ = req.parameters_;
-    auto size = std::accumulate(input.shape_.begin(), input.shape_.end(), 1,
-                                std::multiplies<>()) *
-                input.data_type_.size();
+    auto size = util::containerProduct(input.shape_) * input.data_type_.size();
     auto *dest = static_cast<std::byte *>(input_buffer->data(offset));
     memcpy(dest, req.data_, size);
 

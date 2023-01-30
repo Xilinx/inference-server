@@ -23,9 +23,7 @@
 #include <cstring>     // for memcpy
 #include <exception>   // for exception
 #include <filesystem>  // for path, exists, filesystem
-#include <functional>  // for multiplies
 #include <memory>      // for unique_ptr, allocator
-#include <numeric>     // for accumulate
 #include <ratio>       // for milli, micro
 #include <string>      // for string, operator+, to_s...
 #include <thread>      // for thread
@@ -42,16 +40,13 @@
 #include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"    // for Trace
+#include "amdinfer/util/containers.hpp"        // for containerProduct
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/util/timer.hpp"             // for Timer
 #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
 #include "torch/script.h"                      // for IValue, Tensor, Device
 
 namespace fs = std::filesystem;
-
-uint64_t reduceMult(std::vector<uint64_t>& v) {
-  return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
-}
 
 namespace amdinfer::workers {
 
@@ -251,8 +246,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       // Get all the inputs from the requests and copy to the PT tensor
       for (const auto& input : inputs) {
         auto* input_buffer = input.getData();
-        auto input_shape = input.getShape();
-        input_size = reduceMult(input_shape);
+        const auto& input_shape = input.getShape();
+        input_size = util::containerProduct(input_shape);
 
         auto* float_buffer = static_cast<float*>(input_buffer);
         std::copy(float_buffer, float_buffer + input_size,

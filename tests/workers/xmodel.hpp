@@ -26,7 +26,6 @@
 #include <iostream>                // for operator<<, bas...
 #include <iterator>                // for back_insert_ite...
 #include <memory>                  // for unique_ptr, mak...
-#include <numeric>                 // for accumulate
 #include <string>                  // for string, operator==
 #include <utility>                 // for move, pair
 #include <vart/runner.hpp>         // for Runner::TensorF...
@@ -38,6 +37,7 @@
 
 #include "amdinfer/amdinfer.hpp"
 #include "amdinfer/core/data_types_internal.hpp"
+#include "amdinfer/util/containers.hpp"
 
 inline std::vector<const xir::Subgraph*> getDpuSubgraphs(xir::Graph* graph) {
   std::vector<xir::Subgraph*> subgraphs =
@@ -206,8 +206,7 @@ inline int run(const std::string& xmodel, int images, int threads,
   }
 
   std::vector<char> data;
-  auto num_elements =
-    std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<>());
+  auto num_elements = amdinfer::util::containerProduct(shape);
   data.reserve(num_elements * type.size());
 
   FutureQueue my_queue;

@@ -25,11 +25,9 @@
 #include <exception>              // for exception
 #include <filesystem>             // for path
 #include <fstream>                // for ifstream, operator<<
-#include <functional>             // for multiplies
 #include <map>                    // for map
 #include <memory>                 // for allocator, unique_ptr
 #include <migraphx/migraphx.hpp>  // for shape, program, progra...
-#include <numeric>                // for accumulate
 #include <ratio>                  // for micro
 #include <stdexcept>              // for invalid_argument, runt...
 #include <string>                 // for string, operator+, to_...
@@ -46,6 +44,7 @@
 #include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
 #include "amdinfer/observation/logging.hpp"    // for AMDINFER_LOG_INFO, AMD...
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
+#include "amdinfer/util/containers.hpp"        // for containerProduct
 #include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"            // for setThreadName
 #include "amdinfer/util/timer.hpp"             // for Timer
@@ -554,8 +553,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
             migraphx::api::shape shape = this_output.get_shape();
             auto lengths = shape.lengths();
 
-            size_t num_results = std::accumulate(
-              lengths.begin() + 1, lengths.end(), 1, std::multiplies<>());
+            auto num_results =
+              util::containerProduct(lengths.begin() + 1, lengths.end());
 
             // remove the 0'th dimension (batch size) from lengths
             lengths.erase(lengths.begin());
