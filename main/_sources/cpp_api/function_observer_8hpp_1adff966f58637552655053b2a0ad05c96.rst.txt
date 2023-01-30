@@ -1,0 +1,14 @@
+.. _exhale_function_observer_8hpp_1adff966f58637552655053b2a0ad05c96:
+
+Function amdinfer::logTraceBuffer
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::logTraceBuffer(const Logger&, void *, size_t)
+   :project: amdinfer

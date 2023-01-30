@@ -35,6 +35,8 @@ Includes
 --------
 
 
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
 - ``amdinfer/clients/grpc_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`)
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
@@ -51,13 +53,19 @@ Includes
 
 - ``cstdint``
 
+- ``cstring``
+
 - ``google/protobuf/repeated_ptr_field.h``
 
-- ``iostream``
+- ``google/protobuf/stubs/common.h``
 
 - ``memory``
 
 - ``predict_api.pb.h``
+
+- ``utility``
+
+- ``variant``
 
 - ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
 
@@ -79,7 +87,7 @@ Classes
 
 - :ref:`exhale_struct_structamdinfer_1_1AddDataToTensor`
 
-- :ref:`exhale_struct_structamdinfer_1_1overloaded`
+- :ref:`exhale_struct_structamdinfer_1_1Overloaded`
 
 - :ref:`exhale_struct_structamdinfer_1_1SetOutputData`
 
@@ -90,13 +98,13 @@ Functions
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1a29423446a13fe8f7300565cce516b05e`
+- :ref:`exhale_function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba`
-
-- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
 
@@ -104,5 +112,5 @@ Functions
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1a370f1b4a6348b2265e44bec053e75397`
+- :ref:`exhale_function_grpc__internal_8cpp_1aedf702344a580ab5481f76a200fe60e5`
 

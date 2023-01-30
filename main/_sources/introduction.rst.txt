@@ -36,8 +36,8 @@ The AMD Inference Server is integrated with the following libraries out of the g
 
 * TensorFlow and PyTorch models with `ZenDNN <https://developer.amd.com/zendnn/>`__ on AMD CPUs
 * ONNX models with `MIGraphX <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX>`__ on AMD GPUs
-* XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
-* A graph of computation including pre- and post-processing for end-to-end inference with `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD FPGAs
+* XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD (Xilinx) FPGAs
+* A graph of computation including pre- and post-processing for end-to-end inference with `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD (Xilinx) FPGAs
 
 Documentation overview
 ----------------------
@@ -45,7 +45,7 @@ Documentation overview
 The remainder of this documentation is organized as follows:
 
 * The **About** section continues to talk about the dependencies, licenses, roadmap and the changelog for the project
-* The **Getting Started** section presents quick starts for different types of users
+* The **Quickstart** section presents quick starts for different types of users
 * The **Libraries and API** section goes over the different libraries, APIs and tools available to users
 * The **Examples** section provides more commentary around the examples in the repository
 * The **Using the Server** section discusses how to use the server in more depth
@@ -55,8 +55,8 @@ Support
 -------
 
 This documentation is your best source of support.
-You can also raise issues on the `Github page <https://github.com/Xilinx/inference-server/issues>`__ if you run into a bug or have a question.
+You can also raise issues on `Github <https://github.com/Xilinx/inference-server/issues>`__ if you run into a bug or have a question.
 
 The AMD Inference Server is open-source and welcomes contributions.
 If you are interested in adding a feature, raise an issue first so your proposal can be discussed.
-Follow the `Contributing <https://xilinx.github.io/inference-server/main/contributing.html>`__ guidelines when making a new pull request.
+Follow the :ref:`Contributing <contributing:Contributing>` guidelines when making a new pull request.

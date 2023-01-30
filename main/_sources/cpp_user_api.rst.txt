@@ -20,13 +20,22 @@ C++
 Clients
 -------
 
+.. doxygenfunction:: amdinfer::serverHasExtension
+
+.. doxygenfunction:: amdinfer::waitUntilServerReady
+
+.. doxygenfunction:: amdinfer::waitUntilModelReady
+
+.. doxygenfunction:: amdinfer::inferAsyncOrdered
+
+.. doxygenfunction:: amdinfer::inferAsyncOrderedBatched
+
 gRPC
 ^^^^
 
 .. _user_cpp_clients_grpc:
 .. doxygenclass:: amdinfer::GrpcClient
     :members:
-    :undoc-members:
 
 HTTP
 ^^^^
@@ -34,7 +43,6 @@ HTTP
 .. _user_cpp_clients_http:
 .. doxygenclass:: amdinfer::HttpClient
     :members:
-    :undoc-members:
 
 
 Native
@@ -43,7 +51,6 @@ Native
 .. _user_cpp_clients_native:
 .. doxygenclass:: amdinfer::NativeClient
     :members:
-    :undoc-members:
 
 WebSocket
 ^^^^^^^^^
@@ -51,7 +58,6 @@ WebSocket
 .. _user_cpp_clients_websocket:
 .. doxygenclass:: amdinfer::WebSocketClient
     :members:
-    :undoc-members:
 
 Core
 ----
@@ -62,7 +68,6 @@ DataType
 .. _user_cpp_core_datatype:
 .. doxygenclass:: amdinfer::DataType
     :members:
-    :undoc-members:
 
 Exceptions
 ^^^^^^^^^^
@@ -76,42 +81,34 @@ Prediction
 .. _user_cpp_core_request_parameters:
 .. doxygenclass:: amdinfer::RequestParameters
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_server_metadata:
 .. doxygenstruct:: amdinfer::ServerMetadata
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_inference_request_input:
 .. doxygenclass:: amdinfer::InferenceRequestInput
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_inference_request_output:
 .. doxygenclass:: amdinfer::InferenceRequestOutput
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_inference_response:
 .. doxygenclass:: amdinfer::InferenceResponse
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_inference_request:
 .. doxygenclass:: amdinfer::InferenceRequest
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_inference_model_metadata_tensor:
 .. doxygenclass:: amdinfer::ModelMetadataTensor
     :members:
-    :undoc-members:
 
 .. _user_cpp_core_inference_model_metadata:
 .. doxygenclass:: amdinfer::ModelMetadata
     :members:
-    :undoc-members:
 
 Servers
 -------
@@ -119,4 +116,3 @@ Servers
 .. _user_cpp_servers_server:
 .. doxygenclass:: amdinfer::Server
     :members:
-    :undoc-members:

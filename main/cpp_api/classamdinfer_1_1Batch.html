@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Class Batch &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Class Batch &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -409,9 +412,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch5BatchERK5Batch">
+<span id="_CPPv3N8amdinfer5Batch5BatchERK5Batch"></span><span id="_CPPv2N8amdinfer5Batch5BatchERK5Batch"></span><span id="amdinfer::Batch::Batch__BatchCR"></span><span class="target" id="classamdinfer_1_1Batch_1a57d76a817c3df6663f3a88e21e36171c"></span><span class="sig-name descname"><span class="n"><span class="pre">Batch</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8amdinfer5Batch5BatchERK5Batch" title="amdinfer::Batch::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch5BatchERK5Batch" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5BatchaSERK5Batch">
+<span id="_CPPv3N8amdinfer5BatchaSERK5Batch"></span><span id="_CPPv2N8amdinfer5BatchaSERK5Batch"></span><span id="amdinfer::Batch::assign-operator__BatchCR"></span><span class="target" id="classamdinfer_1_1Batch_1a22338b252cd75882eaec23538fdab553"></span><a class="reference internal" href="#_CPPv4N8amdinfer5BatchE" title="amdinfer::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N8amdinfer5BatchE" title="amdinfer::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N8amdinfer5BatchaSERK5Batch" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy assignment constructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch5BatchERR5Batch">
+<span id="_CPPv3N8amdinfer5Batch5BatchERR5Batch"></span><span id="_CPPv2N8amdinfer5Batch5BatchERR5Batch"></span><span id="amdinfer::Batch::Batch__BatchRR"></span><span class="target" id="classamdinfer_1_1Batch_1a2a6e5925d7ab1bb4d1712115280dc339"></span><span class="sig-name descname"><span class="n"><span class="pre">Batch</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8amdinfer5Batch5BatchERR5Batch" title="amdinfer::Batch::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch5BatchERR5Batch" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move constructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5BatchaSERR5Batch">
+<span id="_CPPv3N8amdinfer5BatchaSERR5Batch"></span><span id="_CPPv2N8amdinfer5BatchaSERR5Batch"></span><span id="amdinfer::Batch::assign-operator__BatchRR"></span><span class="target" id="classamdinfer_1_1Batch_1a01821fa181293fbaacd8eca59960d554"></span><a class="reference internal" href="#_CPPv4N8amdinfer5BatchE" title="amdinfer::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8amdinfer5BatchE" title="amdinfer::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N8amdinfer5BatchaSERR5Batch" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move assignment constructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5BatchD0Ev">
 <span id="_CPPv3N8amdinfer5BatchD0Ev"></span><span id="_CPPv2N8amdinfer5BatchD0Ev"></span><span id="amdinfer::Batch::~Batch"></span><span class="target" id="classamdinfer_1_1Batch_1ad9c611a73a1b16ece8577e1aab6dcedc"></span><span class="sig-name descname"><span class="n"><span class="pre">~Batch</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5BatchD0Ev" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Destructor. </p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch10addRequestE19InferenceRequestPtr">
@@ -419,13 +447,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch10getRequestEi">
-<span id="_CPPv3N8amdinfer5Batch10getRequestEi"></span><span id="_CPPv2N8amdinfer5Batch10getRequestEi"></span><span id="amdinfer::Batch::getRequest__i"></span><span class="target" id="classamdinfer_1_1Batch_1a555adecc86be9125058b9e6f0d83ec0f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe.html#_CPPv4N8amdinfer19InferenceRequestPtrE" title="amdinfer::InferenceRequestPtr"><span class="n"><span class="pre">InferenceRequestPtr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getRequest</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch10getRequestEi" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch10getRequestE6size_t">
+<span id="_CPPv3N8amdinfer5Batch10getRequestE6size_t"></span><span id="_CPPv2N8amdinfer5Batch10getRequestE6size_t"></span><span id="amdinfer::Batch::getRequest__s"></span><span class="target" id="classamdinfer_1_1Batch_1a9f7018e0bfd7a506450d4483a8b66fb8"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe.html#_CPPv4N8amdinfer19InferenceRequestPtrE" title="amdinfer::InferenceRequestPtr"><span class="n"><span class="pre">InferenceRequestPtr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getRequest</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch10getRequestE6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch11getRequestsEv">
-<span id="_CPPv3N8amdinfer5Batch11getRequestsEv"></span><span id="_CPPv2N8amdinfer5Batch11getRequestsEv"></span><span id="amdinfer::Batch::getRequests"></span><span class="target" id="classamdinfer_1_1Batch_1a9d4f78eae68bedd2e1ab981d7c8e68d1"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe.html#_CPPv4N8amdinfer19InferenceRequestPtrE" title="amdinfer::InferenceRequestPtr"><span class="n"><span class="pre">InferenceRequestPtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getRequests</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch11getRequestsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch11getRequestsEv">
+<span id="_CPPv3NK8amdinfer5Batch11getRequestsEv"></span><span id="_CPPv2NK8amdinfer5Batch11getRequestsEv"></span><span id="amdinfer::Batch::getRequestsC"></span><span class="target" id="classamdinfer_1_1Batch_1a32aaefc4b06ebc96cc7029f42498bc3e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe.html#_CPPv4N8amdinfer19InferenceRequestPtrE" title="amdinfer::InferenceRequestPtr"><span class="n"><span class="pre">InferenceRequestPtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getRequests</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch11getRequestsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -459,13 +487,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch10input_sizeEv">
-<span id="_CPPv3NK8amdinfer5Batch10input_sizeEv"></span><span id="_CPPv2NK8amdinfer5Batch10input_sizeEv"></span><span id="amdinfer::Batch::input_sizeC"></span><span class="target" id="classamdinfer_1_1Batch_1abcf5e9ad604c1557c82b895cc6753011"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch10input_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch12getInputSizeEv">
+<span id="_CPPv3NK8amdinfer5Batch12getInputSizeEv"></span><span id="_CPPv2NK8amdinfer5Batch12getInputSizeEv"></span><span id="amdinfer::Batch::getInputSizeC"></span><span class="target" id="classamdinfer_1_1Batch_1aad9b7dcc5cead608e3b505523f1bcc4a"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getInputSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch12getInputSizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch11output_sizeEv">
-<span id="_CPPv3NK8amdinfer5Batch11output_sizeEv"></span><span id="_CPPv2NK8amdinfer5Batch11output_sizeEv"></span><span id="amdinfer::Batch::output_sizeC"></span><span class="target" id="classamdinfer_1_1Batch_1a22d356a492a4991367c7c90b66ecf0c0"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch11output_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch13getOutputSizeEv">
+<span id="_CPPv3NK8amdinfer5Batch13getOutputSizeEv"></span><span id="_CPPv2NK8amdinfer5Batch13getOutputSizeEv"></span><span id="amdinfer::Batch::getOutputSizeC"></span><span class="target" id="classamdinfer_1_1Batch_1a575d4b14db2530ed22d0ece32fca628d"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getOutputSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch13getOutputSizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -506,7 +534,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -567,6 +595,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

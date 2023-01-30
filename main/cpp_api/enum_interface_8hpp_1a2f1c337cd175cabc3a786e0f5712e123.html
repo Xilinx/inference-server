@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Enum InterfaceType &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Enum InterfaceType &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -403,28 +406,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd><p>The InterfaceType identifies the <a class="reference internal" href="classamdinfer_1_1Interface.html#classamdinfer_1_1Interface"><span class="std std-ref">Interface</span></a>. New interfaces can be added by extending this enumeration. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType8kUnknownE">
-<span id="_CPPv3N8amdinfer13InterfaceType8kUnknownE"></span><span id="_CPPv2N8amdinfer13InterfaceType8kUnknownE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a25c2dc47991b3df171ed5192bcf70390"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kUnknown</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType8kUnknownE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType7UnknownE">
+<span id="_CPPv3N8amdinfer13InterfaceType7UnknownE"></span><span id="_CPPv2N8amdinfer13InterfaceType7UnknownE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a88183b946cc5f0e8c96b2e66e1c74a7e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Unknown</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType7UnknownE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType11kDrogonHttpE">
-<span id="_CPPv3N8amdinfer13InterfaceType11kDrogonHttpE"></span><span id="_CPPv2N8amdinfer13InterfaceType11kDrogonHttpE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123ab8e79fbf136965fb8d772100ae875a47"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kDrogonHttp</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType11kDrogonHttpE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType10DrogonHttpE">
+<span id="_CPPv3N8amdinfer13InterfaceType10DrogonHttpE"></span><span id="_CPPv2N8amdinfer13InterfaceType10DrogonHttpE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a076a57c676eac067c030a613b756f968"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DrogonHttp</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType10DrogonHttpE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType9kDrogonWsE">
-<span id="_CPPv3N8amdinfer13InterfaceType9kDrogonWsE"></span><span id="_CPPv2N8amdinfer13InterfaceType9kDrogonWsE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123ad2db09b02363d47a74c9992c2b2e55f1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kDrogonWs</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType9kDrogonWsE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType8DrogonWsE">
+<span id="_CPPv3N8amdinfer13InterfaceType8DrogonWsE"></span><span id="_CPPv2N8amdinfer13InterfaceType8DrogonWsE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a6f79cc9244d15e33d33b2261568c4daa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DrogonWs</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType8DrogonWsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType4kCppE">
-<span id="_CPPv3N8amdinfer13InterfaceType4kCppE"></span><span id="_CPPv2N8amdinfer13InterfaceType4kCppE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a9495062edf5a0f083d0f437fbe1ff344"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kCpp</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType4kCppE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType3CppE">
+<span id="_CPPv3N8amdinfer13InterfaceType3CppE"></span><span id="_CPPv2N8amdinfer13InterfaceType3CppE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123adb4a39bf594c9fbcf318dd39ea19fed3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Cpp</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType3CppE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType5kGrpcE">
-<span id="_CPPv3N8amdinfer13InterfaceType5kGrpcE"></span><span id="_CPPv2N8amdinfer13InterfaceType5kGrpcE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a949f340f5844dbf0d678d8d44846e40e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kGrpc</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType5kGrpcE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13InterfaceType4GrpcE">
+<span id="_CPPv3N8amdinfer13InterfaceType4GrpcE"></span><span id="_CPPv2N8amdinfer13InterfaceType4GrpcE"></span><span class="target" id="interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123a5d39674c6a3289df0ff6c32a953afd57"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Grpc</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13InterfaceType4GrpcE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -454,7 +457,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -515,6 +518,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

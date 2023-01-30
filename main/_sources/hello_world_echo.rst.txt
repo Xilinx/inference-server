@@ -21,8 +21,8 @@ Hello World - Python
 
 AMD Inference Server's Python API allows you to start the server and send requests to it from Python.
 This example walks you through how to start the server and use Python to send requests to a simple model.
-This example and script are intended to run in the dev container.
-The complete script used here is available in the `repository <https://github.com/Xilinx/inference-server/tree/main/examples/hello_world>`__.
+This example and script are intended to run in the development container.
+The complete script used here is available in the :amdinferTree:`repository <examples/hello_world>`.
 
 Import the library
 ------------------
@@ -38,7 +38,6 @@ You can also install it using a pre-built wheel.
 Create our client and server objects
 ------------------------------------
 
-We assume that the server will be running locally with the default HTTP port and pass that to the client.
 This example assumes that the server will be running locally with the default HTTP port.
 Since you'll be using HTTP/REST to communicate with the server, you should create an `HttpClient` using the address of the server as the argument.
 
@@ -120,3 +119,10 @@ Clean up
 Workers that are loaded in AMD Inference Server will persist until the server shuts down or they're explicitly unloaded.
 While it's not shown here, the Python API provides an ``unload()`` method for this purpose.
 As the script ends, the Server object's destructor will clean up any active workers on the server and it will shut down
+
+Next steps
+----------
+
+This example demonstrates the complete process from starting the server, creating a client, loading a worker, and making an inference.
+Depending on your use case, you may only be performing a subset of these actions but this provides an overview of what's happening behind the scenes.
+You can look at more sophisticated examples for another overview of the steps associated with making inferences.

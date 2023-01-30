@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Python &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Python &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
-        <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -403,24 +406,24 @@ Currently, these wheels are not available on Pip and must be built locally.</p>
 It is recommended to perform the following steps on a fresh clone of the inference server repository.
 These instructions assume you’re only building wheels for x86_64 Linux with CPython.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a Dockerfile that defines an image for building wheels</span>
-./docker/generate.py --cibuildwheel --base-image<span class="o">=</span>quay.io/pypa/manylinux2014_x86_64 --base-image-type yum
+./docker/generate.py<span class="w"> </span>--cibuildwheel<span class="w"> </span>--base-image<span class="o">=</span>quay.io/pypa/manylinux2014_x86_64<span class="w"> </span>--base-image-type<span class="w"> </span>yum
 
 <span class="c1"># build the image. You should add some suffix to differentiate this image</span>
 <span class="c1"># from the regular image</span>
-./amdinfer dockerize --suffix<span class="o">=</span><span class="s2">&quot;-ci&quot;</span>
+./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--suffix<span class="o">=</span><span class="s2">&quot;-ci&quot;</span>
 
 <span class="c1"># this will build an image with the name $(whoami)/amdinfer-dev-ci:latest</span>
 <span class="c1"># if you&#39;re not building wheels on the same host, you will need to upload</span>
 <span class="c1"># this image to a Docker registry</span>
 
 <span class="c1"># on a host where your image exists or can be pulled</span>
-<span class="nb">export</span> <span class="nv">CIBW_MANYLINUX_X86_64_IMAGE</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>/amdinfer-dev-ci:latest
+<span class="nb">export</span><span class="w"> </span><span class="nv">CIBW_MANYLINUX_X86_64_IMAGE</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>/amdinfer-dev-ci:latest
 
-pip install cibuildwheel
+pip<span class="w"> </span>install<span class="w"> </span>cibuildwheel
 
 <span class="c1"># you can edit pyproject.toml to control which wheels to build or just use the defaults</span>
 
-cibuildwheel --platform linux
+cibuildwheel<span class="w"> </span>--platform<span class="w"> </span>linux
 
 <span class="c1"># your built wheels will be in ./wheelhouse</span>
 </pre></div>
@@ -695,67 +698,178 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Constructs a new GrpcClient object</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">address</span></code>:</dt><dd><p>Address of the server to connect to</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.hasHardware">
 <span class="sig-name descname"><span class="pre">hasHardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.hasHardware" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server has the requested number of a specific hardware
+device</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the hardware device to check</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">num</span></code>:</dt><dd><p>number of the device that should exist at minimum</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server has at least the requested number of the
+hardware device, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelInfer">
 <span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelInfer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Makes a synchronous inference request to the given model/worker. The
+contents of the request depends on the model/worker that the request
+is for.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to request inference to</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">request</span></code>:</dt><dd><p>the request</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>InferenceResponse</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelList">
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets a list of active models on the server, returning their names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelLoad">
 <span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a model with the given name and load-time parameters. This
+method assumes that a directory with this model name already exists in
+the model repository directory for the server containing the model and
+its metadata in the right format.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to load from the model repository directory</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker supporting the model</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelMetadata">
 <span class="sig-name descname"><span class="pre">modelMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the metadata associated with a ready model/worker</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to get metadata</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ModelMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelReady">
 <span class="sig-name descname"><span class="pre">modelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if a model/worker is ready</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to check</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelUnload">
 <span class="sig-name descname"><span class="pre">modelUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded model and shut it down. This is identical
+in functionality to workerUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.serverLive">
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverLive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is live</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.serverMetadata">
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the server metadata as a ServerMetadata object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ServerMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.serverReady">
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is ready</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.workerLoad">
 <span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::string</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.workerUnload">
 <span class="sig-name descname"><span class="pre">workerUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.workerUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded worker and shut it down. This is identical
+in functionality to modelUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -765,67 +879,178 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelism</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Construct a new HttpClient object</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">address</span></code>:</dt><dd><p>Address of the server to connect to</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.hasHardware">
 <span class="sig-name descname"><span class="pre">hasHardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.hasHardware" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server has the requested number of a specific hardware
+device</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the hardware device to check</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">num</span></code>:</dt><dd><p>number of the device that should exist at minimum</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server has at least the requested number of the
+hardware device, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelInfer">
 <span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelInfer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Makes a synchronous inference request to the given model/worker. The
+contents of the request depends on the model/worker that the request
+is for.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to request inference to</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">request</span></code>:</dt><dd><p>the request</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>InferenceResponse</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelList">
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets a list of active models on the server, returning their names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelLoad">
 <span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a model with the given name and load-time parameters. This
+method assumes that a directory with this model name already exists in
+the model repository directory for the server containing the model and
+its metadata in the right format.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to load from the model repository directory</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker supporting the model</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelMetadata">
 <span class="sig-name descname"><span class="pre">modelMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the metadata associated with a ready model/worker</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to get metadata</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ModelMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelReady">
 <span class="sig-name descname"><span class="pre">modelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if a model/worker is ready</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to check</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelUnload">
 <span class="sig-name descname"><span class="pre">modelUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded model and shut it down. This is identical
+in functionality to workerUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.serverLive">
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverLive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is live</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.serverMetadata">
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the server metadata as a ServerMetadata object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ServerMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.serverReady">
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is ready</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.workerLoad">
 <span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::string</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.workerUnload">
 <span class="sig-name descname"><span class="pre">workerUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.workerUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded worker and shut it down. This is identical
+in functionality to modelUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -863,12 +1088,28 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequest.addInputTensor">
 <span class="sig-name descname"><span class="pre">addInputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequest.addInputTensor" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Constructs and adds a new input tensor to this request</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">data</span></code>:</dt><dd><p>pointer to data to add</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">shape</span></code>:</dt><dd><p>shape of the data</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">data_type</span></code>:</dt><dd><p>the datatype of the data</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>the name of the input tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequest.addOutputTensor">
 <span class="sig-name descname"><span class="pre">addOutputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestOutput" title="amdinfer.InferenceRequestOutput"><span class="pre">amdinfer.InferenceRequestOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequest.addOutputTensor" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Adds a new output tensor to this request</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">output</span></code>:</dt><dd><p>an existing InferenceRequestOutput object</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequest.getInputSize">
@@ -879,13 +1120,13 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequest.getInputs">
 <span class="sig-name descname"><span class="pre">getInputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceRequest.getInputs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a vector of all the input request objects</p>
+<dd><p>Gets a vector of all the input request objects</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequest.getOutputs">
 <span class="sig-name descname"><span class="pre">getOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#amdinfer.InferenceRequestOutput" title="amdinfer.InferenceRequestOutput"><span class="pre">amdinfer.InferenceRequestOutput</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceRequest.getOutputs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a vector of the requested output information</p>
+<dd><p>Gets a vector of the requested output information</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1100,17 +1341,17 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <ol class="arabic simple">
 <li><p>__init__(self: amdinfer._amdinfer.InferenceResponse) -&gt; None</p></li>
 </ol>
-<p>Construct a new InferenceResponse object</p>
+<p>Constructs a new InferenceResponse object</p>
 <ol class="arabic simple" start="2">
 <li><p>__init__(self: amdinfer._amdinfer.InferenceResponse, arg0: str) -&gt; None</p></li>
 </ol>
-<p>Construct a new InferenceResponse error object</p>
+<p>Constructs a new InferenceResponse error object</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.addOutput">
 <span class="sig-name descname"><span class="pre">addOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.addOutput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an output tensor to the response</p>
+<dd><p>Adds an output tensor to the response</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">output</span></code>:</dt><dd><p>an output tensor</p>
 </dd>
@@ -1125,19 +1366,19 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.getError">
 <span class="sig-name descname"><span class="pre">getError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the error message if it exists. Defaults to an empty string</p>
+<dd><p>Gets the error message if it exists. Defaults to an empty string</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.getOutputs">
 <span class="sig-name descname"><span class="pre">getOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getOutputs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a vector of the requested output information</p>
+<dd><p>Gets a vector of the requested output information</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.getParameters">
 <span class="sig-name descname"><span class="pre">getParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getParameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pointer to the parameters associated with this response</p>
+<dd><p>Gets a pointer to the parameters associated with this response</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1148,7 +1389,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.isError">
 <span class="sig-name descname"><span class="pre">isError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.isError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if this is an error response</p>
+<dd><p>Checks if this is an error response</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1174,7 +1415,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a new Model Metadata object</p>
+<dd><p>Constructs a new Model Metadata object</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>Name of the model</p>
 </dd>
@@ -1186,7 +1427,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.addInputTensor">
 <span class="sig-name descname"><span class="pre">addInputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.addInputTensor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an input tensor to this model</p>
+<dd><p>Adds an input tensor to this model</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the tensor</p>
 </dd>
@@ -1200,7 +1441,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.addOutputTensor">
 <span class="sig-name descname"><span class="pre">addOutputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.addOutputTensor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an output tensor to this model</p>
+<dd><p>Adds an output tensor to this model</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the tensor</p>
 </dd>
@@ -1219,7 +1460,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.isReady">
 <span class="sig-name descname"><span class="pre">isReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.isReady" title="Permalink to this definition">¶</a></dt>
-<dd><p>check if this model is ready</p>
+<dd><p>Checks if this model is ready</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1230,7 +1471,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.setReady">
 <span class="sig-name descname"><span class="pre">setReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.setReady" title="Permalink to this definition">¶</a></dt>
-<dd><p>mark this model as ready/not ready</p>
+<dd><p>Marks this model as ready/not ready</p>
 </dd></dl>
 
 </dd></dl>
@@ -1255,17 +1496,20 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.getDataType">
 <span class="sig-name descname"><span class="pre">getDataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.getDataType" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the datatype that this tensor accepts</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.getName">
 <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.getName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the name of the tensor</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.getShape">
 <span class="sig-name descname"><span class="pre">getShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.getShape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the expected shape of the data</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1280,32 +1524,63 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.hasHardware">
 <span class="sig-name descname"><span class="pre">hasHardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.hasHardware" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.NativeClient.modelInfer">
-<span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelInfer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.NativeClient.modelList">
-<span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.NativeClient.modelLoad">
-<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a worker</p>
+<dd><p>Checks if the server has the requested number of a specific hardware
+device</p>
 <dl class="simple">
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the worker to load</p>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the hardware device to check</p>
 </dd>
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>any load-time parameters to pass to the worker</p>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">num</span></code>:</dt><dd><p>number of the device that should exist at minimum</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>std::string the qualified name of the worker to make inference
-requests</p>
+<dd class="field-odd"><p>bool - true if server has at least the requested number of the
+hardware device, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.NativeClient.modelInfer">
+<span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelInfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a synchronous inference request to the given model/worker. The
+contents of the request depends on the model/worker that the request
+is for.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to request inference to</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">request</span></code>:</dt><dd><p>the request</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>InferenceResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.NativeClient.modelList">
+<span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a list of active models on the server, returning their names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.NativeClient.modelLoad">
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a model with the given name and load-time parameters. This
+method assumes that a directory with this model name already exists in
+the model repository directory for the server containing the model and
+its metadata in the right format.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to load from the model repository directory</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker supporting the model</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1313,14 +1588,29 @@ requests</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.modelMetadata">
 <span class="sig-name descname"><span class="pre">modelMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the metadata associated with a ready model/worker</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to get metadata</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ModelMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.modelReady">
 <span class="sig-name descname"><span class="pre">modelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelReady" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if a worker is ready</p>
+<dd><p>Checks if a model/worker is ready</p>
 <dl class="simple">
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to check if ready</p>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to check</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1328,9 +1618,10 @@ requests</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.modelUnload">
 <span class="sig-name descname"><span class="pre">modelUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelUnload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unload a worker</p>
+<dd><p>Unloads a previously loaded model and shut it down. This is identical
+in functionality to workerUnload and is provided for symmetry.</p>
 <dl class="simple">
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to unload</p>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to unload</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1338,27 +1629,63 @@ requests</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.serverLive">
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverLive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is live</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.serverMetadata">
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the server metadata as a ServerMetadata object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ServerMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.serverReady">
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is ready</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.workerLoad">
 <span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::string</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.workerUnload">
 <span class="sig-name descname"><span class="pre">workerUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.workerUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded worker and shut it down. This is identical
+in functionality to modelUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -1375,13 +1702,13 @@ number or string). We further restrict numbers to be doubles or int32.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.empty">
 <span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.empty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the parameters are empty</p>
+<dd><p>Checks if the parameters are empty</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.erase">
 <span class="sig-name descname"><span class="pre">erase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.erase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove a parameter</p>
+<dd><p>Removes a parameter</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>name of the parameter to remove</p>
 </dd>
@@ -1391,7 +1718,7 @@ number or string). We further restrict numbers to be doubles or int32.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.getBool">
 <span class="sig-name descname"><span class="pre">getBool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getBool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pointer to the named parameter. Returns nullptr if not found or
+<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
 if a bad type is used.</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
@@ -1409,7 +1736,7 @@ if a bad type is used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.getFloat">
 <span class="sig-name descname"><span class="pre">getFloat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getFloat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pointer to the named parameter. Returns nullptr if not found or
+<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
 if a bad type is used.</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
@@ -1427,7 +1754,7 @@ if a bad type is used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.getInt">
 <span class="sig-name descname"><span class="pre">getInt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getInt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pointer to the named parameter. Returns nullptr if not found or
+<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
 if a bad type is used.</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
@@ -1445,7 +1772,7 @@ if a bad type is used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.getString">
 <span class="sig-name descname"><span class="pre">getString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getString" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pointer to the named parameter. Returns nullptr if not found or
+<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
 if a bad type is used.</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
@@ -1463,7 +1790,7 @@ if a bad type is used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.has">
 <span class="sig-name descname"><span class="pre">has</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.has" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if a particular parameter exists</p>
+<dd><p>Checks if a particular parameter exists</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>name of the parameter to check</p>
 </dd>
@@ -1482,7 +1809,7 @@ if a bad type is used.</p>
 <ol class="arabic simple">
 <li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: bool) -&gt; None</p></li>
 </ol>
-<p>Put in a key-value pair</p>
+<p>Puts in a key-value pair</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>key used to store and retrieve the value</p>
 </dd>
@@ -1492,7 +1819,7 @@ if a bad type is used.</p>
 <ol class="arabic simple" start="2">
 <li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: float) -&gt; None</p></li>
 </ol>
-<p>Put in a key-value pair</p>
+<p>Puts in a key-value pair</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>key used to store and retrieve the value</p>
 </dd>
@@ -1502,7 +1829,7 @@ if a bad type is used.</p>
 <ol class="arabic simple" start="3">
 <li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: int) -&gt; None</p></li>
 </ol>
-<p>Put in a key-value pair</p>
+<p>Puts in a key-value pair</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>key used to store and retrieve the value</p>
 </dd>
@@ -1512,7 +1839,7 @@ if a bad type is used.</p>
 <ol class="arabic simple" start="4">
 <li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: str) -&gt; None</p></li>
 </ol>
-<p>Put in a key-value pair</p>
+<p>Puts in a key-value pair</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>key used to store and retrieve the value</p>
 </dd>
@@ -1522,7 +1849,7 @@ if a bad type is used.</p>
 <ol class="arabic simple" start="5">
 <li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: str) -&gt; None</p></li>
 </ol>
-<p>Put in a key-value pair</p>
+<p>Puts in a key-value pair</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>key used to store and retrieve the value</p>
 </dd>
@@ -1534,7 +1861,7 @@ if a bad type is used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.RequestParameters.size">
 <span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of parameters</p>
+<dd><p>Gets the number of parameters</p>
 </dd></dl>
 
 </dd></dl>
@@ -1550,37 +1877,62 @@ if a bad type is used.</p>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Constructs a new Server object</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.enableRepositoryMonitoring">
-<span class="sig-name descname"><span class="pre">enableRepositoryMonitoring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_polling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.enableRepositoryMonitoring" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enableRepositoryMonitoring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_polling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.enableRepositoryMonitoring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on active monitoring of the model repository path for new files</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_polling</span></code>:</dt><dd><p>set to true to use polling to check the directory for new files,
+false to use events. Note that events may not work well on all
+platforms.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.setModelRepository">
-<span class="sig-name descname"><span class="pre">setModelRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">os.PathLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.setModelRepository" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setModelRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">os.PathLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.setModelRepository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the path to the model repository associated with this server</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">path</span></code>:</dt><dd><p>path to the model repository</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.startGrpc">
 <span class="sig-name descname"><span class="pre">startGrpc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.startGrpc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start the gRPC server</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">port</span></code>:</dt><dd><p>port to use for the gRPC server</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.startHttp">
 <span class="sig-name descname"><span class="pre">startHttp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.startHttp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start the HTTP server</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">port</span></code>:</dt><dd><p>port to use for the HTTP server</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.stopGrpc">
 <span class="sig-name descname"><span class="pre">stopGrpc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.stopGrpc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Stop the gRPC server</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.stopHttp">
 <span class="sig-name descname"><span class="pre">stopHttp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.stopHttp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Stop the HTTP server</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1595,17 +1947,22 @@ if a bad type is used.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="amdinfer.ServerMetadata.extensions">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extensions</span></span><a class="headerlink" href="#amdinfer.ServerMetadata.extensions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The extensions supported by the server. The KServe specification
+allows servers to support custom extensions and return them with a
+metadata request.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="amdinfer.ServerMetadata.name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#amdinfer.ServerMetadata.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Name of the server</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="amdinfer.ServerMetadata.version">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#amdinfer.ServerMetadata.version" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Version of the server</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1615,82 +1972,215 @@ if a bad type is used.</p>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Constructs a new WebSocketClient object</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">ws_address</span></code>:</dt><dd><p>address of the websocket server to connect to</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">http_address</span></code>:</dt><dd><p>address of the HTTP server to connect to</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Closes the websocket connection</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.hasHardware">
 <span class="sig-name descname"><span class="pre">hasHardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.hasHardware" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server has the requested number of a specific hardware
+device</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the hardware device to check</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">num</span></code>:</dt><dd><p>number of the device that should exist at minimum</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server has at least the requested number of the
+hardware device, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelInfer">
 <span class="sig-name descname"><span class="pre">modelInfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelInfer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Makes a synchronous inference request to the given model/worker. The
+contents of the request depends on the model/worker that the request
+is for.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to request inference to</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">request</span></code>:</dt><dd><p>the request</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>InferenceResponse</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelInferWs">
 <span class="sig-name descname"><span class="pre">modelInferWs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelInferWs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Makes a websocket inference request to the given model/worker. The
+contents of the request depends on the model/worker that the request
+is for. This method differs from the standard inference in that it
+submits an actual Websocket message. The user should use modelRecv to
+get results and must disambiguate different responses on the client-
+side using the IDs of the responses.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>$Parameter <code class="docutils literal notranslate"><span class="pre">request</span></code>:</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelList">
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets a list of active models on the server, returning their names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelLoad">
 <span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a model with the given name and load-time parameters. This
+method assumes that a directory with this model name already exists in
+the model repository directory for the server containing the model and
+its metadata in the right format.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to load from the model repository directory</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker supporting the model</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelMetadata">
 <span class="sig-name descname"><span class="pre">modelMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the metadata associated with a ready model/worker</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model/worker to get metadata</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ModelMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelReady">
 <span class="sig-name descname"><span class="pre">modelReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if a model/worker is ready</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to check</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelRecv">
 <span class="sig-name descname"><span class="pre">modelRecv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelRecv" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets one message from the websocket server sent in response to a
+modelInferWs request. The user should know beforehand how many
+messages are expected and should call this method the same number of
+times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::string a JSON object encoded as a string</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelUnload">
 <span class="sig-name descname"><span class="pre">modelUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded model and shut it down. This is identical
+in functionality to workerUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">model</span></code>:</dt><dd><p>name of the model to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.serverLive">
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverLive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is live</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.serverMetadata">
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the server metadata as a ServerMetadata object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ServerMetadata</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.serverReady">
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverReady" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is ready</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.workerLoad">
 <span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">parameters</span></code>:</dt><dd><p>load-time parameters for the worker</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::string</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.workerUnload">
 <span class="sig-name descname"><span class="pre">workerUnload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.workerUnload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unloads a previously loaded worker and shut it down. This is identical
+in functionality to modelUnload and is provided for symmetry.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to unload</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -1707,16 +2197,6 @@ if a bad type is used.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="amdinfer.inference_request_to_dict">
 <span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">inference_request_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.inference_request_to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="amdinfer.mapTypeToXir">
-<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">mapTypeToXir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xir.DataType</span></span></span><a class="headerlink" href="#amdinfer.mapTypeToXir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="amdinfer.mapXirType">
-<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">mapXirType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xir.DataType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></span><a class="headerlink" href="#amdinfer.mapXirType" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -1786,7 +2266,7 @@ if a bad type is used.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -1847,6 +2327,10 @@ if a bad type is used.</p>
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

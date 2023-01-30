@@ -33,21 +33,21 @@ Program Listing for File get_top_k.hpp
    
    namespace amdinfer::pre_post {
    
-   std::vector<int> get_top_k(const double* d, size_t size, int k) {
+   inline std::vector<int> getTopK(const double* d, size_t size, int k) {
      std::priority_queue<std::pair<float, int>> q;
    
      for (auto i = 0U; i < size; ++i) {
        q.push(std::pair<float, int>(d[i], i));
      }
    
-     std::vector<int> topKIndex;
-     topKIndex.reserve(k);
+     std::vector<int> top_k_index;
+     top_k_index.reserve(k);
      for (auto i = 0; i < k; ++i) {
        const auto& [prob, index] = q.top();
-       topKIndex.push_back(index);
+       top_k_index.push_back(index);
        q.pop();
      }
-     return topKIndex;
+     return top_k_index;
    }
    
    }  // namespace amdinfer::pre_post

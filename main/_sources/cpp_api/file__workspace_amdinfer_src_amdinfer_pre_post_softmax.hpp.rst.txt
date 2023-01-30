@@ -56,5 +56,5 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_softmax_8hpp_1a0751a3e558d4dc26bd1a8ca8c5f222d3`
+- :ref:`exhale_function_softmax_8hpp_1acab8d186d21c38a86ed76bb9246a58da`
 

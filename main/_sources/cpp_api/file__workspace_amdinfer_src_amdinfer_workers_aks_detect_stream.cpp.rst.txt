@@ -63,6 +63,8 @@ Includes
 
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
+- ``amdinfer/workers/aks_detect.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp`)
+
 - ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
 - ``chrono``

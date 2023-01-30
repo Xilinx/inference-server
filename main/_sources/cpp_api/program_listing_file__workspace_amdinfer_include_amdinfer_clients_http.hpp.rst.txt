@@ -41,45 +41,41 @@ Program Listing for File http.hpp
    
    class HttpClient : public Client {
     public:
-     HttpClient(std::string address, const StringMap& headers = {},
-                int parallelism = 32);
-     HttpClient(HttpClient const&);
-     HttpClient& operator=(const HttpClient&) const = delete;
-     HttpClient(HttpClient&& other) noexcept;
-     HttpClient& operator=(HttpClient&& other) const noexcept = delete;
+     explicit HttpClient(const std::string& address);
+     HttpClient(const std::string& address, const StringMap& headers,
+                int parallelism);
+   
+     HttpClient(HttpClient const&) = delete;
+     HttpClient& operator=(const HttpClient&) = delete;
+     HttpClient(HttpClient&& other) = default;
+     HttpClient& operator=(HttpClient&& other) = default;
      ~HttpClient() override;
    
-     ServerMetadata serverMetadata() const override;
-     bool serverLive() const override;
-     bool serverReady() const override;
-     bool modelReady(const std::string& model) const override;
-     ModelMetadata modelMetadata(const std::string& model) const override;
+     [[nodiscard]] ServerMetadata serverMetadata() const override;
+     [[nodiscard]] bool serverLive() const override;
+     [[nodiscard]] bool serverReady() const override;
+     [[nodiscard]] bool modelReady(const std::string& model) const override;
+     [[nodiscard]] ModelMetadata modelMetadata(
+       const std::string& model) const override;
    
      void modelLoad(const std::string& model,
                     RequestParameters* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
-     InferenceResponse modelInfer(const std::string& model,
-                                  const InferenceRequest& request) const override;
-     InferenceResponseFuture modelInferAsync(
+     [[nodiscard]] InferenceResponse modelInfer(
        const std::string& model, const InferenceRequest& request) const override;
-     std::vector<std::string> modelList() const override;
+     [[nodiscard]] InferenceResponseFuture modelInferAsync(
+       const std::string& model, const InferenceRequest& request) const override;
+     [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     std::string workerLoad(const std::string& worker,
-                            RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(
+       const std::string& worker, RequestParameters* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
-     bool hasHardware(const std::string& name, int num) const override;
-   
-     const std::string& getAddress() const&;
-     std::string getAddress() const&&;
-     const StringMap& getHeaders() const&;
-     StringMap getHeaders() const&&;
+     [[nodiscard]] bool hasHardware(const std::string& name,
+                                    int num) const override;
    
     private:
-     std::string address_;
-     StringMap headers_;
-   
      class HttpClientImpl;
      std::unique_ptr<HttpClientImpl> impl_;
    };

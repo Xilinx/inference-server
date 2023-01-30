@@ -1,0 +1,14 @@
+.. _exhale_variable_pt__zendnn_8cpp_1a5544d4acb89db442cba40fdb51c296c3:
+
+Variable amdinfer::workers::kResNetImageSize
+============================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::workers::kResNetImageSize
+   :project: amdinfer

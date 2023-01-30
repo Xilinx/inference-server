@@ -70,15 +70,15 @@ Program Listing for File predict_api.hpp
      void erase(const std::string &key);
      [[nodiscard]] size_t size() const;
      [[nodiscard]] bool empty() const;
-     [[nodiscard]] std::map<std::string, Parameter> data() const;
+     [[nodiscard]] std::map<std::string, Parameter, std::less<>> data() const;
    
      auto begin() { return parameters_.begin(); }
-     auto cbegin() const { return parameters_.cbegin(); }
+     [[nodiscard]] auto cbegin() const { return parameters_.cbegin(); }
    
      auto end() { return parameters_.end(); }
-     auto cend() const { return parameters_.cend(); }
+     [[nodiscard]] auto cend() const { return parameters_.cend(); }
    
-     size_t serializeSize() const override;
+     [[nodiscard]] size_t serializeSize() const override;
      void serialize(std::byte *data_out) const override;
      void deserialize(const std::byte *data_in) override;
    
@@ -88,7 +88,7 @@ Program Listing for File predict_api.hpp
        ss << "RequestParameters(" << &self << "):\n";
        for (const auto &[key, value] : self.parameters_) {
          ss << "  " << key << ": ";
-         std::visit([&](auto &&c) { ss << c; }, value);
+         std::visit([&](const auto &c) { ss << c; }, value);
          ss << "\n";
        }
        auto tmp = ss.str();
@@ -98,7 +98,7 @@ Program Listing for File predict_api.hpp
      }
    
     private:
-     std::map<std::string, Parameter> parameters_;
+     std::map<std::string, Parameter, std::less<>> parameters_;
    };
    
    using RequestParametersPtr = std::shared_ptr<RequestParameters>;
@@ -114,18 +114,20 @@ Program Listing for File predict_api.hpp
      InferenceRequestInput();
    
      InferenceRequestInput(void *data, std::vector<uint64_t> shape,
-                           DataType dataType, std::string name = "");
+                           DataType data_type, std::string name = "");
    
      void setData(void *buffer);
      void setData(std::vector<std::byte> &&buffer);
-     bool sharedData() const;
+     [[nodiscard]] bool sharedData() const;
    
      [[nodiscard]] void *getData() const;
    
-     const std::string &getName() const { return this->name_; }
+     [[nodiscard]] const std::string &getName() const { return this->name_; }
      void setName(std::string name);
    
-     const std::vector<uint64_t> &getShape() const { return this->shape_; }
+     [[nodiscard]] const std::vector<uint64_t> &getShape() const {
+       return this->shape_;
+     }
      void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
      void setShape(const std::vector<uint64_t> &shape) { this->shape_ = shape; }
      void setShape(const std::vector<int32_t> &shape) {
@@ -135,17 +137,19 @@ Program Listing for File predict_api.hpp
        }
      }
    
-     DataType getDatatype() const { return this->dataType_; }
+     [[nodiscard]] DataType getDatatype() const { return this->data_type_; }
      void setDatatype(DataType type);
    
-     RequestParameters *getParameters() const { return this->parameters_.get(); }
+     [[nodiscard]] RequestParameters *getParameters() const {
+       return this->parameters_.get();
+     }
      void setParameters(RequestParametersPtr parameters) {
-       parameters_ = parameters;
+       parameters_ = std::move(parameters);
      }
    
-     size_t getSize() const;
+     [[nodiscard]] size_t getSize() const;
    
-     size_t serializeSize() const override;
+     [[nodiscard]] size_t serializeSize() const override;
      void serialize(std::byte *data_out) const override;
      void deserialize(const std::byte *data_in) override;
    
@@ -158,7 +162,7 @@ Program Listing for File predict_api.hpp
          os << index << ",";
        }
        os << "\n";
-       os << "  Datatype: " << my_class.dataType_.str() << "\n";
+       os << "  Datatype: " << my_class.data_type_.str() << "\n";
        os << "  Parameters:\n";
        if (my_class.parameters_ != nullptr) {
          os << *(my_class.parameters_.get()) << "\n";
@@ -170,7 +174,7 @@ Program Listing for File predict_api.hpp
     private:
      std::string name_;
      std::vector<uint64_t> shape_;
-     DataType dataType_;
+     DataType data_type_;
      RequestParametersPtr parameters_;
      void *data_;
      std::vector<std::byte> shared_data_;
@@ -187,11 +191,11 @@ Program Listing for File predict_api.hpp
    
      void *getData() { return this->data_; }
    
-     std::string getName() { return this->name_; }
+     [[nodiscard]] std::string getName() const { return this->name_; }
      void setName(const std::string &name);
    
      void setParameters(RequestParametersPtr parameters) {
-       parameters_ = parameters;
+       parameters_ = std::move(parameters);
      }
      RequestParameters *getParameters() { return parameters_.get(); }
    
@@ -213,7 +217,7 @@ Program Listing for File predict_api.hpp
      [[nodiscard]] std::vector<InferenceResponseOutput> getOutputs() const;
      void addOutput(const InferenceResponseOutput &output);
    
-     std::string getID() { return id_; }
+     std::string getID() const { return id_; }
      void setID(const std::string &id);
      void setModel(const std::string &model);
      std::string getModel();
@@ -268,22 +272,24 @@ Program Listing for File predict_api.hpp
      void runCallbackError(std::string_view error_msg);
    
      void addInputTensor(void *data, const std::vector<uint64_t> &shape,
-                         DataType dataType, const std::string &name = "");
+                         DataType data_type, const std::string &name = "");
    
      void addInputTensor(InferenceRequestInput input);
      void addOutputTensor(const InferenceRequestOutput &output);
    
-     const std::vector<InferenceRequestInput> &getInputs() const;
-     size_t getInputSize();
+     [[nodiscard]] const std::vector<InferenceRequestInput> &getInputs() const;
+     [[nodiscard]] size_t getInputSize() const;
    
-     const std::vector<InferenceRequestOutput> &getOutputs() const;
+     [[nodiscard]] const std::vector<InferenceRequestOutput> &getOutputs() const;
    
-     const std::string &getID() const { return id_; }
-     void setID(const std::string &id) { id_ = id; }
+     [[nodiscard]] const std::string &getID() const { return id_; }
+     void setID(std::string_view id) { id_ = id; }
    
-     RequestParameters *getParameters() const { return this->parameters_.get(); }
+     [[nodiscard]] RequestParameters *getParameters() const {
+       return this->parameters_.get();
+     }
      void setParameters(RequestParametersPtr parameters) {
-       parameters_ = parameters;
+       parameters_ = std::move(parameters);
      }
    
     private:
@@ -306,9 +312,9 @@ Program Listing for File predict_api.hpp
      ModelMetadataTensor(const std::string &name, DataType datatype,
                          std::vector<uint64_t> shape);
    
-     const std::string &getName() const;
-     const DataType &getDataType() const;
-     const std::vector<uint64_t> &getShape() const;
+     [[nodiscard]] const std::string &getName() const;
+     [[nodiscard]] const DataType &getDataType() const;
+     [[nodiscard]] const std::vector<uint64_t> &getShape() const;
    
     private:
      std::string name_;
@@ -325,19 +331,19 @@ Program Listing for File predict_api.hpp
      void addInputTensor(const std::string &name, DataType datatype,
                          std::vector<int> shape);
    
-     const std::vector<ModelMetadataTensor> &getInputs() const;
+     [[nodiscard]] const std::vector<ModelMetadataTensor> &getInputs() const;
    
      void addOutputTensor(const std::string &name, DataType datatype,
                           std::initializer_list<uint64_t> shape);
      void addOutputTensor(const std::string &name, DataType datatype,
                           std::vector<int> shape);
    
-     const std::vector<ModelMetadataTensor> &getOutputs() const;
+     [[nodiscard]] const std::vector<ModelMetadataTensor> &getOutputs() const;
    
      void setName(const std::string &name);
-     const std::string &getName() const;
+     [[nodiscard]] const std::string &getName() const;
    
-     const std::string &getPlatform() const;
+     [[nodiscard]] const std::string &getPlatform() const;
    
      void setReady(bool ready);
      [[nodiscard]] bool isReady() const;

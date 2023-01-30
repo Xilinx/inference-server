@@ -34,10 +34,11 @@ Program Listing for File compression.cpp
    
    namespace amdinfer::util {
    
-   std::string z_decompress(const char *str, int len) {
-     constexpr auto buffer_size = 32768;
+   std::string zDecompress(const char *str, int len) {
+     const auto chunk_size = 32'768;
    
-     z_stream zs;  // z_stream is zlib's control structure
+     // z_stream is zlib's control structure. Initialize to zero/null
+     z_stream zs;
      memset(&zs, 0, sizeof(zs));
      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
      zs.next_in = const_cast<Bytef *>(reinterpret_cast<const Bytef *>(str));
@@ -46,19 +47,19 @@ Program Listing for File compression.cpp
    
      int ret = Z_OK;
      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init, hicpp-member-init)
-     std::array<char, buffer_size> outbuffer;
-     std::string outstring;
+     std::array<char, chunk_size> out_buffer;
+     std::string out_string;
      do {
-       zs.next_out = reinterpret_cast<Bytef *>(outbuffer.data());
-       zs.avail_out = outbuffer.size();
+       zs.next_out = reinterpret_cast<Bytef *>(out_buffer.data());
+       zs.avail_out = out_buffer.size();
        ret = inflate(&zs, Z_NO_FLUSH);
-       if (outstring.size() < zs.total_out) {
-         outstring.append(outbuffer.data(), zs.total_out - outstring.size());
+       if (out_string.size() < zs.total_out) {
+         out_string.append(out_buffer.data(), zs.total_out - out_string.size());
        }
      } while (ret == Z_OK);
      inflateEnd(&zs);
      if (ret == Z_STREAM_END) {
-       return outstring;
+       return out_string;
      }
      return "";
    }

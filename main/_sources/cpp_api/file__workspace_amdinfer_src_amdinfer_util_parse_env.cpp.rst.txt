@@ -34,6 +34,8 @@ Includes
 
 - ``cstdlib``
 
+- ``iosfwd``
+
 - ``regex``
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
@@ -59,6 +61,4 @@ Functions
 
 
 - :ref:`exhale_function_parse__env_8cpp_1a4251368d5d2f3507fb4ac4296f71c1d3`
-
-- :ref:`exhale_function_parse__env_8cpp_1a8ce41d99ba53522df6ba71cffaf73f99`
 

@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _ZenDNN: https://developer.amd.com/zendnn/
-.. _ZenDNN_download: https://developer.amd.com/zendnn/#download
-.. _ZenDNN_guide: https://developer.amd.com/zendnn/#userguide
+.. _InferenceServerRepository: https://github.com/Xilinx/inference-server
+.. _ZenDNN: https://www.amd.com/en/developer/zendnn.html
+.. _ZenDNN_download: https://www.amd.com/en/developer/zendnn.html#downloads
+.. _ZenDNN_guide: https://www.amd.com/en/developer/zendnn.html#documentation

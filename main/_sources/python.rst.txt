@@ -72,3 +72,4 @@ API
 
 .. automodule:: amdinfer
     :imported-members:
+    :undoc-members:

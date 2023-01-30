@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Quickstart - Development &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Quickstart - Development &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
-        <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="_static/tabs.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -101,6 +104,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +125,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +363,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -391,62 +395,82 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
              
   <section id="quickstart-development">
 <h1>Quickstart - Development<a class="headerlink" href="#quickstart-development" title="Permalink to this headline">¶</a></h1>
-<p>This quickstart is intended for a user who is developing, testing, debugging or otherwise working more deeply with the inference server.</p>
-<p>The easiest way to use the AMD Inference Server is to run it inside a <a class="reference external" href="https://docs.docker.com/get-docker/">Docker container</a>.
-The development Docker image contains all the dependencies to compile and test the inference server.
-It does not container the source code for the inference server however.
-Using the included script to run the container, you can mount the repository into the container and build the server.</p>
+<p>This quickstart is intended for a user who is developing, testing, debugging or otherwise working more deeply with the inference server.
+There are multiple ways to build the server but this quickstart only covers Docker-based development using the included Python run script <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code>.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a> (optional - used for some tests)</p></li>
+<li><p>Python3</p></li>
+<li><p>git</p></li>
+<li><p>Network access to clone the repository</p></li>
+<li><p>Sufficient disk space to download test data and assets</p></li>
+</ul>
+</section>
+<section id="set-up-the-host">
+<h2>Set up the host<a class="headerlink" href="#set-up-the-host" title="Permalink to this headline">¶</a></h2>
 <p>The inference server supports multiple platforms and hardware backends.
 Ensure that you set up your host appropriately depending on which platform(s) you are using.
-For development, your host needs Git, Python3, and <a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a>.
-Some tests require <a class="reference external" href="https://docs.docker.com/compose/install/">Docker-Compose</a> as well.
+For example, to use GPUs, you will need to install the drivers.
 More information on host setup can be found in <a class="reference internal" href="platforms.html#platforms"><span class="std std-ref">each platforms’ guide</span></a>.</p>
-<p>The helper script used for many of the commands here is <code class="file docutils literal notranslate"><span class="pre">amdinfer</span></code>: a Python script with many helpful options.
-The most up-to-date documentation for this script can be seen with <a class="reference internal" href="cli.html#command-line-interface"><span class="std std-ref">online</span></a> or on the terminal with <code class="docutils literal notranslate"><span class="pre">--help</span></code>.
-You can also use <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> before any command to see the underlying commands the script is running.</p>
+</section>
 <section id="get-the-code">
 <h2>Get the code<a class="headerlink" href="#get-the-code" title="Permalink to this headline">¶</a></h2>
 <p>Use <code class="docutils literal notranslate"><span class="pre">git</span></code> to clone the repository from Github:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/Xilinx/inference-server.git
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Xilinx/inference-server.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>inference-server
 </pre></div>
 </div>
 <p>Tests and examples need assets like images and videos to run.
 Some of these files are stored in <a class="reference external" href="https://git-lfs.github.com/">Git LFS</a>.
 Depending on your host, these files may be automatically downloaded with the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code>.
 If some of the files in <code class="docutils literal notranslate"><span class="pre">tests/assets</span></code> are very small (less than 300 bytes), then you haven’t downloaded these Git LFS artifacts.
-From your host or after entering the dev container, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">lfs</span> <span class="pre">pull</span></code> to get these files.</p>
+From your host or after entering the development container, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">lfs</span> <span class="pre">pull</span></code> to get these files.</p>
 </section>
 <section id="build-or-get-the-docker-image">
 <h2>Build or get the Docker image<a class="headerlink" href="#build-or-get-the-docker-image" title="Permalink to this headline">¶</a></h2>
-<p>You can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span></code> to get the dev container from a Docker registry if it’s already built.</p>
-<p>To build from source, you will need Docker 18.09 or newer to build the image.
-After cloning the repository, enter the directory and run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 docker/generate.py
-<span class="gp">$ </span>./amdinfer dockerize &lt;platform flags&gt;
+<p>You can pull the development image from a Docker registry if it’s already built.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>&lt;image&gt;
 </pre></div>
 </div>
+<p>To build a development image from source, run the following commands:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-0-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-0-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-0-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>docker/generate.py
+<span class="gp">$ </span>./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--ptzendnn<span class="w"> </span>/path/to/ptzendnn/archive<span class="w"> </span>--tfzendnn<span class="w"> </span>/path/to/tfzendnn/archive
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>docker/generate.py
+<span class="gp">$ </span>./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--migraphx
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>docker/generate.py
+<span class="gp">$ </span>./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--vitis
+</pre></div>
+</div>
+</div></div>
 <p>The <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script is used to create a dockerfile in the root directory, which is then used by the <code class="docutils literal notranslate"><span class="pre">dockerize</span></code> command.
-Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see configurable options for the <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> script.
-If you want to enable any platforms, pass the appropriate flags.
-Look at the platform-specific documentation for more information about these flags.</p>
-<p>By default, this builds the dev image as <code class="docutils literal notranslate"><span class="pre">&lt;username&gt;/amdinfer-dev:latest</span></code>.
-After the image is built, run the container:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer run --dev
+Then, this dockerfile is used to build the development image with the appropriate platform enabled.
+You can also combine the platform flags to enable multiple platforms in one image.
+Look at the <a class="reference internal" href="platforms.html#platforms"><span class="std std-ref">platform-specific documentation</span></a> for more information.
+By default, this builds the development image as <code class="docutils literal notranslate"><span class="pre">&lt;username&gt;/amdinfer-dev:latest</span></code>.</p>
+<p>After the image is built, you can use it to start a container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>run<span class="w"> </span>--dev
 </pre></div>
 </div>
-<p>This command runs the <code class="docutils literal notranslate"><span class="pre">&lt;username&gt;/amdinfer-dev:latest</span></code> image, which corresponds to the latest local dev image.
-The <code class="docutils literal notranslate"><span class="pre">--dev</span></code> preset will mount the working directory into <code class="file docutils literal notranslate"><span class="pre">/workspace/amdinfer/</span></code>, mount some additional directories into the container, expose some ports to the host and pass in any available hardware like FPGAs.
+<p>This command runs the default created development image created above.
+The <code class="docutils literal notranslate"><span class="pre">--dev</span></code> preset will mount the working directory into <code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/</span></code>, mount some additional directories into the container, expose some ports to the host and pass in device files for any available hardware.
 Some options may be overridden on the command-line (use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see the options).
 By default, it will open a Bash shell in this container and show you a splash screen to show that you’ve entered the container.</p>
 </section>
 <section id="compiling-the-amd-inference-server">
 <h2>Compiling the AMD Inference Server<a class="headerlink" href="#compiling-the-amd-inference-server" title="Permalink to this headline">¶</a></h2>
-<p>These commands are all run inside the dev container.
+<p>These commands are all run inside the development container.
 Here, <code class="file docutils literal notranslate"><span class="pre">./amdinfer</span></code> is aliased to <strong class="command">amdinfer</strong>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>amdinfer build
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>amdinfer<span class="w"> </span>build
 </pre></div>
 </div>
-<p>The build command builds the <strong class="program">amdinfer-server</strong> executable.
+<p>The build command builds the <strong class="program">amdinfer-server</strong> executable, the C++ examples and the C++ tests.
 By default, this will be the debug version.
 You can pass flags to <code class="docutils literal notranslate"><span class="pre">build</span></code> to control the compile options.</p>
 <div class="admonition tip">
@@ -460,56 +484,52 @@ These two flags delete the CMake cache and do a clean build, respectively.</p>
 <p>In general, you should not use <code class="docutils literal notranslate"><span class="pre">sudo</span></code> to run <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> commands.
 Some commands create files in your working directory and using <code class="docutils literal notranslate"><span class="pre">sudo</span></code> creates files with mixed permissions in your container and host and will even fail in some cases.</p>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">build</span></code> will also install the server’s Python library in the dev container.
-You can use it from Python in the container after importing it.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">amdinfer</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">build</span></code> will also install the server’s Python library in the development container.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip list | grep amdinfer</span>
 </pre></div>
 </div>
 </section>
 <section id="get-test-artifacts">
 <h2>Get test artifacts<a class="headerlink" href="#get-test-artifacts" title="Permalink to this headline">¶</a></h2>
-<p>For running tests and certain examples, you need to get models and other files.
+<p>For running tests and examples, you need to get models and other files that they use.
 Make sure you have <a class="reference external" href="https://git-lfs.github.com/">Git LFS</a> installed.
-You can download all files, as shown below with the <code class="docutils literal notranslate"><span class="pre">--all</span></code> flag, or download platform-specific files.
+You can download all files, as shown below with the <code class="docutils literal notranslate"><span class="pre">--all</span></code> flag, or download platform-specific files by passing the appropriate flag(s).
 Use <code class="docutils literal notranslate"><span class="pre">--help</span></code> to see the options available.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git lfs pull
-<span class="gp">$ </span>amdinfer get --all
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<span class="gp">$ </span>amdinfer<span class="w"> </span>get<span class="w"> </span>--all
 </pre></div>
 </div>
 <p>You must abide by the license agreements of these files, if you choose to download them.</p>
 </section>
 <section id="run-the-amd-inference-server">
 <h2>Run the AMD Inference Server<a class="headerlink" href="#run-the-amd-inference-server" title="Permalink to this headline">¶</a></h2>
-<p>Once the server is built, start the server to begin serving requests.</p>
+<p>Once the server is built, you can run the test suite.
+Make sure you have the relevant test artifacts as described in the previous section.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amdinfer<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+<p>You can also run the examples by starting the server in one terminal in the container, opening another terminal in the same container and running an example script.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># start the server</span>
-amdinfer start
+amdinfer<span class="w"> </span>start
 
 <span class="c1"># this command will block and the server will idle for requests</span>
 <span class="c1"># from a new terminal, you can send it requests</span>
-<span class="c1"># on the host:</span>
-amdinfer attach
 
-<span class="c1"># this will open a new terminal on the most recent inference server container</span>
-<span class="c1"># on this new terminal, you can communicate with the server</span>
+<span class="c1"># on the host, use this command to open a new terminal in the most recent</span>
+<span class="c1"># inference server container:</span>
+./amdinfer<span class="w"> </span>attach
 
-<span class="c1"># test that the server is ready. The server returns status 200 OK on success</span>
-curl -I http://localhost:8998/v2/health/ready
-
-<span class="c1"># the server can now accept requests over REST/gRPC</span>
+<span class="c1"># run an example from the second terminal which will reuse the server from</span>
+<span class="c1"># the first terminal</span>
+python<span class="w"> </span>./examples/hello_world/echo.py
 
 <span class="c1"># shutdown the server using Ctrl+C</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="rest.html#rest-endpoints"><span class="std std-ref">REST endpoints</span></a> available to the server are based on <a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>.
-While using REST directly works, using the library is an easier way to communicate with the server.</p>
-<p>You can also try running the test suite.
-The suite is run using PyTest and you can optionally pass Pytest options to the command to filter and choose which tests to run.
-Make sure you have the relevant test artifacts as described in the previous section.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this will start the server and test the REST API from Python.</span>
-amdinfer <span class="nb">test</span>
-</pre></div>
-</div>
-<p>Now that we can build and run the server, we will take a look at how to send requests to it using the Python API and link custom applications to the AMD Inference Server using the C++ API.</p>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Read more about the <a class="reference internal" href="architecture.html#architecture"><span class="std std-ref">architecture</span></a> of the server and dive into the code!</p>
 </section>
 </section>
 
@@ -535,7 +555,7 @@ amdinfer <span class="nb">test</span>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -596,6 +616,10 @@ amdinfer <span class="nb">test</span>
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

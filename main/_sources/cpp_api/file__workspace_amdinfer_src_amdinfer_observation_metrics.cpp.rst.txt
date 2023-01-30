@@ -37,7 +37,7 @@ Includes
 
 - ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
 
-- ``chrono``
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
 - ``iterator``
 
@@ -53,11 +53,13 @@ Includes
 
 - ``prometheus/metric_family.h``
 
-- ``prometheus/registry.h``
-
 - ``prometheus/serializer.h``
 
+- ``prometheus/summary.h``
+
 - ``prometheus/text_serializer.h``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -73,4 +75,15 @@ Namespaces
 
 
 - :ref:`namespace_amdinfer`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_metrics_8cpp_1ade316533d688f2811817fa7a1a73f084`
+
+- :ref:`exhale_variable_metrics_8cpp_1a214ca5f30222281458498214a0d9300c`
+
+- :ref:`exhale_variable_metrics_8cpp_1ab6051d51a6bd12208f6574272fac9117`
 

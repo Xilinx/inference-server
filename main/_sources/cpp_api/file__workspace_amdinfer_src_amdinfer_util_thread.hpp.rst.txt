@@ -44,7 +44,7 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.h`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
 
@@ -88,7 +88,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_thread_8hpp_1a9f542ca1a9ee9128a5871d146acf8b1b`
-
 - :ref:`exhale_function_thread_8hpp_1a1f755ec0f69754bbf457b2c7f68a16c7`
+
+- :ref:`exhale_function_thread_8hpp_1a9f542ca1a9ee9128a5871d146acf8b1b`
 

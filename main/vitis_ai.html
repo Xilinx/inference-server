@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>FPGAs - Vitis AI &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>FPGAs - Vitis AI &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
-        <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -395,8 +398,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.</p>
 <section id="set-up-the-host-and-fpgas">
 <h2>Set up the host and FPGAs<a class="headerlink" href="#set-up-the-host-and-fpgas" title="Permalink to this headline">¶</a></h2>
-<p>The details for setting up your host are available online in the <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup">Vitis AI</a> repository.
-These instructions will depend on whether you are using <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup/alveo">Alveo cards</a> or <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/master/setup/vck5000">VCK5000</a>.
+<p>The details for setting up your host are available online in the <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/2.5/setup">Vitis AI</a> repository.
+These instructions will depend on whether you are using <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/2.5/setup/alveo">Alveo cards</a> or <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/2.5/setup/vck5000">VCK5000</a>.
 In essence, you will need to install software, program the shell on the FPGA(s) and download XCLBINs.</p>
 <section id="software">
 <h3>Software<a class="headerlink" href="#software" title="Permalink to this headline">¶</a></h3>
@@ -427,19 +430,19 @@ Alternatively, you can also copy XCLBINs directly into the container as well.</p
 <h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this headline">¶</a></h2>
 <p>To build an image with Vitis AI enabled, you need to add the <code class="docutils literal notranslate"><span class="pre">--vitis</span></code> to the <code class="docutils literal notranslate"><span class="pre">amdinfer</span> <span class="pre">dockerize</span></code> command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the Dockerfile</span>
-python3 docker/generate.py
+python3<span class="w"> </span>docker/generate.py
 
 <span class="c1"># build the dev image $(whoami)/amdinfer-dev-vitis:latest</span>
-./amdinfer dockerize --vitis --suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span>
+./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--vitis<span class="w"> </span>--suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span>
 
-<span class="c1"># build the production image $(whoami)/amdinfer-vitis:latest</span>
-./amdinfer dockerize --vitis --suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span> --production
+<span class="c1"># build the deployment image $(whoami)/amdinfer-vitis:latest</span>
+./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--vitis<span class="w"> </span>--suffix<span class="o">=</span><span class="s2">&quot;-vitis&quot;</span><span class="w"> </span>--production
 </pre></div>
 </div>
-<p>The production image will need XCLBINs.
+<p>The deployment image will need XCLBINs.
 There are a few ways to achieve this:</p>
 <ol class="arabic simple">
-<li><p>Copy XCLBINs into <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/*</span></code> before invoking the <code class="docutils literal notranslate"><span class="pre">dockerize</span></code> command. The <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> is configured to copy any files and directories at this path into the production image under <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins</span></code>.</p></li>
+<li><p>Copy XCLBINs into <code class="docutils literal notranslate"><span class="pre">./external/overlaybins/*</span></code> before invoking the <code class="docutils literal notranslate"><span class="pre">dockerize</span></code> command. The <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> is configured to copy any files and directories at this path into the deployment image under <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins</span></code>.</p></li>
 <li><p>Copy XCLBINs into the image after building it.</p></li>
 <li><p>Mount the XCLBINs in the container at start time</p></li>
 </ol>
@@ -447,31 +450,31 @@ There are a few ways to achieve this:</p>
 <section id="start-an-image">
 <h2>Start an image<a class="headerlink" href="#start-an-image" title="Permalink to this headline">¶</a></h2>
 <p>The development container can be started with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer run --dev
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>run<span class="w"> </span>--dev
 </pre></div>
 </div>
 <p>This automatically adds the detected devices, publishes ports, and mounts some convenient directories, such as your SSH directory, and drops you into a terminal in the container.</p>
 <p>You can start the <a class="reference internal" href="docker.html#start-the-container"><span class="std std-ref">deployment container on Docker</span></a> with something like:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run --device /dev/xclmgmt# --device /dev/dri <span class="o">[</span>--volume ...<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--device<span class="w"> </span>/dev/xclmgmt#<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span><span class="o">[</span>--volume<span class="w"> </span>...<span class="o">]</span>
 </pre></div>
 </div>
 <p>These <code class="docutils literal notranslate"><span class="pre">--device</span></code> flags pass the FPGA to the container and you can mount other directories as needed to make models available.
 The name of the <code class="docutils literal notranslate"><span class="pre">xclmgmt</span></code> file depends on your host.</p>
 <p>On Kubernetes, you will need to add the FPGA as a resource to your deployment after installing the <a class="reference external" href="https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin">Xilinx FPGA Kubernetes plugin</a>.
 The exact name of the resource will depend on which FPGA and shell you are trying to request.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># rest of the deployment logic</span><span class="w"></span>
-<span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span><span class="w"></span>
-<span class="w">    </span><span class="nt">xilinx.com/fpga-xilinx_u250_gen3x16_xdma_shell_3_1-0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># rest of the deployment logic</span>
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+<span class="w">    </span><span class="nt">xilinx.com/fpga-xilinx_u250_gen3x16_xdma_shell_3_1-0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
 </section>
 <section id="get-assets-and-models">
 <h2>Get assets and models<a class="headerlink" href="#get-assets-and-models" title="Permalink to this headline">¶</a></h2>
 <p>You can download the assets and models used for tests and examples with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer get --vitis
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>get<span class="w"> </span>--vitis
 </pre></div>
 </div>
 <p>The AMD Inference Server is using models and XCLBINs from Vitis 2.5 in its tests and examples.
@@ -501,7 +504,7 @@ Make sure you have compatible tools, shells and XCLBINs with <a class="reference
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -562,6 +565,10 @@ Make sure you have compatible tools, shells and XCLBINs with <a class="reference
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

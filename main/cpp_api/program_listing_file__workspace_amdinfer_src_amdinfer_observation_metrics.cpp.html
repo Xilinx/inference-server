@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Program Listing for File metrics.cpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Program Listing for File metrics.cpp &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -36,12 +37,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="File metrics.hpp" href="file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.html" />
-    <link rel="prev" title="File metrics.cpp" href="file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,6 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +122,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +258,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -290,7 +292,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
@@ -352,13 +354,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../tracing.html#quickstart">Quickstart</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#namespaces">Namespaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -379,8 +380,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="cpp_root.html">Code Documentation</a> &raquo;</li>
-          <li><a href="file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.html">File metrics.cpp</a> &raquo;</li>
       <li>Program Listing for File metrics.cpp</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/cpp_api/program_listing_file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.rst.txt" rel="nofollow"> View page source</a>
@@ -409,231 +408,238 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// See the License for the specific language governing permissions and</span>
 <span class="c1">// limitations under the License.</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/collectable.h&gt;</span><span class="c1">      // for Collectable</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/counter.h&gt;</span><span class="c1">          // for Builder, Counter, BuildCounter</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/family.h&gt;</span><span class="c1">           // for Family</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/gauge.h&gt;</span><span class="c1">            // for Gauge, BuildGauge</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/metric_family.h&gt;</span><span class="c1">    // for MetricFamily</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/registry.h&gt;</span><span class="c1">         // for Registry</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/serializer.h&gt;</span><span class="c1">       // for Serializer</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/text_serializer.h&gt;</span><span class="c1">  // for TextSerializer</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/collectable.h&gt;</span><span class="c1">      // for Collectable</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/counter.h&gt;</span><span class="c1">          // for Builder, Counter, BuildCounter</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/family.h&gt;</span><span class="c1">           // for Family</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/gauge.h&gt;</span><span class="c1">            // for Gauge, BuildGauge</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/metric_family.h&gt;</span><span class="c1">    // for MetricFamily</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/serializer.h&gt;</span><span class="c1">       // for Serializer</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/summary.h&gt;</span><span class="c1">          // for CKMSQuantiles, CKMSQuantiles...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/text_serializer.h&gt;</span><span class="c1">  // for TextSerializer</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span><span class="c1">    // for microseconds, duration, dura...</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iterator&gt;</span><span class="c1">  // for move_iterator, make_move_ite...</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">    // for weak_ptr, allocator, shared_ptr</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">    // for string</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">    // for vector</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iterator&gt;</span><span class="c1">  // for move_iterator, make_move_ite...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">    // for weak_ptr, allocator, shared_ptr</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ratio&gt;</span><span class="c1">     // for micro</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">    // for string</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">    // for vector</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/timer.hpp&quot;</span><span class="c1">  // for Timer</span>
 
-<span class="n">CounterFamily</span><span class="o">::</span><span class="n">CounterFamily</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricCounterIDs</span><span class="p">,</span><span class="w"></span>
-<span class="w">                           </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">family_</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">BuildCounter</span><span class="p">().</span><span class="n">Name</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">Help</span><span class="p">(</span><span class="n">help</span><span class="p">).</span><span class="n">Register</span><span class="p">(</span><span class="o">*</span><span class="n">registry</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">counters_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">family_</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">));</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">CounterFamily</span><span class="o">::</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">counter</span><span class="p">.</span><span class="n">Increment</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">CounterFamily</span><span class="o">::</span><span class="n">CounterFamily</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span>
+<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricCounterIDs</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">family_</span><span class="p">(</span>
+<span class="w">      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">BuildCounter</span><span class="p">().</span><span class="n">Name</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">Help</span><span class="p">(</span><span class="n">help</span><span class="p">).</span><span class="n">Register</span><span class="p">(</span><span class="o">*</span><span class="n">registry</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">counters_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">family_</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">CounterFamily</span><span class="o">::</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">counter</span><span class="p">.</span><span class="n">Increment</span><span class="p">(</span><span class="n">increment</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">CounterFamily</span><span class="o">::</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="n">counter</span><span class="p">.</span><span class="n">Increment</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="n">GaugeFamily</span><span class="o">::</span><span class="n">GaugeFamily</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricGaugeIDs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"></span>
-<span class="w">    </span><span class="n">labels</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">family_</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">BuildGauge</span><span class="p">().</span><span class="n">Name</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">Help</span><span class="p">(</span><span class="n">help</span><span class="p">).</span><span class="n">Register</span><span class="p">(</span><span class="o">*</span><span class="n">registry</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">gauges_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">family_</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">));</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">CounterFamily</span><span class="o">::</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">counters_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="n">counter</span><span class="p">.</span><span class="n">Increment</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">increment</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">GaugeFamily</span><span class="o">::</span><span class="n">set</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">gauges_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">gauges_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">gauge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">gauges_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">gauge</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="n">value</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">GaugeFamily</span><span class="o">::</span><span class="n">GaugeFamily</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span>
+<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricGaugeIDs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span>
+<span class="w">    </span><span class="n">labels</span><span class="p">)</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">family_</span><span class="p">(</span>
+<span class="w">      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">BuildGauge</span><span class="p">().</span><span class="n">Name</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">Help</span><span class="p">(</span><span class="n">help</span><span class="p">).</span><span class="n">Register</span><span class="p">(</span><span class="o">*</span><span class="n">registry</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">gauges_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">family_</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="n">SummaryFamily</span><span class="o">::</span><span class="n">SummaryFamily</span><span class="p">(</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricSummaryIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="o">&gt;&amp;</span><span class="w"></span>
-<span class="w">    </span><span class="n">quantiles</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">family_</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">BuildSummary</span><span class="p">().</span><span class="n">Name</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">Help</span><span class="p">(</span><span class="n">help</span><span class="p">).</span><span class="n">Register</span><span class="p">(</span><span class="o">*</span><span class="n">registry</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">quantile</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">quantiles</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">summaries_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">family_</span><span class="p">.</span><span class="n">Add</span><span class="p">({},</span><span class="w"> </span><span class="n">quantile</span><span class="p">));</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">GaugeFamily</span><span class="o">::</span><span class="n">set</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">gauges_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">gauges_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">gauge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">gauges_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="n">gauge</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">SummaryFamily</span><span class="o">::</span><span class="n">observe</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">summaries_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">summaries_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">summaries_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">summary</span><span class="p">.</span><span class="n">Observe</span><span class="p">(</span><span class="n">value</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">SummaryFamily</span><span class="o">::</span><span class="n">SummaryFamily</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span>
+<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricSummaryIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="o">&gt;&amp;</span>
+<span class="w">    </span><span class="n">quantiles</span><span class="p">)</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">family_</span><span class="p">(</span>
+<span class="w">      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">BuildSummary</span><span class="p">().</span><span class="n">Name</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">Help</span><span class="p">(</span><span class="n">help</span><span class="p">).</span><span class="n">Register</span><span class="p">(</span><span class="o">*</span><span class="n">registry</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">quantile</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">quantiles</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">summaries_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">family_</span><span class="p">.</span><span class="n">Add</span><span class="p">({},</span><span class="w"> </span><span class="n">quantile</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="n">Metrics</span><span class="o">::</span><span class="n">Metrics</span><span class="p">()</span><span class="w"></span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">registry_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">&gt;</span><span class="p">()),</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">SummaryFamily</span><span class="o">::</span><span class="n">observe</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">summaries_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">summaries_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">summaries_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="n">summary</span><span class="p">.</span><span class="n">Observe</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="w">    </span><span class="n">ingress_requests_total_</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;amdinfer_requests_ingress_total&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;Number of incoming requests to amdinfer-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">      </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kCppNative</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;api&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cpp&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;native&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kRestGet</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;api&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rest&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kRestPost</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;api&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rest&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;POST&quot;</span><span class="p">}}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">pipeline_ingress_total_</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;amdinfer_pipeline_ingress_total&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;Number of incoming requests at different pipeline stages&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">      </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kPipelineIngressBatcher</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kPipelineIngressWorker</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;worker&quot;</span><span class="p">}}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">pipeline_egress_total_</span><span class="p">(</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;amdinfer_pipeline_egress_total&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;Number of outgoing requests at different pipeline stages&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">      </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kPipelineEgressBatcher</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kPipelineEgressWorker</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;worker&quot;</span><span class="p">}}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">bytes_transferred_</span><span class="p">(</span><span class="s">&quot;exposer_transferred_bytes_total&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                       </span><span class="s">&quot;Transferred bytes to metrics services&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">                       </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kTransferredBytes</span><span class="p">,</span><span class="w"> </span><span class="p">{}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">num_scrapes_</span><span class="p">(</span><span class="s">&quot;exposer_scrapes_total&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                 </span><span class="s">&quot;Number of times metrics were scraped&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">                 </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kMetricScrapes</span><span class="p">,</span><span class="w"> </span><span class="p">{}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">queue_sizes_total_</span><span class="p">(</span><span class="s">&quot;amdinfer_queue_sizes_total&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                       </span><span class="s">&quot;Number of elements in the queues in amdinfer-server&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                       </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">                       </span><span class="p">{{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">kQueuesBatcherInput</span><span class="p">,</span><span class="w"></span>
-<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;input&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">                        </span><span class="p">{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">kQueuesBatcherOutput</span><span class="p">,</span><span class="w"></span>
-<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;output&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">                        </span><span class="p">{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">kQueuesBufferInput</span><span class="p">,</span><span class="w"></span>
-<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;input&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;buffer&quot;</span><span class="p">}}},</span><span class="w"></span>
-<span class="w">                        </span><span class="p">{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">kQueuesBufferOutput</span><span class="p">,</span><span class="w"></span>
-<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;output&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;buffer&quot;</span><span class="p">}}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">metric_latency_</span><span class="p">(</span><span class="s">&quot;exposer_request_latencies&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="s">&quot;Latencies of serving scrape requests, in microseconds&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">                    </span><span class="p">{{</span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">kMetricLatency</span><span class="p">,</span><span class="w"></span>
-<span class="w">                      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="p">{</span><span class="w"></span>
-<span class="w">                        </span><span class="p">{</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.99</span><span class="p">,</span><span class="w"> </span><span class="mf">0.001</span><span class="p">}}}}),</span><span class="w"></span>
-<span class="w">    </span><span class="n">request_latency_</span><span class="p">(</span><span class="s">&quot;amdinfer_request_latency&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                     </span><span class="s">&quot;Latencies of serving requests, in microseconds&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                     </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"></span>
-<span class="w">                     </span><span class="p">{{</span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">kRequestLatency</span><span class="p">,</span><span class="w"></span>
-<span class="w">                       </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="p">{</span><span class="w"></span>
-<span class="w">                         </span><span class="p">{</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">0.99</span><span class="p">,</span><span class="w"> </span><span class="mf">0.001</span><span class="p">}}}})</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">{</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">collectables_mutex_</span><span class="p">};</span><span class="w"></span>
-<span class="w">  </span><span class="n">collectables_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">registry_</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// the arguments are percentile and error</span>
+<span class="c1">// NOLINTNEXTLINE(cert-err58-cpp)</span>
+<span class="k">const</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">detail</span><span class="o">::</span><span class="n">CKMSQuantiles</span><span class="o">::</span><span class="n">Quantile</span><span class="w"> </span><span class="n">kPercentile50</span><span class="p">{</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">};</span>
+<span class="c1">// NOLINTNEXTLINE(cert-err58-cpp)</span>
+<span class="k">const</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">detail</span><span class="o">::</span><span class="n">CKMSQuantiles</span><span class="o">::</span><span class="n">Quantile</span><span class="w"> </span><span class="n">kPercentile90</span><span class="p">{</span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">};</span>
+<span class="c1">// NOLINTNEXTLINE(cert-err58-cpp)</span>
+<span class="k">const</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">detail</span><span class="o">::</span><span class="n">CKMSQuantiles</span><span class="o">::</span><span class="n">Quantile</span><span class="w"> </span><span class="n">kPercentile99</span><span class="p">{</span><span class="mf">0.99</span><span class="p">,</span><span class="w"> </span><span class="mf">0.001</span><span class="p">};</span>
 
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">serializer_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">TextSerializer</span><span class="o">&gt;</span><span class="p">();</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="n">Metrics</span><span class="o">::</span><span class="n">Metrics</span><span class="p">()</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">ingress_requests_total_</span><span class="p">(</span>
+<span class="w">      </span><span class="s">&quot;amdinfer_requests_ingress_total&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s">&quot;Number of incoming requests to amdinfer-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">      </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">CppNative</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;api&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cpp&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;native&quot;</span><span class="p">}}},</span>
+<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">RestGet</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;api&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rest&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET&quot;</span><span class="p">}}},</span>
+<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">RestPost</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;api&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rest&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;method&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;POST&quot;</span><span class="p">}}}}),</span>
+<span class="w">    </span><span class="n">pipeline_ingress_total_</span><span class="p">(</span>
+<span class="w">      </span><span class="s">&quot;amdinfer_pipeline_ingress_total&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s">&quot;Number of incoming requests at different pipeline stages&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">      </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineIngressBatcher</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span>
+<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineIngressWorker</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;worker&quot;</span><span class="p">}}}}),</span>
+<span class="w">    </span><span class="n">pipeline_egress_total_</span><span class="p">(</span>
+<span class="w">      </span><span class="s">&quot;amdinfer_pipeline_egress_total&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s">&quot;Number of outgoing requests at different pipeline stages&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">      </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineEgressBatcher</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span>
+<span class="w">       </span><span class="p">{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineEgressWorker</span><span class="p">,</span><span class="w"> </span><span class="p">{{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;worker&quot;</span><span class="p">}}}}),</span>
+<span class="w">    </span><span class="n">bytes_transferred_</span><span class="p">(</span><span class="s">&quot;exposer_transferred_bytes_total&quot;</span><span class="p">,</span>
+<span class="w">                       </span><span class="s">&quot;Transferred bytes to metrics services&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">                       </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">TransferredBytes</span><span class="p">,</span><span class="w"> </span><span class="p">{}}}),</span>
+<span class="w">    </span><span class="n">num_scrapes_</span><span class="p">(</span><span class="s">&quot;exposer_scrapes_total&quot;</span><span class="p">,</span>
+<span class="w">                 </span><span class="s">&quot;Number of times metrics were scraped&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">                 </span><span class="p">{{</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">MetricScrapes</span><span class="p">,</span><span class="w"> </span><span class="p">{}}}),</span>
+<span class="w">    </span><span class="n">queue_sizes_total_</span><span class="p">(</span><span class="s">&quot;amdinfer_queue_sizes_total&quot;</span><span class="p">,</span>
+<span class="w">                       </span><span class="s">&quot;Number of elements in the queues in amdinfer-server&quot;</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">                       </span><span class="p">{{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">QueuesBatcherInput</span><span class="p">,</span>
+<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;input&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span>
+<span class="w">                        </span><span class="p">{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">QueuesBatcherOutput</span><span class="p">,</span>
+<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;output&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batcher&quot;</span><span class="p">}}},</span>
+<span class="w">                        </span><span class="p">{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">QueuesBufferInput</span><span class="p">,</span>
+<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;input&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;buffer&quot;</span><span class="p">}}},</span>
+<span class="w">                        </span><span class="p">{</span><span class="n">MetricGaugeIDs</span><span class="o">::</span><span class="n">QueuesBufferOutput</span><span class="p">,</span>
+<span class="w">                         </span><span class="p">{{</span><span class="s">&quot;direction&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;output&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;stage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;buffer&quot;</span><span class="p">}}}}),</span>
+<span class="w">    </span><span class="n">metric_latency_</span><span class="p">(</span><span class="s">&quot;exposer_request_latencies&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s">&quot;Latencies of serving scrape requests, in microseconds&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">                    </span><span class="p">{{</span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">MetricLatency</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="p">{</span>
+<span class="w">                        </span><span class="n">kPercentile50</span><span class="p">,</span><span class="w"> </span><span class="n">kPercentile90</span><span class="p">,</span><span class="w"> </span><span class="n">kPercentile99</span><span class="p">}}}),</span>
+<span class="w">    </span><span class="n">request_latency_</span><span class="p">(</span><span class="s">&quot;amdinfer_request_latency&quot;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s">&quot;Latencies of serving requests, in microseconds&quot;</span><span class="p">,</span>
+<span class="w">                     </span><span class="n">registry_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span>
+<span class="w">                     </span><span class="p">{{</span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">RequestLatency</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="p">{</span>
+<span class="w">                         </span><span class="n">kPercentile50</span><span class="p">,</span><span class="w"> </span><span class="n">kPercentile90</span><span class="p">,</span><span class="w"> </span><span class="n">kPercentile99</span><span class="p">}}})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="n">lock</span><span class="p">{</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">collectables_mutex_</span><span class="p">};</span>
+<span class="w">  </span><span class="n">collectables_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">registry_</span><span class="p">);</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">incrementCounter</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kRestGet</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kRestPost</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kCppNative</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">ingress_requests_total_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kPipelineIngressBatcher</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kPipelineIngressWorker</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">pipeline_ingress_total_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kPipelineEgressBatcher</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kPipelineEgressWorker</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">pipeline_egress_total_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kTransferredBytes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">bytes_transferred_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">increment</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">kMetricScrapes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">num_scrapes_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">serializer_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">TextSerializer</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">setGauge</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">kQueuesBatcherInput</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">kQueuesBatcherOutput</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">kQueuesBufferInput</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">kQueuesBufferOutput</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">queue_sizes_total_</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">incrementCounter</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">RestGet</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">RestPost</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">CppNative</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">ingress_requests_total_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">PipelineIngressBatcher</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">PipelineIngressWorker</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">pipeline_ingress_total_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">PipelineEgressBatcher</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">PipelineEgressWorker</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">pipeline_egress_total_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">TransferredBytes</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">bytes_transferred_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">increment</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricCounterIDs</span><span class="o">::</span><span class="no">MetricScrapes</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">num_scrapes_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">observeSummary</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricSummaryIDs</span><span class="o">::</span><span class="no">kMetricLatency</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">metric_latency_</span><span class="p">.</span><span class="n">observe</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricSummaryIDs</span><span class="o">::</span><span class="no">kRequestLatency</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">request_latency_</span><span class="p">.</span><span class="n">observe</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">setGauge</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">QueuesBatcherInput</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">QueuesBatcherOutput</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">QueuesBufferInput</span><span class="p">:</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricGaugeIDs</span><span class="o">::</span><span class="no">QueuesBufferOutput</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">queue_sizes_total_</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getMetrics</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">start_time_of_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">observeSummary</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricSummaryIDs</span><span class="o">::</span><span class="no">MetricLatency</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">metric_latency_</span><span class="p">.</span><span class="n">observe</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">MetricSummaryIDs</span><span class="o">::</span><span class="no">RequestLatency</span><span class="p">:</span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">request_latency_</span><span class="p">.</span><span class="n">observe</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">MetricFamily</span><span class="o">&gt;</span><span class="w"> </span><span class="n">metrics</span><span class="p">;</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getMetrics</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">Timer</span><span class="w"> </span><span class="n">timer</span><span class="p">{</span><span class="nb">true</span><span class="p">};</span>
 
-<span class="w">  </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">{</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">collectables_mutex_</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">MetricFamily</span><span class="o">&gt;</span><span class="w"> </span><span class="n">metrics</span><span class="p">;</span>
 
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">wcollectable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">collectables_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">collectable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wcollectable</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">collectable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">{</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">collectables_mutex_</span><span class="p">};</span>
 
-<span class="w">      </span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">my_metrics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">collectable</span><span class="o">-&gt;</span><span class="n">Collect</span><span class="p">();</span><span class="w"></span>
-<span class="w">      </span><span class="n">metrics</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">metrics</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">my_metrics</span><span class="p">.</span><span class="n">begin</span><span class="p">()),</span><span class="w"></span>
-<span class="w">                     </span><span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">my_metrics</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">wcollectable</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">collectables_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">collectable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wcollectable</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">collectable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serializer_</span><span class="o">-&gt;</span><span class="n">Serialize</span><span class="p">(</span><span class="n">metrics</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">bodySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">length</span><span class="p">();</span><span class="w"></span>
+<span class="w">      </span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">my_metrics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">collectable</span><span class="o">-&gt;</span><span class="n">Collect</span><span class="p">();</span>
+<span class="w">      </span><span class="n">metrics</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">metrics</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">my_metrics</span><span class="p">.</span><span class="n">begin</span><span class="p">()),</span>
+<span class="w">                     </span><span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">my_metrics</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">stop_time_of_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="w"></span>
-<span class="w">    </span><span class="n">stop_time_of_request</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time_of_request</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">observeSummary</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">kMetricLatency</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">.</span><span class="n">count</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serializer_</span><span class="o">-&gt;</span><span class="n">Serialize</span><span class="p">(</span><span class="n">metrics</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">body_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
 
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">bytes_transferred_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kTransferredBytes</span><span class="p">,</span><span class="w"></span>
-<span class="w">                                     </span><span class="n">bodySize</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">num_scrapes_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">kMetricScrapes</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">timer</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">observeSummary</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">MetricLatency</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">);</span>
 
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">response</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">bytes_transferred_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">TransferredBytes</span><span class="p">,</span>
+<span class="w">                                     </span><span class="n">body_size</span><span class="p">);</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">num_scrapes_</span><span class="p">.</span><span class="n">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">MetricScrapes</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">response</span><span class="p">;</span>
+<span class="p">}</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
 </pre></div>
@@ -653,16 +659,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         }
                   </style>
 				  
-				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.html" class="btn btn-neutral float-left" title="File metrics.cpp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.html" class="btn btn-neutral float-right" title="File metrics.hpp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+				  <footer>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -723,6 +726,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

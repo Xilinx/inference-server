@@ -27,27 +27,41 @@ Program Listing for File exec.cpp
    
    #include "amdinfer/util/exec.hpp"
    
-   #include <array>         // for array
-   #include <cstdio>        // for pclose, fgets, popen, FILE
-   #include <memory>        // for unique_ptr
-   #include <string>        // for string
-   #include <system_error>  // for system_error
+   #include <array>              // for array
+   #include <boost/process.hpp>  // for process, std_out_, null, std_e...
+   #include <cassert>            // for assert
+   #include <istream>            // for basic_istream<>::__istream_type
+   #include <string>             // for string
+   #include <vector>             // for vector
+   
+   namespace bp = boost::process;
    
    namespace amdinfer::util {
    
-   // TODO(varunsh): avoid popen
    std::string exec(const char* cmd) {
-     std::array<char, 128> buffer;  // NOLINT
-     std::string result;
-     // NOLINTNEXTLINE(cert-env33-c)
-     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), &pclose);
-     if (!pipe) {
-       throw std::system_error(EPIPE, std::generic_category(), "popen failed");
+     // this function call, and the bp::system call below raise a possible nullptr
+     // warning somewhere in Boost headers. This NOLINT suppresses it
+     // NOLINTNEXTLINE(clang-analyzer-core.NonNullParamChecker)
+     assert(cmd != nullptr);
+     const auto chunk_size = 128;
+   
+     bp::ipstream is;
+     // stdout and stderr cannot be redirected to the same stream
+     // NOLINTNEXTLINE(clang-analyzer-core.NonNullParamChecker)
+     bp::system(cmd, bp::std_out > is, bp::std_err > bp::null);
+   
+     std::string output;
+     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init, hicpp-member-init)
+     std::array<char, chunk_size> out_buffer;
+     output.reserve(chunk_size);
+   
+     while (is.read(out_buffer.data(), out_buffer.size())) {
+       // if read is true, then a whole chunk has been read, copy over all of it
+       output.append(out_buffer.data(), out_buffer.size());
      }
-     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-       result += buffer.data();
-     }
-     return result;
+     // copy over whatever is left
+     output.append(out_buffer.data(), is.gcount());
+     return output;
    }
    
    }  // namespace amdinfer::util

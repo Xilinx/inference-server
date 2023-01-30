@@ -1,0 +1,93 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_util_containers.hpp:
+
+File containers.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_util>` (``/workspace/amdinfer/src/amdinfer/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Implements helpful functions for working with containers in the standard library. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/util/containers.hpp``)
+---------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_util_containers.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``iterator``
+
+- ``numeric``
+
+- ``type_traits``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__util`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_containers_8hpp_1a1d706def706e8040615295c1696f5355`
+
+- :ref:`exhale_function_containers_8hpp_1ab77948aa3101edea0ef3a53b3a9bba4f`
+
+- :ref:`exhale_function_containers_8hpp_1a95954e812c96e615ffc44e525f706868`
+
+- :ref:`exhale_function_containers_8hpp_1a99c908436f0a0b8939e1e31b73d1e8a2`
+

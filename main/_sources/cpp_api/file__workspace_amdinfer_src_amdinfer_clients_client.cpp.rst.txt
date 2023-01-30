@@ -30,13 +30,25 @@ Includes
 --------
 
 
+- ``algorithm``
+
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
 - ``amdinfer/clients/client.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_client.hpp`)
 
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
+- ``chrono``
+
+- ``future``
+
 - ``queue`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``unordered_set``
 
 
 

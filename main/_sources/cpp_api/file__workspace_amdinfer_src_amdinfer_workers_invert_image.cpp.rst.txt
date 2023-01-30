@@ -35,6 +35,8 @@ Includes
 --------
 
 
+- ``algorithm``
+
 - ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
 
 - ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
@@ -55,11 +57,13 @@ Includes
 
 - ``amdinfer/util/base64.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
-- ``chrono``
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
 - ``climits``
 
@@ -69,21 +73,17 @@ Includes
 
 - ``cstring``
 
-- ``functional``
-
 - ``memory``
-
-- ``numeric``
 
 - ``opencv2/core.hpp``
 
 - ``opencv2/imgcodecs.hpp``
 
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 - ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
-
-- ``type_traits``
 
 - ``utility``
 
@@ -115,4 +115,15 @@ Functions
 
 
 - :ref:`exhale_function_invert__image_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74`
+
+- :ref:`exhale_variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0`
+
+- :ref:`exhale_variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a`
 

@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Changelog &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Changelog &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
-        <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -411,6 +414,9 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Add batch size flag to examples (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/94">#94</a>)</p></li>
 <li><p>Add Kubernetes test for KServe (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/95">#95</a>)</p></li>
 <li><p>Use exhale to generate Python API documentation (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/95">#95</a>)</p></li>
+<li><p>OpenAPI spec for REST protocol (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/100">#100</a>)</p></li>
+<li><p>Use a timer for simpler time measurement (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/104">#104</a>)</p></li>
+<li><p>Allow building containers with custom backend versions (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/107">#107</a>)</p></li>
 </ul>
 </section>
 <section id="changed">
@@ -424,6 +430,22 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Reorganize Python library (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
 <li><p>Rename ‘proteus’ to ‘amdinfer’ (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/91">#91</a>)</p></li>
 <li><p>Use Ubuntu 20.04 by default for Docker (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/97">#97</a>)</p></li>
+<li><p>Bump up to ROCm 5.4.1 (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/99">#99</a>)</p></li>
+<li><p>Some function names changed for style (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/102">#102</a>)</p></li>
+<li><p>Bump up to ZenDNN 4.0 (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/113">#113</a>)</p></li>
+</ul>
+</section>
+<section id="deprecated">
+<h3>Deprecated<a class="headerlink" href="#deprecated" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>ALL_CAPS style enums for the DataType (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/102">#102</a>)</p></li>
+</ul>
+</section>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Mappings between XIR data types &lt;-&gt; inference server data types from public API (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/102">#102</a>)</p></li>
+<li><p>Web GUI (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/110">#110</a>)</p></li>
 </ul>
 </section>
 <section id="fixed">
@@ -434,6 +456,9 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Align gRPC responses using non-gRPC-native data types with other input protocols (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/81">#81</a>)</p></li>
 <li><p>Fix the Manager’s destructor (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/88">#88</a>)</p></li>
 <li><p>Fix using <code class="docutils literal notranslate"><span class="pre">--no-user-config</span></code> with <code class="docutils literal notranslate"><span class="pre">proteus</span> <span class="pre">run</span></code> (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/89">#89</a>)</p></li>
+<li><p>Handle assigning user permissions if the host UID is same as UID in container (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/101">#101</a>)</p></li>
+<li><p>Fix test discovery if some test assets are missing (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/105">#105</a>)</p></li>
+<li><p>Fix gRPC queue shutdown race condition (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/111">#111</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -524,7 +549,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -585,6 +610,10 @@ and this project adheres to <a class="reference external" href="https://semver.o
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

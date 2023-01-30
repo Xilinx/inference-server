@@ -104,3 +104,10 @@ Functions
 
 - :ref:`exhale_function_invert__video_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
 
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_invert__video_8cpp_1ad040ac198e6b944c664091b286f73212`
+

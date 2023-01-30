@@ -57,9 +57,9 @@ Program Listing for File manager.hpp
    };
    
    struct UpdateCommand {
-     explicit UpdateCommand(UpdateCommandType cmd_, std::string key_ = "",
-                            void* object_ = nullptr, void* retval_ = nullptr)
-       : cmd(cmd_), key(std::move(key_)), object(object_), retval(retval_) {}
+     explicit UpdateCommand(UpdateCommandType cmd, std::string key = "",
+                            void* object = nullptr, void* retval = nullptr)
+       : cmd(cmd), key(std::move(key)), object(object), retval(retval) {}
      UpdateCommandType cmd;
      std::string key;
      void* object;
@@ -85,12 +85,12 @@ Program Listing for File manager.hpp
      std::string loadWorker(std::string const& key, RequestParameters parameters);
      void unloadWorker(std::string const& key);
    
-     WorkerInfo* getWorker(std::string const& key);
+     WorkerInfo* getWorker(std::string const& key) const;
    
      std::vector<std::string> getWorkerEndpoints();
    
-     bool workerReady(std::string const& key);
-     ModelMetadata getWorkerMetadata(std::string const& key);
+     bool workerReady(const std::string& key) const;
+     ModelMetadata getWorkerMetadata(const std::string& key) const;
    
      void workerAllocate(std::string const& key, int num);
    
@@ -107,8 +107,8 @@ Program Listing for File manager.hpp
        void unload(const std::string& endpoint);
    
        bool exists(const std::string& endpoint);
-       WorkerInfo* get(const std::string& endpoint);
-       std::vector<std::string> list();
+       WorkerInfo* get(const std::string& endpoint) const;
+       std::vector<std::string> list() const;
    
        std::string add(const std::string& worker, RequestParameters parameters);
    
@@ -130,10 +130,10 @@ Program Listing for File manager.hpp
      std::unique_ptr<UpdateCommandQueue> update_queue_;
      std::thread update_thread_;
    #ifdef AMDINFER_ENABLE_LOGGING
-     Logger logger_{Loggers::kServer};
+     Logger logger_{Loggers::Server};
    #endif
    
-     void update_manager(UpdateCommandQueue* input_queue);
+     void updateManager(UpdateCommandQueue* input_queue);
    };
    
    }  // namespace amdinfer

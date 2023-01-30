@@ -3,7 +3,7 @@
 Struct DetectResponse
 =====================
 
-- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp`
 
 
 Struct Documentation

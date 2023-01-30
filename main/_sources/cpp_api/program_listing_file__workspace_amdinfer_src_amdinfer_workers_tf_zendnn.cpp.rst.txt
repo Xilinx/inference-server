@@ -24,7 +24,8 @@ Program Listing for File tf_zendnn.cpp
    // See the License for the specific language governing permissions and
    // limitations under the License.
    
-   #include <tensorflow/c/c_api.h>                         // for TF_Version
+   #include <dlfcn.h>               // for dlerror, dlopen, dlsym, RTLD...
+   #include <tensorflow/c/c_api.h>  // for TF_Version
    #include <tensorflow/core/framework/graph.pb.h>         // for GraphDef
    #include <tensorflow/core/framework/tensor.h>           // for Tensor
    #include <tensorflow/core/framework/tensor_shape.h>     // for TensorShape
@@ -37,18 +38,17 @@ Program Listing for File tf_zendnn.cpp
    #include <tensorflow/core/public/session.h>             // for NewSession
    #include <tensorflow/core/public/session_options.h>     // for SessionOptions
    
-   #include <algorithm>   // for copy, max
-   #include <chrono>      // for milliseconds
-   #include <cstddef>     // for size_t, byte
-   #include <cstdint>     // for int32_t, uint...
-   #include <cstring>     // for memcpy
-   #include <functional>  // for multiplies
-   #include <memory>      // for allocator
-   #include <numeric>     // for accumulate
-   #include <string>      // for string, opera...
-   #include <thread>      // for thread
-   #include <utility>     // for pair, move
-   #include <vector>      // for vector
+   #include <algorithm>  // for copy, max
+   #include <cassert>    // for assert
+   #include <cstddef>    // for size_t, byte
+   #include <cstdint>    // for int32_t, uint...
+   #include <cstring>    // for memcpy
+   #include <memory>     // for allocator
+   #include <ratio>      // for micro, milli
+   #include <string>     // for string, opera...
+   #include <thread>     // for thread
+   #include <utility>    // for pair, move
+   #include <vector>     // for vector
    
    #include "amdinfer/batching/hard.hpp"          // for Batch, BatchP...
    #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
@@ -60,19 +60,17 @@ Program Listing for File tf_zendnn.cpp
    #include "amdinfer/observation/logging.hpp"    // for Logger, PROTE...
    #include "amdinfer/observation/metrics.hpp"    // for Metrics, Metr...
    #include "amdinfer/observation/tracing.hpp"    // for Trace
-   #include "amdinfer/util/string.hpp"            // for endsWith
    #include "amdinfer/util/thread.hpp"            // for setThreadName
+   #include "amdinfer/util/timer.hpp"             // for Timer
    #include "amdinfer/workers/worker.hpp"         // for Worker, kNumB...
    
    namespace tf = ::tensorflow;
    
-   uint64_t reduce_mult(std::vector<uint64_t>& v) {
-     return std::accumulate(v.begin(), v.end(), 1, std::multiplies<>());
-   }
+   namespace amdinfer::workers {
    
-   namespace amdinfer {
-   
-   namespace workers {
+   const int kResNetImageSize = 224;
+   const int kResNetImageChannels = 3;
+   const int kResNetOutputClasses = 1000;
    
    class TfZendnn : public Worker {
     public:
@@ -89,17 +87,21 @@ Program Listing for File tf_zendnn.cpp
      void doDestroy() override;
    
      // TF session and graphs
-     tf::Session* session_;
+     tf::Session* session_ = nullptr;
      tf::GraphDef graph_def_;
      tf::Status status_;
    
      // Image properties
-     unsigned output_classes_;
-     unsigned image_width_, image_height_, image_channels_, image_size_;
+     unsigned int output_classes_ = kResNetOutputClasses;
+     unsigned int image_width_ = kResNetImageSize;
+     unsigned int image_height_ = kResNetImageSize;
+     unsigned int image_channels_ = kResNetImageChannels;
+     unsigned int image_size_ = image_width_ * image_height_ * image_channels_;
    
      // Input / Output nodes
-     std::string input_node_, output_node_;
-     DataType input_dt_ = DataType::FP32;
+     std::string input_node_{"input"};
+     std::string output_node_{"predict"};
+     DataType input_dt_ = DataType::Fp32;
    };
    
    std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
@@ -107,54 +109,41 @@ Program Listing for File tf_zendnn.cpp
    }
    
    void TfZendnn::doInit(RequestParameters* parameters) {
-     constexpr auto kMaxBufferNum = 64;
-     constexpr auto kBatchSize = 1;
+     const auto default_batch_size = 1;
+     const int default_max_buffer_num = 64;
    
-     auto max_buffer_num = kMaxBufferNum;
-     if (parameters->has("max_buffer_num"))
-       max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-     this->max_buffer_num_ = max_buffer_num;
+     max_buffer_num_ = default_max_buffer_num;
+     if (parameters->has("max_buffer_num")) {
+       max_buffer_num_ = parameters->get<int32_t>("max_buffer_num");
+     }
    
-     auto batch_size = kBatchSize;
-     if (parameters->has("batch_size"))
+     auto batch_size = default_batch_size;
+     if (parameters->has("batch_size")) {
        batch_size = parameters->get<int32_t>("batch_size");
+     }
      this->batch_size_ = batch_size;
-   
-     // Image properties
-     const unsigned kTotalClasses = 1001;
-     const unsigned kImageWidth = 224;
-     const unsigned kImageHeight = 224;
-     const unsigned kImageChannels = 3;
    
      if (parameters->has("input_size")) {
        image_height_ = parameters->get<int32_t>("input_size");
        image_width_ = parameters->get<int32_t>("input_size");
-     } else {
-       image_height_ = kImageWidth;
-       image_width_ = kImageHeight;
      }
-     if (parameters->has("image_channels"))
+   
+     if (parameters->has("image_channels")) {
        image_channels_ = parameters->get<int32_t>("image_channels");
-     else
-       image_channels_ = kImageChannels;
+     }
      image_size_ = image_height_ * image_width_ * image_channels_;
    
-     if (parameters->has("output_classes"))
+     if (parameters->has("output_classes")) {
        output_classes_ = parameters->get<int32_t>("output_classes");
-     else
-       output_classes_ = kTotalClasses;
+     }
    
-     // Input / Output nodes
-     std::string kInputNode = "input";
-     std::string kOutputNode = "predict";
-     if (parameters->has("input_node"))
+     if (parameters->has("input_node")) {
        input_node_ = parameters->get<std::string>("input_node");
-     else
-       input_node_ = kInputNode;
-     if (parameters->has("output_node"))
+     }
+   
+     if (parameters->has("output_node")) {
        output_node_ = parameters->get<std::string>("output_node");
-     else
-       output_node_ = kOutputNode;
+     }
    
      std::string logmsg =
        "TensorFlow C/C++ library version: " + std::string(TF_Version());
@@ -165,14 +154,14 @@ Program Listing for File tf_zendnn.cpp
    }
    
    size_t TfZendnn::doAllocate(size_t num) {
-     constexpr auto kBufferNum = 10U;
+     const auto default_buffer_num = 10U;
      size_t buffer_num =
-       static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
+       static_cast<int>(num) == kNumBufferAuto ? default_buffer_num : num;
    
      VectorBuffer::allocate(this->input_buffers_, buffer_num,
                             image_size_ * this->batch_size_, input_dt_);
      VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                            output_classes_ * this->batch_size_, DataType::FP32);
+                            output_classes_ * this->batch_size_, DataType::Fp32);
      return buffer_num;
    }
    
@@ -187,9 +176,17 @@ Program Listing for File tf_zendnn.cpp
      config.set_use_per_session_threads(false);
    
      // Parallelism parameters
-     unsigned inter_op = 1, intra_op = 64;
-     if (parameters->has("inter_op")) inter_op = parameters->get<int>("inter_op");
-     if (parameters->has("intra_op")) inter_op = parameters->get<int>("intra_op");
+     const unsigned int default_inter_op = 1;
+     const unsigned int default_intra_op = 64;
+   
+     auto inter_op = default_inter_op;
+     if (parameters->has("inter_op")) {
+       inter_op = parameters->get<int>("inter_op");
+     }
+     auto intra_op = default_intra_op;
+     if (parameters->has("intra_op")) {
+       inter_op = parameters->get<int>("intra_op");
+     }
      config.set_intra_op_parallelism_threads(intra_op);
      config.set_inter_op_parallelism_threads(inter_op);
    
@@ -225,7 +222,7 @@ Program Listing for File tf_zendnn.cpp
      this->metadata_.addInputTensor(
        "input", input_dt_,
        {this->batch_size_, image_height_, image_width_, image_channels_});
-     this->metadata_.addOutputTensor("output", DataType::FP32, {output_classes_});
+     this->metadata_.addOutputTensor("output", DataType::Fp32, {output_classes_});
      this->metadata_.setName("TfZendnn");
    }
    
@@ -249,10 +246,10 @@ Program Listing for File tf_zendnn.cpp
    
    #ifdef AMDINFER_ENABLE_METRICS
        Metrics::getInstance().incrementCounter(
-         MetricCounterIDs::kPipelineIngressWorker);
+         MetricCounterIDs::PipelineIngressWorker);
    #endif
    
-       auto TotalStart = std::chrono::high_resolution_clock::now();
+       util::Timer timer{true};
    
        // Find total number of images to initialize for TF tensor
        auto tensor_count = static_cast<int>(batch->size());
@@ -266,10 +263,10 @@ Program Listing for File tf_zendnn.cpp
        size_t vec_size = 0;
    
        for (unsigned int j = 0; j < batch->size(); j++) {
-         auto& req = batch->getRequest(j);
+         const auto& req = batch->getRequest(j);
    
    #ifdef AMDINFER_ENABLE_TRACING
-         auto& trace = batch->getTrace(j);
+         const auto& trace = batch->getTrace(j);
          trace->startSpan("tfzendnn");
    #endif
          auto& resp = responses.emplace_back();
@@ -284,8 +281,8 @@ Program Listing for File tf_zendnn.cpp
          // Get all the inputs from the requests and copy to the TensorFlow tensor
          for (auto& input : inputs) {
            auto* input_buffer = input.getData();
-           const auto* floatBuffer = static_cast<float*>(input_buffer);
-           std::copy(floatBuffer, floatBuffer + input_size,
+           const auto* float_buffer = static_cast<float*>(input_buffer);
+           std::copy(float_buffer, float_buffer + input_size,
                      input_tensor.flat<float>().data() + vec_size);
            vec_size = vec_size + input_size;
          }
@@ -299,17 +296,13 @@ Program Listing for File tf_zendnn.cpp
        std::vector<tensorflow::Tensor> output_tensor;
    
        // Run the session to get the predictions
-       auto start = std::chrono::high_resolution_clock::now();
+       timer.add("infer_start");
        status_ =
          this->session_->Run(input_pair, {output_node_}, {}, &output_tensor);
-       auto stop = std::chrono::high_resolution_clock::now();
-       auto duration =
-         std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-   #ifdef AMDINFER_ENABLE_LOGGING
-       float time_tmp = duration.count();
+       timer.add("infer_stop");
+       auto duration = timer.count<std::milli>("infer_start", "infer_stop");
        AMDINFER_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
-                                   " images: " + std::to_string(time_tmp));
-   #endif
+                                   " images: " + std::to_string(duration));
    
        if (!status_.ok()) {
          AMDINFER_LOG_ERROR(logger, status_.ToString());
@@ -346,7 +339,7 @@ Program Listing for File tf_zendnn.cpp
            }
    
            output.setShape(new_shape);
-           output.setDatatype(DataType::FP32);
+           output.setDatatype(DataType::Fp32);
            resp.addOutput(output);
          }
    
@@ -355,39 +348,60 @@ Program Listing for File tf_zendnn.cpp
          resp.setContext(std::move(context));
    #endif
    
-         auto TotalStop = std::chrono::high_resolution_clock::now();
-         auto d = std::chrono::duration_cast<std::chrono::milliseconds>(
-           TotalStop - TotalStart);
-   #ifdef AMDINFER_ENABLE_LOGGING
-         float tt = d.count();
-         AMDINFER_LOG_DEBUG(logger, "Total time taken: " + std::to_string(tt));
-   #endif
+         timer.stop();
+         duration = timer.count<std::milli>();
+         AMDINFER_LOG_DEBUG(logger,
+                            "Total time taken: " + std::to_string(duration));
    
          req->runCallbackOnce(resp);
    
    #ifdef AMDINFER_ENABLE_METRICS
-         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-           std::chrono::high_resolution_clock::now() - batch->getTime(k));
-         Metrics::getInstance().observeSummary(MetricSummaryIDs::kRequestLatency,
-                                               duration.count());
+         timer.add("metrics", batch->getTime(k));
+         duration = timer.count<std::micro>("metrics", "stop");
+         Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
+                                               duration);
    #endif
        }
      }
      AMDINFER_LOG_INFO(logger, "TfZendnn ending");
    }
    
-   void TfZendnn::doRelease() { this->session_->Close(); }
+   void TfZendnn::doRelease() {
+     auto retval = this->session_->Close();
+     assert(retval.ok());
+   }
    void TfZendnn::doDeallocate() {}
    void TfZendnn::doDestroy() {}
    
-   }  // namespace workers
+   void* openLibrary(const char* library, int dlopen_flags) {
+     void* handle = dlopen(library, dlopen_flags);
+     if (handle == nullptr) {
+       const char* error_str = dlerror();
+       throw amdinfer::file_not_found_error(error_str);
+     }
+     return handle;
+   }
    
-   }  // namespace amdinfer
+   }  // namespace amdinfer::workers
    
    extern "C" {
    // using smart pointer here may cause problems inside shared object so managing
    // manually
    amdinfer::workers::Worker* getWorker() {
+     using amdinfer::workers::openLibrary;
+     // Due to the DEEPBIND change for tensorflow_cc.so below, OMP now gives a
+     // segfault unexpectedly if the server is run from Python. Preloading iomp
+     // without DEEPBIND addresses this problem.
+     openLibrary("libiomp5.so", RTLD_LOCAL | RTLD_LAZY);
+     // Upcoming changes in Tensorflow move the Protobuf symbols defined in this
+     // library to another library called tensorflow_framework.so. At runtime,
+     // tensorflow_cc should resolve its missing protobuf symbols against this
+     // library but instead it finds the protobuf used in the inference server.
+     // Using DEEPBIND addresses this problem so the protobuf symbols get found
+     // correctly when this library uses its own dependencies to resolve missing
+     // symbols before the global scope.
+     openLibrary("libtensorflow_cc.so", RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND);
+   
      return new amdinfer::workers::TfZendnn("TfZendnn", "cpu");
    }
    }  // extern C

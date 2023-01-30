@@ -38,6 +38,10 @@ Program Listing for File server.hpp
    class Server {
     public:
      Server();
+     Server(Server const&) = delete;
+     Server& operator=(const Server&) = delete;
+     Server(Server&& other) = default;
+     Server& operator=(Server&& other) = default;
      ~Server();
    
      void startHttp(uint16_t port) const;
@@ -45,8 +49,8 @@ Program Listing for File server.hpp
      void startGrpc(uint16_t port) const;
      void stopGrpc() const;
    
-     void setModelRepository(const std::filesystem::path& path) const;
-     void enableRepositoryMonitoring(bool use_polling) const;
+     static void setModelRepository(const std::filesystem::path& path);
+     static void enableRepositoryMonitoring(bool use_polling);
    
     private:
      struct ServerImpl;

@@ -17,10 +17,11 @@ Running ResNet50 - C++
 ======================
 
 This page walks you through the C++ versions of the ResNet50 examples.
-These examples are intended to run in the dev container because you need to build and compile these executables.
-You can see the full source files used here in the `repository <https://github.com/Xilinx/inference-server/tree/main/examples/resnet50>`__ for more details.
+These examples are intended to run in the development container because you need to build and compile these executables.
+You can see the full source files used here in the :amdinferTree:`repository <examples/resnet50>` for more details.
 
-While the inference server supports many backends, client applications to make requests to any of them largely look the same.
+The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
+You can read the :ref:`Python version of this example <example_resnet50_python:Running ResNet50 - Python` to better compare these two.
 
 .. note::
     These examples are intended to demonstrate the API and how to communicate with the server.
@@ -197,7 +198,7 @@ You can also make a single asynchronous request to the server where you get back
     :start-after: +validate
     :end-before: -validate
     :language: cpp
-    :dedent: 2
+    :dedent: 6
 
 There are also some helper methods that wrap the basic inference APIs provided by the client.
 The ``inferAsyncOrdered`` method accepts a vector of requests, makes all the requests asynchronously using the ``modelInferAsync`` API, waits until each request completes, and then returns a vector of responses.

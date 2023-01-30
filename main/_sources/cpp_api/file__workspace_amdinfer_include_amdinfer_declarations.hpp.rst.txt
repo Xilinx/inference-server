@@ -104,9 +104,15 @@ Included By
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
 
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_client.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp`
+
 - :ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp`
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp`
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
 

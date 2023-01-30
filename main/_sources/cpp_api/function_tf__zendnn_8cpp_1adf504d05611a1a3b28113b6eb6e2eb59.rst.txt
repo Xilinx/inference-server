@@ -1,0 +1,14 @@
+.. _exhale_function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59:
+
+Function amdinfer::workers::openLibrary
+=======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::workers::openLibrary(const char *, int)
+   :project: amdinfer

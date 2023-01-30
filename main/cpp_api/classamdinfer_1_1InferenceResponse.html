@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Class InferenceResponse &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Class InferenceResponse &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -406,25 +409,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse17InferenceResponseEv">
 <span id="_CPPv3N8amdinfer17InferenceResponse17InferenceResponseEv"></span><span id="_CPPv2N8amdinfer17InferenceResponse17InferenceResponseEv"></span><span id="amdinfer::InferenceResponse::InferenceResponse"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1aafecb77bfac8abb316f7113ed9c0e042"></span><span class="sig-name descname"><span class="n"><span class="pre">InferenceResponse</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse17InferenceResponseEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Construct a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a> object. </p>
+<dd><p>Constructs a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a> object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse17InferenceResponseERKNSt6stringE">
 <span id="_CPPv3N8amdinfer17InferenceResponse17InferenceResponseERKNSt6stringE"></span><span id="_CPPv2N8amdinfer17InferenceResponse17InferenceResponseERKNSt6stringE"></span><span id="amdinfer::InferenceResponse::InferenceResponse__ssCR"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1a5896007fb20ac0278f384b47bb986a54"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InferenceResponse</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">error</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse17InferenceResponseERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Construct a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a> error object. </p>
+<dd><p>Constructs a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a> error object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer17InferenceResponse10getOutputsEv">
 <span id="_CPPv3NK8amdinfer17InferenceResponse10getOutputsEv"></span><span id="_CPPv2NK8amdinfer17InferenceResponse10getOutputsEv"></span><span id="amdinfer::InferenceResponse::getOutputsC"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1a7aec811b07ed4414dceaa51ee27b3703"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1a69968e7d35b8ae122d52452c7e00ed9d.html#_CPPv4N8amdinfer23InferenceResponseOutputE" title="amdinfer::InferenceResponseOutput"><span class="n"><span class="pre">InferenceResponseOutput</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getOutputs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer17InferenceResponse10getOutputsEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get a vector of the requested output information. </p>
+<dd><p>Gets a vector of the requested output information. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse9addOutputERK23InferenceResponseOutput">
 <span id="_CPPv3N8amdinfer17InferenceResponse9addOutputERK23InferenceResponseOutput"></span><span id="_CPPv2N8amdinfer17InferenceResponse9addOutputERK23InferenceResponseOutput"></span><span id="amdinfer::InferenceResponse::addOutput__InferenceResponseOutputCR"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1a6018c33c9e7effdf54c47a9e2e2c57c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addOutput</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef_declarations_8hpp_1a69968e7d35b8ae122d52452c7e00ed9d.html#_CPPv4N8amdinfer23InferenceResponseOutputE" title="amdinfer::InferenceResponseOutput"><span class="n"><span class="pre">InferenceResponseOutput</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse9addOutputERK23InferenceResponseOutput" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Add an output tensor to the response. </p>
+<dd><p>Adds an output tensor to the response. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>output</strong> – an output tensor </p>
@@ -433,45 +436,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse5getIDEv">
-<span id="_CPPv3N8amdinfer17InferenceResponse5getIDEv"></span><span id="_CPPv2N8amdinfer17InferenceResponse5getIDEv"></span><span id="amdinfer::InferenceResponse::getID"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1abf9de3b19f2d0850bc09a299f3d68ca9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse5getIDEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the ID of the response. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer17InferenceResponse5getIDEv">
+<span id="_CPPv3NK8amdinfer17InferenceResponse5getIDEv"></span><span id="_CPPv2NK8amdinfer17InferenceResponse5getIDEv"></span><span id="amdinfer::InferenceResponse::getIDC"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1ac45d3d27e10f2c3795c00d70de2f9a57"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer17InferenceResponse5getIDEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the ID of the response. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse5setIDERKNSt6stringE">
 <span id="_CPPv3N8amdinfer17InferenceResponse5setIDERKNSt6stringE"></span><span id="_CPPv2N8amdinfer17InferenceResponse5setIDERKNSt6stringE"></span><span id="amdinfer::InferenceResponse::setID__ssCR"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1aaeed47b370a7b00d6504cb2758927492"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setID</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse5setIDERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the ID of the response. </p>
+<dd><p>Sets the ID of the response. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse8setModelERKNSt6stringE">
 <span id="_CPPv3N8amdinfer17InferenceResponse8setModelERKNSt6stringE"></span><span id="_CPPv2N8amdinfer17InferenceResponse8setModelERKNSt6stringE"></span><span id="amdinfer::InferenceResponse::setModel__ssCR"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1acfe96413791db3490c3eb1d45e52d6c8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setModel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse8setModelERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>set the model name of the response </p>
+<dd><p>sets the model name of the response </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse8getModelEv">
 <span id="_CPPv3N8amdinfer17InferenceResponse8getModelEv"></span><span id="_CPPv2N8amdinfer17InferenceResponse8getModelEv"></span><span id="amdinfer::InferenceResponse::getModel"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1abd1c35c472ccc39c3564c36768c3b0ad"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getModel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse8getModelEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>get the model name of the response </p>
+<dd><p>gets the model name of the response </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer17InferenceResponse7isErrorEv">
 <span id="_CPPv3NK8amdinfer17InferenceResponse7isErrorEv"></span><span id="_CPPv2NK8amdinfer17InferenceResponse7isErrorEv"></span><span id="amdinfer::InferenceResponse::isErrorC"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1aa33536d4536537236fe968219c378e34"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isError</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer17InferenceResponse7isErrorEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if this is an error response. </p>
+<dd><p>Checks if this is an error response. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer17InferenceResponse8getErrorEv">
 <span id="_CPPv3NK8amdinfer17InferenceResponse8getErrorEv"></span><span id="_CPPv2NK8amdinfer17InferenceResponse8getErrorEv"></span><span id="amdinfer::InferenceResponse::getErrorC"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1adbab52f8c823162bf8eb8b0c5c4ec55b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getError</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer17InferenceResponse8getErrorEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the error message if it exists. Defaults to an empty string. </p>
+<dd><p>Gets the error message if it exists. Defaults to an empty string. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponse13getParametersEv">
 <span id="_CPPv3N8amdinfer17InferenceResponse13getParametersEv"></span><span id="_CPPv2N8amdinfer17InferenceResponse13getParametersEv"></span><span id="amdinfer::InferenceResponse::getParameters"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1aac8b6e1ff669861c37f3615507c75bd6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getParameters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponse13getParametersEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get a pointer to the parameters associated with this response. </p>
+<dd><p>Gets a pointer to the parameters associated with this response. </p>
 </dd></dl>
 
 </div>
@@ -480,7 +483,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer17InferenceResponselsERNSt7ostreamERK17InferenceResponse">
 <span id="_CPPv3N8amdinfer17InferenceResponselsERNSt7ostreamERK17InferenceResponse"></span><span id="_CPPv2N8amdinfer17InferenceResponselsERNSt7ostreamERK17InferenceResponse"></span><span id="amdinfer::InferenceResponse::lshift-operator__osR.InferenceResponseCR"></span><span class="target" id="classamdinfer_1_1InferenceResponse_1aaf5f2818f4b4655ca9d572bfad8287b7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <a class="reference internal" href="#_CPPv4N8amdinfer17InferenceResponseE" title="amdinfer::InferenceResponse"><span class="n"><span class="pre">InferenceResponse</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">my_class</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer17InferenceResponselsERNSt7ostreamERK17InferenceResponse" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Provide an implementation to print the class with std::cout to an ostream. </p>
+<dd><p>Provides an implementation to print the class with std::cout to an ostream. </p>
 </dd></dl>
 
 </div>
@@ -511,7 +514,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -572,6 +575,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

@@ -45,23 +45,13 @@ Includes
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
-- ``cstddef``
-
-- ``cstdint``
-
-- ``cstring``
+- ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
 
 - ``future``
 
 - ``google/protobuf/repeated_ptr_field.h``
 
-- ``google/protobuf/stubs/common.h``
-
 - ``grpcpp/grpcpp.h``
-
-- ``iostream``
-
-- ``map``
 
 - ``memory``
 
@@ -72,10 +62,6 @@ Includes
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 - ``unordered_set``
-
-- ``utility``
-
-- ``variant``
 
 - ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
 

@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Class NativeClient &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Class NativeClient &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -409,30 +412,54 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12NativeClientE">
 <span id="_CPPv3N8amdinfer12NativeClientE"></span><span id="_CPPv2N8amdinfer12NativeClientE"></span><span id="amdinfer::NativeClient"></span><span class="target" id="classamdinfer_1_1NativeClient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NativeClient</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1Client.html#_CPPv4N8amdinfer6ClientE" title="amdinfer::Client"><span class="n"><span class="pre">Client</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer12NativeClientE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>The <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1NativeClient"><span class="std std-ref">NativeClient</span></a> class implements the <a class="reference internal" href="classamdinfer_1_1Client.html#classamdinfer_1_1Client"><span class="std std-ref">Client</span></a> using the native C++ API. This client can be used if the client and backend are in the same C++ executable. </p>
+<p>Usage:</p>
+<p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1NativeClient"><span class="std std-ref">NativeClient</span></a> client; if (client.serverLive()){ … } </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient14serverMetadataEv">
 <span id="_CPPv3NK8amdinfer12NativeClient14serverMetadataEv"></span><span id="_CPPv2NK8amdinfer12NativeClient14serverMetadataEv"></span><span id="amdinfer::NativeClient::serverMetadataC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a3d3dcbe263a0b4f135b3b9107cedad9e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="structamdinfer_1_1ServerMetadata.html#_CPPv4N8amdinfer14ServerMetadataE" title="amdinfer::ServerMetadata"><span class="n"><span class="pre">ServerMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverMetadata</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient14serverMetadataEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Returns the server metadata as a <a class="reference internal" href="../cpp_user_api.html#structamdinfer_1_1ServerMetadata"><span class="std std-ref">ServerMetadata</span></a> object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../cpp_user_api.html#structamdinfer_1_1ServerMetadata"><span class="std std-ref">ServerMetadata</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient10serverLiveEv">
 <span id="_CPPv3NK8amdinfer12NativeClient10serverLiveEv"></span><span id="_CPPv2NK8amdinfer12NativeClient10serverLiveEv"></span><span id="amdinfer::NativeClient::serverLiveC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a469e3f2fc2d7e82e9a802423ff8cebea"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverLive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient10serverLiveEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is live. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is live, false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient11serverReadyEv">
 <span id="_CPPv3NK8amdinfer12NativeClient11serverReadyEv"></span><span id="_CPPv2NK8amdinfer12NativeClient11serverReadyEv"></span><span id="amdinfer::NativeClient::serverReadyC"></span><span class="target" id="classamdinfer_1_1NativeClient_1afc785742d948af5af82298e0cd157b04"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverReady</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient11serverReadyEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Checks if the server is ready. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool - true if server is ready, false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient10modelReadyERKNSt6stringE">
 <span id="_CPPv3NK8amdinfer12NativeClient10modelReadyERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer12NativeClient10modelReadyERKNSt6stringE"></span><span id="amdinfer::NativeClient::modelReady__ssCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a13c930989aca39ea17154710c37a72bd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelReady</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient10modelReadyERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if a worker is ready. </p>
+<dd><p>Checks if a model/worker is ready. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>worker</strong> – name of the worker to check if ready </p>
+<dd class="field-odd"><p><strong>model</strong> – name of the model to check </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool - true if model is ready, false otherwise </p>
 </dd>
 </dl>
 </dd></dl>
@@ -440,21 +467,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE">
 <span id="_CPPv3NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE"></span><span id="amdinfer::NativeClient::modelMetadata__ssCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a896f78d47d693a2285f09f3ca32746e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadataE" title="amdinfer::ModelMetadata"><span class="n"><span class="pre">ModelMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelMetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Returns the metadata associated with a ready model/worker. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – name of the model/worker to get metadata </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1ModelMetadata"><span class="std std-ref">ModelMetadata</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringEP17RequestParameters">
 <span id="_CPPv3NK8amdinfer12NativeClient9modelLoadERKNSt6stringEP17RequestParameters"></span><span id="_CPPv2NK8amdinfer12NativeClient9modelLoadERKNSt6stringEP17RequestParameters"></span><span id="amdinfer::NativeClient::modelLoad__ssCR.RequestParametersPC"></span><span class="target" id="classamdinfer_1_1NativeClient_1af46760978a4f9663a899b03dd6aec64a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <a class="reference internal" href="classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringEP17RequestParameters" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Load a worker. </p>
+<dd><p>Loads a model with the given name and load-time parameters. This method assumes that a directory with this model name already exists in the model repository directory for the server containing the model and its metadata in the right format. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> – name of the worker to load </p></li>
-<li><p><strong>parameters</strong> – any load-time parameters to pass to the worker </p></li>
+<li><p><strong>model</strong> – name of the model to load from the model repository directory </p></li>
+<li><p><strong>parameters</strong> – load-time parameters for the worker supporting the model </p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>std::string the qualified name of the worker to make inference requests </p>
 </dd>
 </dl>
 </dd></dl>
@@ -462,7 +495,80 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient11modelUnloadERKNSt6stringE">
 <span id="_CPPv3NK8amdinfer12NativeClient11modelUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer12NativeClient11modelUnloadERKNSt6stringE"></span><span id="amdinfer::NativeClient::modelUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a59e4459a7d626014d6eee918ee91ba17"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient11modelUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Unload a worker. </p>
+<dd><p>Unloads a previously loaded model and shut it down. This is identical in functionality to workerUnload and is provided for symmetry. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – name of the model to unload </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest">
+<span id="_CPPv3NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::NativeClient::modelInfer__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a34cfb38d59f95825420080ed7480d5d2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceResponse.html#_CPPv4N8amdinfer17InferenceResponseE" title="amdinfer::InferenceResponse"><span class="n"><span class="pre">InferenceResponse</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInfer</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Makes a synchronous inference request to the given model/worker. The contents of the request depends on the model/worker that the request is for. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – name of the model/worker to request inference to </p></li>
+<li><p><strong>request</strong> – the request </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest">
+<span id="_CPPv3NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::NativeClient::modelInferAsync__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1af01de21d498b8b2fe8481dbd12033467"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d.html#_CPPv4N8amdinfer23InferenceResponseFutureE" title="amdinfer::InferenceResponseFuture"><span class="n"><span class="pre">InferenceResponseFuture</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInferAsync</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Makes an asynchronous inference request to the given model/worker. The contents of the request depends on the model/worker that the request is for. The user must save the Future object and use it to get the results of the inference later. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – name of the model/worker to request inference to </p></li>
+<li><p><strong>request</strong> – the request </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>InferenceResponseFuture </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient9modelListEv">
+<span id="_CPPv3NK8amdinfer12NativeClient9modelListEv"></span><span id="_CPPv2NK8amdinfer12NativeClient9modelListEv"></span><span id="amdinfer::NativeClient::modelListC"></span><span class="target" id="classamdinfer_1_1NativeClient_1ade21d53271b5dc34ea216a06970b9c82"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelList</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient9modelListEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets a list of active models on the server, returning their names. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>std::vector&lt;std::string&gt; </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters">
+<span id="_CPPv3NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters"></span><span id="_CPPv2NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters"></span><span id="amdinfer::NativeClient::workerLoad__ssCR.RequestParametersPC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a23153609e2f7deb6e66eedb5f8452079"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span>, <a class="reference internal" href="classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Loads a worker with the given name and load-time parameters. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>worker</strong> – name of the worker to load </p></li>
+<li><p><strong>parameters</strong> – load-time parameters for the worker </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::string </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE">
+<span id="_CPPv3NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE"></span><span id="amdinfer::NativeClient::workerUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1ac73bd8a80be4d6dadefab3e762bd5768"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unloads a previously loaded worker and shut it down. This is identical in functionality to modelUnload and is provided for symmetry. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>worker</strong> – name of the worker to unload </p>
@@ -471,46 +577,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest">
-<span id="_CPPv3NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::NativeClient::modelInfer__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a34cfb38d59f95825420080ed7480d5d2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceResponse.html#_CPPv4N8amdinfer17InferenceResponseE" title="amdinfer::InferenceResponse"><span class="n"><span class="pre">InferenceResponse</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInfer</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest">
-<span id="_CPPv3NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::NativeClient::modelInferAsync__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a1423c6acb8d527f9360132bd39897df0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d.html#_CPPv4N8amdinfer23InferenceResponseFutureE" title="amdinfer::InferenceResponseFuture"><span class="n"><span class="pre">InferenceResponseFuture</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInferAsync</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">workerName</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Enqueue an inference request. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi">
+<span id="_CPPv3NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi"></span><span id="_CPPv2NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi"></span><span id="amdinfer::NativeClient::hasHardware__ssCR.iC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a93de30bb5a7fa672b6cc26d2946c98f0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hasHardware</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if the server has the requested number of a specific hardware device. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>workerName</strong> – name of the worker to make the request to </p></li>
-<li><p><strong>request</strong> – the request to make </p></li>
+<li><p><strong>name</strong> – name of the hardware device to check </p></li>
+<li><p><strong>num</strong> – number of the device that should exist at minimum </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>InferenceResponseFuture a future to get the results of the request </p>
+<dd class="field-even"><p>bool - true if server has at least the requested number of the hardware device, false otherwise </p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient9modelListEv">
-<span id="_CPPv3NK8amdinfer12NativeClient9modelListEv"></span><span id="_CPPv2NK8amdinfer12NativeClient9modelListEv"></span><span id="amdinfer::NativeClient::modelListC"></span><span class="target" id="classamdinfer_1_1NativeClient_1ade21d53271b5dc34ea216a06970b9c82"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelList</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient9modelListEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters">
-<span id="_CPPv3NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters"></span><span id="_CPPv2NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters"></span><span id="amdinfer::NativeClient::workerLoad__ssCR.RequestParametersPC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a23153609e2f7deb6e66eedb5f8452079"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span>, <a class="reference internal" href="classamdinfer_1_1RequestParameters.html#_CPPv4N8amdinfer17RequestParametersE" title="amdinfer::RequestParameters"><span class="n"><span class="pre">RequestParameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP17RequestParameters" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE">
-<span id="_CPPv3NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE"></span><span id="amdinfer::NativeClient::workerUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1NativeClient_1ac73bd8a80be4d6dadefab3e762bd5768"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi">
-<span id="_CPPv3NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi"></span><span id="_CPPv2NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi"></span><span id="amdinfer::NativeClient::hasHardware__ssCR.iC"></span><span class="target" id="classamdinfer_1_1NativeClient_1a93de30bb5a7fa672b6cc26d2946c98f0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hasHardware</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -540,7 +621,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -601,6 +682,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

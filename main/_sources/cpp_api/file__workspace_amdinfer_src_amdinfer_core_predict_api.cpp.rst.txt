@@ -41,13 +41,17 @@ Includes
 
 - ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``cassert``
 
 - ``cstring``
 
 - ``iterator``
 
-- ``numeric``
+- ``tuple``
+
+- ``type_traits``
 
 - ``utility``
 
@@ -76,5 +80,5 @@ Functions
 
 - :ref:`exhale_function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf`
 
-- :ref:`exhale_function_predict__api_8cpp_1a6671145ae5464f5f11fafa31cf195502`
+- :ref:`exhale_function_predict__api_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3`
 

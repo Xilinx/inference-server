@@ -35,15 +35,9 @@ Includes
 --------
 
 
-- ``algorithm``
-
 - ``amdinfer/buffers/buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`)
 
-- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
-
 - ``cstring``
-
-- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 
 

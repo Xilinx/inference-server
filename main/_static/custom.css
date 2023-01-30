@@ -22,3 +22,7 @@
     .wy-nav-content{padding:1.618em}
     .wy-nav-content-wrap.shift{position:fixed;min-width:100%;left:85%;top:0;height:100%;overflow:hidden}
 }
+
+.sphinx-tabs .sphinx-tabs-panel *:last-child {
+    margin-bottom: 0;
+}

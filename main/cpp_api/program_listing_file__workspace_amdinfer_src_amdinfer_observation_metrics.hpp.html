@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Program Listing for File metrics.hpp &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>Program Listing for File metrics.hpp &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -36,12 +37,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/doctools.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="File migraphx.cpp" href="file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp.html" />
-    <link rel="prev" title="File metrics.hpp" href="file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,6 +101,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +122,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +258,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -290,7 +292,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
@@ -352,13 +354,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../tracing.html#quickstart">Quickstart</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#namespaces">Namespaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -379,8 +380,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="cpp_root.html">Code Documentation</a> &raquo;</li>
-          <li><a href="file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.html">File metrics.hpp</a> &raquo;</li>
       <li>Program Listing for File metrics.hpp</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/cpp_api/program_listing_file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.rst.txt" rel="nofollow"> View page source</a>
@@ -412,139 +411,140 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#ifndef GUARD_AMDINFER_OBSERVATION_METRICS</span>
 <span class="cp">#define GUARD_AMDINFER_OBSERVATION_METRICS</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/serializer.h&gt;</span><span class="c1">  // for Serializer</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/summary.h&gt;</span><span class="c1">     // for Summary, BuildSummary, Summa...</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/registry.h&gt;</span><span class="c1">    // for Registry</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/serializer.h&gt;</span><span class="c1">  // for Serializer</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;prometheus/summary.h&gt;</span><span class="c1">     // for Summary, BuildSummary, Summa...</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span><span class="c1">        // for size_t</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span><span class="c1">            // for map</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for weak_ptr, shared_ptr, uni...</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span><span class="c1">          // for mutex</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for string</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span><span class="c1">  // for unordered_map</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span><span class="c1">        // for size_t</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span><span class="c1">            // for map</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span><span class="c1">         // for weak_ptr, shared_ptr, uni...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span><span class="c1">          // for mutex</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">         // for string</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span><span class="c1">  // for unordered_map</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">  // for AMDINFER_ENABLE_METRICS</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">  // for AMDINFER_ENABLE_METRICS</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">prometheus</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Collectable</span><span class="p">;</span><span class="w"></span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="p">;</span><span class="w"></span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Gauge</span><span class="p">;</span><span class="w"></span>
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Family</span><span class="p">;</span><span class="w"></span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Registry</span><span class="p">;</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">prometheus</span><span class="w"> </span><span class="p">{</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Collectable</span><span class="p">;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="p">;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Gauge</span><span class="p">;</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Family</span><span class="p">;</span>
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace prometheus</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MetricCounterIDs</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">kRestGet</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kRestPost</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kCppNative</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kPipelineIngressBatcher</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kPipelineIngressWorker</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kPipelineEgressBatcher</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kPipelineEgressWorker</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kTransferredBytes</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kMetricScrapes</span><span class="p">,</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MetricCounterIDs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">RestGet</span><span class="p">,</span>
+<span class="w">  </span><span class="n">RestPost</span><span class="p">,</span>
+<span class="w">  </span><span class="n">CppNative</span><span class="p">,</span>
+<span class="w">  </span><span class="n">PipelineIngressBatcher</span><span class="p">,</span>
+<span class="w">  </span><span class="n">PipelineIngressWorker</span><span class="p">,</span>
+<span class="w">  </span><span class="n">PipelineEgressBatcher</span><span class="p">,</span>
+<span class="w">  </span><span class="n">PipelineEgressWorker</span><span class="p">,</span>
+<span class="w">  </span><span class="n">TransferredBytes</span><span class="p">,</span>
+<span class="w">  </span><span class="n">MetricScrapes</span><span class="p">,</span>
+<span class="p">};</span>
 
-<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MetricGaugeIDs</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">kQueuesBatcherInput</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kQueuesBatcherOutput</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kQueuesBufferInput</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kQueuesBufferOutput</span><span class="p">,</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MetricGaugeIDs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">QueuesBatcherInput</span><span class="p">,</span>
+<span class="w">  </span><span class="n">QueuesBatcherOutput</span><span class="p">,</span>
+<span class="w">  </span><span class="n">QueuesBufferInput</span><span class="p">,</span>
+<span class="w">  </span><span class="n">QueuesBufferOutput</span><span class="p">,</span>
+<span class="p">};</span>
 
-<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MetricSummaryIDs</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">kMetricLatency</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">kRequestLatency</span><span class="p">,</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MetricSummaryIDs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">MetricLatency</span><span class="p">,</span>
+<span class="w">  </span><span class="n">RequestLatency</span><span class="p">,</span>
+<span class="p">};</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">CounterFamily</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">CounterFamily</span><span class="p">(</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricCounterIDs</span><span class="p">,</span><span class="w"></span>
-<span class="w">                             </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">labels</span><span class="p">);</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CounterFamily</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">CounterFamily</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span>
+<span class="w">    </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricCounterIDs</span><span class="p">,</span>
+<span class="w">                             </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">labels</span><span class="p">);</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">increment</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="p">);</span>
 
-<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Family</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Counter</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">family_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricCounterIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Counter</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="n">counters_</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Family</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Counter</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">family_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricCounterIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Counter</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="n">counters_</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">GaugeFamily</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">GaugeFamily</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"></span>
-<span class="w">              </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"></span>
-<span class="w">              </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="w"></span>
-<span class="w">                </span><span class="n">MetricGaugeIDs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">labels</span><span class="p">);</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GaugeFamily</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">GaugeFamily</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span>
+<span class="w">              </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span>
+<span class="w">              </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span>
+<span class="w">                </span><span class="n">MetricGaugeIDs</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">labels</span><span class="p">);</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
 
-<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Family</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Gauge</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">family_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricGaugeIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Gauge</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="n">gauges_</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Family</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Gauge</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">family_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricGaugeIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Gauge</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="n">gauges_</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">SummaryFamily</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">SummaryFamily</span><span class="p">(</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricSummaryIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="o">&gt;&amp;</span><span class="w"></span>
-<span class="w">      </span><span class="n">quantiles</span><span class="p">);</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SummaryFamily</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">SummaryFamily</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">help</span><span class="p">,</span>
+<span class="w">    </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">*</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricSummaryIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">::</span><span class="n">Quantiles</span><span class="o">&gt;&amp;</span>
+<span class="w">      </span><span class="n">quantiles</span><span class="p">);</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">observe</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
 
-<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Family</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">family_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricSummaryIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="n">summaries_</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Family</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">family_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">MetricSummaryIDs</span><span class="p">,</span><span class="w"> </span><span class="n">prometheus</span><span class="o">::</span><span class="n">Summary</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="n">summaries_</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Metrics</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Metrics</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Guaranteed to be destroyed. Instantiated on first use.</span>
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Metrics</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="n">Metrics</span><span class="p">(</span><span class="n">Metrics</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">Metrics</span><span class="p">(</span><span class="n">Metrics</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Metrics</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
-<span class="w">    </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Metrics</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">Metrics</span><span class="p">(</span><span class="n">Metrics</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Metrics</span><span class="p">(</span><span class="n">Metrics</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Metrics</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Metrics</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="k">delete</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getMetrics</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">incrementCounter</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getMetrics</span><span class="p">();</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">incrementCounter</span><span class="p">(</span><span class="n">MetricCounterIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">increment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setGauge</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setGauge</span><span class="p">(</span><span class="n">MetricGaugeIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">observeSummary</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">observeSummary</span><span class="p">(</span><span class="n">MetricSummaryIDs</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
 
-<span class="w"> </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">Metrics</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="o">~</span><span class="n">Metrics</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">Metrics</span><span class="p">();</span>
+<span class="w">  </span><span class="o">~</span><span class="n">Metrics</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">&gt;</span><span class="w"> </span><span class="n">registry_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Serializer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">serializer_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Collectable</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">collectables_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">collectables_mutex_</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">&gt;</span><span class="w"> </span><span class="n">registry_</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Registry</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Serializer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">serializer_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">prometheus</span><span class="o">::</span><span class="n">Collectable</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">collectables_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">collectables_mutex_</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">ingress_requests_total_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">pipeline_ingress_total_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">pipeline_egress_total_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">bytes_transferred_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">num_scrapes_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">GaugeFamily</span><span class="w"> </span><span class="n">queue_sizes_total_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">SummaryFamily</span><span class="w"> </span><span class="n">metric_latency_</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">SummaryFamily</span><span class="w"> </span><span class="n">request_latency_</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">ingress_requests_total_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">pipeline_ingress_total_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">pipeline_egress_total_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">bytes_transferred_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">CounterFamily</span><span class="w"> </span><span class="n">num_scrapes_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">GaugeFamily</span><span class="w"> </span><span class="n">queue_sizes_total_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">SummaryFamily</span><span class="w"> </span><span class="n">metric_latency_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">SummaryFamily</span><span class="w"> </span><span class="n">request_latency_</span><span class="p">;</span>
+<span class="p">};</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
 
@@ -568,16 +568,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         }
                   </style>
 				  
-				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp.html" class="btn btn-neutral float-left" title="File metrics.hpp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp.html" class="btn btn-neutral float-right" title="File migraphx.cpp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+				  <footer>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -638,6 +635,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

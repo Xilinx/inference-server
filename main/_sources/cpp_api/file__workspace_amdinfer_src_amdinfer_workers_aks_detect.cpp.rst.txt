@@ -61,13 +61,17 @@ Includes
 
 - ``amdinfer/util/base64.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`)
 
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
 - ``amdinfer/util/parse_env.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp`)
 
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
-- ``chrono``
+- ``amdinfer/workers/aks_detect.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp`)
+
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
 - ``cstddef``
 
@@ -75,19 +79,17 @@ Includes
 
 - ``cstring``
 
-- ``ext/alloc_traits.h``
-
-- ``functional``
+- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
 - ``future``
 
 - ``memory``
 
-- ``numeric``
-
 - ``opencv2/core.hpp``
 
 - ``opencv2/imgcodecs.hpp``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -123,8 +125,6 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structamdinfer_1_1workers_1_1DetectResponse`
-
 - :ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetect`
 
 
@@ -133,8 +133,6 @@ Functions
 
 
 - :ref:`exhale_function_aks__detect_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
-
-- :ref:`exhale_function_aks__detect_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141`
 
 
 Variables

@@ -55,7 +55,11 @@ Includes
 
 - ``dlfcn.h``
 
+- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``type_traits``
 
 - ``utility``
 
@@ -75,7 +79,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_worker__info_8cpp_1a1801c8afdba35242de42f29659c45e3a`
+- :ref:`exhale_function_worker__info_8cpp_1a0b90dba241fba26f6e1bc8bea0e55a9e`
 
 - :ref:`exhale_function_worker__info_8cpp_1a19798ed33ad0cecb53ca678f47d8fb95`
 

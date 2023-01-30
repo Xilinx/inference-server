@@ -44,7 +44,7 @@ The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`_
 Get or build the AMD Inference Server Image
 -------------------------------------------
 
-To use with KServe, you will need to pull or :ref:`build the production container <docker:Build the production Docker image>`.
+To use with KServe, you will need to pull or :ref:`build the deployment container <docker:Build the deployment Docker image>`.
 Once you have it somewhere, make sure you can use ``docker pull <image>`` on all the nodes in the Kubernetes cluster to get the image.
 
 Start an inference service
@@ -270,7 +270,7 @@ This use case may be needed if your cluster doesn't have a load-balancer and/or 
 
 Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`__.
 The request will be routed to the server and the response will be returned.
-You can see some examples of using the KServe Python API to make requests in the `tests <https://github.com/Xilinx/inference-server/tree/main/tests/kserve>`__.
+You can see some examples of using the KServe Python API to make requests in the :amdinferTree:`tests <tests/kserve>`.
 
 Debugging
 ---------

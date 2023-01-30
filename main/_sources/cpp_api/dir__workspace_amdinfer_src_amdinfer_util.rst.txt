@@ -20,7 +20,9 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_compression.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_compression.hpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.h`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_exec.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_exec.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.cpp`
@@ -30,6 +32,8 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_read_nth_line.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_timer.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`
 
 

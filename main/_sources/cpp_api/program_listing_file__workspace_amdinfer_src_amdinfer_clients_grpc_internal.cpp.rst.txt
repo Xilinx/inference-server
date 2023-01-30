@@ -28,18 +28,22 @@ Program Listing for File grpc_internal.cpp
    #include "amdinfer/clients/grpc_internal.hpp"
    
    #include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField
+   #include <google/protobuf/stubs/common.h>        // for string
    
-   #include <cstddef>   // for size_t
-   #include <cstdint>   // for int16_t, int32_t
-   #include <iostream>  // for operator<<, cout
-   #include <memory>    // for make_shared, shared...
-   #include <vector>    // for vector, _Bit_reference
+   #include <cstddef>  // for size_t
+   #include <cstdint>  // for int16_t, int32_t
+   #include <cstring>  // for memcpy
+   #include <memory>   // for make_shared, shared...
+   #include <utility>  // for move
+   #include <variant>  // for visit
+   #include <vector>   // for vector, _Bit_reference
    
+   #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LO...
    #include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
    #include "amdinfer/core/predict_api_internal.hpp"  // for RequestParameters
    #include "amdinfer/declarations.hpp"               // for InferenceResponseOu...
    #include "amdinfer/observation/observer.hpp"       // for kNumTraceData
-   #include "amdinfer/util/traits.hpp"                // for is_any
+   #include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
    #include "predict_api.pb.h"                        // for ModelInferResponse_...
    
    namespace amdinfer {
@@ -93,21 +97,21 @@ Program Listing for File grpc_internal.cpp
    // refer to cppreference for std::visit
    // helper type for the visitor #4
    template <class... Ts>
-   struct overloaded : Ts... {
+   struct Overloaded : Ts... {
      using Ts::operator()...;
    };
    // explicit deduction guide (not needed as of C++20)
    template <class... Ts>
-   overloaded(Ts...) -> overloaded<Ts...>;
+   Overloaded(Ts...) -> Overloaded<Ts...>;
    
    void mapParametersToProto(
-     const std::map<std::string, amdinfer::Parameter>& parameters,
+     const std::map<std::string, amdinfer::Parameter, std::less<>>& parameters,
      google::protobuf::Map<std::string, inference::InferParameter>*
        grpc_parameters) {
      for (const auto& [key, value] : parameters) {
        inference::InferParameter param;
        std::visit(
-         overloaded{[&](bool arg) { param.set_bool_param(arg); },
+         Overloaded{[&](bool arg) { param.set_bool_param(arg); },
                     [&](double arg) { param.set_double_param(arg); },
                     [&](int32_t arg) { param.set_int64_param(arg); },
                     [&](const std::string& arg) { param.set_string_param(arg); }},
@@ -234,7 +238,7 @@ Program Listing for File grpc_internal.cpp
    void mapResponseToProto(InferenceResponse response,
                            inference::ModelInferResponse& reply) {
      Observer observer;
-     AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::kServer});
+     AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
    
      AMDINFER_LOG_TRACE(observer.logger,
                         "Mapping the InferenceResponse to proto object");

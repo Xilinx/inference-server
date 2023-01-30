@@ -1,0 +1,14 @@
+.. _exhale_function_containers_8hpp_1ab77948aa3101edea0ef3a53b3a9bba4f:
+
+Template Function amdinfer::util::containerProduct(const Container&)
+====================================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::containerProduct(const Container&)
+   :project: amdinfer

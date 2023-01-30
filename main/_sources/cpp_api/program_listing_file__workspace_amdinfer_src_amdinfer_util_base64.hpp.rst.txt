@@ -33,13 +33,13 @@ Program Listing for File base64.hpp
    
    namespace amdinfer::util {
    
-   std::string base64_decode(std::string in);
+   std::string base64Decode(std::string in);
    
-   std::string base64_decode(const char* in, size_t in_len);
+   std::string base64Decode(const char* in, size_t in_len);
    
-   std::string base64_encode(std::string in);
+   std::string base64Encode(std::string in);
    
-   std::string base64_encode(const char* in, size_t in_len);
+   std::string base64Encode(const char* in, size_t in_len);
    }  // namespace amdinfer::util
    
    #endif  // GUARD_AMDINFER_UTIL_BASE64

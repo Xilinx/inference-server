@@ -45,6 +45,8 @@ Includes
 
 - ``mutex``
 
+- ``prometheus/registry.h``
+
 - ``prometheus/serializer.h``
 
 - ``prometheus/summary.h``

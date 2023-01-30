@@ -19,12 +19,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>KServe &mdash; AMD Inference Server v0.3.0 documentation</title>
+  <title>KServe &mdash; AMD Inference Server main documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/bootstrap-treeview/bootstrap-treeview.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -36,7 +37,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/doctools.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
-        <script src="_static/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -101,6 +103,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
@@ -120,28 +124,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_inference.html">Inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-with-the-library">Making requests with the library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#making-requests-directly">Making requests directly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#get-the-library">Get the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#running-the-examples">Running the examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_inference.html#using-the-library">Using the library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_deployment.html">Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deployment-vs-development-images">Deployment vs. Development Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-docker">Deploying on Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#deployment-image">Deployment image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart_deployment.html#development-image">Development image</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-on-kserve">Deploying on KServe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#deploying-without-docker">Deploying without Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#loading-models">Loading models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_deployment.html#start-the-image">Start the image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
@@ -256,7 +260,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">Deploying with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-production-docker-image">Build the production Docker image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#build-the-deployment-docker-image">Build the deployment Docker image</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docker.html#push-to-a-registry">Push to a registry</a></li>
 </ul>
 </li>
@@ -358,7 +362,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#files">Files</a></li>
 </ul>
 </li>
 </ul>
@@ -411,7 +414,7 @@ The <a class="reference external" href="https://github.com/prometheus-operator/k
 </section>
 <section id="get-or-build-the-amd-inference-server-image">
 <h2>Get or build the AMD Inference Server Image<a class="headerlink" href="#get-or-build-the-amd-inference-server-image" title="Permalink to this headline">¶</a></h2>
-<p>To use with KServe, you will need to pull or <a class="reference internal" href="docker.html#build-the-production-docker-image"><span class="std std-ref">build the production container</span></a>.
+<p>To use with KServe, you will need to pull or <a class="reference internal" href="docker.html#build-the-deployment-docker-image"><span class="std std-ref">build the deployment container</span></a>.
 Once you have it somewhere, make sure you can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">&lt;image&gt;</span></code> on all the nodes in the Kubernetes cluster to get the image.</p>
 </section>
 <section id="start-an-inference-service">
@@ -493,80 +496,80 @@ Wherever you store it, the URI will be needed to start inference services.</p>
 You can see more information about these CRDs in <a class="reference external" href="https://kserve.github.io/website/0.9/modelserving/servingruntimes/">KServe’s documentation</a>.
 The AMD Inference Server is not included by default in the standard KServe installation but you can add the runtime to your cluster.
 A sample <code class="docutils literal notranslate"><span class="pre">ClusterServingRuntime</span></code> definition is provided below.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serving.kserve.io/v1alpha1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterServingRuntime</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># this is the name of the runtime to add</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-amdserver</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">supportedModelFormats</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># depending on the image you&#39;re using, and which platforms are added,</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># the supported formats could be different. For example, this assumes</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># that a ZenDNN image was created with both TF+ZenDNN and PT+ZenDNN</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># support</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytorch</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">protocolVersions</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># depending on the image you&#39;re using, it may not support both HTTP/REST</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># and gRPC, respectively. By default, both protocols are supported.</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grpc-v2</span><span class="w"></span>
-<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-container</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># provide the image name. The usual rules around images apply (see</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># above in the section &quot;Build the AMD Inference Server Image&quot;)</span><span class="w"></span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your image&gt;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># when the image starts, it will automatically launch the server</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># executable with the following arguments. While the ports used by</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># the server are configurable, there are some assumptions in KServe</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># with the default port values so it is recommended to not change them</span><span class="w"></span>
-<span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amdinfer-server</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--enable-repository-watcher</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># the resources allowed to the service. If the image needs access to</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># hardware like FPGAs or GPUs, then those resources need to be added</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># here so Kubernetes can schedule pods on the appropriate nodes.</span><span class="w"></span>
-<span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span><span class="w"></span>
-<span class="w">        </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serving.kserve.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterServingRuntime</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># this is the name of the runtime to add</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-amdserver</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">supportedModelFormats</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># depending on the image you&#39;re using, and which platforms are added,</span>
+<span class="w">    </span><span class="c1"># the supported formats could be different. For example, this assumes</span>
+<span class="w">    </span><span class="c1"># that a ZenDNN image was created with both TF+ZenDNN and PT+ZenDNN</span>
+<span class="w">    </span><span class="c1"># support</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytorch</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">  </span><span class="nt">protocolVersions</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># depending on the image you&#39;re using, it may not support both HTTP/REST</span>
+<span class="w">    </span><span class="c1"># and gRPC, respectively. By default, both protocols are supported.</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grpc-v2</span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-container</span>
+<span class="w">      </span><span class="c1"># provide the image name. The usual rules around images apply (see</span>
+<span class="w">      </span><span class="c1"># above in the section &quot;Build the AMD Inference Server Image&quot;)</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your image&gt;</span>
+<span class="w">      </span><span class="c1"># when the image starts, it will automatically launch the server</span>
+<span class="w">      </span><span class="c1"># executable with the following arguments. While the ports used by</span>
+<span class="w">      </span><span class="c1"># the server are configurable, there are some assumptions in KServe</span>
+<span class="w">      </span><span class="c1"># with the default port values so it is recommended to not change them</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amdinfer-server</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--enable-repository-watcher</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span>
+<span class="w">      </span><span class="c1"># the resources allowed to the service. If the image needs access to</span>
+<span class="w">      </span><span class="c1"># hardware like FPGAs or GPUs, then those resources need to be added</span>
+<span class="w">      </span><span class="c1"># here so Kubernetes can schedule pods on the appropriate nodes.</span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+<span class="w">        </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
 </pre></div>
 </div>
 <p>Adding a <code class="docutils literal notranslate"><span class="pre">ClusterServingRuntime</span></code> or a <code class="docutils literal notranslate"><span class="pre">ServingRuntime</span></code> is a one-time action per cluster.
 Once it’s added, you can launch inference services using the runtime like:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1beta1&quot;</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># The autoscaling target defines how the service should be auto-scale in</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># response to incoming requests. The value of 5 indicates that</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># additional containers should be deployed when the number of concurrent</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># requests exceeds 5.</span><span class="w"></span>
-<span class="w">    </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-runtime-isvc</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-runtime-isvc</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">predictor</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">model</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">modelFormat</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span><span class="w"></span>
-<span class="w">      </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/model</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># while it&#39;s optional for KServe, the runtime should be explicitly</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># specified to make sure the runtime you&#39;ve added for the AMD Inference</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># Server is used</span><span class="w"></span>
-<span class="w">      </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-amdserver</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1beta1&quot;</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># The autoscaling target defines how the service should be auto-scale in</span>
+<span class="w">    </span><span class="c1"># response to incoming requests. The value of 5 indicates that</span>
+<span class="w">    </span><span class="c1"># additional containers should be deployed when the number of concurrent</span>
+<span class="w">    </span><span class="c1"># requests exceeds 5.</span>
+<span class="w">    </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-runtime-isvc</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-runtime-isvc</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">predictor</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">modelFormat</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span>
+<span class="w">      </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/model</span>
+<span class="w">      </span><span class="c1"># while it&#39;s optional for KServe, the runtime should be explicitly</span>
+<span class="w">      </span><span class="c1"># specified to make sure the runtime you&#39;ve added for the AMD Inference</span>
+<span class="w">      </span><span class="c1"># Server is used</span>
+<span class="w">      </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kserve-amdserver</span>
 </pre></div>
 </div>
 </section>
@@ -577,54 +580,54 @@ Initially, no models are loaded on the server as it uses the multi-model serving
 Once an <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> is up, you can load models to it by applying one or more <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code> CRDs.
 Each such load adds a model to the server and makes it available for inference requests.
 A sample YAML file is provided below.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serving.kserve.io/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"></span>
-<span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># The autoscaling target defines how the service should be auto-scaled in</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># response to incoming requests. The value of 5 indicates that additional</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># containers should be deployed when the number of concurrent requests</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># exceeds 5.</span><span class="w"></span>
-<span class="w">  </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;5&#39;</span><span class="w"></span>
-<span class="nt">labels</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span><span class="w"></span>
-<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"></span>
-<span class="nt">predictor</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span><span class="w"></span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your image&gt;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTI_MODEL_SERVER</span><span class="w"></span>
-<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amdinfer-server</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span><span class="w"></span>
-<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9000</span><span class="w"></span>
-<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
-<span class="nn">---</span><span class="w"></span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1alpha1&quot;</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TrainedModel</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># this name is significant and must match the top-level directory in the</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># downloaded model at the storageUri. This string becomes the endpoint u</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># used to make inferences</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name of the model&gt;</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># the name used here must match an existing InferenceService to load</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># this TrainedModel to</span><span class="w"></span>
-<span class="w">  </span><span class="nt">inferenceService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span><span class="w"></span>
-<span class="w">  </span><span class="nt">model</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span><span class="w"></span>
-<span class="w">    </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/model</span><span class="w"></span>
-<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serving.kserve.io/v1beta1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">InferenceService</span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="nt">annotations</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># The autoscaling target defines how the service should be auto-scaled in</span>
+<span class="w">  </span><span class="c1"># response to incoming requests. The value of 5 indicates that additional</span>
+<span class="w">  </span><span class="c1"># containers should be deployed when the number of concurrent requests</span>
+<span class="w">  </span><span class="c1"># exceeds 5.</span>
+<span class="w">  </span><span class="nt">autoscaling.knative.dev/target</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;5&#39;</span>
+<span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">controller-tools.k8s.io</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="nt">predictor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your image&gt;</span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTI_MODEL_SERVER</span>
+<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amdinfer-server</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--model-repository=/mnt/models</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--http-port=8080</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--grpc-port=9000</span>
+<span class="w">      </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9000</span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serving.kserve.io/v1alpha1&quot;</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TrainedModel</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># this name is significant and must match the top-level directory in the</span>
+<span class="w">  </span><span class="c1"># downloaded model at the storageUri. This string becomes the endpoint u</span>
+<span class="w">  </span><span class="c1"># used to make inferences</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name of the model&gt;</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># the name used here must match an existing InferenceService to load</span>
+<span class="w">  </span><span class="c1"># this TrainedModel to</span>
+<span class="w">  </span><span class="nt">inferenceService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-amdserver-multi-isvc</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">framework</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tensorflow</span>
+<span class="w">    </span><span class="nt">storageUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">url/to/model</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
 </pre></div>
 </div>
 </section>
@@ -652,13 +655,13 @@ The easiest way to do this is with the <code class="docutils literal notranslate
 You’ll need to first connect to the node where the container is running.
 On that host:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this lists the running Inference Server containers</span>
-amdinfer list
+amdinfer<span class="w"> </span>list
 
 <span class="c1"># get the container ID of the container you want to connect to</span>
 
 <span class="c1"># provide the ID as an argument to the attach command to open a bash shell</span>
 <span class="c1"># in the container</span>
-amdinfer attach -n &lt;container ID&gt;
+amdinfer<span class="w"> </span>attach<span class="w"> </span>-n<span class="w"> </span>&lt;container<span class="w"> </span>ID&gt;
 </pre></div>
 </div>
 <p>Once in the container, you can find the running <code class="docutils literal notranslate"><span class="pre">amdinfer-server</span></code> executable and then follow the regular debugging guide to debug the inference server.</p>
@@ -687,7 +690,7 @@ amdinfer attach -n &lt;container ID&gt;
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on December 15, 2022.
+      <span class="lastupdated">Last updated on January 30, 2023.
       </span></p>
   </div>
 
@@ -748,6 +751,10 @@ amdinfer attach -n &lt;container ID&gt;
         
           
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
           
         
            <strong> 

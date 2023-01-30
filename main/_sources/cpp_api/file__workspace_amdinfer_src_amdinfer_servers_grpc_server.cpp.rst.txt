@@ -53,15 +53,15 @@ Includes
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
-- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
-
-- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+- ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
 
 - ``amdinfer/servers/grpc_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.hpp`)
 
 - ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 - ``amdinfer/util/traits.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`)
+
+- ``cassert``
 
 - ``cstddef``
 
@@ -71,15 +71,11 @@ Includes
 
 - ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``functional``
-
 - ``google/protobuf/repeated_ptr_field.h``
 
 - ``grpc/support/log.h``
 
 - ``grpcpp/grpcpp.h``
-
-- ``iostream``
 
 - ``memory``
 

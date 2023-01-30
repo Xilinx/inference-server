@@ -57,13 +57,13 @@ Includes
 
 - ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
 
-- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
-
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
 
 - ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
 
-- ``chrono``
+- ``cassert``
 
 - ``cstddef``
 
@@ -71,11 +71,11 @@ Includes
 
 - ``cstring``
 
-- ``functional``
+- ``dlfcn.h``
 
 - ``memory``
 
-- ``numeric``
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -134,7 +134,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+- :ref:`exhale_function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59`
 
-- :ref:`exhale_function_tf__zendnn_8cpp_1a3f05fe2c9519e51534c3da1c5e20e141`
+- :ref:`exhale_function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
 
