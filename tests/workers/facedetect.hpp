@@ -79,7 +79,7 @@ inline void run(std::vector<std::string> image_paths, int threads,
 }
 
 inline std::string load(int workers) {
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   parameters.put("aks_graph_name", "facedetect");
   parameters.put("aks_graph",
                  "${AKS_ROOT}/graph_zoo/"

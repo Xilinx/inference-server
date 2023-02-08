@@ -61,7 +61,7 @@ void postprocess(const amdinfer::InferenceResponseOutput& output) {
   (void)output;
 }
 
-std::string workerLoad(Client* client, RequestParameters* parameters) {
+std::string workerLoad(Client* client, ParameterMap* parameters) {
   return client->workerLoad("Xmodel", parameters);
 }
 
@@ -100,7 +100,7 @@ void test0(Client* client) {
   const auto test_asset = getPathToAsset("asset_bicycle-384566_640.jpg");
   const auto xmodel = getPathToAsset("u250_yolov3");
 
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   parameters.put("model", xmodel);
 
   auto images = preprocess({test_asset});

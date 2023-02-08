@@ -31,12 +31,12 @@
 #include <vector>         // for vector
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+#include "amdinfer/core/predict_api.hpp"     // for ParameterMap
 #include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 #include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
 
-// IWYU pragma: no_forward_declare amdinfer::RequestParameters
+// IWYU pragma: no_forward_declare amdinfer::ParameterMap
 // IWYU pragma: no_forward_declare amdinfer::WorkerInfo
 
 namespace amdinfer {
@@ -101,7 +101,7 @@ class Manager {
   Manager& operator=(Manager&& other) =
     delete;  ///< Move assignment constructor
 
-  std::string loadWorker(std::string const& key, RequestParameters parameters);
+  std::string loadWorker(std::string const& key, ParameterMap parameters);
   void unloadWorker(std::string const& key);
 
   /**
@@ -153,25 +153,25 @@ class Manager {
    */
   class Endpoints {
    public:
-    std::string load(const std::string& worker, RequestParameters* parameters);
+    std::string load(const std::string& worker, ParameterMap* parameters);
     void unload(const std::string& endpoint);
 
     bool exists(const std::string& endpoint);
     WorkerInfo* get(const std::string& endpoint) const;
     std::vector<std::string> list() const;
 
-    std::string add(const std::string& worker, RequestParameters parameters);
+    std::string add(const std::string& worker, ParameterMap parameters);
 
     void shutdown();
 
    private:
     // worker -> map[parameters -> endpoint]
-    std::unordered_map<std::string, std::map<RequestParameters, std::string>>
+    std::unordered_map<std::string, std::map<ParameterMap, std::string>>
       worker_endpoints_;
     // worker -> index
     std::unordered_map<std::string, int> worker_indices_;
     // endpoint -> parameters
-    std::unordered_map<std::string, RequestParameters> worker_parameters_;
+    std::unordered_map<std::string, ParameterMap> worker_parameters_;
     // endpoint -> Worker_Info*
     std::unordered_map<std::string, std::unique_ptr<WorkerInfo>> workers_;
   };

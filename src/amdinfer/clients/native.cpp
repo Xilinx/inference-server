@@ -48,10 +48,10 @@ ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
 }
 
 void NativeClient::modelLoad(const std::string& model,
-                             RequestParameters* parameters) const {
+                             ParameterMap* parameters) const {
   auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
-    RequestParameters params;
+    ParameterMap params;
     ::amdinfer::modelLoad(model_lower, &params);
   } else {
     ::amdinfer::modelLoad(model_lower, parameters);
@@ -59,10 +59,10 @@ void NativeClient::modelLoad(const std::string& model,
 }
 
 std::string NativeClient::workerLoad(const std::string& worker,
-                                     RequestParameters* parameters) const {
+                                     ParameterMap* parameters) const {
   auto worker_lower = util::toLower(worker);
   if (parameters == nullptr) {
-    RequestParameters params;
+    ParameterMap params;
     return ::amdinfer::workerLoad(worker_lower, &params);
   }
   return ::amdinfer::workerLoad(worker_lower, parameters);

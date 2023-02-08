@@ -28,7 +28,7 @@
 #include "amdinfer/clients/http_internal.hpp"      // for RequestBuilder
 #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
 #include "amdinfer/core/manager.hpp"               // for Manager
-#include "amdinfer/core/predict_api_internal.hpp"  // for RequestParametersPtr
+#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
 #include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
 #include "amdinfer/observation/tracing.hpp"        // for startSpan, Span
 

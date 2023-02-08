@@ -79,9 +79,9 @@ class AksDetectStream : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -95,7 +95,7 @@ std::thread AksDetectStream::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&AksDetectStream::run, this, input_queue);
 }
 
-void AksDetectStream::doInit(RequestParameters* parameters) {
+void AksDetectStream::doInit(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
   constexpr auto kBatchSize = 4;
 
@@ -122,7 +122,7 @@ size_t AksDetectStream::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void AksDetectStream::doAcquire(RequestParameters* parameters) {
+void AksDetectStream::doAcquire(ParameterMap* parameters) {
   std::string path{
     "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json"};
   if (parameters->has("aks_graph")) {

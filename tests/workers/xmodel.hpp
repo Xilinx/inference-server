@@ -175,7 +175,7 @@ inline void dequeue(int images, FutureQueue& my_queue) {
 
 inline int run(const std::string& xmodel, int images, int threads,
                int runners) {
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   parameters.put("model", xmodel);
   parameters.put("share", false);
   auto threads_per_worker = std::max(threads / runners, 1);

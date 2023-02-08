@@ -70,7 +70,7 @@ ServerMetadata serverMetadata() {
   return metadata;
 }
 
-void modelLoad(const std::string& model, RequestParameters* parameters) {
+void modelLoad(const std::string& model, ParameterMap* parameters) {
   assert(parameters != nullptr);
   for (const auto& c : model) {
     assert(c == std::tolower(c));
@@ -82,8 +82,7 @@ void modelLoad(const std::string& model, RequestParameters* parameters) {
 
 void modelUnload(const std::string& model) { workerUnload(model); }
 
-std::string workerLoad(const std::string& worker,
-                       RequestParameters* parameters) {
+std::string workerLoad(const std::string& worker, ParameterMap* parameters) {
   assert(parameters != nullptr);
   for (const auto& c : worker) {
     assert(c == std::tolower(c));

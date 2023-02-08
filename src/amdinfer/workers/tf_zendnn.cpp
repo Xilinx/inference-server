@@ -77,9 +77,9 @@ class TfZendnn : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -107,7 +107,7 @@ std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&TfZendnn::run, this, input_queue);
 }
 
-void TfZendnn::doInit(RequestParameters* parameters) {
+void TfZendnn::doInit(ParameterMap* parameters) {
   const auto default_batch_size = 1;
   const int default_max_buffer_num = 64;
 
@@ -164,7 +164,7 @@ size_t TfZendnn::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void TfZendnn::doAcquire(RequestParameters* parameters) {
+void TfZendnn::doAcquire(ParameterMap* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

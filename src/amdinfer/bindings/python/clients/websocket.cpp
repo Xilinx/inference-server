@@ -48,12 +48,12 @@ void wrapWebSocketClient(py::module_ &m) {
     .def("modelMetadata", &WebSocketClient::modelMetadata, py::arg("model"),
          DOCS(WebSocketClient, modelMetadata))
     .def("modelLoad", &WebSocketClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(WebSocketClient, modelLoad))
     .def("modelUnload", &WebSocketClient::modelUnload, py::arg("model"),
          DOCS(WebSocketClient, modelUnload))
     .def("workerLoad", &WebSocketClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(WebSocketClient, workerLoad))
     .def("workerUnload", &WebSocketClient::workerUnload, py::arg("model"),
          DOCS(WebSocketClient, workerUnload))

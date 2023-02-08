@@ -63,7 +63,7 @@ struct Workers {
   std::string name;
   fs::path graph;
 
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   std::variant<ImagePreprocessOptions<float, 3>> preprocessing;
 };
 

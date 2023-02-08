@@ -63,9 +63,9 @@ class MIGraphXWorker : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -126,7 +126,7 @@ DataType toDataType(migraphx_shape_datatype_t in) {
   }
 }
 
-void MIGraphXWorker::doInit(RequestParameters* parameters) {
+void MIGraphXWorker::doInit(ParameterMap* parameters) {
   // default batch size; client may request a change. Arbitrarily set to 64
   const int default_batch_size = 64;
 
@@ -368,9 +368,7 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void MIGraphXWorker::doAcquire(RequestParameters* parameters) {
-  (void)parameters;
-}
+void MIGraphXWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
 
 void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_LOGGING

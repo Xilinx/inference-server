@@ -143,7 +143,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // what may be specified.
 
   // +load
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   const auto timeout_ms = 1000;  // batcher timeout value in milliseconds
 
   // Required: specifies path to the model on the server for it to open

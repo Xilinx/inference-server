@@ -186,7 +186,7 @@ ModelMetadata WebSocketClient::modelMetadata(const std::string& model) const {
 }
 
 void WebSocketClient::modelLoad(const std::string& model,
-                                RequestParameters* parameters) const {
+                                ParameterMap* parameters) const {
   const auto* client = this->impl_->getHttpClient();
   client->modelLoad(model, parameters);
 }
@@ -197,7 +197,7 @@ void WebSocketClient::modelUnload(const std::string& model) const {
 }
 
 std::string WebSocketClient::workerLoad(const std::string& worker,
-                                        RequestParameters* parameters) const {
+                                        ParameterMap* parameters) const {
   const auto* client = this->impl_->getHttpClient();
   return client->workerLoad(worker, parameters);
 }

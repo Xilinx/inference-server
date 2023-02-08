@@ -130,7 +130,7 @@ def load(client, args):
         raise ValueError("No model argument")
 
     # +load
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     parameters.put("model", args.model)
     parameters.put("batch_size", args.batch_size)
     endpoint = client.workerLoad("xmodel", parameters)

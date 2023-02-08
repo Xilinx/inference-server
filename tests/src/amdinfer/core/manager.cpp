@@ -32,7 +32,7 @@ namespace amdinfer {
 Manager::Manager() = default;
 
 std::string Manager::loadWorker(std::string const& key,
-                                RequestParameters parameters) {
+                                ParameterMap parameters) {
   auto endpoint = this->endpoints_.add(key, std::move(parameters));
   return endpoint;
 }
@@ -83,10 +83,10 @@ void Manager::updateManager([[maybe_unused]] UpdateCommandQueue* input_queue) {
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,
-                                     RequestParameters* parameters) {
+                                     ParameterMap* parameters) {
   if (worker_endpoints_.find(worker) == worker_endpoints_.end()) {
     // this is a brand-new worker we haven't seen before
-    std::map<RequestParameters, std::string> map;
+    std::map<ParameterMap, std::string> map;
     map.insert(std::make_pair(*parameters, worker));
     worker_endpoints_.insert(std::make_pair(worker, map));
     worker_parameters_.insert(std::make_pair(worker, *parameters));
@@ -154,7 +154,7 @@ WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) const {
 }
 
 std::string Manager::Endpoints::add(const std::string& worker,
-                                    RequestParameters parameters) {
+                                    ParameterMap parameters) {
   bool share = true;
   if (parameters.has("share")) {
     share = parameters.get<bool>("share");

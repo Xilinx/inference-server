@@ -43,12 +43,12 @@ void wrapNativeClient(py::module_ &m) {
     .def("modelMetadata", &NativeClient::modelMetadata, py::arg("model"),
          DOCS(NativeClient, modelMetadata))
     .def("modelLoad", &NativeClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(NativeClient, modelLoad))
     .def("modelUnload", &NativeClient::modelUnload, py::arg("model"),
          DOCS(NativeClient, modelUnload))
     .def("workerLoad", &NativeClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(NativeClient, workerLoad))
     .def("workerUnload", &NativeClient::workerUnload, py::arg("model"),
          DOCS(NativeClient, workerUnload))

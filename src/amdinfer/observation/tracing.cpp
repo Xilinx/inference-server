@@ -152,7 +152,7 @@ void Trace::setAttribute(nostd::string_view key,
   this->spans_.top()->SetAttribute(key, value);
 }
 
-void Trace::setAttributes(RequestParameters* parameters) {
+void Trace::setAttributes(ParameterMap* parameters) {
   auto data = parameters->data();
   // a range-based for loop doesn't work here because we can't pass the key when
   // it's a structured binding.

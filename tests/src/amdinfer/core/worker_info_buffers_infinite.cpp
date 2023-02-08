@@ -27,7 +27,7 @@
 
 #include "amdinfer/batching/batcher.hpp"  // for Batcher
 #include "amdinfer/buffers/buffer.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
+#include "amdinfer/core/predict_api.hpp"  // for ParameterMap
 #include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
 #include "amdinfer/declarations.hpp"      // for BufferPtrs
 #include "amdinfer/util/queue.hpp"        // for BufferPtrsQueue, BufferP...
@@ -36,7 +36,7 @@ namespace amdinfer {
 
 constexpr auto kDefaultBufferNum = 10;
 
-WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
+WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters) {
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->buffer_num_ = kDefaultBufferNum;
@@ -49,7 +49,7 @@ WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
 WorkerInfo::~WorkerInfo() = default;
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   RequestParameters* parameters) {
+                                   ParameterMap* parameters) {
   (void)name;
   if (parameters == nullptr) {
     return;

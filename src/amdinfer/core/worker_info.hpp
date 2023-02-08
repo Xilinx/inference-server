@@ -34,7 +34,7 @@
 
 namespace amdinfer {
 class Batcher;
-class RequestParameters;
+class ParameterMap;
 namespace workers {
 class Worker;
 }  // namespace workers
@@ -49,7 +49,7 @@ namespace amdinfer {
 class WorkerInfo {
  public:
   /// Construct a new WorkerInfo object
-  WorkerInfo(const std::string& name, RequestParameters* parameters);
+  WorkerInfo(const std::string& name, ParameterMap* parameters);
   ~WorkerInfo();                           ///> Destroy a WorkerInfo object
   WorkerInfo(WorkerInfo const&) = delete;  ///< Copy constructor
   /// Copy assignment constructor
@@ -75,8 +75,7 @@ class WorkerInfo {
    * @param name
    * @param parameters pointer to parameters. Should not be nullptr
    */
-  void addAndStartWorker(const std::string& name,
-                         RequestParameters* parameters);
+  void addAndStartWorker(const std::string& name, ParameterMap* parameters);
 
   /// unload one worker from this worker group
   void unload();

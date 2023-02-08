@@ -91,7 +91,7 @@ class PerfSoftBatcherFixture
 
     this->data_size_ = data_size;
 
-    RequestParameters parameters;
+    ParameterMap parameters;
     parameters.put("timeout", kTimeoutMs);
     parameters.put("batch_size", batch_size);
 

@@ -23,7 +23,7 @@
 
 namespace amdinfer {
 
-class RequestParameters;
+class ParameterMap;
 
 class UpdateListener : public efsw::FileWatchListener {
  public:
@@ -34,8 +34,7 @@ class UpdateListener : public efsw::FileWatchListener {
 
 class ModelRepository {
  public:
-  static void modelLoad(const std::string& model,
-                        RequestParameters* parameters);
+  static void modelLoad(const std::string& model, ParameterMap* parameters);
 
   static void setRepository(const std::string& repository);
   static void enableRepositoryMonitoring(bool use_polling);
@@ -43,8 +42,7 @@ class ModelRepository {
  private:
   class ModelRepositoryImpl {
    public:
-    void modelLoad(const std::string& model,
-                   RequestParameters* parameters) const;
+    void modelLoad(const std::string& model, ParameterMap* parameters) const;
 
     void setRepository(const std::string& repository);
 

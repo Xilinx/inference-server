@@ -139,7 +139,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // worker is using may have its own parameters. Check the documentation to see
   // what may be specified.
 
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   parameters.put("model", args.path_to_model);
   parameters.put("input_size", args.input_size);
   parameters.put("output_classes", args.output_classes);

@@ -64,9 +64,9 @@ class EchoMulti : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -76,7 +76,7 @@ class EchoMulti : public Worker {
   // if not explicitly defined here, a default value is used from worker.hpp.
   using Worker::makeBatcher;
   std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, RequestParameters* parameters) override {
+    int num, ParameterMap* parameters) override {
     return this->makeBatcher<HardBatcher>(num, parameters);
   };
 };
@@ -85,7 +85,7 @@ std::thread EchoMulti::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&EchoMulti::run, this, input_queue);
 }
 
-void EchoMulti::doInit(RequestParameters* parameters) {
+void EchoMulti::doInit(ParameterMap* parameters) {
   constexpr auto kMaxBufferNum = 50;
   constexpr auto kBatchSize = 1;
 
@@ -126,7 +126,7 @@ size_t EchoMulti::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void EchoMulti::doAcquire([[maybe_unused]] RequestParameters* parameters) {
+void EchoMulti::doAcquire([[maybe_unused]] ParameterMap* parameters) {
   for (auto i = 0; i < kInputTensors; ++i) {
     this->metadata_.addInputTensor(
       "input" + std::to_string(i), DataType::Uint32,

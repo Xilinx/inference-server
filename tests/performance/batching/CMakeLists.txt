@@ -19,8 +19,8 @@ list(
   APPEND
     tests_libs
     "$<TARGET_OBJECTS:batcher>~fake_observation~fake_manager~interface\
-      ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~data_types\
-      ~$<TARGET_OBJECTS:softBatcher>~vector_buffer~buffer\
+      ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~parameters\
+      ~data_types\~$<TARGET_OBJECTS:softBatcher>~vector_buffer~buffer\
       ~$<TARGET_OBJECTS:native_internal>~timer"
 )
 

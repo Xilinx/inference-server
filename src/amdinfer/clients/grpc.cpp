@@ -196,7 +196,7 @@ std::vector<std::string> GrpcClient::modelList() const {
 }
 
 void GrpcClient::modelLoad(const std::string& model,
-                           RequestParameters* parameters) const {
+                           ParameterMap* parameters) const {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -233,7 +233,7 @@ void GrpcClient::modelUnload(const std::string& model) const {
 }
 
 std::string GrpcClient::workerLoad(const std::string& worker,
-                                   RequestParameters* parameters) const {
+                                   ParameterMap* parameters) const {
   inference::WorkerLoadRequest request;
   inference::WorkerLoadResponse reply;
 

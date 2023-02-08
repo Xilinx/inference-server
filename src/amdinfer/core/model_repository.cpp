@@ -27,7 +27,7 @@
 #include "amdinfer/core/api.hpp"             // for modelLoad
 #include "amdinfer/core/exceptions.hpp"      // for file_not_found...
 #include "amdinfer/core/manager.hpp"         // for Manager
-#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+#include "amdinfer/core/predict_api.hpp"     // for ParameterMap
 #include "amdinfer/observation/logging.hpp"  // for Logger, PROTEU...
 #include "model_config.pb.h"                 // for Config, InferP...
 
@@ -38,7 +38,7 @@ namespace amdinfer {
 // TODO(varunsh): get rid of this duplicate code with the one in grpc_internal
 void mapProtoToParameters2(
   const google::protobuf::Map<std::string, inference::InferParameter2>& params,
-  RequestParameters* parameters) {
+  ParameterMap* parameters) {
   using ParameterType = inference::InferParameter2::ParameterChoiceCase;
   for (const auto& [key, value] : params) {
     auto type = value.parameter_choice_case();
@@ -69,7 +69,7 @@ void mapProtoToParameters2(
 }
 
 void ModelRepository::modelLoad(const std::string& model,
-                                RequestParameters* parameters) {
+                                ParameterMap* parameters) {
   repo_.modelLoad(model, parameters);
 }
 
@@ -87,7 +87,7 @@ void ModelRepository::ModelRepositoryImpl::setRepository(
 }
 
 void ModelRepository::ModelRepositoryImpl::modelLoad(
-  const std::string& model, RequestParameters* parameters) const {
+  const std::string& model, ParameterMap* parameters) const {
   const fs::path config_file = "config.pbtxt";
 
   auto model_path = repository_ / model;
@@ -177,7 +177,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
       // TODO(varunsh): replace with native client
-      RequestParameters params;
+      ParameterMap params;
       try {
         ModelRepository::modelLoad(model, &params);
         Manager::getInstance().loadWorker(model, params);
@@ -229,7 +229,7 @@ void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
     if (path.is_directory()) {
       auto model = path.path().filename();
       try {
-        RequestParameters params;
+        ParameterMap params;
         amdinfer::modelLoad(model, &params);
       } catch (const amdinfer::runtime_error& e) {
         AMDINFER_LOG_INFO(logger,

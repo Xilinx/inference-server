@@ -41,7 +41,7 @@ class TestLoad:
         )  # this will do nothing and return 200
         assert response == "echo"
 
-        parameters = amdinfer.RequestParameters()
+        parameters = amdinfer.ParameterMap()
         parameters.put("max_buffer_num", 100)
         endpoint_1 = self.rest_client.workerLoad(
             "echo", parameters

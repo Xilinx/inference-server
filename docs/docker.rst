@@ -115,7 +115,7 @@ You can install it locally or use it in the development container to load the wo
     # depending on the model, you need to use the appropriate worker
     worker_name = "migraphx"
 
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     # specifies the path to the model on the server for it to open
     parameters.put("model", "/path/to/model")
 

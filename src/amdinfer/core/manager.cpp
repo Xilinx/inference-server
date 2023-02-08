@@ -47,7 +47,7 @@ void Manager::init() {
 }
 
 std::string Manager::loadWorker(std::string const& key,
-                                RequestParameters parameters) {
+                                ParameterMap parameters) {
   std::shared_ptr<amdinfer::UpdateCommand> request;
   std::string retval;
   retval.reserve(kMaxModelNameSize);
@@ -169,7 +169,7 @@ void Manager::updateManager(UpdateCommandQueue* input_queue) {
         break;
       case UpdateCommandType::Add:
         try {
-          auto* parameters = static_cast<RequestParameters*>(request->object);
+          auto* parameters = static_cast<ParameterMap*>(request->object);
           auto endpoint = this->endpoints_.add(request->key, *parameters);
           static_cast<std::string*>(request->retval)
             ->assign(std::string{endpoint});
@@ -197,10 +197,10 @@ void Manager::updateManager(UpdateCommandQueue* input_queue) {
 }
 
 std::string Manager::Endpoints::load(const std::string& worker,
-                                     RequestParameters* parameters) {
+                                     ParameterMap* parameters) {
   if (worker_endpoints_.find(worker) == worker_endpoints_.end()) {
     // this is a brand-new worker we haven't seen before
-    std::map<RequestParameters, std::string> map;
+    std::map<ParameterMap, std::string> map;
     map.insert(std::make_pair(*parameters, worker));
     worker_endpoints_.insert(std::make_pair(worker, map));
     worker_parameters_.insert(std::make_pair(worker, *parameters));
@@ -278,7 +278,7 @@ WorkerInfo* Manager::Endpoints::get(const std::string& endpoint) const {
 }
 
 std::string Manager::Endpoints::add(const std::string& worker,
-                                    RequestParameters parameters) {
+                                    ParameterMap parameters) {
   bool share = true;
   if (parameters.has("share")) {
     share = parameters.get<bool>("share");

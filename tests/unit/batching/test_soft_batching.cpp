@@ -87,7 +87,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     this->data_size_ = data_size;
     this->data_shape_ = data_shape;
 
-    RequestParameters parameters;
+    ParameterMap parameters;
     parameters.put("timeout", kTimeoutMs);
     parameters.put("batch_size", batch_size);
 

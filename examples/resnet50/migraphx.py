@@ -134,7 +134,7 @@ def load(client, args):
         )
         raise ValueError("No model argument")
 
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     timeout_ms = 1000  # batcher timeout value in milliseconds
 
     # Required: specifies path to the model on the server for it to open

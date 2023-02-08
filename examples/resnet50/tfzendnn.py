@@ -123,7 +123,7 @@ def load(client, args):
         )
         raise ValueError("No model argument")
 
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     parameters.put("model", args.model)
     parameters.put("input_size", args.input_size)
     parameters.put("output_classes", args.output_classes)

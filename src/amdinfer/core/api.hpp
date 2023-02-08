@@ -30,14 +30,13 @@
 namespace amdinfer {
 
 class ModelMetadata;
-class RequestParameters;
+class ParameterMap;
 struct ServerMetadata;
 class Interface;
 
-void modelLoad(const std::string& model, RequestParameters* parameters);
+void modelLoad(const std::string& model, ParameterMap* parameters);
 void modelUnload(const std::string& model);
-std::string workerLoad(const std::string& worker,
-                       RequestParameters* parameters);
+std::string workerLoad(const std::string& worker, ParameterMap* parameters);
 void workerUnload(const std::string& worker);
 
 ServerMetadata serverMetadata();

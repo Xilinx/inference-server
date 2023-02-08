@@ -22,6 +22,7 @@ list(
          data_types_internal
          interface
          model_repository
+         parameters
          api
 )
 

@@ -212,7 +212,7 @@ def load(request, server):
 
     assert test_model
 
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     if test_parameters is not None:
         for key, value in test_parameters.items():
             parameters.put(key, value)

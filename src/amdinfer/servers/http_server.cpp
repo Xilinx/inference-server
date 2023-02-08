@@ -37,7 +37,7 @@
 #include "amdinfer/core/api.hpp"               // for hasHardware, modelI...
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
 #include "amdinfer/core/interface.hpp"         // for Interface
-#include "amdinfer/core/predict_api_internal.hpp"  // for RequestParametersPtr
+#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
 #include "amdinfer/observation/logging.hpp"       // for Logger, AMDINFER_LOG...
 #include "amdinfer/observation/metrics.hpp"       // for Metrics, MetricCoun...
 #include "amdinfer/observation/tracing.hpp"       // for startTrace, Trace
@@ -288,11 +288,11 @@ void v2::AmdinferHttpServer::modelLoad(
   AMDINFER_LOG_INFO(logger_, "Received modelLoad request for " + model_lower);
 
   auto json = req->getJsonObject();
-  RequestParametersPtr parameters = nullptr;
+  ParameterMapPtr parameters = nullptr;
   if (json != nullptr) {
     parameters = mapJsonToParameters(*json);
   } else {
-    parameters = std::make_unique<RequestParameters>();
+    parameters = std::make_unique<ParameterMap>();
   }
 #ifdef AMDINFER_ENABLE_TRACING
   trace->setAttributes(parameters.get());
@@ -353,11 +353,11 @@ void v2::AmdinferHttpServer::workerLoad(
 #endif
 
   auto json = req->getJsonObject();
-  RequestParametersPtr parameters = nullptr;
+  ParameterMapPtr parameters = nullptr;
   if (json != nullptr) {
     parameters = mapJsonToParameters(*json);
   } else {
-    parameters = std::make_unique<RequestParameters>();
+    parameters = std::make_unique<ParameterMap>();
   }
 
   auto worker_lower = util::toLower(worker);

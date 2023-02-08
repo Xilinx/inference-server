@@ -43,10 +43,10 @@ namespace amdinfer {
  * @brief Convert JSON-styled parameters to our objects
  *
  * @param parameters
- * @return RequestParametersPtr
+ * @return ParameterMapPtr
  */
-RequestParametersPtr mapJsonToParameters(Json::Value json);
-Json::Value mapParametersToJson(RequestParameters *parameters);
+ParameterMapPtr mapJsonToParameters(Json::Value json);
+Json::Value mapParametersToJson(ParameterMap *parameters);
 
 InferenceResponse mapJsonToResponse(Json::Value *json);
 Json::Value mapRequestToJson(const InferenceRequest &request);

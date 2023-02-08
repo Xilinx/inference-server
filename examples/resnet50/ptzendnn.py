@@ -116,7 +116,7 @@ def load(client, args):
     # using may have its own parameters. Check the documentation to see what may
     # be specified.
 
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     parameters.put("model", args.model)
     parameters.put("input_size", args.input_size)
     parameters.put("output_classes", args.output_classes)

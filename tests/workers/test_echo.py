@@ -58,7 +58,7 @@ class TestEcho:
         input_0.shape = [1]
         input_0.setUint32Data(np.array([cls.inputs[0]], np.uint32))
         if add_input_parameters:
-            parameters = amdinfer.RequestParameters()
+            parameters = amdinfer.ParameterMap()
             parameters.put("key", "value")
             input_0.parameters = parameters
 
@@ -70,7 +70,7 @@ class TestEcho:
             request.id = "hello_world"
 
         if add_request_parameters:
-            parameters = amdinfer.RequestParameters()
+            parameters = amdinfer.ParameterMap()
             parameters.put("key3", True)
             parameters.put("key4", 1.2)
             request.parameters = parameters
@@ -92,7 +92,7 @@ class TestEcho:
         output_0 = amdinfer.InferenceRequestOutput()
         output_0.name = "echo"
         if add_parameters:
-            parameters = amdinfer.RequestParameters()
+            parameters = amdinfer.ParameterMap()
             parameters.put("key", "value2")
             output_0.parameters = parameters
 

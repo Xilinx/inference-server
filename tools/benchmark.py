@@ -687,7 +687,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 for load in loads:
                     model = extra_info["model"]
 
-                    parameters = amdinfer.RequestParameters()
+                    parameters = amdinfer.ParameterMap()
                     if extra_info["parameters"] is not None:
                         for key, value in extra_info["parameters"].items():
                             parameters.put(key, value)

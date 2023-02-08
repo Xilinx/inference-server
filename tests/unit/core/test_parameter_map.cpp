@@ -18,13 +18,13 @@
 #include <string>   // for string, basic_string, alloc...
 #include <vector>   // for vector
 
-#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
-#include "gtest/gtest.h"                  // for AssertionResult, Message
+#include "amdinfer/core/parameters.hpp"  // for ParameterMap
+#include "gtest/gtest.h"                 // for AssertionResult, Message
 
 namespace amdinfer {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitRequestParameters, SerDes) {
+TEST(UnitParameterMap, SerDes) {
   std::array<std::string, 4> keys = {"string", "int", "bool", "double"};
   const auto index_string = 0;
   const auto index_int = 1;
@@ -35,7 +35,7 @@ TEST(UnitRequestParameters, SerDes) {
   const int param_int = 4;
   const double param_double = 0.4;
 
-  RequestParameters params;
+  ParameterMap params;
   params.put(keys[index_string], "test");
   params.put(keys[index_int], param_int);
   params.put(keys[index_bool], false);
@@ -56,7 +56,7 @@ TEST(UnitRequestParameters, SerDes) {
   data.reserve(size);
   params.serialize(data.data());
 
-  RequestParameters new_params;
+  ParameterMap new_params;
   ASSERT_TRUE(new_params.empty());
   new_params.deserialize(data.data());
   EXPECT_EQ(params.size(), new_params.size());

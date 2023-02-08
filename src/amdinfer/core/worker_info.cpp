@@ -35,7 +35,7 @@
 #include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument, file_not_f...
 #include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
+#include "amdinfer/core/predict_api.hpp"  // for ParameterMap
 #include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
 
 namespace amdinfer {
@@ -104,7 +104,7 @@ workers::Worker* getWorker(const std::string& name) {
   return worker;
 }
 
-WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
+WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters) {
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
 
@@ -119,7 +119,7 @@ WorkerInfo::~WorkerInfo() {
 }
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   RequestParameters* parameters) {
+                                   ParameterMap* parameters) {
   auto* worker = getWorker(name);
   worker->init(parameters);
   this->batch_size_ = worker->getBatchSize();

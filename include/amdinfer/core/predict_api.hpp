@@ -39,142 +39,10 @@
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"  // for DataType, mapTypeToStr
 #include "amdinfer/core/mixins.hpp"      // for Serializable
+#include "amdinfer/core/parameters.hpp"  // for ParameterMap
 #include "amdinfer/declarations.hpp"     // for InferenceResponseOutput
 
 namespace amdinfer {
-
-/// parameters may be one of these types
-using Parameter = std::variant<bool, int32_t, double, std::string>;
-
-/**
- * @brief Holds any parameters from JSON (defined by KServe spec as one of
- * bool, number or string). We further restrict numbers to be doubles or int32.
- *
- */
-class RequestParameters : public Serializable {
- public:
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, bool value);
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, double value);
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, int32_t value);
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, const std::string &value);
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, const char *value);
-
-  /**
-   * @brief Gets a pointer to the named parameter. Returns nullptr if not found
-   * or if a bad type is used.
-   *
-   * @tparam T type of parameter. Must be (bool|double|int32_t|std::string)
-   * @param key parameter to get
-   * @return T*
-   */
-  template <typename T>
-  T get(const std::string &key) {
-    auto &value = this->parameters_.at(key);
-    return std::get<T>(value);
-  }
-
-  /**
-   * @brief Checks if a particular parameter exists
-   *
-   * @param key name of the parameter to check
-   * @return bool
-   */
-  bool has(const std::string &key);
-  /**
-   * @brief Removes a parameter
-   *
-   * @param key name of the parameter to remove
-   */
-  void erase(const std::string &key);
-  /// Gets the number of parameters
-  [[nodiscard]] size_t size() const;
-  /// Checks if the parameters are empty
-  [[nodiscard]] bool empty() const;
-  /// Gets the underlying data structure holding the parameters
-  [[nodiscard]] std::map<std::string, Parameter, std::less<>> data() const;
-
-  /// Returns a read/write iterator to the first parameter in the object
-  auto begin() { return parameters_.begin(); }
-  /// Returns a read iterator to the first parameter in the object
-  [[nodiscard]] auto cbegin() const { return parameters_.cbegin(); }
-
-  /// Returns a read/write iterator to one past the last parameter in the object
-  auto end() { return parameters_.end(); }
-  /// Returns a read iterator to one past the last parameter in the object
-  [[nodiscard]] auto cend() const { return parameters_.cend(); }
-
-  /**
-   * @brief Returns the size of the serialized data
-   *
-   * @return size_t
-   */
-  [[nodiscard]] size_t serializeSize() const override;
-  /**
-   * @brief Serializes the object to the provided memory address. There should
-   * be sufficient space to store the serialized object.
-   *
-   * @param data_out
-   */
-  void serialize(std::byte *data_out) const override;
-  /**
-   * @brief Deserializes the data at the provided memory address to initialize
-   * this object. If the memory cannot be deserialized, an exception is thrown.
-   *
-   * @param data_in a pointer to the serialized data for this object type
-   */
-  void deserialize(const std::byte *data_in) override;
-
-  /// Provides an implementation to print the class with std::cout to an ostream
-  friend std::ostream &operator<<(std::ostream &os,
-                                  RequestParameters const &self) {
-    std::stringstream ss;
-    ss << "RequestParameters(" << &self << "):\n";
-    for (const auto &[key, value] : self.parameters_) {
-      ss << "  " << key << ": ";
-      std::visit([&](const auto &c) { ss << c; }, value);
-      ss << "\n";
-    }
-    auto tmp = ss.str();
-    tmp.pop_back();  // delete trailing newline
-    os << tmp;
-    return os;
-  }
-
- private:
-  std::map<std::string, Parameter, std::less<>> parameters_;
-};
-
-using RequestParametersPtr = std::shared_ptr<RequestParameters>;
 
 struct ServerMetadata {
   /// Name of the server
@@ -245,7 +113,7 @@ class InferenceRequestInput : public Serializable {
   void setDatatype(DataType type);
 
   /// Gets the input tensor's parameters
-  [[nodiscard]] RequestParameters *getParameters() const {
+  [[nodiscard]] ParameterMap *getParameters() const {
     return this->parameters_.get();
   }
   /**
@@ -253,7 +121,7 @@ class InferenceRequestInput : public Serializable {
    *
    * @param parameters pointer to parameters to assign
    */
-  void setParameters(RequestParametersPtr parameters) {
+  void setParameters(ParameterMapPtr parameters) {
     parameters_ = std::move(parameters);
   }
 
@@ -304,7 +172,7 @@ class InferenceRequestInput : public Serializable {
   std::string name_;
   std::vector<uint64_t> shape_;
   DataType data_type_;
-  RequestParametersPtr parameters_;
+  ParameterMapPtr parameters_;
   void *data_;
   std::vector<std::byte> shared_data_;
 
@@ -337,15 +205,15 @@ class InferenceRequestOutput {
    *
    * @param parameters pointer to parameters to assign
    */
-  void setParameters(RequestParametersPtr parameters) {
+  void setParameters(ParameterMapPtr parameters) {
     parameters_ = std::move(parameters);
   }
   /// @brief Gets the output tensor's parameters
-  RequestParameters *getParameters() { return parameters_.get(); }
+  ParameterMap *getParameters() { return parameters_.get(); }
 
  private:
   std::string name_;
-  RequestParametersPtr parameters_;
+  ParameterMapPtr parameters_;
   void *data_;
 
   template <typename U>
@@ -399,7 +267,7 @@ class InferenceResponse {
 #endif
 
   /// Gets a pointer to the parameters associated with this response
-  RequestParameters *getParameters() { return this->parameters_.get(); }
+  ParameterMap *getParameters() { return this->parameters_.get(); }
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
@@ -420,7 +288,7 @@ class InferenceResponse {
  private:
   std::string model_;
   std::string id_;
-  std::shared_ptr<RequestParameters> parameters_;
+  std::shared_ptr<ParameterMap> parameters_;
   std::vector<InferenceResponseOutput> outputs_;
   std::string error_msg_;
 #ifdef AMDINFER_ENABLE_TRACING
@@ -514,7 +382,7 @@ class InferenceRequest {
   void setID(std::string_view id) { id_ = id; }
 
   /// Get a pointer to the request's parameters
-  [[nodiscard]] RequestParameters *getParameters() const {
+  [[nodiscard]] ParameterMap *getParameters() const {
     return this->parameters_.get();
   }
   /**
@@ -522,13 +390,13 @@ class InferenceRequest {
    *
    * @param parameters pointer to the parameters
    */
-  void setParameters(RequestParametersPtr parameters) {
+  void setParameters(ParameterMapPtr parameters) {
     parameters_ = std::move(parameters);
   }
 
  private:
   std::string id_;
-  RequestParametersPtr parameters_;
+  ParameterMapPtr parameters_;
   std::vector<InferenceRequestInput> inputs_;
   std::vector<InferenceRequestOutput> outputs_;
   Callback callback_;
@@ -665,19 +533,19 @@ template <>
  * cannot be stored in an unordered_map.
  *
  */
-struct less<amdinfer::RequestParameters> {
+struct less<amdinfer::ParameterMap> {
   /**
    * @brief Implementation of the comparison of two RequestParameter objects.
    * We compare the size and then check each key is present and finally, compare
-   * the key values. The types supported in RequestParameters all support
+   * the key values. The types supported in ParameterMap all support
    * direct comparison with the "less than" operator already.
    *
    * @param lhs the RequestParameter object on the left-hand-side
    * @param rhs the RequestParameter object on the right-hand-side
    * @return bool
    */
-  bool operator()(const amdinfer::RequestParameters &lhs,
-                  const amdinfer::RequestParameters &rhs) const {
+  bool operator()(const amdinfer::ParameterMap &lhs,
+                  const amdinfer::ParameterMap &rhs) const {
     auto lhs_size = lhs.size();
     auto rhs_size = rhs.size();
     auto lhs_map = lhs.data();

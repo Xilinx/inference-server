@@ -33,7 +33,7 @@
 
 #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LO...
 #include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "amdinfer/core/predict_api_internal.hpp"  // for RequestParameters
+#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMap
 #include "amdinfer/declarations.hpp"               // for InferenceResponseOu...
 #include "amdinfer/observation/observer.hpp"       // for kNumTraceData
 #include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
@@ -43,7 +43,7 @@ namespace amdinfer {
 
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
-  RequestParameters* parameters) {
+  ParameterMap* parameters) {
   using ParameterType = inference::InferParameter::ParameterChoiceCase;
   for (const auto& [key, value] : params) {
     auto type = value.parameter_choice_case();
@@ -73,9 +73,9 @@ void mapProtoToParameters(
   }
 }
 
-RequestParametersPtr mapProtoToParameters(
+ParameterMapPtr mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params) {
-  auto parameters = std::make_shared<RequestParameters>();
+  auto parameters = std::make_shared<ParameterMap>();
   mapProtoToParameters(params, parameters.get());
 
   return parameters;
@@ -83,7 +83,7 @@ RequestParametersPtr mapProtoToParameters(
 
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
-  RequestParameters& parameters) {
+  ParameterMap& parameters) {
   mapProtoToParameters(params, &parameters);
 }
 

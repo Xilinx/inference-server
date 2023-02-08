@@ -78,8 +78,8 @@ Exceptions
 Prediction
 ^^^^^^^^^^
 
-.. _user_cpp_core_request_parameters:
-.. doxygenclass:: amdinfer::RequestParameters
+.. _user_cpp_core_parameter_map:
+.. doxygenclass:: amdinfer::ParameterMap
     :members:
 
 .. _user_cpp_core_server_metadata:
