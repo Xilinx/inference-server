@@ -685,7 +685,7 @@ RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
 # we need to run as root because KServe mounts models to /mnt/models which means
 # the server needs root access to access the mounted assets
 ENTRYPOINT [ "/root/entrypoint.sh", "root" ]
-CMD [ "amdinfer-server" ]
+CMD [ "amdinfer-server", "--repository-load-existing" ]
 
 FROM ${IMAGE_TYPE} AS final
 

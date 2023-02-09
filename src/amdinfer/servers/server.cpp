@@ -21,6 +21,7 @@
 #include <thread>   // for thread
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
+#include "amdinfer/core/api.hpp"               // for modelLoad
 #include "amdinfer/core/exceptions.hpp"        // for environment_not_set_error
 #include "amdinfer/core/manager.hpp"           // for Manager
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
@@ -45,6 +46,7 @@ struct Server::ServerImpl {
 #ifdef AMDINFER_ENABLE_GRPC
   bool grpc_started = false;
 #endif
+  ModelRepository repository;
 };
 
 void initializeServerLogging() {
@@ -120,6 +122,7 @@ void Server::stopHttp() const {
     if (impl_->http_thread.joinable()) {
       impl_->http_thread.join();
     }
+    impl_->http_started = false;
   }
 #endif
 }
@@ -137,16 +140,18 @@ void Server::stopGrpc() const {
 #ifdef AMDINFER_ENABLE_GRPC
   if (impl_->grpc_started) {
     grpc::stop();
+    impl_->grpc_started = false;
   }
 #endif
 }
 
-void Server::setModelRepository(const fs::path& path) {
-  ModelRepository::setRepository(path.string());
+void Server::setModelRepository(const fs::path& repository_path,
+                                bool load_existing) {
+  impl_->repository.setRepository(repository_path, load_existing);
 }
 
 void Server::enableRepositoryMonitoring(bool use_polling) {
-  ModelRepository::enableRepositoryMonitoring(use_polling);
+  impl_->repository.enableMonitoring(use_polling);
 }
 
 }  // namespace amdinfer

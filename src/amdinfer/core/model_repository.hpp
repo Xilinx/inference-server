@@ -27,34 +27,29 @@ class ParameterMap;
 
 class UpdateListener : public efsw::FileWatchListener {
  public:
-  void handleFileAction(efsw::WatchID watchid, const std::string& dir,
+  explicit UpdateListener(const std::filesystem::path& repository)
+    : repository_(repository) {}
+  void handleFileAction(efsw::WatchID watch_id, const std::string& dir,
                         const std::string& filename, efsw::Action action,
                         std::string old_filename) override;
+
+ private:
+  std::filesystem::path repository_;
 };
+
+void parseModel(const std::filesystem::path& repository,
+                const std::string& model, ParameterMap* parameters);
 
 class ModelRepository {
  public:
-  static void modelLoad(const std::string& model, ParameterMap* parameters);
-
-  static void setRepository(const std::string& repository);
-  static void enableRepositoryMonitoring(bool use_polling);
+  void setRepository(const std::filesystem::path& repository_path,
+                     bool load_existing);
+  void enableMonitoring(bool use_polling);
 
  private:
-  class ModelRepositoryImpl {
-   public:
-    void modelLoad(const std::string& model, ParameterMap* parameters) const;
-
-    void setRepository(const std::string& repository);
-
-    void enableRepositoryMonitoring(bool use_polling);
-
-   private:
-    std::filesystem::path repository_;
-    std::unique_ptr<efsw::FileWatcher> file_watcher_;
-    std::unique_ptr<UpdateListener> listener_;
-  };
-
-  inline static ModelRepositoryImpl repo_;
+  std::filesystem::path repository_;
+  std::unique_ptr<efsw::FileWatcher> file_watcher_;
+  std::unique_ptr<UpdateListener> listener_;
 };
 
 }  // namespace amdinfer

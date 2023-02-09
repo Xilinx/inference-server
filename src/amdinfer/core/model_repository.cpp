@@ -68,29 +68,11 @@ void mapProtoToParameters2(
   }
 }
 
-void ModelRepository::modelLoad(const std::string& model,
-                                ParameterMap* parameters) {
-  repo_.modelLoad(model, parameters);
-}
-
-void ModelRepository::setRepository(const std::string& repository) {
-  repo_.setRepository(repository);
-}
-
-void ModelRepository::enableRepositoryMonitoring(bool use_polling) {
-  repo_.enableRepositoryMonitoring(use_polling);
-}
-
-void ModelRepository::ModelRepositoryImpl::setRepository(
-  const std::string& repository_path) {
-  repository_ = repository_path;
-}
-
-void ModelRepository::ModelRepositoryImpl::modelLoad(
-  const std::string& model, ParameterMap* parameters) const {
+void parseModel(const fs::path& repository, const std::string& model,
+                ParameterMap* parameters) {
   const fs::path config_file = "config.pbtxt";
 
-  auto model_path = repository_ / model;
+  auto model_path = repository / model;
   auto config_path = model_path / config_file;
 
   // KServe can sometimes create directories like model/model/config_file
@@ -164,7 +146,35 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   mapProtoToParameters2(config.parameters(), parameters);
 }
 
-void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
+void ModelRepository::setRepository(const fs::path& repository_path,
+                                    bool load_existing) {
+  repository_ = repository_path;
+  if (fs::exists(repository_path) && load_existing) {
+    Logger logger{Loggers::Server};
+    for (const auto& path : fs::directory_iterator(repository_)) {
+      if (path.is_directory()) {
+        auto model = path.path().filename();
+        try {
+          ParameterMap params;
+          amdinfer::modelLoad(model, &params);
+        } catch (const amdinfer::runtime_error& e) {
+          AMDINFER_LOG_INFO(
+            logger, "Error loading " + model.string() + ": " + e.what());
+        }
+      }
+    }
+  }
+}
+
+void ModelRepository::enableMonitoring(bool use_polling) {
+  file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
+  listener_ = std::make_unique<amdinfer::UpdateListener>(repository_);
+
+  file_watcher_->addWatch(repository_.string(), listener_.get(), true);
+  file_watcher_->watch();
+}
+
+void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watch_id,
                                       const std::string& dir,
                                       const std::string& filename,
                                       efsw::Action action,
@@ -179,7 +189,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       // TODO(varunsh): replace with native client
       ParameterMap params;
       try {
-        ModelRepository::modelLoad(model, &params);
+        parseModel(repository_, model, &params);
         Manager::getInstance().loadWorker(model, params);
       } catch (const runtime_error&) {
         AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
@@ -213,29 +223,6 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       break;
     default:
       AMDINFER_LOG_ERROR(logger, "Should never happen");
-  }
-}
-
-void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
-  bool use_polling) {
-  file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
-  listener_ = std::make_unique<amdinfer::UpdateListener>();
-
-  file_watcher_->addWatch(repository_.string(), listener_.get(), true);
-  file_watcher_->watch();
-
-  Logger logger{Loggers::Server};
-  for (const auto& path : fs::directory_iterator(repository_)) {
-    if (path.is_directory()) {
-      auto model = path.path().filename();
-      try {
-        ParameterMap params;
-        amdinfer::modelLoad(model, &params);
-      } catch (const amdinfer::runtime_error& e) {
-        AMDINFER_LOG_INFO(logger,
-                          "Error loading " + model.string() + ": " + e.what());
-      }
-    }
   }
 }
 

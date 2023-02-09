@@ -59,17 +59,20 @@ class Server {
    * @brief Set the path to the model repository associated with this server
    *
    * @param path path to the model repository
+   * @param load_existing load all existing models found at the path
    */
-  static void setModelRepository(const std::filesystem::path& path);
+  void setModelRepository(const std::filesystem::path& repository_path,
+                          bool load_existing);
   /**
    * @brief Turn on active monitoring of the model repository path for new
-   * files
+   * files. A model repository must be set with setModelRepository() before
+   * calling this method.
    *
    * @param use_polling set to true to use polling to check the directory for
    * new files, false to use events. Note that events may not work well on all
    * platforms.
    */
-  static void enableRepositoryMonitoring(bool use_polling);
+  void enableRepositoryMonitoring(bool use_polling);
 
  private:
   struct ServerImpl;

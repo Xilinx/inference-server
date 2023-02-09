@@ -76,7 +76,8 @@ void modelLoad(const std::string& model, ParameterMap* parameters) {
     assert(c == std::tolower(c));
   }
 
-  ModelRepository::modelLoad(model, parameters);
+  parseModel("/workspace/amdinfer/external/artifacts/repository", model,
+             parameters);
   Manager::getInstance().loadWorker(model, *parameters);
 }
 
