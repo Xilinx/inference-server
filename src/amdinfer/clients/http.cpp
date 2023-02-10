@@ -1,6 +1,5 @@
 // Copyright 2021 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -210,7 +209,7 @@ ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
 }
 
 void HttpClient::modelLoad(const std::string& model,
-                           RequestParameters* parameters) const {
+                           ParameterMap* parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
@@ -244,7 +243,7 @@ void HttpClient::modelUnload(const std::string& model) const {
 }
 
 std::string HttpClient::workerLoad(const std::string& worker,
-                                   RequestParameters* parameters) const {
+                                   ParameterMap* parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;

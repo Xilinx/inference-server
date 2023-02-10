@@ -29,7 +29,7 @@
 #include <vector>   // for vector
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 #include "amdinfer/observation/tracing.hpp"  // for TracePtr
@@ -116,7 +116,7 @@ class Batcher {
  public:
   /// Construct a new Batcher object
   Batcher();
-  explicit Batcher(RequestParameters* parameters);
+  explicit Batcher(ParameterMap* parameters);
   /**
    * @brief Construct a new Batcher object
    *
@@ -181,7 +181,7 @@ class Batcher {
   std::shared_ptr<BatchPtrQueue> output_queue_;
   std::thread thread_;
   std::string model_;
-  RequestParameters parameters_;
+  ParameterMap parameters_;
 
  private:
   /**

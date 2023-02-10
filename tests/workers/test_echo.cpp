@@ -21,7 +21,7 @@
 #include <thread>   // for sleep_for
 #include <vector>   // for vector
 
-#include "amdinfer/amdinfer.hpp"  // for RequestParameters, InferenceRequestInput
+#include "amdinfer/amdinfer.hpp"  // for ParameterMap, InferenceRequestInput
 #include "gtest/gtest.h"  // for ParamIteratorInterface, Message, Test...
 
 namespace amdinfer {
@@ -49,7 +49,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
     // NOLINTNEXTLINE(google-readability-casting)
     input_0.setData((void*)(&(inputs[0])));
     if (params.add_input_parameters) {
-      auto parameters = std::make_shared<RequestParameters>();
+      auto parameters = std::make_shared<ParameterMap>();
       parameters->put("key_0", "value");
       input_0.setParameters(parameters);
     }
@@ -63,7 +63,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
       InferenceRequestOutput output;
       output.setName("echo");
       if (params.add_input_parameters) {
-        auto parameters = std::make_shared<RequestParameters>();
+        auto parameters = std::make_shared<ParameterMap>();
         parameters->put("key", "another_value");
         output.setParameters(parameters);
       }
@@ -78,7 +78,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
     if (params.add_request_parameters) {
       const auto key_3 = 1.2;  // arbitrary value
-      auto parameters = std::make_shared<RequestParameters>();
+      auto parameters = std::make_shared<ParameterMap>();
       parameters->put("key_2", true);
       parameters->put("key_3", key_3);
       request.setParameters(parameters);
@@ -118,7 +118,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 };
 
 TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
-  amdinfer::NativeClient client;
+  amdinfer::NativeClient client(&server);
   const auto endpoint = client.workerLoad("echo", nullptr);
 
   auto request = this->constructRequest();

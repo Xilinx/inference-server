@@ -1,6 +1,5 @@
 # Copyright 2021 Xilinx, Inc.
 # Copyright 2022 Advanced Micro Devices, Inc.
-# Copyright 2022 Advanced Micro Devices Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -687,7 +686,7 @@ def wrk_benchmarks(config: Config, benchmarks: Benchmarks):
                 for load in loads:
                     model = extra_info["model"]
 
-                    parameters = amdinfer.RequestParameters()
+                    parameters = amdinfer.ParameterMap()
                     if extra_info["parameters"] is not None:
                         for key, value in extra_info["parameters"].items():
                             parameters.put(key, value)

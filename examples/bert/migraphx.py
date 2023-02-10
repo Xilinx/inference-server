@@ -97,7 +97,7 @@ def load(client, args):
     # It will take the file name stem and search for either a *.onnx or *.mxr extension, and if
     # it finds a *.onnx file it will compile it and save the compiled model as *.mxr for
     # future use. It will read the array dimensions and data type from the model.
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     parameters.put("model", args.model)
 
     parameters.put("batch", args.batch_size)

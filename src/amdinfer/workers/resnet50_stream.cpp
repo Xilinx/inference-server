@@ -45,6 +45,7 @@
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::String
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -80,9 +81,9 @@ class ResNet50Stream : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -97,7 +98,7 @@ std::thread ResNet50Stream::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&ResNet50Stream::run, this, input_queue);
 }
 
-void ResNet50Stream::doInit(RequestParameters* parameters) {
+void ResNet50Stream::doInit(ParameterMap* parameters) {
   constexpr auto kBatchSize = 4;
   (void)parameters;  // suppress unused variable warning
 
@@ -134,7 +135,7 @@ size_t ResNet50Stream::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void ResNet50Stream::doAcquire(RequestParameters* parameters) {
+void ResNet50Stream::doAcquire(ParameterMap* parameters) {
   std::string path{
     "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json"};
   if (parameters->has("aks_graph")) {

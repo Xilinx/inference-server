@@ -23,6 +23,7 @@
 #include "amdinfer/clients/native.hpp"
 #include "amdinfer/core/data_types.hpp"
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/parameters.hpp"
 #include "amdinfer/core/predict_api.hpp"
 #include "amdinfer/declarations.hpp"
 #include "amdinfer/servers/server.hpp"

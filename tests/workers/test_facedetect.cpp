@@ -75,7 +75,7 @@ void dequeueValidate(FutureQueue& my_queue, int num_images) {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(Native, Facedetect) {
   amdinfer::Server server;
-  amdinfer::NativeClient client;
+  amdinfer::NativeClient client(&server);
 
   auto fpgas_exist = client.hasHardware("DPUCADF8H", 1);
   if (!fpgas_exist) {
@@ -83,12 +83,12 @@ TEST(Native, Facedetect) {
   }
 
   auto path = prepareDirectory();
-  auto worker_name = load(1);
+  auto worker_name = load(client, 1);
   auto image_paths = getImages(path);
   auto num_images = image_paths.size();
 
   FutureQueue my_queue;
-  run(image_paths, 1, worker_name, my_queue);
+  run(client, image_paths, 1, worker_name, my_queue);
 
   dequeueValidate(my_queue, num_images);
 }

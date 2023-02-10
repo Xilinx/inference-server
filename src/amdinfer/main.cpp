@@ -61,8 +61,9 @@ int main(int argc, char* argv[]) {
   uint16_t grpc_port = kDefaultGrpcPort;
 #endif
   std::string model_repository = "/mnt/models";
-  bool enable_repository_watcher = false;
+  bool repository_monitoring = false;
   bool use_polling_watcher = false;
+  bool repository_load_existing = false;
 
   try {
     cxxopts::Options options("amdinfer-server", "Inference in the cloud");
@@ -70,9 +71,12 @@ int main(int argc, char* argv[]) {
     options.add_options()
     ("model-repository", "Path to the model repository",
       cxxopts::value(model_repository))
-    ("enable-repository-watcher",
-      "Actively monitor the model-repository directory for new models",
-      cxxopts::value(enable_repository_watcher))
+    ("repository-load-existing",
+      "Load all models found in the model repository as the server starts",
+      cxxopts::value(repository_load_existing))
+    ("repository-monitoring",
+      "Actively monitor the model-repository directory for new models. Sets repository-load-existing to true if enabled",
+      cxxopts::value(repository_monitoring))
     ("use-polling-watcher", "Use polling to monitor model-repository directory",
       cxxopts::value(use_polling_watcher))
 #ifdef AMDINFER_ENABLE_HTTP
@@ -99,11 +103,17 @@ int main(int argc, char* argv[]) {
 
   amdinfer::Logger logger{amdinfer::Loggers::Server};
 
-  amdinfer::Server::setModelRepository(model_repository);
+  // if repository monitoring is enabled, the existing models there must be
+  // loaded so the server can properly track if they're deleted
+  if (repository_monitoring) {
+    repository_load_existing = true;
+  }
+
+  server.setModelRepository(model_repository, repository_load_existing);
   AMDINFER_LOG_INFO(logger, "Using model repository: " + model_repository);
 
-  if (enable_repository_watcher) {
-    amdinfer::Server::enableRepositoryMonitoring(use_polling_watcher);
+  if (repository_monitoring) {
+    server.enableRepositoryMonitoring(use_polling_watcher);
   }
 
 #ifdef AMDINFER_ENABLE_GRPC

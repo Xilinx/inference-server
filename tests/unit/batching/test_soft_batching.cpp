@@ -28,6 +28,7 @@
 #include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
 #include "amdinfer/declarations.hpp"             // for BufferPtrs
@@ -87,7 +88,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     this->data_size_ = data_size;
     this->data_shape_ = data_shape;
 
-    RequestParameters parameters;
+    ParameterMap parameters;
     parameters.put("timeout", kTimeoutMs);
     parameters.put("batch_size", batch_size);
 

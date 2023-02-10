@@ -15,7 +15,7 @@
 
 #include "amdinfer/core/model_repository.hpp"
 
-#include <fcntl.h>                                     // for open, O_RDONLY
+#include <fcntl.h>                                     // for open, O_CLOEXEC
 #include <google/protobuf/io/zero_copy_stream_impl.h>  // for FileInputStream
 #include <google/protobuf/repeated_ptr_field.h>        // for RepeatedPtrField
 #include <google/protobuf/text_format.h>               // for TextFormat
@@ -24,11 +24,10 @@
 #include <filesystem>  // for path, operator/
 #include <thread>      // for sleep_for
 
-#include "amdinfer/core/api.hpp"             // for modelLoad
-#include "amdinfer/core/exceptions.hpp"      // for file_not_found...
-#include "amdinfer/core/manager.hpp"         // for Manager
-#include "amdinfer/core/predict_api.hpp"     // for RequestParameters
-#include "amdinfer/observation/logging.hpp"  // for Logger, PROTEU...
+#include "amdinfer/core/endpoints.hpp"       // for Endpoints
+#include "amdinfer/core/exceptions.hpp"      // for runtime_error
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_D...
 #include "model_config.pb.h"                 // for Config, InferP...
 
 namespace fs = std::filesystem;
@@ -38,7 +37,7 @@ namespace amdinfer {
 // TODO(varunsh): get rid of this duplicate code with the one in grpc_internal
 void mapProtoToParameters2(
   const google::protobuf::Map<std::string, inference::InferParameter2>& params,
-  RequestParameters* parameters) {
+  ParameterMap* parameters) {
   using ParameterType = inference::InferParameter2::ParameterChoiceCase;
   for (const auto& [key, value] : params) {
     auto type = value.parameter_choice_case();
@@ -68,29 +67,11 @@ void mapProtoToParameters2(
   }
 }
 
-void ModelRepository::modelLoad(const std::string& model,
-                                RequestParameters* parameters) {
-  repo_.modelLoad(model, parameters);
-}
-
-void ModelRepository::setRepository(const std::string& repository) {
-  repo_.setRepository(repository);
-}
-
-void ModelRepository::enableRepositoryMonitoring(bool use_polling) {
-  repo_.enableRepositoryMonitoring(use_polling);
-}
-
-void ModelRepository::ModelRepositoryImpl::setRepository(
-  const std::string& repository_path) {
-  repository_ = repository_path;
-}
-
-void ModelRepository::ModelRepositoryImpl::modelLoad(
-  const std::string& model, RequestParameters* parameters) const {
+void parseModel(const fs::path& repository, const std::string& model,
+                ParameterMap* parameters) {
   const fs::path config_file = "config.pbtxt";
 
-  auto model_path = repository_ / model;
+  auto model_path = repository / model;
   auto config_path = model_path / config_file;
 
   // KServe can sometimes create directories like model/model/config_file
@@ -164,7 +145,40 @@ void ModelRepository::ModelRepositoryImpl::modelLoad(
   mapProtoToParameters2(config.parameters(), parameters);
 }
 
-void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
+void ModelRepository::setRepository(const fs::path& repository_path,
+                                    bool load_existing) {
+  repository_ = repository_path;
+  if (fs::exists(repository_path) && load_existing) {
+    Logger logger{Loggers::Server};
+    for (const auto& path : fs::directory_iterator(repository_)) {
+      if (path.is_directory()) {
+        auto model = path.path().filename();
+        try {
+          ParameterMap params;
+          endpoints_->load(model, params);
+        } catch (const amdinfer::runtime_error& e) {
+          AMDINFER_LOG_INFO(
+            logger, "Error loading " + model.string() + ": " + e.what());
+        }
+      }
+    }
+  }
+}
+
+std::string ModelRepository::getRepository() const {
+  return repository_.string();
+}
+
+void ModelRepository::enableMonitoring(bool use_polling) {
+  file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
+  listener_ =
+    std::make_unique<amdinfer::UpdateListener>(repository_, endpoints_);
+
+  file_watcher_->addWatch(repository_.string(), listener_.get(), true);
+  file_watcher_->watch();
+}
+
+void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watch_id,
                                       const std::string& dir,
                                       const std::string& filename,
                                       efsw::Action action,
@@ -176,11 +190,10 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
     if (action == efsw::Actions::Add) {
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
-      // TODO(varunsh): replace with native client
-      RequestParameters params;
+      ParameterMap params;
       try {
-        ModelRepository::modelLoad(model, &params);
-        Manager::getInstance().loadWorker(model, params);
+        parseModel(repository_, model, &params);
+        endpoints_->load(model, params);
       } catch (const runtime_error&) {
         AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
       }
@@ -188,8 +201,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
       // arbitrary delay to make sure filesystem has settled
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
-      // TODO(varunsh): replace with native client
-      Manager::getInstance().unloadWorker(model);
+      endpoints_->unload(model.string());
     }
   }
 
@@ -216,27 +228,8 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watchid,
   }
 }
 
-void ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring(
-  bool use_polling) {
-  file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
-  listener_ = std::make_unique<amdinfer::UpdateListener>();
-
-  file_watcher_->addWatch(repository_.string(), listener_.get(), true);
-  file_watcher_->watch();
-
-  Logger logger{Loggers::Server};
-  for (const auto& path : fs::directory_iterator(repository_)) {
-    if (path.is_directory()) {
-      auto model = path.path().filename();
-      try {
-        RequestParameters params;
-        amdinfer::modelLoad(model, &params);
-      } catch (const amdinfer::runtime_error& e) {
-        AMDINFER_LOG_INFO(logger,
-                          "Error loading " + model.string() + ": " + e.what());
-      }
-    }
-  }
+void ModelRepository::setEndpoints(Endpoints* endpoints) {
+  endpoints_ = endpoints;
 }
 
 }  // namespace amdinfer

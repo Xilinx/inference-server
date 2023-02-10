@@ -30,6 +30,8 @@
 
 namespace amdinfer {
 
+class ParameterMap;
+
 /**
  * @brief The base Client class defines the set of methods that all client
  * implementations must provide. These methods are based on the API defined by
@@ -84,7 +86,7 @@ class Client {
    * @param parameters load-time parameters for the worker supporting the model
    */
   virtual void modelLoad(const std::string& model,
-                         RequestParameters* parameters) const = 0;
+                         ParameterMap* parameters) const = 0;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
@@ -131,7 +133,7 @@ class Client {
    * @return std::string
    */
   virtual std::string workerLoad(const std::string& worker,
-                                 RequestParameters* parameters) const = 0;
+                                 ParameterMap* parameters) const = 0;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.

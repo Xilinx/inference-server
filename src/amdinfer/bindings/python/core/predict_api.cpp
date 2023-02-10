@@ -46,57 +46,49 @@ constexpr auto kKeepAliveArg0 = 2;
 using KeepAliveReturn = py::keep_alive<kKeepAliveReturn, kKeepAliveSelf>;
 using KeepAliveAssign = py::keep_alive<kKeepAliveSelf, kKeepAliveArg0>;
 
-void wrapRequestParameters(py::module_ &m) {
-  using amdinfer::RequestParameters;
+void wrapParameterMap(py::module_ &m) {
+  using amdinfer::ParameterMap;
 
-  py::class_<RequestParameters, std::shared_ptr<RequestParameters>>(
-    m, "RequestParameters")
-    .def(py::init<>(), DOCS(RequestParameters))
+  py::class_<ParameterMap, std::shared_ptr<ParameterMap>>(m, "ParameterMap")
+    .def(py::init<>(), DOCS(ParameterMap))
     .def("put",
-         py::overload_cast<const std::string &, bool>(&RequestParameters::put),
-         DOCS(RequestParameters, put))
-    .def(
-      "put",
-      py::overload_cast<const std::string &, double>(&RequestParameters::put),
-      DOCS(RequestParameters, put, 2))
-    .def(
-      "put",
-      py::overload_cast<const std::string &, int32_t>(&RequestParameters::put),
-      DOCS(RequestParameters, put, 3))
+         py::overload_cast<const std::string &, bool>(&ParameterMap::put),
+         DOCS(ParameterMap, put))
+    .def("put",
+         py::overload_cast<const std::string &, double>(&ParameterMap::put),
+         DOCS(ParameterMap, put, 2))
+    .def("put",
+         py::overload_cast<const std::string &, int32_t>(&ParameterMap::put),
+         DOCS(ParameterMap, put, 3))
     .def("put",
          py::overload_cast<const std::string &, const std::string &>(
-           &RequestParameters::put),
-         DOCS(RequestParameters, put, 4))
-    .def("put",
-         py::overload_cast<const std::string &, const char *>(
-           &RequestParameters::put),
-         DOCS(RequestParameters, put, 5))
-    .def("getBool", &RequestParameters::get<bool>, DOCS(RequestParameters, get))
-    .def("getFloat", &RequestParameters::get<double>,
-         DOCS(RequestParameters, get))
-    .def("getInt", &RequestParameters::get<int32_t>,
-         DOCS(RequestParameters, get))
-    .def("getString", &RequestParameters::get<std::string>,
-         DOCS(RequestParameters, get))
-    .def("has", &RequestParameters::has, DOCS(RequestParameters, has),
-         py::arg("key"))
-    .def("erase", &RequestParameters::erase, DOCS(RequestParameters, erase))
-    .def("empty", &RequestParameters::empty, DOCS(RequestParameters, empty))
-    .def("size", &RequestParameters::size, DOCS(RequestParameters, size))
-    .def("__len__", &RequestParameters::size)
-    .def("__bool__",
-         [](const RequestParameters &self) { return !self.empty(); })
+           &ParameterMap::put),
+         DOCS(ParameterMap, put, 4))
+    .def(
+      "put",
+      py::overload_cast<const std::string &, const char *>(&ParameterMap::put),
+      DOCS(ParameterMap, put, 5))
+    .def("getBool", &ParameterMap::get<bool>, DOCS(ParameterMap, get))
+    .def("getFloat", &ParameterMap::get<double>, DOCS(ParameterMap, get))
+    .def("getInt", &ParameterMap::get<int32_t>, DOCS(ParameterMap, get))
+    .def("getString", &ParameterMap::get<std::string>, DOCS(ParameterMap, get))
+    .def("has", &ParameterMap::has, DOCS(ParameterMap, has), py::arg("key"))
+    .def("erase", &ParameterMap::erase, DOCS(ParameterMap, erase))
+    .def("empty", &ParameterMap::empty, DOCS(ParameterMap, empty))
+    .def("size", &ParameterMap::size, DOCS(ParameterMap, size))
+    .def("__len__", &ParameterMap::size)
+    .def("__bool__", [](const ParameterMap &self) { return !self.empty(); })
     .def(
       "__iter__",
-      [](const RequestParameters &self) {
+      [](const ParameterMap &self) {
         return py::make_iterator(self.cbegin(), self.cend());
       },
       KeepAliveReturn())
     .def("__repr__",
-         [](const RequestParameters &self) {
-           return "RequestParameters(" + std::to_string(self.size()) + ")\n";
+         [](const ParameterMap &self) {
+           return "ParameterMap(" + std::to_string(self.size()) + ")\n";
          })
-    .def("__str__", &amdinfer::toString<RequestParameters>);
+    .def("__str__", &amdinfer::toString<ParameterMap>);
 }
 
 // refer to cppreference for std::visit
@@ -109,12 +101,12 @@ void wrapRequestParameters(py::module_ &m) {
 // template <class... Ts>
 // overloaded(Ts...) -> overloaded<Ts...>;
 
-//? Trying to auto-convert RequestParameters <-> dict but it's not working
+//? Trying to auto-convert ParameterMap <-> dict but it's not working
 // namespace pybind11 { namespace detail {
-//     template <> struct type_caster<amdinfer::RequestParameters> {
+//     template <> struct type_caster<amdinfer::ParameterMap> {
 //     public:
-//         PYBIND11_TYPE_CASTER(amdinfer::RequestParameters,
-//         const_name("RequestParameters"));
+//         PYBIND11_TYPE_CASTER(amdinfer::ParameterMap,
+//         const_name("ParameterMap"));
 
 //         // Conversion part 1 (Python->C++)
 //         bool load(handle src, bool) {
@@ -162,7 +154,7 @@ void wrapRequestParameters(py::module_ &m) {
 //          * Conversion part 2 (C++ -> Python). Ignoring policy and handle per
 //          * pybind11 suggestion
 //          */
-//         static handle cast(amdinfer::RequestParameters src,
+//         static handle cast(amdinfer::ParameterMap src,
 //         return_value_policy, handle) {
 //           py::dict tmp;
 //           for (const auto& pair : src) {

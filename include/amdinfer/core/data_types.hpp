@@ -62,36 +62,22 @@ class DataType {
  public:
   enum Value : uint8_t {
     Bool,
-    BOOL = Bool,
     Uint8,
-    UINT8 = Uint8,
     Uint16,
-    UINT16 = Uint16,
     Uint32,
-    UINT32 = Uint32,
     Uint64,
-    UINT64 = Uint64,
     Int8,
-    INT8 = Int8,
     Int16,
-    INT16 = Int16,
     Int32,
-    INT32 = Int32,
     Int64,
-    INT64 = Int64,
     Fp16,
-    Float16 = Fp16,
     FP16 = Fp16,
     Fp32,
-    Float32 = Fp32,
     FP32 = Fp32,
     Fp64,
-    Float64 = Fp64,
     FP64 = Fp64,
     String,
-    STRING = String,
     Unknown,
-    UNKNOWN = Unknown
   };
 
   /// Constructs a new DataType object

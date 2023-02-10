@@ -1,6 +1,5 @@
 // Copyright 2022 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,10 +26,12 @@
 #include <vector>  // for vector
 
 #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
-#include "amdinfer/core/predict_api.hpp"  // for RequestParameters (ptr o...
+#include "amdinfer/core/predict_api.hpp"  // for ParameterMap (ptr o...
 #include "amdinfer/declarations.hpp"      // for StringMap
 
 namespace amdinfer {
+
+class ParameterMap;
 
 /**
  * @brief The HttpClient class implements the Client using HTTP REST
@@ -122,7 +123,7 @@ class HttpClient : public Client {
    * @param parameters load-time parameters for the worker supporting the model
    */
   void modelLoad(const std::string& model,
-                 RequestParameters* parameters) const override;
+                 ParameterMap* parameters) const override;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
@@ -168,8 +169,8 @@ class HttpClient : public Client {
    * @param parameters load-time parameters for the worker
    * @return std::string
    */
-  [[nodiscard]] std::string workerLoad(
-    const std::string& worker, RequestParameters* parameters) const override;
+  [[nodiscard]] std::string workerLoad(const std::string& worker,
+                                       ParameterMap* parameters) const override;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.

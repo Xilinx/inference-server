@@ -38,8 +38,9 @@ PYBIND11_MODULE(_amdinfer, m) {
   m.doc() = "amdinfer inference library";
 
   wrapCore(m);
-  wrapClients(m);
+  // server needs to be bound before NativeClient
   wrapServers(m);
+  wrapClients(m);
 #ifdef AMDINFER_BUILD_TESTING
   wrapTesting(t);
 #endif

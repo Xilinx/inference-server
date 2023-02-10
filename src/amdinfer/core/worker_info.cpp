@@ -1,6 +1,5 @@
 // Copyright 2021 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,21 +21,22 @@
 
 #include "amdinfer/core/worker_info.hpp"
 
-#include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
+#include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTL...
 
 #include <cctype>       // for toupper
 #include <climits>      // for UINT_MAX
 #include <cstdint>      // for int32_t
 #include <exception>    // for exception
-#include <string>       // for string, operator+, basic_string
-#include <type_traits>  // for __decay_and_strip<>::__type
+#include <string>       // for string, operator+, basic_st...
+#include <type_traits>  // for remove_reference<>::type
 #include <utility>      // for pair, move, make_pair
 
-#include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
-#include "amdinfer/core/exceptions.hpp"   // for invalid_argument, file_not_f...
+#include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Bat...
+#include "amdinfer/core/exceptions.hpp"   // for invalid_argument, external_...
 #include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
-#include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
+#include "amdinfer/core/parameters.hpp"   // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"  // for ModelMetadata
+#include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worke...
 
 namespace amdinfer {
 
@@ -104,7 +104,7 @@ workers::Worker* getWorker(const std::string& name) {
   return worker;
 }
 
-WorkerInfo::WorkerInfo(const std::string& name, RequestParameters* parameters) {
+WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters) {
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
 
@@ -119,7 +119,7 @@ WorkerInfo::~WorkerInfo() {
 }
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   RequestParameters* parameters) {
+                                   ParameterMap* parameters) {
   auto* worker = getWorker(name);
   worker->init(parameters);
   this->batch_size_ = worker->getBatchSize();
@@ -291,6 +291,11 @@ void WorkerInfo::allocate(size_t request_size) {
   auto allocated =
     this->workers_.begin()->second->allocate(request_size - this->buffer_num_);
   this->buffer_num_ += allocated;
+}
+
+ModelMetadata WorkerInfo::getMetadata() const {
+  auto* worker_class = workers_.begin()->second;
+  return worker_class->getMetadata();
 }
 
 }  // namespace amdinfer

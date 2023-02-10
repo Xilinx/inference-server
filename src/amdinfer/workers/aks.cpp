@@ -41,6 +41,7 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Fp32
 #include "amdinfer/core/exceptions.hpp"        // for external_error
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -69,9 +70,9 @@ class Aks : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -87,7 +88,7 @@ std::thread Aks::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&Aks::run, this, input_queue);
 }
 
-void Aks::doInit(RequestParameters* parameters) {
+void Aks::doInit(ParameterMap* parameters) {
   // arbitrarily set the default batch size to 1
   const int default_batch_size = 1;
 
@@ -112,7 +113,7 @@ size_t Aks::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void Aks::doAcquire(RequestParameters* parameters) {
+void Aks::doAcquire(ParameterMap* parameters) {
   std::string path{"${AKS_ROOT}/graph_zoo/graph_adder.json"};
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");

@@ -34,7 +34,8 @@
 
 namespace amdinfer {
 class Batcher;
-class RequestParameters;
+class ParameterMap;
+class ModelMetadata;
 namespace workers {
 class Worker;
 }  // namespace workers
@@ -49,7 +50,7 @@ namespace amdinfer {
 class WorkerInfo {
  public:
   /// Construct a new WorkerInfo object
-  WorkerInfo(const std::string& name, RequestParameters* parameters);
+  WorkerInfo(const std::string& name, ParameterMap* parameters);
   ~WorkerInfo();                           ///> Destroy a WorkerInfo object
   WorkerInfo(WorkerInfo const&) = delete;  ///< Copy constructor
   /// Copy assignment constructor
@@ -75,8 +76,7 @@ class WorkerInfo {
    * @param name
    * @param parameters pointer to parameters. Should not be nullptr
    */
-  void addAndStartWorker(const std::string& name,
-                         RequestParameters* parameters);
+  void addAndStartWorker(const std::string& name, ParameterMap* parameters);
 
   /// unload one worker from this worker group
   void unload();
@@ -146,6 +146,8 @@ class WorkerInfo {
 
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
+
+  ModelMetadata getMetadata() const;
 
  private:
   std::map<std::thread::id, std::thread> worker_threads_;

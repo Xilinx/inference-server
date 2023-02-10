@@ -49,7 +49,7 @@ std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
     static_cast<int8_t*>(output.getData()), output.getSize(), k);
 }
 
-std::string workerLoad(Client* client, RequestParameters* parameters) {
+std::string workerLoad(Client* client, ParameterMap* parameters) {
   return client->workerLoad("Xmodel", parameters);
 }
 
@@ -94,7 +94,7 @@ void test0(Client* client) {
   const auto test_asset = getPathToAsset("asset_dog-3619020_640.jpg");
   const auto xmodel = getPathToAsset("u250_resnet50");
 
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   parameters.put("model", xmodel);
 
   auto images = preprocess({test_asset});
@@ -115,7 +115,7 @@ TEST_F(GrpcFixture, WorkersXmodelResnet50) { test0(client_.get()); }
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, WorkersXmodelResnet50) {
-  NativeClient client;
+  NativeClient client(&server_);
   test0(&client);
 }
 

@@ -51,7 +51,7 @@ void Trace::setAttribute(
   [[maybe_unused]] nostd::string_view key,
   [[maybe_unused]] const opentelemetry::common::AttributeValue& value) {}
 
-void Trace::setAttributes([[maybe_unused]] RequestParameters* parameters) {}
+void Trace::setAttributes([[maybe_unused]] ParameterMap* parameters) {}
 
 void Trace::endSpan() {}
 

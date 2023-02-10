@@ -89,7 +89,7 @@ def main(args):
     # future use.  It will read
     # the array dimensions and data type from the model.
 
-    parameters = amdinfer.RequestParameters()
+    parameters = amdinfer.ParameterMap()
     parameters.put("model", str(model))
     parameters.put("batch", batch_size)
     parameters.put("timeout", 100)  # ms

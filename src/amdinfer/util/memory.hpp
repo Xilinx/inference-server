@@ -1,4 +1,4 @@
-// Copyright 2022 Advanced Micro Devices, Inc.
+// Copyright 2023 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,30 +14,30 @@
 
 /**
  * @file
- * @brief Defines the objects for Python bindings for the core
+ * @brief Defines helper functions associated with managing memory
  */
 
-#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_CORE_CORE
-#define GUARD_AMDINFER_BINDINGS_PYTHON_CORE_CORE
+#ifndef GUARD_AMDINFER_UTIL_MEMORY
+#define GUARD_AMDINFER_UTIL_MEMORY
 
-namespace pybind11 {
-class module_;
-}  // namespace pybind11
+#include <cassert>  // for assert
+#include <cstddef>  // for byte
+#include <cstring>  // for memcpy
 
 namespace amdinfer {
 
-void wrapDataType(pybind11::module_ &);
-void wrapParameterMap(pybind11::module_ &);
-void wrapPredictApi(pybind11::module_ &);
-void wrapExceptions(pybind11::module_ &);
-
-void inline wrapCore(pybind11::module_ &m) {
-  wrapExceptions(m);
-  wrapDataType(m);
-  wrapParameterMap(m);
-  wrapPredictApi(m);
+template <typename T>
+std::byte *copy(const T &src, std::byte *dst,
+                [[maybe_unused]] size_t count = 0) {
+  if constexpr (std::is_pointer_v<T>) {
+    assert(count > 0);
+    std::memcpy(dst, src, count);
+    return dst + count;
+  }
+  std::memcpy(dst, &src, sizeof(T));
+  return dst + sizeof(T);
 }
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_CORE_CORE
+#endif  // GUARD_AMDINFER_UTIL_MEMORY

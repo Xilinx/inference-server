@@ -1,6 +1,5 @@
 // Copyright 2022 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,8 +33,8 @@ class BaseFixture : public testing::Test {
     if (root == nullptr) {
       throw amdinfer::environment_not_set_error("AMDINFER_ROOT is not set");
     }
-    amdinfer::Server::setModelRepository(std::string{root} +
-                                         "/external/artifacts/repository");
+    server_.setModelRepository(
+      std::string{root} + "/external/artifacts/repository", false);
   }
 };
 

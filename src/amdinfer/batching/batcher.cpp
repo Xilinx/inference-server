@@ -47,7 +47,7 @@ Batcher::Batcher() {
 #endif
 }
 
-Batcher::Batcher(RequestParameters* parameters) : Batcher() {
+Batcher::Batcher(ParameterMap* parameters) : Batcher() {
   if (parameters != nullptr) {
     this->parameters_ = *parameters;
   }

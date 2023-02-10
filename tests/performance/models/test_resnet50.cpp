@@ -63,7 +63,7 @@ struct Workers {
   std::string name;
   fs::path graph;
 
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   std::variant<ImagePreprocessOptions<float, 3>> preprocessing;
 };
 
@@ -243,7 +243,7 @@ INSTANTIATE_TEST_SUITE_P(PerfModelsResnetGrpc, PerfModelsResnetGrpcFixture,
 
 // @pytest.mark.perf(group="clients")
 TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {  // NOLINT
-  amdinfer::NativeClient client;
+  amdinfer::NativeClient client(&server_);
   const auto& [config, worker] = GetParam();
   test(&client, config, worker);
 }

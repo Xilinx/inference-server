@@ -34,7 +34,7 @@ void test(amdinfer::Client* client) {
   EXPECT_EQ(endpoint, worker);
 
   // load the same worker with a different config
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   // arbitrarily set to 100 just to create a different config
   const auto max_buffer_num = 100;
   parameters.put("max_buffer_num", max_buffer_num);
@@ -65,7 +65,7 @@ TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, workerLoad) {
-  amdinfer::NativeClient client;
+  amdinfer::NativeClient client(&server_);
   test(&client);
 }
 

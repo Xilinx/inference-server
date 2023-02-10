@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests inference_request_input request_parameters)
+list(APPEND tests inference_request_input parameter_map)
 
-list(APPEND tests_libs "predict_api" "predict_api")
+list(APPEND tests_libs "predict_api~parameters" "parameters")
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

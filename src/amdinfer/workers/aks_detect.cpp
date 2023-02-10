@@ -45,6 +45,7 @@
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -74,9 +75,9 @@ class AksDetect : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -91,7 +92,7 @@ std::thread AksDetect::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&AksDetect::run, this, input_queue);
 }
 
-void AksDetect::doInit(RequestParameters* parameters) {
+void AksDetect::doInit(ParameterMap* parameters) {
   this->sys_manager_ = AKS::SysManagerExt::getGlobal();
 
   // arbitrarily choose 4 as the default
@@ -125,7 +126,7 @@ size_t AksDetect::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void AksDetect::doAcquire(RequestParameters* parameters) {
+void AksDetect::doAcquire(ParameterMap* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

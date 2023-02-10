@@ -22,6 +22,7 @@
 #ifndef GUARD_AMDINFER_CLIENTS_NATIVE
 #define GUARD_AMDINFER_CLIENTS_NATIVE
 
+#include <memory>  // for unique_ptr
 #include <string>  // for string
 #include <vector>  // for vector
 
@@ -29,9 +30,10 @@
 #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
 #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
 
-// IWYU pragma: no_forward_declare amdinfer::RequestParameters
-
 namespace amdinfer {
+
+class ParameterMap;
+class Server;
 
 /**
  * @brief The NativeClient class implements the Client using the native C++ API.
@@ -48,6 +50,29 @@ namespace amdinfer {
  */
 class NativeClient : public Client {
  public:
+  /**
+   * @brief Construct a new NativeClient object
+   *
+   * @param server server to connect to
+   *
+   */
+  explicit NativeClient(Server* server);
+  /// Copy constructor
+  NativeClient(NativeClient const&) = delete;
+  /// Copy assignment constructor
+  NativeClient& operator=(const NativeClient&) = delete;
+  /// Move constructor
+  NativeClient(NativeClient&& other) = default;
+  /// Move assignment constructor
+  NativeClient& operator=(NativeClient&& other) = default;
+  /**
+   * @brief Destructor. This is needed because NativeClientImpl is an incomplete
+   * type. The destructor is defaulted in the implementation. But having a non-
+   * default destructor here forces the need to explicitly specify the other
+   * special member functions by the Rule of 5.
+   */
+  ~NativeClient() override;
+
   /**
    * @brief Returns the server metadata as a ServerMetadata object
    *
@@ -93,7 +118,7 @@ class NativeClient : public Client {
    * @param parameters load-time parameters for the worker supporting the model
    */
   void modelLoad(const std::string& model,
-                 RequestParameters* parameters) const override;
+                 ParameterMap* parameters) const override;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
@@ -139,8 +164,8 @@ class NativeClient : public Client {
    * @param parameters load-time parameters for the worker
    * @return std::string
    */
-  [[nodiscard]] std::string workerLoad(
-    const std::string& worker, RequestParameters* parameters) const override;
+  [[nodiscard]] std::string workerLoad(const std::string& worker,
+                                       ParameterMap* parameters) const override;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.
@@ -160,6 +185,10 @@ class NativeClient : public Client {
    */
   [[nodiscard]] bool hasHardware(const std::string& name,
                                  int num) const override;
+
+ private:
+  struct NativeClientImpl;
+  std::unique_ptr<NativeClientImpl> impl_;
 };
 
 }  // namespace amdinfer

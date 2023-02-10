@@ -32,6 +32,8 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 void wrapHttpClient(py::module_ &m) {
   using amdinfer::HttpClient;
 
@@ -53,12 +55,12 @@ void wrapHttpClient(py::module_ &m) {
     .def("modelMetadata", &HttpClient::modelMetadata, py::arg("model"),
          DOCS(HttpClient, modelMetadata))
     .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(HttpClient, modelLoad))
     .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
          DOCS(HttpClient, modelUnload))
     .def("workerLoad", &HttpClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(HttpClient, workerLoad))
     .def("workerUnload", &HttpClient::workerUnload, py::arg("model"),
          DOCS(HttpClient, workerUnload))

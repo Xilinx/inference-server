@@ -35,7 +35,7 @@ FakeInferenceRequest::FakeInferenceRequest(
   std::vector<size_t>& input_offsets, const BufferRawPtrs& output_buffers,
   std::vector<size_t>& output_offsets) {
   this->id_ = "";
-  this->parameters_ = std::make_unique<RequestParameters>();
+  this->parameters_ = std::make_unique<ParameterMap>();
   this->callback_ = nullptr;
 
   this->inputs_.emplace_back();
@@ -50,7 +50,7 @@ FakeInferenceRequest::FakeInferenceRequest(
 
 FakeInferenceRequest::FakeInferenceRequest() {
   this->id_ = "";
-  this->parameters_ = std::make_unique<RequestParameters>();
+  this->parameters_ = std::make_unique<ParameterMap>();
   this->callback_ = nullptr;
 
   this->inputs_.emplace_back();

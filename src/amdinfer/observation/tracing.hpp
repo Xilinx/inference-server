@@ -24,11 +24,11 @@
 #include <memory>  // for shared_ptr, uniqu...
 #include <stack>   // for stack
 
-#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TR...
-#include "amdinfer/core/predict_api.hpp"  // for RequestParameters
-#include "amdinfer/declarations.hpp"      // for StringMap
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TR...
+#include "amdinfer/core/parameters.hpp"  // for ParameterMap
+#include "amdinfer/declarations.hpp"     // for StringMap
 
-// IWYU pragma: no_forward_declare amdinfer::RequestParameters
+// IWYU pragma: no_forward_declare amdinfer::ParameterMap
 
 #ifdef AMDINFER_ENABLE_TRACING
 
@@ -73,7 +73,7 @@ class Trace final {
                     const opentelemetry::common::AttributeValue& value);
 
   /// set all parameters as attributes in the active span in the trace
-  void setAttributes(RequestParameters* parameters);
+  void setAttributes(ParameterMap* parameters);
 
   /// ends all spans except the last one and returns its context for propagation
   StringMap propagate();

@@ -33,6 +33,7 @@
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -56,9 +57,9 @@ class Echo : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -68,7 +69,7 @@ class Echo : public Worker {
   // if not explicitly defined here, a default value is used from worker.hpp.
   using Worker::makeBatcher;
   std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, RequestParameters* parameters) override {
+    int num, ParameterMap* parameters) override {
     return this->makeBatcher<HardBatcher>(num, parameters);
   };
 };
@@ -77,7 +78,7 @@ std::thread Echo::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&Echo::run, this, input_queue);
 }
 
-void Echo::doInit(RequestParameters* parameters) {
+void Echo::doInit(ParameterMap* parameters) {
   constexpr auto kMaxBufferNum = 50;
   constexpr auto kBatchSize = 1;
 
@@ -105,7 +106,7 @@ size_t Echo::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void Echo::doAcquire(RequestParameters* parameters) {
+void Echo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
   this->metadata_.addInputTensor("input", DataType::Uint32, {1});

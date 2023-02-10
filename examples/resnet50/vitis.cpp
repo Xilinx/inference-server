@@ -139,7 +139,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // what may be specified.
 
   // +load:
-  amdinfer::RequestParameters parameters;
+  amdinfer::ParameterMap parameters;
   parameters.put("model", args.path_to_model);
   parameters.put("batch_size", args.batch_size);
   std::string endpoint = client->workerLoad("xmodel", &parameters);

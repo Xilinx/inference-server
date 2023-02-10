@@ -43,13 +43,13 @@ class TestInvertVideo:
         input_0.datatype = amdinfer.DataType.STRING
         input_0.setStringData(video_path)
         input_0.shape = [len(video_path)]
-        parameters = amdinfer.RequestParameters()
+        parameters = amdinfer.ParameterMap()
         parameters.put("count", requested_frames_count)
         input_0.parameters = parameters
 
         request = amdinfer.InferenceRequest()
         request.addInputTensor(input_0)
-        parameters_2 = amdinfer.RequestParameters()
+        parameters_2 = amdinfer.ParameterMap()
         parameters_2.put("key", "0")
         request.parameters = parameters_2
 

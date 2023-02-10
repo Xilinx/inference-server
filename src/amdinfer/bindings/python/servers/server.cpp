@@ -40,11 +40,11 @@ void wrapServer(py::module_ &m) {
     .def("startGrpc", &Server::startGrpc, py::arg("port"),
          DOCS(Server, startGrpc))
     .def("stopGrpc", &Server::stopGrpc, DOCS(Server, stopGrpc))
-    .def_static("setModelRepository", &Server::setModelRepository,
-                py::arg("path"), DOCS(Server, setModelRepository))
-    .def_static("enableRepositoryMonitoring",
-                &Server::enableRepositoryMonitoring, py::arg("use_polling"),
-                DOCS(Server, enableRepositoryMonitoring));
+    .def("setModelRepository", &Server::setModelRepository,
+         py::arg("repository_path"), py::arg("load_existing"),
+         DOCS(Server, setModelRepository))
+    .def("enableRepositoryMonitoring", &Server::enableRepositoryMonitoring,
+         py::arg("use_polling"), DOCS(Server, enableRepositoryMonitoring));
 }
 
 }  // namespace amdinfer

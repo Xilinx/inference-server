@@ -79,7 +79,7 @@ class Worker {
   virtual std::thread spawn(BatchPtrQueue* input_queue) = 0;
 
   /// Perform low-cost initialization of the worker
-  void init(RequestParameters* parameters) {
+  void init(ParameterMap* parameters) {
     this->status_ = WorkerStatus::Init;
     this->doInit(parameters);
   }
@@ -89,7 +89,7 @@ class Worker {
     return this->doAllocate(num);
   }
   /// Acquire any hardware resources or perform high-cost initialization
-  void acquire(RequestParameters* parameters) {
+  void acquire(ParameterMap* parameters) {
     this->status_ = WorkerStatus::Acquire;
     this->doAcquire(parameters);
     this->metadata_.setReady(true);
@@ -155,13 +155,13 @@ class Worker {
   [[nodiscard]] WorkerStatus getStatus() const { return this->status_; }
 
   virtual std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, RequestParameters* parameters) {
+    int num, ParameterMap* parameters) {
     return this->makeBatcher<SoftBatcher>(num, parameters);
   }
 
   template <typename T>
-  std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, RequestParameters* parameters) {
+  std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
+                                                    ParameterMap* parameters) {
     std::vector<std::unique_ptr<Batcher>> batchers;
     batchers.emplace_back(std::make_unique<T>(parameters));
     for (int i = 1; i < num; i++) {
@@ -171,7 +171,7 @@ class Worker {
     return batchers;
   }
 
-  ModelMetadata getMetadata() { return this->metadata_; }
+  ModelMetadata getMetadata() const { return this->metadata_; }
 
  protected:
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -186,11 +186,11 @@ class Worker {
 
  private:
   /// Perform low-cost initialization of the worker
-  virtual void doInit(RequestParameters* parameters) = 0;
+  virtual void doInit(ParameterMap* parameters) = 0;
   /// Allocate some buffers that are used to hold input and output data
   virtual size_t doAllocate(size_t num) = 0;
   /// Acquire any hardware resources or perform high-cost initialization
-  virtual void doAcquire(RequestParameters* parameters) = 0;
+  virtual void doAcquire(ParameterMap* parameters) = 0;
   /**
    * @brief The main body of the worker executes the work
    *

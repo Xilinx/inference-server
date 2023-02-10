@@ -48,8 +48,8 @@
 
 namespace amdinfer {
 
-RequestParametersPtr mapJsonToParameters(Json::Value json) {
-  auto parameters = std::make_shared<RequestParameters>();
+ParameterMapPtr mapJsonToParameters(Json::Value json) {
+  auto parameters = std::make_shared<ParameterMap>();
   for (auto const &id : json.getMemberNames()) {
     if (json[id].isString()) {
       parameters->put(id, json[id].asString());
@@ -76,7 +76,7 @@ struct Overloaded : Ts... {
 template <class... Ts>
 Overloaded(Ts...) -> Overloaded<Ts...>;
 
-Json::Value mapParametersToJson(RequestParameters *parameters) {
+Json::Value mapParametersToJson(ParameterMap *parameters) {
   Json::Value json = Json::objectValue;
 
   for (const auto &parameter : *parameters) {
@@ -276,7 +276,7 @@ class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
       auto parameters = req->get("parameters", Json::objectValue);
       input.parameters_ = mapJsonToParameters(parameters);
     } else {
-      input.parameters_ = std::make_unique<RequestParameters>();
+      input.parameters_ = std::make_unique<ParameterMap>();
     }
     if (!req->isMember("data")) {
       throw invalid_argument("No 'data' key present in request input");
@@ -308,7 +308,7 @@ class InferenceRequestOutputBuilder<std::shared_ptr<Json::Value>> {
       auto parameters = req->get("parameters", Json::objectValue);
       output.parameters_ = mapJsonToParameters(parameters);
     } else {
-      output.parameters_ = std::make_unique<RequestParameters>();
+      output.parameters_ = std::make_unique<ParameterMap>();
     }
     return output;
   }
@@ -332,7 +332,7 @@ InferenceRequestPtr RequestBuilder::build(
     auto parameters = req->get("parameters", Json::objectValue);
     request->parameters_ = mapJsonToParameters(parameters);
   } else {
-    request->parameters_ = std::make_unique<RequestParameters>();
+    request->parameters_ = std::make_unique<ParameterMap>();
   }
 
   if (!req->isMember("inputs")) {

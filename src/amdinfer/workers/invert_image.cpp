@@ -36,6 +36,7 @@
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint8
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
 #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"    // for Logger
@@ -86,9 +87,9 @@ class InvertImage : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -99,7 +100,7 @@ std::thread InvertImage::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&InvertImage::run, this, input_queue);
 }
 
-void InvertImage::doInit(RequestParameters* parameters) {
+void InvertImage::doInit(ParameterMap* parameters) {
   constexpr auto kMaxBufferNum = 50;
   constexpr auto kBatchSize = 1;
 
@@ -134,7 +135,7 @@ size_t InvertImage::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void InvertImage::doAcquire(RequestParameters* parameters) {
+void InvertImage::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
   this->metadata_.addInputTensor(

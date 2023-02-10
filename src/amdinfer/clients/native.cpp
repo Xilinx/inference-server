@@ -28,44 +28,58 @@
 
 #include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
-#include "amdinfer/core/api.hpp"                 // for modelLoad, workerLoad
 #include "amdinfer/core/exceptions.hpp"          // for invalid_argument
 #include "amdinfer/core/interface.hpp"           // for Interface
-#include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCounte...
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCount...
 #include "amdinfer/observation/tracing.hpp"      // for startTrace, Trace
+#include "amdinfer/servers/server.hpp"           // for Server
+#include "amdinfer/servers/server_internal.hpp"  // for Server::ServerImpl
 #include "amdinfer/util/string.hpp"              // for toLower
 
 namespace amdinfer {
 
+struct NativeClient::NativeClientImpl {
+  SharedState* state;
+};
+
+NativeClient::NativeClient(Server* server) {
+  impl_ = std::make_unique<NativeClientImpl>();
+  impl_->state = &(server->impl_->state);
+}
+
+NativeClient::~NativeClient() = default;
+
 ServerMetadata NativeClient::serverMetadata() const {
-  return ::amdinfer::serverMetadata();
+  return SharedState::serverMetadata();
 }
 bool NativeClient::serverLive() const { return true; }
 bool NativeClient::serverReady() const { return true; }
 
 ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
-  return ::amdinfer::modelMetadata(model);
+  return impl_->state->modelMetadata(model);
 }
 
 void NativeClient::modelLoad(const std::string& model,
-                             RequestParameters* parameters) const {
+                             ParameterMap* parameters) const {
   auto model_lower = util::toLower(model);
   if (parameters == nullptr) {
-    RequestParameters params;
-    ::amdinfer::modelLoad(model_lower, &params);
+    ParameterMap params;
+    impl_->state->modelLoad(model_lower, &params);
   } else {
-    ::amdinfer::modelLoad(model_lower, parameters);
+    impl_->state->modelLoad(model_lower, parameters);
   }
 }
 
 std::string NativeClient::workerLoad(const std::string& worker,
-                                     RequestParameters* parameters) const {
+                                     ParameterMap* parameters) const {
   auto worker_lower = util::toLower(worker);
   if (parameters == nullptr) {
-    RequestParameters params;
-    return ::amdinfer::workerLoad(worker_lower, &params);
+    ParameterMap params;
+    return impl_->state->workerLoad(worker_lower, &params);
   }
-  return ::amdinfer::workerLoad(worker_lower, parameters);
+  return impl_->state->workerLoad(worker_lower, parameters);
 }
 
 InferenceResponseFuture NativeClient::modelInferAsync(
@@ -84,7 +98,7 @@ InferenceResponseFuture NativeClient::modelInferAsync(
   trace->endSpan();
   api->setTrace(std::move(trace));
 #endif
-  ::amdinfer::modelInfer(model, std::move(api));
+  impl_->state->modelInfer(model, std::move(api));
 
   return future;
 }
@@ -97,28 +111,28 @@ InferenceResponse NativeClient::modelInfer(
 
 void NativeClient::modelUnload(const std::string& model) const {
   auto model_lower = util::toLower(model);
-  ::amdinfer::modelUnload(model_lower);
+  impl_->state->modelUnload(model_lower);
 }
 
 void NativeClient::workerUnload(const std::string& worker) const {
   auto worker_lower = util::toLower(worker);
-  ::amdinfer::workerUnload(worker_lower);
+  impl_->state->workerUnload(worker_lower);
 }
 
 bool NativeClient::modelReady(const std::string& model) const {
   try {
-    return ::amdinfer::modelReady(model);
+    return impl_->state->modelReady(model);
   } catch (const invalid_argument&) {
     return false;
   }
 }
 
 std::vector<std::string> NativeClient::modelList() const {
-  return ::amdinfer::modelList();
+  return impl_->state->modelList();
 }
 
 bool NativeClient::hasHardware(const std::string& name, int num) const {
-  return ::amdinfer::hasHardware(name, num);
+  return SharedState::hasHardware(name, num);
 }
 
 }  // namespace amdinfer

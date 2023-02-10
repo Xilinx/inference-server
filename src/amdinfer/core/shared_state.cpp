@@ -1,5 +1,4 @@
-// Copyright 2022 Xilinx, Inc.
-// Copyright 2022 Advanced Micro Devices, Inc.
+// Copyright 2023 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,30 +14,30 @@
 
 /**
  * @file
- * @brief Implements the client-server API used in the inference server
+ * @brief
  */
 
-#include "amdinfer/core/api.hpp"
+#include "amdinfer/core/shared_state.hpp"
 
 #include <json/reader.h>  // for CharReaderBuilder, Char...
 #include <json/value.h>   // for Value
 
 #include <cassert>        // for assert
 #include <cctype>         // for tolower
+#include <filesystem>     // for path
 #include <iostream>       // for operator<<, basic_ostream
 #include <string>         // for string, operator+, stoi
 #include <unordered_map>  // for operator==, unordered_m...
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for move, pair
 
-#include "amdinfer/batching/batcher.hpp"       // for Batcher
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_VITIS
+#include "amdinfer/core/endpoints.hpp"         // for Endpoints
 #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
 #include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
-#include "amdinfer/core/manager.hpp"           // for Manager
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
-#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/version.hpp"                // for kAmdinferVersion
 
 #ifdef AMDINFER_ENABLE_VITIS
@@ -46,9 +45,11 @@
 #include <sockpp/tcp_connector.h>  // for tcp_connector
 #endif
 
+namespace fs = std::filesystem;
+
 namespace amdinfer {
 
-ServerMetadata serverMetadata() {
+ServerMetadata SharedState::serverMetadata() {
   std::unordered_set<std::string> extensions;
   ServerMetadata metadata{"amdinfer", kAmdinferVersion, extensions};
 
@@ -70,58 +71,55 @@ ServerMetadata serverMetadata() {
   return metadata;
 }
 
-void modelLoad(const std::string& model, RequestParameters* parameters) {
+void SharedState::modelLoad(const std::string& model,
+                            ParameterMap* parameters) {
   assert(parameters != nullptr);
   for (const auto& c : model) {
     assert(c == std::tolower(c));
   }
 
-  ModelRepository::modelLoad(model, parameters);
-  Manager::getInstance().loadWorker(model, *parameters);
+  parseModel(repository_.getRepository(), model, parameters);
+  endpoints_.load(model, *parameters);
 }
 
-void modelUnload(const std::string& model) { workerUnload(model); }
+void SharedState::modelUnload(const std::string& model) {
+  this->workerUnload(model);
+}
 
-std::string workerLoad(const std::string& worker,
-                       RequestParameters* parameters) {
+std::string SharedState::workerLoad(const std::string& worker,
+                                    ParameterMap* parameters) {
   assert(parameters != nullptr);
   for (const auto& c : worker) {
     assert(c == std::tolower(c));
   }
 
   parameters->put("worker", worker);
-  return Manager::getInstance().loadWorker(worker, *parameters);
+  return endpoints_.load(worker, *parameters);
 }
 
-void workerUnload(const std::string& worker) {
+void SharedState::workerUnload(const std::string& worker) {
   for (const auto& c : worker) {
     assert(c == std::tolower(c));
   }
-  Manager::getInstance().unloadWorker(worker);
+  endpoints_.unload(worker);
 }
 
-void modelInfer(const std::string& model, std::unique_ptr<Interface> request) {
-  WorkerInfo* worker = Manager::getInstance().getWorker(model);
-  if (worker == nullptr) {
-    throw invalid_argument("Worker " + model + " not found");
-  }
-  auto* batcher = worker->getBatcher();
-  batcher->enqueue(std::move(request));
+void SharedState::modelInfer(const std::string& model,
+                             std::unique_ptr<Interface> request) {
+  endpoints_.infer(model, std::move(request));
 }
 
-bool modelReady(const std::string& model) {
-  return Manager::getInstance().workerReady(model);
+bool SharedState::modelReady(const std::string& model) {
+  return endpoints_.ready(model);
 }
 
-std::vector<std::string> modelList() {
-  return Manager::getInstance().getWorkerEndpoints();
+std::vector<std::string> SharedState::modelList() { return endpoints_.list(); }
+
+ModelMetadata SharedState::modelMetadata(const std::string& model) {
+  return endpoints_.metadata(model);
 }
 
-ModelMetadata modelMetadata(const std::string& model) {
-  return Manager::getInstance().getWorkerMetadata(model);
-}
-
-Kernels getHardware() {
+Kernels SharedState::getHardware() {
   Kernels kernels;
 
 #ifdef AMDINFER_ENABLE_VITIS
@@ -184,14 +182,24 @@ Kernels getHardware() {
   return kernels;
 }
 
-bool hasHardware(const std::string& name, int num) {
-  auto kernels = getHardware();
+bool SharedState::hasHardware(const std::string& name, int num) {
+  auto kernels = SharedState::getHardware();
 
   auto kernel_iterator = kernels.find(name);
   if (kernel_iterator == kernels.end()) {
     return false;
   }
   return kernel_iterator->second >= num;
+}
+
+void SharedState::setRepository(const fs::path& repository_path,
+                                bool load_existing) {
+  repository_.setEndpoints(&endpoints_);
+  repository_.setRepository(repository_path, load_existing);
+}
+
+void SharedState::enableRepositoryMonitoring(bool use_polling) {
+  repository_.enableMonitoring(use_polling);
 }
 
 }  // namespace amdinfer

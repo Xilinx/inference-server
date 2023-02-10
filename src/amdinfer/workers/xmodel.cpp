@@ -49,6 +49,7 @@
 #include "amdinfer/core/data_types.hpp"             // for DataType
 #include "amdinfer/core/data_types_internal.hpp"    // for mapXirToType
 #include "amdinfer/core/exceptions.hpp"             // for invalid_argument
+#include "amdinfer/core/parameters.hpp"             // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
 #include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
@@ -74,9 +75,9 @@ class XModel : public Worker {
   std::thread spawn(BatchPtrQueue* input_queue) override;
 
  private:
-  void doInit(RequestParameters* parameters) override;
+  void doInit(ParameterMap* parameters) override;
   size_t doAllocate(size_t num) override;
-  void doAcquire(RequestParameters* parameters) override;
+  void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
   void doDeallocate() override;
@@ -101,7 +102,7 @@ vart::RunnerExt* XModel::getRunner() {
   return dynamic_cast<vart::RunnerExt*>(this->runner_.get());
 }
 
-void XModel::doInit(RequestParameters* parameters) {
+void XModel::doInit(ParameterMap* parameters) {
   const auto max_buffer_num = 50;
   const auto* aks_xmodel_root = std::getenv("AKS_XMODEL_ROOT");
   if (aks_xmodel_root == nullptr) {
@@ -183,7 +184,7 @@ size_t XModel::doAllocate(size_t num) {
   return buffer_num;
 }
 
-void XModel::doAcquire(RequestParameters* parameters) {
+void XModel::doAcquire(ParameterMap* parameters) {
   constexpr auto kThreads = 3;
 
   auto threads = kThreads;

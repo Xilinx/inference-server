@@ -29,6 +29,8 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 void wrapGrpcClient(py::module_ &m) {
   py::class_<GrpcClient, amdinfer::Client>(m, "GrpcClient")
     .def(py::init<const std::string &>(), py::arg("address"),
@@ -42,12 +44,12 @@ void wrapGrpcClient(py::module_ &m) {
     .def("modelMetadata", &GrpcClient::modelMetadata, py::arg("model"),
          DOCS(GrpcClient, modelMetadata))
     .def("modelLoad", &GrpcClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(GrpcClient, modelLoad))
     .def("modelUnload", &GrpcClient::modelUnload, py::arg("model"),
          DOCS(GrpcClient, modelUnload))
     .def("workerLoad", &GrpcClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<RequestParameters *>(nullptr),
+         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
          DOCS(GrpcClient, workerLoad))
     .def("workerUnload", &GrpcClient::workerUnload, py::arg("model"),
          DOCS(GrpcClient, workerUnload))

@@ -32,6 +32,7 @@
 #include "amdinfer/clients/grpc_internal.hpp"  // for mapParametersToProto
 #include "amdinfer/core/data_types.hpp"        // for DataType
 #include "amdinfer/core/exceptions.hpp"        // for bad_status, connecti...
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/declarations.hpp"           // for InferenceResponseFuture
 #include "amdinfer/observation/observer.hpp"   // for Logger, Observer
 #include "predict_api.grpc.pb.h"               // for GRPCInferenceService...
@@ -196,7 +197,7 @@ std::vector<std::string> GrpcClient::modelList() const {
 }
 
 void GrpcClient::modelLoad(const std::string& model,
-                           RequestParameters* parameters) const {
+                           ParameterMap* parameters) const {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -233,7 +234,7 @@ void GrpcClient::modelUnload(const std::string& model) const {
 }
 
 std::string GrpcClient::workerLoad(const std::string& worker,
-                                   RequestParameters* parameters) const {
+                                   ParameterMap* parameters) const {
   inference::WorkerLoadRequest request;
   inference::WorkerLoadResponse reply;
 

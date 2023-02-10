@@ -35,6 +35,8 @@ class Channel;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 /**
  * @brief The GrpcClient class implements the Client using gRPC
  *
@@ -121,7 +123,7 @@ class GrpcClient : public Client {
    * @param parameters load-time parameters for the worker supporting the model
    */
   void modelLoad(const std::string& model,
-                 RequestParameters* parameters) const override;
+                 ParameterMap* parameters) const override;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
@@ -167,8 +169,8 @@ class GrpcClient : public Client {
    * @param parameters load-time parameters for the worker
    * @return std::string
    */
-  [[nodiscard]] std::string workerLoad(
-    const std::string& worker, RequestParameters* parameters) const override;
+  [[nodiscard]] std::string workerLoad(const std::string& worker,
+                                       ParameterMap* parameters) const override;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.

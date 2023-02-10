@@ -1,6 +1,5 @@
 // Copyright 2022 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,14 +19,14 @@
 #include <string>   // for operator+, string
 #include <thread>   // for thread
 
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_HTTP
-#include "amdinfer/core/exceptions.hpp"        // for environment_not_set_error
-#include "amdinfer/core/manager.hpp"           // for Manager
-#include "amdinfer/core/model_repository.hpp"  // for ModelRepository
-#include "amdinfer/observation/logging.hpp"    // for initLogger, getLogDirec...
-#include "amdinfer/observation/tracing.hpp"    // for startTracer, stopTracer
-#include "amdinfer/servers/grpc_server.hpp"    // for start, stop
-#include "amdinfer/servers/http_server.hpp"    // for stop, start
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_HTTP
+#include "amdinfer/core/exceptions.hpp"          // for environment_not_set_e...
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/observation/logging.hpp"      // for initLogger, getLogDir...
+#include "amdinfer/observation/tracing.hpp"      // for startTracer, stopTracer
+#include "amdinfer/servers/grpc_server.hpp"      // for start, stop
+#include "amdinfer/servers/http_server.hpp"      // for stop, start
+#include "amdinfer/servers/server_internal.hpp"  // for ServerImpl
 
 #ifdef AMDINFER_ENABLE_AKS
 #include <aks/AksSysManagerExt.h>  // for SysManagerExt
@@ -36,16 +35,6 @@
 namespace fs = std::filesystem;
 
 namespace amdinfer {
-
-struct Server::ServerImpl {
-#ifdef AMDINFER_ENABLE_HTTP
-  bool http_started = false;
-  std::thread http_thread;
-#endif
-#ifdef AMDINFER_ENABLE_GRPC
-  bool grpc_started = false;
-#endif
-};
 
 void initializeServerLogging() {
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -61,13 +50,23 @@ void initializeServerLogging() {
 #endif
 }
 
-void initialize() {
+void terminate() {
+#ifdef AMDINFER_ENABLE_TRACING
+  stopTracer();
+#endif
+
+#ifdef AMDINFER_ENABLE_AKS
+  AKS::SysManagerExt::deleteGlobal();
+#endif
+}
+
+Server::Server() {
   initializeServerLogging();
+  this->impl_ = std::make_unique<Server::ServerImpl>();
+
 #ifdef AMDINFER_ENABLE_TRACING
   startTracer();
 #endif
-
-  Manager::getInstance().init();
 
 #ifdef AMDINFER_ENABLE_AKS
   auto* aks_sys_manager = AKS::SysManagerExt::getGlobal();
@@ -82,22 +81,6 @@ void initialize() {
 #endif
 }
 
-void terminate() {
-#ifdef AMDINFER_ENABLE_TRACING
-  stopTracer();
-#endif
-  Manager::getInstance().shutdown();
-
-#ifdef AMDINFER_ENABLE_AKS
-  AKS::SysManagerExt::deleteGlobal();
-#endif
-}
-
-Server::Server() {
-  this->impl_ = std::make_unique<Server::ServerImpl>();
-  initialize();
-}
-
 Server::~Server() {
   stopHttp();
   stopGrpc();
@@ -107,7 +90,7 @@ Server::~Server() {
 void Server::startHttp([[maybe_unused]] uint16_t port) const {
 #ifdef AMDINFER_ENABLE_HTTP
   if (!impl_->http_started) {
-    impl_->http_thread = std::thread{http::start, port};
+    impl_->http_thread = std::thread{http::start, &(impl_->state), port};
     impl_->http_started = true;
   }
 #endif
@@ -120,6 +103,7 @@ void Server::stopHttp() const {
     if (impl_->http_thread.joinable()) {
       impl_->http_thread.join();
     }
+    impl_->http_started = false;
   }
 #endif
 }
@@ -127,7 +111,7 @@ void Server::stopHttp() const {
 void Server::startGrpc([[maybe_unused]] uint16_t port) const {
 #ifdef AMDINFER_ENABLE_GRPC
   if (!impl_->grpc_started) {
-    grpc::start(port);
+    grpc::start(&(impl_->state), port);
     impl_->grpc_started = true;
   }
 #endif
@@ -137,16 +121,18 @@ void Server::stopGrpc() const {
 #ifdef AMDINFER_ENABLE_GRPC
   if (impl_->grpc_started) {
     grpc::stop();
+    impl_->grpc_started = false;
   }
 #endif
 }
 
-void Server::setModelRepository(const fs::path& path) {
-  ModelRepository::setRepository(path.string());
+void Server::setModelRepository(const fs::path& repository_path,
+                                bool load_existing) {
+  impl_->state.setRepository(repository_path, load_existing);
 }
 
 void Server::enableRepositoryMonitoring(bool use_polling) {
-  ModelRepository::enableRepositoryMonitoring(use_polling);
+  impl_->state.enableRepositoryMonitoring(use_polling);
 }
 
 }  // namespace amdinfer
