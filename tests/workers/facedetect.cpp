@@ -70,8 +70,9 @@ int main(int argc, char* argv[]) {
   }
 
   amdinfer::Server server;
+  amdinfer::NativeClient client(&server);
 
-  auto worker_name = load(runners);
+  auto worker_name = load(client, runners);
   auto image_paths = getImages(path);
   if (max_images > 0) {
     auto images = static_cast<size_t>(max_images);
@@ -91,7 +92,7 @@ int main(int argc, char* argv[]) {
   auto t1 = std::chrono::steady_clock::now();
 
   FutureQueue my_queue;
-  run(image_paths, threads, worker_name, my_queue);
+  run(client, image_paths, threads, worker_name, my_queue);
 
   // auto t2 = std::chrono::steady_clock::now();
 

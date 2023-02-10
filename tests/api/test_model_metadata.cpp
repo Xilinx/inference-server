@@ -51,7 +51,7 @@ TEST_F(GrpcFixture, modelMetadata) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, modelMetadata) {
-  amdinfer::NativeClient client;
+  amdinfer::NativeClient client(&server_);
   test(&client);
 }
 

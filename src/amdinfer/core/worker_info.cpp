@@ -1,6 +1,5 @@
 // Copyright 2021 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -291,6 +290,11 @@ void WorkerInfo::allocate(size_t request_size) {
   auto allocated =
     this->workers_.begin()->second->allocate(request_size - this->buffer_num_);
   this->buffer_num_ += allocated;
+}
+
+ModelMetadata WorkerInfo::getMetadata() const {
+  auto* worker_class = workers_.begin()->second;
+  return worker_class->getMetadata();
 }
 
 }  // namespace amdinfer

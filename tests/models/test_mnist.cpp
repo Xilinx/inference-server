@@ -97,7 +97,7 @@ TEST_F(GrpcFixture, mnist) { test(client_.get()); }
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, mnist) {
-  NativeClient client;
+  NativeClient client(&server_);
   test(&client);
 }
 

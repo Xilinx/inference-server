@@ -24,9 +24,7 @@
 #include <filesystem>  // for path, operator/
 #include <thread>      // for sleep_for
 
-#include "amdinfer/core/api.hpp"             // for modelLoad
 #include "amdinfer/core/exceptions.hpp"      // for file_not_found...
-#include "amdinfer/core/manager.hpp"         // for Manager
 #include "amdinfer/core/predict_api.hpp"     // for ParameterMap
 #include "amdinfer/observation/logging.hpp"  // for Logger, PROTEU...
 #include "model_config.pb.h"                 // for Config, InferP...
@@ -156,7 +154,7 @@ void ModelRepository::setRepository(const fs::path& repository_path,
         auto model = path.path().filename();
         try {
           ParameterMap params;
-          amdinfer::modelLoad(model, &params);
+          endpoints_->load(model, params);
         } catch (const amdinfer::runtime_error& e) {
           AMDINFER_LOG_INFO(
             logger, "Error loading " + model.string() + ": " + e.what());
@@ -166,9 +164,14 @@ void ModelRepository::setRepository(const fs::path& repository_path,
   }
 }
 
+std::string ModelRepository::getRepository() const {
+  return repository_.string();
+}
+
 void ModelRepository::enableMonitoring(bool use_polling) {
   file_watcher_ = std::make_unique<efsw::FileWatcher>(use_polling);
-  listener_ = std::make_unique<amdinfer::UpdateListener>(repository_);
+  listener_ =
+    std::make_unique<amdinfer::UpdateListener>(repository_, endpoints_);
 
   file_watcher_->addWatch(repository_.string(), listener_.get(), true);
   file_watcher_->watch();
@@ -186,11 +189,10 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watch_id,
     if (action == efsw::Actions::Add) {
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
-      // TODO(varunsh): replace with native client
       ParameterMap params;
       try {
         parseModel(repository_, model, &params);
-        Manager::getInstance().loadWorker(model, params);
+        endpoints_->load(model, params);
       } catch (const runtime_error&) {
         AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
       }
@@ -198,8 +200,7 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watch_id,
       // arbitrary delay to make sure filesystem has settled
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
-      // TODO(varunsh): replace with native client
-      Manager::getInstance().unloadWorker(model);
+      endpoints_->unload(model.string());
     }
   }
 
@@ -224,6 +225,10 @@ void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watch_id,
     default:
       AMDINFER_LOG_ERROR(logger, "Should never happen");
   }
+}
+
+void ModelRepository::setEndpoints(Endpoints* endpoints) {
+  endpoints_ = endpoints;
 }
 
 }  // namespace amdinfer

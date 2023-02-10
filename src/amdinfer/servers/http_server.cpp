@@ -34,7 +34,6 @@
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/clients/http_internal.hpp"  // for propagate, errorHtt...
-#include "amdinfer/core/api.hpp"               // for hasHardware, modelI...
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
 #include "amdinfer/core/interface.hpp"         // for Interface
 #include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
@@ -51,9 +50,9 @@ using drogon::HttpStatusCode;
 
 namespace amdinfer::http {
 
-void start(int port) {
-  auto controller = std::make_shared<v2::AmdinferHttpServer>();
-  auto ws_controller = std::make_shared<WebsocketServer>();
+void start(SharedState *state, uint16_t port) {
+  auto controller = std::make_shared<v2::AmdinferHttpServer>(state);
+  auto ws_controller = std::make_shared<WebsocketServer>(state);
 
   auto &app = drogon::app();
   app.registerController(controller);
@@ -79,7 +78,7 @@ void start(int port) {
 
 void stop() { drogon::app().quit(); }
 
-v2::AmdinferHttpServer::AmdinferHttpServer() {
+v2::AmdinferHttpServer::AmdinferHttpServer(SharedState *state) : state_(state) {
   AMDINFER_LOG_DEBUG(logger_, "Constructed v2::AmdinferHttpServer");
 }
 
@@ -134,7 +133,7 @@ void v2::AmdinferHttpServer::getModelReady(
 
   auto resp = HttpResponse::newHttpResponse();
   try {
-    if (!::amdinfer::modelReady(model)) {
+    if (!state_->modelReady(model)) {
       resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
     }
   } catch (const invalid_argument &e) {
@@ -153,7 +152,7 @@ void v2::AmdinferHttpServer::getServerMetadata(
 #endif
   (void)req;  // suppress unused variable warning
 
-  auto metadata = serverMetadata();
+  auto metadata = SharedState::serverMetadata();
 
   Json::Value ret;
   ret["name"] = metadata.name;
@@ -179,7 +178,7 @@ void v2::AmdinferHttpServer::getModelMetadata(
   Json::Value ret;
   bool error = false;
   try {
-    auto metadata = ::amdinfer::modelMetadata(model);
+    auto metadata = state_->modelMetadata(model);
     ret = modelMetadataToJson(metadata);
   } catch (const runtime_error &e) {
     ret["error"] = e.what();
@@ -198,7 +197,7 @@ void v2::AmdinferHttpServer::modelList(
   std::function<void(const drogon::HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received modelList request");
   (void)req;  // suppress unused variable warning
-  const auto models = ::amdinfer::modelList();
+  const auto models = state_->modelList();
 
   Json::Value json;
   json["models"] = Json::arrayValue;
@@ -226,8 +225,8 @@ void v2::AmdinferHttpServer::hasHardware(
     return;
   }
 
-  auto found = amdinfer::hasHardware(json->get("name", "").asString(),
-                                     json->get("num", 1).asInt());
+  auto found = state_->hasHardware(json->get("name", "").asString(),
+                                   json->get("num", 1).asInt());
 
   auto resp = HttpResponse::newHttpResponse();
   if (!found) {
@@ -264,7 +263,7 @@ void v2::AmdinferHttpServer::modelInfer(
     trace->endSpan();
     request->setTrace(std::move(trace));
 #endif
-    ::amdinfer::modelInfer(model, std::move(request));
+    state_->modelInfer(model, std::move(request));
   } catch (const invalid_argument &e) {
     AMDINFER_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -299,7 +298,7 @@ void v2::AmdinferHttpServer::modelLoad(
 #endif
 
   try {
-    ::amdinfer::modelLoad(model_lower, parameters.get());
+    state_->modelLoad(model_lower, parameters.get());
   } catch (const runtime_error &e) {
     AMDINFER_LOG_ERROR(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -333,7 +332,7 @@ void v2::AmdinferHttpServer::modelUnload(
   trace->setAttribute("model", model_lower);
 #endif
 
-  ::amdinfer::modelUnload(model_lower);
+  state_->modelUnload(model_lower);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef AMDINFER_ENABLE_TRACING
@@ -372,7 +371,7 @@ void v2::AmdinferHttpServer::workerLoad(
 #endif
   HttpResponsePtr resp;
   try {
-    auto endpoint = ::amdinfer::workerLoad(worker_lower, parameters.get());
+    auto endpoint = state_->workerLoad(worker_lower, parameters.get());
     resp = HttpResponse::newHttpResponse();
     resp->setBody(endpoint);
   } catch (const runtime_error &e) {
@@ -403,7 +402,7 @@ void v2::AmdinferHttpServer::workerUnload(
   trace->setAttribute("model", worker_lower);
 #endif
 
-  ::amdinfer::workerUnload(worker_lower);
+  state_->workerUnload(worker_lower);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef AMDINFER_ENABLE_TRACING

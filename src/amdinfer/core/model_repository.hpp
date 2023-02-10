@@ -21,20 +21,23 @@
 #include <memory>         // for unique_ptr
 #include <string>         // for string
 
+#include "amdinfer/core/endpoints.hpp"  // for endpoints
+
 namespace amdinfer {
 
 class ParameterMap;
 
 class UpdateListener : public efsw::FileWatchListener {
  public:
-  explicit UpdateListener(const std::filesystem::path& repository)
-    : repository_(repository) {}
+  UpdateListener(const std::filesystem::path& repository, Endpoints* endpoints)
+    : repository_(repository), endpoints_(endpoints) {}
   void handleFileAction(efsw::WatchID watch_id, const std::string& dir,
                         const std::string& filename, efsw::Action action,
                         std::string old_filename) override;
 
  private:
   std::filesystem::path repository_;
+  Endpoints* endpoints_;
 };
 
 void parseModel(const std::filesystem::path& repository,
@@ -44,10 +47,13 @@ class ModelRepository {
  public:
   void setRepository(const std::filesystem::path& repository_path,
                      bool load_existing);
+  std::string getRepository() const;
+  void setEndpoints(Endpoints* endpoints);
   void enableMonitoring(bool use_polling);
 
  private:
   std::filesystem::path repository_;
+  Endpoints* endpoints_;
   std::unique_ptr<efsw::FileWatcher> file_watcher_;
   std::unique_ptr<UpdateListener> listener_;
 };

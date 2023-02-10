@@ -31,7 +31,7 @@ namespace amdinfer {
 
 void wrapNativeClient(py::module_ &m) {
   py::class_<NativeClient, amdinfer::Client>(m, "NativeClient")
-    .def(py::init<>())
+    .def(py::init<Server *>(), py::arg("server"))
     .def("serverMetadata", &NativeClient::serverMetadata,
          DOCS(NativeClient, serverMetadata))
     .def("serverLive", &NativeClient::serverLive,

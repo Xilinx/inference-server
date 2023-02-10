@@ -16,14 +16,14 @@
 list(
   APPEND targets
          predict_api
-         manager
+         endpoints
          worker_info
          data_types
          data_types_internal
          interface
          model_repository
          parameters
-         api
+         shared_state
 )
 
 foreach(target ${targets})
@@ -34,13 +34,13 @@ foreach(target ${targets})
   list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
-target_link_libraries(manager INTERFACE Threads::Threads)
+target_link_libraries(endpoints INTERFACE Threads::Threads)
 
-target_link_libraries(api PRIVATE Jsoncpp_lib)
+target_link_libraries(shared_state PRIVATE Jsoncpp_lib)
 target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(data_types INTERFACE xir)
-  target_link_libraries(api INTERFACE sockpp)
+  target_link_libraries(shared_state INTERFACE sockpp)
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})

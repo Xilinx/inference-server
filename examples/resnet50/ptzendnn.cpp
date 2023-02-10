@@ -178,12 +178,12 @@ int main(int argc, char* argv[]) {
     Args args = getArgs(argc, argv);
 
     // +create client
-    // ptzendnn.cpp
-    amdinfer::NativeClient client;
-
     std::cout << "Starting server locally...\n";
 
     amdinfer::Server server;
+
+    // ptzendnn.cpp
+    amdinfer::NativeClient client(&server);
 
     std::cout << "Waiting until the server is ready...\n";
     amdinfer::waitUntilServerReady(&client);

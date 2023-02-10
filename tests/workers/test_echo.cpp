@@ -118,7 +118,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 };
 
 TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
-  amdinfer::NativeClient client;
+  amdinfer::NativeClient client(&server);
   const auto endpoint = client.workerLoad("echo", nullptr);
 
   auto request = this->constructRequest();

@@ -13,29 +13,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @file
- * @brief Defines the gRPC server
- */
+#ifndef GUARD_AMDINFER_SERVERS_SERVER_INTERNAL
+#define GUARD_AMDINFER_SERVERS_SERVER_INTERNAL
 
-#ifndef GUARD_AMDINFER_SERVERS_GRPC_SERVER
-#define GUARD_AMDINFER_SERVERS_GRPC_SERVER
+#include <thread>
 
 #include "amdinfer/build_options.hpp"
-
-#ifdef AMDINFER_ENABLE_GRPC
+#include "amdinfer/core/model_repository.hpp"
+#include "amdinfer/core/shared_state.hpp"
+#include "amdinfer/servers/server.hpp"
 
 namespace amdinfer {
-class SharedState;
-}
 
-namespace amdinfer::grpc {
+struct Server::ServerImpl {
+#ifdef AMDINFER_ENABLE_HTTP
+  bool http_started = false;
+  std::thread http_thread;
+#endif
+#ifdef AMDINFER_ENABLE_GRPC
+  bool grpc_started = false;
+#endif
+  SharedState state;
+};
 
-void start(SharedState* endpoints, int port);
-void stop();
+}  // namespace amdinfer
 
-}  // namespace amdinfer::grpc
-
-#endif  // AMDINFER_ENABLE_GRPC
-
-#endif  // GUARD_AMDINFER_SERVERS_GRPC_SERVER
+#endif  // GUARD_AMDINFER_SERVERS_SERVER_INTERNAL

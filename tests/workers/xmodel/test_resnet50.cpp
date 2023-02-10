@@ -115,7 +115,7 @@ TEST_F(GrpcFixture, WorkersXmodelResnet50) { test0(client_.get()); }
 // @pytest.mark.fpgas("DPUCADF8H", 1)
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, WorkersXmodelResnet50) {
-  NativeClient client;
+  NativeClient client(&server_);
   test0(&client);
 }
 

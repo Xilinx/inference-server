@@ -35,6 +35,7 @@
 namespace amdinfer {
 class Batcher;
 class ParameterMap;
+class ModelMetadata;
 namespace workers {
 class Worker;
 }  // namespace workers
@@ -145,6 +146,8 @@ class WorkerInfo {
 
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
+
+  ModelMetadata getMetadata() const;
 
  private:
   std::map<std::thread::id, std::thread> worker_threads_;

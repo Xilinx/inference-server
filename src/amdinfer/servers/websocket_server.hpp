@@ -29,6 +29,7 @@
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/interface.hpp"       // for Interface
+#include "amdinfer/core/shared_state.hpp"    // for SharedState
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
@@ -75,7 +76,7 @@ class DrogonWs : public Interface {
 class WebsocketServer
   : public drogon::WebSocketController<WebsocketServer, false> {
  public:
-  WebsocketServer();  ///< constructor
+  explicit WebsocketServer(SharedState *state);  ///< constructor
 
   /**
    * @brief When a client sends a new message, this handler is invoked to parse
@@ -107,10 +108,11 @@ class WebsocketServer
   WS_PATH_ADD("/models/infer", drogon::Get);
   WS_PATH_LIST_END
 
-#ifdef AMDINFER_ENABLE_LOGGING
  private:
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::Server};
 #endif
+  SharedState *state_;
 };
 
 }  // namespace amdinfer::http

@@ -171,7 +171,7 @@ class Worker {
     return batchers;
   }
 
-  ModelMetadata getMetadata() { return this->metadata_; }
+  ModelMetadata getMetadata() const { return this->metadata_; }
 
  protected:
 #ifdef AMDINFER_ENABLE_LOGGING

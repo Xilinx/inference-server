@@ -27,7 +27,6 @@
 #include "amdinfer/batching/batcher.hpp"           // for Batcher
 #include "amdinfer/clients/http_internal.hpp"      // for RequestBuilder
 #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
-#include "amdinfer/core/manager.hpp"               // for Manager
 #include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
 #include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
 #include "amdinfer/observation/tracing.hpp"        // for startSpan, Span
@@ -38,7 +37,7 @@ using drogon::WebSocketMessageType;
 
 namespace amdinfer::http {
 
-WebsocketServer::WebsocketServer() {
+WebsocketServer::WebsocketServer(SharedState *state) : state_(state) {
   AMDINFER_LOG_INFO(logger_, "Constructed WebsocketServer");
 }
 
@@ -84,20 +83,18 @@ void WebsocketServer::handleNewMessage(const WebSocketConnectionPtr &conn,
                  [](unsigned char c) { return std::tolower(c); });
 
   auto request = std::make_unique<DrogonWs>(conn, std::move(json));
-
-  auto *worker = Manager::getInstance().getWorker(model);
-  if (worker == nullptr) {
-    AMDINFER_LOG_INFO(logger_, "Worker " + model + " not found");
-    conn->shutdown(drogon::CloseCode::kInvalidMessage,
-                   "Worker " + model + " not found");
-    return;
-  }
-  auto *batcher = worker->getBatcher();
 #ifdef AMDINFER_ENABLE_TRACING
   trace->endSpan();
   request->setTrace(std::move(trace));
 #endif
-  batcher->enqueue(std::move(request));
+
+  try {
+    state_->modelInfer(model, std::move(request));
+  } catch (const runtime_error &e) {
+    AMDINFER_LOG_INFO(logger_, e.what());
+    conn->shutdown(drogon::CloseCode::kInvalidMessage, e.what());
+    return;
+  }
 }
 
 void WebsocketServer::handleConnectionClosed(

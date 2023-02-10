@@ -24,7 +24,8 @@
 #include <functional>  // for function
 #include <string>      // for allocator, string
 
-#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_HTTP, PROT...
+#include "amdinfer/build_options.hpp"      // for AMDINFER_ENABLE_HTTP, PROT...
+#include "amdinfer/core/shared_state.hpp"  // for SharedState
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
 #ifdef AMDINFER_ENABLE_HTTP
@@ -49,7 +50,7 @@ class AmdinferHttpServer
   : public drogon::HttpController<AmdinferHttpServer, false> {
  public:
   /// Constructor
-  explicit AmdinferHttpServer();
+  explicit AmdinferHttpServer(SharedState *state);
 
   METHOD_LIST_BEGIN
 #ifdef AMDINFER_ENABLE_REST
@@ -246,8 +247,9 @@ class AmdinferHttpServer
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
 #endif
-#ifdef AMDINFER_ENABLE_LOGGING
  private:
+  SharedState *state_;
+#ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::Server};
 #endif
 };
@@ -261,7 +263,7 @@ class AmdinferHttpServer
  *
  * @param port the port to use for the server
  */
-void start(int port);
+void start(SharedState *state, uint16_t port);
 
 /// Stop the REST server
 void stop();

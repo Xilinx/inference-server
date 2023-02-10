@@ -25,7 +25,7 @@ namespace amdinfer {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
-  NativeClient client;
+  NativeClient client(&server_);
   auto endpoint = client.workerLoad("echo", nullptr);
   EXPECT_EQ(endpoint, "echo");
 

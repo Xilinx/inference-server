@@ -1,6 +1,5 @@
 // Copyright 2022 Xilinx, Inc.
 // Copyright 2022 Advanced Micro Devices, Inc.
-// Copyright 2022 Advanced Micro Devices Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,6 +72,8 @@ class Server {
    * platforms.
    */
   void enableRepositoryMonitoring(bool use_polling);
+
+  friend class NativeClient;
 
  private:
   struct ServerImpl;
