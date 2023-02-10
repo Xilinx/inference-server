@@ -30,9 +30,12 @@
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/exceptions.hpp"          // for invalid_argument
 #include "amdinfer/core/interface.hpp"           // for Interface
-#include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCounte...
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCount...
 #include "amdinfer/observation/tracing.hpp"      // for startTrace, Trace
-#include "amdinfer/servers/server_internal.hpp"  // for Server, ServerImpl
+#include "amdinfer/servers/server.hpp"           // for Server
+#include "amdinfer/servers/server_internal.hpp"  // for Server::ServerImpl
 #include "amdinfer/util/string.hpp"              // for toLower
 
 namespace amdinfer {
@@ -49,7 +52,7 @@ NativeClient::NativeClient(Server* server) {
 NativeClient::~NativeClient() = default;
 
 ServerMetadata NativeClient::serverMetadata() const {
-  return impl_->state->serverMetadata();
+  return SharedState::serverMetadata();
 }
 bool NativeClient::serverLive() const { return true; }
 bool NativeClient::serverReady() const { return true; }
@@ -129,7 +132,7 @@ std::vector<std::string> NativeClient::modelList() const {
 }
 
 bool NativeClient::hasHardware(const std::string& name, int num) const {
-  return impl_->state->hasHardware(name, num);
+  return SharedState::hasHardware(name, num);
 }
 
 }  // namespace amdinfer

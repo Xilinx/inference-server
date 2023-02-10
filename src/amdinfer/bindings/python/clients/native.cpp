@@ -24,6 +24,7 @@
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/servers/server.hpp"                      // for Server
 
 namespace py = pybind11;
 

@@ -41,6 +41,7 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Fp32
 #include "amdinfer/core/exceptions.hpp"        // for external_error
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
 #include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"    // for Logger

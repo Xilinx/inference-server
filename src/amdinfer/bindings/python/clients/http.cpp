@@ -32,6 +32,8 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 void wrapHttpClient(py::module_ &m) {
   using amdinfer::HttpClient;
 

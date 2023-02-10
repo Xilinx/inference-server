@@ -21,10 +21,9 @@
 #include <memory>         // for unique_ptr
 #include <string>         // for string
 
-#include "amdinfer/core/endpoints.hpp"  // for endpoints
-
 namespace amdinfer {
 
+class Endpoints;
 class ParameterMap;
 
 class UpdateListener : public efsw::FileWatchListener {

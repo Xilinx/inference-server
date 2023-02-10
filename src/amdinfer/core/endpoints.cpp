@@ -19,12 +19,16 @@
 
 #include "amdinfer/core/endpoints.hpp"
 
+#include <cassert>      // for assert
+#include <type_traits>  // for __decay_and_strip<>::__type
+
 #include "amdinfer/batching/batcher.hpp"  // for Batcher
 #include "amdinfer/build_options.hpp"     // for kMaxModelNameSize
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument
-#include "amdinfer/core/interface.hpp"
-#include "amdinfer/util/memory.hpp"  // for copy
-#include "amdinfer/util/thread.hpp"  // for setThreadName
+#include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
+#include "amdinfer/core/parameters.hpp"   // for ParameterMap
+#include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
+#include "amdinfer/util/thread.hpp"       // for setThreadName
 
 namespace amdinfer {
 
@@ -34,12 +38,13 @@ Endpoints::Endpoints() {
 
 Endpoints::~Endpoints() { this->shutdown(); }
 
-std::string Endpoints::load(const std::string& key, ParameterMap parameters) {
+std::string Endpoints::load(const std::string& worker,
+                            ParameterMap parameters) {
   std::shared_ptr<amdinfer::UpdateCommand> request;
   std::string retval;
   retval.reserve(kMaxModelNameSize);
   retval = "";
-  request = std::make_shared<UpdateCommand>(UpdateCommandType::Load, key,
+  request = std::make_shared<UpdateCommand>(UpdateCommandType::Load, worker,
                                             &parameters, &retval);
   update_queue_.enqueue(request);
 
@@ -54,10 +59,10 @@ std::string Endpoints::load(const std::string& key, ParameterMap parameters) {
   return endpoint;
 }
 
-void Endpoints::unload(const std::string& key) {
-  if (this->exists(key)) {
+void Endpoints::unload(const std::string& endpoint) {
+  if (this->exists(endpoint)) {
     auto request =
-      std::make_shared<UpdateCommand>(UpdateCommandType::Unload, key);
+      std::make_shared<UpdateCommand>(UpdateCommandType::Unload, endpoint);
     update_queue_.enqueue(request);
   }
 }

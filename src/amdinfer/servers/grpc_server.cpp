@@ -36,20 +36,21 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "amdinfer/buffers/buffer.hpp"         // for Buffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/clients/grpc_internal.hpp"  // for mapProtoToParameters
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType:...
-#include "amdinfer/core/exceptions.hpp"        // for invalid_argument
-#include "amdinfer/core/interface.hpp"         // for Interface, Interfac...
+#include "amdinfer/buffers/buffer.hpp"             // for Buffer
+#include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LOG...
+#include "amdinfer/clients/grpc_internal.hpp"      // for mapProtoToParameters
+#include "amdinfer/core/data_types.hpp"            // for DataType, DataType:...
+#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
+#include "amdinfer/core/interface.hpp"             // for Interface, Interfac...
+#include "amdinfer/core/parameters.hpp"            // for ParameterMap
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/observation/observer.hpp"
-#include "amdinfer/util/string.hpp"  // for toLower
-#include "amdinfer/util/traits.hpp"  // IWYU pragma: keep
-#include "predict_api.grpc.pb.h"     // for GRPCInferenceServic...
-#include "predict_api.pb.h"          // for InferTensorContents
+#include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
+#include "amdinfer/util/string.hpp"                // for toLower
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
+#include "predict_api.pb.h"                        // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;
@@ -605,7 +606,7 @@ CALLDATA_IMPL(WorkerUnload, Unary) {
 CALLDATA_IMPL_END
 
 CALLDATA_IMPL(HasHardware, Unary) {
-  auto found = state_->hasHardware(request_.name(), request_.num());
+  auto found = SharedState::hasHardware(request_.name(), request_.num());
   reply_.set_found(found);
   finish(::grpc::Status::OK);
 }
@@ -640,6 +641,8 @@ class GrpcServer final {
   /// Get the singleton GrpcServer instance
   static GrpcServer& getInstance() { return create("", -1, nullptr); }
 
+  // using this singleton approach here because the start() method is state-
+  // independent. The HTTP server is already global like this
   static GrpcServer& create(const std::string& address, const int cq_count,
                             SharedState* state) {
     static GrpcServer server(address, cq_count, state);

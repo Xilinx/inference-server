@@ -21,11 +21,11 @@
 #ifndef GUARD_AMDINFER_SERVERS_HTTP_SERVER
 #define GUARD_AMDINFER_SERVERS_HTTP_SERVER
 
+#include <cstdint>     // for uint16_t
 #include <functional>  // for function
 #include <string>      // for allocator, string
 
-#include "amdinfer/build_options.hpp"      // for AMDINFER_ENABLE_HTTP, PROT...
-#include "amdinfer/core/shared_state.hpp"  // for SharedState
+#include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_HTTP, PROT...
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
 #ifdef AMDINFER_ENABLE_HTTP
@@ -34,6 +34,10 @@
 #include <drogon/HttpResponse.h>    // for HttpResponsePtr
 #include <drogon/HttpTypes.h>       // for Options, Get, Post
 #endif
+
+namespace amdinfer {
+class SharedState;
+}
 
 namespace amdinfer::http {
 

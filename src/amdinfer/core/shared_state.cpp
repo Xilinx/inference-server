@@ -31,14 +31,13 @@
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for move, pair
 
-#include "amdinfer/batching/batcher.hpp"       // for Batcher
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_VITIS
 #include "amdinfer/core/endpoints.hpp"         // for Endpoints
 #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
 #include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
-#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/version.hpp"                // for kAmdinferVersion
 
 #ifdef AMDINFER_ENABLE_VITIS
@@ -184,7 +183,7 @@ Kernels SharedState::getHardware() {
 }
 
 bool SharedState::hasHardware(const std::string& name, int num) {
-  auto kernels = this->getHardware();
+  auto kernels = SharedState::getHardware();
 
   auto kernel_iterator = kernels.find(name);
   if (kernel_iterator == kernels.end()) {

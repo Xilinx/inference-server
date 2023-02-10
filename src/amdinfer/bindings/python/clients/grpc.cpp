@@ -29,6 +29,8 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 void wrapGrpcClient(py::module_ &m) {
   py::class_<GrpcClient, amdinfer::Client>(m, "GrpcClient")
     .def(py::init<const std::string &>(), py::arg("address"),

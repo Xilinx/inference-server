@@ -29,7 +29,7 @@
 #include <vector>   // for vector
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/predict_api.hpp"     // for ParameterMap
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 #include "amdinfer/observation/tracing.hpp"  // for TracePtr

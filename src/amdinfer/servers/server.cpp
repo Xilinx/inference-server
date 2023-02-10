@@ -20,15 +20,12 @@
 #include <thread>   // for thread
 
 #include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_HTTP
-#include "amdinfer/clients/native.hpp"           // for NativeClient
-#include "amdinfer/clients/native_internal.hpp"  // for NativeClientImpl
-#include "amdinfer/core/endpoints.hpp"           // for Endpoints
-#include "amdinfer/core/exceptions.hpp"        // for environment_not_set_error
-#include "amdinfer/core/model_repository.hpp"  // for ModelRepository
-#include "amdinfer/observation/logging.hpp"    // for initLogger, getLogDirec...
-#include "amdinfer/observation/tracing.hpp"    // for startTracer, stopTracer
-#include "amdinfer/servers/grpc_server.hpp"    // for start, stop
-#include "amdinfer/servers/http_server.hpp"    // for stop, start
+#include "amdinfer/core/exceptions.hpp"          // for environment_not_set_e...
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/observation/logging.hpp"      // for initLogger, getLogDir...
+#include "amdinfer/observation/tracing.hpp"      // for startTracer, stopTracer
+#include "amdinfer/servers/grpc_server.hpp"      // for start, stop
+#include "amdinfer/servers/http_server.hpp"      // for stop, start
 #include "amdinfer/servers/server_internal.hpp"  // for ServerImpl
 
 #ifdef AMDINFER_ENABLE_AKS

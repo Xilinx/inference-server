@@ -29,7 +29,6 @@
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/interface.hpp"       // for Interface
-#include "amdinfer/core/shared_state.hpp"    // for SharedState
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
@@ -39,6 +38,7 @@ class Value;
 
 namespace amdinfer {
 class InferenceRequest;
+class SharedState;
 }  // namespace amdinfer
 
 namespace amdinfer::http {

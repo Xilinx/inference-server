@@ -26,9 +26,9 @@
 #include <map>         // for map
 #include <string>      // for string
 
-#include "amdinfer/core/data_types.hpp"            // for fp16
-#include "amdinfer/core/predict_api_internal.hpp"  // for Parameter, Request...
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+#include "amdinfer/core/data_types.hpp"  // for fp16
+#include "amdinfer/core/parameters.hpp"  // for Parameter, ParameterMap (ptr...
+#include "amdinfer/util/traits.hpp"      // IWYU pragma: keep
 
 namespace google::protobuf {
 template <typename T, typename U>
@@ -44,6 +44,9 @@ class ModelInferRequest;
 
 namespace amdinfer {
 
+class InferenceRequest;
+class InferenceResponse;
+class ModelMetadata;
 struct Observer;
 
 void mapParametersToProto(

@@ -19,9 +19,12 @@
 
 #include "amdinfer/core/parameters.hpp"
 
-#include <cstring>
-#include <tuple>
-#include <vector>
+#include <cassert>      // for assert
+#include <cstdint>      // for int32_t
+#include <cstring>      // for size_t, memcpy
+#include <tuple>        // for tuple
+#include <type_traits>  // for add_const<>::type, decay_t
+#include <vector>       // for vector
 
 #include "amdinfer/util/memory.hpp"  // for copy
 

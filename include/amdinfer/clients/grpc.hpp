@@ -35,6 +35,8 @@ class Channel;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 /**
  * @brief The GrpcClient class implements the Client using gRPC
  *

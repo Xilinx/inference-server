@@ -30,6 +30,8 @@
 
 namespace amdinfer {
 
+class ParameterMap;
+
 /**
  * @brief The base Client class defines the set of methods that all client
  * implementations must provide. These methods are based on the API defined by

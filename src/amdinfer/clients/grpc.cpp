@@ -32,6 +32,7 @@
 #include "amdinfer/clients/grpc_internal.hpp"  // for mapParametersToProto
 #include "amdinfer/core/data_types.hpp"        // for DataType
 #include "amdinfer/core/exceptions.hpp"        // for bad_status, connecti...
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/declarations.hpp"           // for InferenceResponseFuture
 #include "amdinfer/observation/observer.hpp"   // for Logger, Observer
 #include "predict_api.grpc.pb.h"               // for GRPCInferenceService...

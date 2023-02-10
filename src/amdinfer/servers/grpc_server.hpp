@@ -31,7 +31,7 @@ class SharedState;
 
 namespace amdinfer::grpc {
 
-void start(SharedState* endpoints, int port);
+void start(SharedState* state, int port);
 void stop();
 
 }  // namespace amdinfer::grpc

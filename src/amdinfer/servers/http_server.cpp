@@ -36,7 +36,9 @@
 #include "amdinfer/clients/http_internal.hpp"  // for propagate, errorHtt...
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
 #include "amdinfer/core/interface.hpp"         // for Interface
+#include "amdinfer/core/parameters.hpp"        // for ParameterMapPtr
 #include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
+#include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/observation/logging.hpp"       // for Logger, AMDINFER_LOG...
 #include "amdinfer/observation/metrics.hpp"       // for Metrics, MetricCoun...
 #include "amdinfer/observation/tracing.hpp"       // for startTrace, Trace
@@ -225,8 +227,8 @@ void v2::AmdinferHttpServer::hasHardware(
     return;
   }
 
-  auto found = state_->hasHardware(json->get("name", "").asString(),
-                                   json->get("num", 1).asInt());
+  auto found = SharedState::hasHardware(json->get("name", "").asString(),
+                                        json->get("num", 1).asInt());
 
   auto resp = HttpResponse::newHttpResponse();
   if (!found) {

@@ -24,9 +24,9 @@
 #include <memory>  // for shared_ptr, uniqu...
 #include <stack>   // for stack
 
-#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TR...
-#include "amdinfer/core/predict_api.hpp"  // for ParameterMap
-#include "amdinfer/declarations.hpp"      // for StringMap
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TR...
+#include "amdinfer/core/parameters.hpp"  // for ParameterMap
+#include "amdinfer/declarations.hpp"     // for StringMap
 
 // IWYU pragma: no_forward_declare amdinfer::ParameterMap
 

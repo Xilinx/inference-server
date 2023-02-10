@@ -20,12 +20,10 @@
 
 #include "amdinfer/core/predict_api.hpp"
 
-#include <algorithm>    // for copy
-#include <cassert>      // for assert
-#include <iterator>     // for back_insert_iterator, back_inse...
-#include <tuple>        // for tuple
-#include <type_traits>  // for add_const<>::type, decay_t
-#include <utility>      // for pair, make_pair, move
+#include <algorithm>  // for copy
+#include <cstring>    // for memcpy
+#include <iterator>   // for back_insert_iterator, back_inse...
+#include <utility>    // for pair, make_pair, move
 
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/util/containers.hpp"  // for containerProduct

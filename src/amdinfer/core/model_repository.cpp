@@ -15,7 +15,7 @@
 
 #include "amdinfer/core/model_repository.hpp"
 
-#include <fcntl.h>                                     // for open, O_RDONLY
+#include <fcntl.h>                                     // for open, O_CLOEXEC
 #include <google/protobuf/io/zero_copy_stream_impl.h>  // for FileInputStream
 #include <google/protobuf/repeated_ptr_field.h>        // for RepeatedPtrField
 #include <google/protobuf/text_format.h>               // for TextFormat
@@ -24,9 +24,10 @@
 #include <filesystem>  // for path, operator/
 #include <thread>      // for sleep_for
 
-#include "amdinfer/core/exceptions.hpp"      // for file_not_found...
-#include "amdinfer/core/predict_api.hpp"     // for ParameterMap
-#include "amdinfer/observation/logging.hpp"  // for Logger, PROTEU...
+#include "amdinfer/core/endpoints.hpp"       // for Endpoints
+#include "amdinfer/core/exceptions.hpp"      // for runtime_error
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_D...
 #include "model_config.pb.h"                 // for Config, InferP...
 
 namespace fs = std::filesystem;

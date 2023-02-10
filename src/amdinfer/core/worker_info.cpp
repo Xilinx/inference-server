@@ -21,21 +21,22 @@
 
 #include "amdinfer/core/worker_info.hpp"
 
-#include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTLD...
+#include <dlfcn.h>  // for dlerror, dlopen, dlsym, RTL...
 
 #include <cctype>       // for toupper
 #include <climits>      // for UINT_MAX
 #include <cstdint>      // for int32_t
 #include <exception>    // for exception
-#include <string>       // for string, operator+, basic_string
-#include <type_traits>  // for __decay_and_strip<>::__type
+#include <string>       // for string, operator+, basic_st...
+#include <type_traits>  // for remove_reference<>::type
 #include <utility>      // for pair, move, make_pair
 
-#include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Batc...
-#include "amdinfer/core/exceptions.hpp"   // for invalid_argument, file_not_f...
+#include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Bat...
+#include "amdinfer/core/exceptions.hpp"   // for invalid_argument, external_...
 #include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/predict_api.hpp"  // for ParameterMap
-#include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worker...
+#include "amdinfer/core/parameters.hpp"   // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"  // for ModelMetadata
+#include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worke...
 
 namespace amdinfer {
 

@@ -20,12 +20,20 @@
 #ifndef GUARD_AMDINFER_CORE_SHARED_STATE
 #define GUARD_AMDINFER_CORE_SHARED_STATE
 
-#include <filesystem>
+#include <filesystem>  // for path
+#include <memory>      // for unique_ptr
+#include <string>      // for string
+#include <vector>      // for vector
 
-#include "amdinfer/core/endpoints.hpp"
-#include "amdinfer/core/model_repository.hpp"
+#include "amdinfer/core/endpoints.hpp"         // for Endpoints
+#include "amdinfer/core/model_repository.hpp"  // for ModelRepository
+#include "amdinfer/core/predict_api.hpp"       // for ModelMetadata, ServerM...
+#include "amdinfer/declarations.hpp"           // for Kernels
 
 namespace amdinfer {
+
+class Interface;
+class ParameterMap;
 
 class SharedState {
  public:
@@ -41,8 +49,8 @@ class SharedState {
 
   void modelInfer(const std::string& model, std::unique_ptr<Interface> request);
 
-  Kernels getHardware();
-  bool hasHardware(const std::string& name, int num);
+  static Kernels getHardware();
+  static bool hasHardware(const std::string& name, int num);
 
   void setRepository(const std::filesystem::path& repository_path,
                      bool load_existing);

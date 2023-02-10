@@ -20,19 +20,25 @@
 #ifndef GUARD_AMDINFER_CORE_ENDPOINTS
 #define GUARD_AMDINFER_CORE_ENDPOINTS
 
-#include <map>
-#include <memory>
-#include <string>
-#include <unordered_map>
-#include <vector>
+#include <exception>      // for exception_ptr
+#include <map>            // for map
+#include <memory>         // for allocator, uniq...
+#include <string>         // for string
+#include <thread>         // for thread
+#include <unordered_map>  // for unordered_map
+#include <utility>        // for move
+#include <vector>         // for vector
 
-#include "amdinfer/build_options.hpp"
-#include "amdinfer/core/parameters.hpp"
-#include "amdinfer/core/predict_api.hpp"  // for ModelMetadata
-#include "amdinfer/core/worker_info.hpp"
-#include "amdinfer/observation/logging.hpp"
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE...
+#include "amdinfer/core/predict_api.hpp"     // for ModelMetadata
+#include "amdinfer/observation/logging.hpp"  // for Logger, Loggers
+#include "amdinfer/util/queue.hpp"           // for BlockingQueue
 
 namespace amdinfer {
+
+class Interface;
+class ParameterMap;
+class WorkerInfo;
 
 /**
  * @brief IDs used to specify commands to update the Manager

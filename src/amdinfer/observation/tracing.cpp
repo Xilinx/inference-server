@@ -49,8 +49,6 @@
 #include <utility>  // for move
 #include <variant>  // for get
 
-#include "amdinfer/core/predict_api.hpp"
-
 #ifdef AMDINFER_ENABLE_TRACING
 
 namespace trace_api = opentelemetry::trace;

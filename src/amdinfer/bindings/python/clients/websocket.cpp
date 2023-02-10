@@ -30,6 +30,8 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
+class ParameterMap;
+
 void wrapWebSocketClient(py::module_ &m) {
   using amdinfer::WebSocketClient;
 

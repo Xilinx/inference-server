@@ -28,6 +28,7 @@
 
 #include "amdinfer/buffers/buffer.hpp"       // for Buffer
 #include "amdinfer/core/data_types.hpp"      // for DataType
+#include "amdinfer/core/parameters.hpp"      // for ParameterMapPtr
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_ERROR
 #include "amdinfer/util/containers.hpp"      // for containerProduct
 

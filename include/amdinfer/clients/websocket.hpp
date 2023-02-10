@@ -31,6 +31,8 @@
 
 namespace amdinfer {
 
+class ParameterMap;
+
 /**
  * @brief The WebSocketClient class implements the Client using websocket. It
  * reuses the HttpClient for most transactions with the exception of some

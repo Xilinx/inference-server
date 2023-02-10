@@ -24,11 +24,10 @@
 #include <string>     // for string, operator+, char_t...
 #include <utility>    // for move
 
-#include "amdinfer/batching/batcher.hpp"           // for Batcher
 #include "amdinfer/clients/http_internal.hpp"      // for RequestBuilder
 #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
 #include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
-#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/observation/tracing.hpp"        // for startSpan, Span
 
 using drogon::HttpRequestPtr;

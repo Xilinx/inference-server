@@ -22,17 +22,18 @@
 #ifndef GUARD_AMDINFER_CLIENTS_NATIVE
 #define GUARD_AMDINFER_CLIENTS_NATIVE
 
+#include <memory>  // for unique_ptr
 #include <string>  // for string
 #include <vector>  // for vector
 
 #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
 #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
 #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
-#include "amdinfer/servers/server.hpp"    // for Server
-
-// IWYU pragma: no_forward_declare amdinfer::ParameterMap
 
 namespace amdinfer {
+
+class ParameterMap;
+class Server;
 
 /**
  * @brief The NativeClient class implements the Client using the native C++ API.

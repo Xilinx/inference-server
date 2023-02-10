@@ -31,6 +31,8 @@
 
 namespace amdinfer {
 
+class ParameterMap;
+
 /**
  * @brief The HttpClient class implements the Client using HTTP REST
  *

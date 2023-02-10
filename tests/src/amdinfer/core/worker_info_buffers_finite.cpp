@@ -28,7 +28,7 @@
 
 #include "amdinfer/batching/batcher.hpp"  // for Batcher
 #include "amdinfer/buffers/buffer.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/predict_api.hpp"  // for ParameterMap
+#include "amdinfer/core/parameters.hpp"   // for ParameterMap
 #include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
 #include "amdinfer/declarations.hpp"      // for BufferPtrs
 #include "amdinfer/util/queue.hpp"        // for BufferPtrsQueue, Blockin...

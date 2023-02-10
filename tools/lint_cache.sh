@@ -43,6 +43,7 @@ flags: provide options for this command
   --tool      - tool to run: iwyu or tidy
   --run       - run the specified tool
   --check     - print the results from the specified tool
+  --clean     - ignore the cache and rerun the tool
   -p          - max number of processes to use. Defaults to nproc / 2
   -h | --help - prints this message and exits
 EOF
