@@ -36,70 +36,63 @@
 #endif
 
 namespace amdinfer {
-class SharedState;
-}
 
-namespace amdinfer::http {
+class SharedState;
 
 #ifdef AMDINFER_ENABLE_HTTP
-
-namespace v2 {
 
 /**
  * @brief The HTTP server for handling REST requests extends the base
  * HttpController in Drogon and adds the endpoints of interest.
  *
  */
-class AmdinferHttpServer
-  : public drogon::HttpController<AmdinferHttpServer, false> {
+class HttpServer : public drogon::HttpController<HttpServer, false> {
  public:
   /// Constructor
-  explicit AmdinferHttpServer(SharedState *state);
+  explicit HttpServer(SharedState *state);
 
   METHOD_LIST_BEGIN
 #ifdef AMDINFER_ENABLE_REST
   /// Register the getServerLive endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::getServerLive, "v2/health/live",
-                drogon::Get, drogon::Options);
+  ADD_METHOD_TO(HttpServer::getServerLive, "v2/health/live", drogon::Get,
+                drogon::Options);
   /// Register the getServerReady endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::getServerReady, "v2/health/ready",
-                drogon::Get, drogon::Options);
+  ADD_METHOD_TO(HttpServer::getServerReady, "v2/health/ready", drogon::Get,
+                drogon::Options);
   /// Register the getModelReady endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::getModelReady, "v2/models/{model}/ready",
+  ADD_METHOD_TO(HttpServer::getModelReady, "v2/models/{model}/ready",
                 drogon::Get, drogon::Options);
   /// Register the getServerMetadata endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::getServerMetadata, "v2", drogon::Get,
+  ADD_METHOD_TO(HttpServer::getServerMetadata, "v2", drogon::Get,
                 drogon::Options);
   /// Register the getModelMetadata endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::getModelMetadata, "v2/models/{model}",
-                drogon::Get, drogon::Options);
+  ADD_METHOD_TO(HttpServer::getModelMetadata, "v2/models/{model}", drogon::Get,
+                drogon::Options);
   /// Register the getHardware endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::hasHardware, "v2/hardware", drogon::Post,
+  ADD_METHOD_TO(HttpServer::hasHardware, "v2/hardware", drogon::Post,
                 drogon::Options);
   /// Register the modelList endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::modelList, "v2/models", drogon::Get,
+  ADD_METHOD_TO(HttpServer::modelList, "v2/models", drogon::Get,
                 drogon::Options);
   /// Register the modelInfer endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::modelInfer, "v2/models/{model}/infer",
-                drogon::Post, drogon::Options);
+  ADD_METHOD_TO(HttpServer::modelInfer, "v2/models/{model}/infer", drogon::Post,
+                drogon::Options);
   /// Register the load endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::modelLoad,
-                "v2/repository/models/{model}/load", drogon::Post,
-                drogon::Options);
+  ADD_METHOD_TO(HttpServer::modelLoad, "v2/repository/models/{model}/load",
+                drogon::Post, drogon::Options);
   /// Register the unload endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::modelUnload,
-                "v2/repository/models/{model}/unload", drogon::Post,
-                drogon::Options);
+  ADD_METHOD_TO(HttpServer::modelUnload, "v2/repository/models/{model}/unload",
+                drogon::Post, drogon::Options);
   /// Register the workerLoad endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::workerLoad, "v2/workers/{worker}/load",
+  ADD_METHOD_TO(HttpServer::workerLoad, "v2/workers/{worker}/load",
                 drogon::Post, drogon::Options);
   /// Register the workerUnload endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::workerUnload, "v2/workers/{worker}/unload",
+  ADD_METHOD_TO(HttpServer::workerUnload, "v2/workers/{worker}/unload",
                 drogon::Post, drogon::Options);
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
   /// Register the metrics endpoint
-  ADD_METHOD_TO(AmdinferHttpServer::metrics, "metrics", drogon::Get);
+  ADD_METHOD_TO(HttpServer::metrics, "metrics", drogon::Get);
 #endif
   METHOD_LIST_END
 
@@ -258,9 +251,9 @@ class AmdinferHttpServer
 #endif
 };
 
-}  // namespace v2
-
 #endif
+
+namespace http {
 
 /**
  * @brief Start the HTTP REST server
@@ -272,5 +265,8 @@ void start(SharedState *state, uint16_t port);
 /// Stop the REST server
 void stop();
 
-}  // namespace amdinfer::http
+}  // namespace http
+
+}  // namespace amdinfer
+
 #endif  // GUARD_AMDINFER_SERVERS_HTTP_SERVER

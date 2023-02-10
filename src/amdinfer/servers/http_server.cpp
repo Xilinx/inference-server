@@ -50,10 +50,12 @@ using drogon::HttpResponse;
 using drogon::HttpResponsePtr;
 using drogon::HttpStatusCode;
 
-namespace amdinfer::http {
+namespace amdinfer {
+
+namespace http {
 
 void start(SharedState *state, uint16_t port) {
-  auto controller = std::make_shared<v2::AmdinferHttpServer>(state);
+  auto controller = std::make_shared<HttpServer>(state);
   auto ws_controller = std::make_shared<WebsocketServer>(state);
 
   auto &app = drogon::app();
@@ -80,13 +82,15 @@ void start(SharedState *state, uint16_t port) {
 
 void stop() { drogon::app().quit(); }
 
-v2::AmdinferHttpServer::AmdinferHttpServer(SharedState *state) : state_(state) {
-  AMDINFER_LOG_DEBUG(logger_, "Constructed v2::AmdinferHttpServer");
+}  // namespace http
+
+HttpServer::HttpServer(SharedState *state) : state_(state) {
+  AMDINFER_LOG_DEBUG(logger_, "Constructed HttpServer");
 }
 
 #ifdef AMDINFER_ENABLE_REST
 
-void v2::AmdinferHttpServer::getServerLive(
+void HttpServer::getServerLive(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerLive request");
@@ -107,7 +111,7 @@ void v2::AmdinferHttpServer::getServerLive(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::getServerReady(
+void HttpServer::getServerReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerReady request");
@@ -123,7 +127,7 @@ void v2::AmdinferHttpServer::getServerReady(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::getModelReady(
+void HttpServer::getModelReady(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
@@ -145,7 +149,7 @@ void v2::AmdinferHttpServer::getModelReady(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::getServerMetadata(
+void HttpServer::getServerMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerMetadata request");
@@ -167,7 +171,7 @@ void v2::AmdinferHttpServer::getServerMetadata(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::getModelMetadata(
+void HttpServer::getModelMetadata(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
@@ -194,7 +198,7 @@ void v2::AmdinferHttpServer::getModelMetadata(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::modelList(
+void HttpServer::modelList(
   const drogon::HttpRequestPtr &req,
   std::function<void(const drogon::HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received modelList request");
@@ -211,7 +215,7 @@ void v2::AmdinferHttpServer::modelList(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::hasHardware(
+void HttpServer::hasHardware(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received hasHardware request");
@@ -237,7 +241,7 @@ void v2::AmdinferHttpServer::hasHardware(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::modelInfer(
+void HttpServer::modelInfer(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
@@ -277,7 +281,7 @@ void v2::AmdinferHttpServer::modelInfer(
   }
 }
 
-void v2::AmdinferHttpServer::modelLoad(
+void HttpServer::modelLoad(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
@@ -319,7 +323,7 @@ void v2::AmdinferHttpServer::modelLoad(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::modelUnload(
+void HttpServer::modelUnload(
   [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &model) const {
@@ -344,7 +348,7 @@ void v2::AmdinferHttpServer::modelUnload(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::workerLoad(
+void HttpServer::workerLoad(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
@@ -388,7 +392,7 @@ void v2::AmdinferHttpServer::workerLoad(
   callback(resp);
 }
 
-void v2::AmdinferHttpServer::workerUnload(
+void HttpServer::workerUnload(
   [[maybe_unused]] const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
@@ -417,7 +421,7 @@ void v2::AmdinferHttpServer::workerUnload(
 #endif  // AMDINFER_ENABLE_REST
 
 #ifdef AMDINFER_ENABLE_METRICS
-void v2::AmdinferHttpServer::metrics(
+void HttpServer::metrics(
   const HttpRequestPtr &req,
   std::function<void(const HttpResponsePtr &)> &&callback) const {
   (void)req;  // suppress unused variable warning
@@ -430,4 +434,4 @@ void v2::AmdinferHttpServer::metrics(
 }
 #endif
 
-}  // namespace amdinfer::http
+}  // namespace amdinfer
