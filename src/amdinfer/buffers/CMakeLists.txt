@@ -22,11 +22,12 @@ endif()
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
   target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  enable_ipo_on_target(${target})
+  set_target_options(${target})
 
   list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
 
 add_library(buffers STATIC ${BUFFERS_OBJS})
+set_target_options(buffers)
 
 # set(BUFFERS_OBJS ${BUFFERS_OBJS} PARENT_SCOPE)

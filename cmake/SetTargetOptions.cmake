@@ -14,13 +14,30 @@
 # limitations under the License.
 
 include(CheckIPOSupported)
-check_ipo_supported(RESULT IPO_SUPPORTED)
+check_ipo_supported(RESULT ipo_supported OUTPUT output)
 
 function(enable_ipo_on_target target)
-  if(IPO_SUPPORTED)
+  if(ipo_supported)
     set_property(
       TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION
                                 ${AMDINFER_ENABLE_IPO}
     )
+  else()
+    if(${AMDINFER_ENABLE_IPO})
+      message(WARNING "IPO is not supported: ${output}")
+    endif()
   endif()
+endfunction()
+
+function(set_target_options target)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(
+      ${target} PRIVATE "-Wall" "-Wextra" "-Werror" "-Wpedantic"
+                        "-pedantic-errors"
+    )
+  else()
+    message(WARNING "Not compiling with gcc. This is not well-tested.")
+  endif()
+
+  enable_ipo_on_target(${target})
 endfunction()

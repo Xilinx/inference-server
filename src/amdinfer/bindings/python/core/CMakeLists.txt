@@ -23,6 +23,7 @@ target_include_directories(
                         ${Python_INCLUDE_DIRS}
 )
 target_link_libraries(exceptions_py PRIVATE ${Python_LIBRARIES})
+set_target_options(exceptions_py)
 add_dependencies(exceptions_py pybind11Mkdoc)
 
 set(LINK_TARGETS ${LINK_TARGETS} exceptions_py)
@@ -34,6 +35,7 @@ foreach(target ${TARGETS})
                          ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
   )
   target_link_libraries(${target}_py PRIVATE ${Python_LIBRARIES} amdinfer)
+  set_target_options(${target}_py)
   add_dependencies(${target}_py pybind11Mkdoc)
 
   set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)

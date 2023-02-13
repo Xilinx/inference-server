@@ -18,14 +18,14 @@ list(APPEND targets)
 
 add_library(batcher OBJECT batcher.cpp)
 target_include_directories(batcher PRIVATE ${AMDINFER_INCLUDE_DIRS})
-enable_ipo_on_target(batcher)
+set_target_options(batcher)
 set(BATCHING_OBJS $<TARGET_OBJECTS:batcher>)
 
 foreach(file ${files})
   set(target ${file}Batcher)
   add_library(${target} OBJECT ${file}.cpp)
   target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  enable_ipo_on_target(${target})
+  set_target_options(${target})
 
   list(APPEND BATCHING_OBJS $<TARGET_OBJECTS:${target}>)
   list(APPEND targets ${target})
@@ -35,5 +35,6 @@ target_link_libraries(softBatcher INTERFACE timer)
 
 add_library(batching STATIC ${BATCHING_OBJS})
 target_link_libraries(batching INTERFACE batcher ${targets})
+set_target_options(batching)
 
 set(BATCHING_OBJS ${BATCHING_OBJS} PARENT_SCOPE)

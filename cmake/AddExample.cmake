@@ -37,6 +37,7 @@ function(amdinfer_add_example example)
   add_executable(${target} ${example}.cpp)
   target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   target_link_libraries(${target} PRIVATE amdinfer util)
+  set_target_options(${target})
 endfunction()
 
 function(amdinfer_add_examples examples)

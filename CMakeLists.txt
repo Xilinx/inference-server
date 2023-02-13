@@ -63,7 +63,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   )
 
   # set standard options
-  set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic -pedantic-errors")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
@@ -77,7 +76,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
 endif()
 include(CMakeDependentOption)
 include(CTest)
-include(EnableIPO)
+include(SetTargetOptions)
 include(AddOption)
 
 # check requirements

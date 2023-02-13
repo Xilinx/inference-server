@@ -18,6 +18,7 @@ target_include_directories(
                      ${Python_INCLUDE_DIRS} ${AMDINFER_TEST_INCLUDE_DIRS}
 )
 target_link_libraries(testing_py PRIVATE ${Python_LIBRARIES} testing)
+set_target_options(testing_py)
 add_dependencies(testing_py pybind11Mkdoc)
 
 set(TESTING_OBJS testing_py PARENT_SCOPE)

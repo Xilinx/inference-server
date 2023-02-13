@@ -20,7 +20,7 @@ if(${AMDINFER_ENABLE_LOGGING})
   add_library(logging OBJECT logging.cpp)
   target_link_libraries(logging INTERFACE spdlog)
   target_include_directories(logging PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  enable_ipo_on_target(logging)
+  set_target_options(logging)
 
   list(APPEND targets logging)
 
@@ -31,7 +31,7 @@ if(${AMDINFER_ENABLE_METRICS})
   add_library(metrics OBJECT metrics.cpp)
   target_link_libraries(metrics INTERFACE prometheus-cpp-core util)
   target_include_directories(metrics PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  enable_ipo_on_target(metrics)
+  set_target_options(metrics)
 
   list(APPEND targets metrics)
 
@@ -47,7 +47,7 @@ if(${AMDINFER_ENABLE_TRACING})
     tracing INTERFACE opentelemetry_trace libopentelemetry_resources.so
                       opentelemetry_exporter_jaeger_trace
   )
-  enable_ipo_on_target(tracing)
+  set_target_options(tracing)
 
   list(APPEND targets tracing)
 
@@ -56,5 +56,6 @@ endif()
 
 add_library(observation STATIC ${OBSERVATION_OBJS})
 target_link_libraries(observation INTERFACE ${targets})
+set_target_options(observation)
 
 set(OBSERVATION_OBJS ${OBSERVATION_OBJS} PARENT_SCOPE)

@@ -21,6 +21,7 @@ target_link_libraries(
   pre_post_py PRIVATE ${Python_LIBRARIES} opencv_core opencv_imgproc
                       opencv_imgcodecs
 )
+set_target_options(pre_post_py)
 add_dependencies(pre_post_py pybind11Mkdoc)
 
 set(PRE_POST_OBJS pre_post_py PARENT_SCOPE)

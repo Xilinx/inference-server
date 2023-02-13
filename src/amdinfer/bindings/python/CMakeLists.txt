@@ -76,6 +76,7 @@ if(${AMDINFER_BUILD_TESTING})
   target_link_libraries(amdinfer_py PRIVATE ${TESTING_OBJS})
 endif()
 set_target_properties(amdinfer_py PROPERTIES OUTPUT_NAME _amdinfer)
+set_target_options(amdinfer_py)
 
 if(UNIX AND NOT APPLE)
   set_target_properties(amdinfer_py PROPERTIES INSTALL_RPATH "$ORIGIN")

@@ -30,7 +30,7 @@ foreach(target ${targets})
   target_include_directories(
     fake_${target} AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS}
   )
-  enable_ipo_on_target(fake_${target})
+  set_target_options(fake_${target})
 
   list(APPEND CORE_OBJS $<TARGET_OBJECTS:fake_${target}>)
 endforeach()
