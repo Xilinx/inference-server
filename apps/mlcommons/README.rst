@@ -21,10 +21,11 @@ Prerequisites
 
 - CMake
 - git
+- amdinfer
 
 
-Build
------
+Build the app
+-------------
 
 Build and install the MLCommons loadgen library:
 
@@ -34,7 +35,7 @@ Build and install the MLCommons loadgen library:
     git clone --single-branch -b v2.0 https://github.com/mlcommons/inference.git mlcommons_inference
     cd mlcommons_inference/loadgen
     cmake -S . -B build
-    sudo cmake --build build -- -j4
+    cmake --build build -- -j4
     # the normal install target installs everything to CMAKE_INSTALL_PREFIX/* which
     # can lead to name collisions so manually create install directories
     export LIB_INSTALL_PATH=/usr/local/lib
@@ -45,3 +46,19 @@ Build and install the MLCommons loadgen library:
     sudo cp *.h $INC_INSTALL_PATH
 
 You can also refer to the `official build instructions <https://github.com/mlcommons/inference/blob/master/loadgen/README_BUILD.md>`__
+
+Build the app:
+
+.. code-block:: bash
+
+    cmake -S . -B build
+    cmake --build build -- -j4
+
+Run the app
+-----------
+
+.. code-block:: bash
+
+    ./build/src/app <flags>
+
+Use ``--help`` to see the options.

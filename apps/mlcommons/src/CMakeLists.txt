@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(app main.cpp query_sample_library.cpp system_under_test.cpp)
+add_executable(mlperf main.cpp query_sample_library.cpp system_under_test.cpp)
 target_link_libraries(
-  app PRIVATE mlperf_loadgen amdinfer Threads::Threads opencv_core
-              opencv_imgproc opencv_imgcodecs
+  mlperf PRIVATE mlperf_loadgen amdinfer Threads::Threads opencv_core
+                 opencv_imgproc opencv_imgcodecs
 )
 if(NOT PROJECT_IS_TOP_LEVEL)
-  set_target_options(app)
-  target_include_directories(app PRIVATE ${AMDINFER_PUBLIC_INCLUDE_DIRS})
+  set_target_options(mlperf)
+  target_include_directories(mlperf PRIVATE ${AMDINFER_PUBLIC_INCLUDE_DIRS})
 endif()

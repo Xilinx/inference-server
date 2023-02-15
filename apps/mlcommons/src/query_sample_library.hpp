@@ -20,12 +20,13 @@
 #ifndef GUARD_MLCOMMONS_SRC_QUERY_SAMPLE_LIBRARY
 #define GUARD_MLCOMMONS_SRC_QUERY_SAMPLE_LIBRARY
 
+#include <mlcommons/loadgen/query_sample_library.h>
+
 #include <filesystem>
 #include <functional>
 #include <string>
 
 #include "amdinfer/amdinfer.hpp"
-#include "mlcommons/loadgen/query_sample_library.h"
 
 namespace amdinfer {
 

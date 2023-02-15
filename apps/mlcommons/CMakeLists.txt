@@ -24,13 +24,15 @@ project(
 if(PROJECT_IS_TOP_LEVEL)
   find_package(amdinfer REQUIRED)
   find_package(Threads REQUIRED)
-else()
-  message(STATUS "Building apps: mlcommons")
 endif()
 
 check_include_file_cxx(mlcommons/loadgen/loadgen.h LOADGEN_INCLUDE)
 if(NOT LOADGEN_INCLUDE)
-  message(FATAL_ERROR "loadgen could not be included")
+  message(
+    WARNING
+      "Skipping app: mlcommons ('mlcommons/loadgen/loadgen.h' could not be included)"
+  )
+else()
+  message(STATUS "Building apps: mlcommons")
+  add_subdirectory(src)
 endif()
-
-add_subdirectory(src)

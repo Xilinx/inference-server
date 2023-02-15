@@ -19,9 +19,10 @@
 
 #include "system_under_test.hpp"
 
+#include <mlcommons/loadgen/loadgen.h>
+
 #include <cassert>
 
-#include "mlcommons/loadgen/loadgen.h"
 #include "query_sample_library.hpp"
 
 namespace amdinfer {

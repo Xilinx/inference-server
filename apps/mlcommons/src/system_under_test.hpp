@@ -20,8 +20,9 @@
 #ifndef GUARD_MLCOMMONS_SRC_SYSTEM_UNDER_TEST
 #define GUARD_MLCOMMONS_SRC_SYSTEM_UNDER_TEST
 
+#include <mlcommons/loadgen/system_under_test.h>
+
 #include "amdinfer/amdinfer.hpp"
-#include "mlcommons/loadgen/system_under_test.h"
 
 namespace amdinfer {
 

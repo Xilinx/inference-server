@@ -246,7 +246,7 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
     }
   } catch (...) {
     // undo the load if the worker creation fails
-    this->unload(endpoint);
+    this->unsafeUnload(endpoint);
     throw;
   }
   return endpoint;
@@ -304,7 +304,7 @@ void Endpoints::unsafeList(std::vector<std::string>* list) const {
 
 // FIXME(varunsh): potential race condition if the worker is being deleted
 ModelMetadata Endpoints::unsafeMetadata(const std::string& endpoint) const {
-  auto* worker = this->unsafeGet(endpoint);
+  const auto* worker = this->unsafeGet(endpoint);
   if (worker == nullptr) {
     throw invalid_argument("Worker " + endpoint + " not found");
   }

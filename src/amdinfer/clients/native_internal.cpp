@@ -48,7 +48,7 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
   static InferenceRequestInput build(const InferenceRequestInput &req,
                                      Buffer *input_buffer, size_t offset) {
     InferenceRequestInput input;
-    input.data_ = req.data_;
+    input.data_ = req.getData();
     input.name_ = req.name_;
     input.shape_.reserve(req.shape_.size());
     input.shape_ = req.shape_;
@@ -56,7 +56,7 @@ class InferenceRequestInputBuilder<InferenceRequestInput> {
     input.parameters_ = req.parameters_;
     auto size = util::containerProduct(input.shape_) * input.data_type_.size();
     auto *dest = static_cast<std::byte *>(input_buffer->data(offset));
-    memcpy(dest, req.data_, size);
+    memcpy(dest, input.data_, size);
 
     input.data_ = dest;
     return input;
