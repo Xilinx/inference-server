@@ -61,9 +61,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_base64_8cpp_1a726cc9124c561dfd45dfbeceeb78f3be`
-
 - :ref:`exhale_function_base64_8cpp_1a3fab927a4086e187790fddf5d7356625`
+
+- :ref:`exhale_function_base64_8cpp_1a726cc9124c561dfd45dfbeceeb78f3be`
 
 - :ref:`exhale_function_base64_8cpp_1ac5e3a230a657bc4195e886fc328f4adf`
 

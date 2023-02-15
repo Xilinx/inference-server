@@ -23,8 +23,16 @@ Install the Python library
 --------------------------
 
 The Python library is built and installed in the development container as part of the regular CMake build.
-To install it outside Docker or in different containers, you need to install a precompiled wheel.
-Currently, these wheels are not available on Pip and must be built locally.
+To install it outside Docker or in different containers, you can use ``pip``:
+
+.. code-block:: console
+
+    $ pip install amdinfer
+
+.. tip::
+
+    Make sure the client library version is compatible with the server by using matching versions.
+    If you are using the latest server from ``main``, you may need to install the Python library with ``pip install --pre amdinfer`` to install a pre-release package, if it exists.
 
 Build wheels
 ^^^^^^^^^^^^

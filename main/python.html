@@ -398,8 +398,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="install-the-python-library">
 <h2>Install the Python library<a class="headerlink" href="#install-the-python-library" title="Permalink to this headline">¶</a></h2>
 <p>The Python library is built and installed in the development container as part of the regular CMake build.
-To install it outside Docker or in different containers, you need to install a precompiled wheel.
-Currently, these wheels are not available on Pip and must be built locally.</p>
+To install it outside Docker or in different containers, you can use <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>amdinfer
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure the client library version is compatible with the server by using matching versions.
+If you are using the latest server from <code class="docutils literal notranslate"><span class="pre">main</span></code>, you may need to install the Python library with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--pre</span> <span class="pre">amdinfer</span></code> to install a pre-release package, if it exists.</p>
+</div>
 <section id="build-wheels">
 <h3>Build wheels<a class="headerlink" href="#build-wheels" title="Permalink to this headline">¶</a></h3>
 <p>You can build wheels for the Python library to make a precompiled package that can be installed in any Linux host, container or environment.
@@ -2266,7 +2273,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 30, 2023.
+      <span class="lastupdated">Last updated on February 15, 2023.
       </span></p>
   </div>
 

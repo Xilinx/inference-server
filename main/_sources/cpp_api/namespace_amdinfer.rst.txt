@@ -298,9 +298,9 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835`
-
 - :ref:`exhale_function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6`
 

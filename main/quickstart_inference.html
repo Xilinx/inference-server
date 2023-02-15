@@ -405,7 +405,11 @@ Your server administrator can provide this information.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> library allows you to make clients that you can use to communicate with the server over any protocol that the server supports.
 Clients for different protocols have the same base set of methods so you can easily replace one with another.
 The library can be used from C++ or Python.</p>
-<p>You can use the development container to use the C++ and Python libraries:</p>
+<p>To use the Python library, install with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>amdinfer
+</pre></div>
+</div>
+<p>You can use the development container to use both the C++ and Python libraries:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Xilinx/inference-server.git
 <span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>inference-server
 <span class="gp">$ </span>python3<span class="w"> </span>docker/generate.py
@@ -585,7 +589,7 @@ If needed, you must implement it or use an existing implementation for your mode
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 30, 2023.
+      <span class="lastupdated">Last updated on February 15, 2023.
       </span></p>
   </div>
 

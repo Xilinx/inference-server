@@ -637,7 +637,7 @@ A sample YAML file is provided below.</p>
 <p>The method by which you communicate with your service depends on your Kubernetes cluster configuration.
 For example, one way to make requests is to <a class="reference external" href="https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports">get the address of the INGRESS_HOST and INGRESS_PORT</a>, and then make requests to this URL by setting the <code class="docutils literal notranslate"><span class="pre">Host</span></code> header on all requests to your targeted service.
 This use case may be needed if your cluster doesn’t have a load-balancer and/or DNS enabled.</p>
-<p>Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the <a class="reference external" href="https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/">KServe Python API</a>.
+<p>Once you can communicate with your service, you can make requests to the Inference Server using REST with the Python client library or the <a class="reference external" href="https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/">KServe Python API</a>.
 The request will be routed to the server and the response will be returned.
 You can see some examples of using the KServe Python API to make requests in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/tests/kserve">tests</a>.</p>
 </section>
@@ -690,7 +690,7 @@ amdinfer<span class="w"> </span>attach<span class="w"> </span>-n<span class="w">
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 30, 2023.
+      <span class="lastupdated">Last updated on February 15, 2023.
       </span></p>
   </div>
 

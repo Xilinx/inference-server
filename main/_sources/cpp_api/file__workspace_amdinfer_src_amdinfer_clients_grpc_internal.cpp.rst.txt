@@ -100,11 +100,11 @@ Functions
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
-
 - :ref:`exhale_function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
 

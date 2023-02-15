@@ -400,9 +400,7 @@ This example and script are intended to run in the development container.
 The complete script used here is available in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/examples/hello_world">repository</a>.</p>
 <section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Permalink to this headline">¶</a></h2>
-<p>You need to bring in the AMD Inference Server Python library to use the API.
-The Python library is based on the Inference Server’s C++ API and it gets installed in the dev container when you build the project.
-You can also install it using a pre-built wheel.</p>
+<p>In the development container, the Python library is automatically built and installed as part of the CMake build process.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -541,7 +539,7 @@ You can look at more sophisticated examples for another overview of the steps as
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 30, 2023.
+      <span class="lastupdated">Last updated on February 15, 2023.
       </span></p>
   </div>
 
