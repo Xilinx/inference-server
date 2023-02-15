@@ -286,11 +286,11 @@ Functions
 
 - :ref:`exhale_function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec`
 
+- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
+
 - :ref:`exhale_function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba`
-
-- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
 
 - :ref:`exhale_function_model__repository_8cpp_1a9635913e10f284c7c36fa430aab3e865`
 

@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Running ResNet50 - Python &mdash; AMD Inference Server main documentation</title>
+  <title>Running ResNet50 - Python &mdash; AMD Inference Server v0.3.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -58,7 +58,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="index.html" class="icon icon-home"> AMD Inference Server
           </a>
               <div class="version">
-                main
+                0.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -396,11 +396,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h1>Running ResNet50 - Python<a class="headerlink" href="#running-resnet50-python" title="Permalink to this headline">¶</a></h1>
 <p>This page walks you through the Python versions of the ResNet50 examples.
 These examples and script are intended to run in the development container.
-You can see the full source files in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/examples/resnet50">repository</a> for more details.</p>
+You can see the full source files in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/v0.3.0/examples/resnet50">repository</a> for more details.</p>
 <p>The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
 You can read the <a class="reference internal" href="example_resnet50_cpp.html#running-resnet50-c"><span class="std std-ref">C++ version of this example</span></a> to better compare these two.</p>
-<p>In the dev container, the Python library is automatically built and installed as part of the CMake build process.
-You may also install the Python library by installing a wheel.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>These examples are intended to demonstrate the API and how to communicate with the server.
@@ -408,7 +406,8 @@ They are not intended to show the most optimal performance for each backend.</p>
 </div>
 <section id="include-the-module">
 <h2>Include the module<a class="headerlink" href="#include-the-module" title="Permalink to this headline">¶</a></h2>
-<p>You can include the Python library by importing the <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> module.
+<p>In the development container, the Python library is automatically built and installed as part of the CMake build process.
+You can include the Python library by importing the <code class="docutils literal notranslate"><span class="pre">amdinfer</span></code> module.
 The different submodules are imported by default but you can include them manually as well.
 These explicit imports can help IDEs resolve Python imports for autocompletion.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">amdinfer</span>
@@ -556,7 +555,7 @@ If there are multiple requests sent in this way, they may be batched together by
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on January 30, 2023.
+      <span class="lastupdated">Last updated on February 15, 2023.
       </span></p>
   </div>
 
@@ -593,7 +592,7 @@ If there are multiple requests sent in this way, they may be batched together by
   <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Read the Docs</span>
-      v: main
+      v: 0.3.0
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
@@ -602,7 +601,7 @@ If there are multiple requests sent in this way, they may be batched together by
         <dt>Languages</dt>
         
            <strong> 
-          <dd><a href="/inference-server/main/">en</a></dd>
+          <dd><a href="/inference-server/0.3.0/">en</a></dd>
            </strong> 
         
       </dl>
@@ -619,13 +618,13 @@ If there are multiple requests sent in this way, they may be batched together by
           <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
           
         
-          
-          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
-          
-        
            <strong> 
-          <dd><a href="/inference-server/main/">main</a></dd>
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
            </strong> 
+        
+          
+          <dd><a href="/inference-server/main/">main</a></dd>
+          
         
       </dl>
       
