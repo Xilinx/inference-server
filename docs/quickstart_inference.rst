@@ -32,7 +32,13 @@ The ``amdinfer`` library allows you to make clients that you can use to communic
 Clients for different protocols have the same base set of methods so you can easily replace one with another.
 The library can be used from C++ or Python.
 
-You can use the development container to use the C++ and Python libraries:
+To use the Python library, install with ``pip``:
+
+.. code-block:: console
+
+    $ pip install amdinfer
+
+You can use the development container to use both the C++ and Python libraries:
 
 .. code-block:: console
 
