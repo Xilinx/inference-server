@@ -157,7 +157,7 @@ A sample ``ClusterServingRuntime`` definition is provided below.
           args:
             - amdinfer-server
             - --model-repository=/mnt/models
-            - --enable-repository-watcher
+            - --repository-monitoring
             - --grpc-port=9000
             - --http-port=8080
           # the resources allowed to the service. If the image needs access to

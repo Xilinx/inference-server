@@ -32,9 +32,13 @@ Program Listing for File grpc_server.hpp
    
    #ifdef AMDINFER_ENABLE_GRPC
    
+   namespace amdinfer {
+   class SharedState;
+   }
+   
    namespace amdinfer::grpc {
    
-   void start(int port);
+   void start(SharedState* state, int port);
    void stop();
    
    }  // namespace amdinfer::grpc

@@ -1,0 +1,17 @@
+.. _exhale_class_classamdinfer_1_1Endpoints:
+
+Class Endpoints
+===============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::Endpoints
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -411,6 +422,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#ifndef GUARD_AMDINFER_SERVERS_HTTP_SERVER</span>
 <span class="cp">#define GUARD_AMDINFER_SERVERS_HTTP_SERVER</span>
 
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span><span class="c1">     // for uint16_t</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span><span class="c1">  // for function</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">      // for allocator, string</span>
 
@@ -424,48 +436,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;drogon/HttpTypes.h&gt;</span><span class="c1">       // for Options, Get, Post</span>
 <span class="cp">#endif</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="o">::</span><span class="nn">http</span><span class="w"> </span><span class="p">{</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SharedState</span><span class="p">;</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_HTTP</span>
 
-<span class="k">namespace</span><span class="w"> </span><span class="nn">v2</span><span class="w"> </span><span class="p">{</span>
-
-<span class="k">class</span><span class="w"> </span><span class="nc">AmdinferHttpServer</span>
-<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">HttpController</span><span class="o">&lt;</span><span class="n">AmdinferHttpServer</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HttpServer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">HttpController</span><span class="o">&lt;</span><span class="n">HttpServer</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w"> </span><span class="k">public</span><span class="o">:</span>
-<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">AmdinferHttpServer</span><span class="p">();</span>
+<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">HttpServer</span><span class="p">(</span><span class="n">SharedState</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">METHOD_LIST_BEGIN</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_REST</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">getServerLive</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/health/live&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">getServerReady</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/health/ready&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">getModelReady</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models/{model}/ready&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">getServerMetadata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">getServerLive</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/health/live&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">getModelMetadata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models/{model}&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">getServerReady</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/health/ready&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
+<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">getModelReady</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models/{model}/ready&quot;</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/hardware&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">getServerMetadata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">modelList</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">getModelMetadata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models/{model}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">modelInfer</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models/{model}/infer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/hardware&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span>
+<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">modelList</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">,</span>
+<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">modelInfer</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/models/{model}/infer&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span>
+<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/repository/models/{model}/load&quot;</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">,</span>
-<span class="w">                </span><span class="s">&quot;v2/repository/models/{model}/load&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span>
-<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">modelUnload</span><span class="p">,</span>
-<span class="w">                </span><span class="s">&quot;v2/repository/models/{model}/unload&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span>
-<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">workerLoad</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/workers/{worker}/load&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">modelUnload</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/repository/models/{model}/unload&quot;</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">workerUnload</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/workers/{worker}/unload&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">workerLoad</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/workers/{worker}/load&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">workerUnload</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;v2/workers/{worker}/unload&quot;</span><span class="p">,</span>
 <span class="w">                </span><span class="n">drogon</span><span class="o">::</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Options</span><span class="p">);</span>
 <span class="cp">#endif</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">AmdinferHttpServer</span><span class="o">::</span><span class="n">metrics</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ADD_METHOD_TO</span><span class="p">(</span><span class="n">HttpServer</span><span class="o">::</span><span class="n">metrics</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">Get</span><span class="p">);</span>
 <span class="cp">#endif</span>
 <span class="w">  </span><span class="n">METHOD_LIST_END</span>
 
@@ -533,21 +542,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">HttpRequestPtr</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">,</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">drogon</span><span class="o">::</span><span class="n">HttpResponsePtr</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 <span class="cp">#endif</span>
-<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
 <span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">SharedState</span><span class="w"> </span><span class="o">*</span><span class="n">state_</span><span class="p">;</span>
+<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
 <span class="w">  </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger_</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">};</span>
 <span class="cp">#endif</span>
 <span class="p">};</span>
 
-<span class="p">}</span><span class="w">  </span><span class="c1">// namespace v2</span>
-
 <span class="cp">#endif</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">start</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="p">);</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="p">{</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="n">SharedState</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">);</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">stop</span><span class="p">();</span>
 
-<span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer::http</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace http</span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
+
 <span class="cp">#endif  </span><span class="c1">// GUARD_AMDINFER_SERVERS_HTTP_SERVER</span>
 </pre></div>
 </div>
@@ -572,7 +585,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

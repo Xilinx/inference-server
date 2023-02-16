@@ -30,15 +30,13 @@ Includes
 --------
 
 
-- ``amdinfer/core/api.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`)
+- ``amdinfer/core/endpoints.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`)
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/manager.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`)
-
 - ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
@@ -74,5 +72,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_model__repository_8cpp_1a9635913e10f284c7c36fa430aab3e865`
+- :ref:`exhale_function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f`
+
+- :ref:`exhale_function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76`
 

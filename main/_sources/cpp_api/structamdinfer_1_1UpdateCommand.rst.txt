@@ -3,7 +3,7 @@
 Struct UpdateCommand
 ====================
 
-- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
 
 Struct Documentation

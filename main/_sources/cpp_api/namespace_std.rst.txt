@@ -17,4 +17,4 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structstd_1_1less_3_01amdinfer_1_1RequestParameters_01_4`
+- :ref:`exhale_struct_structstd_1_1less_3_01amdinfer_1_1ParameterMap_01_4`

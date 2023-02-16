@@ -19,6 +19,7 @@ Files
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_mixins.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
 
 

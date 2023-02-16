@@ -34,7 +34,7 @@ Includes
 
 - ``filesystem``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 
 
@@ -42,9 +42,13 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_server_internal.hpp`
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
 

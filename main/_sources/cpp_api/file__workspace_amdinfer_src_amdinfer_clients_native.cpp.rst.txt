@@ -41,21 +41,27 @@ Includes
 
 - ``amdinfer/clients/native_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`)
 
-- ``amdinfer/core/api.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`)
-
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
 - ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/core/shared_state.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`)
 
 - ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
 
 - ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
 
+- ``amdinfer/servers/server.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_servers_server.hpp`)
+
+- ``amdinfer/servers/server_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_server_internal.hpp`)
+
 - ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 - ``future``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -71,4 +77,11 @@ Namespaces
 
 
 - :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1NativeClient_1_1NativeClientImpl`
 

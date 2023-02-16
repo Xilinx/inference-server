@@ -94,14 +94,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
@@ -109,14 +120,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -554,13 +565,13 @@ You can pull the deployment image with Docker if it exists or <a class="referenc
 <h2>Start the image<a class="headerlink" href="#start-the-image" title="Permalink to this headline">¶</a></h2>
 <p>You can start a container from the deployment image with <code class="docutils literal notranslate"><span class="pre">docker</span></code> as any other image:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-3-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-3-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-3-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--volume<span class="w"> </span>/path/to/model/repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>&lt;image&gt;<span class="w"> </span>amdinfer-server<span class="w"> </span>--enable-repository-watcher
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-3-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-3-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-3-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--volume<span class="w"> </span>/path/to/model/repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>&lt;image&gt;
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/kfd<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--volume<span class="w"> </span>/path/to/model/repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>&lt;image&gt;<span class="w"> </span>amdinfer-server<span class="w"> </span>--enable-repository-watcher
+</div><div aria-labelledby="tab-3-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/kfd<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--volume<span class="w"> </span>/path/to/model/repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>&lt;image&gt;
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--device<span class="w"> </span>/dev/xclmgmt&lt;id&gt;<span class="w"> </span>--volume<span class="w"> </span>/path/to/model/repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>&lt;image&gt;<span class="w"> </span>amdinfer-server<span class="w"> </span>--enable-repository-watcher
+</div><div aria-labelledby="tab-3-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--device<span class="w"> </span>/dev/xclmgmt&lt;id&gt;<span class="w"> </span>--volume<span class="w"> </span>/path/to/model/repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>&lt;image&gt;
 </pre></div>
 </div>
 </div></div>
@@ -570,7 +581,7 @@ You can pull the deployment image with Docker if it exists or <a class="referenc
 Depending on your particular device(s) or desired container configuration, you may need to add or remove flags.</p>
 </div>
 <p>As the container starts, it will start the server and load the models from your model repository in <code class="docutils literal notranslate"><span class="pre">/mnt/models</span></code> in the container.
-The explicit command provided to the image, <code class="docutils literal notranslate"><span class="pre">amdinfer-server</span> <span class="pre">--enable-repository-watcher</span></code>, starts the server executable in the container and tells it to use the repository at the default location of <code class="docutils literal notranslate"><span class="pre">/mnt/models</span></code>.
+By default, the container will start the server executable in the container that will use the repository at the default location of <code class="docutils literal notranslate"><span class="pre">/mnt/models</span></code> and load all the found models.
 The <code class="docutils literal notranslate"><span class="pre">--publish</span></code> flags will map ports 8998 and 50051 in the container to arbitrary free ports on the host machine for HTTP and gRPC requests, respectively.
 You can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code> to show the running containers and what ports on the host machine are used by the container.
 Your clients will need these port numbers to make requests to the server.
@@ -602,7 +613,7 @@ Once the container is started, you and any clients can <a class="reference inter
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

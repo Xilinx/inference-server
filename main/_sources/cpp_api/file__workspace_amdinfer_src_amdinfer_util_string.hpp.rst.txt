@@ -74,7 +74,7 @@ Functions
 
 - :ref:`exhale_function_string_8hpp_1a23ca4a0fca976cf704e73ba9c454edf9`
 
-- :ref:`exhale_function_string_8hpp_1a4414f2322f12277f964e4a7cc3ae6733`
-
 - :ref:`exhale_function_string_8hpp_1a66dcea22803a394e9d697db2110f57b1`
+
+- :ref:`exhale_function_string_8hpp_1a4414f2322f12277f964e4a7cc3ae6733`
 

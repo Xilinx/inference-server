@@ -182,15 +182,15 @@ You can start a container from the deployment image with ``docker`` as any other
 
     .. code-tab:: console CPU
 
-        $ docker run -d --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image> amdinfer-server --enable-repository-watcher
+        $ docker run -d --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
 
     .. code-tab:: console GPU
 
-        $ docker run -d --device /dev/kfd --device /dev/dri --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image> amdinfer-server --enable-repository-watcher
+        $ docker run -d --device /dev/kfd --device /dev/dri --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
 
     .. code-tab:: console FPGA
 
-        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image> amdinfer-server --enable-repository-watcher
+        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume /path/to/model/repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
 
 .. note::
 
@@ -198,7 +198,7 @@ You can start a container from the deployment image with ``docker`` as any other
     Depending on your particular device(s) or desired container configuration, you may need to add or remove flags.
 
 As the container starts, it will start the server and load the models from your model repository in ``/mnt/models`` in the container.
-The explicit command provided to the image, ``amdinfer-server --enable-repository-watcher``, starts the server executable in the container and tells it to use the repository at the default location of ``/mnt/models``.
+By default, the container will start the server executable in the container that will use the repository at the default location of ``/mnt/models`` and load all the found models.
 The ``--publish`` flags will map ports 8998 and 50051 in the container to arbitrary free ports on the host machine for HTTP and gRPC requests, respectively.
 You can use ``docker ps`` to show the running containers and what ports on the host machine are used by the container.
 Your clients will need these port numbers to make requests to the server.

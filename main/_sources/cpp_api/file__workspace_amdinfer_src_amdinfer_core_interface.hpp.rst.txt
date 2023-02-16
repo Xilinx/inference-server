@@ -49,7 +49,7 @@ Includes
 
 - ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
 
@@ -73,9 +73,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
 

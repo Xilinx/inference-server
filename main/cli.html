@@ -93,14 +93,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
@@ -108,14 +119,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -724,15 +735,15 @@ The documentation for the options available in this Python script can be seen he
 <section id="test">
 <h3>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
 <p>Run the test suite with pytest. All unknown arguments are passed to pytest</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span>
-              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">tests</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span>
+              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat10">
 <h4>Options<a class="headerlink" href="#options_repeat10" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--mode</kbd></dt>
-<dd><p>Possible choices: all, examples, tests</p>
+<dd><p>Possible choices: tests, examples, all</p>
 <p>Type of tests to run. Defaults to tests</p>
 <p>Default: “tests”</p>
 </dd>
@@ -753,17 +764,17 @@ The documentation for the options available in this Python script can be seen he
 <p>Default: “Debug”</p>
 </dd>
 <dt><kbd>--benchmark</kbd></dt>
-<dd><p>Possible choices: all, skip, only</p>
+<dd><p>Possible choices: only, skip, all</p>
 <p>Run benchmark tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--perf</kbd></dt>
-<dd><p>Possible choices: all, skip, only</p>
+<dd><p>Possible choices: only, skip, all</p>
 <p>Run perf tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--cpp</kbd></dt>
-<dd><p>Possible choices: all, skip, only</p>
+<dd><p>Possible choices: only, skip, all</p>
 <p>Run cpp tests. Defaults to all. Ignored if -m is specified</p>
 <p>Default: “all”</p>
 </dd>
@@ -827,7 +838,7 @@ The documentation for the options available in this Python script can be seen he
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

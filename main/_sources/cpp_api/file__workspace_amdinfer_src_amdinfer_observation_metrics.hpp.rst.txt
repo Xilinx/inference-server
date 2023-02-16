@@ -41,7 +41,7 @@ Includes
 
 - ``map``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``mutex``
 

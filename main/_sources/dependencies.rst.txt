@@ -86,7 +86,7 @@ The following packages (and any dependencies) are installed from Ubuntu's reposi
     :ubuntuPackages:`sudo`,1.8.31-1ubuntu1.2,ISC license + others,Executable used to grant elevated permissions to the user\ :superscript:`a 0`
     :ubuntuPackages:`symlinks`,1.4-4,Freely distributable,Executable used to convert absolute symlinks to relative ones\ :superscript:`d 0`
     :ubuntuPackages:`tzdata`,2022f-0ubuntu0.20.04.1,Public Domain,Used for setting the timezone\ :superscript:`a 0`
-    :ubuntuPackages:`uuid-dev`,2.34-0.1ubuntu9.3,GPL-2+ + others,Dynamically linked by Drogon\ :superscript:`a 0`
+    :ubuntuPackages:`uuid-dev`,2.34-0.1ubuntu9.3,GPL-2+ + others,Statically linked by Drogon\ :superscript:`a 0`
     :ubuntuPackages:`valgrind`,1:3.15.0-1ubuntu9.1,GPL-2+ + others,Executable used for for debugging\ :superscript:`d 0`
     :ubuntuPackages:`vim`,2:8.1.2269-1ubuntu5.9,Vim + others,Executable used for text editing in terminal\ :superscript:`d 0`
     :ubuntuPackages:`wget`,1.20.3-1ubuntu2,GPL-3 with OpenSSL exception,Executable used to retrieve files from the internet\ :superscript:`d 0`

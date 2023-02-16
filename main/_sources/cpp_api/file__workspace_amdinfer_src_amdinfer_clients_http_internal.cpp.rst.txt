@@ -122,11 +122,11 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b`
 
-- :ref:`exhale_function_http__internal_8cpp_1ae9a219aa864779f813bc00edc3a861c0`
+- :ref:`exhale_function_http__internal_8cpp_1a35f336b6080d807deb64cb9d082d19b5`
 
 - :ref:`exhale_function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3`
 
-- :ref:`exhale_function_http__internal_8cpp_1a96f12abbea879eab96fc3a7677c27c4d`
+- :ref:`exhale_function_http__internal_8cpp_1acc26de4cacac0bd1e7b5dc5b1b802c3a`
 
 - :ref:`exhale_function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537`
 

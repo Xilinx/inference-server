@@ -28,6 +28,7 @@ Program Listing for File native.hpp
    #ifndef GUARD_AMDINFER_CLIENTS_NATIVE
    #define GUARD_AMDINFER_CLIENTS_NATIVE
    
+   #include <memory>  // for unique_ptr
    #include <string>  // for string
    #include <vector>  // for vector
    
@@ -35,12 +36,20 @@ Program Listing for File native.hpp
    #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
    #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
    
-   // IWYU pragma: no_forward_declare amdinfer::RequestParameters
-   
    namespace amdinfer {
+   
+   class ParameterMap;
+   class Server;
    
    class NativeClient : public Client {
     public:
+     explicit NativeClient(Server* server);
+     NativeClient(NativeClient const&) = delete;
+     NativeClient& operator=(const NativeClient&) = delete;
+     NativeClient(NativeClient&& other) = default;
+     NativeClient& operator=(NativeClient&& other) = default;
+     ~NativeClient() override;
+   
      [[nodiscard]] ServerMetadata serverMetadata() const override;
      [[nodiscard]] bool serverLive() const override;
      [[nodiscard]] bool serverReady() const override;
@@ -50,7 +59,7 @@ Program Listing for File native.hpp
        const std::string& model) const override;
    
      void modelLoad(const std::string& model,
-                    RequestParameters* parameters) const override;
+                    ParameterMap* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
      [[nodiscard]] InferenceResponse modelInfer(
@@ -59,12 +68,16 @@ Program Listing for File native.hpp
        const std::string& model, const InferenceRequest& request) const override;
      [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     [[nodiscard]] std::string workerLoad(
-       const std::string& worker, RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(const std::string& worker,
+                                          ParameterMap* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
      [[nodiscard]] bool hasHardware(const std::string& name,
                                     int num) const override;
+   
+    private:
+     struct NativeClientImpl;
+     std::unique_ptr<NativeClientImpl> impl_;
    };
    
    }  // namespace amdinfer

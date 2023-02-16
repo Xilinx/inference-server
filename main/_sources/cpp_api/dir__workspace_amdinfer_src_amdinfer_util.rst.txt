@@ -25,6 +25,7 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_exec.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_exec.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`

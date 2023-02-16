@@ -1,0 +1,69 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_util_memory.hpp:
+
+File memory.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_util>` (``/workspace/amdinfer/src/amdinfer/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines helper functions associated with managing memory. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/util/memory.hpp``)
+-----------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_util_memory.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cassert``
+
+- ``cstddef``
+
+- ``cstring``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_parameters.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_memory_8hpp_1a884a4d99e70f8bcffb6037ef76a92535`
+

@@ -42,7 +42,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class SoftBatcher" href="classamdinfer_1_1SoftBatcher.html" />
+    <link rel="next" title="Class SharedState" href="classamdinfer_1_1SharedState.html" />
     <link rel="prev" title="Class Serializable" href="classamdinfer_1_1Serializable.html" /> 
 </head>
 
@@ -93,14 +93,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -108,14 +119,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -484,24 +495,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd><p>Stop the gRPC server. </p>
 </dd></dl>
 
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathE">
-<span id="_CPPv3N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathE"></span><span id="_CPPv2N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathE"></span><span id="amdinfer::Server::setModelRepository__std::filesystem::pathCR"></span><span class="target" id="classamdinfer_1_1Server_1ae737045fac363e6c6e03240d7aa5c73e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setModelRepository</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathEb">
+<span id="_CPPv3N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathEb"></span><span id="_CPPv2N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathEb"></span><span id="amdinfer::Server::setModelRepository__std::filesystem::pathCR.b"></span><span class="target" id="classamdinfer_1_1Server_1a4e8694476754bc1a63ce3daa363d4b97"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setModelRepository</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">repository_path</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">load_existing</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the path to the model repository associated with this server. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> – path to the model repository </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – path to the model repository </p></li>
+<li><p><strong>load_existing</strong> – load all existing models found at the path </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Server26enableRepositoryMonitoringEb">
-<span id="_CPPv3N8amdinfer6Server26enableRepositoryMonitoringEb"></span><span id="_CPPv2N8amdinfer6Server26enableRepositoryMonitoringEb"></span><span id="amdinfer::Server::enableRepositoryMonitoring__b"></span><span class="target" id="classamdinfer_1_1Server_1a095e3921437b1f09eee867080b6c8cd6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableRepositoryMonitoring</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">use_polling</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer6Server26enableRepositoryMonitoringEb" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Turn on active monitoring of the model repository path for new files. </p>
+<span id="_CPPv3N8amdinfer6Server26enableRepositoryMonitoringEb"></span><span id="_CPPv2N8amdinfer6Server26enableRepositoryMonitoringEb"></span><span id="amdinfer::Server::enableRepositoryMonitoring__b"></span><span class="target" id="classamdinfer_1_1Server_1a095e3921437b1f09eee867080b6c8cd6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableRepositoryMonitoring</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">use_polling</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer6Server26enableRepositoryMonitoringEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Turn on active monitoring of the model repository path for new files. A model repository must be set with <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1Server_1a4e8694476754bc1a63ce3daa363d4b97"><span class="std std-ref">setModelRepository()</span></a> before calling this method. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>use_polling</strong> – set to true to use polling to check the directory for new files, false to use events. Note that events may not work well on all platforms. </p>
@@ -510,10 +521,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </dd></dl>
 
 </div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl>
+<dt class="sig sig-object cpp">
+<em class="property"><span class="pre">friend</span> <span class="pre">class</span></em> <span class="pre">NativeClient</span></dt>
+</dl>
+
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Server10ServerImplE">
 <span id="_CPPv3N8amdinfer6Server10ServerImplE"></span><span id="_CPPv2N8amdinfer6Server10ServerImplE"></span><span id="amdinfer::Server::ServerImpl"></span><span class="target" id="structamdinfer_1_1Server_1_1ServerImpl"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ServerImpl</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer6Server10ServerImplE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Server10ServerImpl5stateE">
+<span id="_CPPv3N8amdinfer6Server10ServerImpl5stateE"></span><span id="_CPPv2N8amdinfer6Server10ServerImpl5stateE"></span><span id="amdinfer::Server::ServerImpl::state__SharedState"></span><span class="target" id="structamdinfer_1_1Server_1_1ServerImpl_1a28ba4a3761818fc94adfe6d8e87023ff"></span><a class="reference internal" href="classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedStateE" title="amdinfer::SharedState"><span class="n"><span class="pre">SharedState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer6Server10ServerImpl5stateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
+
+</div>
+</dd></dl>
 
 </dd></dl>
 
@@ -535,14 +562,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="classamdinfer_1_1Serializable.html" class="btn btn-neutral float-left" title="Class Serializable" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="classamdinfer_1_1SoftBatcher.html" class="btn btn-neutral float-right" title="Class SoftBatcher" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="classamdinfer_1_1SharedState.html" class="btn btn-neutral float-right" title="Class SharedState" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

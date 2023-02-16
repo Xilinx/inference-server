@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -416,9 +427,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span><span class="c1">         // for map</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">      // for string</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">            // for fp16</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api_internal.hpp&quot;</span><span class="c1">  // for Parameter, Request...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/traits.hpp&quot;</span><span class="c1">                // IWYU pragma: keep</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">  // for fp16</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span><span class="c1">  // for Parameter, ParameterMap (ptr...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/traits.hpp&quot;</span><span class="c1">      // IWYU pragma: keep</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">google</span><span class="o">::</span><span class="nn">protobuf</span><span class="w"> </span><span class="p">{</span>
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U</span><span class="o">&gt;</span>
@@ -434,17 +445,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">InferenceRequest</span><span class="p">;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InferenceResponse</span><span class="p">;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelMetadata</span><span class="p">;</span>
 <span class="k">struct</span><span class="w"> </span><span class="nc">Observer</span><span class="p">;</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">mapParametersToProto</span><span class="p">(</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Parameter</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">less</span><span class="o">&lt;&gt;&gt;&amp;</span><span class="w"> </span><span class="n">parameters</span><span class="p">,</span>
 <span class="w">  </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">InferParameter</span><span class="o">&gt;*</span>
 <span class="w">    </span><span class="n">grpc_parameters</span><span class="p">);</span>
-<span class="n">RequestParametersPtr</span><span class="w"> </span><span class="nf">mapProtoToParameters</span><span class="p">(</span>
+<span class="n">ParameterMapPtr</span><span class="w"> </span><span class="nf">mapProtoToParameters</span><span class="p">(</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">InferParameter</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">mapProtoToParameters</span><span class="p">(</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">InferParameter</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">params</span><span class="p">,</span>
-<span class="w">  </span><span class="n">RequestParameters</span><span class="o">&amp;</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ParameterMap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">mapRequestToProto</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">InferenceRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">,</span>
 <span class="w">                       </span><span class="n">inference</span><span class="o">::</span><span class="n">ModelInferRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">grpc_request</span><span class="p">,</span>
 <span class="w">                       </span><span class="k">const</span><span class="w"> </span><span class="n">Observer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span>
@@ -537,7 +551,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

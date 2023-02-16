@@ -37,7 +37,7 @@ Included By
 -----------
 
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 
 
 

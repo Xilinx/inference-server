@@ -1,0 +1,17 @@
+.. _exhale_struct_structstd_1_1less_3_01amdinfer_1_1ParameterMap_01_4:
+
+Template Struct less< amdinfer::ParameterMap >
+==============================================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: std::less< amdinfer::ParameterMap >
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

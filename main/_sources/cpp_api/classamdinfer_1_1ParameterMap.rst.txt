@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1ParameterMap:
+
+Class ParameterMap
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::Serializable`` (:ref:`exhale_class_classamdinfer_1_1Serializable`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::ParameterMap
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -43,7 +43,7 @@ Includes
 
 - ``map``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -59,15 +59,9 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
 
 
 

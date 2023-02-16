@@ -93,14 +93,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -108,14 +119,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -396,47 +407,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="struct-updatecommand">
 <span id="exhale-struct-structamdinfer-1-1updatecommand"></span><h1>Struct UpdateCommand<a class="headerlink" href="#struct-updatecommand" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_manager.hpp.html#file-workspace-amdinfer-src-amdinfer-core-manager-hpp"><span class="std std-ref">File manager.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp.html#file-workspace-amdinfer-src-amdinfer-core-endpoints-hpp"><span class="std std-ref">File endpoints.hpp</span></a></p></li>
 </ul>
 <section id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13UpdateCommandE">
 <span id="_CPPv3N8amdinfer13UpdateCommandE"></span><span id="_CPPv2N8amdinfer13UpdateCommandE"></span><span id="amdinfer::UpdateCommand"></span><span class="target" id="structamdinfer_1_1UpdateCommand"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UpdateCommand</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommandE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Commands sent to update the <a class="reference internal" href="classamdinfer_1_1Manager.html#classamdinfer_1_1Manager"><span class="std std-ref">Manager</span></a> consist of an ID, a key value (string), an integer, and a pointer to an exception so if the update fails for some reason, this information is communicated back to the requester. </p>
+<dd><p>Commands sent to update the Manager consist of an ID, a key value (string), an integer, and a pointer to an exception so if the update fails for some reason, this information is communicated back to the requester. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv">
-<span id="_CPPv3N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv"></span><span id="_CPPv2N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv"></span><span id="amdinfer::UpdateCommand::UpdateCommand__UpdateCommandType.ss.voidP.voidP"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1a0c1277530bdcce669abcafefaf1f554b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UpdateCommand</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enum_manager_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.html#_CPPv4N8amdinfer17UpdateCommandTypeE" title="amdinfer::UpdateCommandType"><span class="n"><span class="pre">UpdateCommandType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">cmd</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;&quot;</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">object</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">retval</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Constructor for <a class="reference internal" href="#structamdinfer_1_1UpdateCommand"><span class="std std-ref">UpdateCommand</span></a>. </p>
-</dd></dl>
+<span id="_CPPv3N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv"></span><span id="_CPPv2N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv"></span><span id="amdinfer::UpdateCommand::UpdateCommand__UpdateCommandType.ss.voidP.voidP"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1a0c1277530bdcce669abcafefaf1f554b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UpdateCommand</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enum_endpoints_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.html#_CPPv4N8amdinfer17UpdateCommandTypeE" title="amdinfer::UpdateCommandType"><span class="n"><span class="pre">UpdateCommandType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">cmd</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">key</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;&quot;</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">object</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">retval</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand13UpdateCommandE17UpdateCommandTypeNSt6stringEPvPv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13UpdateCommand3cmdE">
-<span id="_CPPv3N8amdinfer13UpdateCommand3cmdE"></span><span id="_CPPv2N8amdinfer13UpdateCommand3cmdE"></span><span id="amdinfer::UpdateCommand::cmd__UpdateCommandType"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1a5ff316d879eec33eaa403e5e8688c912"></span><a class="reference internal" href="enum_manager_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.html#_CPPv4N8amdinfer17UpdateCommandTypeE" title="amdinfer::UpdateCommandType"><span class="n"><span class="pre">UpdateCommandType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cmd</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand3cmdE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>the command ID </p>
+<span id="_CPPv3N8amdinfer13UpdateCommand3cmdE"></span><span id="_CPPv2N8amdinfer13UpdateCommand3cmdE"></span><span id="amdinfer::UpdateCommand::cmd__UpdateCommandType"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1a5ff316d879eec33eaa403e5e8688c912"></span><a class="reference internal" href="enum_endpoints_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.html#_CPPv4N8amdinfer17UpdateCommandTypeE" title="amdinfer::UpdateCommandType"><span class="n"><span class="pre">UpdateCommandType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cmd</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand3cmdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The command ID. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13UpdateCommand3keyE">
 <span id="_CPPv3N8amdinfer13UpdateCommand3keyE"></span><span id="_CPPv2N8amdinfer13UpdateCommand3keyE"></span><span id="amdinfer::UpdateCommand::key__ss"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1af93d6ed0ffb020767d1e7283ac96c396"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">key</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand3keyE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>a string key that a command can make use of. Usually identifies the worker </p>
+<dd><p>A string key that a command can make use of. Usually identifies the worker. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13UpdateCommand6objectE">
 <span id="_CPPv3N8amdinfer13UpdateCommand6objectE"></span><span id="_CPPv2N8amdinfer13UpdateCommand6objectE"></span><span id="amdinfer::UpdateCommand::object__voidP"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1ab9597d233d70026df6aa804e5ff2adb4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">object</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand6objectE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>pointer to an arbitrary object </p>
+<dd><p>Pointer to an arbitrary object. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer13UpdateCommand6retvalE">
 <span id="_CPPv3N8amdinfer13UpdateCommand6retvalE"></span><span id="_CPPv2N8amdinfer13UpdateCommand6retvalE"></span><span id="amdinfer::UpdateCommand::retval__voidP"></span><span class="target" id="structamdinfer_1_1UpdateCommand_1abb6bfefc856a43433d3115fbcaf4f082"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">retval</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><a class="headerlink" href="#_CPPv4N8amdinfer13UpdateCommand6retvalE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>pointer to a caller-allocated variable to hold the return value </p>
+<dd><p>Pointer to a caller-allocated variable to hold the return value. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -473,7 +483,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

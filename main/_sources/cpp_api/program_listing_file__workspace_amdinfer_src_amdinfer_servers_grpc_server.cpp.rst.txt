@@ -43,20 +43,21 @@ Program Listing for File grpc_server.cpp
    #include <utility>        // for move
    #include <vector>         // for vector
    
-   #include "amdinfer/buffers/buffer.hpp"         // for Buffer
-   #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-   #include "amdinfer/clients/grpc_internal.hpp"  // for mapProtoToParameters
-   #include "amdinfer/core/api.hpp"               // for hasHardware, modelI...
-   #include "amdinfer/core/data_types.hpp"        // for DataType, DataType:...
-   #include "amdinfer/core/exceptions.hpp"        // for invalid_argument
-   #include "amdinfer/core/interface.hpp"         // for Interface, Interfac...
+   #include "amdinfer/buffers/buffer.hpp"             // for Buffer
+   #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LOG...
+   #include "amdinfer/clients/grpc_internal.hpp"      // for mapProtoToParameters
+   #include "amdinfer/core/data_types.hpp"            // for DataType, DataType:...
+   #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
+   #include "amdinfer/core/interface.hpp"             // for Interface, Interfac...
+   #include "amdinfer/core/parameters.hpp"            // for ParameterMap
    #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
+   #include "amdinfer/core/shared_state.hpp"          // for SharedState
    #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-   #include "amdinfer/observation/observer.hpp"
-   #include "amdinfer/util/string.hpp"  // for toLower
-   #include "amdinfer/util/traits.hpp"  // IWYU pragma: keep
-   #include "predict_api.grpc.pb.h"     // for GRPCInferenceServic...
-   #include "predict_api.pb.h"          // for InferTensorContents
+   #include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
+   #include "amdinfer/util/string.hpp"                // for toLower
+   #include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+   #include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
+   #include "predict_api.pb.h"                        // for InferTensorContents
    
    namespace amdinfer {
    class CallDataModelInfer;
@@ -276,43 +277,53 @@ Program Listing for File grpc_server.cpp
    
    #ifdef AMDINFER_ENABLE_LOGGING
    // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define CALLDATA_IMPL(endpoint, type)                                         \
-     class CallData##endpoint                                                    \
-       : public CallData##type<inference::endpoint##Request,                     \
-                               inference::endpoint##Response> {                  \
-      public:                                                                    \
-       CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \
-         : CallData##type(service, cq) {                                         \
-         proceed();                                                              \
-       }                                                                         \
-                                                                                 \
-      private:                                                                   \
-       Logger logger_{Loggers::Server};                                          \
-                                                                                 \
-      protected:                                                                 \
-       void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
-       void waitForRequest() override {                                          \
-         service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
-                                     this);                                      \
-       }                                                                         \
+   #define CALLDATA_IMPL(endpoint, type)                                      \
+     class CallData##endpoint                                                 \
+       : public CallData##type<inference::endpoint##Request,                  \
+                               inference::endpoint##Response> {               \
+      public:                                                                 \
+       CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq,   \
+                          SharedState* state)                                 \
+         : CallData##type(service, cq), state_(state) {                       \
+         proceed();                                                           \
+       }                                                                      \
+                                                                              \
+      private:                                                                \
+       Logger logger_{Loggers::Server};                                       \
+       SharedState* state_;                                                   \
+                                                                              \
+      protected:                                                              \
+       void addNewCallData() override {                                       \
+         new CallData##endpoint(service_, cq_, state_);                       \
+       }                                                                      \
+       void waitForRequest() override {                                       \
+         service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_, \
+                                     this);                                   \
+       }                                                                      \
        void handleRequest() noexcept override
    #else
-   #define CALLDATA_IMPL(endpoint, type)                                         \
-     class CallData##endpoint                                                    \
-       : public CallData##type<inference::endpoint##Request,                     \
-                               inference::endpoint##Response> {                  \
-      public:                                                                    \
-       CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \
-         : CallData##type(service, cq) {                                         \
-         proceed();                                                              \
-       }                                                                         \
-                                                                                 \
-      protected:                                                                 \
-       void addNewCallData() override { new CallData##endpoint(service_, cq_); } \
-       void waitForRequest() override {                                          \
-         service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_,    \
-                                     this);                                      \
-       }                                                                         \
+   #define CALLDATA_IMPL(endpoint, type)                                      \
+     class CallData##endpoint                                                 \
+       : public CallData##type<inference::endpoint##Request,                  \
+                               inference::endpoint##Response> {               \
+      public:                                                                 \
+       CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq,   \
+                          SharedState* state)                                 \
+         : CallData##type(service, cq), state_(state) {                       \
+         proceed();                                                           \
+       }                                                                      \
+                                                                              \
+      private:                                                                \
+       SharedState* state_;                                                   \
+                                                                              \
+      protected:                                                              \
+       void addNewCallData() override {                                       \
+         new CallData##endpoint(service_, cq_, state_);                       \
+       }                                                                      \
+       void waitForRequest() override {                                       \
+         service_->Request##endpoint(&ctx_, &request_, &responder_, cq_, cq_, \
+                                     this);                                   \
+       }                                                                      \
        void handleRequest() noexcept override
    #endif
    
@@ -493,7 +504,7 @@ Program Listing for File grpc_server.cpp
    CALLDATA_IMPL(ModelReady, Unary) {
      const auto& model = request_.name();
      try {
-       reply_.set_ready(::amdinfer::modelReady(model));
+       reply_.set_ready(state_->modelReady(model));
        finish(::grpc::Status::OK);
      } catch (const invalid_argument& e) {
        reply_.set_ready(false);
@@ -508,7 +519,7 @@ Program Listing for File grpc_server.cpp
    CALLDATA_IMPL(ModelMetadata, Unary) {
      const auto& model = request_.name();
      try {
-       auto metadata = ::amdinfer::modelMetadata(model);
+       auto metadata = state_->modelMetadata(model);
        mapModelMetadataToProto(metadata, reply_);
        finish(::grpc::Status::OK);
      } catch (const invalid_argument& e) {
@@ -520,7 +531,7 @@ Program Listing for File grpc_server.cpp
    CALLDATA_IMPL_END
    
    CALLDATA_IMPL(ServerMetadata, Unary) {
-     auto metadata = serverMetadata();
+     auto metadata = SharedState::serverMetadata();
      reply_.set_name(metadata.name);
      reply_.set_version(metadata.version);
      for (const auto& extension : metadata.extensions) {
@@ -531,7 +542,7 @@ Program Listing for File grpc_server.cpp
    CALLDATA_IMPL_END
    
    CALLDATA_IMPL(ModelList, Unary) {
-     auto models = ::amdinfer::modelList();
+     auto models = state_->modelList();
      for (const auto& model : models) {
        reply_.add_models(model);
      }
@@ -545,7 +556,7 @@ Program Listing for File grpc_server.cpp
      auto* model = request_.mutable_name();
      util::toLower(model);
      try {
-       ::amdinfer::modelLoad(*model, parameters.get());
+       state_->modelLoad(*model, parameters.get());
      } catch (const runtime_error& e) {
        AMDINFER_LOG_ERROR(logger_, e.what());
        finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -562,7 +573,7 @@ Program Listing for File grpc_server.cpp
    CALLDATA_IMPL(ModelUnload, Unary) {
      auto* model = request_.mutable_name();
      util::toLower(model);
-     ::amdinfer::modelUnload(*model);
+     state_->modelUnload(*model);
      finish(::grpc::Status::OK);
    }
    CALLDATA_IMPL_END
@@ -574,7 +585,7 @@ Program Listing for File grpc_server.cpp
      util::toLower(model);
    
      try {
-       auto endpoint = ::amdinfer::workerLoad(*model, parameters.get());
+       auto endpoint = state_->workerLoad(*model, parameters.get());
        reply_.set_endpoint(endpoint);
        finish(::grpc::Status::OK);
      } catch (const runtime_error& e) {
@@ -590,13 +601,13 @@ Program Listing for File grpc_server.cpp
    CALLDATA_IMPL(WorkerUnload, Unary) {
      auto* worker = request_.mutable_name();
      util::toLower(worker);
-     ::amdinfer::workerUnload(*worker);
+     state_->workerUnload(*worker);
      finish(::grpc::Status::OK);
    }
    CALLDATA_IMPL_END
    
    CALLDATA_IMPL(HasHardware, Unary) {
-     auto found = ::amdinfer::hasHardware(request_.name(), request_.num());
+     auto found = SharedState::hasHardware(request_.name(), request_.num());
      reply_.set_found(found);
      finish(::grpc::Status::OK);
    }
@@ -616,7 +627,7 @@ Program Listing for File grpc_server.cpp
        trace->endSpan();
        request->setTrace(std::move(trace));
    #endif
-       ::amdinfer::modelInfer(model, std::move(request));
+       state_->modelInfer(model, std::move(request));
      } catch (const invalid_argument& e) {
        AMDINFER_LOG_INFO(logger_, e.what());
        finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -628,10 +639,13 @@ Program Listing for File grpc_server.cpp
    
    class GrpcServer final {
     public:
-     static GrpcServer& getInstance() { return create("", -1); }
+     static GrpcServer& getInstance() { return create("", -1, nullptr); }
    
-     static GrpcServer& create(const std::string& address, const int cq_count) {
-       static GrpcServer server(address, cq_count);
+     // using this singleton approach here because the start() method is state-
+     // independent. The HTTP server is already global like this
+     static GrpcServer& create(const std::string& address, const int cq_count,
+                               SharedState* state) {
+       static GrpcServer server(address, cq_count, state);
        return server;
      }
    
@@ -661,7 +675,8 @@ Program Listing for File grpc_server.cpp
      }
    
     private:
-     GrpcServer(const std::string& address, const int cq_count) {
+     GrpcServer(const std::string& address, const int cq_count, SharedState* state)
+       : state_(state) {
        ServerBuilder builder;
        builder.SetMaxReceiveMessageSize(kMaxGrpcMessageSize);
        builder.SetMaxSendMessageSize(kMaxGrpcMessageSize);
@@ -689,18 +704,18 @@ Program Listing for File grpc_server.cpp
        const auto& my_cq = cq_.at(index);
    
        // Spawn a new CallData instance to serve new clients.
-       new CallDataServerLive(&service_, my_cq.get());
-       new CallDataServerMetadata(&service_, my_cq.get());
-       new CallDataModelMetadata(&service_, my_cq.get());
-       new CallDataServerReady(&service_, my_cq.get());
-       new CallDataModelList(&service_, my_cq.get());
-       new CallDataModelReady(&service_, my_cq.get());
-       new CallDataModelLoad(&service_, my_cq.get());
-       new CallDataModelUnload(&service_, my_cq.get());
-       new CallDataWorkerLoad(&service_, my_cq.get());
-       new CallDataWorkerUnload(&service_, my_cq.get());
-       new CallDataModelInfer(&service_, my_cq.get());
-       new CallDataHasHardware(&service_, my_cq.get());
+       new CallDataServerLive(&service_, my_cq.get(), state_);
+       new CallDataServerMetadata(&service_, my_cq.get(), state_);
+       new CallDataModelMetadata(&service_, my_cq.get(), state_);
+       new CallDataServerReady(&service_, my_cq.get(), state_);
+       new CallDataModelList(&service_, my_cq.get(), state_);
+       new CallDataModelReady(&service_, my_cq.get(), state_);
+       new CallDataModelLoad(&service_, my_cq.get(), state_);
+       new CallDataModelUnload(&service_, my_cq.get(), state_);
+       new CallDataWorkerLoad(&service_, my_cq.get(), state_);
+       new CallDataWorkerUnload(&service_, my_cq.get(), state_);
+       new CallDataModelInfer(&service_, my_cq.get(), state_);
+       new CallDataHasHardware(&service_, my_cq.get(), state_);
        // new CallDataStreamModelInfer(&service_, my_cq.get());
        void* tag = nullptr;  // uniquely identifies a request.
        bool ok = false;
@@ -727,13 +742,14 @@ Program Listing for File grpc_server.cpp
      inference::GRPCInferenceService::AsyncService service_;
      std::unique_ptr<::grpc::Server> server_;
      std::vector<std::thread> threads_;
+     SharedState* state_;
    };
    
    namespace grpc {
    
-   void start(int port) {
+   void start(SharedState* state, int port) {
      const std::string address = "0.0.0.0:" + std::to_string(port);
-     GrpcServer::create(address, 1);
+     GrpcServer::create(address, 1, state);
    }
    
    void stop() {

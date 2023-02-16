@@ -37,7 +37,7 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -51,7 +51,7 @@ Includes
 
 - ``cstddef``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -71,11 +71,9 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
 

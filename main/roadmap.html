@@ -93,14 +93,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
@@ -108,14 +119,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -397,32 +408,63 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>The AMD Inference Server is in active development and this is the tentative and non-exhaustive roadmap of features we would like to add.
 Of course, this is subject to change based on our own assessment and on feedback from the community, both of which may affect which features take priority over others.
 More detailed information about the work that’s ongoing and/or completed can be found in the <a class="reference internal" href="changelog.html#changelog"><span class="std std-ref">change log</span></a> and the <a class="reference external" href="https://github.com/Xilinx/inference-server/projects/3">Github roadmap</a>.</p>
+<section id="id1">
+<h2>2022<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <section id="q1">
-<h2>2022 Q1<a class="headerlink" href="#q1" title="Permalink to this headline">¶</a></h2>
+<h3>2022 Q1<a class="headerlink" href="#q1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>gRPC support (series of commits starting in <a class="reference external" href="https://github.com/Xilinx/inference-server/commit/37a6aad">&#64;37a6aad</a>)</p></li>
 </ul>
 </section>
 <section id="q2">
-<h2>2022 Q2<a class="headerlink" href="#q2" title="Permalink to this headline">¶</a></h2>
+<h3>2022 Q2<a class="headerlink" href="#q2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>ZenDNN CPU support (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/17">#17</a> and <a class="reference external" href="https://github.com/Xilinx/inference-server/pull/21">#21</a>)</p></li>
 <li><p>Official integration with KServe (KServe website <a class="reference external" href="https://github.com/kserve/website/pull/179">#179</a>)</p></li>
 </ul>
 </section>
 <section id="q3">
-<h2>2022 Q3<a class="headerlink" href="#q3" title="Permalink to this headline">¶</a></h2>
+<h3>2022 Q3<a class="headerlink" href="#q3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>GPU support (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/34">#34</a>)</p></li>
 </ul>
 </section>
-<section id="future">
-<h2>Future<a class="headerlink" href="#future" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="id2">
+<h2>2023<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>The theme for 2023 is ease-of-use and performance.
+These two prongs are related and connected as two ways of engaging users and driving development.
+Ease-of-use means improving documentation and expanding testing with different models and devices to provide guides on how users can do the same.
+Making it easier to install and get started is a big part of that too.
+As test coverage expands, the question inevitably gets asked: how is it compared to the alternative?
+Thus, measuring performance and reliably reporting results consistently in a reproducible manner becomes important.
+The quality of those results should then guide what changes need to be made internally to improve performance.
+Having these results to compare with is also useful to maintain the numbers</p>
+<section id="id3">
+<h3>2023 Q1<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>Refactor memory model</p></li>
-<li><p>Expanded testing with models in Vitis AI model zoo</p></li>
 <li><p>Benchmarking with MLPerf</p></li>
 </ul>
+</section>
+<section id="id4">
+<h3>2023 Q2<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Refactor memory model</p></li>
+<li><p>Enable installation without Docker</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>2023 Q3<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Expanded testing with models in Vitis AI model zoo</p></li>
+</ul>
+</section>
+<section id="q4">
+<h3>2023 Q4<a class="headerlink" href="#q4" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="future">
+<h2>Future<a class="headerlink" href="#future" title="Permalink to this headline">¶</a></h2>
 </section>
 </section>
 
@@ -448,7 +490,7 @@ More detailed information about the work that’s ongoing and/or completed can b
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

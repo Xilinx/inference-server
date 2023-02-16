@@ -34,7 +34,7 @@ Includes
 
 - ``concurrentqueue/blockingconcurrentqueue.h``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
 
@@ -52,7 +52,7 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
 

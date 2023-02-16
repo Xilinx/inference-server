@@ -12,7 +12,6 @@ Program Listing for File server.hpp
 
    // Copyright 2022 Xilinx, Inc.
    // Copyright 2022 Advanced Micro Devices, Inc.
-   // Copyright 2022 Advanced Micro Devices Inc.
    //
    // Licensed under the Apache License, Version 2.0 (the "License");
    // you may not use this file except in compliance with the License.
@@ -49,8 +48,11 @@ Program Listing for File server.hpp
      void startGrpc(uint16_t port) const;
      void stopGrpc() const;
    
-     static void setModelRepository(const std::filesystem::path& path);
-     static void enableRepositoryMonitoring(bool use_polling);
+     void setModelRepository(const std::filesystem::path& repository_path,
+                             bool load_existing);
+     void enableRepositoryMonitoring(bool use_polling);
+   
+     friend class NativeClient;
    
     private:
      struct ServerImpl;

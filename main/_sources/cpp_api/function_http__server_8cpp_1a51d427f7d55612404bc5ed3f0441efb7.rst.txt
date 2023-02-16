@@ -1,0 +1,14 @@
+.. _exhale_function_http__server_8cpp_1a51d427f7d55612404bc5ed3f0441efb7:
+
+Function amdinfer::http::start
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::http::start(SharedState *, uint16_t)
+   :project: amdinfer

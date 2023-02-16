@@ -31,11 +31,11 @@ Program Listing for File tracing.hpp
    #include <memory>  // for shared_ptr, uniqu...
    #include <stack>   // for stack
    
-   #include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TR...
-   #include "amdinfer/core/predict_api.hpp"  // for RequestParameters
-   #include "amdinfer/declarations.hpp"      // for StringMap
+   #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TR...
+   #include "amdinfer/core/parameters.hpp"  // for ParameterMap
+   #include "amdinfer/declarations.hpp"     // for StringMap
    
-   // IWYU pragma: no_forward_declare amdinfer::RequestParameters
+   // IWYU pragma: no_forward_declare amdinfer::ParameterMap
    
    #ifdef AMDINFER_ENABLE_TRACING
    
@@ -70,7 +70,7 @@ Program Listing for File tracing.hpp
      void setAttribute(opentelemetry::nostd::string_view key,
                        const opentelemetry::common::AttributeValue& value);
    
-     void setAttributes(RequestParameters* parameters);
+     void setAttributes(ParameterMap* parameters);
    
      StringMap propagate();
    

@@ -47,7 +47,7 @@ Includes
 
 - ``limits``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -62,8 +62,6 @@ Includes
 Included By
 -----------
 
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
 

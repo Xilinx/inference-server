@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -395,7 +406,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>↰ <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp.html#file-workspace-amdinfer-src-amdinfer-core-worker-info-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/core/worker_info.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Copyright 2021 Xilinx, Inc.</span>
 <span class="c1">// Copyright 2022 Advanced Micro Devices, Inc.</span>
-<span class="c1">// Copyright 2022 Advanced Micro Devices Inc.</span>
 <span class="c1">//</span>
 <span class="c1">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
 <span class="c1">// you may not use this file except in compliance with the License.</span>
@@ -411,21 +421,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/worker_info.hpp&quot;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dlfcn.h&gt;</span><span class="c1">  // for dlerror, dlopen, dlsym, RTLD...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;dlfcn.h&gt;</span><span class="c1">  // for dlerror, dlopen, dlsym, RTL...</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cctype&gt;</span><span class="c1">       // for toupper</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;climits&gt;</span><span class="c1">      // for UINT_MAX</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span><span class="c1">      // for int32_t</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span><span class="c1">    // for exception</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">       // for string, operator+, basic_string</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span><span class="c1">  // for __decay_and_strip&lt;&gt;::__type</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="c1">       // for string, operator+, basic_st...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;type_traits&gt;</span><span class="c1">  // for remove_reference&lt;&gt;::type</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">      // for pair, move, make_pair</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/batcher.hpp&quot;</span><span class="c1">  // for Batcher, BatcherStatus, Batc...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">   // for invalid_argument, file_not_f...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/batcher.hpp&quot;</span><span class="c1">  // for Batcher, BatcherStatus, Bat...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">   // for invalid_argument, external_...</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">    // IWYU pragma: keep</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">  // for RequestParameters</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/workers/worker.hpp&quot;</span><span class="c1">    // for Worker, WorkerStatus, Worker...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span><span class="c1">   // for ParameterMap</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">  // for ModelMetadata</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/workers/worker.hpp&quot;</span><span class="c1">    // for Worker, WorkerStatus, Worke...</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
@@ -486,7 +497,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">worker</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="n">WorkerInfo</span><span class="o">::</span><span class="n">WorkerInfo</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">WorkerInfo</span><span class="o">::</span><span class="n">WorkerInfo</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_buffer_ptr_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">BufferPtrsQueue</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_buffer_ptr_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">BufferPtrsQueue</span><span class="o">&gt;</span><span class="p">();</span>
 
@@ -501,7 +512,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="p">}</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="n">WorkerInfo</span><span class="o">::</span><span class="n">addAndStartWorker</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
-<span class="w">                                   </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                   </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getWorker</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
 <span class="w">  </span><span class="n">worker</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
 <span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">worker</span><span class="o">-&gt;</span><span class="n">getBatchSize</span><span class="p">();</span>
@@ -675,6 +686,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">buffer_num_</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">allocated</span><span class="p">;</span>
 <span class="p">}</span>
 
+<span class="n">ModelMetadata</span><span class="w"> </span><span class="n">WorkerInfo</span><span class="o">::</span><span class="n">getMetadata</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">worker_class</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">workers_</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">worker_class</span><span class="o">-&gt;</span><span class="n">getMetadata</span><span class="p">();</span>
+<span class="p">}</span>
+
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
 </pre></div>
 </div>
@@ -699,7 +715,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

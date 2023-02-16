@@ -26,6 +26,6 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_http__server_8cpp_1ac92ce920719257b547b656e4a2cc57ac`
+- :ref:`exhale_function_http__server_8cpp_1a51d427f7d55612404bc5ed3f0441efb7`
 
 - :ref:`exhale_function_http__server_8cpp_1a024aac815aaac4c7a062bd1afa1d5efc`

@@ -43,15 +43,11 @@ Includes
 
 - ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
 
-- ``cassert``
+- ``amdinfer/util/memory.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``cstring``
 
 - ``iterator``
-
-- ``tuple``
-
-- ``type_traits``
 
 - ``utility``
 
@@ -72,13 +68,4 @@ Classes
 
 
 - :ref:`exhale_struct_structamdinfer_1_1InferenceRequestInputSizes`
-
-
-Functions
----------
-
-
-- :ref:`exhale_function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf`
-
-- :ref:`exhale_function_predict__api_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3`
 

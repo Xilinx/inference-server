@@ -28,10 +28,10 @@ Program Listing for File version.hpp
    #ifndef GUARD_AMDINFER_VERSION_HPP
    #define GUARD_AMDINFER_VERSION_HPP
    
-   constexpr auto kAmdinferVersion = "0.3.0";
+   constexpr auto kAmdinferVersion = "0.4.0-dev";
    
    constexpr auto kAmdinferVersionMajor = 0;
-   constexpr auto kAmdinferVersionMinor = 3;
+   constexpr auto kAmdinferVersionMinor = 4;
    constexpr auto kAmdinferVersionPatch = 0;
    constexpr auto kAmdinferVersionLabel = "";
    #endif  // GUARD_AMDINFER_VERSION_HPP

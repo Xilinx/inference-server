@@ -13,7 +13,7 @@ Derived Types
 *************
 
 - ``public amdinfer::InferenceRequestInput`` (:ref:`exhale_class_classamdinfer_1_1InferenceRequestInput`)
-- ``public amdinfer::RequestParameters`` (:ref:`exhale_class_classamdinfer_1_1RequestParameters`)
+- ``public amdinfer::ParameterMap`` (:ref:`exhale_class_classamdinfer_1_1ParameterMap`)
 
 
 Class Documentation

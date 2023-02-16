@@ -39,7 +39,7 @@ Program Listing for File soft.cpp
    #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_METRICS
    #include "amdinfer/core/exceptions.hpp"      // for invalid_argument
    #include "amdinfer/core/interface.hpp"       // for Interface
-   #include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+   #include "amdinfer/core/parameters.hpp"      // for ParameterMap
    #include "amdinfer/declarations.hpp"         // for InterfacePtr
    #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_DEBUG
    #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs

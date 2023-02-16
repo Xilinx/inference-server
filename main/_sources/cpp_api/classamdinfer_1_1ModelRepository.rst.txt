@@ -6,16 +6,6 @@ Class ModelRepository
 - Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`
 
 
-Nested Relationships
---------------------
-
-
-Nested Types
-************
-
-- :ref:`exhale_class_classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl`
-
-
 Class Documentation
 -------------------
 

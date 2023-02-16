@@ -3,7 +3,7 @@
 Struct Server::ServerImpl
 =========================
 
-- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_server_internal.hpp`
 
 
 Nested Relationships

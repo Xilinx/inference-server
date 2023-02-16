@@ -46,62 +46,10 @@ Program Listing for File predict_api.hpp
    #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
    #include "amdinfer/core/data_types.hpp"  // for DataType, mapTypeToStr
    #include "amdinfer/core/mixins.hpp"      // for Serializable
+   #include "amdinfer/core/parameters.hpp"  // for ParameterMap
    #include "amdinfer/declarations.hpp"     // for InferenceResponseOutput
    
    namespace amdinfer {
-   
-   using Parameter = std::variant<bool, int32_t, double, std::string>;
-   
-   class RequestParameters : public Serializable {
-    public:
-     void put(const std::string &key, bool value);
-     void put(const std::string &key, double value);
-     void put(const std::string &key, int32_t value);
-     void put(const std::string &key, const std::string &value);
-     void put(const std::string &key, const char *value);
-   
-     template <typename T>
-     T get(const std::string &key) {
-       auto &value = this->parameters_.at(key);
-       return std::get<T>(value);
-     }
-   
-     bool has(const std::string &key);
-     void erase(const std::string &key);
-     [[nodiscard]] size_t size() const;
-     [[nodiscard]] bool empty() const;
-     [[nodiscard]] std::map<std::string, Parameter, std::less<>> data() const;
-   
-     auto begin() { return parameters_.begin(); }
-     [[nodiscard]] auto cbegin() const { return parameters_.cbegin(); }
-   
-     auto end() { return parameters_.end(); }
-     [[nodiscard]] auto cend() const { return parameters_.cend(); }
-   
-     [[nodiscard]] size_t serializeSize() const override;
-     void serialize(std::byte *data_out) const override;
-     void deserialize(const std::byte *data_in) override;
-   
-     friend std::ostream &operator<<(std::ostream &os,
-                                     RequestParameters const &self) {
-       std::stringstream ss;
-       ss << "RequestParameters(" << &self << "):\n";
-       for (const auto &[key, value] : self.parameters_) {
-         ss << "  " << key << ": ";
-         std::visit([&](const auto &c) { ss << c; }, value);
-         ss << "\n";
-       }
-       auto tmp = ss.str();
-       tmp.pop_back();  // delete trailing newline
-       os << tmp;
-       return os;
-     }
-   
-    private:
-     std::map<std::string, Parameter, std::less<>> parameters_;
-   };
-   
-   using RequestParametersPtr = std::shared_ptr<RequestParameters>;
    
    struct ServerMetadata {
      std::string name;
@@ -140,10 +88,10 @@ Program Listing for File predict_api.hpp
      [[nodiscard]] DataType getDatatype() const { return this->data_type_; }
      void setDatatype(DataType type);
    
-     [[nodiscard]] RequestParameters *getParameters() const {
+     [[nodiscard]] ParameterMap *getParameters() const {
        return this->parameters_.get();
      }
-     void setParameters(RequestParametersPtr parameters) {
+     void setParameters(ParameterMapPtr parameters) {
        parameters_ = std::move(parameters);
      }
    
@@ -175,7 +123,7 @@ Program Listing for File predict_api.hpp
      std::string name_;
      std::vector<uint64_t> shape_;
      DataType data_type_;
-     RequestParametersPtr parameters_;
+     ParameterMapPtr parameters_;
      void *data_;
      std::vector<std::byte> shared_data_;
    
@@ -194,14 +142,14 @@ Program Listing for File predict_api.hpp
      [[nodiscard]] std::string getName() const { return this->name_; }
      void setName(const std::string &name);
    
-     void setParameters(RequestParametersPtr parameters) {
+     void setParameters(ParameterMapPtr parameters) {
        parameters_ = std::move(parameters);
      }
-     RequestParameters *getParameters() { return parameters_.get(); }
+     ParameterMap *getParameters() { return parameters_.get(); }
    
     private:
      std::string name_;
-     RequestParametersPtr parameters_;
+     ParameterMapPtr parameters_;
      void *data_;
    
      template <typename U>
@@ -231,7 +179,7 @@ Program Listing for File predict_api.hpp
      const StringMap &getContext() const;
    #endif
    
-     RequestParameters *getParameters() { return this->parameters_.get(); }
+     ParameterMap *getParameters() { return this->parameters_.get(); }
    
      friend std::ostream &operator<<(std::ostream &os,
                                      InferenceResponse const &my_class) {
@@ -251,7 +199,7 @@ Program Listing for File predict_api.hpp
     private:
      std::string model_;
      std::string id_;
-     std::shared_ptr<RequestParameters> parameters_;
+     std::shared_ptr<ParameterMap> parameters_;
      std::vector<InferenceResponseOutput> outputs_;
      std::string error_msg_;
    #ifdef AMDINFER_ENABLE_TRACING
@@ -285,16 +233,16 @@ Program Listing for File predict_api.hpp
      [[nodiscard]] const std::string &getID() const { return id_; }
      void setID(std::string_view id) { id_ = id; }
    
-     [[nodiscard]] RequestParameters *getParameters() const {
+     [[nodiscard]] ParameterMap *getParameters() const {
        return this->parameters_.get();
      }
-     void setParameters(RequestParametersPtr parameters) {
+     void setParameters(ParameterMapPtr parameters) {
        parameters_ = std::move(parameters);
      }
    
     private:
      std::string id_;
-     RequestParametersPtr parameters_;
+     ParameterMapPtr parameters_;
      std::vector<InferenceRequestInput> inputs_;
      std::vector<InferenceRequestOutput> outputs_;
      Callback callback_;
@@ -361,9 +309,9 @@ Program Listing for File predict_api.hpp
    
    namespace std {
    template <>
-   struct less<amdinfer::RequestParameters> {
-     bool operator()(const amdinfer::RequestParameters &lhs,
-                     const amdinfer::RequestParameters &rhs) const {
+   struct less<amdinfer::ParameterMap> {
+     bool operator()(const amdinfer::ParameterMap &lhs,
+                     const amdinfer::ParameterMap &rhs) const {
        auto lhs_size = lhs.size();
        auto rhs_size = rhs.size();
        auto lhs_map = lhs.data();

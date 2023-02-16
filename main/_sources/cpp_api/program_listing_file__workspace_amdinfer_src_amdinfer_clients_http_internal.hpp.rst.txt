@@ -39,15 +39,16 @@ Program Listing for File http_internal.hpp
    #include <string>      // for string
    #include <vector>      // for vector
    
-   #include "amdinfer/build_options.hpp"   // for AMDINFER_ENABLE_TRACING
-   #include "amdinfer/core/interface.hpp"  // for Interface
+   #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_TRA...
+   #include "amdinfer/core/interface.hpp"             // for Interface
+   #include "amdinfer/core/parameters.hpp"            // for ParameterMap (ptr ...
    #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
    #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
    
    namespace amdinfer {
    
-   RequestParametersPtr mapJsonToParameters(Json::Value json);
-   Json::Value mapParametersToJson(RequestParameters *parameters);
+   ParameterMapPtr mapJsonToParameters(Json::Value json);
+   Json::Value mapParametersToJson(ParameterMap *parameters);
    
    InferenceResponse mapJsonToResponse(Json::Value *json);
    Json::Value mapRequestToJson(const InferenceRequest &request);

@@ -17,6 +17,6 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_grpc__server_8cpp_1af2f2b9dcdbdb51142654acff7134fe47`
+- :ref:`exhale_function_grpc__server_8cpp_1acd5880aba6baa79251eba9aa507f2dd4`
 
 - :ref:`exhale_function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1`

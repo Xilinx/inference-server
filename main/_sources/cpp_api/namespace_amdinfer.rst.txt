@@ -40,6 +40,8 @@ Classes
 
 - :ref:`exhale_struct_structamdinfer_1_1LogOptions`
 
+- :ref:`exhale_struct_structamdinfer_1_1NativeClient_1_1NativeClientImpl`
+
 - :ref:`exhale_struct_structamdinfer_1_1Observer`
 
 - :ref:`exhale_struct_structamdinfer_1_1Overloaded`
@@ -106,6 +108,8 @@ Classes
 
 - :ref:`exhale_class_classamdinfer_1_1DrogonHttp`
 
+- :ref:`exhale_class_classamdinfer_1_1Endpoints`
+
 - :ref:`exhale_class_classamdinfer_1_1environment__not__set__error`
 
 - :ref:`exhale_class_classamdinfer_1_1external__error`
@@ -162,27 +166,23 @@ Classes
 
 - :ref:`exhale_class_classamdinfer_1_1Logger`
 
-- :ref:`exhale_class_classamdinfer_1_1Manager`
-
-- :ref:`exhale_class_classamdinfer_1_1Manager_1_1Endpoints`
-
 - :ref:`exhale_class_classamdinfer_1_1ModelMetadata`
 
 - :ref:`exhale_class_classamdinfer_1_1ModelMetadataTensor`
 
 - :ref:`exhale_class_classamdinfer_1_1ModelRepository`
 
-- :ref:`exhale_class_classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl`
-
 - :ref:`exhale_class_classamdinfer_1_1NativeClient`
 
-- :ref:`exhale_class_classamdinfer_1_1RequestParameters`
+- :ref:`exhale_class_classamdinfer_1_1ParameterMap`
 
 - :ref:`exhale_class_classamdinfer_1_1runtime__error`
 
 - :ref:`exhale_class_classamdinfer_1_1Serializable`
 
 - :ref:`exhale_class_classamdinfer_1_1Server`
+
+- :ref:`exhale_class_classamdinfer_1_1SharedState`
 
 - :ref:`exhale_class_classamdinfer_1_1SoftBatcher`
 
@@ -213,7 +213,7 @@ Enums
 
 - :ref:`exhale_enum_status_8hpp_1a913436294d314192e3d1ef856c142de3`
 
-- :ref:`exhale_enum_manager_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3`
+- :ref:`exhale_enum_endpoints_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3`
 
 
 Functions
@@ -228,7 +228,7 @@ Functions
 
 - :ref:`exhale_function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a`
 
-- :ref:`exhale_function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf`
+- :ref:`exhale_function_memory_8hpp_1a884a4d99e70f8bcffb6037ef76a92535`
 
 - :ref:`exhale_function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d`
 
@@ -238,11 +238,9 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1a90265777686e06d56b25b0bc843eef9e`
 
-- :ref:`exhale_function_predict__api_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3`
+- :ref:`exhale_function_parameters_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3`
 
 - :ref:`exhale_function_worker__info_8cpp_1a0b90dba241fba26f6e1bc8bea0e55a9e`
-
-- :ref:`exhale_function_api_8cpp_1a451d6aeeb8de699b4cfc8f632f8e78b6`
 
 - :ref:`exhale_function_logging_8cpp_1ab42e9688a184d4c25b0809fd75c21465`
 
@@ -254,13 +252,9 @@ Functions
 
 - :ref:`exhale_function_grpc__server_8cpp_1a17fb6a89fb9a16380c4f07f999c78fb6`
 
-- :ref:`exhale_function_api_8cpp_1ae0dbf04d01555d9b6428c642503e02d9`
-
 - :ref:`exhale_function_client_8cpp_1a7db4f7d3cc3c76913a04f054545e45a1`
 
 - :ref:`exhale_function_client_8cpp_1a4d4441bcf3855f2e944fa25af8295257`
-
-- :ref:`exhale_function_server_8cpp_1aaee4d554c86a0f534bbe3ffae4a86382`
 
 - :ref:`exhale_function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93`
 
@@ -274,51 +268,39 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b`
 
-- :ref:`exhale_function_http__internal_8cpp_1ae9a219aa864779f813bc00edc3a861c0`
+- :ref:`exhale_function_http__internal_8cpp_1a35f336b6080d807deb64cb9d082d19b5`
 
 - :ref:`exhale_function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf`
 
-- :ref:`exhale_function_http__internal_8cpp_1a96f12abbea879eab96fc3a7677c27c4d`
+- :ref:`exhale_function_http__internal_8cpp_1acc26de4cacac0bd1e7b5dc5b1b802c3a`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580`
 
 - :ref:`exhale_function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1ae7334f09228bbcce89265176a7067843`
+- :ref:`exhale_function_grpc__internal_8cpp_1ae460b92cd5f64db78436cebbe777f27b`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba`
+- :ref:`exhale_function_grpc__internal_8cpp_1a54829da37e86837ed95fd9b4775135bf`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1a770ea8ac5d3401297d49e81b28b78c3e`
+- :ref:`exhale_function_grpc__internal_8cpp_1a810895b7fc432ac1fdda46f6b426644a`
 
-- :ref:`exhale_function_model__repository_8cpp_1a9635913e10f284c7c36fa430aab3e865`
+- :ref:`exhale_function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
 
 - :ref:`exhale_function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537`
 
-- :ref:`exhale_function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d`
-
 - :ref:`exhale_function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835`
 
+- :ref:`exhale_function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d`
+
 - :ref:`exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6`
-
-- :ref:`exhale_function_api_8cpp_1ad1da7e319e89046cb1f6d20fea46ef7d`
-
-- :ref:`exhale_function_api_8cpp_1aab5a33ec7de1e03183aa4075ca858cc3`
-
-- :ref:`exhale_function_api_8cpp_1a39eb9fa1198e60153ddaf2136833e96c`
-
-- :ref:`exhale_function_api_8cpp_1a2f1ebf8b459a22a7de3ce2906aac4f33`
 
 - :ref:`exhale_function_http__internal_8cpp_1a263e4c7efb3c93d6fc48499bc4a46548`
 
 - :ref:`exhale_function_http__internal_8cpp_1a20f514dbb8f33ccf800d6fe95d9dc475`
-
-- :ref:`exhale_function_api_8cpp_1ad9bd380ef495aeb0b4efac1ecef7aef6`
-
-- :ref:`exhale_function_api_8cpp_1a769502f968540b2f68287c808a9156e2`
 
 - :ref:`exhale_function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49`
 
@@ -326,13 +308,15 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d`
 
+- :ref:`exhale_function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76`
+
+- :ref:`exhale_function_model__repository_8hpp_1a94c9f9dd875588ecd02da3459c46da36`
+
 - :ref:`exhale_function_http__internal_8cpp_1acbfb678bfa4431649f17750ea346f33c`
 
 - :ref:`exhale_function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4`
 
 - :ref:`exhale_function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2`
-
-- :ref:`exhale_function_api_8cpp_1abb0bfc39e167c58a8f83a57e8e3717ec`
 
 - :ref:`exhale_function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb`
 
@@ -341,10 +325,6 @@ Functions
 - :ref:`exhale_function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd`
 
 - :ref:`exhale_function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724`
-
-- :ref:`exhale_function_api_8cpp_1a61f95cf4710f15355fc00da05c888668`
-
-- :ref:`exhale_function_api_8cpp_1a59d78af1e09556ee7389be7bc48098db`
 
 
 Typedefs
@@ -393,15 +373,15 @@ Typedefs
 
 - :ref:`exhale_typedef_http__internal_8cpp_1ac0c25a8d874c058c0256360834443885`
 
-- :ref:`exhale_typedef_predict__api_8hpp_1af874429ad00786b2a05f30c311422e4c`
+- :ref:`exhale_typedef_parameters_8hpp_1af874429ad00786b2a05f30c311422e4c`
+
+- :ref:`exhale_typedef_parameters_8hpp_1a26002ca91b4305088f6e975fb162cc81`
 
 - :ref:`exhale_typedef_http__internal_8cpp_1a9a8b533ecefc7f30d6f3377cf897f1c8`
 
-- :ref:`exhale_typedef_predict__api_8hpp_1aecb5618c912edd1c1537ec7da1befebc`
-
 - :ref:`exhale_typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf`
 
-- :ref:`exhale_typedef_manager_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c`
+- :ref:`exhale_typedef_endpoints_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c`
 
 
 Variables

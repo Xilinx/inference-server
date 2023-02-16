@@ -38,6 +38,8 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`
+
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
 
 

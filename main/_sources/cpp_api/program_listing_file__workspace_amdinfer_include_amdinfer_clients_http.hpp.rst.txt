@@ -12,7 +12,6 @@ Program Listing for File http.hpp
 
    // Copyright 2022 Xilinx, Inc.
    // Copyright 2022 Advanced Micro Devices, Inc.
-   // Copyright 2022 Advanced Micro Devices Inc.
    //
    // Licensed under the Apache License, Version 2.0 (the "License");
    // you may not use this file except in compliance with the License.
@@ -34,10 +33,12 @@ Program Listing for File http.hpp
    #include <vector>  // for vector
    
    #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
-   #include "amdinfer/core/predict_api.hpp"  // for RequestParameters (ptr o...
+   #include "amdinfer/core/predict_api.hpp"  // for ParameterMap (ptr o...
    #include "amdinfer/declarations.hpp"      // for StringMap
    
    namespace amdinfer {
+   
+   class ParameterMap;
    
    class HttpClient : public Client {
     public:
@@ -59,7 +60,7 @@ Program Listing for File http.hpp
        const std::string& model) const override;
    
      void modelLoad(const std::string& model,
-                    RequestParameters* parameters) const override;
+                    ParameterMap* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
      [[nodiscard]] InferenceResponse modelInfer(
@@ -68,8 +69,8 @@ Program Listing for File http.hpp
        const std::string& model, const InferenceRequest& request) const override;
      [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     [[nodiscard]] std::string workerLoad(
-       const std::string& worker, RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(const std::string& worker,
+                                          ParameterMap* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
      [[nodiscard]] bool hasHardware(const std::string& name,

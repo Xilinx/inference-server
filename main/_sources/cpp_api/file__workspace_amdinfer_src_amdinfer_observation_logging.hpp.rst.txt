@@ -37,7 +37,7 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -59,9 +59,9 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
 

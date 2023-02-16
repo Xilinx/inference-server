@@ -41,6 +41,8 @@ Includes
 
 - ``amdinfer/core/mixins.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_mixins.hpp`)
 
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
 - ``cstddef``
@@ -55,7 +57,7 @@ Includes
 
 - ``map``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``sstream``
 
@@ -77,27 +79,19 @@ Included By
 -----------
 
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.hpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
 
@@ -157,7 +151,7 @@ Classes
 
 - :ref:`exhale_struct_structamdinfer_1_1ServerMetadata`
 
-- :ref:`exhale_struct_structstd_1_1less_3_01amdinfer_1_1RequestParameters_01_4`
+- :ref:`exhale_struct_structstd_1_1less_3_01amdinfer_1_1ParameterMap_01_4`
 
 - :ref:`exhale_class_classamdinfer_1_1InferenceRequest`
 
@@ -171,8 +165,6 @@ Classes
 
 - :ref:`exhale_class_classamdinfer_1_1ModelMetadataTensor`
 
-- :ref:`exhale_class_classamdinfer_1_1RequestParameters`
-
 
 Typedefs
 --------
@@ -181,8 +173,4 @@ Typedefs
 - :ref:`exhale_typedef_predict__api_8hpp_1a08788239a50c8739700f08f0a6ede4e5`
 
 - :ref:`exhale_typedef_predict__api_8hpp_1a68c2a90f38823c9713e56fd203b2b88d`
-
-- :ref:`exhale_typedef_predict__api_8hpp_1af874429ad00786b2a05f30c311422e4c`
-
-- :ref:`exhale_typedef_predict__api_8hpp_1aecb5618c912edd1c1537ec7da1befebc`
 

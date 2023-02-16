@@ -33,9 +33,9 @@ Program Listing for File grpc_internal.hpp
    #include <map>         // for map
    #include <string>      // for string
    
-   #include "amdinfer/core/data_types.hpp"            // for fp16
-   #include "amdinfer/core/predict_api_internal.hpp"  // for Parameter, Request...
-   #include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+   #include "amdinfer/core/data_types.hpp"  // for fp16
+   #include "amdinfer/core/parameters.hpp"  // for Parameter, ParameterMap (ptr...
+   #include "amdinfer/util/traits.hpp"      // IWYU pragma: keep
    
    namespace google::protobuf {
    template <typename T, typename U>
@@ -51,17 +51,20 @@ Program Listing for File grpc_internal.hpp
    
    namespace amdinfer {
    
+   class InferenceRequest;
+   class InferenceResponse;
+   class ModelMetadata;
    struct Observer;
    
    void mapParametersToProto(
      const std::map<std::string, amdinfer::Parameter, std::less<>>& parameters,
      google::protobuf::Map<std::string, inference::InferParameter>*
        grpc_parameters);
-   RequestParametersPtr mapProtoToParameters(
+   ParameterMapPtr mapProtoToParameters(
      const google::protobuf::Map<std::string, inference::InferParameter>& params);
    void mapProtoToParameters(
      const google::protobuf::Map<std::string, inference::InferParameter>& params,
-     RequestParameters& parameters);
+     ParameterMap& parameters);
    void mapRequestToProto(const InferenceRequest& request,
                           inference::ModelInferRequest& grpc_request,
                           const Observer& observer);

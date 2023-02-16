@@ -41,15 +41,17 @@ Includes
 
 - ``amdinfer/clients/grpc_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`)
 
-- ``amdinfer/core/api.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_api.hpp`)
-
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
 - ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
 
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
 - ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+
+- ``amdinfer/core/shared_state.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -77,7 +79,7 @@ Includes
 
 - ``grpcpp/grpcpp.h``
 
-- ``memory``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``predict_api.grpc.pb.h``
 
@@ -158,7 +160,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_grpc__server_8cpp_1af2f2b9dcdbdb51142654acff7134fe47`
+- :ref:`exhale_function_grpc__server_8cpp_1acd5880aba6baa79251eba9aa507f2dd4`
 
 - :ref:`exhale_function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1`
 

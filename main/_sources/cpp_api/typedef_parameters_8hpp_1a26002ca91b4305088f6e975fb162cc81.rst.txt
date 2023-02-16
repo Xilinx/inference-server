@@ -1,0 +1,14 @@
+.. _exhale_typedef_parameters_8hpp_1a26002ca91b4305088f6e975fb162cc81:
+
+Typedef amdinfer::ParameterMapPtr
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::ParameterMapPtr
+   :project: amdinfer

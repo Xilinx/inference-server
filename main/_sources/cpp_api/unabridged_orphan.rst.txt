@@ -317,6 +317,11 @@ Defines
 
    define_grpc__server_8cpp_1aa8804898829de032ded6a07028b0af36.rst
 
+.. toctree::
+   :maxdepth: 5
+
+   define_parameters_8hpp_1a64574f13f79faf4cd17924e2b0687116.rst
+
 Typedefs
 ********
 
@@ -429,7 +434,12 @@ Typedefs
 .. toctree::
    :maxdepth: 5
 
-   typedef_predict__api_8hpp_1af874429ad00786b2a05f30c311422e4c.rst
+   typedef_parameters_8hpp_1af874429ad00786b2a05f30c311422e4c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_parameters_8hpp_1a26002ca91b4305088f6e975fb162cc81.rst
 
 .. toctree::
    :maxdepth: 5
@@ -439,17 +449,12 @@ Typedefs
 .. toctree::
    :maxdepth: 5
 
-   typedef_predict__api_8hpp_1aecb5618c912edd1c1537ec7da1befebc.rst
-
-.. toctree::
-   :maxdepth: 5
-
    typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf.rst
 
 .. toctree::
    :maxdepth: 5
 
-   typedef_manager_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c.rst
+   typedef_endpoints_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c.rst
 
 .. toctree::
    :maxdepth: 5
@@ -607,16 +612,6 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__workspace_amdinfer_src_amdinfer_core_api.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   file__workspace_amdinfer_src_amdinfer_core_api.hpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
    file__workspace_amdinfer_src_amdinfer_util_base64.cpp.rst
 
 .. toctree::
@@ -723,6 +718,16 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -857,12 +862,7 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__workspace_amdinfer_src_amdinfer_core_manager.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   file__workspace_amdinfer_src_amdinfer_core_manager.hpp.rst
+   file__workspace_amdinfer_src_amdinfer_util_memory.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -918,6 +918,16 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_src_amdinfer_observation_observer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_parameters.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_include_amdinfer_core_parameters.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -988,6 +998,21 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_include_amdinfer_servers_server.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_servers_server_internal.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp.rst
 
 .. toctree::
    :maxdepth: 5

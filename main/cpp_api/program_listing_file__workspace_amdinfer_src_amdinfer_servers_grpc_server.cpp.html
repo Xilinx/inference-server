@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -426,20 +437,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">        // for move</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">         // for vector</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/buffer.hpp&quot;</span><span class="c1">         // for Buffer</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">          // for AMDINFER_ENABLE_LOGGING</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc_internal.hpp&quot;</span><span class="c1">  // for mapProtoToParameters</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/api.hpp&quot;</span><span class="c1">               // for hasHardware, modelI...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">        // for DataType, DataType:...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">        // for invalid_argument</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">         // for Interface, Interfac...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/buffer.hpp&quot;</span><span class="c1">             // for Buffer</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">              // for AMDINFER_ENABLE_LOG...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/clients/grpc_internal.hpp&quot;</span><span class="c1">      // for mapProtoToParameters</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">            // for DataType, DataType:...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">            // for invalid_argument</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/interface.hpp&quot;</span><span class="c1">             // for Interface, Interfac...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span><span class="c1">            // for ParameterMap</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api_internal.hpp&quot;</span><span class="c1">  // for InferenceRequestInput</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/shared_state.hpp&quot;</span><span class="c1">          // for SharedState</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">               // for BufferRawPtrs, Infe...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/observer.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/string.hpp&quot;</span><span class="c1">  // for toLower</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/traits.hpp&quot;</span><span class="c1">  // IWYU pragma: keep</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.grpc.pb.h&quot;</span><span class="c1">     // for GRPCInferenceServic...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.pb.h&quot;</span><span class="c1">          // for InferTensorContents</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/observer.hpp&quot;</span><span class="c1">       // for Logger, Loggers</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/string.hpp&quot;</span><span class="c1">                // for toLower</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/traits.hpp&quot;</span><span class="c1">                // IWYU pragma: keep</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.grpc.pb.h&quot;</span><span class="c1">                   // for GRPCInferenceServic...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;predict_api.pb.h&quot;</span><span class="c1">                        // for InferTensorContents</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CallDataModelInfer</span><span class="p">;</span>
@@ -659,43 +671,53 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
 <span class="c1">// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)</span>
-<span class="cp">#define CALLDATA_IMPL(endpoint, type)                                         \</span>
-<span class="cp">  class CallData##endpoint                                                    \</span>
-<span class="cp">    : public CallData##type&lt;inference::endpoint##Request,                     \</span>
-<span class="cp">                            inference::endpoint##Response&gt; {                  \</span>
-<span class="cp">   public:                                                                    \</span>
-<span class="cp">    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \</span>
-<span class="cp">      : CallData##type(service, cq) {                                         \</span>
-<span class="cp">      proceed();                                                              \</span>
-<span class="cp">    }                                                                         \</span>
-<span class="cp">                                                                              \</span>
-<span class="cp">   private:                                                                   \</span>
-<span class="cp">    Logger logger_{Loggers::Server};                                          \</span>
-<span class="cp">                                                                              \</span>
-<span class="cp">   protected:                                                                 \</span>
-<span class="cp">    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \</span>
-<span class="cp">    void waitForRequest() override {                                          \</span>
-<span class="cp">      service_-&gt;Request##endpoint(&amp;ctx_, &amp;request_, &amp;responder_, cq_, cq_,    \</span>
-<span class="cp">                                  this);                                      \</span>
-<span class="cp">    }                                                                         \</span>
+<span class="cp">#define CALLDATA_IMPL(endpoint, type)                                      \</span>
+<span class="cp">  class CallData##endpoint                                                 \</span>
+<span class="cp">    : public CallData##type&lt;inference::endpoint##Request,                  \</span>
+<span class="cp">                            inference::endpoint##Response&gt; {               \</span>
+<span class="cp">   public:                                                                 \</span>
+<span class="cp">    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq,   \</span>
+<span class="cp">                       SharedState* state)                                 \</span>
+<span class="cp">      : CallData##type(service, cq), state_(state) {                       \</span>
+<span class="cp">      proceed();                                                           \</span>
+<span class="cp">    }                                                                      \</span>
+<span class="cp">                                                                           \</span>
+<span class="cp">   private:                                                                \</span>
+<span class="cp">    Logger logger_{Loggers::Server};                                       \</span>
+<span class="cp">    SharedState* state_;                                                   \</span>
+<span class="cp">                                                                           \</span>
+<span class="cp">   protected:                                                              \</span>
+<span class="cp">    void addNewCallData() override {                                       \</span>
+<span class="cp">      new CallData##endpoint(service_, cq_, state_);                       \</span>
+<span class="cp">    }                                                                      \</span>
+<span class="cp">    void waitForRequest() override {                                       \</span>
+<span class="cp">      service_-&gt;Request##endpoint(&amp;ctx_, &amp;request_, &amp;responder_, cq_, cq_, \</span>
+<span class="cp">                                  this);                                   \</span>
+<span class="cp">    }                                                                      \</span>
 <span class="cp">    void handleRequest() noexcept override</span>
 <span class="cp">#else</span>
-<span class="cp">#define CALLDATA_IMPL(endpoint, type)                                         \</span>
-<span class="cp">  class CallData##endpoint                                                    \</span>
-<span class="cp">    : public CallData##type&lt;inference::endpoint##Request,                     \</span>
-<span class="cp">                            inference::endpoint##Response&gt; {                  \</span>
-<span class="cp">   public:                                                                    \</span>
-<span class="cp">    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq)      \</span>
-<span class="cp">      : CallData##type(service, cq) {                                         \</span>
-<span class="cp">      proceed();                                                              \</span>
-<span class="cp">    }                                                                         \</span>
-<span class="cp">                                                                              \</span>
-<span class="cp">   protected:                                                                 \</span>
-<span class="cp">    void addNewCallData() override { new CallData##endpoint(service_, cq_); } \</span>
-<span class="cp">    void waitForRequest() override {                                          \</span>
-<span class="cp">      service_-&gt;Request##endpoint(&amp;ctx_, &amp;request_, &amp;responder_, cq_, cq_,    \</span>
-<span class="cp">                                  this);                                      \</span>
-<span class="cp">    }                                                                         \</span>
+<span class="cp">#define CALLDATA_IMPL(endpoint, type)                                      \</span>
+<span class="cp">  class CallData##endpoint                                                 \</span>
+<span class="cp">    : public CallData##type&lt;inference::endpoint##Request,                  \</span>
+<span class="cp">                            inference::endpoint##Response&gt; {               \</span>
+<span class="cp">   public:                                                                 \</span>
+<span class="cp">    CallData##endpoint(AsyncService* service, ServerCompletionQueue* cq,   \</span>
+<span class="cp">                       SharedState* state)                                 \</span>
+<span class="cp">      : CallData##type(service, cq), state_(state) {                       \</span>
+<span class="cp">      proceed();                                                           \</span>
+<span class="cp">    }                                                                      \</span>
+<span class="cp">                                                                           \</span>
+<span class="cp">   private:                                                                \</span>
+<span class="cp">    SharedState* state_;                                                   \</span>
+<span class="cp">                                                                           \</span>
+<span class="cp">   protected:                                                              \</span>
+<span class="cp">    void addNewCallData() override {                                       \</span>
+<span class="cp">      new CallData##endpoint(service_, cq_, state_);                       \</span>
+<span class="cp">    }                                                                      \</span>
+<span class="cp">    void waitForRequest() override {                                       \</span>
+<span class="cp">      service_-&gt;Request##endpoint(&amp;ctx_, &amp;request_, &amp;responder_, cq_, cq_, \</span>
+<span class="cp">                                  this);                                   \</span>
+<span class="cp">    }                                                                      \</span>
 <span class="cp">    void handleRequest() noexcept override</span>
 <span class="cp">#endif</span>
 
@@ -876,7 +898,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelReady</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">();</span>
 <span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelReady</span><span class="p">(</span><span class="n">model</span><span class="p">));</span>
+<span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">modelReady</span><span class="p">(</span><span class="n">model</span><span class="p">));</span>
 <span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_ready</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
@@ -891,7 +913,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">();</span>
 <span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelMetadata</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">modelMetadata</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
 <span class="w">    </span><span class="n">mapModelMetadataToProto</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">reply_</span><span class="p">);</span>
 <span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -903,7 +925,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">CALLDATA_IMPL_END</span>
 
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ServerMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serverMetadata</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SharedState</span><span class="o">::</span><span class="n">serverMetadata</span><span class="p">();</span>
 <span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
 <span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_version</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">extension</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="n">extensions</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -914,7 +936,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">CALLDATA_IMPL_END</span>
 
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelList</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">models</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelList</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">models</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">modelList</span><span class="p">();</span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">models</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">add_models</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
@@ -928,7 +950,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span>
 <span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
 <span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">    </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">modelLoad</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
 <span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span>
@@ -945,7 +967,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">ModelUnload</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span>
 <span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
-<span class="w">  </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelUnload</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">);</span>
+<span class="w">  </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">modelUnload</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">);</span>
 <span class="w">  </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="n">CALLDATA_IMPL_END</span>
@@ -957,7 +979,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
 
 <span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workerLoad</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="o">*</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
 <span class="w">    </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span>
 <span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -973,13 +995,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">WorkerUnload</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">worker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">mutable_name</span><span class="p">();</span>
 <span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">toLower</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
-<span class="w">  </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workerUnload</span><span class="p">(</span><span class="o">*</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">  </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">workerUnload</span><span class="p">(</span><span class="o">*</span><span class="n">worker</span><span class="p">);</span>
 <span class="w">  </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="n">CALLDATA_IMPL_END</span>
 
 <span class="n">CALLDATA_IMPL</span><span class="p">(</span><span class="n">HasHardware</span><span class="p">,</span><span class="w"> </span><span class="n">Unary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">(</span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">num</span><span class="p">());</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SharedState</span><span class="o">::</span><span class="n">hasHardware</span><span class="p">(</span><span class="n">request_</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">request_</span><span class="p">.</span><span class="n">num</span><span class="p">());</span>
 <span class="w">  </span><span class="n">reply_</span><span class="p">.</span><span class="n">set_found</span><span class="p">(</span><span class="n">found</span><span class="p">);</span>
 <span class="w">  </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">);</span>
 <span class="p">}</span>
@@ -999,7 +1021,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">endSpan</span><span class="p">();</span>
 <span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">setTrace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span>
 <span class="cp">#endif</span>
-<span class="w">    </span><span class="o">::</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span>
+<span class="w">    </span><span class="n">state_</span><span class="o">-&gt;</span><span class="n">modelInfer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">request</span><span class="p">));</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">invalid_argument</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger_</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
 <span class="w">    </span><span class="n">finish</span><span class="p">(</span><span class="o">::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">::</span><span class="n">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()));</span>
@@ -1011,10 +1033,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="k">class</span><span class="w"> </span><span class="nc">GrpcServer</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
 <span class="w"> </span><span class="k">public</span><span class="o">:</span>
-<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 
-<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cq_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="w"> </span><span class="nf">server</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">cq_count</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// using this singleton approach here because the start() method is state-</span>
+<span class="w">  </span><span class="c1">// independent. The HTTP server is already global like this</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cq_count</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">SharedState</span><span class="o">*</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">GrpcServer</span><span class="w"> </span><span class="nf">server</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">cq_count</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">server</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
@@ -1044,7 +1069,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="p">}</span>
 
 <span class="w"> </span><span class="k">private</span><span class="o">:</span>
-<span class="w">  </span><span class="n">GrpcServer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cq_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cq_count</span><span class="p">,</span><span class="w"> </span><span class="n">SharedState</span><span class="o">*</span><span class="w"> </span><span class="n">state</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">state_</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">ServerBuilder</span><span class="w"> </span><span class="n">builder</span><span class="p">;</span>
 <span class="w">    </span><span class="n">builder</span><span class="p">.</span><span class="n">SetMaxReceiveMessageSize</span><span class="p">(</span><span class="n">kMaxGrpcMessageSize</span><span class="p">);</span>
 <span class="w">    </span><span class="n">builder</span><span class="p">.</span><span class="n">SetMaxSendMessageSize</span><span class="p">(</span><span class="n">kMaxGrpcMessageSize</span><span class="p">);</span>
@@ -1072,18 +1098,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">my_cq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cq_</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
 
 <span class="w">    </span><span class="c1">// Spawn a new CallData instance to serve new clients.</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerLive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelList</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataWorkerLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataWorkerUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelInfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataHasHardware</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerLive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelMetadata</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataServerReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelList</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelReady</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataWorkerLoad</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataWorkerUnload</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataModelInfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">CallDataHasHardware</span><span class="p">(</span><span class="o">&amp;</span><span class="n">service_</span><span class="p">,</span><span class="w"> </span><span class="n">my_cq</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">state_</span><span class="p">);</span>
 <span class="w">    </span><span class="c1">// new CallDataStreamModelInfer(&amp;service_, my_cq.get());</span>
 <span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w">  </span><span class="c1">// uniquely identifies a request.</span>
 <span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
@@ -1110,13 +1136,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">inference</span><span class="o">::</span><span class="n">GRPCInferenceService</span><span class="o">::</span><span class="n">AsyncService</span><span class="w"> </span><span class="n">service_</span><span class="p">;</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;::</span><span class="n">grpc</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server_</span><span class="p">;</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">threads_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">SharedState</span><span class="o">*</span><span class="w"> </span><span class="n">state_</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">grpc</span><span class="w"> </span><span class="p">{</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="n">SharedState</span><span class="o">*</span><span class="w"> </span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.0.0.0:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">port</span><span class="p">);</span>
-<span class="w">  </span><span class="n">GrpcServer</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">GrpcServer</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1151,7 +1178,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

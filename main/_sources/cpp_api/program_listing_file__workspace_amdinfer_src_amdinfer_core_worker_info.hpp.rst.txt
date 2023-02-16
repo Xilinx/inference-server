@@ -40,7 +40,8 @@ Program Listing for File worker_info.hpp
    
    namespace amdinfer {
    class Batcher;
-   class RequestParameters;
+   class ParameterMap;
+   class ModelMetadata;
    namespace workers {
    class Worker;
    }  // namespace workers
@@ -50,7 +51,7 @@ Program Listing for File worker_info.hpp
    
    class WorkerInfo {
     public:
-     WorkerInfo(const std::string& name, RequestParameters* parameters);
+     WorkerInfo(const std::string& name, ParameterMap* parameters);
      ~WorkerInfo();                           
      WorkerInfo(WorkerInfo const&) = delete;  
      WorkerInfo& operator=(const WorkerInfo&) = delete;
@@ -61,8 +62,7 @@ Program Listing for File worker_info.hpp
      void join(std::thread::id id);
      void joinAll();  
    
-     void addAndStartWorker(const std::string& name,
-                            RequestParameters* parameters);
+     void addAndStartWorker(const std::string& name, ParameterMap* parameters);
    
      void unload();
      void shutdown();
@@ -83,6 +83,8 @@ Program Listing for File worker_info.hpp
      [[nodiscard]] size_t getGroupSize() const;
    
      [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
+   
+     ModelMetadata getMetadata() const;
    
     private:
      std::map<std::thread::id, std::thread> worker_threads_;

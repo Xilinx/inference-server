@@ -50,6 +50,7 @@ Program Listing for File websocket_server.hpp
    
    namespace amdinfer {
    class InferenceRequest;
+   class SharedState;
    }  // namespace amdinfer
    
    namespace amdinfer::http {
@@ -77,7 +78,7 @@ Program Listing for File websocket_server.hpp
    class WebsocketServer
      : public drogon::WebSocketController<WebsocketServer, false> {
     public:
-     WebsocketServer();  
+     explicit WebsocketServer(SharedState *state);  
    
      void handleNewMessage(const drogon::WebSocketConnectionPtr &conn,
                            std::string &&message,
@@ -90,10 +91,11 @@ Program Listing for File websocket_server.hpp
      WS_PATH_ADD("/models/infer", drogon::Get);
      WS_PATH_LIST_END
    
-   #ifdef AMDINFER_ENABLE_LOGGING
     private:
+   #ifdef AMDINFER_ENABLE_LOGGING
      Logger logger_{Loggers::Server};
    #endif
+     SharedState *state_;
    };
    
    }  // namespace amdinfer::http

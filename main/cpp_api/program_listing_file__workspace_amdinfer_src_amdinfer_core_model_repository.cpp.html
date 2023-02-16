@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -410,7 +421,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/model_repository.hpp&quot;</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span><span class="c1">                                     // for open, O_RDONLY</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span><span class="c1">                                     // for open, O_CLOEXEC</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/io/zero_copy_stream_impl.h&gt;</span><span class="c1">  // for FileInputStream</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/repeated_ptr_field.h&gt;</span><span class="c1">        // for RepeatedPtrField</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;google/protobuf/text_format.h&gt;</span><span class="c1">               // for TextFormat</span>
@@ -419,11 +430,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;filesystem&gt;</span><span class="c1">  // for path, operator/</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span><span class="c1">      // for sleep_for</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/api.hpp&quot;</span><span class="c1">             // for modelLoad</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">      // for file_not_found...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/manager.hpp&quot;</span><span class="c1">         // for Manager</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">     // for RequestParameters</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for Logger, PROTEU...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/endpoints.hpp&quot;</span><span class="c1">       // for Endpoints</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">      // for runtime_error</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span><span class="c1">      // for ParameterMap</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for AMDINFER_LOG_D...</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;model_config.pb.h&quot;</span><span class="c1">                 // for Config, InferP...</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">fs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">filesystem</span><span class="p">;</span>
@@ -433,7 +443,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// TODO(varunsh): get rid of this duplicate code with the one in grpc_internal</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">mapProtoToParameters2</span><span class="p">(</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">InferParameter2</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">params</span><span class="p">,</span>
-<span class="w">  </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">ParameterType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inference</span><span class="o">::</span><span class="n">InferParameter2</span><span class="o">::</span><span class="n">ParameterChoiceCase</span><span class="p">;</span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">params</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">.</span><span class="n">parameter_choice_case</span><span class="p">();</span>
@@ -463,29 +473,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::modelLoad</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span>
-<span class="w">                                </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">repo_</span><span class="p">.</span><span class="n">modelLoad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::setRepository</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">repository</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">repo_</span><span class="p">.</span><span class="n">setRepository</span><span class="p">(</span><span class="n">repository</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::enableRepositoryMonitoring</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">use_polling</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">repo_</span><span class="p">.</span><span class="n">enableRepositoryMonitoring</span><span class="p">(</span><span class="n">use_polling</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::ModelRepositoryImpl::setRepository</span><span class="p">(</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">repository_path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">repository_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repository_path</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::ModelRepositoryImpl::modelLoad</span><span class="p">(</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">RequestParameters</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">parseModel</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="o">&amp;</span><span class="w"> </span><span class="n">repository</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="p">,</span>
+<span class="w">                </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">config_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;config.pbtxt&quot;</span><span class="p">;</span>
 
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">model_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repository_</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">model_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repository</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">model</span><span class="p">;</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">config_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model_path</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">config_file</span><span class="p">;</span>
 
 <span class="w">  </span><span class="c1">// KServe can sometimes create directories like model/model/config_file</span>
@@ -559,7 +551,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">mapProtoToParameters2</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">UpdateListener::handleFileAction</span><span class="p">([[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="n">efsw</span><span class="o">::</span><span class="n">WatchID</span><span class="w"> </span><span class="n">watchid</span><span class="p">,</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::setRepository</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="o">&amp;</span><span class="w"> </span><span class="n">repository_path</span><span class="p">,</span>
+<span class="w">                                    </span><span class="kt">bool</span><span class="w"> </span><span class="n">load_existing</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">repository_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repository_path</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fs</span><span class="o">::</span><span class="n">exists</span><span class="p">(</span><span class="n">repository_path</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">load_existing</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">};</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">directory_iterator</span><span class="p">(</span><span class="n">repository_</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">is_directory</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">path</span><span class="p">.</span><span class="n">path</span><span class="p">().</span><span class="n">filename</span><span class="p">();</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">ParameterMap</span><span class="w"> </span><span class="n">params</span><span class="p">;</span>
+<span class="w">          </span><span class="n">endpoints_</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
+<span class="w">            </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error loading &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">string</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">ModelRepository::getRepository</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">repository_</span><span class="p">.</span><span class="n">string</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::enableMonitoring</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">use_polling</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">file_watcher_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">efsw</span><span class="o">::</span><span class="n">FileWatcher</span><span class="o">&gt;</span><span class="p">(</span><span class="n">use_polling</span><span class="p">);</span>
+<span class="w">  </span><span class="n">listener_</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">UpdateListener</span><span class="o">&gt;</span><span class="p">(</span><span class="n">repository_</span><span class="p">,</span><span class="w"> </span><span class="n">endpoints_</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">file_watcher_</span><span class="o">-&gt;</span><span class="n">addWatch</span><span class="p">(</span><span class="n">repository_</span><span class="p">.</span><span class="n">string</span><span class="p">(),</span><span class="w"> </span><span class="n">listener_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">file_watcher_</span><span class="o">-&gt;</span><span class="n">watch</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">UpdateListener::handleFileAction</span><span class="p">([[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="n">efsw</span><span class="o">::</span><span class="n">WatchID</span><span class="w"> </span><span class="n">watch_id</span><span class="p">,</span>
 <span class="w">                                      </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">dir</span><span class="p">,</span>
 <span class="w">                                      </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span>
 <span class="w">                                      </span><span class="n">efsw</span><span class="o">::</span><span class="n">Action</span><span class="w"> </span><span class="n">action</span><span class="p">,</span>
@@ -571,11 +596,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">action</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">efsw</span><span class="o">::</span><span class="n">Actions</span><span class="o">::</span><span class="n">Add</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">delay</span><span class="p">);</span>
 <span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="p">(</span><span class="n">dir</span><span class="p">).</span><span class="n">parent_path</span><span class="p">().</span><span class="n">filename</span><span class="p">();</span>
-<span class="w">      </span><span class="c1">// TODO(varunsh): replace with native client</span>
-<span class="w">      </span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">params</span><span class="p">;</span>
+<span class="w">      </span><span class="n">ParameterMap</span><span class="w"> </span><span class="n">params</span><span class="p">;</span>
 <span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">ModelRepository</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">params</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Manager</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">loadWorker</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
+<span class="w">        </span><span class="n">parseModel</span><span class="p">(</span><span class="n">repository_</span><span class="p">,</span><span class="w"> </span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">params</span><span class="p">);</span>
+<span class="w">        </span><span class="n">endpoints_</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
 <span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error loading &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">string</span><span class="p">());</span>
 <span class="w">      </span><span class="p">}</span>
@@ -583,8 +607,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="c1">// arbitrary delay to make sure filesystem has settled</span>
 <span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">delay</span><span class="p">);</span>
 <span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">path</span><span class="p">(</span><span class="n">dir</span><span class="p">).</span><span class="n">parent_path</span><span class="p">().</span><span class="n">filename</span><span class="p">();</span>
-<span class="w">      </span><span class="c1">// TODO(varunsh): replace with native client</span>
-<span class="w">      </span><span class="n">Manager</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">unloadWorker</span><span class="p">(</span><span class="n">model</span><span class="p">);</span>
+<span class="w">      </span><span class="n">endpoints_</span><span class="o">-&gt;</span><span class="n">unload</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">string</span><span class="p">());</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 
@@ -611,27 +634,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::ModelRepositoryImpl::enableRepositoryMonitoring</span><span class="p">(</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_polling</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">file_watcher_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">efsw</span><span class="o">::</span><span class="n">FileWatcher</span><span class="o">&gt;</span><span class="p">(</span><span class="n">use_polling</span><span class="p">);</span>
-<span class="w">  </span><span class="n">listener_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">UpdateListener</span><span class="o">&gt;</span><span class="p">();</span>
-
-<span class="w">  </span><span class="n">file_watcher_</span><span class="o">-&gt;</span><span class="n">addWatch</span><span class="p">(</span><span class="n">repository_</span><span class="p">.</span><span class="n">string</span><span class="p">(),</span><span class="w"> </span><span class="n">listener_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">file_watcher_</span><span class="o">-&gt;</span><span class="n">watch</span><span class="p">();</span>
-
-<span class="w">  </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="p">{</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">};</span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fs</span><span class="o">::</span><span class="n">directory_iterator</span><span class="p">(</span><span class="n">repository_</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">is_directory</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">path</span><span class="p">.</span><span class="n">path</span><span class="p">().</span><span class="n">filename</span><span class="p">();</span>
-<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">RequestParameters</span><span class="w"> </span><span class="n">params</span><span class="p">;</span>
-<span class="w">        </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">modelLoad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">params</span><span class="p">);</span>
-<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span>
-<span class="w">                          </span><span class="s">&quot;Error loading &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">string</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">ModelRepository::setEndpoints</span><span class="p">(</span><span class="n">Endpoints</span><span class="o">*</span><span class="w"> </span><span class="n">endpoints</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">endpoints_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">endpoints</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer</span>
@@ -658,7 +662,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

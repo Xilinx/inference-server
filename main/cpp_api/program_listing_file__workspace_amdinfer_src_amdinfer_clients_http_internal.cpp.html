@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -438,8 +449,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
 
-<span class="n">RequestParametersPtr</span><span class="w"> </span><span class="nf">mapJsonToParameters</span><span class="p">(</span><span class="n">Json</span><span class="o">::</span><span class="n">Value</span><span class="w"> </span><span class="n">json</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RequestParameters</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">ParameterMapPtr</span><span class="w"> </span><span class="nf">mapJsonToParameters</span><span class="p">(</span><span class="n">Json</span><span class="o">::</span><span class="n">Value</span><span class="w"> </span><span class="n">json</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ParameterMap</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">&amp;</span><span class="n">id</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">json</span><span class="p">.</span><span class="n">getMemberNames</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">isString</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">parameters</span><span class="o">-&gt;</span><span class="n">put</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">asString</span><span class="p">());</span>
@@ -466,7 +477,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="p">...</span><span class="w"> </span><span class="n">Ts</span><span class="o">&gt;</span>
 <span class="n">Overloaded</span><span class="p">(</span><span class="n">Ts</span><span class="p">...)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Overloaded</span><span class="o">&lt;</span><span class="n">Ts</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="n">Json</span><span class="o">::</span><span class="n">Value</span><span class="w"> </span><span class="nf">mapParametersToJson</span><span class="p">(</span><span class="n">RequestParameters</span><span class="w"> </span><span class="o">*</span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">Json</span><span class="o">::</span><span class="n">Value</span><span class="w"> </span><span class="nf">mapParametersToJson</span><span class="p">(</span><span class="n">ParameterMap</span><span class="w"> </span><span class="o">*</span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">Json</span><span class="o">::</span><span class="n">Value</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Json</span><span class="o">::</span><span class="n">objectValue</span><span class="p">;</span>
 
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parameter</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">*</span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -666,7 +677,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;parameters&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Json</span><span class="o">::</span><span class="n">objectValue</span><span class="p">);</span>
 <span class="w">      </span><span class="n">input</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapJsonToParameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">input</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">RequestParameters</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">      </span><span class="n">input</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ParameterMap</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">isMember</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;No &#39;data&#39; key present in request input&quot;</span><span class="p">);</span>
@@ -698,7 +709,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;parameters&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Json</span><span class="o">::</span><span class="n">objectValue</span><span class="p">);</span>
 <span class="w">      </span><span class="n">output</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapJsonToParameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">output</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">RequestParameters</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">      </span><span class="n">output</span><span class="p">.</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ParameterMap</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">output</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
@@ -722,7 +733,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;parameters&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Json</span><span class="o">::</span><span class="n">objectValue</span><span class="p">);</span>
 <span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapJsonToParameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">RequestParameters</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">parameters_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ParameterMap</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">  </span><span class="p">}</span>
 
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">isMember</span><span class="p">(</span><span class="s">&quot;inputs&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
@@ -1012,7 +1023,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

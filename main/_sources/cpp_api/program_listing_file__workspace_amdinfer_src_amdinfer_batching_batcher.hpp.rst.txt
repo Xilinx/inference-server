@@ -36,7 +36,7 @@ Program Listing for File batcher.hpp
    #include <vector>   // for vector
    
    #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-   #include "amdinfer/core/predict_api.hpp"     // for RequestParameters
+   #include "amdinfer/core/parameters.hpp"      // for ParameterMap
    #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
    #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
    #include "amdinfer/observation/tracing.hpp"  // for TracePtr
@@ -105,7 +105,7 @@ Program Listing for File batcher.hpp
    class Batcher {
     public:
      Batcher();
-     explicit Batcher(RequestParameters* parameters);
+     explicit Batcher(ParameterMap* parameters);
      // explicit Batcher(const std::string& name);
      Batcher(const Batcher& batcher);              
      Batcher& operator=(const Batcher&) = delete;  
@@ -140,7 +140,7 @@ Program Listing for File batcher.hpp
      std::shared_ptr<BatchPtrQueue> output_queue_;
      std::thread thread_;
      std::string model_;
-     RequestParameters parameters_;
+     ParameterMap parameters_;
    
     private:
      virtual void doRun(WorkerInfo* worker) = 0;

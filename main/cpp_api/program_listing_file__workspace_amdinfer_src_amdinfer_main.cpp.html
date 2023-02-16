@@ -91,14 +91,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
@@ -106,14 +117,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id6">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -438,8 +449,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">grpc_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kDefaultGrpcPort</span><span class="p">;</span>
 <span class="cp">#endif</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">model_repository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/mnt/models&quot;</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">enable_repository_watcher</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">repository_monitoring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_polling_watcher</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">repository_load_existing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
 
 <span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">cxxopts</span><span class="o">::</span><span class="n">Options</span><span class="w"> </span><span class="n">options</span><span class="p">(</span><span class="s">&quot;amdinfer-server&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Inference in the cloud&quot;</span><span class="p">);</span>
@@ -447,9 +459,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">add_options</span><span class="p">()</span>
 <span class="w">    </span><span class="p">(</span><span class="s">&quot;model-repository&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Path to the model repository&quot;</span><span class="p">,</span>
 <span class="w">      </span><span class="n">cxxopts</span><span class="o">::</span><span class="n">value</span><span class="p">(</span><span class="n">model_repository</span><span class="p">))</span>
-<span class="w">    </span><span class="p">(</span><span class="s">&quot;enable-repository-watcher&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s">&quot;Actively monitor the model-repository directory for new models&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="n">cxxopts</span><span class="o">::</span><span class="n">value</span><span class="p">(</span><span class="n">enable_repository_watcher</span><span class="p">))</span>
+<span class="w">    </span><span class="p">(</span><span class="s">&quot;repository-load-existing&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s">&quot;Load all models found in the model repository as the server starts&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">cxxopts</span><span class="o">::</span><span class="n">value</span><span class="p">(</span><span class="n">repository_load_existing</span><span class="p">))</span>
+<span class="w">    </span><span class="p">(</span><span class="s">&quot;repository-monitoring&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s">&quot;Actively monitor the model-repository directory for new models. Sets repository-load-existing to true if enabled&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="n">cxxopts</span><span class="o">::</span><span class="n">value</span><span class="p">(</span><span class="n">repository_monitoring</span><span class="p">))</span>
 <span class="w">    </span><span class="p">(</span><span class="s">&quot;use-polling-watcher&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Use polling to monitor model-repository directory&quot;</span><span class="p">,</span>
 <span class="w">      </span><span class="n">cxxopts</span><span class="o">::</span><span class="n">value</span><span class="p">(</span><span class="n">use_polling_watcher</span><span class="p">))</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_HTTP</span>
@@ -476,11 +491,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="p">{</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">};</span>
 
-<span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">::</span><span class="n">setModelRepository</span><span class="p">(</span><span class="n">model_repository</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// if repository monitoring is enabled, the existing models there must be</span>
+<span class="w">  </span><span class="c1">// loaded so the server can properly track if they&#39;re deleted</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">repository_monitoring</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">repository_load_existing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">setModelRepository</span><span class="p">(</span><span class="n">model_repository</span><span class="p">,</span><span class="w"> </span><span class="n">repository_load_existing</span><span class="p">);</span>
 <span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Using model repository: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">model_repository</span><span class="p">);</span>
 
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">enable_repository_watcher</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">::</span><span class="n">enableRepositoryMonitoring</span><span class="p">(</span><span class="n">use_polling_watcher</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">repository_monitoring</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">enableRepositoryMonitoring</span><span class="p">(</span><span class="n">use_polling_watcher</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_GRPC</span>
@@ -522,7 +543,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 15, 2023.
+      <span class="lastupdated">Last updated on February 16, 2023.
       </span></p>
   </div>
 

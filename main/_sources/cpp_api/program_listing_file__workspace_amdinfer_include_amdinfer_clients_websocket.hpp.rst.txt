@@ -38,6 +38,8 @@ Program Listing for File websocket.hpp
    
    namespace amdinfer {
    
+   class ParameterMap;
+   
    class WebSocketClient : public Client {
     public:
      WebSocketClient(const std::string& ws_address,
@@ -57,7 +59,7 @@ Program Listing for File websocket.hpp
        const std::string& model) const override;
    
      void modelLoad(const std::string& model,
-                    RequestParameters* parameters) const override;
+                    ParameterMap* parameters) const override;
      void modelUnload(const std::string& model) const override;
    
      [[nodiscard]] InferenceResponse modelInfer(
@@ -66,8 +68,8 @@ Program Listing for File websocket.hpp
        const std::string& model, const InferenceRequest& request) const override;
      [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     [[nodiscard]] std::string workerLoad(
-       const std::string& worker, RequestParameters* parameters) const override;
+     [[nodiscard]] std::string workerLoad(const std::string& worker,
+                                          ParameterMap* parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
      [[nodiscard]] bool hasHardware(const std::string& name,

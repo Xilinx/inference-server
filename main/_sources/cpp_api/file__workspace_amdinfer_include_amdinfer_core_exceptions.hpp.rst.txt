@@ -57,13 +57,13 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_api.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_manager.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
 
