@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(mlperf main.cpp query_sample_library.cpp system_under_test.cpp)
+add_executable(
+  mlperf config_parser.cpp main.cpp query_sample_library.cpp
+         system_under_test.cpp
+)
 target_link_libraries(
   mlperf PRIVATE mlperf_loadgen amdinfer Threads::Threads opencv_core
                  opencv_imgproc opencv_imgcodecs

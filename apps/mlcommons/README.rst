@@ -59,6 +59,8 @@ Run the app
 
 .. code-block:: bash
 
-    ./build/src/app <flags>
+    cp mlperf.conf.in mlperf.conf
+    # edit mlperf.conf as needed
+    mlperf --config <path to mlperf.conf> --scenario <scenario> --model <model> <other flags>
 
 Use ``--help`` to see the options.

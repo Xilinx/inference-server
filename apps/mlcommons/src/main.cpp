@@ -26,6 +26,7 @@
 #include <opencv2/imgcodecs.hpp>  // for imread
 #include <opencv2/imgproc.hpp>    // for resize
 
+#include "config_parser.hpp"
 #include "query_sample_library.hpp"
 #include "system_under_test.hpp"
 
@@ -68,37 +69,106 @@ amdinfer::InferenceRequest pre_process_resnet50(
 }
 
 int main(int argc, char* argv[]) {
+  // these defaults are overridden first by the config file and then by command
+  // line, if they exist
   size_t performance_samples = 1000;
   fs::path input_directory = fs::current_path() / "data";
   fs::path model_path;
   std::string worker;
 
-  try {
-    cxxopts::Options options(
-      "mlperf", "Run the mlperf benchmark with the AMD Inference Server");
-    // clang-format off
-    options.add_options()
-    ("performance-samples",
-      "Number of samples guaranteed to fit in memory. Defaults to 1000.",
-      cxxopts::value(performance_samples))
-    ("input-directory",
-      "Path to the directory containing input data. Defaults to ./data",
-      cxxopts::value(input_directory))
-    ("model", "Path to the model file", cxxopts::value(model_path))
-    ("worker", "Name of the worker to use", cxxopts::value(worker))
-    ("help", "Print help");
-    // clang-format on
+  // these must be specified from the command line
+  std::string scenario;
+  std::string model;
+  fs::path config_path = fs::current_path() / "mlperf.conf";
 
+  mlperf::TestSettings test_settings;
+  amdinfer::Config test_config;
+
+  cxxopts::Options options(
+    "mlperf", "Run the mlperf benchmark with the AMD Inference Server");
+  // clang-format off
+  options.add_options()
+  ("config", "Path to the config file. Defaults to ./mlperf.conf",
+    cxxopts::value(config_path))
+  ("model", "Must be one of the mlperf model names", cxxopts::value(model))
+  ("scenario",
+    "Must be one of 'SingleStream', 'MultiStream', 'Server', 'Offline'",
+    cxxopts::value(scenario))
+  ("performance-samples",
+    "Number of samples guaranteed to fit in memory. Defaults to 1000.",
+    cxxopts::value(performance_samples))
+  ("input-directory",
+    "Path to the directory containing input data. Defaults to ./data",
+    cxxopts::value(input_directory))
+  ("model-path", "Path to the model file", cxxopts::value(model_path))
+  ("worker", "Name of the worker to use", cxxopts::value(worker))
+  ("help", "Print help");
+  // clang-format on
+
+  try {
     auto result = options.parse(argc, argv);
 
     if (result.count("help") != 0U) {
       std::cout << options.help({""}) << "\n";
-      exit(0);
+      return 0;
     }
+
+    if (!fs::exists(config_path)) {
+      std::cerr << "Config file at " << config_path << " does not exist\n";
+      return 1;
+    }
+
+    if (scenario.empty()) {
+      std::cerr << "Scenario not specified. Use --scenario <arg>\n";
+      return 1;
+    }
+
+    if (model.empty()) {
+      std::cerr << "Model not specified. Use --model <arg>\n";
+      return 1;
+    }
+
+    test_config = amdinfer::parseConfig(config_path.string());
+
+    // if these arguments aren't specified on the command-line, override them
+    // with values from the config file, if they exist
+    if (result.count("performance-samples") == 0U &&
+        test_config.has(model, scenario, "performance_samples")) {
+      performance_samples =
+        test_config.get<int>(model, scenario, "performance_samples");
+    }
+    if (result.count("worker") == 0U &&
+        test_config.has(model, scenario, "worker")) {
+      worker = test_config.get<std::string>(model, scenario, "worker");
+    }
+    if (result.count("input-directory") == 0U &&
+        test_config.has(model, scenario, "input_directory")) {
+      input_directory =
+        test_config.get<std::string>(model, scenario, "input_directory");
+    }
+
   } catch (const cxxopts::OptionException& e) {
     std::cout << "Error parsing options: " << e.what() << "\n";
     exit(1);
   }
+
+  if (scenario == "SingleStream") {
+    test_settings.scenario = mlperf::TestScenario::SingleStream;
+  } else if (scenario == "MultiStream") {
+    test_settings.scenario = mlperf::TestScenario::MultiStream;
+  } else if (scenario == "Server") {
+    test_settings.scenario = mlperf::TestScenario::Server;
+  } else if (scenario == "Offline") {
+    test_settings.scenario = mlperf::TestScenario::Offline;
+  } else {
+    std::cerr << "Scenario must be one of 'SingleStream', 'MultiStream', "
+                 "'Server', or 'Offline'\n";
+    return 1;
+  }
+  test_settings.FromConfig(config_path.string(), model, scenario);
+
+  mlperf::LogSettings logSettings;
+  logSettings.enable_trace = false;
 
   if (!fs::exists(input_directory)) {
     std::cerr << "Input directory at " << input_directory
@@ -106,48 +176,22 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  if (!fs::exists(model_path)) {
-    std::cerr << "Model at " << model_path << " does not exist\n";
-    return 1;
-  }
-
   if (worker.empty()) {
-    std::cerr << "A valid worker must be specified with --worker\n";
+    std::cerr << "A valid worker must be specified with --worker or in the "
+                 "config file\n";
     return 1;
   }
-
-  mlperf::TestSettings testSettings;
-  testSettings.scenario = mlperf::TestScenario::SingleStream;
-  testSettings.mode = mlperf::TestMode::PerformanceOnly;
-  testSettings.min_query_count = 10000;
-  // testSettings.max_query_count = 10000;
-  testSettings.min_duration_ms =
-    10;  // TO-DO: expose it to the outer level user command
-  testSettings.server_max_async_queries = 1;
-  // testSettings.multi_stream_target_qps = 20;
-  testSettings.multi_stream_samples_per_query = 52;
-  testSettings.server_target_latency_ns = 15000000;
-  testSettings.server_target_qps = 100;
-  testSettings.offline_expected_qps = 100;
-  // testSettings.qsl_rng_seed = 12786827339337101903ULL;
-  // testSettings.schedule_rng_seed = 3135815929913719677ULL;
-  // testSettings.sample_index_rng_seed = 12640797754436136668ULL;
-  testSettings.qsl_rng_seed = 7322528924094909334ULL;
-  testSettings.schedule_rng_seed = 3507442325620259414ULL;
-  testSettings.sample_index_rng_seed = 1570999273408051088ULL;
-
-  mlperf::LogSettings logSettings;
-  logSettings.enable_trace = false;
 
   amdinfer::QuerySampleLibrary qsl(performance_samples, input_directory,
                                    pre_process_resnet50);
 
-  amdinfer::ParameterMap parameters;
-  parameters.put("model", model_path);
-  parameters.put("batch_size", 4);
+  amdinfer::ParameterMap parameters =
+    test_config.getParameters(model, scenario);
   amdinfer::SystemUnderTestNative sut(&qsl, worker, parameters);
 
-  mlperf::StartTest(&sut, &qsl, testSettings, logSettings);
+  // std::cout << "Seed: " << worker << std::endl;
+
+  mlperf::StartTest(&sut, &qsl, test_settings, logSettings);
 
   return 0;
 }
