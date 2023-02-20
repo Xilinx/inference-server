@@ -76,7 +76,7 @@ class QuerySampleLibrary : public mlperf::QuerySampleLibrary {
   InferenceRequest& getSample(mlperf::QuerySampleIndex index);
 
  private:
-  std::string name_{"AMD Inference Server - native"};
+  std::string name_{"AMD Inference Server"};
   size_t perf_samples_;
   std::vector<Sample> samples_;
   PreProcessFunc pre_process_;

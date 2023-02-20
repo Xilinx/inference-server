@@ -139,7 +139,14 @@ Config parseConfig(const std::string& path) {
     } else if (type == "double") {
       config.put(parameter_key, std::stod(value));
     } else if (type == "bool") {
-      config.put(parameter_key, static_cast<bool>(std::stoi(value)));
+      try {
+        config.put(parameter_key, static_cast<bool>(std::stoi(value)));
+      } catch (const std::invalid_argument& e) {
+        std::cerr << "Config parsing error: could not convert string to int: "
+                  << value << "\n";
+        continue;
+      }
+
     } else {
       config.put(parameter_key, value);
     }

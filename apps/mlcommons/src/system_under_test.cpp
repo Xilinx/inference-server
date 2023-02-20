@@ -27,36 +27,45 @@
 
 namespace amdinfer {
 
-const std::string& SystemUnderTestNative::Name() const { return name_; }
+const std::string& SystemUnderTest::Name() const { return name_; }
 
-SystemUnderTestNative::SystemUnderTestNative(QuerySampleLibrary* qsl,
-                                             const std::string& model,
-                                             ParameterMap parameters)
-  : qsl_(qsl), client_(&server_) {
-  waitUntilServerReady(&client_);
-  endpoint_ = client_.workerLoad(model, &parameters);
-  waitUntilModelReady(&client_, endpoint_);
+SystemUnderTest::SystemUnderTest(QuerySampleLibrary* qsl, Client* client,
+                                 const std::string& endpoint)
+  : qsl_(qsl), client_(client), endpoint_(endpoint) {
+  waitUntilServerReady(client_);
+  waitUntilModelReady(client_, endpoint_);
+  std::thread{&SystemUnderTest::FinishQuery, this}.detach();
 }
 
-void SystemUnderTestNative::IssueQuery(
+void SystemUnderTest::IssueQuery(
   const std::vector<mlperf::QuerySample>& samples) {
   for (const auto& sample : samples) {
     auto& request = qsl_->getSample(sample.index);
     request.setID(std::to_string(sample.id));
-    auto response = client_.modelInfer(endpoint_, request);
+    auto response = client_->modelInferAsync(endpoint_, request);
+    queue_.enqueue(std::move(response));
+  }
+}
+
+void SystemUnderTest::FinishQuery() {
+  while (true) {
+    InferenceResponseFuture future;
+    queue_.wait_dequeue(future);
+    auto response = future.get();
     assert(!response.isError());
     const auto& outputs = response.getOutputs();
     assert(outputs.size() == 1);
     auto& output = outputs[0];
     auto data = reinterpret_cast<uintptr_t>(output.getData());
-    mlperf::QuerySampleResponse result{sample.id, data, output.getSize()};
+    mlperf::ResponseId id = std::stoul(response.getID());
+    mlperf::QuerySampleResponse result{id, data, output.getSize()};
     mlperf::QuerySamplesComplete(&result, 1);
   }
 }
 
-void SystemUnderTestNative::FlushQueries() {}
+void SystemUnderTest::FlushQueries() {}
 
-void SystemUnderTestNative::ReportLatencyResults(
+void SystemUnderTest::ReportLatencyResults(
   [[maybe_unused]] const std::vector<mlperf::QuerySampleLatency>&
     latencies_ns) {}
 

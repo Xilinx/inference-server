@@ -20,6 +20,7 @@
 #ifndef GUARD_MLCOMMONS_SRC_SYSTEM_UNDER_TEST
 #define GUARD_MLCOMMONS_SRC_SYSTEM_UNDER_TEST
 
+#include <concurrentqueue/blockingconcurrentqueue.h>
 #include <mlcommons/loadgen/system_under_test.h>
 
 #include "amdinfer/amdinfer.hpp"
@@ -28,18 +29,19 @@ namespace amdinfer {
 
 class QuerySampleLibrary;
 
-class SystemUnderTestNative : public mlperf::SystemUnderTest {
+class SystemUnderTest : public mlperf::SystemUnderTest {
  public:
-  SystemUnderTestNative(QuerySampleLibrary* qsl, const std::string& model,
-                        ParameterMap parameters);
+  SystemUnderTest(QuerySampleLibrary* qsl, Client* client,
+                  const std::string& endpoint);
 
   // void execBatch(std::vector<mlperf::QuerySample> batch);
 
-  ~SystemUnderTestNative() noexcept override = default;
+  ~SystemUnderTest() noexcept override = default;
 
   const std::string& Name() const override;
 
   void IssueQuery(const std::vector<mlperf::QuerySample>& samples) override;
+  void FinishQuery();
 
   void FlushQueries() override;
 
@@ -47,11 +49,11 @@ class SystemUnderTestNative : public mlperf::SystemUnderTest {
     const std::vector<mlperf::QuerySampleLatency>& latencies_ns) override;
 
  private:
-  std::string name_{"AMD Inference Server - native"};
+  std::string name_{"AMD Inference Server"};
   QuerySampleLibrary* qsl_;
-  Server server_;
-  NativeClient client_;
+  Client* client_;
   std::string endpoint_;
+  moodycamel::BlockingConcurrentQueue<InferenceResponseFuture> queue_;
 };
 
 }  // namespace amdinfer

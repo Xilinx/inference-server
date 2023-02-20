@@ -75,6 +75,10 @@ int main(int argc, char* argv[]) {
   fs::path input_directory = fs::current_path() / "data";
   fs::path model_path;
   std::string worker;
+  std::string client_id{"native"};
+  std::string address;
+  std::string endpoint;
+  bool remote_server = false;
 
   // these must be specified from the command line
   std::string scenario;
@@ -100,8 +104,18 @@ int main(int argc, char* argv[]) {
   ("input-directory",
     "Path to the directory containing input data. Defaults to ./data",
     cxxopts::value(input_directory))
-  ("model-path", "Path to the model file", cxxopts::value(model_path))
-  ("worker", "Name of the worker to use", cxxopts::value(worker))
+  // ("client", "Must be one of 'native', 'HTTP' or 'gRPC'",
+  //   cxxopts::value(client_id))
+  // ("address", "Address to the server if using HTTP or gRPC client",
+  //   cxxopts::value(address))
+  // ("remote-server", "Set to use remote server",
+  //   cxxopts::value(remote_server))
+  // ("endpoint", "The endpoint for inference if using a remote server",
+  //   cxxopts::value(endpoint))
+  ("model-path", "Path to the model file if using a local server",
+    cxxopts::value(model_path))
+  ("worker", "Name of the worker to use if using a local server",
+    cxxopts::value(worker))
   ("help", "Print help");
   // clang-format on
 
@@ -152,6 +166,22 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
+  if (test_config.has(model, scenario, "client_id")) {
+    client_id = test_config.get<std::string>(model, scenario, "client_id");
+  }
+
+  if (test_config.has(model, scenario, "address")) {
+    address = test_config.get<std::string>(model, scenario, "address");
+  }
+
+  if (test_config.has(model, scenario, "remote_server")) {
+    remote_server = test_config.get<bool>(model, scenario, "remote_server");
+  }
+
+  if (test_config.has(model, scenario, "endpoint")) {
+    endpoint = test_config.get<std::string>(model, scenario, "endpoint");
+  }
+
   if (scenario == "SingleStream") {
     test_settings.scenario = mlperf::TestScenario::SingleStream;
   } else if (scenario == "MultiStream") {
@@ -185,11 +215,45 @@ int main(int argc, char* argv[]) {
   amdinfer::QuerySampleLibrary qsl(performance_samples, input_directory,
                                    pre_process_resnet50);
 
-  amdinfer::ParameterMap parameters =
-    test_config.getParameters(model, scenario);
-  amdinfer::SystemUnderTestNative sut(&qsl, worker, parameters);
+  std::optional<amdinfer::Server> server;
+  std::unique_ptr<amdinfer::Client> client;
+  if (!remote_server) {
+    server.emplace();
+  }
 
-  // std::cout << "Seed: " << worker << std::endl;
+  if (client_id == "native") {
+    if (remote_server) {
+      std::cerr << "Server must be started locally if using native client\n";
+      return 1;
+    }
+    client = std::make_unique<amdinfer::NativeClient>(&(server.value()));
+  } else if (scenario == "HTTP") {
+    client = std::make_unique<amdinfer::HttpClient>(address);
+    if (!remote_server) {
+      server.value().startHttp(8998);
+    }
+  } else if (scenario == "gRPC") {
+    client = std::make_unique<amdinfer::GrpcClient>(address);
+    if (!remote_server) {
+      server.value().startGrpc(50051);
+    }
+  } else {
+    std::cerr << "Client must be one of 'native', 'HTTP', or 'gRPC'\n";
+    return 1;
+  }
+
+  if (!remote_server) {
+    amdinfer::ParameterMap parameters =
+      test_config.getParameters(model, scenario);
+    endpoint = client->workerLoad(worker, &parameters);
+  }
+
+  if (endpoint.empty()) {
+    std::cerr << "If using a remote server, you must pass an endpoint\n";
+    return 1;
+  }
+
+  amdinfer::SystemUnderTest sut(&qsl, client.get(), endpoint);
 
   mlperf::StartTest(&sut, &qsl, test_settings, logSettings);
 
