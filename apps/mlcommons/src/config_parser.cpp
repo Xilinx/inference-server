@@ -20,12 +20,15 @@
 #include "config_parser.hpp"
 
 #include <cassert>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string_view>
 #include <vector>
 
 #include "amdinfer/core/parameters.hpp"
+
+namespace fs = std::filesystem;
 
 namespace amdinfer {
 
@@ -74,7 +77,7 @@ ParameterMap Config::getParameters(const std::string& model,
   return parameters;
 }
 
-Config parseConfig(const std::string& path) {
+Config parseConfig(const fs::path& path, const fs::path& new_path) {
   // assuming entry is "key = value" so splitting by space yields 3 values
   const auto num_substrings = 3;
   // assuming label for parameters is amdinfer.<model>.<scenario>.<name>.<type>
@@ -88,6 +91,7 @@ Config parseConfig(const std::string& path) {
   Config config;
 
   std::ifstream file{path};
+  std::ofstream new_file{new_path};
   std::string line;
   while (std::getline(file, line)) {
     // skip comments
@@ -111,6 +115,7 @@ Config parseConfig(const std::string& path) {
 
     // skip all the non-custom keys assuming loadgen will parse them
     if (split_key[0] != "amdinfer") {
+      new_file << line << "\n";
       continue;
     }
 
@@ -151,6 +156,9 @@ Config parseConfig(const std::string& path) {
       config.put(parameter_key, value);
     }
   }
+
+  file.close();
+  new_file.close();
 
   return config;
 }

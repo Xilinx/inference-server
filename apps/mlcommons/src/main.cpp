@@ -84,6 +84,7 @@ int main(int argc, char* argv[]) {
   std::string scenario;
   std::string model;
   fs::path config_path = fs::current_path() / "mlperf.conf";
+  fs::path mlperf_config_path = fs::current_path() / "mlperf_filtered.conf";
 
   mlperf::TestSettings test_settings;
   amdinfer::Config test_config;
@@ -142,7 +143,8 @@ int main(int argc, char* argv[]) {
       return 1;
     }
 
-    test_config = amdinfer::parseConfig(config_path.string());
+    mlperf_config_path = config_path.parent_path() / "mlperf_filtered.conf";
+    test_config = amdinfer::parseConfig(config_path, mlperf_config_path);
 
     // if these arguments aren't specified on the command-line, override them
     // with values from the config file, if they exist
@@ -195,7 +197,12 @@ int main(int argc, char* argv[]) {
                  "'Server', or 'Offline'\n";
     return 1;
   }
-  test_settings.FromConfig(config_path.string(), model, scenario);
+  auto retval =
+    test_settings.FromConfig(mlperf_config_path.string(), model, scenario);
+  if (retval != 0) {
+    std::cerr << "Errors encountered during parsing configuration file\n";
+    return retval;
+  }
 
   mlperf::LogSettings logSettings;
   logSettings.enable_trace = false;
@@ -221,6 +228,10 @@ int main(int argc, char* argv[]) {
     server.emplace();
   }
 
+  // TODO(varunsh): expose to the outside
+  const uint16_t http_port = 8998;
+  const uint16_t grpc_port = 50'051;
+
   if (client_id == "native") {
     if (remote_server) {
       std::cerr << "Server must be started locally if using native client\n";
@@ -230,12 +241,12 @@ int main(int argc, char* argv[]) {
   } else if (scenario == "HTTP") {
     client = std::make_unique<amdinfer::HttpClient>(address);
     if (!remote_server) {
-      server.value().startHttp(8998);
+      server.value().startHttp(http_port);
     }
   } else if (scenario == "gRPC") {
     client = std::make_unique<amdinfer::GrpcClient>(address);
     if (!remote_server) {
-      server.value().startGrpc(50051);
+      server.value().startGrpc(grpc_port);
     }
   } else {
     std::cerr << "Client must be one of 'native', 'HTTP', or 'gRPC'\n";

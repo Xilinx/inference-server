@@ -20,6 +20,7 @@
 #ifndef GUARD_MLCOMMONS_SRC_CONFIG_PARSER
 #define GUARD_MLCOMMONS_SRC_CONFIG_PARSER
 
+#include <filesystem>
 #include <string>
 
 #include "amdinfer/core/exceptions.hpp"
@@ -76,7 +77,8 @@ class Config {
   ParameterMap config_;
 };
 
-Config parseConfig(const std::string& path);
+Config parseConfig(const std::filesystem::path& path,
+                   const std::filesystem::path& new_path);
 
 }  // namespace amdinfer
 
