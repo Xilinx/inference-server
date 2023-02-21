@@ -95,7 +95,7 @@ amdinfer.*.*.input_directory.string = <path>
 amdinfer.*.*.workers.int = 3
 # type of client to make: must be one of native, HTTP, or gRPC
 amdinfer.*.*.client_id.string = native
-# address of the server if using a remote server
+# address of the server if using non-native client
 amdinfer.*.*.address.string = <address>
 # set to true to use a remote server
 amdinfer.*.*.remote_server.bool = 1

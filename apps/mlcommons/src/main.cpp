@@ -238,12 +238,12 @@ int main(int argc, char* argv[]) {
       return 1;
     }
     client = std::make_unique<amdinfer::NativeClient>(&(server.value()));
-  } else if (scenario == "HTTP") {
+  } else if (client_id == "HTTP") {
     client = std::make_unique<amdinfer::HttpClient>(address);
     if (!remote_server) {
       server.value().startHttp(http_port);
     }
-  } else if (scenario == "gRPC") {
+  } else if (client_id == "gRPC") {
     client = std::make_unique<amdinfer::GrpcClient>(address);
     if (!remote_server) {
       server.value().startGrpc(grpc_port);
@@ -257,6 +257,7 @@ int main(int argc, char* argv[]) {
     amdinfer::ParameterMap parameters =
       test_config.getParameters(model, scenario);
     parameters.put("share", false);
+    amdinfer::waitUntilServerReady(client.get());
     endpoint = client->workerLoad(worker, &parameters);
     if (test_config.has(model, scenario, "workers")) {
       auto workers = test_config.get<int>(model, scenario, "workers");
