@@ -71,6 +71,11 @@ inline void toLower(std::string* str) {
                  [](unsigned char c) { return std::tolower(c); });
 }
 
+inline bool isLower(std::string_view str) {
+  return std::all_of(str.begin(), str.end(),
+                     [](char c) { return c == std::tolower(c); });
+}
+
 inline std::string addressToString(const void* ptr) {
   std::ostringstream addr;
   addr << ptr;

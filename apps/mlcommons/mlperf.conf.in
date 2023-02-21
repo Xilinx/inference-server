@@ -91,6 +91,8 @@ amdinfer.*.*.input_directory.string = <path>
 
 # these custom arguments must be defined here
 
+# number of workers to load if using local server
+amdinfer.*.*.workers.int = 3
 # type of client to make: must be one of native, HTTP, or gRPC
 amdinfer.*.*.client_id.string = native
 # address of the server if using a remote server
@@ -100,6 +102,5 @@ amdinfer.*.*.remote_server.bool = 1
 # endpoint of the worker to use for inference if using a remote server
 amdinfer.*.*.endpoint.string = <endpoint>
 
-amdinfer.*.*.parameters.batch_size.int = 4
 # path to the model file
 amdinfer.*.*.parameters.model.string = <path>

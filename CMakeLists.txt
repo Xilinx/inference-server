@@ -62,10 +62,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
 
-  # set standard options
-  set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-
   set(AMDINFER_BUILD_TESTING_DEFAULT ON)
 else()
   set(AMDINFER_BUILD_TESTING_DEFAULT OFF)

@@ -23,7 +23,6 @@
 #include <json/value.h>   // for Value
 
 #include <cassert>        // for assert
-#include <cctype>         // for tolower
 #include <filesystem>     // for path
 #include <iostream>       // for operator<<, basic_ostream
 #include <string>         // for string, operator+, stoi
@@ -38,6 +37,7 @@
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
+#include "amdinfer/util/string.hpp"            // for isLower
 #include "amdinfer/version.hpp"                // for kAmdinferVersion
 
 #ifdef AMDINFER_ENABLE_VITIS
@@ -74,9 +74,7 @@ ServerMetadata SharedState::serverMetadata() {
 void SharedState::modelLoad(const std::string& model,
                             ParameterMap* parameters) {
   assert(parameters != nullptr);
-  for (const auto& c : model) {
-    assert(c == std::tolower(c));
-  }
+  assert(util::isLower(model));
 
   parseModel(repository_.getRepository(), model, parameters);
   endpoints_.load(model, *parameters);
@@ -89,18 +87,14 @@ void SharedState::modelUnload(const std::string& model) {
 std::string SharedState::workerLoad(const std::string& worker,
                                     ParameterMap* parameters) {
   assert(parameters != nullptr);
-  for (const auto& c : worker) {
-    assert(c == std::tolower(c));
-  }
+  assert(util::isLower(worker));
 
   parameters->put("worker", worker);
   return endpoints_.load(worker, *parameters);
 }
 
 void SharedState::workerUnload(const std::string& worker) {
-  for (const auto& c : worker) {
-    assert(c == std::tolower(c));
-  }
+  assert(util::isLower(worker));
   endpoints_.unload(worker);
 }
 

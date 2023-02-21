@@ -256,7 +256,14 @@ int main(int argc, char* argv[]) {
   if (!remote_server) {
     amdinfer::ParameterMap parameters =
       test_config.getParameters(model, scenario);
+    parameters.put("share", false);
     endpoint = client->workerLoad(worker, &parameters);
+    if (test_config.has(model, scenario, "workers")) {
+      auto workers = test_config.get<int>(model, scenario, "workers");
+      for (auto i = 0; i < workers - 1; ++i) {
+        client->workerLoad(worker, &parameters);
+      }
+    }
   }
 
   if (endpoint.empty()) {

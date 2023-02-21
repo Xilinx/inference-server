@@ -116,7 +116,7 @@ void mapParametersToProto(
 struct AddDataToTensor {
   template <typename T, typename Tensor>
   void operator()(const void* source_data, size_t size, Tensor* tensor,
-                  const Observer& observer) const {
+                  [[maybe_unused]] const Observer& observer) const {
     const auto* data = static_cast<const T*>(source_data);
     auto* contents = getTensorContents<T>(tensor);
 

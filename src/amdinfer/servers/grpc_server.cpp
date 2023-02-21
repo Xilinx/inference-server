@@ -202,7 +202,7 @@ class CallDataServerStream : public CallData<RequestType, ReplyType> {
 struct WriteData {
   template <typename T, typename Tensor>
   void operator()(Buffer* buffer, Tensor* tensor, size_t offset, size_t size,
-                  const Observer& observer) const {
+                  [[maybe_unused]] const Observer& observer) const {
     auto* contents = getTensorContents<T>(tensor);
     if constexpr (util::is_any_v<T, bool, uint32_t, uint64_t, int32_t, int64_t,
                                  float, double, char>) {

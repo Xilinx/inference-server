@@ -122,6 +122,29 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
                                    ParameterMap* parameters) {
   auto* worker = getWorker(name);
   worker->init(parameters);
+
+  auto max_buffers = worker->getMaxBufferNum();
+  worker->setInputBuffers(this->input_buffer_ptr_.get());
+  worker->setOutputBuffers(this->output_buffer_ptr_.get());
+  try {
+    auto buffer_num = worker->allocate(kNumBufferAuto);
+    this->buffer_num_ += buffer_num;
+  } catch (const std::exception& e) {
+    throw external_error(e.what());
+  } catch (...) {
+    throw runtime_error("Unknown error occurred");
+  }
+  this->max_buffer_num_ =
+    max_buffers == UINT_MAX ? UINT_MAX : this->max_buffer_num_ + max_buffers;
+
+  try {
+    worker->acquire(parameters);
+  } catch (const std::exception& e) {
+    throw external_error(e.what());
+  } catch (...) {
+    throw runtime_error("Unknown error occurred");
+  }
+
   this->batch_size_ = worker->getBatchSize();
 
   if (this->batchers_.empty()) {
@@ -135,40 +158,6 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
       batcher->setName(name);
       batcher->setBatchSize(this->batch_size_);
     }
-  }
-
-  auto max_buffers = worker->getMaxBufferNum();
-  worker->setInputBuffers(this->input_buffer_ptr_.get());
-  worker->setOutputBuffers(this->output_buffer_ptr_.get());
-  try {
-    auto buffer_num = worker->allocate(kNumBufferAuto);
-    this->buffer_num_ += buffer_num;
-  } catch (const std::exception& e) {
-    if (workers_.empty()) {
-      this->batchers_.clear();
-    }
-    throw external_error(e.what());
-  } catch (...) {
-    if (workers_.empty()) {
-      this->batchers_.clear();
-    }
-    throw runtime_error("Unknown error occurred");
-  }
-  this->max_buffer_num_ =
-    max_buffers == UINT_MAX ? UINT_MAX : this->max_buffer_num_ + max_buffers;
-
-  try {
-    worker->acquire(parameters);
-  } catch (const std::exception& e) {
-    if (workers_.empty()) {
-      this->batchers_.clear();
-    }
-    throw external_error(e.what());
-  } catch (...) {
-    if (workers_.empty()) {
-      this->batchers_.clear();
-    }
-    throw runtime_error("Unknown error occurred");
   }
 
   for (const auto& batcher : this->batchers_) {

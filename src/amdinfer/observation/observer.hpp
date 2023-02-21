@@ -39,7 +39,7 @@ struct Observer {
   AMDINFER_IF_LOGGING(Logger logger);
 };
 
-inline void logTraceBuffer(const Logger& logger, void* data,
+inline void logTraceBuffer([[maybe_unused]] const Logger& logger, void* data,
                            size_t size = sizeof(char)) {
   std::string bytes;
   const auto num_bytes = kNumTraceData * size;
