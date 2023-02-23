@@ -539,7 +539,7 @@ std::shared_ptr<InferenceRequest> DrogonHttp::getRequest(
 
 void DrogonHttp::errorHandler(const std::exception &e) {
 #ifdef AMDINFER_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
+  [[maybe_unused]] const auto &logger = this->getLogger();
   AMDINFER_LOG_DEBUG(logger, e.what());
 #endif
   this->callback_(errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));

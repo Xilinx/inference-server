@@ -39,6 +39,7 @@ foreach(test ${tests})
     target_include_directories(
       ${target} PRIVATE ${AMDINFER_PUBLIC_INCLUDE_DIRS}
     )
+    set_target_options(${target})
   endif()
 endforeach()
 

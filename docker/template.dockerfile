@@ -419,7 +419,7 @@ RUN COMMIT=6b51944994b5c77dbd7edce66846e378a3bf4d8e \
     && tar -xzf ${COMMIT}.tar.gz \
     && cd efsw-${COMMIT}/ && mkdir build && cd build \
     && cmake .. \
-    && make -j \
+    && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cat install_manifest.txt > ${MANIFESTS_DIR}/efsw.txt \
@@ -431,6 +431,17 @@ RUN wget -O half_2.2.0.zip https://sourceforge.net/projects/half/files/latest/do
     && mkdir -p ${COPY_DIR}/usr/local/include/half \
     && mv half/include/half.hpp ${COPY_DIR}/usr/local/include/half \
     && cd /tmp && rm -fr /tmp/*
+
+# install yaml-cpp for yaml parsing
+# RUN wget --quet https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
+#     && tar -xzf yaml-cpp-0.7.0.tar.gz \
+#     && cd yaml-cpp-yaml-cpp-0.7.0 \
+#     && cmake -S . -B build -DYAML_CPP_BUILD_CONTRIB=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DYAML_BUILD_SHARED_LIBS=OFF -DYAML_CPP_BUILD_TESTS=OFF \
+#     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+#     && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+#     && cat build/install_manifest.txt > ${MANIFESTS_DIR}/yaml-cpp.txt \
+#     && cd /tmp && rm -fr /tmp/*
+
 
 # install doxygen 1.9.2
 # RUN cd /tmp && wget --quiet https://github.com/doxygen/doxygen/archive/refs/tags/Release_1_9_2.tar.gz \

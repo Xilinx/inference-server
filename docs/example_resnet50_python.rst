@@ -23,9 +23,6 @@ You can see the full source files in the :amdinferTree:`repository <examples/res
 The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
 You can read the :ref:`C++ version of this example <example_resnet50_cpp:Running ResNet50 - C++>` to better compare these two.
 
-In the dev container, the Python library is automatically built and installed as part of the CMake build process.
-You may also install the Python library by installing a wheel.
-
 .. note::
     These examples are intended to demonstrate the API and how to communicate with the server.
     They are not intended to show the most optimal performance for each backend.
@@ -33,6 +30,7 @@ You may also install the Python library by installing a wheel.
 Include the module
 ------------------
 
+In the development container, the Python library is automatically built and installed as part of the CMake build process.
 You can include the Python library by importing the ``amdinfer`` module.
 The different submodules are imported by default but you can include them manually as well.
 These explicit imports can help IDEs resolve Python imports for autocompletion.

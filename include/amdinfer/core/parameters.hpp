@@ -84,12 +84,11 @@ class ParameterMap : public Serializable {
   void put(const std::string &key, const char *value);
 
   /**
-   * @brief Gets a pointer to the named parameter. Returns nullptr if not found
-   * or if a bad type is used.
+   * @brief Get the named parameter
    *
    * @tparam T type of parameter. Must be (bool|double|int32_t|std::string)
    * @param key parameter to get
-   * @return T*
+   * @return T
    */
   template <typename T>
   T get(const std::string &key) {
@@ -104,8 +103,19 @@ class ParameterMap : public Serializable {
    * @return bool
    */
   bool has(const std::string &key);
+
   /**
-   * @brief Removes a parameter
+   * @brief Rename the key associated with a parameter. If the new key already
+   * exists, its value is not overwritten and the old key is just erased.
+   *
+   * @param key
+   * @param new_key
+   */
+  void rename(const std::string &key, const std::string &new_key);
+
+  /**
+   * @brief Removes a parameter, if it exists. No error is raised if it doesn't
+   * exist
    *
    * @param key name of the parameter to remove
    */

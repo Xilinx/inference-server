@@ -62,11 +62,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
 
-  # set standard options
-  set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic -pedantic-errors")
-  set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-
   set(AMDINFER_BUILD_TESTING_DEFAULT ON)
 else()
   set(AMDINFER_BUILD_TESTING_DEFAULT OFF)
@@ -77,7 +72,7 @@ if(CMAKE_BUILD_TYPE MATCHES Coverage)
 endif()
 include(CMakeDependentOption)
 include(CTest)
-include(EnableIPO)
+include(SetTargetOptions)
 include(AddOption)
 
 # check requirements
@@ -145,6 +140,7 @@ add_option("ENABLE_TRACING" "Enable Jaeger tracing" ${opentelemetry-cpp_FOUND})
 add_option("ENABLE_AKS" "Enable AKS dependencies" ${AMDINFER_AKS_FOUND})
 add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${AMDINFER_VITIS_FOUND})
 add_option("BUILD_EXAMPLES" "Build examples" ON)
+add_option("BUILD_APPS" "Build apps" ON)
 add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
 add_option("BUILD_TESTING" "Build C++ tests" ${AMDINFER_BUILD_TESTING_DEFAULT})
 add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
@@ -232,6 +228,9 @@ endif()
 
 add_subdirectory(external)
 add_subdirectory(src/amdinfer)
+if(${AMDINFER_BUILD_APPS})
+  add_subdirectory(apps)
+endif()
 if(${AMDINFER_BUILD_EXAMPLES})
   add_subdirectory(examples)
 endif()

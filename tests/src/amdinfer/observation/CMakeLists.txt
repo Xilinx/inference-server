@@ -44,7 +44,7 @@ if(${AMDINFER_ENABLE_TRACING})
   # opentelemetry_exporter_ostream_span for debugging traces locally
   # target_link_libraries(tracing INTERFACE opentelemetry_trace
   # libopentelemetry_resources.so opentelemetry_exporter_jaeger_trace)
-  enable_ipo_on_target(fake_tracing)
+  set_target_options(fake_tracing)
 
   target_link_libraries(
     fake_observation INTERFACE $<TARGET_OBJECTS:fake_tracing> fake_tracing

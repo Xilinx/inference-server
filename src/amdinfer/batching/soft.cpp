@@ -50,7 +50,7 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
   auto thread_name = "batch" + this->getName();
   util::setThreadName(thread_name);
 #ifdef AMDINFER_ENABLE_LOGGING
-  const auto& logger = this->getLogger();
+  [[maybe_unused]] const auto& logger = this->getLogger();
 #endif
 
   bool run = true;
@@ -92,7 +92,8 @@ void SoftBatcher::doRun(WorkerInfo* worker) {
         timer.stop();
 
         auto remaining_time = timeout - timer.count<std::milli, int>();
-        auto duration = std::max(remaining_time, 0);
+        // convert duration from milliseconds to microseconds for function
+        auto duration = std::max(remaining_time, 0) * std::kilo::num;
         bool valid = this->input_queue_->wait_dequeue_timed(req, duration);
         if (!valid) {
           break;

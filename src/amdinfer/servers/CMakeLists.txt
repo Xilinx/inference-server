@@ -26,7 +26,7 @@ endif()
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
   target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  enable_ipo_on_target(${target})
+  set_target_options(${target})
 
   list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
@@ -52,5 +52,6 @@ endif()
 
 add_library(servers STATIC ${SERVER_OBJS})
 target_link_libraries(servers INTERFACE ${targets})
+set_target_options(servers)
 
 set(SERVER_OBJS ${SERVER_OBJS} PARENT_SCOPE)

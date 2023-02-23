@@ -19,4 +19,4 @@ target_include_directories(
 )
 target_include_directories(fakeBatcher AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS})
 target_link_libraries(fakeBatcher INTERFACE fake_observation Threads::Threads)
-enable_ipo_on_target(fakeBatcher)
+set_target_options(fakeBatcher)

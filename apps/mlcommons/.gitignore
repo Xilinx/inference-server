@@ -1,5 +1,4 @@
-# Copyright 2021 Xilinx, Inc.
-# Copyright 2022 Advanced Micro Devices, Inc.
+# Copyright 2023 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,14 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include(CheckIPOSupported)
-check_ipo_supported(RESULT IPO_SUPPORTED)
-
-function(enable_ipo_on_target target)
-  if(IPO_SUPPORTED)
-    set_property(
-      TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION
-                                ${AMDINFER_ENABLE_IPO}
-    )
-  endif()
-endfunction()
+mlcommons_inference
+mlperf.conf
+mlperf_filtered.conf
+mlperf_log_*

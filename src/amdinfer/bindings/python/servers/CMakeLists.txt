@@ -24,6 +24,7 @@ foreach(target ${TARGETS})
                          ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
   )
   target_link_libraries(${target}_py PRIVATE ${Python_LIBRARIES} amdinfer)
+  set_target_options(${target}_py)
   add_dependencies(${target}_py pybind11Mkdoc)
 
   set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)

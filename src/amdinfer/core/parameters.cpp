@@ -60,6 +60,12 @@ bool ParameterMap::has(const std::string &key) {
   return this->parameters_.find(key) != this->parameters_.end();
 }
 
+void ParameterMap::rename(const std::string &key, const std::string &new_key) {
+  auto node = parameters_.extract(key);
+  node.key() = new_key;
+  parameters_.insert(std::move(node));
+}
+
 size_t ParameterMap::size() const { return parameters_.size(); }
 
 bool ParameterMap::empty() const { return parameters_.empty(); }

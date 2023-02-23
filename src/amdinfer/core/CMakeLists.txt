@@ -29,7 +29,7 @@ list(
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
   target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  enable_ipo_on_target(${target})
+  set_target_options(${target})
 
   list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
@@ -48,6 +48,7 @@ if(${AMDINFER_ENABLE_GRPC})
   disable_target_linting(lib_grpc)
   target_include_directories(lib_grpc PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(lib_grpc INTERFACE gRPC::grpc++)
+  set_target_options(lib_grpc)
 
   get_target_property(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
   protobuf_generate(TARGET lib_grpc LANGUAGE cpp)
@@ -64,6 +65,7 @@ target_include_directories(lib_config PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(lib_config INTERFACE protobuf::libprotobuf)
 protobuf_generate(TARGET lib_config LANGUAGE cpp)
 disable_target_linting(lib_config)
+set_target_options(lib_config)
 
 target_include_directories(
   model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>
@@ -73,5 +75,6 @@ add_dependencies(model_repository lib_config)
 
 add_library(core STATIC ${CORE_OBJS})
 target_link_libraries(core INTERFACE ${targets})
+set_target_options(core)
 
 set(CORE_OBJS ${CORE_OBJS} PARENT_SCOPE)

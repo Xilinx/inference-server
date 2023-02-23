@@ -28,7 +28,7 @@ list(APPEND UTIL_OBJS)
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
-  enable_ipo_on_target(${target})
+  set_target_options(${target})
   target_include_directories(${target} PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
   list(APPEND UTIL_OBJS $<TARGET_OBJECTS:${target}>)
@@ -43,5 +43,6 @@ set_target_properties(util PROPERTIES OUTPUT_NAME amdinfer-util)
 set_target_properties(
   util PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/..
 )
+set_target_options(util)
 
 set(UTIL_OBJS ${UTIL_OBJS} PARENT_SCOPE)

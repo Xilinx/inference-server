@@ -178,11 +178,10 @@ void ModelRepository::enableMonitoring(bool use_polling) {
   file_watcher_->watch();
 }
 
-void UpdateListener::handleFileAction([[maybe_unused]] efsw::WatchID watch_id,
-                                      const std::string& dir,
-                                      const std::string& filename,
-                                      efsw::Action action,
-                                      std::string old_filename) {
+void UpdateListener::handleFileAction(
+  [[maybe_unused]] efsw::WatchID watch_id, const std::string& dir,
+  const std::string& filename, efsw::Action action,
+  [[maybe_unused]] std::string old_filename) {
   Logger logger{Loggers::Server};
   // arbitrary delay to make sure filesystem has settled
   const std::chrono::milliseconds delay{100};

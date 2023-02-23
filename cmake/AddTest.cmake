@@ -53,6 +53,7 @@ function(_amdinfer_add_test test type)
   endif()
 
   target_link_libraries(${target} PRIVATE test_main testing)
+  set_target_options(${target})
 
   gtest_discover_tests(${target} DISCOVERY_TIMEOUT 120)
 endfunction()

@@ -27,9 +27,7 @@ The complete script used here is available in the :amdinferTree:`repository <exa
 Import the library
 ------------------
 
-You need to bring in the AMD Inference Server Python library to use the API.
-The Python library is based on the Inference Server's C++ API and it gets installed in the dev container when you build the project.
-You can also install it using a pre-built wheel.
+In the development container, the Python library is automatically built and installed as part of the CMake build process.
 
 .. literalinclude:: ../examples/hello_world/echo.py
     :start-after: +imports

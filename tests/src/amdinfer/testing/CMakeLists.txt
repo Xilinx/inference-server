@@ -14,6 +14,7 @@
 
 add_library(test_main STATIC test_main.cpp)
 target_link_libraries(test_main PUBLIC gtest)
+set_target_options(test_main)
 
 list(APPEND files get_path_to_asset)
 list(APPEND targets)
@@ -24,7 +25,7 @@ foreach(file ${files})
   target_include_directories(
     ${target} PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS} ${AMDINFER_INCLUDE_DIRS}
   )
-  enable_ipo_on_target(${target})
+  set_target_options(${target})
 
   list(APPEND targets ${target} $<TARGET_OBJECTS:${target}>)
 endforeach()

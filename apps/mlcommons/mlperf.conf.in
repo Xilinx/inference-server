@@ -1,0 +1,106 @@
+# Copyright 2023 Advanced Micro Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+################################################################################
+# Keys are of the format: "model.scenario.key = value" where value is should be
+# an integer or double. Use 0 and 1 for false and true, respectively for boolean
+# values. "*" can be used to match all models and/or scenarios. If repeated
+# values are provided, the last one takes priority.
+#
+# All times are in milliseconds. For custom strings, don't use quotes.
+#
+# Comment out lines to use the default values in loadgen instead. Note, you
+# can't have comments on the same line as a key-value due to limitations in
+# loadgen's config file parsing logic.
+################################################################################
+
+# Test mode is based on the TestMode enum in test_settings.h in loadgen
+#   - 0: SubmissionRun
+#   - 1: AccuracyOnly
+#   - 2: PerformanceOnly
+#   - 3: FindPeakPerformance
+*.*.mode = 2
+
+# test duration
+*.*.min_duration = 10000
+*.*.max_duration = 0
+*.*.min_query_count = 100
+*.*.max_query_count = 0
+
+# random number generation
+*.*.qsl_rng_seed = 0
+*.*.sample_index_rng_seed = 0
+*.*.schedule_rng_seed = 0
+*.*.accuracy_log_rng_seed = 0
+*.*.accuracy_log_probability = 0.0
+*.*.accuracy_log_sampling_target = 0
+
+# performance sample modifiers
+*.*.print_timestamps = 0
+*.*.performance_issue_unique = 0
+*.*.performance_issue_same = 0
+*.*.performance_issue_same_index = 0
+*.*.performance_sample_count_override = 0
+*.*.sample_concatenate_permutation = 0
+
+# SingleStream options
+*.SingleStream.target_latency_percentile = 0.9
+*.SingleStream.target_latency = 1
+
+# MultiStream options
+*.MultiStream.target_latency_percentile = 0.9
+*.MultiStream.target_latency = 8
+*.MultiStream.samples_per_query = 8
+
+# Server options
+*.Server.target_latency_percentile = 0.9
+*.Server.target_latency = 100
+*.Server.target_qps = 1
+*.Server.coalesce_queries = 0
+*.Server.max_async_queries = 0
+# these values cannot be set from the config file due to loadgen limitations:
+#  - server_find_peak_qps_decimals_of_precision
+#  - server_num_issue_query_threads
+
+# Offline options
+*.Offline.target_qps = 1
+
+################################################################################
+# Custom arguments specific to the mlperf app in the AMD Inference Server
+
+# these arguments override the defaults in the mlperf app source. They
+# may be globally overridden by command-line arguments to the executable
+
+# name of the worker to use
+amdinfer.*.*.worker.string = <name>
+# number of samples guaranteed to fit in memory
+amdinfer.*.*.performance_samples.int = 1000
+# path to the directory containing input data
+amdinfer.*.*.input_directory.string = <path>
+
+# these custom arguments must be defined here
+
+# number of workers to load if using local server
+amdinfer.*.*.workers.int = 3
+# type of client to make: must be one of native, HTTP, or gRPC
+amdinfer.*.*.client_id.string = native
+# address of the server if using non-native client
+amdinfer.*.*.address.string = <address>
+# set to true to use a remote server
+amdinfer.*.*.remote_server.bool = 1
+# endpoint of the worker to use for inference if using a remote server
+amdinfer.*.*.endpoint.string = <endpoint>
+
+# path to the model file
+amdinfer.*.*.parameters.model.string = <path>

@@ -268,7 +268,7 @@ The method by which you communicate with your service depends on your Kubernetes
 For example, one way to make requests is to `get the address of the INGRESS_HOST and INGRESS_PORT <https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports>`__, and then make requests to this URL by setting the ``Host`` header on all requests to your targeted service.
 This use case may be needed if your cluster doesn't have a load-balancer and/or DNS enabled.
 
-Once you can communicate with your service, you can make requests to the Inference Server using REST with cURL or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`__.
+Once you can communicate with your service, you can make requests to the Inference Server using REST with the Python client library or the `KServe Python API <https://kserve.github.io/website/0.8/sdk_docs/sdk_doc/>`__.
 The request will be routed to the server and the response will be returned.
 You can see some examples of using the KServe Python API to make requests in the :amdinferTree:`tests <tests/kserve>`.
 

@@ -16,7 +16,7 @@
 add_executable(amdinfer-server-exe main.cpp)
 target_include_directories(amdinfer-server-exe PRIVATE ${AMDINFER_INCLUDE_DIRS})
 target_link_options(amdinfer-server-exe PRIVATE "LINKER:-E")
-enable_ipo_on_target(amdinfer-server-exe)
+set_target_options(amdinfer-server-exe)
 set_target_properties(
   amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
 )
@@ -60,6 +60,7 @@ add_library(
 target_link_libraries(
   amdinfer PRIVATE batching clients core observation servers util
 )
+set_target_options(amdinfer)
 
 add_library(
   amdinfer-server
@@ -72,12 +73,14 @@ add_library(
   ${UTIL_OBJS}
 )
 target_link_libraries(amdinfer-server PRIVATE batching core observation servers)
+set_target_options(amdinfer-server)
 
 add_library(
   amdinfer-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
                   ${UTIL_OBJS}
 )
 target_link_libraries(amdinfer-client PRIVATE clients core observation)
+set_target_options(amdinfer-client)
 
 set(output_libraries amdinfer amdinfer-server amdinfer-client)
 foreach(lib ${output_libraries})
