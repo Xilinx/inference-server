@@ -32,7 +32,7 @@
 
 namespace fs = std::filesystem;
 
-amdinfer::InferenceRequest pre_process_resnet50(
+amdinfer::InferenceRequest preprocessResnet50(
   const std::filesystem::path& path) {
   const auto height = 224;
   const auto width = 224;
@@ -53,7 +53,8 @@ amdinfer::InferenceRequest pre_process_resnet50(
         auto output_index = (i * width * channels) + (j * channels) + k;
         auto* addr = reinterpret_cast<int8_t*>(data.data() + output_index);
         *addr = static_cast<int8_t>(
-          (img.at<cv::Vec<int8_t, channels>>(i, j)[k] - mean[k]) * std[k]);
+          (img.at<cv::Vec<int8_t, channels>>(i, j)[k] - mean.at(k)) *
+          std.at(k));
       }
     }
   }
@@ -69,9 +70,11 @@ amdinfer::InferenceRequest pre_process_resnet50(
 }
 
 int main(int argc, char* argv[]) {
+  const size_t default_performance_samples = 1000;
+
   // these defaults are overridden first by the config file and then by command
   // line, if they exist
-  size_t performance_samples = 1000;
+  size_t performance_samples = default_performance_samples;
   fs::path input_directory = fs::current_path() / "data";
   fs::path model_path;
   std::string worker;
@@ -204,8 +207,8 @@ int main(int argc, char* argv[]) {
     return retval;
   }
 
-  mlperf::LogSettings logSettings;
-  logSettings.enable_trace = false;
+  mlperf::LogSettings log_settings;
+  log_settings.enable_trace = false;
 
   if (!fs::exists(input_directory)) {
     std::cerr << "Input directory at " << input_directory
@@ -220,7 +223,7 @@ int main(int argc, char* argv[]) {
   }
 
   amdinfer::QuerySampleLibrary qsl(performance_samples, input_directory,
-                                   pre_process_resnet50);
+                                   preprocessResnet50);
 
   std::optional<amdinfer::Server> server;
   std::unique_ptr<amdinfer::Client> client;
@@ -258,6 +261,7 @@ int main(int argc, char* argv[]) {
       test_config.getParameters(model, scenario);
     parameters.put("share", false);
     amdinfer::waitUntilServerReady(client.get());
+
     endpoint = client->workerLoad(worker, &parameters);
     if (test_config.has(model, scenario, "workers")) {
       auto workers = test_config.get<int>(model, scenario, "workers");
@@ -269,7 +273,7 @@ int main(int argc, char* argv[]) {
 
   amdinfer::SystemUnderTest sut(&qsl, client.get(), endpoint);
 
-  mlperf::StartTest(&sut, &qsl, test_settings, logSettings);
+  mlperf::StartTest(&sut, &qsl, test_settings, log_settings);
 
   return 0;
 }

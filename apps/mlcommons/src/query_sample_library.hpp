@@ -37,14 +37,13 @@ struct Sample {
   InferenceRequest request;
 };
 
-using PreProcessFunc =
+using PreprocessFunc =
   std::function<InferenceRequest(const std::filesystem::path&)>;
 
 class QuerySampleLibrary : public mlperf::QuerySampleLibrary {
  public:
   QuerySampleLibrary(size_t perf_samples,
-                     const std::filesystem::path& directory,
-                     const PreProcessFunc& f);
+                     const std::filesystem::path& directory, PreprocessFunc f);
 
   /// Get the name for the object
   const std::string& Name() const override;
@@ -79,7 +78,7 @@ class QuerySampleLibrary : public mlperf::QuerySampleLibrary {
   std::string name_{"AMD Inference Server"};
   size_t perf_samples_;
   std::vector<Sample> samples_;
-  PreProcessFunc pre_process_;
+  PreprocessFunc pre_process_;
 };
 
 }  // namespace amdinfer

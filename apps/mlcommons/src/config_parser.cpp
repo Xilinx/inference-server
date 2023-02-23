@@ -53,6 +53,7 @@ inline bool startsWith(std::string_view str, std::string_view prefix) {
 ParameterMap Config::getParameters(const std::string& model,
                                    const std::string& scenario) {
   ParameterMap parameters = config_;
+  std::unordered_map<std::string, int> priority;
 
   for (const auto& [key, value] : config_) {
     auto split_key = split(key, ".");
@@ -62,13 +63,28 @@ ParameterMap Config::getParameters(const std::string& model,
     }
 
     if (split_key[0] == model && split_key[1] == scenario) {
+      // highest priority so always overwrite to the latest
+      priority[split_key[2]] = 4;
+      parameters.erase(split_key[3]);
       parameters.rename(key, split_key[3]);
     } else if (split_key[0] == "*" && split_key[1] == scenario) {
-      parameters.rename(key, split_key[3]);
+      if (priority[split_key[2]] <= 3) {
+        priority[split_key[2]] = 3;
+        parameters.erase(split_key[3]);
+        parameters.rename(key, split_key[3]);
+      }
     } else if (split_key[0] == model && split_key[1] == "*") {
-      parameters.rename(key, split_key[3]);
+      if (priority[split_key[2]] <= 2) {
+        priority[split_key[2]] = 2;
+        parameters.erase(split_key[3]);
+        parameters.rename(key, split_key[3]);
+      }
     } else if (split_key[0] == "*" && split_key[1] == "*") {
-      parameters.rename(key, split_key[3]);
+      if (priority[split_key[2]] <= 1) {
+        priority[split_key[2]] = 1;
+        parameters.erase(split_key[3]);
+        parameters.rename(key, split_key[3]);
+      }
     } else {
       throw invalid_argument("bad key value stored");
     }

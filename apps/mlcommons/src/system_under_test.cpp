@@ -30,8 +30,8 @@ namespace amdinfer {
 const std::string& SystemUnderTest::Name() const { return name_; }
 
 SystemUnderTest::SystemUnderTest(QuerySampleLibrary* qsl, Client* client,
-                                 const std::string& endpoint)
-  : qsl_(qsl), client_(client), endpoint_(endpoint) {
+                                 std::string endpoint)
+  : qsl_(qsl), client_(client), endpoint_(std::move(endpoint)) {
   waitUntilServerReady(client_);
   waitUntilModelReady(client_, endpoint_);
   std::thread{&SystemUnderTest::FinishQuery, this}.detach();
@@ -47,6 +47,7 @@ void SystemUnderTest::IssueQuery(
   }
 }
 
+// NOLINTNEXTLINE(readability-identifier-naming)
 void SystemUnderTest::FinishQuery() {
   while (true) {
     InferenceResponseFuture future;
@@ -57,7 +58,7 @@ void SystemUnderTest::FinishQuery() {
     } else {
       const auto& outputs = response.getOutputs();
       assert(outputs.size() == 1);
-      auto& output = outputs[0];
+      const auto& output = outputs[0];
       auto data = reinterpret_cast<uintptr_t>(output.getData());
       mlperf::ResponseId id = std::stoul(response.getID());
       mlperf::QuerySampleResponse result{id, data, output.getSize()};

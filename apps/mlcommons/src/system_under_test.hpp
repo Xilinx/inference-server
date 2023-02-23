@@ -32,7 +32,7 @@ class QuerySampleLibrary;
 class SystemUnderTest : public mlperf::SystemUnderTest {
  public:
   SystemUnderTest(QuerySampleLibrary* qsl, Client* client,
-                  const std::string& endpoint);
+                  std::string endpoint);
 
   // void execBatch(std::vector<mlperf::QuerySample> batch);
 
@@ -41,6 +41,7 @@ class SystemUnderTest : public mlperf::SystemUnderTest {
   const std::string& Name() const override;
 
   void IssueQuery(const std::vector<mlperf::QuerySample>& samples) override;
+
   void FinishQuery();
 
   void FlushQueries() override;

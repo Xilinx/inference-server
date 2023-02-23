@@ -141,7 +141,7 @@ check() {
 }
 
 # directories relative to the root to search for source files
-source_directories=(examples include src tests)
+source_directories=(apps examples include src tests)
 
 # file extensions to search for
 extensions=(".c" ".cpp" ".cc")

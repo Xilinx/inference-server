@@ -114,7 +114,8 @@ class ParameterMap : public Serializable {
   void rename(const std::string &key, const std::string &new_key);
 
   /**
-   * @brief Removes a parameter
+   * @brief Removes a parameter, if it exists. No error is raised if it doesn't
+   * exist
    *
    * @param key name of the parameter to remove
    */

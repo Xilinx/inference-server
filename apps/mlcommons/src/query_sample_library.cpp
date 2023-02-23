@@ -27,8 +27,8 @@ namespace amdinfer {
 
 QuerySampleLibrary::QuerySampleLibrary(size_t perf_samples,
                                        const fs::path& directory,
-                                       const PreProcessFunc& f)
-  : perf_samples_(perf_samples), pre_process_(f) {
+                                       PreprocessFunc f)
+  : perf_samples_(perf_samples), pre_process_(std::move(f)) {
   for (const auto& path : fs::recursive_directory_iterator(directory)) {
     if (!path.is_directory()) {
       auto sample_path = path.path();
