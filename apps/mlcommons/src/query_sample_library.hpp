@@ -20,7 +20,7 @@
 #ifndef GUARD_MLCOMMONS_SRC_QUERY_SAMPLE_LIBRARY
 #define GUARD_MLCOMMONS_SRC_QUERY_SAMPLE_LIBRARY
 
-#include <mlcommons/loadgen/query_sample_library.h>
+#include <query_sample_library.h>
 
 #include <filesystem>
 #include <functional>

@@ -19,7 +19,7 @@
 
 #include "system_under_test.hpp"
 
-#include <mlcommons/loadgen/loadgen.h>
+#include <loadgen.h>
 
 #include <cassert>
 
@@ -52,21 +52,26 @@ void SystemUnderTest::FinishQuery() {
     InferenceResponseFuture future;
     queue_.wait_dequeue(future);
     auto response = future.get();
-    assert(!response.isError());
-    const auto& outputs = response.getOutputs();
-    assert(outputs.size() == 1);
-    auto& output = outputs[0];
-    auto data = reinterpret_cast<uintptr_t>(output.getData());
-    mlperf::ResponseId id = std::stoul(response.getID());
-    mlperf::QuerySampleResponse result{id, data, output.getSize()};
-    mlperf::QuerySamplesComplete(&result, 1);
+    if (response.isError()) {
+      std::cout << "Error encountered in response. App may hang\n";
+    } else {
+      const auto& outputs = response.getOutputs();
+      assert(outputs.size() == 1);
+      auto& output = outputs[0];
+      auto data = reinterpret_cast<uintptr_t>(output.getData());
+      mlperf::ResponseId id = std::stoul(response.getID());
+      mlperf::QuerySampleResponse result{id, data, output.getSize()};
+      mlperf::QuerySamplesComplete(&result, 1);
+    }
   }
 }
 
-void SystemUnderTest::FlushQueries() {}
+void SystemUnderTest::FlushQueries() { std::cout << "FlushQueries\n"; }
 
 void SystemUnderTest::ReportLatencyResults(
   [[maybe_unused]] const std::vector<mlperf::QuerySampleLatency>&
-    latencies_ns) {}
+    latencies_ns) {
+  std::cout << "ReportLatencyResults\n";
+}
 
 }  // namespace amdinfer

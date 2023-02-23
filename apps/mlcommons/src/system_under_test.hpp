@@ -21,7 +21,7 @@
 #define GUARD_MLCOMMONS_SRC_SYSTEM_UNDER_TEST
 
 #include <concurrentqueue/blockingconcurrentqueue.h>
-#include <mlcommons/loadgen/system_under_test.h>
+#include <system_under_test.h>
 
 #include "amdinfer/amdinfer.hpp"
 

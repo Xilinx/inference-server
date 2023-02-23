@@ -295,13 +295,25 @@ InferenceResponseFuture HttpClient::modelInferAsync(
   auto* client = this->impl_->getClient();
   client->sendRequest(req, [prom](drogon::ReqResult result,
                                   const drogon::HttpResponsePtr& response) {
-    checkError(result);
-    if (response->statusCode() != drogon::k200OK) {
-      throw bad_status(std::string(response->body()));
+    // throwing exceptions asynchronously makes them difficult to process so
+    // just return an error object. Unfortunately, there's no way to know which
+    // request just errored out since response is likely nullptr if Drogon
+    // failed
+    std::string error;
+    try {
+      checkError(result);
+      if (response->statusCode() != drogon::k200OK) {
+        throw bad_status(std::string(response->body()));
+      }
+    } catch (const bad_status& e) {
+      error = e.what();
     }
-
-    auto resp = response->jsonObject();
-    prom->set_value(mapJsonToResponse(resp.get()));
+    if (error.empty()) {
+      auto resp = response->jsonObject();
+      prom->set_value(mapJsonToResponse(resp.get()));
+    } else {
+      prom->set_value(InferenceResponse(error));
+    }
   });
 
   return fut;

@@ -64,3 +64,8 @@ Run the app
     mlperf --config <path to mlperf.conf> --scenario <scenario> --model <model> <other flags>
 
 Use ``--help`` to see the options.
+
+Notes
+-----
+
+- Using the HTTP client in Server mode with a "high" QPS can result in hangs. I suspect it's because of request failures due to network errors which means that requests don't complete and then loadgen is waiting indefinitely. The workaround for now is to lower the QPS until it completes successfully.

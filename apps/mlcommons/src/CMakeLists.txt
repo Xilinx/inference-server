@@ -20,6 +20,11 @@ target_link_libraries(
   mlperf PRIVATE mlperf_loadgen amdinfer Threads::Threads opencv_core
                  opencv_imgproc opencv_imgcodecs
 )
+# LOADGEN_INCLUDE_DIR is set by the parent CMakeLists.txt if the loadgen headers
+# are found in a custom location
+if(LOADGEN_INCLUDE_DIR)
+  target_include_directories(mlperf PRIVATE SYSTEM ${LOADGEN_INCLUDE_DIR})
+endif()
 if(NOT PROJECT_IS_TOP_LEVEL)
   set_target_options(mlperf)
   target_include_directories(mlperf PRIVATE ${AMDINFER_PUBLIC_INCLUDE_DIRS})

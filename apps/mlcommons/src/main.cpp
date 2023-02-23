@@ -17,8 +17,8 @@
  * @brief
  */
 
-#include <mlcommons/loadgen/loadgen.h>
-#include <mlcommons/loadgen/test_settings.h>
+#include <loadgen.h>
+#include <test_settings.h>
 
 #include <cxxopts/cxxopts.hpp>
 #include <filesystem>
@@ -253,7 +253,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  if (!remote_server) {
+  if (endpoint.empty() || endpoint == "n/a") {
     amdinfer::ParameterMap parameters =
       test_config.getParameters(model, scenario);
     parameters.put("share", false);
@@ -265,11 +265,6 @@ int main(int argc, char* argv[]) {
         client->workerLoad(worker, &parameters);
       }
     }
-  }
-
-  if (endpoint.empty()) {
-    std::cerr << "If using a remote server, you must pass an endpoint\n";
-    return 1;
   }
 
   amdinfer::SystemUnderTest sut(&qsl, client.get(), endpoint);
