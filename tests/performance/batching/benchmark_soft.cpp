@@ -44,8 +44,6 @@
 namespace amdinfer {
 
 constexpr auto kTimeoutMs = 1000;  // timeout in ms
-// timeout in us with safety factor
-constexpr auto kTimeoutUs = kTimeoutMs * 1000 * 5;
 
 class PerfSoftBatcherFixture : public ::benchmark::Fixture {
  public:
@@ -70,8 +68,6 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
 
     const auto data_shape = {1UL, 2UL, 50UL};
     const auto data_size = 100;
-
-    this->data_size_ = data_size;
 
     ParameterMap parameters;
     parameters.put("timeout", kTimeoutMs);
@@ -105,7 +101,7 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
 
     data_.resize(data_size);
     for (auto i = 0; i < data_size; i++) {
-      data_[i] = i;
+      data_[i] = static_cast<uint8_t>(i);
     }
 
     this->request_ = InferenceRequest();
@@ -118,7 +114,7 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
     batcher_->end();
   }
 
-  int data_size_ = 0;
+ private:
   std::vector<uint8_t> data_;
   InferenceRequest request_;
   std::optional<WorkerInfo> worker_;
@@ -130,7 +126,7 @@ BENCHMARK_DEFINE_F(PerfSoftBatcherFixture, BasicBatching)
 
   const auto enqueue_count = 1000;
 
-  for (auto _ : st) {
+  for ([[maybe_unused]] auto _ : st) {
     auto batch_size = static_cast<int>(st.range(0));
     const auto dequeue_count = static_cast<int>(
       std::ceil(enqueue_count / static_cast<double>(batch_size)));
@@ -146,17 +142,19 @@ BENCHMARK_DEFINE_F(PerfSoftBatcherFixture, BasicBatching)
   }
 }
 
-const std::vector<int64_t> kBatchSizes{1, 2, 4};
+const std::initializer_list<int64_t> kBatchSizes{1, 2, 4};
 
-const std::vector<int64_t> kBufferNums{1, 10, 100};
+const std::initializer_list<int64_t> kBufferNums{1, 10, 100};
 
 // delay after dequeue per request in microseconds
-const std::vector<int64_t> kWorkDelay{0, 1, 10};
+const std::initializer_list<int64_t> kWorkDelay{0, 1, 10};
 
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 BENCHMARK_REGISTER_F(PerfSoftBatcherFixture, BasicBatching)
   ->ArgsProduct({kBatchSizes, kBufferNums, kWorkDelay})
   ->Unit(benchmark::kMillisecond);
 
+// NOLINTNEXTLINE
 BENCHMARK_MAIN();
 
 }  // namespace amdinfer

@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Performance testing for ResNet50
+ * @brief Performance testing for resnet50
  */
 
 #include <benchmark/benchmark.h>
@@ -34,6 +34,7 @@
 #include <string>               // for string, allocator
 #include <thread>               // for sleep_for
 #include <tuple>                // for tuple, _Swallow_as...
+#include <utility>              // for forward
 #include <variant>              // for variant, visit
 #include <vector>               // for vector
 
@@ -139,14 +140,14 @@ template <class... Fs>
 Overload(Fs...) -> Overload<Fs...>;
 
 template <class... Args>
-void ResNet50(benchmark::State& st, Args&&... args) {
-  auto args_tuple = std::make_tuple(std::forward(args)...);
+void resnet50(benchmark::State& st, Args&&... args) {
+  auto args_tuple = std::make_tuple(std::forward<Args>(args)...);
   int client_index = std::get<0>(args_tuple);
 
   auto config_index = st.range(0);
   auto worker_index = st.range(1);
-  auto& config = kConfigs[config_index];
-  auto& worker = kWorkers[worker_index];
+  const auto& config = kConfigs.at(config_index);
+  const auto* worker = kWorkers.at(worker_index);
 
   const auto image_location =
     amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
@@ -164,15 +165,18 @@ void ResNet50(benchmark::State& st, Args&&... args) {
   parameters.put("output_classes", output_classes);
   parameters.put("batch_size", batch_size);
 
+  const auto default_http_port = 8998;
+  const auto default_grpc_port = 50'051;
+
   amdinfer::Server server;
   std::unique_ptr<amdinfer::Client> client;
   if (client_index == 0) {
     client = std::make_unique<amdinfer::NativeClient>(&server);
   } else if (client_index == 1) {
-    server.startHttp(8998);
+    server.startHttp(default_http_port);
     client = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
   } else if (client_index == 2) {
-    server.startGrpc(50051);
+    server.startGrpc(default_grpc_port);
     client = std::make_unique<amdinfer::GrpcClient>("127.0.0.1:50051");
   } else {
     st.SkipWithError("Unknown client index passed");
@@ -187,22 +191,22 @@ void ResNet50(benchmark::State& st, Args&&... args) {
   std::vector<std::string> paths{image_location};
   const auto& options = worker->preprocessing;
 
-  amdinfer::InferenceRequest request_;
+  amdinfer::InferenceRequest request;
   std::vector<std::vector<float>> images;
   std::visit(
     Overload{
       [&](const ImagePreprocessOptions<float, channels>& opts) {
         images = amdinfer::pre_post::imagePreprocess(paths, opts);
-        request_.addInputTensor(images[0].data(),
-                                {channels, input_size, input_size},
-                                amdinfer::DataType::Fp32);
+        request.addInputTensor(images[0].data(),
+                               {channels, input_size, input_size},
+                               amdinfer::DataType::Fp32);
       },
     },
     options);
 
   // warm up
   for (auto i = 0; i < warmup_requests; ++i) {
-    std::ignore = client->modelInfer(endpoint, request_);
+    std::ignore = client->modelInfer(endpoint, request);
   }
 
   for (auto _ : st) {
@@ -214,7 +218,7 @@ void ResNet50(benchmark::State& st, Args&&... args) {
 
     auto num_requests = config.requests;
     for (auto i = 0; i < num_requests; ++i) {
-      auto response = client->modelInfer(endpoint, request_);
+      auto response = client->modelInfer(endpoint, request);
       assert(!response.isError());
     }
   }
@@ -224,22 +228,27 @@ void ResNet50(benchmark::State& st, Args&&... args) {
   }
 }
 
-const std::vector<std::vector<int64_t>> range{
-  {benchmark::CreateDenseRange(0, kConfigs.size() - 1, 1),
-   benchmark::CreateDenseRange(0, kWorkers.size() - 1, 1)}};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const std::initializer_list<std::vector<int64_t>> kRange{
+  benchmark::CreateDenseRange(0, kConfigs.size() - 1, 1),
+  benchmark::CreateDenseRange(0, kWorkers.size() - 1, 1)};
 
-BENCHMARK_CAPTURE(ResNet50, Native, 0)
-  ->ArgsProduct(range)
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+BENCHMARK_CAPTURE(resnet50, Native, 0)
+  ->ArgsProduct(kRange)
   ->Unit(benchmark::kMillisecond);
 #ifdef AMDINFER_ENABLE_HTTP
-BENCHMARK_CAPTURE(ResNet50, HTTP, 1)
-  ->ArgsProduct(range)
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+BENCHMARK_CAPTURE(resnet50, HTTP, 1)
+  ->ArgsProduct(kRange)
   ->Unit(benchmark::kMillisecond);
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-BENCHMARK_CAPTURE(ResNet50, gRPC, 2)
-  ->ArgsProduct(range)
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+BENCHMARK_CAPTURE(resnet50, gRPC, 2)
+  ->ArgsProduct(kRange)
   ->Unit(benchmark::kMillisecond);
 #endif
 
+// NOLINTNEXTLINE
 BENCHMARK_MAIN();
