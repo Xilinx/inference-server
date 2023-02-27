@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <benchmark/benchmark.h>
+
 #include <array>     // for array
 #include <chrono>    // for duration, operator-
 #include <cstddef>   // for size_t
@@ -37,7 +39,7 @@
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
 #include "amdinfer/declarations.hpp"             // for BufferPtrs
 #include "amdinfer/observation/logging.hpp"      // for LogOptions, initLogger
-#include "gtest/gtest.h"                         // for UnitTest, EXPECT_NEAR
+#include "gtest/gtest.h"
 
 namespace amdinfer {
 
@@ -45,48 +47,27 @@ constexpr auto kTimeoutMs = 1000;  // timeout in ms
 // timeout in us with safety factor
 constexpr auto kTimeoutUs = kTimeoutMs * 1000 * 5;
 
-class PerfSoftBatcherFixture
-  : public testing::TestWithParam<std::tuple<int, int, int>> {
+class PerfSoftBatcherFixture : public ::benchmark::Fixture {
  public:
-  int enqueue() {
-    auto start_time = std::chrono::high_resolution_clock::now();
-    std::chrono::nanoseconds duration = std::chrono::nanoseconds(0);
-
-    int count = 0;
-
-    do {
+  void enqueue(int count) {
+    for (auto i = 0; i < count; ++i) {
       auto req = std::make_unique<CppNativeApi>(this->request_);
       batcher_->enqueue(std::move(req));
-      count++;
-
-      auto end_time = std::chrono::high_resolution_clock::now();
-      duration = end_time - start_time;
-    } while (duration < std::chrono::nanoseconds(std::chrono::seconds(1)));
-
-    return count;
+    }
   }
 
-  int dequeue() {
-    const auto [batch_size, num_buffers, delay] = GetParam();
-    bool valid_read = false;
-    int count = 0;
-    do {
+  void dequeue(int count, int delay) {
+    for (auto i = 0; i < count; ++i) {
       BatchPtr batch;
-      valid_read =
-        batcher_->getOutputQueue()->wait_dequeue_timed(batch, kTimeoutUs);
+      batcher_->getOutputQueue()->wait_dequeue(batch);
       std::this_thread::sleep_for(std::chrono::microseconds(delay));
-      if (valid_read) {
-        count++;
-      }
-    } while (valid_read);
-    return count;
+    }
   }
 
- protected:
-  void SetUp() override {
-    const auto [batch_size, num_buffers, delay] = GetParam();
+  void SetUp(const ::benchmark::State& state) override {
+    auto batch_size = static_cast<int>(state.range(0));
+    auto buffer_num = static_cast<size_t>(state.range(1));
 
-    const auto buffer_num = static_cast<size_t>(num_buffers);
     const auto data_shape = {1UL, 2UL, 50UL};
     const auto data_size = 100;
 
@@ -132,7 +113,7 @@ class PerfSoftBatcherFixture
                                   DataType::Uint8);
   }
 
-  void TearDown() override {
+  void TearDown([[maybe_unused]] const ::benchmark::State& state) override {
     batcher_->enqueue(nullptr);
     batcher_->end();
   }
@@ -144,42 +125,38 @@ class PerfSoftBatcherFixture
   std::optional<SoftBatcher> batcher_;
 };
 
-// @pytest.mark.perf(group="batcher")
-TEST_P(PerfSoftBatcherFixture, BasicBatching) {  // NOLINT
-  const auto [batch_size, num_buffers, delay] = GetParam();
-  auto start_time = std::chrono::high_resolution_clock::now();
+BENCHMARK_DEFINE_F(PerfSoftBatcherFixture, BasicBatching)
+(benchmark::State& st) {  // NOLINT
 
-  auto enqueue =
-    std::async(std::launch::async, &PerfSoftBatcherFixture::enqueue, this);
-  auto dequeue =
-    std::async(std::launch::async, &PerfSoftBatcherFixture::dequeue, this);
+  const auto enqueue_count = 1000;
 
-  auto enqueue_count = enqueue.get();
-  auto dequeue_count = dequeue.get();
+  for (auto _ : st) {
+    auto batch_size = static_cast<int>(st.range(0));
+    const auto dequeue_count = static_cast<int>(
+      std::ceil(enqueue_count / static_cast<double>(batch_size)));
+    auto enqueue =
+      std::async(std::launch::async, &PerfSoftBatcherFixture::enqueue, this,
+                 enqueue_count);
+    auto dequeue =
+      std::async(std::launch::async, &PerfSoftBatcherFixture::dequeue, this,
+                 dequeue_count, st.range(2));
 
-  auto end_time = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> duration = end_time - start_time;
-  auto throughput = static_cast<double>(enqueue_count) / duration.count();
-
-  EXPECT_NEAR(enqueue_count / float(batch_size), dequeue_count,
-              enqueue_count * 0.01);
-
-  std::cerr << "Enqueue count: " << enqueue_count << std::endl;
-  std::cerr << "Dequeue count: " << dequeue_count << std::endl;
-  std::cerr << "Throughput (req/s): " << throughput << std::endl;
+    enqueue.get();
+    dequeue.get();
+  }
 }
 
-const std::array kBatchSizes{1, 2, 4};
+const std::vector<int64_t> kBatchSizes{1, 2, 4};
 
-const std::array kBufferNums{1, 10, 100};
+const std::vector<int64_t> kBufferNums{1, 10, 100};
 
 // delay after dequeue per request in microseconds
-const std::array kWorkDelay{0, 1, 10};
+const std::vector<int64_t> kWorkDelay{0, 1, 10};
 
-// NOLINTNEXTLINE(cert-err58-cpp)
-INSTANTIATE_TEST_SUITE_P(Datatypes, PerfSoftBatcherFixture,
-                         testing::Combine(testing::ValuesIn(kBatchSizes),
-                                          testing::ValuesIn(kBufferNums),
-                                          testing::ValuesIn(kWorkDelay)));
+BENCHMARK_REGISTER_F(PerfSoftBatcherFixture, BasicBatching)
+  ->ArgsProduct({kBatchSizes, kBufferNums, kWorkDelay})
+  ->Unit(benchmark::kMillisecond);
+
+BENCHMARK_MAIN();
 
 }  // namespace amdinfer

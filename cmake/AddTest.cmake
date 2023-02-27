@@ -66,6 +66,22 @@ function(amdinfer_add_unit_test test)
   _amdinfer_add_test(${test} "unit")
 endfunction()
 
+function(amdinfer_add_benchmark test)
+  amdinfer_get_test_target(target ${test} benchmark)
+
+  add_executable(${target} benchmark_${test}.cpp)
+  target_include_directories(
+    ${target} BEFORE PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
+  )
+  target_include_directories(${target} AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS})
+
+  target_link_libraries(
+    ${target} PRIVATE benchmark::benchmark benchmark::benchmark_main
+  )
+
+  set_target_options(${target})
+endfunction()
+
 function(amdinfer_add_system_tests tests)
   foreach(test ${tests})
     amdinfer_add_system_test(${test})
@@ -80,6 +96,19 @@ function(amdinfer_add_unit_tests tests tests_libs)
 
     amdinfer_add_unit_test(${test})
     amdinfer_get_test_target(target ${test})
+
+    target_link_libraries(${target} PRIVATE ${libs})
+  endforeach()
+endfunction()
+
+function(amdinfer_add_benchmarks tests tests_libs)
+  foreach(test lib_str IN ZIP_LISTS tests tests_libs)
+
+    string(REPLACE " " "" libs_no_spaces ${lib_str})
+    string(REPLACE "~" ";" libs ${libs_no_spaces})
+
+    amdinfer_add_benchmark(${test})
+    amdinfer_get_test_target(target ${test} benchmark)
 
     target_link_libraries(${target} PRIVATE ${libs})
   endforeach()

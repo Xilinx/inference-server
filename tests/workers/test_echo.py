@@ -196,9 +196,10 @@ class TestEcho:
     @pytest.mark.benchmark(group="echo")
     def test_benchmark_echo_0(self, benchmark):
         request = self.construct_request(False, False, False)
+        model, parameters = self.get_config()
         options = {
-            "model": self.model,
-            "parameters": self.parameters,
+            "model": model,
+            "parameters": parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }

@@ -14,8 +14,10 @@
 
 /**
  * @file
- * @brief Performance testing for the native client
+ * @brief Performance testing for ResNet50
  */
+
+#include <benchmark/benchmark.h>
 
 #include <algorithm>            // for copy, max
 #include <array>                // for array
@@ -38,7 +40,6 @@
 #include "amdinfer/amdinfer.hpp"                   // for InferenceRequest
 #include "amdinfer/pre_post/image_preprocess.hpp"  // for ImagePreprocessOpt...
 #include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
-#include "amdinfer/testing/gtest_fixtures.hpp"     // for ParamIteratorInter...
 
 namespace fs = std::filesystem;
 
@@ -52,6 +53,9 @@ struct Config {
     return os;
   }
 };
+
+const std::array<Config, 4> kConfigs = {Config{1, 10}, Config{2, 20},
+                                        Config{20, 40}, Config{40, 40}};
 
 template <typename T, int kChannels>
 using ImagePreprocessOptions =
@@ -72,7 +76,8 @@ struct PtzendnnWorker : public Workers {
     assert(root != nullptr);
     extension = "ptzendnn";
     name = "ptzendnn";
-    graph = fs::path{root} / "external/pytorch_models/resnet50_pretrained.pt";
+    graph =
+      fs::path{root} / "external/artifacts/pytorch/resnet50_pretrained.pt";
 
     parameters.put("model", graph.string());
 
@@ -100,7 +105,7 @@ struct TfzendnnWorker : public Workers {
     extension = "tfzendnn";
     name = "tfzendnn";
     graph = fs::path{root} /
-            "external/tensorflow_models/resnet_v1_50_baseline_6.96B_922.pb";
+            "external/artifacts/tensorflow/resnet_v1_50_baseline_6.96B_922.pb";
 
     // arbitrarily set to 64
     const int inter_op = 64;
@@ -119,12 +124,12 @@ struct TfzendnnWorker : public Workers {
   }
 };
 
-class PerfModelsResnetBaseFixture
-  : public BaseFixtureWithParams<std::tuple<Config, const Workers*>> {};
-class PerfModelsResnetHttpFixture
-  : public HttpFixtureWithParams<std::tuple<Config, const Workers*>> {};
-class PerfModelsResnetGrpcFixture
-  : public GrpcFixtureWithParams<std::tuple<Config, const Workers*>> {};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const PtzendnnWorker kPtZendnn{};
+// NOLINTNEXTLINE(cert-err58-cpp)
+const TfzendnnWorker kTfZendnn{};
+
+const std::array<const Workers*, 2> kWorkers{&kPtZendnn, &kTfZendnn};
 
 template <class... Fs>
 struct Overload : Fs... {
@@ -133,11 +138,15 @@ struct Overload : Fs... {
 template <class... Fs>
 Overload(Fs...) -> Overload<Fs...>;
 
-void test(amdinfer::Client* client, const Config& config,
-          const Workers* worker) {
-  if (!amdinfer::serverHasExtension(client, worker->extension)) {
-    GTEST_SKIP() << worker->extension << " support required but not found.\n";
-  }
+template <class... Args>
+void ResNet50(benchmark::State& st, Args&&... args) {
+  auto args_tuple = std::make_tuple(std::forward(args)...);
+  int client_index = std::get<0>(args_tuple);
+
+  auto config_index = st.range(0);
+  auto worker_index = st.range(1);
+  auto& config = kConfigs[config_index];
+  auto& worker = kWorkers[worker_index];
 
   const auto image_location =
     amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
@@ -147,7 +156,6 @@ void test(amdinfer::Client* client, const Config& config,
   const auto batch_size = config.batch_size;
 
   const auto warmup_requests = 4;
-  const auto num_requests = config.requests;
 
   const auto& name = worker->name;
 
@@ -156,113 +164,82 @@ void test(amdinfer::Client* client, const Config& config,
   parameters.put("output_classes", output_classes);
   parameters.put("batch_size", batch_size);
 
+  amdinfer::Server server;
+  std::unique_ptr<amdinfer::Client> client;
+  if (client_index == 0) {
+    client = std::make_unique<amdinfer::NativeClient>(&server);
+  } else if (client_index == 1) {
+    server.startHttp(8998);
+    client = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
+  } else if (client_index == 2) {
+    server.startGrpc(50051);
+    client = std::make_unique<amdinfer::GrpcClient>("127.0.0.1:50051");
+  } else {
+    st.SkipWithError("Unknown client index passed");
+    return;
+  }
+
+  amdinfer::waitUntilServerReady(client.get());
+
   auto endpoint = client->workerLoad(name, &parameters);
-  EXPECT_EQ(endpoint, name);
+  assert(endpoint == name);
 
   std::vector<std::string> paths{image_location};
   const auto& options = worker->preprocessing;
 
-  amdinfer::InferenceRequest request;
+  amdinfer::InferenceRequest request_;
+  std::vector<std::vector<float>> images;
   std::visit(
     Overload{
       [&](const ImagePreprocessOptions<float, channels>& opts) {
-        auto images = amdinfer::pre_post::imagePreprocess(paths, opts);
-        request.addInputTensor(images[0].data(),
-                               {channels, input_size, input_size},
-                               amdinfer::DataType::Fp32);
+        images = amdinfer::pre_post::imagePreprocess(paths, opts);
+        request_.addInputTensor(images[0].data(),
+                                {channels, input_size, input_size},
+                                amdinfer::DataType::Fp32);
       },
     },
     options);
 
   // warm up
   for (auto i = 0; i < warmup_requests; ++i) {
-    std::ignore = client->modelInfer(endpoint, request);
+    std::ignore = client->modelInfer(endpoint, request_);
   }
 
-  auto start = std::chrono::high_resolution_clock::now();
-  for (auto i = 0; i < num_requests; ++i) {
-    auto response = client->modelInfer(endpoint, request);
-    EXPECT_FALSE(response.isError());
-  }
-  auto stop = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double, std::milli> duration = stop - start;
-  std::cout << "-----\n";
-  std::cout << "sync time taken for " << num_requests
-            << " images with batch size " << batch_size << " on " << name
-            << ": " << duration.count() << "ms" << std::endl;
-  std::cout << "-----\n";
+  for (auto _ : st) {
+    if (!amdinfer::serverHasExtension(client.get(), worker->extension)) {
+      std::string error = worker->extension + " support required but not found";
+      st.SkipWithError(error.c_str());
+      return;
+    }
 
-  std::vector<amdinfer::InferenceRequest> requests;
-  requests.reserve(num_requests);
-  for (auto i = 0; i < num_requests; ++i) {
-    requests.push_back(request);
+    auto num_requests = config.requests;
+    for (auto i = 0; i < num_requests; ++i) {
+      auto response = client->modelInfer(endpoint, request_);
+      assert(!response.isError());
+    }
   }
-  start = std::chrono::high_resolution_clock::now();
-  auto responses = amdinfer::inferAsyncOrdered(client, endpoint, requests);
-  stop = std::chrono::high_resolution_clock::now();
-  duration = stop - start;
-  std::cout << "-----\n";
-  std::cout << "async time taken for " << num_requests
-            << " images with batch size " << batch_size << " on " << name
-            << ": " << duration.count() << "ms" << std::endl;
-  std::cout << "-----\n";
-
   client->workerUnload(endpoint);
   while (client->modelReady(endpoint)) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
 
-const std::array<Config, 4> kConfigs = {Config{1, 10}, Config{2, 20},
-                                        Config{20, 40}, Config{40, 40}};
+const std::vector<std::vector<int64_t>> range{
+  {benchmark::CreateDenseRange(0, kConfigs.size() - 1, 1),
+   benchmark::CreateDenseRange(0, kWorkers.size() - 1, 1)}};
 
-// NOLINTNEXTLINE(cert-err58-cpp)
-const PtzendnnWorker kPtZendnn{};
-// NOLINTNEXTLINE(cert-err58-cpp)
-const TfzendnnWorker kTfZendnn{};
-
-const std::array<const Workers*, 1> kWorkers = {
-  // TODO(amuralee): why does TFzendnn slow down dramatically if included
-  // together
-  //  &kPtZendnn, &kTfZendnn
-  &kTfZendnn};
-
-#ifdef AMDINFER_ENABLE_GRPC
-
-// @pytest.mark.perf(group="clients")
-TEST_P(PerfModelsResnetGrpcFixture, ModelInfer) {  // NOLINT
-  const auto& [config, worker] = GetParam();
-  test(client_.get(), config, worker);
-}
-
-// NOLINTNEXTLINE(cert-err58-cpp)
-INSTANTIATE_TEST_SUITE_P(PerfModelsResnetGrpc, PerfModelsResnetGrpcFixture,
-                         testing::Combine(testing::ValuesIn(kConfigs),
-                                          testing::ValuesIn(kWorkers)));
-#endif
-
-// @pytest.mark.perf(group="clients")
-TEST_P(PerfModelsResnetBaseFixture, ModelInfer) {  // NOLINT
-  amdinfer::NativeClient client(&server_);
-  const auto& [config, worker] = GetParam();
-  test(&client, config, worker);
-}
-
-// NOLINTNEXTLINE(cert-err58-cpp)
-INSTANTIATE_TEST_SUITE_P(PerfModelsResnetBase, PerfModelsResnetBaseFixture,
-                         testing::Combine(testing::ValuesIn(kConfigs),
-                                          testing::ValuesIn(kWorkers)));
-
+BENCHMARK_CAPTURE(ResNet50, Native, 0)
+  ->ArgsProduct(range)
+  ->Unit(benchmark::kMillisecond);
 #ifdef AMDINFER_ENABLE_HTTP
-// @pytest.mark.perf(group="clients")
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_P(PerfModelsResnetHttpFixture, ModelInfer) {  // NOLINT
-  const auto& [config, worker] = GetParam();
-  test(client_.get(), config, worker);
-}
-
-// NOLINTNEXTLINE(cert-err58-cpp)
-INSTANTIATE_TEST_SUITE_P(PerfModelsResnetHttp, PerfModelsResnetHttpFixture,
-                         testing::Combine(testing::ValuesIn(kConfigs),
-                                          testing::ValuesIn(kWorkers)));
+BENCHMARK_CAPTURE(ResNet50, HTTP, 1)
+  ->ArgsProduct(range)
+  ->Unit(benchmark::kMillisecond);
 #endif
+#ifdef AMDINFER_ENABLE_GRPC
+BENCHMARK_CAPTURE(ResNet50, gRPC, 2)
+  ->ArgsProduct(range)
+  ->Unit(benchmark::kMillisecond);
+#endif
+
+BENCHMARK_MAIN();
