@@ -29,7 +29,7 @@ The easiest way to help out is react and vote up issues and discussions that are
 Idea generation
 ^^^^^^^^^^^^^^^
 
-If you have ideas on new things that may be needed or changing something, `start a discussion <https://github.com/Xilinx/inference-server/discussions/new?category=ideas`_.
+If you have ideas on new things that may be needed or changing something, `start a discussion <https://github.com/Xilinx/inference-server/discussions/new?category=ideas>`_.
 New idea discussions don't need to be fully fleshed out or limited in scope.
 Instead, use it as a notepad for ideas that you have so they can be remembered and tracked.
 Having it as a discussion allows the community and maintainers to elaborate on the idea and determine if it's something of interest.
