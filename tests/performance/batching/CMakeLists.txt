@@ -24,4 +24,4 @@ list(
       ~$<TARGET_OBJECTS:native_internal>~timer"
 )
 
-amdinfer_add_unit_tests("${tests}" "${tests_libs}")
+amdinfer_add_benchmarks("${tests}" "${tests_libs}")

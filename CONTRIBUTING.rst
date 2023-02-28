@@ -18,28 +18,61 @@ Contributing
 ============
 
 AMD Inference Server is in active development and many things need to be done so thanks for helping!
-You can contribute in a variety of ways.
 
-Ways to Contribute
+
+Ways to contribute
 ------------------
 
-* Raise issues to report bugs! If you find a bug, give us as much information as you can about your environment, hardware, steps to reproduce and relevant logs. If you can point to the code that's causing a problem, that helps a lot too!
-* Raise issues to suggest or request new features and changes to existing ones to improve functionality, performance and/or quality. Comment and vote up issues that you think should be prioritized.
-* Submit pull requests against active issues. See `Contributing Code`_ for more information.
+You can contribute in a variety of ways depending on your experience, time, and permissions.
+The easiest way to help out is react and vote up issues and discussions that are important to you.
 
-Contributing Code
-------------------
+Idea generation
+^^^^^^^^^^^^^^^
 
-The suggested model of contributing new code is to pick an issue (or raise a new one) and comment about wanting to tackle it.
-This lets others know that there's active development on it. Then, you can fork this repository, make your additions and submit a pull request for merging.
-When sending code sign your work as described below.
+If you have ideas on new things that may be needed or changing something, `start a discussion <https://github.com/Xilinx/inference-server/discussions/new?category=ideas>`_.
+New idea discussions don't need to be fully fleshed out or limited in scope.
+Instead, use it as a notepad for ideas that you have so they can be remembered and tracked.
+Having it as a discussion allows the community and maintainers to elaborate on the idea and determine if it's something of interest.
+
+Raise issues
+^^^^^^^^^^^^
+
+An issue can be a bug report, a new feature request, or a change to documentation.
+They're used to track concrete measurable tasks that need to get done, which means there should be a clear way to determine that the issue is resolved.
+If you find a bug, give us as much information as you can about your environment, hardware, steps to reproduce and relevant logs.
+If you can point to the code that's causing a problem, that helps a lot too!
+
+Issues may be raised independently from ideas if the scope is already well-defined.
+But ideas will also naturally result in new issues aimed at implementing the idea.
+These related issues aimed at implementing this idea should link back to the original idea for context.
+If an issue is better suited as a discussion before being formalized as an issue, it will be moved.
+
+Triage
+^^^^^^
+
+Managing and organizing the repository are tasks for those with appropriate permissions:
+
+* Issues that are better suited for discussions should be moved
+* Issues should be labeled appropriately to categorize them and marked active once approved
+* Projects should be used to track upcoming releases or deadlines
+* Issues should be added to the appropriate project(s) if they're committed to for it
+
+Raise pull requests
+^^^^^^^^^^^^^^^^^^^
+
+A pull request should be made against an active issue.
+An active issue indicates that it has gone through a discussion already and is approved for development.
+You can fork the repository, make your additions and raise a pull request.
+Remember to `sign your git commits <Sign your work>`_.
+The pull request will be reviewed by an owner and eventually approved for testing.
+If the automated testing passes, then it can be merged in.
 All code is licensed under the terms of the LICENSE file included in the repository.
 Your contribution will be accepted under the same license.
 
-Sign Your Work
-^^^^^^^^^^^^^^
+Sign your work
+""""""""""""""
 
-Please use the *Signed-off-by* line at the end of your patch which indicates that you accept the Developer Certificate of Origin (DCO) defined by https://developercertificate.org/ reproduced below:
+Please use the *Signed-off-by* line at the end of your patch which indicates that you accept the `Developer Certificate of Origin (DCO) <https://developercertificate.org/>`_, reproduced below:
 
 .. code-block:: text
 
@@ -82,7 +115,7 @@ Please use the *Signed-off-by* line at the end of your patch which indicates tha
         this project or the open source license(s) involved.
 
 
-Here is an example Signed-off-by line which indicates that the contributor accepts DCO:
+Here is an example commit message that indicates that the contributor accepts the DCO:
 
 .. code-block:: text
 
@@ -90,7 +123,16 @@ Here is an example Signed-off-by line which indicates that the contributor accep
 
     Signed-off-by: Jane Doe <jane.doe@example.com>
 
-Style Guide
+You can also add the sign-off statement automatically when committing with git:
+
+.. code-block:: console
+
+    $ git commit -s -m "This is my commit message"
+
+Consider signing your commit with GPG as well.
+You can see more information about commit signature verification on `Github <https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits>`_.
+
+Style guide
 -----------
 
 ``pre-commit`` is used to enforce style and is included in the development container.
@@ -102,6 +144,19 @@ Documentation
 
 The documentation for the AMD Inference Server is written in reStructuredText and is located in the ``docs/`` directory.
 If you are unfamiliar with reStructuredText, check out a `basic tutorial <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html>`_
+
+Headers
+"""""""
+
+Headers are denoted in reStructuredText with a series of punctuation characters at least as long as the title.
+While it does not enforce that a particular character denotes a particular hierarchy, you should use the following convention that matches the `Python convention <https://devguide.python.org/documentation/markup/#sections>`_:
+
+* ``#`` with overline, for parts
+* ``*`` with overline, for chapters
+* ``=``, for sections
+* ``-``, for subsections
+* ``^``, for subsubsections
+* ``"``, for paragraphs
 
 Admonitions
 """""""""""
@@ -117,16 +172,11 @@ While reStructuredText supports many types of admonitions, the following groups 
 
 For maintaining visual consistency, admonitions in the same class should convey the same relative importance.
 
-.. list-table::
-    :header-rows: 1
-
-    * - Admonition
-      - Usage
-    * - Blue
-      - Contains useful non-essential information and does not suggest an action for the reader to take
-    * - Green
-      - Contains useful information or suggests an action for the reader to take
-    * - Yellow
-      - Contains important information or highlights unexpected side effects of events
-    * - Red
-      - Contains critical information
+========== =====
+Admonition Usage
+========== =====
+Blue       Contains useful non-essential information and does not suggest an action for the reader to take
+Green      Contains useful information or suggests an action for the reader to take
+Yellow     Contains important information or highlights unexpected side effects of events
+Red        Contains critical information
+========== =====

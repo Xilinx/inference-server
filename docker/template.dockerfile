@@ -432,6 +432,16 @@ RUN wget -O half_2.2.0.zip https://sourceforge.net/projects/half/files/latest/do
     && mv half/include/half.hpp ${COPY_DIR}/usr/local/include/half \
     && cd /tmp && rm -fr /tmp/*
 
+# install google benchmark for benchmarking apps
+RUN wget --quiet https://github.com/google/benchmark/archive/refs/tags/v1.7.1.tar.gz \
+    && tar -xzf v1.7.1.tar.gz \
+    && cd benchmark-1.7.1 \
+    && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_TESTING=OFF \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cat build/install_manifest.txt > ${MANIFESTS_DIR}/benchmark.txt \
+    && cd /tmp && rm -fr /tmp/*
+
 # install yaml-cpp for yaml parsing
 # RUN wget --quet https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
 #     && tar -xzf yaml-cpp-0.7.0.tar.gz \
