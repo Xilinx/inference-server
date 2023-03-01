@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests cpu_simple_allocator pool)
+list(APPEND tests cpu_allocator pool)
 
-list(APPEND tests_libs "cpu_simple_allocator" "memory_pool")
+list(APPEND tests_libs "cpu_allocator" "memory_pool")
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

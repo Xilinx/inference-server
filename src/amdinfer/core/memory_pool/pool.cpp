@@ -20,16 +20,15 @@
 #include "amdinfer/core/memory_pool/pool.hpp"
 
 #include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/memory_pool/cpu_simple_allocator.hpp"
+#include "amdinfer/core/memory_pool/cpu_allocator.hpp"
 
 namespace amdinfer {
 
 const size_t kDefaultCpuBlockSize = 1'048'576;  // arbitrarily 1MiB
 
 MemoryPool::MemoryPool() {
-  allocators_.try_emplace(
-    MemoryAllocators::Cpu,
-    std::make_unique<CpuSimpleAllocator>(kDefaultCpuBlockSize));
+  allocators_.try_emplace(MemoryAllocators::Cpu,
+                          std::make_unique<CpuAllocator>(kDefaultCpuBlockSize));
 }
 
 Memory MemoryPool::get(

@@ -23,14 +23,14 @@
 // #include <vector>   // for vector
 
 #include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/memory_pool/cpu_simple_allocator.hpp"  // for CpuSimpl...
+#include "amdinfer/core/memory_pool/cpu_allocator.hpp"  // for CpuSimpl...
 #include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
 
 namespace amdinfer {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitCpuSimpleAllocator, Basic) {
-  CpuSimpleAllocator allocator{sizeof(int)};
+TEST(UnitCpuAllocator, Basic) {
+  CpuAllocator allocator{sizeof(int)};
 
   const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
 
@@ -42,8 +42,8 @@ TEST(UnitCpuSimpleAllocator, Basic) {
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitCpuSimpleAllocator, Correctness) {
-  CpuSimpleAllocator allocator{sizeof(int) * 4, sizeof(int) * 4};
+TEST(UnitCpuAllocator, Correctness) {
+  CpuAllocator allocator{sizeof(int) * 4, sizeof(int) * 4};
 
   const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
   const auto* bar = static_cast<int*>(allocator.get(sizeof(int)));
@@ -63,8 +63,8 @@ TEST(UnitCpuSimpleAllocator, Correctness) {
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitCpuSimpleAllocator, ExceedingMax) {
-  CpuSimpleAllocator allocator{sizeof(int), sizeof(int)};
+TEST(UnitCpuAllocator, ExceedingMax) {
+  CpuAllocator allocator{sizeof(int), sizeof(int)};
 
   std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
   EXPECT_THROW_CHECK(
@@ -73,8 +73,8 @@ TEST(UnitCpuSimpleAllocator, ExceedingMax) {
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitCpuSimpleAllocator, BadFree) {
-  CpuSimpleAllocator allocator{sizeof(int)};
+TEST(UnitCpuAllocator, BadFree) {
+  CpuAllocator allocator{sizeof(int)};
 
   const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
   const auto* bad_address = foo + 1;

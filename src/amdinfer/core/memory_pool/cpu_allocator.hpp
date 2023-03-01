@@ -17,8 +17,8 @@
  * @brief
  */
 
-#ifndef GUARD_AMDINFER_CORE_MEMORY_POOL_CPU_SIMPLE_ALLOCATOR
-#define GUARD_AMDINFER_CORE_MEMORY_POOL_CPU_SIMPLE_ALLOCATOR
+#ifndef GUARD_AMDINFER_CORE_MEMORY_POOL_CPU_ALLOCATOR
+#define GUARD_AMDINFER_CORE_MEMORY_POOL_CPU_ALLOCATOR
 
 #include <cstddef>
 #include <list>
@@ -30,9 +30,9 @@ namespace amdinfer {
 
 struct MemoryHeader;
 
-class CpuSimpleAllocator : public MemoryAllocator {
+class CpuAllocator : public MemoryAllocator {
  public:
-  explicit CpuSimpleAllocator(size_t block_size, size_t max_allocated = -1);
+  explicit CpuAllocator(size_t block_size, size_t max_allocated = -1);
 
   [[nodiscard]] void* get(size_t size) override;
   void put(const void* address) override;
@@ -50,4 +50,4 @@ class CpuSimpleAllocator : public MemoryAllocator {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_CORE_MEMORY_POOL_CPU_SIMPLE_ALLOCATOR
+#endif  // GUARD_AMDINFER_CORE_MEMORY_POOL_CPU_ALLOCATOR
