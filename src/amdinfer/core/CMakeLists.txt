@@ -73,8 +73,10 @@ target_include_directories(
 target_link_libraries(model_repository INTERFACE lib_config efsw)
 add_dependencies(model_repository lib_config)
 
+add_subdirectory(memory_pool) # sets MEMORY_POOL
+
 add_library(core STATIC ${CORE_OBJS})
-target_link_libraries(core INTERFACE ${targets})
+target_link_libraries(core INTERFACE ${targets} ${MEMORY_POOL})
 set_target_options(core)
 
 set(CORE_OBJS ${CORE_OBJS} PARENT_SCOPE)

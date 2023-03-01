@@ -212,8 +212,8 @@ The following packages are downloaded from AMD.
     :header: Name,Version,License,Usage
     :widths: auto
 
-    `PT_v1.11.0_ZenDNN_v3.3_C++_API.zip <https://www.amd.com/en/developer/zendnn.html>`__,4.0,AMD ZenDNN EULA,Used by PT+ZenDNN worker\ :superscript:`a 3`
-    `TF_v2.9_ZenDNN_v3.3_C++_API.zip <https://www.amd.com/en/developer/zendnn.html>`__,4.0,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
+    `PT_v1.12.0_ZenDNN_v4.0_C++_API.zip <https://www.amd.com/en/developer/zendnn.html>`__,4.0,AMD ZenDNN EULA,Used by PT+ZenDNN worker\ :superscript:`a 3`
+    `TF_v2.10_ZenDNN_v4.0_C++_API.zip <https://www.amd.com/en/developer/zendnn.html>`__,4.0,AMD ZenDNN EULA,Used by TF+ZenDNN worker\ :superscript:`a 2`
 
 
 Included

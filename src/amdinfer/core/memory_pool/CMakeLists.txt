@@ -13,10 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(memory_pool)
+set(targets cpu_simple_allocator)
 
-list(APPEND tests inference_request_input parameter_map)
+foreach(target ${targets})
+  add_library(${target} OBJECT ${target}.cpp)
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
+  set_target_options(${target})
 
-list(APPEND tests_libs "predict_api~parameters" "parameters")
+  list(APPEND MEMORY_POOL_OBJS $<TARGET_OBJECTS:${target}>)
+endforeach()
 
-amdinfer_add_unit_tests("${tests}" "${tests_libs}")
+add_library(memory_pool STATIC ${MEMORY_POOL_OBJS})
+target_link_libraries(memory_pool INTERFACE ${targets})
+set_target_options(memory_pool)
+
+set(MEMORY_POOL ${MEMORY_POOL_OBJS} PARENT_SCOPE)

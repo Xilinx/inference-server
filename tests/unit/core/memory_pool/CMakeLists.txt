@@ -1,5 +1,4 @@
-# Copyright 2021 Xilinx, Inc.
-# Copyright 2022 Advanced Micro Devices, Inc.
+# Copyright 2023 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(memory_pool)
+list(APPEND tests cpu_simple_allocator)
 
-list(APPEND tests inference_request_input parameter_map)
-
-list(APPEND tests_libs "predict_api~parameters" "parameters")
+list(APPEND tests_libs "cpu_simple_allocator")
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")
