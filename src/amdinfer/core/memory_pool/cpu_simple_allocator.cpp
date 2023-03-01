@@ -29,7 +29,7 @@ namespace amdinfer {
 CpuSimpleAllocator::CpuSimpleAllocator(size_t block_size, size_t max_allocate)
   : max_allocate_(max_allocate), block_size_(block_size) {}
 
-void* CpuSimpleAllocator::allocate(size_t size) {
+void* CpuSimpleAllocator::get(size_t size) {
   auto best = headers_.end();
   const auto end = headers_.end();
   for (auto it = headers_.begin(); it != end; it++) {
@@ -75,7 +75,7 @@ void* CpuSimpleAllocator::allocate(size_t size) {
   return retval;
 }
 
-void CpuSimpleAllocator::free(const void* address) {
+void CpuSimpleAllocator::put(const void* address) {
   const auto end = headers_.end();
   auto found = headers_.end();
   for (auto it = headers_.begin(); it != end; it++) {

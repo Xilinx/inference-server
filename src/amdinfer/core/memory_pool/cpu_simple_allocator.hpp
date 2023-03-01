@@ -34,8 +34,10 @@ class CpuSimpleAllocator : public MemoryAllocator {
  public:
   explicit CpuSimpleAllocator(size_t block_size, size_t max_allocated = -1);
 
-  [[nodiscard]] void* allocate(size_t size);
-  void free(const void* address);
+  [[nodiscard]] void* get(size_t size) override;
+  void put(const void* address) override;
+
+  // void free(const void* address);
 
  private:
   size_t allocated_ = 0;

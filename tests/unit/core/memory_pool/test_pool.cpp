@@ -17,31 +17,21 @@
  * @brief
  */
 
-#ifndef GUARD_AMDINFER_CORE_MEMORY_POOL_MEMORY_ALLOCATOR
-#define GUARD_AMDINFER_CORE_MEMORY_POOL_MEMORY_ALLOCATOR
+#include <tuple>
 
-#include <cstddef>  // for size_t
+#include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/memory_pool/pool.hpp"
+#include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
 
 namespace amdinfer {
 
-struct MemoryHeader {
-  std::byte* address;
-  bool free;
-  size_t size;
-  size_t block_id;
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST(UnitPool, Basic) {
+  MemoryPool pool;
 
-  MemoryHeader(std::byte* address, size_t size, bool free, size_t block_id)
-    : address(address), free(free), size(size), block_id(block_id) {}
-};
+  auto [allocator, address] = pool.get({MemoryAllocators::Cpu}, sizeof(int));
 
-class MemoryAllocator {
- public:
-  virtual ~MemoryAllocator() = default;
-
-  [[nodiscard]] virtual void* get(size_t size) = 0;
-  virtual void put(const void* address) = 0;
-};
+  pool.put({allocator, address});
+}
 
 }  // namespace amdinfer
-
-#endif  // GUARD_AMDINFER_CORE_MEMORY_POOL_MEMORY_ALLOCATOR

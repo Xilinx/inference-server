@@ -17,31 +17,35 @@
  * @brief
  */
 
-#ifndef GUARD_AMDINFER_CORE_MEMORY_POOL_MEMORY_ALLOCATOR
-#define GUARD_AMDINFER_CORE_MEMORY_POOL_MEMORY_ALLOCATOR
+#ifndef GUARD_AMDINFER_CORE_MEMORY_POOL_POOL
+#define GUARD_AMDINFER_CORE_MEMORY_POOL_POOL
 
-#include <cstddef>  // for size_t
+#include <cstddef>
+#include <memory>
+#include <unordered_map>
+
+#include "amdinfer/build_options.hpp"
+#include "amdinfer/core/memory_pool/memory_allocator.hpp"
 
 namespace amdinfer {
 
-struct MemoryHeader {
-  std::byte* address;
-  bool free;
-  size_t size;
-  size_t block_id;
+enum class MemoryAllocators { Cpu };
 
-  MemoryHeader(std::byte* address, size_t size, bool free, size_t block_id)
-    : address(address), free(free), size(size), block_id(block_id) {}
-};
+using Memory = std::pair<MemoryAllocators, void*>;
 
-class MemoryAllocator {
+class MemoryPool {
  public:
-  virtual ~MemoryAllocator() = default;
+  MemoryPool();
 
-  [[nodiscard]] virtual void* get(size_t size) = 0;
-  virtual void put(const void* address) = 0;
+  Memory get(const std::initializer_list<MemoryAllocators>& allocators,
+             size_t size);
+  void put(Memory memory);
+
+ private:
+  std::unordered_map<MemoryAllocators, std::unique_ptr<MemoryAllocator>>
+    allocators_;
 };
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_CORE_MEMORY_POOL_MEMORY_ALLOCATOR
+#endif  // GUARD_AMDINFER_CORE_MEMORY_POOL_POOL

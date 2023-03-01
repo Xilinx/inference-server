@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(targets cpu_simple_allocator)
+set(targets cpu_simple_allocator pool)
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)

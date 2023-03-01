@@ -32,33 +32,33 @@ namespace amdinfer {
 TEST(UnitCpuSimpleAllocator, Basic) {
   CpuSimpleAllocator allocator{sizeof(int)};
 
-  const auto* foo = static_cast<int*>(allocator.allocate(sizeof(int)));
+  const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
 
-  const auto* bar = static_cast<int*>(allocator.allocate(sizeof(int)));
+  const auto* bar = static_cast<int*>(allocator.get(sizeof(int)));
   ASSERT_NE(foo, bar);
 
-  allocator.free(foo);
-  allocator.free(bar);
+  allocator.put(foo);
+  allocator.put(bar);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitCpuSimpleAllocator, Correctness) {
   CpuSimpleAllocator allocator{sizeof(int) * 4, sizeof(int) * 4};
 
-  const auto* foo = static_cast<int*>(allocator.allocate(sizeof(int)));
-  const auto* bar = static_cast<int*>(allocator.allocate(sizeof(int)));
+  const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
+  const auto* bar = static_cast<int*>(allocator.get(sizeof(int)));
 
   ASSERT_EQ(foo + 1, bar);
 
-  allocator.free(foo);
-  const auto* baz = static_cast<int*>(allocator.allocate(sizeof(int)));
+  allocator.put(foo);
+  const auto* baz = static_cast<int*>(allocator.get(sizeof(int)));
 
   ASSERT_EQ(foo, baz);
 
-  allocator.free(baz);
-  allocator.free(bar);
+  allocator.put(baz);
+  allocator.put(bar);
 
-  const auto* bard = static_cast<int*>(allocator.allocate(sizeof(int) * 4));
+  const auto* bard = static_cast<int*>(allocator.get(sizeof(int) * 4));
   ASSERT_EQ(foo, bard);
 }
 
@@ -66,9 +66,9 @@ TEST(UnitCpuSimpleAllocator, Correctness) {
 TEST(UnitCpuSimpleAllocator, ExceedingMax) {
   CpuSimpleAllocator allocator{sizeof(int), sizeof(int)};
 
-  std::ignore = static_cast<int*>(allocator.allocate(sizeof(int)));
+  std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
   EXPECT_THROW_CHECK(
-    std::ignore = static_cast<int*>(allocator.allocate(sizeof(int)));
+    std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
     , EXPECT_STREQ(e.what(), "Too much requested");, runtime_error);
 }
 
@@ -76,9 +76,9 @@ TEST(UnitCpuSimpleAllocator, ExceedingMax) {
 TEST(UnitCpuSimpleAllocator, BadFree) {
   CpuSimpleAllocator allocator{sizeof(int)};
 
-  const auto* foo = static_cast<int*>(allocator.allocate(sizeof(int)));
+  const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
   const auto* bad_address = foo + 1;
-  EXPECT_THROW_CHECK(allocator.free(bad_address);
+  EXPECT_THROW_CHECK(allocator.put(bad_address);
                      , EXPECT_STREQ(e.what(), "Address not found");
                      , runtime_error);
 }
