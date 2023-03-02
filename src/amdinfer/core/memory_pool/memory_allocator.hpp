@@ -38,6 +38,7 @@ class MemoryAllocator {
  public:
   virtual ~MemoryAllocator() = default;
 
+  // these methods are thread-safe
   [[nodiscard]] virtual void* get(size_t size) = 0;
   virtual void put(const void* address) = 0;
 };

@@ -31,6 +31,7 @@ CpuAllocator::CpuAllocator(size_t block_size, size_t max_allocate)
   : max_allocate_(max_allocate), block_size_(block_size) {}
 
 void* CpuAllocator::get(size_t size) {
+  const std::lock_guard lock{mutex_};
   auto best = headers_.end();
   const auto end = headers_.end();
   for (auto it = headers_.begin(); it != end; it++) {
@@ -80,6 +81,7 @@ void* CpuAllocator::get(size_t size) {
 }
 
 void CpuAllocator::put(const void* address) {
+  const std::lock_guard lock{mutex_};
   const auto end = headers_.end();
   auto found = headers_.end();
   for (auto it = headers_.begin(); it != end; it++) {

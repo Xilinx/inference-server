@@ -28,6 +28,7 @@
 #include <thread>   // for thread
 #include <vector>   // for vector
 
+#include "amdinfer/batching/batch.hpp"       // for Batch
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
@@ -46,55 +47,6 @@ namespace amdinfer {
 
 enum class BatcherStatus { New, Run, Inactive, Dead };
 
-/**
- * @brief The Batch is what the batcher produces and pushes to the workers. It
- * represents the requests, the buffers associated with the request and other
- * metadata that should be sent to the worker.
- *
- */
-class Batch {
- public:
-  void addRequest(InferenceRequestPtr request);
-
-  void setBuffers(BufferPtrs inputs, BufferPtrs outputs);
-  [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
-  [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
-  [[nodiscard]] std::vector<BufferPtr> getInputBuffers();
-  [[nodiscard]] const std::vector<BufferPtr>& getOutputBuffers() const;
-  [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
-  [[nodiscard]] std::vector<Buffer*> getRawOutputBuffers() const;
-
-  [[nodiscard]] bool empty() const;
-  [[nodiscard]] size_t size() const;
-  [[nodiscard]] size_t getInputSize() const;
-  [[nodiscard]] size_t getOutputSize() const;
-
-#ifdef AMDINFER_ENABLE_TRACING
-  void addTrace(TracePtr trace);
-  TracePtr& getTrace(size_t index);
-#endif
-#ifdef AMDINFER_ENABLE_METRICS
-  void addTime(std::chrono::high_resolution_clock::time_point timestamp);
-  std::chrono::high_resolution_clock::time_point getTime(size_t index);
-#endif
-
-  [[nodiscard]] auto begin() const { return requests_.begin(); }
-  [[nodiscard]] auto end() const { return requests_.end(); }
-
- private:
-  const WorkerInfo* worker_;
-  std::vector<InferenceRequestPtr> requests_;
-  std::vector<BufferPtr> input_buffers_;
-  std::vector<BufferPtr> output_buffers_;
-#ifdef AMDINFER_ENABLE_TRACING
-  std::vector<TracePtr> traces_;
-#endif
-#ifdef AMDINFER_ENABLE_METRICS
-  std::vector<std::chrono::high_resolution_clock::time_point> start_times_;
-#endif
-};
-
-using BatchPtr = std::unique_ptr<Batch>;
 using BatchPtrQueue = BlockingQueue<BatchPtr>;
 
 /**

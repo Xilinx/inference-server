@@ -17,10 +17,15 @@
 list(APPEND files soft)
 list(APPEND targets)
 
+add_library(batch OBJECT batch.cpp)
+target_include_directories(batch PRIVATE ${AMDINFER_INCLUDE_DIRS})
+set_target_options(batch)
+
 add_library(batcher OBJECT batcher.cpp)
 target_include_directories(batcher PRIVATE ${AMDINFER_INCLUDE_DIRS})
 set_target_options(batcher)
-set(BATCHING_OBJS $<TARGET_OBJECTS:batcher>)
+
+set(BATCHING_OBJS $<TARGET_OBJECTS:batch> $<TARGET_OBJECTS:batcher>)
 
 foreach(file ${files})
   set(target ${file}Batcher)

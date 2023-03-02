@@ -22,6 +22,7 @@
 
 #include <cstddef>
 #include <list>
+#include <mutex>
 #include <vector>
 
 #include "amdinfer/core/memory_pool/memory_allocator.hpp"
@@ -44,6 +45,7 @@ class CpuAllocator : public MemoryAllocator {
   size_t max_allocate_;
   size_t block_size_;
   size_t block_id_ = 0;
+  std::mutex mutex_;
   std::list<MemoryHeader> headers_;
   std::vector<std::vector<std::byte>> data_;
 };
