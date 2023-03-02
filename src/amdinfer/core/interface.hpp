@@ -79,8 +79,8 @@ class Interface {
   /// Get the number of input tensors in the request
   virtual size_t getInputSize() = 0;
 
-  virtual std::vector<size_t> getInputSizes() { return {0}; }
-  virtual std::vector<size_t> getOutputSizes() { return {0}; }
+  virtual std::vector<size_t> getInputSizes() const = 0;
+  // virtual std::vector<size_t> getOutputSizes() = 0;
   /**
    * @brief Construct an InferenceRequest using the data in the Interface
    *

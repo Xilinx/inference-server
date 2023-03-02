@@ -47,6 +47,7 @@
 #include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
 #include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
+#include "amdinfer/util/containers.hpp"            // for containerProduct
 #include "amdinfer/util/string.hpp"                // for toLower
 #include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
 #include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
@@ -477,6 +478,23 @@ class GrpcApiUnary : public Interface {
 
   size_t getInputSize() override {
     return calldata_->getRequest().inputs_size();
+  }
+
+  std::vector<size_t> getInputSizes() const override {
+    std::vector<size_t> sizes;
+
+    auto inputs = calldata_->getRequest().inputs();
+
+    for (const auto& tensor : inputs) {
+      const auto& raw_type = tensor.datatype();
+      auto datatype = DataType(raw_type.c_str());
+
+      const auto& shape = tensor.shape();
+      auto size = util::containerProduct(shape);
+
+      sizes.push_back(size * datatype.size());
+    }
+    return sizes;
   }
 
   void errorHandler(const std::exception& e) override {

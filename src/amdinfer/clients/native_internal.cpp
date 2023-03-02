@@ -137,7 +137,7 @@ CppNativeApi::CppNativeApi(InferenceRequest request)
 
 size_t CppNativeApi::getInputSize() { return this->request_.getInputSize(); }
 
-std::vector<size_t> CppNativeApi::getInputSizes() {
+std::vector<size_t> CppNativeApi::getInputSizes() const {
   std::vector<size_t> sizes;
   for (const auto &tensor : request_.getInputs()) {
     sizes.push_back(tensor.getSize() * tensor.getDatatype().size());

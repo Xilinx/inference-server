@@ -41,7 +41,7 @@ class SoftBatcher : public Batcher {
   using Batcher::Batcher;
 
  private:
-  void doRun(const std::vector<MemoryAllocators>& worker) override;
+  void doRun(const std::vector<MemoryAllocators>& allocators) override;
 };
 
 }  // namespace amdinfer

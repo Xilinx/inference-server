@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# list(APPEND files hard soft)
-list(APPEND files soft)
+list(APPEND files hard soft)
 list(APPEND targets)
 
 add_library(batch OBJECT batch.cpp)

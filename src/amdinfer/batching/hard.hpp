@@ -24,6 +24,7 @@
 #include "amdinfer/batching/batcher.hpp"  // IWYU pragma: export
 
 namespace amdinfer {
+enum class MemoryAllocators;
 class WorkerInfo;
 }  // namespace amdinfer
 
@@ -41,7 +42,7 @@ class HardBatcher : public Batcher {
   using Batcher::Batcher;
 
  private:
-  void doRun(WorkerInfo* worker) override;
+  void doRun(const std::vector<MemoryAllocators>& allocators) override;
 };
 
 }  // namespace amdinfer

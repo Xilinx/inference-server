@@ -29,7 +29,7 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/batching/soft.hpp"          // for HardBatcher
+#include "amdinfer/batching/hard.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
@@ -71,7 +71,7 @@ class Echo : public Worker {
   std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
                                                     ParameterMap* parameters,
                                                     MemoryPool* pool) override {
-    return this->makeBatcher<SoftBatcher>(num, parameters, pool);
+    return this->makeBatcher<HardBatcher>(num, parameters, pool);
   };
 };
 

@@ -113,7 +113,7 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
       auto input_sizes = req->getInputSizes();
       std::vector<BufferPtr> input_buffers;
       input_buffers.reserve(input_sizes.size());
-      auto output_sizes = req->getOutputSizes();
+      // auto output_sizes = req->getOutputSizes();
       // TODO(varunsh): the spec does not require the request to have outputs
       // additionally, the output size could be variable so this should be
       // allocated by the worker

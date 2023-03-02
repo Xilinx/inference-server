@@ -125,6 +125,32 @@ size_t DrogonWs::getInputSize() {
   return inputs.size();
 }
 
+std::vector<size_t> DrogonWs::getInputSizes() const {
+  std::vector<size_t> sizes;
+
+  if (!this->json_->isMember("inputs")) {
+    throw invalid_argument("No 'inputs' key present in request");
+  }
+  auto inputs = this->json_->get("inputs", Json::arrayValue);
+  if (!inputs.isArray()) {
+    throw invalid_argument("'inputs' is not an array");
+  }
+
+  for (const auto &tensor : inputs) {
+    const auto *raw_type = tensor.get("datatype", "UNKNOWN").asCString();
+    auto datatype = DataType(raw_type);
+
+    const auto shape = tensor.get("shape", Json::arrayValue);
+    size_t size = 1;
+    for (const auto &index : shape) {
+      size *= index.asInt64();
+    }
+
+    sizes.push_back(size * datatype.size());
+  }
+  return sizes;
+}
+
 std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
   const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offset,
   const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offset) {
