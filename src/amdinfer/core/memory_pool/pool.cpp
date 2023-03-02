@@ -19,6 +19,7 @@
 
 #include "amdinfer/core/memory_pool/pool.hpp"
 
+#include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"
 
@@ -31,8 +32,8 @@ MemoryPool::MemoryPool() {
                           std::make_unique<CpuAllocator>(kDefaultCpuBlockSize));
 }
 
-Memory MemoryPool::get(
-  const std::initializer_list<MemoryAllocators>& allocators, size_t size) {
+std::unique_ptr<Buffer> MemoryPool::get(
+  const std::vector<MemoryAllocators>& allocators, size_t size) {
   for (const auto& allocator : allocators) {
     void* address = nullptr;
     try {
@@ -41,14 +42,16 @@ Memory MemoryPool::get(
       continue;
     }
     if (address != nullptr) {
-      return {allocator, address};
+      return std::make_unique<CpuBuffer>(address, allocator);
     }
   }
   throw runtime_error("Memory could not be allocated");
 }
 
-void MemoryPool::put(Memory memory) {
-  const auto [allocator, address] = memory;
+void MemoryPool::put(std::unique_ptr<Buffer> memory) {
+  auto* buffer = dynamic_cast<CpuBuffer*>(memory.get());
+  const auto allocator = buffer->getAllocator();
+  const auto* address = buffer->data(0);
   allocators_.at(allocator)->put(address);
 }
 

@@ -23,7 +23,9 @@
 #include <cstddef>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
+#include "amdinfer/buffers/buffer.hpp"
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/core/memory_pool/memory_allocator.hpp"
 
@@ -37,9 +39,9 @@ class MemoryPool {
  public:
   MemoryPool();
 
-  Memory get(const std::initializer_list<MemoryAllocators>& allocators,
-             size_t size);
-  void put(Memory memory);
+  std::unique_ptr<Buffer> get(const std::vector<MemoryAllocators>& allocators,
+                              size_t size);
+  void put(std::unique_ptr<Buffer> memory);
 
  private:
   std::unordered_map<MemoryAllocators, std::unique_ptr<MemoryAllocator>>

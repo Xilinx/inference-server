@@ -20,6 +20,7 @@
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"
 
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 #include "amdinfer/core/exceptions.hpp"
@@ -43,6 +44,7 @@ void* CpuAllocator::get(size_t size) {
   if (best != end) {
     if (best->size == size) {
       best->free = false;
+      std::cout << "Matched " << size << " bytes\n";
       return best->address;
     }
     const auto& new_block =
@@ -50,6 +52,7 @@ void* CpuAllocator::get(size_t size) {
     assert(end == headers_.end());
     best->size -= size;
     best->address += size;
+    std::cout << "Partitioned " << size << " bytes\n";
     return new_block->address;
   }
 
@@ -72,6 +75,7 @@ void* CpuAllocator::get(size_t size) {
     // foo.next = std::prev(end);
   }
 
+  std::cout << "Allocated " << size << " bytes\n";
   return retval;
 }
 

@@ -29,7 +29,7 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for HardBatcher
+#include "amdinfer/batching/soft.hpp"          // for HardBatcher
 #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
@@ -58,7 +58,7 @@ class Echo : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -68,9 +68,10 @@ class Echo : public Worker {
   // workers define what batcher implementation should be used for them.
   // if not explicitly defined here, a default value is used from worker.hpp.
   using Worker::makeBatcher;
-  std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, ParameterMap* parameters) override {
-    return this->makeBatcher<HardBatcher>(num, parameters);
+  std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
+                                                    ParameterMap* parameters,
+                                                    MemoryPool* pool) override {
+    return this->makeBatcher<SoftBatcher>(num, parameters, pool);
   };
 };
 
@@ -95,15 +96,9 @@ void Echo::doInit(ParameterMap* parameters) {
   this->batch_size_ = batch_size;
 }
 
-size_t Echo::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::Uint32);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         1 * this->batch_size_, DataType::Uint32);
-  return buffer_num;
+std::vector<MemoryAllocators> Echo::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void Echo::doAcquire(ParameterMap* parameters) {
@@ -163,11 +158,15 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 
         InferenceResponseOutput output;
         output.setDatatype(DataType::Uint32);
-        std::string output_name = outputs[i].getName();
-        if (output_name.empty()) {
-          output.setName(inputs[i].getName());
+        if (outputs.size() < i) {
+          std::string output_name = outputs[i].getName();
+          if (output_name.empty()) {
+            output.setName(inputs[i].getName());
+          } else {
+            output.setName(output_name);
+          }
         } else {
-          output.setName(output_name);
+          output.setName(inputs[i].getName());
         }
         output.setShape({1});
         std::vector<std::byte> buffer;

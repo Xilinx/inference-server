@@ -23,6 +23,7 @@
 
 namespace amdinfer {
 
+#ifdef AMDINFER_ENABLE_HTTP
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client(&server_);
@@ -51,5 +52,6 @@ TEST_F(HttpFixture, Ordered) {
     EXPECT_FALSE(resp.isError());
   }
 }
+#endif
 
 }  // namespace amdinfer

@@ -75,8 +75,8 @@ add_dependencies(model_repository lib_config)
 
 add_subdirectory(memory_pool) # sets MEMORY_POOL
 
-add_library(core STATIC ${CORE_OBJS})
-target_link_libraries(core INTERFACE ${targets} ${MEMORY_POOL})
+add_library(core STATIC ${CORE_OBJS} ${MEMORY_POOL})
+target_link_libraries(core INTERFACE ${targets} memory_pool)
 set_target_options(core)
 
 set(CORE_OBJS ${CORE_OBJS} PARENT_SCOPE)

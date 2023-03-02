@@ -31,6 +31,7 @@
 #include "amdinfer/batching/soft.hpp"
 #include "amdinfer/buffers/buffer.hpp"
 #include "amdinfer/build_options.hpp"
+#include "amdinfer/core/memory_pool/pool.hpp"
 #include "amdinfer/core/predict_api.hpp"
 #include "amdinfer/observation/logging.hpp"
 
@@ -84,7 +85,7 @@ class Worker {
     this->doInit(parameters);
   }
   /// Allocate some buffers that are used to hold input and output data
-  size_t allocate(size_t num) {
+  std::vector<MemoryAllocators> allocate(size_t num) {
     this->status_ = WorkerStatus::Allocate;
     return this->doAllocate(num);
   }
@@ -147,6 +148,8 @@ class Worker {
     this->output_buffers_ = buffers;
   }
 
+  void setPool(MemoryPool* pool) { pool_ = pool; }
+
   [[nodiscard]] uint32_t getMaxBufferNum() const {
     return this->max_buffer_num_;
   }
@@ -155,15 +158,16 @@ class Worker {
   [[nodiscard]] WorkerStatus getStatus() const { return this->status_; }
 
   virtual std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, ParameterMap* parameters) {
-    return this->makeBatcher<SoftBatcher>(num, parameters);
+    int num, ParameterMap* parameters, MemoryPool* pool) {
+    return this->makeBatcher<SoftBatcher>(num, parameters, pool);
   }
 
   template <typename T>
   std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
-                                                    ParameterMap* parameters) {
+                                                    ParameterMap* parameters,
+                                                    MemoryPool* pool) {
     std::vector<std::unique_ptr<Batcher>> batchers;
-    batchers.emplace_back(std::make_unique<T>(parameters));
+    batchers.emplace_back(std::make_unique<T>(pool, parameters));
     for (int i = 1; i < num; i++) {
       batchers.push_back(
         std::make_unique<T>(*dynamic_cast<T*>(batchers.back().get())));
@@ -183,12 +187,13 @@ class Worker {
   uint32_t max_buffer_num_;
   size_t batch_size_;
   ModelMetadata metadata_;
+  MemoryPool* pool_;
 
  private:
   /// Perform low-cost initialization of the worker
   virtual void doInit(ParameterMap* parameters) = 0;
   /// Allocate some buffers that are used to hold input and output data
-  virtual size_t doAllocate(size_t num) = 0;
+  virtual std::vector<MemoryAllocators> doAllocate(size_t num) = 0;
   /// Acquire any hardware resources or perform high-cost initialization
   virtual void doAcquire(ParameterMap* parameters) = 0;
   /**

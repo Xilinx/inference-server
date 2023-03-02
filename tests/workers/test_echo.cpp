@@ -92,7 +92,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
     auto add_id = params.add_id;
     auto multiplier = params.multiplier;
 
-    EXPECT_FALSE(response.isError());
+    ASSERT_FALSE(response.isError());
     EXPECT_EQ(response.getModel(), "echo");
     auto outputs = response.getOutputs();
     EXPECT_EQ(outputs.size(), multiplier);

@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets buffer vector_buffer)
+list(APPEND targets buffer cpu)
 
-if(${AMDINFER_ENABLE_VITIS})
-  set(targets ${targets} vart_tensor_buffer)
-endif()
+# if(${AMDINFER_ENABLE_VITIS})
+#   set(targets ${targets} vart_tensor_buffer)
+# endif()
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
@@ -30,4 +30,4 @@ endforeach()
 add_library(buffers STATIC ${BUFFERS_OBJS})
 set_target_options(buffers)
 
-# set(BUFFERS_OBJS ${BUFFERS_OBJS} PARENT_SCOPE)
+set(BUFFERS_OBJS ${BUFFERS_OBJS} PARENT_SCOPE)

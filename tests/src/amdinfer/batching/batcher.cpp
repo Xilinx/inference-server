@@ -41,110 +41,111 @@
 
 namespace amdinfer {
 
-/**
- * @brief For testing purposes, this fake C++ interface returns a
- * fakeInferenceRequest object similar to how the real one does.
- *
- */
-class FakeInterface : public Interface {
- public:
-  explicit FakeInterface(InferenceRequestInput request);
+// /**
+//  * @brief For testing purposes, this fake C++ interface returns a
+//  * fakeInferenceRequest object similar to how the real one does.
+//  *
+//  */
+// class FakeInterface : public Interface {
+//  public:
+//   explicit FakeInterface(InferenceRequestInput request);
 
-  std::shared_ptr<InferenceRequest> getRequest(
-    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
-    const BufferRawPtrs &output_buffers,
-    std::vector<size_t> &output_offsets) override;
+//   std::shared_ptr<InferenceRequest> getRequest(
+//     const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+//     const BufferRawPtrs &output_buffers,
+//     std::vector<size_t> &output_offsets) override;
 
-  size_t getInputSize() override;
-  void errorHandler(const std::exception &e) override;
-  std::promise<amdinfer::InferenceResponse> *getPromise();
+//   size_t getInputSize() override;
+//   void errorHandler(const std::exception &e) override;
+//   std::promise<amdinfer::InferenceResponse> *getPromise();
 
- private:
-  InferenceRequestInput request_;
-  InferenceResponsePromisePtr promise_;
-};
+//  private:
+//   InferenceRequestInput request_;
+//   InferenceResponsePromisePtr promise_;
+// };
 
-FakeInterface::FakeInterface(InferenceRequestInput request)
-  : request_(std::move(request)) {
-  this->promise_ =
-    std::make_unique<std::promise<amdinfer::InferenceResponse>>();
-}
+// FakeInterface::FakeInterface(InferenceRequestInput request)
+//   : request_(std::move(request)) {
+//   this->promise_ =
+//     std::make_unique<std::promise<amdinfer::InferenceResponse>>();
+// }
 
-size_t FakeInterface::getInputSize() { return 1; }
+// size_t FakeInterface::getInputSize() { return 1; }
 
-std::promise<amdinfer::InferenceResponse> *FakeInterface::getPromise() {
-  return this->promise_.get();
-}
+// std::promise<amdinfer::InferenceResponse> *FakeInterface::getPromise() {
+//   return this->promise_.get();
+// }
 
-void fakeCppCallback(const InferenceResponsePromisePtr &promise,
-                     const InferenceResponse &response) {
-  promise->set_value(response);
-}
+// void fakeCppCallback(const InferenceResponsePromisePtr &promise,
+//                      const InferenceResponse &response) {
+//   promise->set_value(response);
+// }
 
-std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
-  const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
-  const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
-  auto request = std::make_shared<FakeInferenceRequest>(
-    this->request_, input_buffers, input_offsets, output_buffers,
-    output_offsets);
-  Callback callback = [this](const InferenceResponse &response) {
-    fakeCppCallback(this->promise_, response);
-  };
-  request->setCallback(std::move(callback));
-  return request;
-}
+// std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
+//   const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+//   const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
+//   auto request = std::make_shared<FakeInferenceRequest>(
+//     this->request_, input_buffers, input_offsets, output_buffers,
+//     output_offsets);
+//   Callback callback = [this](const InferenceResponse &response) {
+//     fakeCppCallback(this->promise_, response);
+//   };
+//   request->setCallback(std::move(callback));
+//   return request;
+// }
 
-void FakeInterface::errorHandler(const std::exception &e) {
-  AMDINFER_LOG_ERROR(this->getLogger(), e.what());
-  (void)e;  // suppress unused variable warning
-}
+// void FakeInterface::errorHandler(const std::exception &e) {
+//   AMDINFER_LOG_ERROR(this->getLogger(), e.what());
+//   (void)e;  // suppress unused variable warning
+// }
 
-void Batcher::run(WorkerInfo *worker) {
-  auto thread_name = "batch" + this->getName();
-  util::setThreadName(thread_name);
-  InterfacePtr req;
-  bool run = true;
+// void Batcher::run(WorkerInfo *worker) {
+//   auto thread_name = "batch" + this->getName();
+//   util::setThreadName(thread_name);
+//   InterfacePtr req;
+//   bool run = true;
 
-  while (run) {
-    auto batch = std::make_unique<Batch>(worker);
-    auto input_buffers = batch->getRawInputBuffers();
-    auto output_buffers = batch->getRawOutputBuffers();
-    std::vector<size_t> input_offset(input_buffers.size(), 0);
-    std::vector<size_t> output_offset(output_buffers.size(), 0);
+//   while (run) {
+//     auto batch = std::make_unique<Batch>(worker);
+//     auto input_buffers = batch->getRawInputBuffers();
+//     auto output_buffers = batch->getRawOutputBuffers();
+//     std::vector<size_t> input_offset(input_buffers.size(), 0);
+//     std::vector<size_t> output_offset(output_buffers.size(), 0);
 
-    // wait for the first request
-    this->input_queue_->wait_dequeue(req);
-    AMDINFER_LOG_DEBUG(
-      logger_, "Got initial request of a new batch for " + this->model_);
+//     // wait for the first request
+//     this->input_queue_->wait_dequeue(req);
+//     AMDINFER_LOG_DEBUG(
+//       logger_, "Got initial request of a new batch for " + this->model_);
 
-    if (req == nullptr) {
-      break;
-    }
+//     if (req == nullptr) {
+//       break;
+//     }
 
-#ifdef AMDINFER_ENABLE_TRACING
-    auto trace = req->getTrace();
-    trace->startSpan("fake_batcher");
-#endif
-    req->getInputSize();  // initialize the req object
-    auto new_req = req->getRequest(input_buffers, input_offset, output_buffers,
-                                   output_offset);
+// #ifdef AMDINFER_ENABLE_TRACING
+//     auto trace = req->getTrace();
+//     trace->startSpan("fake_batcher");
+// #endif
+//     req->getInputSize();  // initialize the req object
+//     auto new_req = req->getRequest(input_buffers, input_offset,
+//     output_buffers,
+//                                    output_offset);
 
-    batch->addRequest(new_req);
+//     batch->addRequest(new_req);
 
-#ifdef AMDINFER_ENABLE_TRACING
-    trace->endSpan();
-    batch->addTrace(std::move(trace));
-#endif
-#ifdef AMDINFER_ENABLE_METRICS
-    batch->addTime(req->getTime());
-#endif
-    // batch_size += 1;
+// #ifdef AMDINFER_ENABLE_TRACING
+//     trace->endSpan();
+//     batch->addTrace(std::move(trace));
+// #endif
+// #ifdef AMDINFER_ENABLE_METRICS
+//     batch->addTime(req->getTime());
+// #endif
+//     // batch_size += 1;
 
-    if (!batch->empty()) {
-      AMDINFER_LOG_DEBUG(logger_, "Enqueuing batch for " + this->model_);
-      this->output_queue_->enqueue(std::move(batch));
-    }
-  }
-}
+//     if (!batch->empty()) {
+//       AMDINFER_LOG_DEBUG(logger_, "Enqueuing batch for " + this->model_);
+//       this->output_queue_->enqueue(std::move(batch));
+//     }
+//   }
+// }
 
 }  // namespace amdinfer

@@ -38,6 +38,8 @@
 namespace amdinfer {
 class Buffer;
 class WorkerInfo;
+class MemoryPool;
+enum class MemoryAllocators;
 }  // namespace amdinfer
 
 namespace amdinfer {
@@ -52,24 +54,13 @@ enum class BatcherStatus { New, Run, Inactive, Dead };
  */
 class Batch {
  public:
-  explicit Batch(const WorkerInfo* worker);
-  /// Copy constructor
-  Batch(Batch const&) = delete;
-  /// Copy assignment constructor
-  Batch& operator=(const Batch&) = delete;
-  /// Move constructor
-  Batch(Batch&& other) = default;
-  /// Move assignment constructor
-  Batch& operator=(Batch&& other) = default;
-  /// Destructor
-  ~Batch();
-
   void addRequest(InferenceRequestPtr request);
 
+  void setBuffers(BufferPtrs inputs, BufferPtrs outputs);
   [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
   [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
-  [[nodiscard]] const BufferPtrs& getInputBuffers() const;
-  [[nodiscard]] const BufferPtrs& getOutputBuffers() const;
+  [[nodiscard]] const std::vector<BufferPtr>& getInputBuffers() const;
+  [[nodiscard]] const std::vector<BufferPtr>& getOutputBuffers() const;
   [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
   [[nodiscard]] std::vector<Buffer*> getRawOutputBuffers() const;
 
@@ -115,8 +106,8 @@ using BatchPtrQueue = BlockingQueue<BatchPtr>;
 class Batcher {
  public:
   /// Construct a new Batcher object
-  Batcher();
-  explicit Batcher(ParameterMap* parameters);
+  explicit Batcher(MemoryPool* pool);
+  Batcher(MemoryPool* pool, ParameterMap* parameters);
   /**
    * @brief Construct a new Batcher object
    *
@@ -135,7 +126,7 @@ class Batcher {
    *
    * @param worker
    */
-  void start(WorkerInfo* worker);
+  void start(const std::vector<MemoryAllocators>& allocator);
   /**
    * @brief Set the batch size for the batcher
    *
@@ -157,7 +148,7 @@ class Batcher {
   /// Get the batcher's output queue (used to push batches to the worker group)
   BatchPtrQueue* getOutputQueue();
 
-  void run(WorkerInfo* worker);
+  void run(const std::vector<MemoryAllocators>& allocators);
 
   BatcherStatus getStatus();
 
@@ -182,6 +173,7 @@ class Batcher {
   std::thread thread_;
   std::string model_;
   ParameterMap parameters_;
+  MemoryPool* pool_;
 
  private:
   /**
@@ -190,7 +182,7 @@ class Batcher {
    *
    * @param worker pointer to this batcher's worker [group]
    */
-  virtual void doRun(WorkerInfo* worker) = 0;
+  virtual void doRun(const std::vector<MemoryAllocators>& worker) = 0;
 
   BatcherStatus status_;
 

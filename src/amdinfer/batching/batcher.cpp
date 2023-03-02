@@ -25,8 +25,9 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/buffers/buffer.hpp"       // IWYU pragma: keep
-#include "amdinfer/core/interface.hpp"       // IWYU pragma: keep
+#include "amdinfer/buffers/buffer.hpp"  // IWYU pragma: keep
+#include "amdinfer/core/interface.hpp"  // IWYU pragma: keep
+#include "amdinfer/core/memory_pool/pool.hpp"
 #include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Loggers:...
 
@@ -38,7 +39,7 @@ namespace amdinfer {
  *
  */
 
-Batcher::Batcher() {
+Batcher::Batcher(MemoryPool* pool) : pool_(pool) {
   this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
   this->status_ = BatcherStatus::New;
@@ -47,7 +48,7 @@ Batcher::Batcher() {
 #endif
 }
 
-Batcher::Batcher(ParameterMap* parameters) : Batcher() {
+Batcher::Batcher(MemoryPool* pool, ParameterMap* parameters) : Batcher(pool) {
   if (parameters != nullptr) {
     this->parameters_ = *parameters;
   }
@@ -64,9 +65,9 @@ Batcher::Batcher(const Batcher& batcher) {
   this->model_ = batcher.model_;
 }
 
-void Batcher::start(WorkerInfo* worker) {
+void Batcher::start(const std::vector<MemoryAllocators>& allocators) {
   this->status_ = BatcherStatus::Run;
-  this->thread_ = std::thread(&Batcher::run, this, worker);
+  this->thread_ = std::thread(&Batcher::run, this, allocators);
 }
 
 void Batcher::setBatchSize(size_t batch_size) {
@@ -87,8 +88,8 @@ void Batcher::enqueue(InterfacePtr request) {
   this->input_queue_->enqueue(std::move(request));
 }
 
-void Batcher::run(WorkerInfo* worker) {
-  this->doRun(worker);
+void Batcher::run(const std::vector<MemoryAllocators>& allocators) {
+  this->doRun(allocators);
   this->status_ = BatcherStatus::Inactive;
 }
 
@@ -102,16 +103,6 @@ void Batcher::end() {
 #ifdef AMDINFER_ENABLE_LOGGING
 const Logger& Batcher::getLogger() const { return logger_; }
 #endif
-
-Batch::Batch(const WorkerInfo* worker)
-  : worker_(worker),
-    input_buffers_(worker->getInputBuffer()),
-    output_buffers_(worker->getOutputBuffer()) {}
-
-Batch::~Batch() {
-  worker_->putInputBuffer(std::move(input_buffers_));
-  worker_->putOutputBuffer(std::move(output_buffers_));
-}
 
 void Batch::addRequest(InferenceRequestPtr request) {
   requests_.push_back(std::move(request));
@@ -163,6 +154,11 @@ size_t Batch::size() const {
 size_t Batch::getInputSize() const { return input_buffers_.size(); }
 
 size_t Batch::getOutputSize() const { return output_buffers_.size(); }
+
+void Batch::setBuffers(BufferPtrs inputs, BufferPtrs outputs) {
+  input_buffers_ = std::move(inputs);
+  output_buffers_ = std::move(outputs);
+}
 
 #ifdef AMDINFER_ENABLE_TRACING
 void Batch::addTrace(TracePtr trace) { traces_.push_back(std::move(trace)); }

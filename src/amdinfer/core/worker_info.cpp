@@ -34,9 +34,10 @@
 #include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Bat...
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument, external_...
 #include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/parameters.hpp"   // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"  // for ModelMetadata
-#include "amdinfer/workers/worker.hpp"    // for Worker, WorkerStatus, Worke...
+#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"       // for ModelMetadata
+#include "amdinfer/workers/worker.hpp"  // for Worker, WorkerStatus, Worke...
 
 namespace amdinfer {
 
@@ -104,11 +105,12 @@ workers::Worker* getWorker(const std::string& name) {
   return worker;
 }
 
-WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters) {
+WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
+                       MemoryPool* pool) {
   this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
   this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
 
-  this->addAndStartWorker(name, parameters);
+  this->addAndStartWorker(name, parameters, pool);
 }
 
 WorkerInfo::~WorkerInfo() {
@@ -119,23 +121,21 @@ WorkerInfo::~WorkerInfo() {
 }
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   ParameterMap* parameters) {
+                                   ParameterMap* parameters, MemoryPool* pool) {
   auto* worker = getWorker(name);
   worker->init(parameters);
 
-  auto max_buffers = worker->getMaxBufferNum();
+  // auto max_buffers = worker->getMaxBufferNum();
   worker->setInputBuffers(this->input_buffer_ptr_.get());
   worker->setOutputBuffers(this->output_buffer_ptr_.get());
+  std::vector<MemoryAllocators> allocators;
   try {
-    auto buffer_num = worker->allocate(kNumBufferAuto);
-    this->buffer_num_ += buffer_num;
+    allocators = worker->allocate(kNumBufferAuto);
   } catch (const std::exception& e) {
     throw external_error(e.what());
   } catch (...) {
     throw runtime_error("Unknown error occurred");
   }
-  this->max_buffer_num_ =
-    max_buffers == UINT_MAX ? UINT_MAX : this->max_buffer_num_ + max_buffers;
 
   try {
     worker->acquire(parameters);
@@ -146,13 +146,14 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   }
 
   this->batch_size_ = worker->getBatchSize();
+  worker->setPool(pool);
 
   if (this->batchers_.empty()) {
     int32_t batcher_count = 1;
     if (parameters->has("batchers")) {
       batcher_count = parameters->get<int32_t>("batchers");
     }
-    this->batchers_ = worker->makeBatcher(batcher_count, parameters);
+    this->batchers_ = worker->makeBatcher(batcher_count, parameters, pool);
 
     for (const auto& batcher : this->batchers_) {
       batcher->setName(name);
@@ -162,7 +163,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
 
   for (const auto& batcher : this->batchers_) {
     if (batcher->getStatus() != BatcherStatus::Run) {
-      batcher->start(this);
+      batcher->start(allocators);
     }
   }
   auto thread = worker->spawn(this->batchers_[0]->getOutputQueue());
@@ -262,24 +263,6 @@ void WorkerInfo::putInputBuffer(BufferPtrs&& buffer) const {
 
 void WorkerInfo::putOutputBuffer(BufferPtrs&& buffer) const {
   this->output_buffer_ptr_->enqueue(std::move(buffer));
-}
-
-bool WorkerInfo::inputSizeValid(size_t size) const {
-  if (size <= this->getBufferNum()) {
-    return true;
-  }
-  if (size <= this->getMaxBufferNum()) {
-    return false;
-  }
-  throw invalid_argument("Too many input tensors for this model");
-}
-
-void WorkerInfo::allocate(size_t request_size) {
-  // TODO(varunsh): can result in deadlock in manager if allocated num !=
-  // request
-  auto allocated =
-    this->workers_.begin()->second->allocate(request_size - this->buffer_num_);
-  this->buffer_num_ += allocated;
 }
 
 ModelMetadata WorkerInfo::getMetadata() const {
