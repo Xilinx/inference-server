@@ -59,7 +59,7 @@ class Batch {
   void setBuffers(BufferPtrs inputs, BufferPtrs outputs);
   [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
   [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
-  [[nodiscard]] const std::vector<BufferPtr>& getInputBuffers() const;
+  [[nodiscard]] std::vector<BufferPtr> getInputBuffers();
   [[nodiscard]] const std::vector<BufferPtr>& getOutputBuffers() const;
   [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
   [[nodiscard]] std::vector<Buffer*> getRawOutputBuffers() const;

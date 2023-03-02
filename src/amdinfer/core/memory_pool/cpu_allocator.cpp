@@ -110,6 +110,7 @@ void CpuAllocator::put(const void* address) {
   } else {
     found->free = true;
   }
+  std::cout << "Freed memory\n";
 }
 
 }  // namespace amdinfer

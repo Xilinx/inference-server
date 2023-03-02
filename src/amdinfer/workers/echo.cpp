@@ -183,6 +183,11 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 
       // respond back to the client
       req->runCallbackOnce(resp);
+      auto buffers = batch->getInputBuffers();
+      for (auto& buffer : buffers) {
+        pool_->put(std::move(buffer));
+      }
+
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::PipelineEgressWorker);

@@ -117,7 +117,7 @@ std::vector<Buffer*> Batch::getRawInputBuffers() const {
   return buffers;
 }
 
-const BufferPtrs& Batch::getInputBuffers() const { return input_buffers_; }
+BufferPtrs Batch::getInputBuffers() { return std::move(input_buffers_); }
 
 std::vector<Buffer*> Batch::getRawOutputBuffers() const {
   std::vector<Buffer*> buffers;
