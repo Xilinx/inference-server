@@ -42,24 +42,23 @@
 #include <xir/graph/subgraph.hpp>       // for Subgraph
 #include <xir/tensor/tensor.hpp>        // for Tensor
 
-#include "amdinfer/batching/batcher.hpp"            // for BatchPtr, Batch
-#include "amdinfer/buffers/buffer.hpp"              // for Buffer
-#include "amdinfer/buffers/vart_tensor_buffer.hpp"  // for VartTensorBuffer
-#include "amdinfer/build_options.hpp"               // for AMDINFER_ENABLE_ME...
-#include "amdinfer/core/data_types.hpp"             // for DataType
-#include "amdinfer/core/data_types_internal.hpp"    // for mapXirToType
-#include "amdinfer/core/exceptions.hpp"             // for invalid_argument
-#include "amdinfer/core/parameters.hpp"             // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"            // for InferenceResponse
-#include "amdinfer/declarations.hpp"                // for BufferPtrs, Infere...
-#include "amdinfer/observation/observer.hpp"        // for Loggers, Metrics...
-#include "amdinfer/util/containers.hpp"             // for containerProduct
-#include "amdinfer/util/ctpl.hpp"                   // for ThreadPool
-#include "amdinfer/util/parse_env.hpp"              // for autoExpandEnvironm...
-#include "amdinfer/util/queue.hpp"                  // for BufferPtrsQueue
-#include "amdinfer/util/thread.hpp"                 // for setThreadName
-#include "amdinfer/util/timer.hpp"                  // for Timer
-#include "amdinfer/workers/worker.hpp"              // for Worker, kNumBuffer...
+#include "amdinfer/batching/batcher.hpp"          // for BatchPtr, Batch
+#include "amdinfer/buffers/buffer.hpp"            // for Buffer
+#include "amdinfer/build_options.hpp"             // for AMDINFER_ENABLE_ME...
+#include "amdinfer/core/data_types.hpp"           // for DataType
+#include "amdinfer/core/data_types_internal.hpp"  // for mapXirToType
+#include "amdinfer/core/exceptions.hpp"           // for invalid_argument
+#include "amdinfer/core/parameters.hpp"           // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"          // for InferenceResponse
+#include "amdinfer/declarations.hpp"              // for BufferPtrs, Infere...
+#include "amdinfer/observation/observer.hpp"      // for Loggers, Metrics...
+#include "amdinfer/util/containers.hpp"           // for containerProduct
+#include "amdinfer/util/ctpl.hpp"                 // for ThreadPool
+#include "amdinfer/util/parse_env.hpp"            // for autoExpandEnvironm...
+#include "amdinfer/util/queue.hpp"                // for BufferPtrsQueue
+#include "amdinfer/util/thread.hpp"               // for setThreadName
+#include "amdinfer/util/timer.hpp"                // for Timer
+#include "amdinfer/workers/worker.hpp"            // for Worker, kNumBuffer...
 
 namespace amdinfer::workers {
 
@@ -76,7 +75,7 @@ class XModel : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -91,7 +90,7 @@ class XModel : public Worker {
   std::unique_ptr<vart::Runner> runner_;
   std::vector<DataType> output_type_;
   std::vector<uint32_t> output_size_;
-  util::ThreadPool pool_;
+  util::ThreadPool thread_pool_;
 };
 
 std::thread XModel::spawn(BatchPtrQueue* input_queue) {
@@ -149,39 +148,9 @@ void XModel::doInit(ParameterMap* parameters) {
   }
 }
 
-size_t XModel::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-
-  for (size_t i = 0; i < buffer_num; i++) {
-    BufferPtrs vec;
-    auto input_tensors = subgraph_->get_sorted_input_tensors();
-    if (input_tensors.size() > 1) {
-      // rt-engine/vart does not support more than one input tensor
-      throw(
-        invalid_argument("Unsupported XModel with more than one input tensor"));
-    }
-    for (const auto* tensor : input_tensors) {
-      auto input_shape = tensor->get_shape();
-      auto input_type = tensor->get_data_type();
-      vec.emplace_back(std::make_unique<VartTensorBuffer>(
-        tensor->get_name(), input_shape, input_type));
-    }
-    this->input_buffers_->enqueue(std::move(vec));
-  }
-  for (size_t i = 0; i < buffer_num; i++) {
-    BufferPtrs vec;
-    auto output_tensors = subgraph_->get_sorted_output_tensors();
-    for (const auto* tensor : output_tensors) {
-      auto input_shape = tensor->get_shape();
-      auto input_type = tensor->get_data_type();
-      vec.emplace_back(std::make_unique<VartTensorBuffer>(
-        tensor->get_name(), input_shape, input_type));
-    }
-    this->output_buffers_->enqueue(std::move(vec));
-  }
-  return buffer_num;
+std::vector<MemoryAllocators> XModel::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void XModel::doAcquire(ParameterMap* parameters) {
@@ -191,7 +160,7 @@ void XModel::doAcquire(ParameterMap* parameters) {
   if (parameters->has("threads")) {
     threads = parameters->get<int32_t>("threads");
   }
-  this->pool_.resize(threads);
+  this->thread_pool_.resize(threads);
 
   runner_ = vart::Runner::create_runner(this->subgraph_, "run");
   auto input_tensors = runner_->get_input_tensors();
@@ -215,14 +184,15 @@ void XModel::doAcquire(ParameterMap* parameters) {
 }
 
 void XModel::doRun(BatchPtrQueue* input_queue) {
-  std::atomic_int32_t pool_size = 0;
-  const int max_pool_size = this->pool_.getSize() * 4;  // 4 is arbitrary
+  std::atomic_int32_t thread_pool_size = 0;
+  const int max_thread_pool_size =
+    this->thread_pool_.getSize() * 4;  // 4 is arbitrary
   util::setThreadName("XModel");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  const auto pool_delay = std::chrono::milliseconds(10);
+  const auto thread_pool_delay = std::chrono::milliseconds(10);
 
   while (true) {
     BatchPtr batch;
@@ -236,135 +206,146 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::PipelineIngressWorker);
 #endif
-    pool_size++;
-    if (pool_size > max_pool_size) {
-      std::this_thread::sleep_for(pool_delay);
+    thread_pool_size++;
+    if (thread_pool_size > max_thread_pool_size) {
+      std::this_thread::sleep_for(thread_pool_delay);
     }
-    this->pool_.push([this, batch = std::move(batch), &pool_size](int id) {
-      (void)id;  // suppress unused variable warning
+    this->thread_pool_.push(
+      [this, batch = std::move(batch), &thread_pool_size](int id) {
+        (void)id;  // suppress unused variable warning
 #ifdef AMDINFER_ENABLE_TRACING
-      for (unsigned int j = 0; j < batch->size(); j++) {
-        auto& trace = batch->getTrace(j);
-        trace->startSpan("xmodel");
-      }
+        for (unsigned int j = 0; j < batch->size(); j++) {
+          auto& trace = batch->getTrace(j);
+          trace->startSpan("xmodel");
+        }
 #endif
 
-      std::queue<std::pair<uint32_t, int>> futures;
-      std::vector<vart::TensorBuffer*> inputs_ptr;
-      std::vector<vart::TensorBuffer*> outputs_ptr;
+        std::queue<std::pair<uint32_t, int>> futures;
 
-      const auto& input_buffers = batch->getInputBuffers();
-      inputs_ptr.reserve(input_buffers.size());
-      const auto& output_buffers = batch->getOutputBuffers();
-      outputs_ptr.reserve(output_buffers.size());
+        auto input_buffers = batch->getInputBuffers();
+        // const auto& output_buffers = batch->getOutputBuffers();
 
-      for (const auto& buffer : input_buffers) {
-        logTraceBuffer(getLogger(), buffer->data(0));
-      }
-
-      for (const auto& buffer : input_buffers) {
-        auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-        inputs_ptr.emplace_back(vart->getTensorBuffer());
-      }
-      for (const auto& buffer : output_buffers) {
-        auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-        outputs_ptr.emplace_back(vart->getTensorBuffer());
-      }
-
-      for (auto* input : inputs_ptr) {
-        const auto* tensor = input->get_tensor();
-        input->sync_for_write(
-          0, tensor->get_element_num() / (tensor->get_shape())[0]);
-      }
-
-      futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
-
-      std::vector<InferenceResponse> responses;
-      responses.reserve(batch->size());
-
-      for (const auto& req : *batch) {
-        auto& resp = responses.emplace_back();
-        resp.setID(req->getID());
-        resp.setModel("xmodel");
-      }
-
-      while (!futures.empty()) {
-        auto job_id = futures.front();
-        futures.pop();
-        getRunner()->wait(job_id.first, -1);
-      }
-
-      for (auto* output : outputs_ptr) {
-        const auto* tensor = output->get_tensor();
-        output->sync_for_read(
-          0, tensor->get_element_num() / (tensor->get_shape())[0]);
-      }
-
-      const auto num_batches = batch->size();
-      for (unsigned int k = 0; k < num_batches; k++) {
-        const auto& req = batch->getRequest(k);
-        auto inputs = req->getInputs();
-        auto outputs = req->getOutputs();
-        auto& resp = responses[k];
-
-        const auto num_outputs = outputs.size();
-        for (unsigned int i = 0; i < num_outputs; i++) {
-          auto* output_index = output_buffers[i]->data(0);
-          InferenceResponseOutput output;
-          auto output_tensors = getRunner()->get_output_tensors();
-          auto output_shape = output_tensors[i]->get_shape();
-          std::vector<uint64_t> new_shape;
-          new_shape.reserve(output_shape.size() - 1);
-          for (size_t j = 0; j < output_shape.size() - 1; j++) {
-            new_shape.push_back(output_shape[j + 1]);
-          }
-          output.setShape(new_shape);
-
-          output.setDatatype(this->output_type_[i]);
-
-          std::vector<std::byte> buffer;
-          buffer.resize(this->output_size_[i] * sizeof(uint8_t));
-          memcpy(buffer.data(),
-                 reinterpret_cast<int8_t*>(output_index) +
-                   (i * this->output_size_[i]),
-                 this->output_size_[i] * sizeof(uint8_t));
-          output.setData(std::move(buffer));
-
-          std::string output_name = outputs[i].getName();
-
-          if (output_name.empty()) {
-            output.setName(inputs[0].getName());
-          } else {
-            output.setName(output_name);
-          }
-
-          resp.addOutput(output);
+        for (const auto& buffer : input_buffers) {
+          logTraceBuffer(getLogger(), buffer->data(0));
         }
 
+        auto inputs_ptr = getRunner()->get_inputs();
+        if (inputs_ptr.size() != input_buffers.size()) {
+          throw invalid_argument("Input size does not match model");
+        }
+        for (auto j = 0U; j < input_buffers.size(); ++j) {
+          auto* tensor = inputs_ptr.at(j);
+          auto& buffer = input_buffers.at(j);
+
+          const auto [addr, size] = tensor->data();
+          auto* tensor_addr = reinterpret_cast<void*>(addr);
+
+          std::memcpy(tensor_addr, buffer->data(0), size);
+        }
+        auto outputs_ptr = getRunner()->get_outputs();
+
+        for (auto* input : inputs_ptr) {
+          const auto* tensor = input->get_tensor();
+          input->sync_for_write(
+            0, tensor->get_element_num() / (tensor->get_shape())[0]);
+        }
+
+        futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
+
+        std::vector<InferenceResponse> responses;
+        responses.reserve(batch->size());
+
+        for (const auto& req : *batch) {
+          auto& resp = responses.emplace_back();
+          resp.setID(req->getID());
+          resp.setModel("xmodel");
+        }
+
+        while (!futures.empty()) {
+          auto job_id = futures.front();
+          futures.pop();
+          getRunner()->wait(job_id.first, -1);
+        }
+
+        for (auto* output : outputs_ptr) {
+          const auto* tensor = output->get_tensor();
+          output->sync_for_read(
+            0, tensor->get_element_num() / (tensor->get_shape())[0]);
+        }
+
+        const auto num_batches = batch->size();
+        for (unsigned int k = 0; k < num_batches; k++) {
+          const auto& req = batch->getRequest(k);
+          auto inputs = req->getInputs();
+          auto outputs = req->getOutputs();
+          auto& resp = responses[k];
+
+          const auto num_outputs = outputs_ptr.size();
+          for (unsigned int i = 0; i < num_outputs; i++) {
+            // auto* output_index = output_buffers[i]->data(0);
+            auto* output_index =
+              reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
+            InferenceResponseOutput output;
+            auto output_tensors = getRunner()->get_output_tensors();
+            auto output_shape = output_tensors[i]->get_shape();
+            std::vector<uint64_t> new_shape;
+            new_shape.reserve(output_shape.size() - 1);
+            for (size_t j = 0; j < output_shape.size() - 1; j++) {
+              new_shape.push_back(output_shape[j + 1]);
+            }
+            output.setShape(new_shape);
+
+            output.setDatatype(this->output_type_[i]);
+
+            std::vector<std::byte> buffer;
+            buffer.resize(this->output_size_[i] * sizeof(uint8_t));
+            memcpy(buffer.data(),
+                   reinterpret_cast<int8_t*>(output_index) +
+                     (i * this->output_size_[i]),
+                   this->output_size_[i] * sizeof(uint8_t));
+            output.setData(std::move(buffer));
+
+            std::string output_name;
+            if (i < outputs.size()) {
+              output_name = outputs[i].getName();
+            }
+
+            if (output_name.empty()) {
+              output.setName(inputs[0].getName());
+            } else {
+              output.setName(output_name);
+            }
+
+            resp.addOutput(output);
+          }
+
 #ifdef AMDINFER_ENABLE_TRACING
-        auto context = batch->getTrace(k)->propagate();
-        resp.setContext(std::move(context));
+          auto context = batch->getTrace(k)->propagate();
+          resp.setContext(std::move(context));
 #endif
 
-        req->runCallbackOnce(resp);
+          req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
-        Metrics::getInstance().incrementCounter(
-          MetricCounterIDs::PipelineEgressWorker);
-        util::Timer timer{batch->getTime(k)};
-        timer.stop();
-        auto duration = timer.count<std::micro>();
-        Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                              duration);
+          Metrics::getInstance().incrementCounter(
+            MetricCounterIDs::PipelineEgressWorker);
+          util::Timer timer{batch->getTime(k)};
+          timer.stop();
+          auto duration = timer.count<std::micro>();
+          Metrics::getInstance().observeSummary(
+            MetricSummaryIDs::RequestLatency, duration);
 #endif
-      }
-      pool_size--;
-    });
+        }
+        for (auto& buffer : input_buffers) {
+          pool_->put(std::move(buffer));
+        }
+        thread_pool_size--;
+      });
   }
   AMDINFER_LOG_INFO(logger, "XModel ending");
 }
 
 void XModel::doRelease() {}
-void XModel::doDeallocate() { this->pool_.stop(true); }
+void XModel::doDeallocate() { this->thread_pool_.stop(true); }
 void XModel::doDestroy() {}
 
 }  // namespace amdinfer::workers

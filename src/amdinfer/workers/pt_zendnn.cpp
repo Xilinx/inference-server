@@ -68,7 +68,7 @@ class PtZendnn : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -132,16 +132,9 @@ void PtZendnn::doInit(ParameterMap* parameters) {
   }
 }
 
-size_t PtZendnn::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         image_size_ * this->batch_size_, input_dt_);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         output_classes_ * this->batch_size_, DataType::FP32);
-  return buffer_num;
+std::vector<MemoryAllocators> PtZendnn::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void PtZendnn::doAcquire(ParameterMap* parameters) {
@@ -304,9 +297,13 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
                response_size * sizeof(float));
         output.setData(std::move(buffer));
 
-        std::string output_name = outputs[i].getName();
+        std::string output_name;
+        if (i < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
         if (output_name.empty()) {
-          output.setName(inputs[i].getName());
+          output.setName(inputs[0].getName());
         } else {
           output.setName(output_name);
         }
@@ -334,6 +331,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
                                             duration);
 #endif
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "PtZendnn ending");
 }

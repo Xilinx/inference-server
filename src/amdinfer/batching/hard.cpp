@@ -51,6 +51,12 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
     auto batch = std::make_unique<Batch>();
     size_t batch_size = 0;
 
+    std::vector<BufferPtr> input_buffers;
+    std::vector<size_t> input_offset;
+    std::vector<size_t> output_offset;
+
+    bool first_request = true;
+
     do {
       this->input_queue_->wait_dequeue(req);
 
@@ -76,26 +82,27 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         continue;
       }
 
-      auto input_sizes = req->getInputSizes();
-      std::vector<BufferPtr> input_buffers;
-      input_buffers.reserve(input_sizes.size());
-      // auto output_sizes = req->getOutputSizes();
-      // TODO(varunsh): the spec does not require the request to have outputs
-      // additionally, the output size could be variable so this should be
-      // allocated by the worker
+      if (first_request) {
+        auto input_sizes = req->getInputSizes();
+        input_buffers.reserve(input_sizes.size());
+        // auto output_sizes = req->getOutputSizes();
+        // TODO(varunsh): the spec does not require the request to have outputs
+        // additionally, the output size could be variable so this should be
+        // allocated by the worker
 
-      // std::vector<BufferPtr> output_buffers;
-      // output_buffers.reserve(output_sizes.size());
-      // std::vector<size_t> output_offset(output_buffers.size(), 0);
-      for (const auto& tensor_size : input_sizes) {
-        input_buffers.push_back(pool_->get(allocators, tensor_size));
+        // std::vector<BufferPtr> output_buffers;
+        // output_buffers.reserve(output_sizes.size());
+        // std::vector<size_t> output_offset(output_buffers.size(), 0);
+        for (const auto& tensor_size : input_sizes) {
+          input_buffers.push_back(
+            pool_->get(allocators, tensor_size * batch_size_));
+        }
+        // for(const auto& tensor_size : output_sizes) {
+        //   output_buffers.push_back(pool_->get(allocators, tensor_size));
+        // }
+        input_offset.resize(input_buffers.size());
+        batch->setBuffers(std::move(input_buffers), {});
       }
-      // for(const auto& tensor_size : output_sizes) {
-      //   output_buffers.push_back(pool_->get(allocators, tensor_size));
-      // }
-      std::vector<size_t> input_offset(input_buffers.size(), 0);
-      batch->setBuffers(std::move(input_buffers), {});
-      std::vector<size_t> output_offset;
 
       auto raw_inputs = batch->getRawInputBuffers();
       auto raw_outputs = batch->getRawOutputBuffers();
@@ -110,6 +117,9 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
       } else {
         batch->addRequest(new_req);
         batch_size++;
+        if (first_request) {
+          first_request = false;
+        }
 #ifdef AMDINFER_ENABLE_TRACING
         trace->endSpan();
         batch->addTrace(std::move(trace));

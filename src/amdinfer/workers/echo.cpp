@@ -158,15 +158,15 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 
         InferenceResponseOutput output;
         output.setDatatype(DataType::Uint32);
-        if (outputs.size() < i) {
-          std::string output_name = outputs[i].getName();
-          if (output_name.empty()) {
-            output.setName(inputs[i].getName());
-          } else {
-            output.setName(output_name);
-          }
+        std::string output_name;
+        if (i < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
+        if (output_name.empty()) {
+          output.setName(inputs[0].getName());
         } else {
-          output.setName(inputs[i].getName());
+          output.setName(output_name);
         }
         output.setShape({1});
         std::vector<std::byte> buffer;
@@ -183,11 +183,6 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 
       // respond back to the client
       req->runCallbackOnce(resp);
-      auto buffers = batch->getInputBuffers();
-      for (auto& buffer : buffers) {
-        pool_->put(std::move(buffer));
-      }
-
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
         MetricCounterIDs::PipelineEgressWorker);
@@ -198,6 +193,7 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
                                             duration);
 #endif
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "Echo ending");
 }

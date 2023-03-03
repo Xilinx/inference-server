@@ -82,7 +82,7 @@ class ResNet50Stream : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -124,15 +124,9 @@ const std::string kBoxHeightStr{"10"};
 /// number of categories returned for the image
 constexpr auto kResnetClassifications = 5;
 
-size_t ResNet50Stream::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::Uint8);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::Uint8);
-  return buffer_num;
+std::vector<MemoryAllocators> ResNet50Stream::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void ResNet50Stream::doAcquire(ParameterMap* parameters) {

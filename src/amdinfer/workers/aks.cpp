@@ -71,7 +71,7 @@ class Aks : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -102,15 +102,9 @@ void Aks::doInit(ParameterMap* parameters) {
   this->batch_size_ = batch_size;
 }
 
-size_t Aks::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::Fp32);
-  VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::Fp32);
-  return buffer_num;
+std::vector<MemoryAllocators> Aks::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void Aks::doAcquire(ParameterMap* parameters) {

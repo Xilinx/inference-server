@@ -88,7 +88,7 @@ class InvertImage : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -122,17 +122,9 @@ const auto kMaxImageHeight = 1080;
 const auto kMaxImageWidth = 1920;
 const auto kMaxImageChannels = 3;
 
-size_t InvertImage::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize =
-    kMaxImageWidth * kMaxImageHeight * kMaxImageChannels;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::Uint8);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::Uint8);
-  return buffer_num;
+std::vector<MemoryAllocators> InvertImage::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void InvertImage::doAcquire(ParameterMap* parameters) {
@@ -151,6 +143,9 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
+
+  std::vector<std::byte> output;
+  output.resize(kMaxImageHeight * kMaxImageWidth * kMaxImageChannels);
 
   while (true) {
     BatchPtr batch;
@@ -173,7 +168,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       auto outputs = req->getOutputs();
       for (unsigned int i = 0; i < inputs.size(); i++) {
         auto* input_buffer = inputs[i].getData();
-        auto* output_buffer = outputs[i].getData();
+        auto* output_buffer = output.data();
 
         auto input_shape = inputs[i].getShape();
 
@@ -192,7 +187,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
             invert<uint8_t*, true>(input_buffer, output_buffer, input_size);
           }
 
-          auto* output_data = static_cast<uint8_t*>(output_buffer);
+          auto* output_data = reinterpret_cast<uint8_t*>(output_buffer);
 
           std::vector<std::byte> buffer;
           buffer.resize(input_size);
@@ -233,9 +228,13 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         // if our output is explicitly named, use that name in response, or use
         // the input tensor's name if it's not defined.
-        std::string output_name = outputs[i].getName();
+        std::string output_name;
+        if (i < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
         if (output_name.empty()) {
-          output.setName(inputs[i].getName());
+          output.setName(inputs[0].getName());
         } else {
           output.setName(output_name);
         }
@@ -255,6 +254,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #endif
       req->runCallbackOnce(resp);
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "InvertImage ending");
 }

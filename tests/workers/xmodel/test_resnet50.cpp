@@ -74,7 +74,7 @@ void validate(const std::vector<InferenceResponse>& responses) {
 
   for (const auto& response : responses) {
     auto outputs = response.getOutputs();
-    EXPECT_EQ(outputs.size(), 1);
+    ASSERT_EQ(outputs.size(), 1);
     auto top_k = postprocess(outputs[0], k);
     for (auto j = 0U; j < k; ++j) {
       EXPECT_EQ(top_k.at(j), golden.at(j));

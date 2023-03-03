@@ -66,7 +66,7 @@ class EchoMulti : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -76,9 +76,10 @@ class EchoMulti : public Worker {
   // workers define what batcher implementation should be used for them.
   // if not explicitly defined here, a default value is used from worker.hpp.
   using Worker::makeBatcher;
-  std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, ParameterMap* parameters) override {
-    return this->makeBatcher<HardBatcher>(num, parameters);
+  std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
+                                                    ParameterMap* parameters,
+                                                    MemoryPool* pool) override {
+    return this->makeBatcher<HardBatcher>(num, parameters, pool);
   };
 };
 
@@ -103,28 +104,9 @@ void EchoMulti::doInit(ParameterMap* parameters) {
   this->batch_size_ = batch_size;
 }
 
-size_t EchoMulti::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-
-  for (size_t i = 0; i < buffer_num; ++i) {
-    BufferPtrs vec;
-    for (auto j = 0; j < kInputTensors; ++j) {
-      vec.emplace_back(std::make_unique<VectorBuffer>(
-        kInputLengths.at(j) * this->batch_size_, DataType::Uint32));
-    }
-    this->input_buffers_->enqueue(std::move(vec));
-  }
-  for (size_t i = 0; i < buffer_num; i++) {
-    BufferPtrs vec;
-    for (auto j = 0; j < kOutputTensors; ++j) {
-      vec.emplace_back(std::make_unique<VectorBuffer>(
-        kOutputLengths.at(j) * this->batch_size_, DataType::Uint32));
-    }
-    this->output_buffers_->enqueue(std::move(vec));
-  }
-  return buffer_num;
+std::vector<MemoryAllocators> EchoMulti::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void EchoMulti::doAcquire([[maybe_unused]] ParameterMap* parameters) {
@@ -193,7 +175,11 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
 
         InferenceResponseOutput output;
         output.setDatatype(DataType::Uint32);
-        std::string output_name = outputs[i].getName();
+        std::string output_name;
+        if (static_cast<size_t>(i) < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
         if (output_name.empty()) {
           output.setName(inputs[0].getName());
         } else {
@@ -226,6 +212,7 @@ void EchoMulti::doRun(BatchPtrQueue* input_queue) {
                                             duration);
 #endif
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "EchoMulti ending");
 }

@@ -73,7 +73,7 @@ class ResNet50 : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -113,15 +113,9 @@ constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
 constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
 
-size_t ResNet50::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::Uint8);
-  VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::Uint32);
-  return buffer_num;
+std::vector<MemoryAllocators> ResNet50::doAllocate(size_t num) {
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void ResNet50::doAcquire(ParameterMap* parameters) {
@@ -267,9 +261,13 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
                response_size * sizeof(int));
         output.setData(std::move(buffer));
 
-        std::string output_name = outputs[i].getName();
+        std::string output_name;
+        if (i < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
         if (output_name.empty()) {
-          output.setName(inputs[i].getName());
+          output.setName(inputs[0].getName());
         } else {
           output.setName(output_name);
         }
@@ -293,6 +291,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 #endif
       req->runCallbackOnce(resp);
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "ResNet50 ending");
 }

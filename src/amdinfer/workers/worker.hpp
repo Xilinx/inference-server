@@ -182,6 +182,13 @@ class Worker {
   [[nodiscard]] const Logger& getLogger() const { return logger_; };
 #endif
 
+  void returnInputBuffers(std::unique_ptr<Batch> batch) {
+    auto buffers = batch->getInputBuffers();
+    for (auto& buffer : buffers) {
+      pool_->put(std::move(buffer));
+    }
+  }
+
   BufferPtrsQueue* input_buffers_;
   BufferPtrsQueue* output_buffers_;
   uint32_t max_buffer_num_;

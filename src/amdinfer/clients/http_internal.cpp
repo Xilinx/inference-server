@@ -476,8 +476,9 @@ std::vector<size_t> DrogonHttp::getInputSizes() const {
   }
 
   for (const auto &tensor : inputs) {
-    const auto *raw_type = tensor.get("datatype", "UNKNOWN").asCString();
-    auto datatype = DataType(raw_type);
+    // using asCString() doesn't work -> the string is empty
+    const auto raw_type = tensor.get("datatype", "UNKNOWN").asString();
+    auto datatype = DataType(raw_type.c_str());
 
     const auto shape = tensor.get("shape", Json::arrayValue);
     size_t size = 1;

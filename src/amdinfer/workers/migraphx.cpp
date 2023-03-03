@@ -65,7 +65,7 @@ class MIGraphXWorker : public Worker {
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
+  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
@@ -293,7 +293,7 @@ void MIGraphXWorker::doInit(ParameterMap* parameters) {
  * @param num the number of buffers to add
  * @return size_t the number of buffers added
  */
-size_t MIGraphXWorker::doAllocate(size_t num) {
+std::vector<MemoryAllocators> MIGraphXWorker::doAllocate(size_t num) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -301,9 +301,6 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
   //
   // Allocate
   //
-  constexpr auto kBufferNum = 3U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
   // Allocate enough to hold buffer_num batches' worth of input sets.
   // Extra batches allow server to hold more requests at one time
   // todo:  this try/catch was observed to just get stuck when batch size
@@ -329,44 +326,8 @@ size_t MIGraphXWorker::doAllocate(size_t num) {
     max_buffer = std::max(max_buffer, asize);
   }
 
-  // Now, allocate the input and output buffers.
-
-  try {
-    for (const auto* aname : input_shapes.names()) {
-      auto ashape = input_shapes[aname];
-      auto llen = ashape.lengths();
-
-      // todo: test whether VectorBuffer::allocate() does this in the right
-      // order for multiple (kBufferNum) sets of buffers. It wasn't designed to
-      // be called in a loop like this.  Using 1 in place of kBufferNum
-
-      buffer_vec.emplace_back(
-        std::make_unique<VectorBuffer>(max_buffer, DataType::Uint8));
-    }
-    this->input_buffers_->enqueue(std::move(buffer_vec));
-
-    // Calculate max. output buffer size
-    size_t out_buffer_size{0};
-    migraphx::shapes output_shapes = this->prog_.get_output_shapes();
-    for (const auto& ash : output_shapes) {
-      out_buffer_size = std::max(out_buffer_size, ash.bytes());
-    }
-
-    // Output buffers aren't used by the engine at time of writing this,
-    // but allocate them anyway. (Use number of outputs for kBufferNum)
-    VectorBuffer::allocate(this->output_buffers_, output_shapes.size(),
-                           out_buffer_size, amdinfer::DataType::Int8);
-  } catch (...) {
-    AMDINFER_LOG_ERROR(
-      logger,
-      std::string("MIGraphXWorker couldn't allocate buffer (batch size ") +
-        std::to_string(batch_size_) + ")");
-    throw runtime_error{"MIGraphXWorker couldn't allocate buffer"};
-  }
-  AMDINFER_LOG_INFO(logger, std::string("MIGraphXWorker::doAllocate() added ") +
-                              std::to_string(buffer_num) + " buffers");
-
-  return buffer_num;
+  (void)num;
+  return {MemoryAllocators::Cpu};
 }
 
 void MIGraphXWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
@@ -625,6 +586,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
     }
 
     timer.add("batch_stop");
+    this->returnInputBuffers(std::move(batch));
     auto duration = timer.count<std::micro>("batch_start", "batch_stop");
     AMDINFER_LOG_INFO(
       logger, std::string("Finished migraphx batch processing; batch size: ") +
