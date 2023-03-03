@@ -480,7 +480,7 @@ class GrpcApiUnary : public Interface {
     return calldata_->getRequest().inputs_size();
   }
 
-  std::vector<size_t> getInputSizes() const override {
+  [[nodiscard]] std::vector<size_t> getInputSizes() const override {
     std::vector<size_t> sizes;
 
     auto inputs = calldata_->getRequest().inputs();

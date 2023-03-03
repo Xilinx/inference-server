@@ -72,7 +72,7 @@ class AksDetect : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
-  std::vector<MemoryAllocators> getAllocators() const override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
@@ -115,7 +115,6 @@ void AksDetect::doInit(ParameterMap* parameters) {
 constexpr auto kImageWidth = 1920;
 constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
-constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
 
 void AksDetect::doAcquire(ParameterMap* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING

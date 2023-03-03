@@ -69,7 +69,7 @@ class ResNet50 : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
-  std::vector<MemoryAllocators> getAllocators() const override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
@@ -113,7 +113,6 @@ void ResNet50::doInit(ParameterMap* parameters) {
 constexpr auto kImageWidth = 1920;
 constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
-constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
 
 void ResNet50::doAcquire(ParameterMap* parameters) {
   std::string path{

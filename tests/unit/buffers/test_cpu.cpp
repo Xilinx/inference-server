@@ -25,9 +25,7 @@
 namespace amdinfer {
 
 constexpr auto kBufferSize = 10;
-// constexpr auto kDataType = DataType::Int32;
-// constexpr auto kDataSize = types::getSize(kDataType);
-constexpr auto kTimeout = 1E6;  // 1E6 us = 1 s timeout
+constexpr auto kDataSize = 512;
 
 struct WriteData {
   template <typename T>
@@ -67,7 +65,7 @@ class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
 
   // void TearDown() override {}
 
-  std::vector<std::byte> memory_{512};
+  std::vector<std::byte> memory_{kDataSize};
   CpuBuffer buffer_;
 };
 

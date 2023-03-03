@@ -67,6 +67,7 @@ TEST(UnitCpuAllocator, ExceedingMax) {
   CpuAllocator allocator{sizeof(int), sizeof(int)};
 
   std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK(
     std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
     , EXPECT_STREQ(e.what(), "Too much requested");, runtime_error);
@@ -78,6 +79,7 @@ TEST(UnitCpuAllocator, BadFree) {
 
   const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
   const auto* bad_address = foo + 1;
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK(allocator.put(bad_address);
                      , EXPECT_STREQ(e.what(), "Address not found");
                      , runtime_error);

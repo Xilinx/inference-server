@@ -74,7 +74,7 @@ class Worker {
   virtual std::thread spawn(BatchPtrQueue* input_queue) = 0;
 
   /// Allocate some buffers that are used to hold input and output data
-  virtual std::vector<MemoryAllocators> getAllocators() const = 0;
+  [[nodiscard]] virtual std::vector<MemoryAllocators> getAllocators() const = 0;
 
   /// Perform low-cost initialization of the worker
   void init(ParameterMap* parameters) {

@@ -58,7 +58,8 @@ Batcher::Batcher(const Batcher& batcher)
   : batch_size_(batcher.batch_size_),
     input_queue_(batcher.input_queue_),
     output_queue_(batcher.output_queue_),
-    model_(batcher.model_) {
+    model_(batcher.model_),
+    pool_(batcher.pool_) {
   this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
   this->logger_ = Logger(Loggers::Server);

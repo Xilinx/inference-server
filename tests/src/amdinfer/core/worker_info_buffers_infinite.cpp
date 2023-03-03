@@ -34,8 +34,6 @@
 
 namespace amdinfer {
 
-constexpr auto kDefaultBufferNum = 10;
-
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
                        MemoryPool* pool) {
   this->batch_size_ = 1;

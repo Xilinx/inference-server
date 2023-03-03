@@ -72,7 +72,7 @@ class XModel : public Worker {
  public:
   XModel() : Worker("XModel", "XModel") {}
   std::thread spawn(BatchPtrQueue* input_queue) override;
-  std::vector<MemoryAllocators> getAllocators() const override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;

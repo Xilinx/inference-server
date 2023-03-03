@@ -162,9 +162,6 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
       } else {
         batch->addRequest(new_req);
         batch_size++;
-        if (first_request) {
-          first_request = false;
-        }
 #ifdef AMDINFER_ENABLE_TRACING
         trace->endSpan();
         batch->addTrace(std::move(trace));
@@ -173,6 +170,7 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         batch->addTime(req->getTime());
 #endif
       }
+      first_request = false;
     } while (batch_size % this->batch_size_ != 0 && run);
 
     if (!batch->empty()) {
