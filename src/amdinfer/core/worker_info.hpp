@@ -86,31 +86,6 @@ class WorkerInfo {
   /// unload all workers from this worker group
   void shutdown();
 
-  /**
-   * @brief Get an input buffer from this worker
-   *
-   * @return BufferPtrs
-   */
-  [[nodiscard]] BufferPtrs getInputBuffer() const;
-  /**
-   * @brief Get an output buffer from this worker
-   *
-   * @return BufferPtrs
-   */
-  [[nodiscard]] BufferPtrs getOutputBuffer() const;
-  /**
-   * @brief Return an input buffer to the worker
-   *
-   * @param buffer the buffer to return
-   */
-  void putInputBuffer(BufferPtrs&& buffer) const;
-  /**
-   * @brief Return an output buffer to the worker
-   *
-   * @param buffer the buffer to return
-   */
-  void putOutputBuffer(BufferPtrs&& buffer) const;
-
   /// get the number of workers in the group
   [[nodiscard]] size_t getGroupSize() const;
 
@@ -123,8 +98,6 @@ class WorkerInfo {
   std::map<std::thread::id, std::thread> worker_threads_;
   std::map<std::thread::id, workers::Worker*> workers_;
   std::vector<std::unique_ptr<Batcher>> batchers_;
-  BufferPtrsQueuePtr input_buffer_ptr_;
-  BufferPtrsQueuePtr output_buffer_ptr_;
   size_t batch_size_ = 1;
 
   friend class Manager;

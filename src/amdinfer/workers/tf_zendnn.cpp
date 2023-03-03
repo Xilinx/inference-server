@@ -43,20 +43,19 @@
 #include <utility>    // for pair, move
 #include <vector>     // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for Batch, BatchP...
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABL...
-#include "amdinfer/core/data_types.hpp"        // for DataType, Dat...
-#include "amdinfer/core/exceptions.hpp"        // for external_error
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResp...
-#include "amdinfer/declarations.hpp"           // for InferenceResp...
-#include "amdinfer/observation/logging.hpp"    // for Logger, PROTE...
-#include "amdinfer/observation/metrics.hpp"    // for Metrics, Metr...
-#include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumB...
+#include "amdinfer/batching/hard.hpp"        // for Batch, BatchP...
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABL...
+#include "amdinfer/core/data_types.hpp"      // for DataType, Dat...
+#include "amdinfer/core/exceptions.hpp"      // for external_error
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResp...
+#include "amdinfer/declarations.hpp"         // for InferenceResp...
+#include "amdinfer/observation/logging.hpp"  // for Logger, PROTE...
+#include "amdinfer/observation/metrics.hpp"  // for Metrics, Metr...
+#include "amdinfer/observation/tracing.hpp"  // for Trace
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumB...
 
 namespace tf = ::tensorflow;
 
@@ -76,14 +75,13 @@ class TfZendnn : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   // TF session and graphs
@@ -108,14 +106,12 @@ std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&TfZendnn::run, this, input_queue);
 }
 
+std::vector<MemoryAllocators> TfZendnn::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
+
 void TfZendnn::doInit(ParameterMap* parameters) {
   const auto default_batch_size = 1;
-  const int default_max_buffer_num = 64;
-
-  max_buffer_num_ = default_max_buffer_num;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num_ = parameters->get<int32_t>("max_buffer_num");
-  }
 
   auto batch_size = default_batch_size;
   if (parameters->has("batch_size")) {
@@ -151,11 +147,6 @@ void TfZendnn::doInit(ParameterMap* parameters) {
   const auto& logger = this->getLogger();
   AMDINFER_LOG_INFO(logger, logmsg);
 #endif
-}
-
-std::vector<MemoryAllocators> TfZendnn::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
 }
 
 void TfZendnn::doAcquire(ParameterMap* parameters) {
@@ -368,7 +359,6 @@ void TfZendnn::doRelease() {
   auto retval = this->session_->Close();
   assert(retval.ok());
 }
-void TfZendnn::doDeallocate() {}
 void TfZendnn::doDestroy() {}
 
 void* openLibrary(const char* library, int dlopen_flags) {

@@ -35,21 +35,20 @@
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for BatchPtr, Batch, Batch...
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"        // for DataType, operator<<
-#include "amdinfer/core/exceptions.hpp"        // for invalid_argument, runt...
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infe...
-#include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
-#include "amdinfer/observation/logging.hpp"    // for AMDINFER_LOG_INFO, AMD...
-#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
-#include "amdinfer/util/containers.hpp"        // for containerProduct
-#include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/hard.hpp"        // for BatchPtr, Batch, Batch...
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"      // for DataType, operator<<
+#include "amdinfer/core/exceptions.hpp"      // for invalid_argument, runt...
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infe...
+#include "amdinfer/declarations.hpp"         // for InferenceResponseOutput
+#include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_INFO, AMD...
+#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
+#include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/queue.hpp"           // for BufferPtrsQueue
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
 
 namespace amdinfer::workers {
 
@@ -62,14 +61,13 @@ class MIGraphXWorker : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   // the model file to be loaded.  Supported types are *.onnx and *.mxr
@@ -90,6 +88,10 @@ class MIGraphXWorker : public Worker {
 
 std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&MIGraphXWorker::run, this, input_queue);
+}
+
+std::vector<MemoryAllocators> MIGraphXWorker::getAllocators() const {
+  return {MemoryAllocators::Cpu};
 }
 
 // Enum-to-enum conversion to let us read data type from migraphx model.
@@ -281,41 +283,7 @@ void MIGraphXWorker::doInit(ParameterMap* parameters) {
   auto length = sh.lengths();
   migraphx::api::shapes output_shapes = prog_.get_output_shapes();
   this->batch_size_ = length[0];
-}
 
-/**
- * @brief doAllocate() allocates a queue of buffers for input/output.
- * A functioning doAllocate() is required or else the worker will
- * simply fail to respond to post requests.
- * doAllocate() may be called multiple times by the engine
- *  to allocate more buffer space if necessary.
- *
- * @param num the number of buffers to add
- * @return size_t the number of buffers added
- */
-std::vector<MemoryAllocators> MIGraphXWorker::doAllocate(size_t num) {
-#ifdef AMDINFER_ENABLE_LOGGING
-  const auto& logger = this->getLogger();
-#endif
-  AMDINFER_LOG_INFO(logger, "MIGraphXWorker::doAllocate");
-  //
-  // Allocate
-  //
-  // Allocate enough to hold buffer_num batches' worth of input sets.
-  // Extra batches allow server to hold more requests at one time
-  // todo:  this try/catch was observed to just get stuck when batch size
-  // is too big (approx. 56 for Yolov4 model); how to catch the error?
-
-  // Calculate the total number of bytes required for all inputs
-
-  BufferPtrs buffer_vec;
-
-  migraphx::program_parameter_shapes input_shapes =
-    this->prog_.get_parameter_shapes();
-
-  // Work out the max. size of any input buffer, in bytes.  We'll allocate all
-  // of them the same size in case a request puts them in mixed-up order.
-  size_t max_buffer(0);
   for (const auto* aname : input_shapes.names()) {
     migraphx::shape ashape = input_shapes[aname];
     auto llen = ashape.lengths();
@@ -323,11 +291,7 @@ std::vector<MemoryAllocators> MIGraphXWorker::doAllocate(size_t num) {
     auto asize = ashape.bytes();
     // size of a single request input (divide by batch size)
     input_sizes_[aname] = asize / *(ashape.lengths().begin());
-    max_buffer = std::max(max_buffer, asize);
   }
-
-  (void)num;
-  return {MemoryAllocators::Cpu};
 }
 
 void MIGraphXWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
@@ -597,7 +561,6 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 }
 
 void MIGraphXWorker::doRelease() {}
-void MIGraphXWorker::doDeallocate() {}
 void MIGraphXWorker::doDestroy() {}
 
 }  // namespace amdinfer::workers

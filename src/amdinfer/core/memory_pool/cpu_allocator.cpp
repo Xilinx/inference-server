@@ -45,7 +45,7 @@ void* CpuAllocator::get(size_t size) {
   if (best != end) {
     if (best->size == size) {
       best->free = false;
-      std::cout << "Matched " << size << " bytes\n";
+      // std::cout << "Matched " << size << " bytes\n";
       return best->address;
     }
     const auto& new_block =
@@ -53,7 +53,7 @@ void* CpuAllocator::get(size_t size) {
     assert(end == headers_.end());
     best->size -= size;
     best->address += size;
-    std::cout << "Partitioned " << size << " bytes\n";
+    // std::cout << "Partitioned " << size << " bytes\n";
     return new_block->address;
   }
 
@@ -76,7 +76,7 @@ void* CpuAllocator::get(size_t size) {
     // foo.next = std::prev(end);
   }
 
-  std::cout << "Allocated " << size << " bytes\n";
+  // std::cout << "Allocated " << size << " bytes\n";
   return retval;
 }
 
@@ -112,7 +112,7 @@ void CpuAllocator::put(const void* address) {
   } else {
     found->free = true;
   }
-  std::cout << "Freed memory\n";
+  // std::cout << "Freed memory\n";
 }
 
 }  // namespace amdinfer

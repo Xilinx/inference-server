@@ -56,7 +56,6 @@ foreach(worker ${workers})
   set(worker_name worker${worker_pascal})
 
   add_library(${worker_name} SHARED ${file_name}.cpp)
-  # target_link_libraries(${worker_name} PRIVATE buffers)
   target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
   set_target_options(${worker_name})
 

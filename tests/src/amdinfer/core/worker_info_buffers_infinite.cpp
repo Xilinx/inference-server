@@ -36,21 +36,19 @@ namespace amdinfer {
 
 constexpr auto kDefaultBufferNum = 10;
 
-WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters) {
-  this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->buffer_num_ = kDefaultBufferNum;
-  this->max_buffer_num_ = kDefaultBufferNum;
+WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
+                       MemoryPool* pool) {
   this->batch_size_ = 1;
 
-  this->addAndStartWorker(name, parameters);
+  this->addAndStartWorker(name, parameters, pool);
 }
 
 WorkerInfo::~WorkerInfo() = default;
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   ParameterMap* parameters) {
+                                   ParameterMap* parameters, MemoryPool* pool) {
   (void)name;
+  (void)pool;
   if (parameters == nullptr) {
     return;
   }
@@ -73,30 +71,5 @@ void WorkerInfo::unload() {}
 size_t WorkerInfo::getGroupSize() const { return 1; }
 
 void WorkerInfo::shutdown() {}
-
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-BufferPtrs WorkerInfo::getInputBuffer() const {
-  BufferPtrs buffer;
-  return buffer;
-}
-
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-BufferPtrs WorkerInfo::getOutputBuffer() const {
-  BufferPtrs buffer;
-  return buffer;
-}
-
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-void WorkerInfo::putInputBuffer([[maybe_unused]] BufferPtrs&& buffer) const {}
-
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-void WorkerInfo::putOutputBuffer([[maybe_unused]] BufferPtrs&& buffer) const {}
-
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-bool WorkerInfo::inputSizeValid([[maybe_unused]] size_t size) const {
-  return true;
-}
-
-void WorkerInfo::allocate([[maybe_unused]] size_t request_size) {}
 
 }  // namespace amdinfer

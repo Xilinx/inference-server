@@ -39,7 +39,7 @@ class Batch {
   [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
   [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
   [[nodiscard]] std::vector<BufferPtr> getInputBuffers();
-  [[nodiscard]] const std::vector<BufferPtr>& getOutputBuffers() const;
+  [[nodiscard]] std::vector<BufferPtr> getOutputBuffers();
   [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
   [[nodiscard]] std::vector<Buffer*> getRawOutputBuffers() const;
 

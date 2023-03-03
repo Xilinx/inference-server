@@ -53,12 +53,6 @@ class CpuBuffer : public Buffer {
 
   MemoryAllocators getAllocator() const { return allocator_; }
 
-  /**
-   * @brief Reset the internal write_counter_ prior to returning the buffer to
-   * a pool
-   */
-  void reset() override;
-
  private:
   MemoryAllocators allocator_;
   std::byte* data_;

@@ -72,14 +72,13 @@ class XModel : public Worker {
  public:
   XModel() : Worker("XModel", "XModel") {}
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   vart::RunnerExt* getRunner();
@@ -97,12 +96,15 @@ std::thread XModel::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&XModel::run, this, input_queue);
 }
 
+std::vector<MemoryAllocators> XModel::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
+
 vart::RunnerExt* XModel::getRunner() {
   return dynamic_cast<vart::RunnerExt*>(this->runner_.get());
 }
 
 void XModel::doInit(ParameterMap* parameters) {
-  const auto max_buffer_num = 50;
   const auto* aks_xmodel_root = std::getenv("AKS_XMODEL_ROOT");
   if (aks_xmodel_root == nullptr) {
     throw environment_not_set_error("AKS_XMODEL_ROOT not set");
@@ -110,11 +112,6 @@ void XModel::doInit(ParameterMap* parameters) {
   const auto default_path =
     std::string{aks_xmodel_root} +
     "/artifacts/u200_u250/resnet_v1_50_tf/resnet_v1_50_tf.xmodel";
-
-  max_buffer_num_ = max_buffer_num;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num_ = parameters->get<int32_t>("max_buffer_num");
-  }
 
   auto path = default_path;
   if (parameters->has("model")) {
@@ -146,11 +143,6 @@ void XModel::doInit(ParameterMap* parameters) {
   } else {
     this->kernel_ = this->subgraph_->get_attr<std::string>("kernel");
   }
-}
-
-std::vector<MemoryAllocators> XModel::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
 }
 
 void XModel::doAcquire(ParameterMap* parameters) {
@@ -345,8 +337,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 }
 
 void XModel::doRelease() {}
-void XModel::doDeallocate() { this->thread_pool_.stop(true); }
-void XModel::doDestroy() {}
+void XModel::doDestroy() { this->thread_pool_.stop(true); }
 
 }  // namespace amdinfer::workers
 

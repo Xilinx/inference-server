@@ -41,22 +41,21 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
-#include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/base64.hpp"            // for base64_decode
-#include "amdinfer/util/containers.hpp"        // for containerProduct
-#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"     // for BatchPtr, Batch, BatchP...
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint32
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricSummaryIDs
+#include "amdinfer/observation/tracing.hpp"  // for Trace
+#include "amdinfer/util/base64.hpp"          // for base64_decode
+#include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/parse_env.hpp"       // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
 
 namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
@@ -73,14 +72,13 @@ class AksDetect : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
@@ -90,6 +88,10 @@ class AksDetect : public Worker {
 
 std::thread AksDetect::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&AksDetect::run, this, input_queue);
+}
+
+std::vector<MemoryAllocators> AksDetect::getAllocators() const {
+  return {MemoryAllocators::Cpu};
 }
 
 void AksDetect::doInit(ParameterMap* parameters) {
@@ -114,11 +116,6 @@ constexpr auto kImageWidth = 1920;
 constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
 constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
-
-std::vector<MemoryAllocators> AksDetect::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
-}
 
 void AksDetect::doAcquire(ParameterMap* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -311,7 +308,6 @@ void AksDetect::doRun(BatchPtrQueue* input_queue) {
 }
 
 void AksDetect::doRelease() {}
-void AksDetect::doDeallocate() {}
 void AksDetect::doDestroy() {}
 
 }  // namespace amdinfer::workers

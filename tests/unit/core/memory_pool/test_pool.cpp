@@ -29,9 +29,9 @@ namespace amdinfer {
 TEST(UnitPool, Basic) {
   MemoryPool pool;
 
-  auto [allocator, address] = pool.get({MemoryAllocators::Cpu}, sizeof(int));
+  auto buffer = pool.get({MemoryAllocators::Cpu}, sizeof(int));
 
-  pool.put({allocator, address});
+  pool.put(std::move(buffer));
 }
 
 }  // namespace amdinfer

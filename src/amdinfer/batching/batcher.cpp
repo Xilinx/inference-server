@@ -25,11 +25,11 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/buffers/buffer.hpp"  // IWYU pragma: keep
-#include "amdinfer/core/interface.hpp"  // IWYU pragma: keep
-#include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
-#include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Loggers:...
+#include "amdinfer/buffers/buffer.hpp"         // IWYU pragma: keep
+#include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
+#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
+#include "amdinfer/observation/logging.hpp"    // for Logger, Loggers, Logger...
 
 namespace amdinfer {
 
@@ -54,15 +54,15 @@ Batcher::Batcher(MemoryPool* pool, ParameterMap* parameters) : Batcher(pool) {
   }
 }
 
-Batcher::Batcher(const Batcher& batcher) {
-  this->input_queue_ = batcher.input_queue_;
-  this->output_queue_ = batcher.output_queue_;
-  this->batch_size_ = batcher.batch_size_;
+Batcher::Batcher(const Batcher& batcher)
+  : batch_size_(batcher.batch_size_),
+    input_queue_(batcher.input_queue_),
+    output_queue_(batcher.output_queue_),
+    model_(batcher.model_) {
   this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
   this->logger_ = Logger(Loggers::Server);
 #endif
-  this->model_ = batcher.model_;
 }
 
 void Batcher::start(const std::vector<MemoryAllocators>& allocators) {
@@ -84,7 +84,7 @@ BlockingQueue<InterfacePtr>* Batcher::getInputQueue() {
 
 BatchPtrQueue* Batcher::getOutputQueue() { return this->output_queue_.get(); }
 
-void Batcher::enqueue(InterfacePtr request) {
+void Batcher::enqueue(InterfacePtr request) const {
   this->input_queue_->enqueue(std::move(request));
 }
 
@@ -93,7 +93,7 @@ void Batcher::run(const std::vector<MemoryAllocators>& allocators) {
   this->status_ = BatcherStatus::Inactive;
 }
 
-BatcherStatus Batcher::getStatus() { return this->status_; }
+BatcherStatus Batcher::getStatus() const { return this->status_; }
 
 void Batcher::end() {
   this->thread_.join();

@@ -30,22 +30,21 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for Batch, BatchPtrQueue
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
-#include "amdinfer/core/exceptions.hpp"        // for external_error, file_no...
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Requ...
-#include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
-#include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
-#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
-#include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/containers.hpp"        // for containerProduct
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
-#include "torch/script.h"                      // for IValue, Tensor, Device
+#include "amdinfer/batching/hard.hpp"        // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::FP32
+#include "amdinfer/core/exceptions.hpp"      // for external_error, file_no...
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Requ...
+#include "amdinfer/declarations.hpp"         // for InferenceResponseOutput
+#include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_INFO
+#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
+#include "amdinfer/observation/tracing.hpp"  // for Trace
+#include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
+#include "torch/script.h"                    // for IValue, Tensor, Device
 
 namespace fs = std::filesystem;
 
@@ -65,14 +64,13 @@ class PtZendnn : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   // workers define what batcher implementation should be used for them.
@@ -100,15 +98,12 @@ std::thread PtZendnn::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&PtZendnn::run, this, input_queue);
 }
 
-void PtZendnn::doInit(ParameterMap* parameters) {
-  constexpr auto kMaxBufferNum = 64;
-  constexpr auto kBatchSize = 1;
+std::vector<MemoryAllocators> PtZendnn::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
 
-  auto max_buffer_num = kMaxBufferNum;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-  }
-  this->max_buffer_num_ = max_buffer_num;
+void PtZendnn::doInit(ParameterMap* parameters) {
+  constexpr auto kBatchSize = 1;
 
   auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
@@ -130,11 +125,6 @@ void PtZendnn::doInit(ParameterMap* parameters) {
   if (parameters->has("output_classes")) {
     output_classes_ = parameters->get<int32_t>("output_classes");
   }
-}
-
-std::vector<MemoryAllocators> PtZendnn::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
 }
 
 void PtZendnn::doAcquire(ParameterMap* parameters) {
@@ -337,7 +327,6 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
 }
 
 void PtZendnn::doRelease() {}
-void PtZendnn::doDeallocate() {}
 void PtZendnn::doDestroy() {}
 
 }  // namespace amdinfer::workers

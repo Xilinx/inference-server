@@ -39,7 +39,7 @@ endforeach()
 target_link_libraries(softBatcher INTERFACE timer)
 
 add_library(batching STATIC ${BATCHING_OBJS})
-target_link_libraries(batching INTERFACE batcher ${targets})
+target_link_libraries(batching INTERFACE batch batcher ${targets})
 set_target_options(batching)
 
 set(BATCHING_OBJS ${BATCHING_OBJS} PARENT_SCOPE)

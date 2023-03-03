@@ -13,9 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets # predict_api
-            predict_api #  worker_info_buffers_infinite
-                        #  worker_info_buffers_finite # data_types interface
+list(
+  APPEND targets
+         predict_api
+         worker_info_buffers_infinite
+         worker_info_buffers_finite
+         # data_types interface
 )
 
 foreach(target ${targets})

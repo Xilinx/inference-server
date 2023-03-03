@@ -29,19 +29,18 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/batching/hard.hpp"          // for HardBatcher
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
-#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/metrics.hpp"    // for Metrics
-#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/hard.hpp"        // for HardBatcher
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint32
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infer...
+#include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/metrics.hpp"  // for Metrics
+#include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker
 
 namespace amdinfer::workers {
 
@@ -55,14 +54,13 @@ class Echo : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   // workers define what batcher implementation should be used for them.
@@ -79,26 +77,18 @@ std::thread Echo::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&Echo::run, this, input_queue);
 }
 
-void Echo::doInit(ParameterMap* parameters) {
-  constexpr auto kMaxBufferNum = 50;
-  constexpr auto kBatchSize = 1;
+std::vector<MemoryAllocators> Echo::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
 
-  auto max_buffer_num = kMaxBufferNum;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-  }
-  this->max_buffer_num_ = max_buffer_num;
+void Echo::doInit(ParameterMap* parameters) {
+  constexpr auto kBatchSize = 1;
 
   auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
     batch_size = parameters->get<int32_t>("batch_size");
   }
   this->batch_size_ = batch_size;
-}
-
-std::vector<MemoryAllocators> Echo::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
 }
 
 void Echo::doAcquire(ParameterMap* parameters) {
@@ -199,7 +189,6 @@ void Echo::doRun(BatchPtrQueue* input_queue) {
 }
 
 void Echo::doRelease() {}
-void Echo::doDeallocate() {}
 void Echo::doDestroy() {}
 
 }  // namespace amdinfer::workers

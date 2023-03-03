@@ -107,9 +107,6 @@ workers::Worker* getWorker(const std::string& name) {
 
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
                        MemoryPool* pool) {
-  this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-
   this->addAndStartWorker(name, parameters, pool);
 }
 
@@ -125,17 +122,8 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   auto* worker = getWorker(name);
   worker->init(parameters);
 
-  // auto max_buffers = worker->getMaxBufferNum();
-  worker->setInputBuffers(this->input_buffer_ptr_.get());
-  worker->setOutputBuffers(this->output_buffer_ptr_.get());
-  std::vector<MemoryAllocators> allocators;
-  try {
-    allocators = worker->allocate(kNumBufferAuto);
-  } catch (const std::exception& e) {
-    throw external_error(e.what());
-  } catch (...) {
-    throw runtime_error("Unknown error occurred");
-  }
+  std::vector<MemoryAllocators> allocators = worker->getAllocators();
+  ;
 
   try {
     worker->acquire(parameters);
@@ -227,7 +215,6 @@ void WorkerInfo::unload() {
   }
   auto* worker = this->workers_[id];
   worker->release();
-  worker->deallocate();
   worker->destroy();
 
   if (last_worker) {
@@ -243,26 +230,6 @@ void WorkerInfo::shutdown() {
   for (auto i = 0U; i < workers; i++) {
     this->unload();
   }
-}
-
-BufferPtrs WorkerInfo::getInputBuffer() const {
-  BufferPtrs buffer;
-  input_buffer_ptr_->wait_dequeue(buffer);
-  return buffer;
-}
-
-BufferPtrs WorkerInfo::getOutputBuffer() const {
-  BufferPtrs buffer;
-  output_buffer_ptr_->wait_dequeue(buffer);
-  return buffer;
-}
-
-void WorkerInfo::putInputBuffer(BufferPtrs&& buffer) const {
-  this->input_buffer_ptr_->enqueue(std::move(buffer));
-}
-
-void WorkerInfo::putOutputBuffer(BufferPtrs&& buffer) const {
-  this->output_buffer_ptr_->enqueue(std::move(buffer));
 }
 
 ModelMetadata WorkerInfo::getMetadata() const {

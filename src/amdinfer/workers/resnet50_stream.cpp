@@ -41,18 +41,17 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, BatchPtrQueue
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::String
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/util/base64.hpp"            // for base64_encode
-#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"     // for BatchPtr, BatchPtrQueue
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::String
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/util/base64.hpp"          // for base64_encode
+#include "amdinfer/util/parse_env.hpp"       // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
 
 namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
@@ -79,14 +78,13 @@ class ResNet50Stream : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
@@ -96,6 +94,10 @@ class ResNet50Stream : public Worker {
 
 std::thread ResNet50Stream::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&ResNet50Stream::run, this, input_queue);
+}
+
+std::vector<MemoryAllocators> ResNet50Stream::getAllocators() const {
+  return {MemoryAllocators::Cpu};
 }
 
 void ResNet50Stream::doInit(ParameterMap* parameters) {
@@ -123,11 +125,6 @@ const std::string kBoxHeightStr{"10"};
 
 /// number of categories returned for the image
 constexpr auto kResnetClassifications = 5;
-
-std::vector<MemoryAllocators> ResNet50Stream::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
-}
 
 void ResNet50Stream::doAcquire(ParameterMap* parameters) {
   std::string path{
@@ -321,7 +318,6 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue) {
 }
 
 void ResNet50Stream::doRelease() {}
-void ResNet50Stream::doDeallocate() {}
 void ResNet50Stream::doDestroy() {}
 
 }  // namespace workers

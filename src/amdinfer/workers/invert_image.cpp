@@ -32,21 +32,20 @@
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint8
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
-#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/metrics.hpp"    // for Metrics
-#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "amdinfer/util/base64.hpp"            // for base64_decode, base64_e...
-#include "amdinfer/util/containers.hpp"        // for containerProduct
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/batcher.hpp"     // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint8
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infer...
+#include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/metrics.hpp"  // for Metrics
+#include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
+#include "amdinfer/util/base64.hpp"          // for base64_decode, base64_e...
+#include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker
 
 namespace {
 
@@ -85,14 +84,13 @@ class InvertImage : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  std::vector<MemoryAllocators> doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 };
 
@@ -100,15 +98,12 @@ std::thread InvertImage::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&InvertImage::run, this, input_queue);
 }
 
-void InvertImage::doInit(ParameterMap* parameters) {
-  constexpr auto kMaxBufferNum = 50;
-  constexpr auto kBatchSize = 1;
+std::vector<MemoryAllocators> InvertImage::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
 
-  auto max_buffer_num = kMaxBufferNum;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-  }
-  this->max_buffer_num_ = max_buffer_num;
+void InvertImage::doInit(ParameterMap* parameters) {
+  constexpr auto kBatchSize = 1;
 
   auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
@@ -121,11 +116,6 @@ void InvertImage::doInit(ParameterMap* parameters) {
 const auto kMaxImageHeight = 1080;
 const auto kMaxImageWidth = 1920;
 const auto kMaxImageChannels = 3;
-
-std::vector<MemoryAllocators> InvertImage::doAllocate(size_t num) {
-  (void)num;
-  return {MemoryAllocators::Cpu};
-}
 
 void InvertImage::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
@@ -260,7 +250,6 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 }
 
 void InvertImage::doRelease() {}
-void InvertImage::doDeallocate() {}
 void InvertImage::doDestroy() {}
 
 }  // namespace amdinfer::workers

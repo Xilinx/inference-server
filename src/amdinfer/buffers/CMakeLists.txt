@@ -13,18 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets buffer cpu)
+list(APPEND targets cpu)
 
-# if(${AMDINFER_ENABLE_VITIS})
-#   set(targets ${targets} vart_tensor_buffer)
-# endif()
+add_library(buffer OBJECT buffer.cpp)
+target_include_directories(buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})
+set_target_options(buffer)
+
+list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:buffer>)
 
 foreach(target ${targets})
-  add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${target})
+  add_library(${target}Buffer OBJECT ${target}.cpp)
+  target_include_directories(${target}Buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})
+  set_target_options(${target}Buffer)
 
-  list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:${target}>)
+  list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:${target}Buffer>)
 endforeach()
 
 add_library(buffers STATIC ${BUFFERS_OBJS})

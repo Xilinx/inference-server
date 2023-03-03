@@ -15,10 +15,11 @@
 
 #include <memory>  // for allocator
 
-#include "amdinfer/batching/soft.hpp"        // for SoftBatcher
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/interface.hpp"       // IWYU pragma: keep
-#include "amdinfer/core/worker_info.hpp"     // for WorkerInfo
+#include "amdinfer/batching/soft.hpp"          // for SoftBatcher
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
+#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for initLogger, LogLevel, Log...
 #include "gtest/gtest.h"                     // for Test, SuiteApiResolver, TEST
 
@@ -38,11 +39,13 @@ TEST(UnitSoftBatcher, ConstructAndStart) {
   initLogger(options);
 #endif
 
-  SoftBatcher batcher;
+  MemoryPool pool;
+
+  SoftBatcher batcher(&pool);
   batcher.setName("test");
 
-  WorkerInfo fake("", nullptr);
-  batcher.start(&fake);
+  WorkerInfo fake("", nullptr, &pool);
+  batcher.start({MemoryAllocators::Cpu});
 
   batcher.enqueue(nullptr);
   batcher.end();

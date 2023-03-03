@@ -44,12 +44,10 @@ namespace workers {
 enum class WorkerStatus {
   New,
   Init,
-  Allocate,
   Acquire,
   Run,
   Inactive,
   Release,
-  Deallocate,
   Destroy,
   Dead
 };
@@ -64,10 +62,6 @@ class Worker {
   Worker(const std::string& name, const std::string& platform)
     : metadata_(name, platform) {
     this->status_ = WorkerStatus::New;
-    this->input_buffers_ = nullptr;
-    this->output_buffers_ = nullptr;
-    this->max_buffer_num_ = UINT_MAX;
-    this->batch_size_ = 1;
   }
   virtual ~Worker() = default;  ///< Destroy the Worker object
 
@@ -79,15 +73,13 @@ class Worker {
    */
   virtual std::thread spawn(BatchPtrQueue* input_queue) = 0;
 
+  /// Allocate some buffers that are used to hold input and output data
+  virtual std::vector<MemoryAllocators> getAllocators() const = 0;
+
   /// Perform low-cost initialization of the worker
   void init(ParameterMap* parameters) {
     this->status_ = WorkerStatus::Init;
     this->doInit(parameters);
-  }
-  /// Allocate some buffers that are used to hold input and output data
-  std::vector<MemoryAllocators> allocate(size_t num) {
-    this->status_ = WorkerStatus::Allocate;
-    return this->doAllocate(num);
   }
   /// Acquire any hardware resources or perform high-cost initialization
   void acquire(ParameterMap* parameters) {
@@ -111,13 +103,6 @@ class Worker {
     this->metadata_.setReady(false);
     this->doRelease();
   }
-  /// Free the input and output buffers
-  void deallocate() {
-    this->status_ = WorkerStatus::Deallocate;
-    this->doDeallocate();
-    this->input_buffers_ = nullptr;
-    this->output_buffers_ = nullptr;
-  }
   /// Perform any final operations before the worker thread is joined
   void destroy() {
     this->status_ = WorkerStatus::Destroy;
@@ -125,34 +110,7 @@ class Worker {
     this->status_ = WorkerStatus::Dead;
   }
 
-  /**
-   * @brief Return buffers to the worker's buffer pool after use. The buffers'
-   * reset() method is called prior to returning.
-   *
-   * @param input_buffers
-   * @param output_buffers
-   */
-  void returnBuffers(std::unique_ptr<std::vector<BufferPtrs>> input_buffers,
-                     std::unique_ptr<std::vector<BufferPtrs>> output_buffers) {
-    this->input_buffers_->enqueue_bulk(
-      std::make_move_iterator(input_buffers->begin()), input_buffers->size());
-    this->output_buffers_->enqueue_bulk(
-      std::make_move_iterator(output_buffers->begin()), output_buffers->size());
-  }
-
-  void setInputBuffers(BufferPtrsQueue* buffers) {
-    this->input_buffers_ = buffers;
-  }
-
-  void setOutputBuffers(BufferPtrsQueue* buffers) {
-    this->output_buffers_ = buffers;
-  }
-
   void setPool(MemoryPool* pool) { pool_ = pool; }
-
-  [[nodiscard]] uint32_t getMaxBufferNum() const {
-    return this->max_buffer_num_;
-  }
 
   [[nodiscard]] size_t getBatchSize() const { return this->batch_size_; }
   [[nodiscard]] WorkerStatus getStatus() const { return this->status_; }
@@ -189,18 +147,13 @@ class Worker {
     }
   }
 
-  BufferPtrsQueue* input_buffers_;
-  BufferPtrsQueue* output_buffers_;
-  uint32_t max_buffer_num_;
-  size_t batch_size_;
+  size_t batch_size_ = 1;
   ModelMetadata metadata_;
   MemoryPool* pool_;
 
  private:
   /// Perform low-cost initialization of the worker
   virtual void doInit(ParameterMap* parameters) = 0;
-  /// Allocate some buffers that are used to hold input and output data
-  virtual std::vector<MemoryAllocators> doAllocate(size_t num) = 0;
   /// Acquire any hardware resources or perform high-cost initialization
   virtual void doAcquire(ParameterMap* parameters) = 0;
   /**
@@ -211,8 +164,6 @@ class Worker {
   virtual void doRun(BatchPtrQueue* input_queue) = 0;
   /// Release any hardware resources
   virtual void doRelease() = 0;
-  /// Free the input and output buffers
-  virtual void doDeallocate() = 0;
   /// Perform any final operations before the worker's run thread is joined
   virtual void doDestroy() = 0;
 

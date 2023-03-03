@@ -133,8 +133,8 @@ configure_file(
 
 message(STATUS "Build Options:")
 add_option("ENABLE_REST" "Enable the REST server" ON)
-add_option("ENABLE_GRPC" "Enable the gRPC server" ON)
-add_option("ENABLE_METRICS" "Enable Prometheus metrics" PN)
+add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
+add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
 add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
 add_option("ENABLE_TRACING" "Enable Jaeger tracing" ${opentelemetry-cpp_FOUND})
 add_option("ENABLE_AKS" "Enable AKS dependencies" ${AMDINFER_AKS_FOUND})

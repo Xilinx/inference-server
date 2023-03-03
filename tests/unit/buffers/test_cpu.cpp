@@ -1,5 +1,4 @@
-// Copyright 2022 Xilinx, Inc.
-// Copyright 2022 Advanced Micro Devices, Inc.
+// Copyright 2023 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,11 +16,11 @@
 #include <cstddef>  // for size_t
 #include <memory>   // for allocator
 
-#include "amdinfer/buffers/vector_buffer.hpp"  // for Buffer, VectorBuffer
-#include "amdinfer/core/data_types.hpp"        // for DataType, getSize, oper...
-#include "amdinfer/declarations.hpp"           // for BufferPtrs
-#include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
-#include "gtest/gtest.h"                       // for EXPECT_EQ, FAIL, UnitTest
+#include "amdinfer/buffers/cpu.hpp"      // for CpuBuffer
+#include "amdinfer/core/data_types.hpp"  // for DataType, getSize, oper...
+#include "amdinfer/declarations.hpp"     // for BufferPtrs
+#include "amdinfer/util/queue.hpp"       // for BufferPtrsQueue
+#include "gtest/gtest.h"                 // for EXPECT_EQ, FAIL, UnitTest
 
 namespace amdinfer {
 
@@ -56,7 +55,7 @@ struct ReadData {
 
 class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
  public:
-  UnitVectorBufferFixture() : buffer_(kBufferSize, GetParam()){};
+  UnitVectorBufferFixture() : buffer_(memory_.data(), MemoryAllocators::Cpu){};
 
  protected:
   void SetUp() override {
@@ -68,7 +67,8 @@ class UnitVectorBufferFixture : public testing::TestWithParam<DataType> {
 
   // void TearDown() override {}
 
-  VectorBuffer buffer_;
+  std::vector<std::byte> memory_{512};
+  CpuBuffer buffer_;
 };
 
 TEST_P(UnitVectorBufferFixture, TestFixtureState) {  // NOLINT
@@ -78,23 +78,7 @@ TEST_P(UnitVectorBufferFixture, TestFixtureState) {  // NOLINT
   }
 }
 
-TEST_P(UnitVectorBufferFixture, TestAllocate) {  // NOLINT
-  BufferPtrsQueue buffer_queue;
-  const size_t buffer_num = 10;
-  const size_t batch_size = 4;
-
-  VectorBuffer::allocate(&buffer_queue, buffer_num, 1 * batch_size, GetParam());
-
-  for (auto i = 0U; i < buffer_num; i++) {
-    BufferPtrs buffers;
-    if (!buffer_queue.wait_dequeue_timed(buffers, kTimeout)) {
-      FAIL() << "Dequeuing buffers timed out";
-    }
-    EXPECT_EQ(buffers.size(), 1);
-  }
-}
-
-// we exclude STRING as it doesn't have a defined size we can pre-allocate
+// Excluding STRING as it doesn't have a defined size to pre-allocate
 // NOLINTNEXTLINE(cert-err58-cpp)
 const std::array<DataType, 12> kDataTypes{
   amdinfer::DataType::Bool,   amdinfer::DataType::Uint8,

@@ -21,7 +21,6 @@
 #ifndef GUARD_AMDINFER_BATCHING_BATCHER
 #define GUARD_AMDINFER_BATCHING_BATCHER
 
-#include <chrono>   // for system_clock::time_point
 #include <cstddef>  // for size_t
 #include <memory>   // for unique_ptr, shared_ptr
 #include <string>   // for string
@@ -102,14 +101,14 @@ class Batcher {
 
   void run(const std::vector<MemoryAllocators>& allocators);
 
-  BatcherStatus getStatus();
+  BatcherStatus getStatus() const;
 
   /**
    * @brief Enqueue a new request to the batcher
    *
    * @param request
    */
-  void enqueue(InterfacePtr request);
+  void enqueue(InterfacePtr request) const;
 
   /// End the batcher
   void end();
@@ -132,9 +131,9 @@ class Batcher {
    * @brief The doRun method defines the exact process by which the batcher
    * consumes incoming Interface objects and uses them to create batches.
    *
-   * @param worker pointer to this batcher's worker [group]
+   * @param allocators vector of allocators that may be used to get memory
    */
-  virtual void doRun(const std::vector<MemoryAllocators>& worker) = 0;
+  virtual void doRun(const std::vector<MemoryAllocators>& allocators) = 0;
 
   BatcherStatus status_;
 

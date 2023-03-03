@@ -48,7 +48,7 @@ std::vector<Buffer*> Batch::getRawOutputBuffers() const {
   return buffers;
 }
 
-const BufferPtrs& Batch::getOutputBuffers() const { return output_buffers_; }
+BufferPtrs Batch::getOutputBuffers() { return std::move(output_buffers_); }
 
 const std::vector<InferenceRequestPtr>& Batch::getRequests() const {
   return requests_;
