@@ -43,6 +43,8 @@ class CppNativeApi : public Interface {
     std::vector<size_t> &output_offsets) override;
 
   size_t getInputSize() override;
+  std::vector<size_t> getInputSizes() const override;
+  // std::vector<size_t> getOutputSizes() override;
   void errorHandler(const std::exception &e) override;
   std::promise<amdinfer::InferenceResponse> *getPromise();
 

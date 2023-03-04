@@ -32,21 +32,20 @@
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint8
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
-#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/metrics.hpp"    // for Metrics
-#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "amdinfer/util/base64.hpp"            // for base64_decode, base64_e...
-#include "amdinfer/util/containers.hpp"        // for containerProduct
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/batcher.hpp"     // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint8
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infer...
+#include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/metrics.hpp"  // for Metrics
+#include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
+#include "amdinfer/util/base64.hpp"          // for base64_decode, base64_e...
+#include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker
 
 namespace {
 
@@ -85,14 +84,13 @@ class InvertImage : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 };
 
@@ -100,15 +98,12 @@ std::thread InvertImage::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&InvertImage::run, this, input_queue);
 }
 
-void InvertImage::doInit(ParameterMap* parameters) {
-  constexpr auto kMaxBufferNum = 50;
-  constexpr auto kBatchSize = 1;
+std::vector<MemoryAllocators> InvertImage::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
 
-  auto max_buffer_num = kMaxBufferNum;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-  }
-  this->max_buffer_num_ = max_buffer_num;
+void InvertImage::doInit(ParameterMap* parameters) {
+  constexpr auto kBatchSize = 1;
 
   auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
@@ -121,19 +116,6 @@ void InvertImage::doInit(ParameterMap* parameters) {
 const auto kMaxImageHeight = 1080;
 const auto kMaxImageWidth = 1920;
 const auto kMaxImageChannels = 3;
-
-size_t InvertImage::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize =
-    kMaxImageWidth * kMaxImageHeight * kMaxImageChannels;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::Uint8);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kBufferSize * this->batch_size_, DataType::Uint8);
-  return buffer_num;
-}
 
 void InvertImage::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
@@ -151,6 +133,9 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
+
+  std::vector<std::byte> output;
+  output.resize(kMaxImageHeight * kMaxImageWidth * kMaxImageChannels);
 
   while (true) {
     BatchPtr batch;
@@ -173,7 +158,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
       auto outputs = req->getOutputs();
       for (unsigned int i = 0; i < inputs.size(); i++) {
         auto* input_buffer = inputs[i].getData();
-        auto* output_buffer = outputs[i].getData();
+        auto* output_buffer = output.data();
 
         auto input_shape = inputs[i].getShape();
 
@@ -192,7 +177,7 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
             invert<uint8_t*, true>(input_buffer, output_buffer, input_size);
           }
 
-          auto* output_data = static_cast<uint8_t*>(output_buffer);
+          auto* output_data = reinterpret_cast<uint8_t*>(output_buffer);
 
           std::vector<std::byte> buffer;
           buffer.resize(input_size);
@@ -233,9 +218,13 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 
         // if our output is explicitly named, use that name in response, or use
         // the input tensor's name if it's not defined.
-        std::string output_name = outputs[i].getName();
+        std::string output_name;
+        if (i < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
         if (output_name.empty()) {
-          output.setName(inputs[i].getName());
+          output.setName(inputs[0].getName());
         } else {
           output.setName(output_name);
         }
@@ -255,12 +244,12 @@ void InvertImage::doRun(BatchPtrQueue* input_queue) {
 #endif
       req->runCallbackOnce(resp);
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "InvertImage ending");
 }
 
 void InvertImage::doRelease() {}
-void InvertImage::doDeallocate() {}
 void InvertImage::doDestroy() {}
 
 }  // namespace amdinfer::workers

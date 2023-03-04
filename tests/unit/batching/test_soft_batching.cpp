@@ -24,10 +24,10 @@
 #include <vector>            // for vector
 
 #include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "amdinfer/buffers/vector_buffer.hpp"    // for VectorBuffer
 #include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
+#include "amdinfer/core/memory_pool/pool.hpp"    // for MemoryPool
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
@@ -80,7 +80,6 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     const auto& batch_config = GetParam();
     int batch_size = batch_config.batch_size;
 
-    const auto buffer_num = 10;
     const auto data_shape = {1UL, 2UL, 50UL};
     // the product of the data shape < 255 to fit into uint8
     const uint8_t data_size = 100;
@@ -92,25 +91,25 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     parameters.put("timeout", kTimeoutMs);
     parameters.put("batch_size", batch_size);
 
-    this->batcher_.emplace(&parameters);
+    this->batcher_.emplace(&pool_, &parameters);
     this->batcher_->setName("test");
     this->batcher_->setBatchSize(batch_size);
 
-    this->worker_.emplace("", &parameters);
-    for (size_t i = 0; i < buffer_num; i++) {
-      BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
-                                                      DataType::Uint8));
-      this->worker_->putInputBuffer(std::move(vec));
-    }
-    for (size_t i = 0; i < buffer_num; i++) {
-      BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
-                                                      DataType::Uint8));
-      this->worker_->putOutputBuffer(std::move(vec));
-    }
+    this->worker_.emplace("", &parameters, &pool_);
+    // for (size_t i = 0; i < buffer_num; i++) {
+    //   BufferPtrs vec;
+    //   vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
+    //                                                   DataType::Uint8));
+    //   this->worker_->putInputBuffer(std::move(vec));
+    // }
+    // for (size_t i = 0; i < buffer_num; i++) {
+    //   BufferPtrs vec;
+    //   vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
+    //                                                   DataType::Uint8));
+    //   this->worker_->putOutputBuffer(std::move(vec));
+    // }
 
-    this->batcher_->start(&this->worker_.value());
+    this->batcher_->start({MemoryAllocators::Cpu});
 
     data_.resize(data_size);
     for (uint8_t i = 0; i < data_size; i++) {
@@ -183,6 +182,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
   InferenceRequest request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;
+  MemoryPool pool_;
 };
 
 TEST_P(UnitSoftBatcherFixture, BasicBatching) {  // NOLINT

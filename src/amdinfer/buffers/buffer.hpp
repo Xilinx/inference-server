@@ -52,12 +52,6 @@ class Buffer {
   virtual void* data(size_t offset) = 0;
 
   /**
-   * @brief Reset the buffer. This should be called prior to returning the
-   * buffer to its buffer pool.
-   */
-  virtual void reset() = 0;
-
-  /**
    * @brief Write arbitrary data from an address into this buffer.
    *
    * @param data pointer to data
@@ -68,7 +62,7 @@ class Buffer {
   virtual size_t write(void* data, size_t offset, size_t size);
 
   /**
-   * @brief Write a bool value to the buffer
+   * @brief Write a value to the buffer
    *
    * @param value value to write
    */
@@ -89,8 +83,7 @@ class Buffer {
       // this->write_counter_ += value.length() + 1;
       return offset + value.length() + 1;
     } else {
-      std::memcpy(this->data(offset), &value, sizeof(T));
-      return offset + sizeof(T);
+      return this->write(&value, offset, sizeof(T));
     }
   }
 };

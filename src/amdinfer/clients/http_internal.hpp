@@ -97,6 +97,7 @@ class DrogonHttp : public Interface {
     std::vector<size_t> &output_offsets) override;
 
   size_t getInputSize() override;
+  std::vector<size_t> getInputSizes() const override;
   void errorHandler(const std::exception &e) override;
 
  private:

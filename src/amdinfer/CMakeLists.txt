@@ -50,6 +50,7 @@ add_library(
   amdinfer
   ${TYPE}
   ${BATCHING_OBJS}
+  ${BUFFERS_OBJS}
   ${CLIENT_OBJS}
   ${CORE_OBJS}
   ${HELPER_OBJS}
@@ -66,6 +67,7 @@ add_library(
   amdinfer-server
   ${TYPE}
   ${BATCHING_OBJS}
+  ${BUFFERS_OBJS}
   ${CORE_OBJS}
   ${HELPER_OBJS}
   ${OBSERVATION_OBJS}

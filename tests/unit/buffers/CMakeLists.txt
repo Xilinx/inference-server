@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests vector_buffer)
+list(APPEND tests cpu)
 
-list(APPEND tests_libs "buffer~data_types~fake_observation~vector_buffer")
+list(APPEND tests_libs "buffer~data_types~fake_observation~cpuBuffer")
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

@@ -21,13 +21,13 @@
 #ifndef GUARD_AMDINFER_BATCHING_BATCHER
 #define GUARD_AMDINFER_BATCHING_BATCHER
 
-#include <chrono>   // for system_clock::time_point
 #include <cstddef>  // for size_t
 #include <memory>   // for unique_ptr, shared_ptr
 #include <string>   // for string
 #include <thread>   // for thread
 #include <vector>   // for vector
 
+#include "amdinfer/batching/batch.hpp"       // for Batch
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceReq...
@@ -38,72 +38,14 @@
 namespace amdinfer {
 class Buffer;
 class WorkerInfo;
+class MemoryPool;
+enum class MemoryAllocators;
 }  // namespace amdinfer
 
 namespace amdinfer {
 
 enum class BatcherStatus { New, Run, Inactive, Dead };
 
-/**
- * @brief The Batch is what the batcher produces and pushes to the workers. It
- * represents the requests, the buffers associated with the request and other
- * metadata that should be sent to the worker.
- *
- */
-class Batch {
- public:
-  explicit Batch(const WorkerInfo* worker);
-  /// Copy constructor
-  Batch(Batch const&) = delete;
-  /// Copy assignment constructor
-  Batch& operator=(const Batch&) = delete;
-  /// Move constructor
-  Batch(Batch&& other) = default;
-  /// Move assignment constructor
-  Batch& operator=(Batch&& other) = default;
-  /// Destructor
-  ~Batch();
-
-  void addRequest(InferenceRequestPtr request);
-
-  [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
-  [[nodiscard]] const std::vector<InferenceRequestPtr>& getRequests() const;
-  [[nodiscard]] const BufferPtrs& getInputBuffers() const;
-  [[nodiscard]] const BufferPtrs& getOutputBuffers() const;
-  [[nodiscard]] std::vector<Buffer*> getRawInputBuffers() const;
-  [[nodiscard]] std::vector<Buffer*> getRawOutputBuffers() const;
-
-  [[nodiscard]] bool empty() const;
-  [[nodiscard]] size_t size() const;
-  [[nodiscard]] size_t getInputSize() const;
-  [[nodiscard]] size_t getOutputSize() const;
-
-#ifdef AMDINFER_ENABLE_TRACING
-  void addTrace(TracePtr trace);
-  TracePtr& getTrace(size_t index);
-#endif
-#ifdef AMDINFER_ENABLE_METRICS
-  void addTime(std::chrono::high_resolution_clock::time_point timestamp);
-  std::chrono::high_resolution_clock::time_point getTime(size_t index);
-#endif
-
-  [[nodiscard]] auto begin() const { return requests_.begin(); }
-  [[nodiscard]] auto end() const { return requests_.end(); }
-
- private:
-  const WorkerInfo* worker_;
-  std::vector<InferenceRequestPtr> requests_;
-  std::vector<BufferPtr> input_buffers_;
-  std::vector<BufferPtr> output_buffers_;
-#ifdef AMDINFER_ENABLE_TRACING
-  std::vector<TracePtr> traces_;
-#endif
-#ifdef AMDINFER_ENABLE_METRICS
-  std::vector<std::chrono::high_resolution_clock::time_point> start_times_;
-#endif
-};
-
-using BatchPtr = std::unique_ptr<Batch>;
 using BatchPtrQueue = BlockingQueue<BatchPtr>;
 
 /**
@@ -115,8 +57,8 @@ using BatchPtrQueue = BlockingQueue<BatchPtr>;
 class Batcher {
  public:
   /// Construct a new Batcher object
-  Batcher();
-  explicit Batcher(ParameterMap* parameters);
+  explicit Batcher(MemoryPool* pool);
+  Batcher(MemoryPool* pool, ParameterMap* parameters);
   /**
    * @brief Construct a new Batcher object
    *
@@ -135,7 +77,7 @@ class Batcher {
    *
    * @param worker
    */
-  void start(WorkerInfo* worker);
+  void start(const std::vector<MemoryAllocators>& allocator);
   /**
    * @brief Set the batch size for the batcher
    *
@@ -157,16 +99,16 @@ class Batcher {
   /// Get the batcher's output queue (used to push batches to the worker group)
   BatchPtrQueue* getOutputQueue();
 
-  void run(WorkerInfo* worker);
+  void run(const std::vector<MemoryAllocators>& allocators);
 
-  BatcherStatus getStatus();
+  BatcherStatus getStatus() const;
 
   /**
    * @brief Enqueue a new request to the batcher
    *
    * @param request
    */
-  void enqueue(InterfacePtr request);
+  void enqueue(InterfacePtr request) const;
 
   /// End the batcher
   void end();
@@ -182,15 +124,16 @@ class Batcher {
   std::thread thread_;
   std::string model_;
   ParameterMap parameters_;
+  MemoryPool* pool_;
 
  private:
   /**
    * @brief The doRun method defines the exact process by which the batcher
    * consumes incoming Interface objects and uses them to create batches.
    *
-   * @param worker pointer to this batcher's worker [group]
+   * @param allocators vector of allocators that may be used to get memory
    */
-  virtual void doRun(WorkerInfo* worker) = 0;
+  virtual void doRun(const std::vector<MemoryAllocators>& allocators) = 0;
 
   BatcherStatus status_;
 

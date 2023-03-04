@@ -29,10 +29,11 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE...
-#include "amdinfer/core/predict_api.hpp"     // for ModelMetadata
-#include "amdinfer/observation/logging.hpp"  // for Logger, Loggers
-#include "amdinfer/util/queue.hpp"           // for BlockingQueue
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE...
+#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/predict_api.hpp"       // for ModelMetadata
+#include "amdinfer/observation/logging.hpp"    // for Logger, Loggers
+#include "amdinfer/util/queue.hpp"             // for BlockingQueue
 
 namespace amdinfer {
 
@@ -113,6 +114,7 @@ class Endpoints {
   /// A queue used to sequentially order changes to the Manager state
   UpdateCommandQueue update_queue_;
   std::thread update_thread_;
+  MemoryPool pool_;
 #ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::Server};
 #endif

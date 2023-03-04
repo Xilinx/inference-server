@@ -49,6 +49,9 @@ using InferenceResponseFuture = std::future<amdinfer::InferenceResponse>;
 
 using StringMap = std::unordered_map<std::string, std::string>;
 
+class Trace;
+using TracePtr = std::unique_ptr<Trace>;
+
 using Kernels = std::unordered_map<std::string, int>;
 
 }  // namespace amdinfer

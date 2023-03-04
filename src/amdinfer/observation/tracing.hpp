@@ -90,8 +90,6 @@ class Trace final {
   // std::unique_ptr<opentelemetry::trace::Scope> scope_;
 };
 
-using TracePtr = std::unique_ptr<Trace>;
-
 /// Start a trace with the given name
 TracePtr startTrace(const char* name);
 

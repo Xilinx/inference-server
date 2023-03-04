@@ -28,18 +28,17 @@
 #include <thread>                 // for thread
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/batcher.hpp"       // for Batch, BatchPtrQueue
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::String
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-#include "amdinfer/util/base64.hpp"            // for base64_encode
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/workers/worker.hpp"         // for Worker
+#include "amdinfer/batching/batcher.hpp"     // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::String
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
+#include "amdinfer/util/base64.hpp"          // for base64_encode
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/workers/worker.hpp"       // for Worker
 
 namespace amdinfer {
 
@@ -60,14 +59,13 @@ class InvertVideo : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 };
 
@@ -75,15 +73,12 @@ std::thread InvertVideo::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&InvertVideo::run, this, input_queue);
 }
 
-void InvertVideo::doInit(ParameterMap* parameters) {
-  constexpr auto kMaxBufferNum = 50;
-  constexpr auto kBatchSize = 1;
+std::vector<MemoryAllocators> InvertVideo::getAllocators() const {
+  return {MemoryAllocators::Cpu};
+}
 
-  auto max_buffer_num = kMaxBufferNum;
-  if (parameters->has("max_buffer_num")) {
-    max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-  }
-  this->max_buffer_num_ = max_buffer_num;
+void InvertVideo::doInit([[maybe_unused]] ParameterMap* parameters) {
+  constexpr auto kBatchSize = 1;
 
   this->batch_size_ = kBatchSize;
 }
@@ -95,19 +90,6 @@ const auto kMaxImageChannels = 3;
 
 // arbitrarily choose max URL length for the video
 const auto kMaxUrlLength = 128;
-
-size_t InvertVideo::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize = kMaxUrlLength;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num, kBufferSize,
-                         DataType::String);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kMaxImageWidth * kMaxImageHeight * kMaxImageChannels,
-                         DataType::Int8);
-  return buffer_num;
-}
 
 void InvertVideo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
@@ -209,7 +191,6 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
 }
 
 void InvertVideo::doRelease() {}
-void InvertVideo::doDeallocate() {}
 void InvertVideo::doDestroy() {}
 
 }  // namespace workers

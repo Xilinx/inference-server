@@ -237,12 +237,13 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
   // if the worker doesn't exist yet, we need to create it
   try {
     if (worker_info == nullptr) {
-      auto new_worker = std::make_unique<WorkerInfo>(worker_name, parameters);
+      auto new_worker =
+        std::make_unique<WorkerInfo>(worker_name, parameters, &pool_);
       this->workers_.try_emplace(endpoint, std::move(new_worker));
       // if the worker exists but the share parameter is false, we need to add
       // one
     } else if (!share) {
-      worker_info->addAndStartWorker(worker_name, parameters);
+      worker_info->addAndStartWorker(worker_name, parameters, &pool_);
     }
   } catch (...) {
     // undo the load if the worker creation fails

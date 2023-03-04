@@ -153,7 +153,7 @@ def main(args):
     server = amdinfer.Server()
     print("Waiting until the server is ready...")
 
-    client = amdinfer.NativeClient()
+    client = amdinfer.NativeClient(server)
     amdinfer.waitUntilServerReady(client)
 
     if args.endpoint:

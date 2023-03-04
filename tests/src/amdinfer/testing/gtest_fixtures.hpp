@@ -100,17 +100,4 @@ template <typename T>
 class HttpFixtureWithParams : public HttpFixture,
                               public testing::WithParamInterface<T> {};
 
-// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define EXPECT_THROW_CHECK(statement, check, exception) \
-  EXPECT_THROW(                                         \
-    {                                                   \
-      try {                                             \
-        statement                                       \
-      } catch (const exception& e) {                    \
-        check;                                          \
-        throw;                                          \
-      }                                                 \
-    },                                                  \
-    exception)
-
 #endif  // GUARD_SRC_AMDINFER_TESTING_GTEST_FIXTURES

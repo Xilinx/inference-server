@@ -31,6 +31,7 @@
 #include "amdinfer/batching/soft.hpp"
 #include "amdinfer/buffers/buffer.hpp"
 #include "amdinfer/build_options.hpp"
+#include "amdinfer/core/memory_pool/pool.hpp"
 #include "amdinfer/core/predict_api.hpp"
 #include "amdinfer/observation/logging.hpp"
 
@@ -43,12 +44,10 @@ namespace workers {
 enum class WorkerStatus {
   New,
   Init,
-  Allocate,
   Acquire,
   Run,
   Inactive,
   Release,
-  Deallocate,
   Destroy,
   Dead
 };
@@ -63,10 +62,6 @@ class Worker {
   Worker(const std::string& name, const std::string& platform)
     : metadata_(name, platform) {
     this->status_ = WorkerStatus::New;
-    this->input_buffers_ = nullptr;
-    this->output_buffers_ = nullptr;
-    this->max_buffer_num_ = UINT_MAX;
-    this->batch_size_ = 1;
   }
   virtual ~Worker() = default;  ///< Destroy the Worker object
 
@@ -78,15 +73,13 @@ class Worker {
    */
   virtual std::thread spawn(BatchPtrQueue* input_queue) = 0;
 
+  /// Allocate some buffers that are used to hold input and output data
+  [[nodiscard]] virtual std::vector<MemoryAllocators> getAllocators() const = 0;
+
   /// Perform low-cost initialization of the worker
   void init(ParameterMap* parameters) {
     this->status_ = WorkerStatus::Init;
     this->doInit(parameters);
-  }
-  /// Allocate some buffers that are used to hold input and output data
-  size_t allocate(size_t num) {
-    this->status_ = WorkerStatus::Allocate;
-    return this->doAllocate(num);
   }
   /// Acquire any hardware resources or perform high-cost initialization
   void acquire(ParameterMap* parameters) {
@@ -110,13 +103,6 @@ class Worker {
     this->metadata_.setReady(false);
     this->doRelease();
   }
-  /// Free the input and output buffers
-  void deallocate() {
-    this->status_ = WorkerStatus::Deallocate;
-    this->doDeallocate();
-    this->input_buffers_ = nullptr;
-    this->output_buffers_ = nullptr;
-  }
   /// Perform any final operations before the worker thread is joined
   void destroy() {
     this->status_ = WorkerStatus::Destroy;
@@ -124,46 +110,22 @@ class Worker {
     this->status_ = WorkerStatus::Dead;
   }
 
-  /**
-   * @brief Return buffers to the worker's buffer pool after use. The buffers'
-   * reset() method is called prior to returning.
-   *
-   * @param input_buffers
-   * @param output_buffers
-   */
-  void returnBuffers(std::unique_ptr<std::vector<BufferPtrs>> input_buffers,
-                     std::unique_ptr<std::vector<BufferPtrs>> output_buffers) {
-    this->input_buffers_->enqueue_bulk(
-      std::make_move_iterator(input_buffers->begin()), input_buffers->size());
-    this->output_buffers_->enqueue_bulk(
-      std::make_move_iterator(output_buffers->begin()), output_buffers->size());
-  }
-
-  void setInputBuffers(BufferPtrsQueue* buffers) {
-    this->input_buffers_ = buffers;
-  }
-
-  void setOutputBuffers(BufferPtrsQueue* buffers) {
-    this->output_buffers_ = buffers;
-  }
-
-  [[nodiscard]] uint32_t getMaxBufferNum() const {
-    return this->max_buffer_num_;
-  }
+  void setPool(MemoryPool* pool) { pool_ = pool; }
 
   [[nodiscard]] size_t getBatchSize() const { return this->batch_size_; }
   [[nodiscard]] WorkerStatus getStatus() const { return this->status_; }
 
   virtual std::vector<std::unique_ptr<Batcher>> makeBatcher(
-    int num, ParameterMap* parameters) {
-    return this->makeBatcher<SoftBatcher>(num, parameters);
+    int num, ParameterMap* parameters, MemoryPool* pool) {
+    return this->makeBatcher<SoftBatcher>(num, parameters, pool);
   }
 
   template <typename T>
   std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
-                                                    ParameterMap* parameters) {
+                                                    ParameterMap* parameters,
+                                                    MemoryPool* pool) {
     std::vector<std::unique_ptr<Batcher>> batchers;
-    batchers.emplace_back(std::make_unique<T>(parameters));
+    batchers.emplace_back(std::make_unique<T>(pool, parameters));
     for (int i = 1; i < num; i++) {
       batchers.push_back(
         std::make_unique<T>(*dynamic_cast<T*>(batchers.back().get())));
@@ -178,17 +140,20 @@ class Worker {
   [[nodiscard]] const Logger& getLogger() const { return logger_; };
 #endif
 
-  BufferPtrsQueue* input_buffers_;
-  BufferPtrsQueue* output_buffers_;
-  uint32_t max_buffer_num_;
-  size_t batch_size_;
+  void returnInputBuffers(std::unique_ptr<Batch> batch) {
+    auto buffers = batch->getInputBuffers();
+    for (auto& buffer : buffers) {
+      pool_->put(std::move(buffer));
+    }
+  }
+
+  size_t batch_size_ = 1;
   ModelMetadata metadata_;
+  MemoryPool* pool_;
 
  private:
   /// Perform low-cost initialization of the worker
   virtual void doInit(ParameterMap* parameters) = 0;
-  /// Allocate some buffers that are used to hold input and output data
-  virtual size_t doAllocate(size_t num) = 0;
   /// Acquire any hardware resources or perform high-cost initialization
   virtual void doAcquire(ParameterMap* parameters) = 0;
   /**
@@ -199,8 +164,6 @@ class Worker {
   virtual void doRun(BatchPtrQueue* input_queue) = 0;
   /// Release any hardware resources
   virtual void doRelease() = 0;
-  /// Free the input and output buffers
-  virtual void doDeallocate() = 0;
   /// Perform any final operations before the worker's run thread is joined
   virtual void doDestroy() = 0;
 

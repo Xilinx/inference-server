@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+add_subdirectory(memory_pool)
+
 list(APPEND tests inference_request_input parameter_map)
 
 list(APPEND tests_libs "predict_api~parameters" "parameters")

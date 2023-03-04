@@ -14,7 +14,8 @@
 # limitations under the License.
 
 add_subdirectory(batching)
-# add_subdirectory(buffers) add_subdirectory(clients)
+# add_subdirectory(buffers)
+# add_subdirectory(clients)
 add_subdirectory(core)
 add_subdirectory(observation)
 # add_subdirectory(servers)

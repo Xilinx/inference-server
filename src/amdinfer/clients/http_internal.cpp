@@ -458,10 +458,36 @@ size_t DrogonHttp::getInputSize() {
   }
   auto inputs = this->json_->get("inputs", Json::arrayValue);
   if (!inputs.isArray()) {
-    throw invalid_argument("'inputs' is not an arrafy");
+    throw invalid_argument("'inputs' is not an array");
   }
 
   return inputs.size();
+}
+
+std::vector<size_t> DrogonHttp::getInputSizes() const {
+  std::vector<size_t> sizes;
+
+  if (!this->json_->isMember("inputs")) {
+    throw invalid_argument("No 'inputs' key present in request");
+  }
+  auto inputs = this->json_->get("inputs", Json::arrayValue);
+  if (!inputs.isArray()) {
+    throw invalid_argument("'inputs' is not an array");
+  }
+
+  for (const auto &tensor : inputs) {
+    // using asCString() doesn't work -> the string is empty
+    const auto raw_type = tensor.get("datatype", "UNKNOWN").asString();
+    auto datatype = DataType(raw_type.c_str());
+
+    const auto shape = tensor.get("shape", Json::arrayValue);
+    size_t size = 1;
+    for (const auto &index : shape) {
+      size *= index.asInt64();
+    }
+    sizes.push_back(size * datatype.size());
+  }
+  return sizes;
 }
 
 Json::Value parseResponse(InferenceResponse response) {

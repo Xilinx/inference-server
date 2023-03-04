@@ -31,9 +31,9 @@
 #include <vector>    // for vector
 
 #include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "amdinfer/buffers/vector_buffer.hpp"    // for VectorBuffer
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
+#include "amdinfer/core/memory_pool/pool.hpp"    // for MemoryPool
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
@@ -64,7 +64,6 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
 
   void SetUp(const ::benchmark::State& state) override {
     auto batch_size = static_cast<int>(state.range(0));
-    auto buffer_num = static_cast<size_t>(state.range(1));
 
     const auto data_shape = {1UL, 2UL, 50UL};
     const auto data_size = 100;
@@ -79,25 +78,25 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
     options.file_enable = false;
     initLogger(options);
 
-    this->batcher_.emplace(&parameters);
+    this->batcher_.emplace(&pool_, &parameters);
     this->batcher_->setName("test");
     this->batcher_->setBatchSize(batch_size);
 
-    this->worker_.emplace("", &parameters);
-    for (size_t i = 0; i < buffer_num; i++) {
-      BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
-                                                      DataType::Uint8));
-      this->worker_->putInputBuffer(std::move(vec));
-    }
-    for (size_t i = 0; i < buffer_num; i++) {
-      BufferPtrs vec;
-      vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
-                                                      DataType::Uint8));
-      this->worker_->putOutputBuffer(std::move(vec));
-    }
+    this->worker_.emplace("", &parameters, &pool_);
+    // for (size_t i = 0; i < buffer_num; i++) {
+    //   BufferPtrs vec;
+    //   vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
+    //                                                   DataType::Uint8));
+    //   this->worker_->putInputBuffer(std::move(vec));
+    // }
+    // for (size_t i = 0; i < buffer_num; i++) {
+    //   BufferPtrs vec;
+    //   vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,
+    //                                                   DataType::Uint8));
+    //   this->worker_->putOutputBuffer(std::move(vec));
+    // }
 
-    this->batcher_->start(&this->worker_.value());
+    this->batcher_->start({MemoryAllocators::Cpu});
 
     data_.resize(data_size);
     for (auto i = 0; i < data_size; i++) {
@@ -119,6 +118,7 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
   InferenceRequest request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;
+  MemoryPool pool_;
 };
 
 BENCHMARK_DEFINE_F(PerfSoftBatcherFixture, BasicBatching)
@@ -144,14 +144,12 @@ BENCHMARK_DEFINE_F(PerfSoftBatcherFixture, BasicBatching)
 
 const std::initializer_list<int64_t> kBatchSizes{1, 2, 4};
 
-const std::initializer_list<int64_t> kBufferNums{1, 10, 100};
-
 // delay after dequeue per request in microseconds
 const std::initializer_list<int64_t> kWorkDelay{0, 1, 10};
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 BENCHMARK_REGISTER_F(PerfSoftBatcherFixture, BasicBatching)
-  ->ArgsProduct({kBatchSizes, kBufferNums, kWorkDelay})
+  ->ArgsProduct({kBatchSizes, kWorkDelay})
   ->Unit(benchmark::kMillisecond);
 
 // NOLINTNEXTLINE

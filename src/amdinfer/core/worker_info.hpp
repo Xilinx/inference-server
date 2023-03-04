@@ -36,6 +36,7 @@ namespace amdinfer {
 class Batcher;
 class ParameterMap;
 class ModelMetadata;
+class MemoryPool;
 namespace workers {
 class Worker;
 }  // namespace workers
@@ -50,7 +51,8 @@ namespace amdinfer {
 class WorkerInfo {
  public:
   /// Construct a new WorkerInfo object
-  WorkerInfo(const std::string& name, ParameterMap* parameters);
+  WorkerInfo(const std::string& name, ParameterMap* parameters,
+             MemoryPool* pool);
   ~WorkerInfo();                           ///> Destroy a WorkerInfo object
   WorkerInfo(WorkerInfo const&) = delete;  ///< Copy constructor
   /// Copy assignment constructor
@@ -76,70 +78,13 @@ class WorkerInfo {
    * @param name
    * @param parameters pointer to parameters. Should not be nullptr
    */
-  void addAndStartWorker(const std::string& name, ParameterMap* parameters);
+  void addAndStartWorker(const std::string& name, ParameterMap* parameters,
+                         MemoryPool* pool);
 
   /// unload one worker from this worker group
   void unload();
   /// unload all workers from this worker group
   void shutdown();
-
-  /**
-   * @brief Get an input buffer from this worker
-   *
-   * @return BufferPtrs
-   */
-  [[nodiscard]] BufferPtrs getInputBuffer() const;
-  /**
-   * @brief Get an output buffer from this worker
-   *
-   * @return BufferPtrs
-   */
-  [[nodiscard]] BufferPtrs getOutputBuffer() const;
-  /**
-   * @brief Return an input buffer to the worker
-   *
-   * @param buffer the buffer to return
-   */
-  void putInputBuffer(BufferPtrs&& buffer) const;
-  /**
-   * @brief Return an output buffer to the worker
-   *
-   * @param buffer the buffer to return
-   */
-  void putOutputBuffer(BufferPtrs&& buffer) const;
-
-  /**
-   * @brief Checks if this worker group supports a particular number of input
-   * tensors.
-   *
-   * @param size
-   * @exception invalid_argument too many input tensors for this worker
-   * @return true if the number of input tensors is acceptable
-   * @return false if more buffers need to be allocated but the number is okay
-   */
-  [[nodiscard]] bool inputSizeValid(size_t size) const;
-
-  /**
-   * @brief Get the number of buffers currently allocated by this worker
-   *
-   * @return auto
-   */
-  [[nodiscard]] auto getBufferNum() const { return this->buffer_num_; }
-
-  /**
-   * @brief Get the maximum number of buffers that this worker may allocate. -1
-   * indicates there is no limit.
-   *
-   * @return auto
-   */
-  [[nodiscard]] auto getMaxBufferNum() const { return this->max_buffer_num_; }
-
-  /**
-   * @brief Allocate enough buffers to fulfill a particular request size
-   *
-   * @param request_size
-   */
-  void allocate(size_t request_size);
 
   /// get the number of workers in the group
   [[nodiscard]] size_t getGroupSize() const;
@@ -153,10 +98,6 @@ class WorkerInfo {
   std::map<std::thread::id, std::thread> worker_threads_;
   std::map<std::thread::id, workers::Worker*> workers_;
   std::vector<std::unique_ptr<Batcher>> batchers_;
-  BufferPtrsQueuePtr input_buffer_ptr_;
-  BufferPtrsQueuePtr output_buffer_ptr_;
-  size_t buffer_num_ = 0;
-  size_t max_buffer_num_ = 0;
   size_t batch_size_ = 1;
 
   friend class Manager;

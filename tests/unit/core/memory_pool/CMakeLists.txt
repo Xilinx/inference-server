@@ -1,5 +1,4 @@
-# Copyright 2021 Xilinx, Inc.
-# Copyright 2022 Advanced Micro Devices, Inc.
+# Copyright 2023 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,15 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests soft)
+list(APPEND tests cpu_allocator pool)
 
-list(
-  APPEND
-    tests_libs
-    "$<TARGET_OBJECTS:batcher>~fake_observation~interface\
-      ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~parameters\
-      ~data_types\~$<TARGET_OBJECTS:softBatcher>~cpuBuffer~buffer~memory_pool\
-      ~batch~$<TARGET_OBJECTS:native_internal>~timer"
-)
+list(APPEND tests_libs "cpu_allocator" "memory_pool~buffer~cpuBuffer")
 
-amdinfer_add_benchmarks("${tests}" "${tests_libs}")
+amdinfer_add_unit_tests("${tests}" "${tests_libs}")

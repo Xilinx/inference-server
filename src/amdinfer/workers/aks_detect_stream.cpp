@@ -40,20 +40,19 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::String
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/base64.hpp"            // for base64_encode
-#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/workers/aks_detect.hpp"     // for DetectResponse
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"     // for BatchPtr, Batch, BatchP...
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::String
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/tracing.hpp"  // for Trace
+#include "amdinfer/util/base64.hpp"          // for base64_encode
+#include "amdinfer/util/parse_env.hpp"       // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/workers/aks_detect.hpp"   // for DetectResponse
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
 
 namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
@@ -78,14 +77,13 @@ class AksDetectStream : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
@@ -94,6 +92,10 @@ class AksDetectStream : public Worker {
 
 std::thread AksDetectStream::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&AksDetectStream::run, this, input_queue);
+}
+
+std::vector<MemoryAllocators> AksDetectStream::getAllocators() const {
+  return {MemoryAllocators::Cpu};
 }
 
 void AksDetectStream::doInit(ParameterMap* parameters) {
@@ -109,19 +111,6 @@ void AksDetectStream::doInit(ParameterMap* parameters) {
 constexpr auto kImageWidth = 1920;
 constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
-constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
-
-size_t AksDetectStream::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  constexpr auto kBufferSize = 128;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num, kBufferSize,
-                         DataType::String);
-  VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::Int8);
-  return buffer_num;
-}
 
 void AksDetectStream::doAcquire(ParameterMap* parameters) {
   std::string path{
@@ -363,7 +352,6 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
 }
 
 void AksDetectStream::doRelease() {}
-void AksDetectStream::doDeallocate() {}
 void AksDetectStream::doDestroy() {}
 
 }  // namespace workers

@@ -38,22 +38,21 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"       // for BatchPtr, Batch, BatchP...
-#include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Infe...
-#include "amdinfer/declarations.hpp"           // for BufferPtrs, InferenceRe...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricSummaryIDs
-#include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/base64.hpp"            // for base64_decode
-#include "amdinfer/util/containers.hpp"        // for containerProduct
-#include "amdinfer/util/parse_env.hpp"         // for autoExpandEnvironmentVa...
-#include "amdinfer/util/thread.hpp"            // for setThreadName
-#include "amdinfer/util/timer.hpp"             // for Timer
-#include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
+#include "amdinfer/batching/batcher.hpp"     // for BatchPtr, Batch, BatchP...
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint32
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
+#include "amdinfer/observation/logging.hpp"  // for Logger
+#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricSummaryIDs
+#include "amdinfer/observation/tracing.hpp"  // for Trace
+#include "amdinfer/util/base64.hpp"          // for base64_decode
+#include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/parse_env.hpp"       // for autoExpandEnvironmentVa...
+#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/util/timer.hpp"           // for Timer
+#include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
 
 namespace AKS {  // NOLINT(readability-identifier-naming)
 class AIGraph;
@@ -70,14 +69,13 @@ class ResNet50 : public Worker {
  public:
   using Worker::Worker;
   std::thread spawn(BatchPtrQueue* input_queue) override;
+  [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
-  size_t doAllocate(size_t num) override;
   void doAcquire(ParameterMap* parameters) override;
   void doRun(BatchPtrQueue* input_queue) override;
   void doRelease() override;
-  void doDeallocate() override;
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
@@ -87,6 +85,10 @@ class ResNet50 : public Worker {
 
 std::thread ResNet50::spawn(BatchPtrQueue* input_queue) {
   return std::thread(&ResNet50::run, this, input_queue);
+}
+
+std::vector<MemoryAllocators> ResNet50::getAllocators() const {
+  return {MemoryAllocators::Cpu};
 }
 
 void ResNet50::doInit(ParameterMap* parameters) {
@@ -111,18 +113,6 @@ void ResNet50::doInit(ParameterMap* parameters) {
 constexpr auto kImageWidth = 1920;
 constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
-constexpr auto kImageSize = kImageWidth * kImageHeight * kImageChannels;
-
-size_t ResNet50::doAllocate(size_t num) {
-  constexpr auto kBufferNum = 10U;
-  size_t buffer_num =
-    static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-  VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                         kImageSize * this->batch_size_, DataType::Uint8);
-  VectorBuffer::allocate(this->output_buffers_, kBufferNum,
-                         1 * this->batch_size_, DataType::Uint32);
-  return buffer_num;
-}
 
 void ResNet50::doAcquire(ParameterMap* parameters) {
   std::string path{
@@ -267,9 +257,13 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
                response_size * sizeof(int));
         output.setData(std::move(buffer));
 
-        std::string output_name = outputs[i].getName();
+        std::string output_name;
+        if (i < outputs.size()) {
+          output_name = outputs[i].getName();
+        }
+
         if (output_name.empty()) {
-          output.setName(inputs[i].getName());
+          output.setName(inputs[0].getName());
         } else {
           output.setName(output_name);
         }
@@ -293,12 +287,12 @@ void ResNet50::doRun(BatchPtrQueue* input_queue) {
 #endif
       req->runCallbackOnce(resp);
     }
+    this->returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "ResNet50 ending");
 }
 
 void ResNet50::doRelease() {}
-void ResNet50::doDeallocate() {}
 void ResNet50::doDestroy() {}
 
 }  // namespace amdinfer::workers

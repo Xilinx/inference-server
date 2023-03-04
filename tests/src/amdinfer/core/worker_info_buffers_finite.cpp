@@ -35,24 +35,19 @@
 
 namespace amdinfer {
 
-WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters) {
-  // arbitrarily set to 10
-  const int max_buffer_num = 10;
-
-  this->input_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->output_buffer_ptr_ = std::make_unique<BufferPtrsQueue>();
-  this->buffer_num_ = max_buffer_num;
-  this->max_buffer_num_ = max_buffer_num;
+WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
+                       MemoryPool* pool) {
   this->batch_size_ = 1;
 
-  this->addAndStartWorker(name, parameters);
+  this->addAndStartWorker(name, parameters, pool);
 }
 
 WorkerInfo::~WorkerInfo() = default;
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
-                                   ParameterMap* parameters) {
+                                   ParameterMap* parameters, MemoryPool* pool) {
   (void)name;
+  (void)pool;
   if (parameters == nullptr) {
     return;
   }
@@ -75,32 +70,5 @@ void WorkerInfo::unload() {}
 size_t WorkerInfo::getGroupSize() const { return 1; }
 
 void WorkerInfo::shutdown() {}
-
-BufferPtrs WorkerInfo::getInputBuffer() const {
-  BufferPtrs buffer;
-  input_buffer_ptr_->wait_dequeue(buffer);
-  return buffer;
-}
-
-BufferPtrs WorkerInfo::getOutputBuffer() const {
-  BufferPtrs buffer;
-  output_buffer_ptr_->wait_dequeue(buffer);
-  return buffer;
-}
-
-void WorkerInfo::putInputBuffer(BufferPtrs&& buffer) const {
-  this->input_buffer_ptr_->enqueue(std::move(buffer));
-}
-
-void WorkerInfo::putOutputBuffer(BufferPtrs&& buffer) const {
-  this->output_buffer_ptr_->enqueue(std::move(buffer));
-}
-
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-bool WorkerInfo::inputSizeValid([[maybe_unused]] size_t size) const {
-  return true;
-}
-
-void WorkerInfo::allocate([[maybe_unused]] size_t request_size) {}
 
 }  // namespace amdinfer

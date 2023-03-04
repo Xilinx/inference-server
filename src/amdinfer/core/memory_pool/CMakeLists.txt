@@ -13,15 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests soft)
+set(targets cpu_allocator pool)
 
-list(
-  APPEND
-    tests_libs
-    "$<TARGET_OBJECTS:batcher>~fake_observation~interface\
-      ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~parameters\
-      ~data_types\~$<TARGET_OBJECTS:softBatcher>~cpuBuffer~buffer~memory_pool\
-      ~batch~$<TARGET_OBJECTS:native_internal>~timer"
-)
+foreach(target ${targets})
+  add_library(${target} OBJECT ${target}.cpp)
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
+  set_target_options(${target})
 
-amdinfer_add_benchmarks("${tests}" "${tests_libs}")
+  list(APPEND MEMORY_POOL_OBJS $<TARGET_OBJECTS:${target}>)
+endforeach()
+
+add_library(memory_pool STATIC ${MEMORY_POOL_OBJS})
+target_link_libraries(memory_pool INTERFACE ${targets})
+set_target_options(memory_pool)
+
+set(MEMORY_POOL ${MEMORY_POOL_OBJS} PARENT_SCOPE)
