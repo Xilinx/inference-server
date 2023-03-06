@@ -35,8 +35,9 @@
 #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_TRA...
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap (ptr ...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
+#include "amdinfer/core/protocol_wrapper.hpp"      // for ProtocolWrapper
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/util/traits.hpp"                // for is_any_v
 
 namespace amdinfer {
 
@@ -51,12 +52,6 @@ Json::Value mapParametersToJson(ParameterMap *parameters);
 
 InferenceResponse mapJsonToResponse(Json::Value *json);
 Json::Value mapRequestToJson(const InferenceRequest &request);
-
-// class InferenceRequestOutputBuilder {
-//  public:
-//   static InferenceRequestOutput fromJson(
-//     std::shared_ptr<Json::Value> const &req);
-// };
 
 template <>
 class InferenceRequestBuilder<std::shared_ptr<Json::Value>> {
@@ -74,40 +69,60 @@ using RequestBuilder = InferenceRequestBuilder<std::shared_ptr<Json::Value>>;
 void propagate(drogon::HttpResponse *resp, const StringMap &context);
 #endif
 
-using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
+struct SetInputData {
+  template <typename T>
+  void operator()(Json::Value *json, void *src_data, size_t src_size) const {
+    auto *data = static_cast<T *>(src_data);
+    if constexpr (std::is_same_v<T, char>) {
+      std::string str{data, src_size};
+      json->append(str);
+    } else {
+      // NOLINTNEXTLINE(readability-identifier-naming)
+      constexpr auto getData = [](const T *data_ptr, size_t index) {
+        if constexpr (std::is_same_v<T, uint64_t>) {
+          return static_cast<Json::UInt64>(data_ptr[index]);
+        } else if constexpr (std::is_same_v<T, int64_t>) {
+          return static_cast<Json::Int64>(data_ptr[index]);
+        } else if constexpr (util::is_any_v<T, bool, uint8_t, uint16_t,
+                                            uint32_t, int8_t, int16_t, int32_t,
+                                            float, double>) {
+          return data_ptr[index];
+        } else if constexpr (util::is_any_v<T, fp16>) {
+          return half_float::half_cast<float>(data_ptr[index]);
+        } else {
+          static_assert(!sizeof(T), "Invalid type to SetInputData");
+        }
+      };
 
-/**
- * @brief The DrogonHttp ProtocolWrapper class encapsulates incoming requests
- * from Drogon's HTTP interface to the batcher.
- *
- */
-class DrogonHttp : public ProtocolWrapper {
- public:
-  /**
-   * @brief Construct a new DrogonHttp object
-   *
-   * @param req
-   * @param callback
-   */
-  DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback);
-
-  std::shared_ptr<InferenceRequest> getRequest(
-    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
-    const BufferRawPtrs &output_buffers,
-    std::vector<size_t> &output_offsets) override;
-
-  size_t getInputSize() override;
-  std::vector<size_t> getInputSizes() const override;
-  void errorHandler(const std::exception &e) override;
-
- private:
-  drogon::HttpRequestPtr req_;
-  DrogonCallback callback_;
-  std::shared_ptr<Json::Value> json_;
+      for (auto i = 0U; i < src_size; ++i) {
+        json->append(getData(data, i));
+      }
+    }
+  }
 };
 
-drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
-                                          int status_code);
+template <typename T>
+constexpr auto jsonValueToType(const Json::Value &datum) {
+  if constexpr (std::is_same_v<T, bool>) {
+    return datum.asBool();
+  } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, uint32_t>) {
+    return datum.asUInt();
+  } else if constexpr (std::is_same_v<T, uint64_t>) {
+    return datum.asUInt64();
+  } else if constexpr (util::is_any_v<T, int8_t, int16_t, int32_t>) {
+    return datum.asInt();
+  } else if constexpr (std::is_same_v<T, int64_t>) {
+    return datum.asInt64();
+  } else if constexpr (util::is_any_v<T, fp16, float>) {
+    return datum.asFloat();
+  } else if constexpr (std::is_same_v<T, double>) {
+    return datum.asDouble();
+  } else if constexpr (std::is_same_v<T, char>) {
+    return datum.asString();
+  } else {
+    static_assert(!sizeof(T), "Invalid type to jsonValueToType");
+  }
+}
 
 /// convert the metadata to a JSON representation compatible with the server
 Json::Value modelMetadataToJson(const ModelMetadata &metadata);

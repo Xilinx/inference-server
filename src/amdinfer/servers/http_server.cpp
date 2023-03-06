@@ -37,12 +37,13 @@
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
 #include "amdinfer/core/parameters.hpp"        // for ParameterMapPtr
 #include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
+#include "amdinfer/core/protocol_wrapper.hpp"      // for ProtocolWrapper
 #include "amdinfer/core/shared_state.hpp"          // for SharedState
-#include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG...
-#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCoun...
-#include "amdinfer/observation/tracing.hpp"  // for startTrace, Trace
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/observation/logging.hpp"       // for Logger, AMDINFER_LOG...
+#include "amdinfer/observation/metrics.hpp"       // for Metrics, MetricCoun...
+#include "amdinfer/observation/tracing.hpp"       // for startTrace, Trace
 #include "amdinfer/servers/websocket_server.hpp"  // for WebsocketServer
+#include "amdinfer/util/compression.hpp"          // for zDecompress
 #include "amdinfer/util/string.hpp"               // for toLower
 
 using drogon::HttpRequestPtr;
@@ -83,6 +84,358 @@ void start(SharedState *state, uint16_t port) {
 void stop() { drogon::app().quit(); }
 
 }  // namespace http
+
+std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
+#ifdef AMDINFER_ENABLE_LOGGING
+  Logger logger{Loggers::Server};
+#endif
+
+  // attempt to get the JSON object directly first
+  const auto &json_obj = req->getJsonObject();
+  if (json_obj != nullptr) {
+    return json_obj;
+  }
+
+  AMDINFER_LOG_DEBUG(logger, "Failed to get JSON data directly");
+
+  // if it's not valid, then we need to attempt to parse the body
+  auto root = std::make_shared<Json::Value>();
+
+  std::string errors;
+  Json::CharReaderBuilder builder;
+  Json::CharReader *reader = builder.newCharReader();
+  auto body = req->getBody();
+  bool success =
+    reader->parse(body.data(), body.data() + body.size(), root.get(), &errors);
+  if (success) {
+    return root;
+  }
+
+  AMDINFER_LOG_DEBUG(logger, "Failed to interpret body as JSON data");
+
+  // if it's still not valid, attempt to uncompress the body and convert to JSON
+  auto body_decompress = util::zDecompress(body.data(), body.length());
+  success = reader->parse(body_decompress.data(),
+                          body_decompress.data() + body_decompress.size(),
+                          root.get(), &errors);
+  if (success) {
+    return root;
+  }
+
+  throw invalid_argument("Failed to interpret request body as JSON");
+}
+
+Json::Value parseResponse(InferenceResponse response) {
+  Json::Value ret;
+  ret["model_name"] = response.getModel();
+  ret["outputs"] = Json::arrayValue;
+  ret["id"] = response.getID();
+  auto outputs = response.getOutputs();
+  for (const InferenceResponseOutput &output : outputs) {
+    Json::Value json_output;
+    json_output["name"] = output.getName();
+    json_output["parameters"] = Json::objectValue;
+    json_output["data"] = Json::arrayValue;
+    json_output["shape"] = Json::arrayValue;
+    json_output["datatype"] = output.getDatatype().str();
+    const auto &shape = output.getShape();
+    for (const size_t &index : shape) {
+      json_output["shape"].append(static_cast<Json::UInt>(index));
+    }
+
+    switchOverTypes(SetInputData(), output.getDatatype(),
+                    &(json_output["data"]), output.getData(), output.getSize());
+    ret["outputs"].append(json_output);
+  }
+  return ret;
+}
+
+struct WriteData {
+  template <typename T>
+  size_t operator()(Buffer *buffer, const Json::Value &value,
+                    size_t offset) const {
+    if constexpr (std::is_same_v<T, char>) {
+      return buffer->write(jsonValueToType<T>(value), offset);
+    } else {
+      return buffer->write(static_cast<T>(jsonValueToType<T>(value)), offset);
+    }
+  }
+};
+
+template <>
+class InferenceRequestInputBuilder<std::shared_ptr<Json::Value>> {
+ public:
+  static InferenceRequestInput build(std::shared_ptr<Json::Value> const &req,
+                                     Buffer *input_buffer, size_t offset) {
+    InferenceRequestInput input;
+#ifdef AMDINFER_ENABLE_LOGGING
+    Logger logger{Loggers::Server};
+#endif
+    input.data_ = input_buffer->data(0);
+
+    if (!req->isMember("name")) {
+      throw invalid_argument("No 'name' key present in request input");
+    }
+    input.name_ = req->get("name", "").asString();
+    if (!req->isMember("shape")) {
+      throw invalid_argument("No 'shape' key present in request input");
+    }
+    auto shape = req->get("shape", Json::arrayValue);
+    for (auto const &i : shape) {
+      if (!i.isUInt64()) {
+        throw invalid_argument("'shape' must be specified by uint64 elements");
+      }
+      input.shape_.push_back(i.asUInt64());
+    }
+    if (!req->isMember("datatype")) {
+      throw invalid_argument("No 'datatype' key present in request input");
+    }
+    std::string data_type_str = req->get("datatype", "").asString();
+    input.data_type_ = DataType(data_type_str.c_str());
+    if (req->isMember("parameters")) {
+      auto parameters = req->get("parameters", Json::objectValue);
+      input.parameters_ = mapJsonToParameters(parameters);
+    } else {
+      input.parameters_ = std::make_unique<ParameterMap>();
+    }
+    if (!req->isMember("data")) {
+      throw invalid_argument("No 'data' key present in request input");
+    }
+    auto data = req->get("data", Json::arrayValue);
+    try {
+      for (auto const &i : data) {
+        offset = switchOverTypes(WriteData(), input.data_type_, input_buffer, i,
+                                 offset);
+      }
+    } catch (const Json::LogicError &) {
+      throw invalid_argument(
+        "Could not convert some data to the provided data type");
+    }
+    return input;
+  }
+};
+
+using InputBuilder = InferenceRequestInputBuilder<std::shared_ptr<Json::Value>>;
+
+template <>
+class InferenceRequestOutputBuilder<std::shared_ptr<Json::Value>> {
+ public:
+  static InferenceRequestOutput build(const std::shared_ptr<Json::Value> &req) {
+    InferenceRequestOutput output;
+    output.data_ = nullptr;
+    output.name_ = req->get("name", "").asString();
+    if (req->isMember("parameters")) {
+      auto parameters = req->get("parameters", Json::objectValue);
+      output.parameters_ = mapJsonToParameters(parameters);
+    } else {
+      output.parameters_ = std::make_unique<ParameterMap>();
+    }
+    return output;
+  }
+};
+
+using OutputBuilder =
+  InferenceRequestOutputBuilder<std::shared_ptr<Json::Value>>;
+
+InferenceRequestPtr RequestBuilder::build(
+  const std::shared_ptr<Json::Value> &req, const BufferRawPtrs &input_buffers,
+  std::vector<size_t> &input_offsets, const BufferRawPtrs &output_buffers,
+  std::vector<size_t> &output_offsets) {
+  auto request = std::make_shared<InferenceRequest>();
+
+  if (req->isMember("id")) {
+    request->id_ = req->get("id", "").asString();
+  } else {
+    request->id_ = "";
+  }
+  if (req->isMember("parameters")) {
+    auto parameters = req->get("parameters", Json::objectValue);
+    request->parameters_ = mapJsonToParameters(parameters);
+  } else {
+    request->parameters_ = std::make_unique<ParameterMap>();
+  }
+
+  if (!req->isMember("inputs")) {
+    throw invalid_argument("No 'inputs' key present in request");
+  }
+  auto inputs = req->get("inputs", Json::arrayValue);
+  if (!inputs.isArray()) {
+    throw invalid_argument("'inputs' is not an array");
+  }
+
+  request->callback_ = nullptr;
+
+  assert(input_buffers.size() == inputs.size());
+  const auto input_num = input_buffers.size();
+  for (auto i = 0U; i < input_num; ++i) {
+    const auto &json_input = inputs[i];
+    if (!json_input.isObject()) {
+      throw invalid_argument("At least one element in 'inputs' is not an obj");
+    }
+    auto *buffer = input_buffers[i];
+    auto &offset = input_offsets[i];
+    auto input = InputBuilder::build(std::make_shared<Json::Value>(json_input),
+                                     buffer, offset);
+    offset += (input.getSize() * input.getDatatype().size());
+
+    request->inputs_.push_back(std::move(input));
+  }
+
+  // TODO(varunsh): output_offset is currently ignored! The size of the output
+  // needs to come from the worker but we have no such information.
+  const auto output_num = output_buffers.size();
+  if (req->isMember("outputs")) {
+    auto outputs = req->get("outputs", Json::arrayValue);
+    assert(output_buffers.size() == outputs.size());
+    for (auto i = 0U; i < output_num; ++i) {
+      const auto &json_output = outputs[i];
+      auto *buffer = output_buffers[i];
+      auto &offset = output_offsets[i];
+
+      auto output =
+        OutputBuilder::build(std::make_shared<Json::Value>(json_output));
+      output.setData(static_cast<std::byte *>(buffer->data(offset)));
+      request->outputs_.push_back(std::move(output));
+      // output += request->outputs_.back().getSize(); // see TODO
+    }
+  } else {
+    for (auto i = 0U; i < output_num; ++i) {
+      auto *buffer = output_buffers[i];
+      const auto &offset = output_offsets[i];
+
+      request->outputs_.emplace_back();
+      request->outputs_.back().setData(
+        static_cast<std::byte *>(buffer->data(offset)));
+    }
+  }
+
+  return request;
+}
+
+using RequestBuilder = InferenceRequestBuilder<std::shared_ptr<Json::Value>>;
+
+drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
+                                          int status_code) {
+  Json::Value ret;
+  ret["error"] = error.data();
+  auto resp = drogon::HttpResponse::newHttpJsonResponse(ret);
+  resp->setStatusCode(static_cast<drogon::HttpStatusCode>(status_code));
+  return resp;
+}
+
+using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
+
+/**
+ * @brief The DrogonHttp ProtocolWrapper class encapsulates incoming requests
+ * from Drogon's HTTP interface to the batcher.
+ *
+ */
+class DrogonHttp : public ProtocolWrapper {
+ public:
+  /**
+   * @brief Construct a new DrogonHttp object
+   *
+   * @param req
+   * @param callback
+   */
+  DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback)
+    : req_(req), callback_(std::move(callback)) {
+    this->type_ = ProtocolWrappers::DrogonHttp;
+    this->json_ = parseJson(req_.get());
+  }
+
+  std::shared_ptr<InferenceRequest> getRequest(
+    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+    const BufferRawPtrs &output_buffers,
+    std::vector<size_t> &output_offsets) override {
+#ifdef AMDINFER_ENABLE_LOGGING
+    const auto &logger = this->getLogger();
+#endif
+    try {
+      auto request =
+        RequestBuilder::build(this->json_, input_buffers, input_offsets,
+                              output_buffers, output_offsets);
+      Callback callback = [callback = std::move(this->callback_)](
+                            const InferenceResponse &response) {
+        drogon::HttpResponsePtr resp;
+        if (response.isError()) {
+          resp = errorHttpResponse(response.getError(),
+                                   HttpStatusCode::k400BadRequest);
+        } else {
+          try {
+            Json::Value ret = parseResponse(response);
+            resp = drogon::HttpResponse::newHttpJsonResponse(ret);
+          } catch (const invalid_argument &e) {
+            resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
+          }
+        }
+#ifdef AMDINFER_ENABLE_TRACING
+        const auto &context = response.getContext();
+        propagate(resp.get(), context);
+#endif
+        callback(resp);
+      };
+      request->setCallback(std::move(callback));
+      return request;
+    } catch (const invalid_argument &e) {
+      AMDINFER_LOG_INFO(logger, e.what());
+      this->callback_(
+        errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
+      return nullptr;
+    }
+  };
+
+  size_t getInputSize() override {
+    if (!this->json_->isMember("inputs")) {
+      throw invalid_argument("No 'inputs' key present in request");
+    }
+    auto inputs = this->json_->get("inputs", Json::arrayValue);
+    if (!inputs.isArray()) {
+      throw invalid_argument("'inputs' is not an array");
+    }
+
+    return inputs.size();
+  };
+
+  std::vector<size_t> getInputSizes() const override {
+    std::vector<size_t> sizes;
+
+    if (!this->json_->isMember("inputs")) {
+      throw invalid_argument("No 'inputs' key present in request");
+    }
+    auto inputs = this->json_->get("inputs", Json::arrayValue);
+    if (!inputs.isArray()) {
+      throw invalid_argument("'inputs' is not an array");
+    }
+
+    for (const auto &tensor : inputs) {
+      // using asCString() doesn't work -> the string is empty
+      const auto raw_type = tensor.get("datatype", "UNKNOWN").asString();
+      auto datatype = DataType(raw_type.c_str());
+
+      const auto shape = tensor.get("shape", Json::arrayValue);
+      size_t size = 1;
+      for (const auto &index : shape) {
+        size *= index.asInt64();
+      }
+      sizes.push_back(size * datatype.size());
+    }
+    return sizes;
+  };
+  void errorHandler(const std::exception &e) override {
+#ifdef AMDINFER_ENABLE_LOGGING
+    [[maybe_unused]] const auto &logger = this->getLogger();
+    AMDINFER_LOG_DEBUG(logger, e.what());
+#endif
+    this->callback_(
+      errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest));
+  };
+
+ private:
+  drogon::HttpRequestPtr req_;
+  DrogonCallback callback_;
+  std::shared_ptr<Json::Value> json_;
+};
 
 HttpServer::HttpServer(SharedState *state) : state_(state) {
   AMDINFER_LOG_DEBUG(logger_, "Constructed HttpServer");

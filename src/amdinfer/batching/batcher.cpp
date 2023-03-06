@@ -27,9 +27,9 @@
 
 #include "amdinfer/buffers/buffer.hpp"         // IWYU pragma: keep
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/protocol_wrapper.hpp"  // IWYU pragma: keep
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"    // for Logger, Loggers, Logger...
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // IWYU pragma: keep
 
 namespace amdinfer {
 

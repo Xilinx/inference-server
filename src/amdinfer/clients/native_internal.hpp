@@ -28,8 +28,8 @@
 #include <vector>     // for vector
 
 #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest, Infere...
-#include "amdinfer/declarations.hpp"      // for BufferRawPtrs
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/declarations.hpp"           // for BufferRawPtrs
 
 namespace amdinfer {
 

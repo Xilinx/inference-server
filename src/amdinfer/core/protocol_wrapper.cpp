@@ -18,7 +18,7 @@
  * @brief Implements the base ProtocolWrapper class
  */
 
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"
+#include "amdinfer/core/protocol_wrapper.hpp"
 
 #include <utility>  // for move
 

@@ -29,13 +29,13 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"        // for invalid_argument
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/declarations.hpp"           // for ProtocolWrapperPtr
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
-#include "amdinfer/util/queue.hpp"   // for BlockingConcurrentQueue
-#include "amdinfer/util/thread.hpp"  // for setThreadName
+#include "amdinfer/util/queue.hpp"             // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"            // for setThreadName
 
 // IWYU pragma: no_forward_declare amdinfer::Buffer
 

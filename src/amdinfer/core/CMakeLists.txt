@@ -23,6 +23,7 @@ list(
          model_repository
          parameters
          shared_state
+         protocol_wrapper
 )
 
 foreach(target ${targets})

@@ -36,9 +36,9 @@
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // IWYU pragma: keep
-#include "amdinfer/util/string.hpp"                         // for isLower
-#include "amdinfer/version.hpp"  // for kAmdinferVersion
+#include "amdinfer/core/protocol_wrapper.hpp"  // IWYU pragma: keep
+#include "amdinfer/util/string.hpp"            // for isLower
+#include "amdinfer/version.hpp"                // for kAmdinferVersion
 
 #ifdef AMDINFER_ENABLE_VITIS
 #include <sockpp/socket.h>         // for socket, socket_initializer

@@ -27,10 +27,10 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/declarations.hpp"         // for BufferRawPtrs
-#include "amdinfer/observation/logging.hpp"  // for LoggerPtr
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/declarations.hpp"           // for BufferRawPtrs
+#include "amdinfer/observation/logging.hpp"    // for LoggerPtr
 
 namespace Json {  // NOLINT(readability-identifier-naming)
 class Value;
@@ -42,32 +42,6 @@ class SharedState;
 }  // namespace amdinfer
 
 namespace amdinfer::http {
-
-/**
- * @brief The DrogonWs ProtocolWrapper class encapsulates incoming requests from
- * Drogon's Websocket interface to the batcher.
- *
- */
-class DrogonWs : public ProtocolWrapper {
- public:
-  DrogonWs(const drogon::WebSocketConnectionPtr &conn,
-           std::shared_ptr<Json::Value> json);
-
-  std::shared_ptr<InferenceRequest> getRequest(
-    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
-    const BufferRawPtrs &output_buffers,
-    std::vector<size_t> &output_offsets) override;
-
-  size_t getInputSize() override;
-  std::vector<size_t> getInputSizes() const override;
-  void errorHandler(const std::exception &e) override;
-
- private:
-  void setJson();
-
-  std::shared_ptr<Json::Value> json_;
-  drogon::WebSocketConnectionPtr conn_;
-};
 
 /**
  * @brief The Websocket server handles incoming websocket requests. Currently,

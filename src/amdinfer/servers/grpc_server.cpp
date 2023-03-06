@@ -43,15 +43,15 @@
 #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/shared_state.hpp"          // for SharedState
-#include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper, Interfac...
-#include "amdinfer/util/containers.hpp"  // for containerProduct
-#include "amdinfer/util/string.hpp"      // for toLower
-#include "amdinfer/util/traits.hpp"      // IWYU pragma: keep
-#include "predict_api.grpc.pb.h"         // for GRPCInferenceServic...
-#include "predict_api.pb.h"              // for InferTensorContents
+#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper, Interfac...
+#include "amdinfer/core/shared_state.hpp"      // for SharedState
+#include "amdinfer/declarations.hpp"           // for BufferRawPtrs, Infe...
+#include "amdinfer/observation/observer.hpp"  // for Logger, Loggers
+#include "amdinfer/util/containers.hpp"       // for containerProduct
+#include "amdinfer/util/string.hpp"           // for toLower
+#include "amdinfer/util/traits.hpp"           // IWYU pragma: keep
+#include "predict_api.grpc.pb.h"              // for GRPCInferenceServic...
+#include "predict_api.pb.h"                   // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;
@@ -441,7 +441,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
 class GrpcApiUnary : public ProtocolWrapper {
  public:
   /**
-   * @brief Construct a new DrogonHttp object
+   * @brief Construct a new GrpcApiUnary object
    *
    * @param req
    * @param callback

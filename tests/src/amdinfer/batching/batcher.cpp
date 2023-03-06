@@ -31,11 +31,11 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponsePromis...
+#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
 #include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_DEBUG
 #include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
-#include "amdinfer/util/queue.hpp"   // for BlockingConcurrentQueue
-#include "amdinfer/util/thread.hpp"  // for setThreadName
+#include "amdinfer/util/queue.hpp"             // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"            // for setThreadName
 
 // IWYU pragma: no_forward_declare amdinfer::Buffer
 

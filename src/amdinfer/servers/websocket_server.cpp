@@ -36,6 +36,32 @@ using drogon::WebSocketMessageType;
 
 namespace amdinfer::http {
 
+/**
+ * @brief The DrogonWs ProtocolWrapper class encapsulates incoming requests from
+ * Drogon's Websocket interface to the batcher.
+ *
+ */
+class DrogonWs : public ProtocolWrapper {
+ public:
+  DrogonWs(const drogon::WebSocketConnectionPtr &conn,
+           std::shared_ptr<Json::Value> json);
+
+  std::shared_ptr<InferenceRequest> getRequest(
+    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
+    const BufferRawPtrs &output_buffers,
+    std::vector<size_t> &output_offsets) override;
+
+  size_t getInputSize() override;
+  std::vector<size_t> getInputSizes() const override;
+  void errorHandler(const std::exception &e) override;
+
+ private:
+  void setJson();
+
+  std::shared_ptr<Json::Value> json_;
+  drogon::WebSocketConnectionPtr conn_;
+};
+
 WebsocketServer::WebsocketServer(SharedState *state) : state_(state) {
   AMDINFER_LOG_INFO(logger_, "Constructed WebsocketServer");
 }

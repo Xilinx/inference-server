@@ -30,11 +30,11 @@
 #include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
 #include "amdinfer/core/exceptions.hpp"          // for invalid_argument
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/protocol_wrapper.hpp"    // for ProtocolWrapper
 #include "amdinfer/core/shared_state.hpp"        // for SharedState
 #include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCount...
 #include "amdinfer/observation/tracing.hpp"      // for startTrace, Trace
-#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
-#include "amdinfer/servers/server.hpp"                      // for Server
+#include "amdinfer/servers/server.hpp"           // for Server
 #include "amdinfer/servers/server_internal.hpp"  // for Server::ServerImpl
 #include "amdinfer/util/string.hpp"              // for toLower
 
