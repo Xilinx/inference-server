@@ -15,11 +15,11 @@
 
 /**
  * @file
- * @brief Defines the base Interface class
+ * @brief Defines the base ProtocolWrapper class
  */
 
-#ifndef GUARD_AMDINFER_CORE_INTERFACE
-#define GUARD_AMDINFER_CORE_INTERFACE
+#ifndef GUARD_AMDINFER_PROTOCOL_WRAPPER_PROTOCOL_WRAPPER
+#define GUARD_AMDINFER_PROTOCOL_WRAPPER_PROTOCOL_WRAPPER
 
 #include <chrono>     // for high_resolution_clock
 #include <cstddef>    // for size_t
@@ -39,11 +39,11 @@ class InferenceRequest;
 namespace amdinfer {
 
 /**
- * @brief The InterfaceType identifies the Interface. New interfaces can be
- * added by extending this enumeration.
+ * @brief The ProtocolWrappers identifies the ProtocolWrapper. New
+ * ProtocolWrappers can be added by extending this enumeration.
  *
  */
-enum class InterfaceType {
+enum class ProtocolWrappers {
   Unknown,
   DrogonHttp,
   DrogonWs,
@@ -52,21 +52,21 @@ enum class InterfaceType {
 };
 
 /**
- * @brief The Interface class represents an input-agnostic wrapper class that
+ * @brief The ProtocolWrapper class represents an input-agnostic class that
  * can encapsulate incoming requests from different protocols and present a
  * consistent object and interface to the batcher to process all the requests.
  *
  */
-class Interface {
+class ProtocolWrapper {
  public:
-  Interface();                     ///< Constructor
-  virtual ~Interface() = default;  ///< Destructor
-  /// Get the type of the interface
-  [[nodiscard]] InterfaceType getType() const;
+  ProtocolWrapper();                     ///< Constructor
+  virtual ~ProtocolWrapper() = default;  ///< Destructor
+  /// Get the type of the ProtocolWrapper
+  [[nodiscard]] ProtocolWrappers getType() const;
 #ifdef AMDINFER_ENABLE_TRACING
-  /// Store the active trace into the Interface for propagation
+  /// Store the active trace into the ProtocolWrapper for propagation
   void setTrace(TracePtr &&trace);
-  /// Get the stored trace from the interface for propagation
+  /// Get the stored trace from the ProtocolWrapper for propagation
   TracePtr &&getTrace();
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
@@ -82,7 +82,7 @@ class Interface {
   virtual std::vector<size_t> getInputSizes() const = 0;
   // virtual std::vector<size_t> getOutputSizes() = 0;
   /**
-   * @brief Construct an InferenceRequest using the data in the Interface
+   * @brief Construct an InferenceRequest using the data in the ProtocolWrapper
    *
    * @param input_buffers a vector of buffers to hold the input data
    * @param input_offsets offsets of where to start storing input data
@@ -103,7 +103,7 @@ class Interface {
   virtual void errorHandler(const std::exception &e) = 0;
 
  protected:
-  InterfaceType type_;
+  ProtocolWrappers type_;
 #ifdef AMDINFER_ENABLE_TRACING
   TracePtr trace_;
 #endif
@@ -122,4 +122,4 @@ class Interface {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_CORE_INTERFACE
+#endif  // GUARD_AMDINFER_PROTOCOL_WRAPPER_PROTOCOL_WRAPPER

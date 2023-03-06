@@ -28,8 +28,8 @@ class Buffer;
 
 class Batch;
 
-class Interface;
-using InterfacePtr = std::unique_ptr<Interface>;
+class ProtocolWrapper;
+using ProtocolWrapperPtr = std::unique_ptr<ProtocolWrapper>;
 class WorkerInfo;
 
 struct UpdateCommand;

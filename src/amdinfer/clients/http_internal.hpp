@@ -33,10 +33,10 @@
 #include <vector>      // for vector
 
 #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_TRA...
-#include "amdinfer/core/interface.hpp"             // for Interface
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap (ptr ...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
 
 namespace amdinfer {
 
@@ -77,11 +77,11 @@ void propagate(drogon::HttpResponse *resp, const StringMap &context);
 using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
 
 /**
- * @brief The DrogonHttp Interface class encapsulates incoming requests from
- * Drogon's HTTP interface to the batcher.
+ * @brief The DrogonHttp ProtocolWrapper class encapsulates incoming requests
+ * from Drogon's HTTP interface to the batcher.
  *
  */
-class DrogonHttp : public Interface {
+class DrogonHttp : public ProtocolWrapper {
  public:
   /**
    * @brief Construct a new DrogonHttp object

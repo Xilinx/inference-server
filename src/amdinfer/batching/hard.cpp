@@ -28,14 +28,14 @@
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"        // for invalid_argument
-#include "amdinfer/core/interface.hpp"         // for Interface
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
-#include "amdinfer/declarations.hpp"           // for InterfacePtr
+#include "amdinfer/declarations.hpp"           // for ProtocolWrapperPtr
 #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/queue.hpp"             // for BlockingConcurrentQueue
-#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/util/queue.hpp"   // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"  // for setThreadName
 
 // IWYU pragma: no_forward_declare amdinfer::Buffer
 
@@ -44,7 +44,7 @@ namespace amdinfer {
 void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
   auto thread_name = "batch" + this->getName();
   util::setThreadName(thread_name);
-  InterfacePtr req;
+  ProtocolWrapperPtr req;
   bool run = true;
 
   while (run) {

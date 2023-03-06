@@ -45,11 +45,11 @@ Ingestion
 
 There are a number of ways to get data into the system for inference.
 In general, each protocol has a custom interface to the client and requires explicit handling in the Server to accept this initial request.
-After receiving the client's request in the Server, each supported protocols' handler packs the request into an implementation of an ``Interface`` object.
+After receiving the client's request in the Server, each supported protocols' handler packs the request into an implementation of a ``ProtocolWrapper`` object.
 This virtual class is defined in the Server and provides the batcher with a standard way of interacting with data from different ingestion protocols.
 Since all protocols push an implementation of this class to the batcher, they are treated equally by the rest of the Server.
 The only protocol-specific logic applies at the end of the worker when it replies back to the client in a protocol-specific manner.
-This structure also enables easy extension of the Server to add new protocols by extending the ``Interface`` class.
+This structure also enables easy extension of the Server to add new protocols by extending the ``ProtocolWrapper`` class.
 
 API
 ^^^
@@ -87,7 +87,7 @@ The various endpoints from the API are registered in the Drogon's HTTP controlle
 Drogon uses a configurable number of threads to run these request handlers.
 When a REST request is made to an endpoint, the request data and callback function are provided for the handler to process the request and then respond to the client.
 To avoid blocking the finite number of handler threads with potentially long-running inference requests, we use an asynchronous architecture in the handler.
-The received request is packed into an ``Interface`` object and pushed into a :github:`thread-safe lock-free multi producer/consumer queue <cameron314/concurrentqueue>` to go to the target worker's batcher.
+The received request is packed into a ``ProtocolWrapper`` object and pushed into a :github:`thread-safe lock-free multi producer/consumer queue <cameron314/concurrentqueue>` to go to the target worker's batcher.
 The HTTP server code is in ``src/amdinfer/servers/http_server.*``.
 
 Drogon also provides a WebSocket server, which is currently used experimentally to run predictions on videos from certain workers.
@@ -103,7 +103,7 @@ As a result, using the C++ API will yield the highest performance of any ingesti
 
 The C++ API provides functions similar to the prediction API used in HTTP.
 The API lets users load workers and make inference requests.
-The inference request is packed into an ``Interface`` object and pushed to the target worker's batcher.
+The inference request is packed into a ``ProtocolWrapper`` object and pushed to the target worker's batcher.
 An ``std::promise`` is returned to the user to retrieve the result.
 
 The public API is defined in ``include/amdinfer/clients/native.hpp`` and the implementation is in ``src/amdinfer/clients/native.cpp``.
@@ -129,7 +129,7 @@ The implementations of the batchers are in ``src/amdinfer/batching``.
 
 The base batcher class defines a common interface for all batcher implementations and has some basic common properties.
 Each batcher has two thread-safe queues (one for input and one for output), a configured batch size and a string identifying the worker group it's attached to.
-The batcher runs as a separate thread that monitors its input queue to process incoming ``Interface`` objects from all ingestion methods and pushes completed ``Batch`` objects on the output queue.
+The batcher runs as a separate thread that monitors its input queue to process incoming ``ProtocolWrapper`` objects from all ingestion methods and pushes completed ``Batch`` objects on the output queue.
 Each batcher implementation defines a ``run()`` method that provides the logic with which the batcher produces a batch.
 A worker (and by extension, the worker group) specifies which batcher implementation should be used to prepare batches for it (as well as the batch size) and each worker group shares a set of batchers.
 This configuration is determined at compile-time and built into the definition of the worker.
@@ -144,9 +144,9 @@ In this case, the batcher's job is to take individual requests and move its data
 Batchers have some flexibility with how these batches are constructed, which is why multiple batcher implementations are possible and supported in the AMD Inference Server.
 For example, one batcher may allow partial batches to be pushed on after enough time whereas this may not be allowed by another batcher.
 
-Batchers use the ``Interface`` object's ``getRequest()`` method to help create batches.
+Batchers use the ``ProtocolWrapper`` object's ``getRequest()`` method to help create batches.
 This method must be implemented by each interface and governs how, given some buffers and counters, the particular ingestion method's data should be converted to an ``InferenceRequest`` and its data is copied over to the buffers.
-THis method allows batchers to process all ingestion methods without knowing about the details of how the data may be stored internally in the ``Interface``.
+THis method allows batchers to process all ingestion methods without knowing about the details of how the data may be stored internally in the ``ProtocolWrapper``.
 
 
 .. _architectureWorkers:
@@ -318,7 +318,7 @@ Manager
 -------
 
 The shared state of the AMD Inference Server is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in :numref:`architecture_detail`.
-This information enables the ingestion protocols to query the Manager to retrieve a pointer to the correct batcher to use to push the ``Interface`` object to the right one corresponding to the targeted worker.
+This information enables the ingestion protocols to query the Manager to retrieve a pointer to the correct batcher to use to push the ``ProtocolWrapper`` object to the right one corresponding to the targeted worker.
 To manage multiple versions of workers that may be running with different configurations, the Manager stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
 In the case that it's assigned to an existing worker group, the previously allocated endpoint is returned to the client.
 If a new worker group is created, a new endpoint is reserved for this worker group and returned to the client.

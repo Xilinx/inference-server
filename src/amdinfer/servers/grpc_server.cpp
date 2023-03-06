@@ -41,17 +41,17 @@
 #include "amdinfer/clients/grpc_internal.hpp"      // for mapProtoToParameters
 #include "amdinfer/core/data_types.hpp"            // for DataType, DataType:...
 #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
-#include "amdinfer/core/interface.hpp"             // for Interface, Interfac...
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
 #include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
-#include "amdinfer/util/containers.hpp"            // for containerProduct
-#include "amdinfer/util/string.hpp"                // for toLower
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
-#include "predict_api.pb.h"                        // for InferTensorContents
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper, Interfac...
+#include "amdinfer/util/containers.hpp"  // for containerProduct
+#include "amdinfer/util/string.hpp"      // for toLower
+#include "amdinfer/util/traits.hpp"      // IWYU pragma: keep
+#include "predict_api.grpc.pb.h"         // for GRPCInferenceServic...
+#include "predict_api.pb.h"              // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;
@@ -438,7 +438,7 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
   calldata->finish(::grpc::Status::OK);
 }
 
-class GrpcApiUnary : public Interface {
+class GrpcApiUnary : public ProtocolWrapper {
  public:
   /**
    * @brief Construct a new DrogonHttp object
@@ -447,7 +447,7 @@ class GrpcApiUnary : public Interface {
    * @param callback
    */
   explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {
-    this->type_ = InterfaceType::Grpc;
+    this->type_ = ProtocolWrappers::Grpc;
   }
 
   std::shared_ptr<InferenceRequest> getRequest(

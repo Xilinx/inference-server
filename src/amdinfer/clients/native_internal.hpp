@@ -27,13 +27,13 @@
 #include <memory>     // for shared_ptr
 #include <vector>     // for vector
 
-#include "amdinfer/core/interface.hpp"    // for Interface
 #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest, Infere...
 #include "amdinfer/declarations.hpp"      // for BufferRawPtrs
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
 
 namespace amdinfer {
 
-class CppNativeApi : public Interface {
+class CppNativeApi : public ProtocolWrapper {
  public:
   explicit CppNativeApi(InferenceRequest request);
 

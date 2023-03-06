@@ -25,10 +25,10 @@
 #include "amdinfer/batching/batcher.hpp"  // for Batcher
 #include "amdinfer/build_options.hpp"     // for kMaxModelNameSize
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument
-#include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
 #include "amdinfer/core/parameters.hpp"   // for ParameterMap
 #include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
-#include "amdinfer/util/thread.hpp"       // for setThreadName
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // IWYU pragma: keep
+#include "amdinfer/util/thread.hpp"                         // for setThreadName
 
 namespace amdinfer {
 
@@ -69,7 +69,7 @@ void Endpoints::unload(const std::string& endpoint) {
 
 // TODO(varunsh): race condition if workers are shutting down
 void Endpoints::infer(const std::string& endpoint,
-                      std::unique_ptr<Interface> request) const {
+                      std::unique_ptr<ProtocolWrapper> request) const {
   WorkerInfo* worker = this->unsafeGet(endpoint);
   if (worker == nullptr) {
     throw invalid_argument("Worker " + endpoint + " not found");

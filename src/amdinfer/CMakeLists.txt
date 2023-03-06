@@ -30,6 +30,7 @@ add_subdirectory(bindings)
 add_subdirectory(buffers)
 add_subdirectory(clients)
 add_subdirectory(core)
+add_subdirectory(protocol_wrappers)
 add_subdirectory(observation)
 add_subdirectory(servers)
 add_subdirectory(util)
@@ -55,6 +56,7 @@ add_library(
   ${CORE_OBJS}
   ${HELPER_OBJS}
   ${OBSERVATION_OBJS}
+  ${PROTOCOL_WRAPPER_OBJS}
   ${SERVER_OBJS}
   ${UTIL_OBJS}
 )
@@ -71,6 +73,7 @@ add_library(
   ${CORE_OBJS}
   ${HELPER_OBJS}
   ${OBSERVATION_OBJS}
+  ${PROTOCOL_WRAPPER_OBJS}
   ${SERVER_OBJS}
   ${UTIL_OBJS}
 )

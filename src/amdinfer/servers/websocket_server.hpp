@@ -28,9 +28,9 @@
 #include <vector>     // for vector
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/interface.hpp"       // for Interface
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
 
 namespace Json {  // NOLINT(readability-identifier-naming)
 class Value;
@@ -44,11 +44,11 @@ class SharedState;
 namespace amdinfer::http {
 
 /**
- * @brief The DrogonWs Interface class encapsulates incoming requests from
+ * @brief The DrogonWs ProtocolWrapper class encapsulates incoming requests from
  * Drogon's Websocket interface to the batcher.
  *
  */
-class DrogonWs : public Interface {
+class DrogonWs : public ProtocolWrapper {
  public:
   DrogonWs(const drogon::WebSocketConnectionPtr &conn,
            std::shared_ptr<Json::Value> json);

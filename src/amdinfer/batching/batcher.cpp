@@ -26,21 +26,21 @@
 #include <utility>  // for move
 
 #include "amdinfer/buffers/buffer.hpp"         // IWYU pragma: keep
-#include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"    // for Logger, Loggers, Logger...
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // IWYU pragma: keep
 
 namespace amdinfer {
 
 /**
- * @brief The C++ Interface class encapsulates incoming requests from the C++
- * API to the batcher.
+ * @brief The C++ ProtocolWrapper class encapsulates incoming requests from the
+ * C++ API to the batcher.
  *
  */
 
 Batcher::Batcher(MemoryPool* pool) : pool_(pool) {
-  this->input_queue_ = std::make_shared<BlockingQueue<InterfacePtr>>();
+  this->input_queue_ = std::make_shared<BlockingQueue<ProtocolWrapperPtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
   this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -79,13 +79,13 @@ void Batcher::setName(const std::string& name) { this->model_ = name; }
 
 std::string Batcher::getName() const { return this->model_; }
 
-BlockingQueue<InterfacePtr>* Batcher::getInputQueue() {
+BlockingQueue<ProtocolWrapperPtr>* Batcher::getInputQueue() {
   return this->input_queue_.get();
 }
 
 BatchPtrQueue* Batcher::getOutputQueue() { return this->output_queue_.get(); }
 
-void Batcher::enqueue(InterfacePtr request) const {
+void Batcher::enqueue(ProtocolWrapperPtr request) const {
   this->input_queue_->enqueue(std::move(request));
 }
 

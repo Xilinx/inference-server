@@ -39,12 +39,12 @@
 #include "amdinfer/buffers/buffer.hpp"             // for Buffer
 #include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
 #include "amdinfer/core/exceptions.hpp"            // invalid_argument
-#include "amdinfer/core/interface.hpp"             // for InterfaceType, Inte...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
 #include "amdinfer/observation/logging.hpp"        // for Logger
-#include "amdinfer/util/compression.hpp"           // for zDecompress
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "half/half.hpp"                           // for half
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrappers, Inte...
+#include "amdinfer/util/compression.hpp"                    // for zDecompress
+#include "amdinfer/util/traits.hpp"                         // IWYU pragma: keep
+#include "half/half.hpp"                                    // for half
 
 namespace amdinfer {
 
@@ -448,7 +448,7 @@ std::shared_ptr<Json::Value> parseJson(const drogon::HttpRequest *req) {
 DrogonHttp::DrogonHttp(const drogon::HttpRequestPtr &req,
                        DrogonCallback callback)
   : req_(req), callback_(std::move(callback)) {
-  this->type_ = InterfaceType::DrogonHttp;
+  this->type_ = ProtocolWrappers::DrogonHttp;
   this->json_ = parseJson(req.get());
 }
 

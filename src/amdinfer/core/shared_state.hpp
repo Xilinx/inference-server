@@ -32,7 +32,7 @@
 
 namespace amdinfer {
 
-class Interface;
+class ProtocolWrapper;
 class ParameterMap;
 
 class SharedState {
@@ -47,7 +47,8 @@ class SharedState {
   bool modelReady(const std::string& model);
   ModelMetadata modelMetadata(const std::string& model);
 
-  void modelInfer(const std::string& model, std::unique_ptr<Interface> request);
+  void modelInfer(const std::string& model,
+                  std::unique_ptr<ProtocolWrapper> request);
 
   static Kernels getHardware();
   static bool hasHardware(const std::string& name, int num);

@@ -15,10 +15,10 @@
 
 /**
  * @file
- * @brief Implements the base Interface class
+ * @brief Implements the base ProtocolWrapper class
  */
 
-#include "amdinfer/core/interface.hpp"
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"
 
 #include <utility>  // for move
 
@@ -27,28 +27,31 @@
 
 namespace amdinfer {
 
-Interface::Interface() { this->type_ = InterfaceType::Unknown; }
+ProtocolWrapper::ProtocolWrapper() { this->type_ = ProtocolWrappers::Unknown; }
 
-InterfaceType Interface::getType() const { return this->type_; }
+ProtocolWrappers ProtocolWrapper::getType() const { return this->type_; }
 
 #ifdef AMDINFER_ENABLE_TRACING
-void Interface::setTrace(TracePtr&& trace) { this->trace_ = std::move(trace); }
-TracePtr&& Interface::getTrace() { return std::move(this->trace_); }
+void ProtocolWrapper::setTrace(TracePtr&& trace) {
+  this->trace_ = std::move(trace);
+}
+TracePtr&& ProtocolWrapper::getTrace() { return std::move(this->trace_); }
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS
-void Interface::setTime(
+void ProtocolWrapper::setTime(
   const std::chrono::high_resolution_clock::time_point& start_time) {
   this->start_time_ = start_time;
 }
 
-std::chrono::high_resolution_clock::time_point Interface::getTime() const {
+std::chrono::high_resolution_clock::time_point ProtocolWrapper::getTime()
+  const {
   return this->start_time_;
 }
 #endif
 
 #ifdef AMDINFER_ENABLE_LOGGING
-const Logger& Interface::getLogger() const { return this->logger_; }
+const Logger& ProtocolWrapper::getLogger() const { return this->logger_; }
 #endif
 
 }  // namespace amdinfer

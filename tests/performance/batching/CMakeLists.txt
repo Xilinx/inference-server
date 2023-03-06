@@ -18,7 +18,7 @@ list(APPEND tests soft)
 list(
   APPEND
     tests_libs
-    "$<TARGET_OBJECTS:batcher>~fake_observation~interface\
+    "$<TARGET_OBJECTS:batcher>~fake_observation~protocol_wrapper\
       ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~parameters\
       ~data_types\~$<TARGET_OBJECTS:softBatcher>~cpuBuffer~buffer~memory_pool\
       ~batch~$<TARGET_OBJECTS:native_internal>~timer"

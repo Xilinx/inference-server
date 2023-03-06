@@ -30,12 +30,12 @@
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "amdinfer/core/interface.hpp"         // for Interface
 #include "amdinfer/core/predict_api.hpp"       // for InferenceResponsePromis...
 #include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_DEBUG
 #include "amdinfer/observation/tracing.hpp"    // for Trace
-#include "amdinfer/util/queue.hpp"             // for BlockingConcurrentQueue
-#include "amdinfer/util/thread.hpp"            // for setThreadName
+#include "amdinfer/protocol_wrappers/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/util/queue.hpp"   // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"  // for setThreadName
 
 // IWYU pragma: no_forward_declare amdinfer::Buffer
 
@@ -46,9 +46,9 @@ namespace amdinfer {
 //  * fakeInferenceRequest object similar to how the real one does.
 //  *
 //  */
-// class FakeInterface : public Interface {
+// class FakeProtocolWrapper : public ProtocolWrapper {
 //  public:
-//   explicit FakeInterface(InferenceRequestInput request);
+//   explicit FakeProtocolWrapper(InferenceRequestInput request);
 
 //   std::shared_ptr<InferenceRequest> getRequest(
 //     const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
@@ -64,15 +64,16 @@ namespace amdinfer {
 //   InferenceResponsePromisePtr promise_;
 // };
 
-// FakeInterface::FakeInterface(InferenceRequestInput request)
+// FakeProtocolWrapper::FakeProtocolWrapper(InferenceRequestInput request)
 //   : request_(std::move(request)) {
 //   this->promise_ =
 //     std::make_unique<std::promise<amdinfer::InferenceResponse>>();
 // }
 
-// size_t FakeInterface::getInputSize() { return 1; }
+// size_t FakeProtocolWrapper::getInputSize() { return 1; }
 
-// std::promise<amdinfer::InferenceResponse> *FakeInterface::getPromise() {
+// std::promise<amdinfer::InferenceResponse> *FakeProtocolWrapper::getPromise()
+// {
 //   return this->promise_.get();
 // }
 
@@ -81,7 +82,7 @@ namespace amdinfer {
 //   promise->set_value(response);
 // }
 
-// std::shared_ptr<InferenceRequest> FakeInterface::getRequest(
+// std::shared_ptr<InferenceRequest> FakeProtocolWrapper::getRequest(
 //   const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
 //   const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offsets) {
 //   auto request = std::make_shared<FakeInferenceRequest>(
@@ -94,7 +95,7 @@ namespace amdinfer {
 //   return request;
 // }
 
-// void FakeInterface::errorHandler(const std::exception &e) {
+// void FakeProtocolWrapper::errorHandler(const std::exception &e) {
 //   AMDINFER_LOG_ERROR(this->getLogger(), e.what());
 //   (void)e;  // suppress unused variable warning
 // }
@@ -102,7 +103,7 @@ namespace amdinfer {
 // void Batcher::run(WorkerInfo *worker) {
 //   auto thread_name = "batch" + this->getName();
 //   util::setThreadName(thread_name);
-//   InterfacePtr req;
+//   ProtocolWrapperPtr req;
 //   bool run = true;
 
 //   while (run) {

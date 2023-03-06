@@ -18,7 +18,7 @@ list(
          predict_api
          worker_info_buffers_infinite
          worker_info_buffers_finite
-         # data_types interface
+         # data_types protocol_wrapper
 )
 
 foreach(target ${targets})
