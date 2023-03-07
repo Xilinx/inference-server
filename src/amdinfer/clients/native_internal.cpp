@@ -82,7 +82,7 @@ class InferenceRequestBuilder<InferenceRequest> {
     for (const auto &input : req.inputs_) {
       const auto &buffers = input_buffers;
       auto index = 0;
-      for (const auto &buffer : buffers) {
+      for (auto *buffer : buffers) {
         auto &offset = input_offsets[index];
 
         request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
@@ -133,6 +133,7 @@ CppNativeApi::CppNativeApi(InferenceRequest request)
   : request_(std::move(request)) {
   this->promise_ =
     std::make_unique<std::promise<amdinfer::InferenceResponse>>();
+  inputs_ = request_.getInputs();
 }
 
 size_t CppNativeApi::getInputSize() { return this->request_.getInputSize(); }

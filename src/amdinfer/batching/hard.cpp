@@ -29,6 +29,7 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"        // for invalid_argument
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequestInput
 #include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
 #include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
 #include "amdinfer/declarations.hpp"           // for ProtocolWrapperPtr

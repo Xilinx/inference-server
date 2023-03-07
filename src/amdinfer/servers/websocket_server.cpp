@@ -44,20 +44,83 @@ namespace amdinfer::http {
 class DrogonWs : public ProtocolWrapper {
  public:
   DrogonWs(const drogon::WebSocketConnectionPtr &conn,
-           std::shared_ptr<Json::Value> json);
+           std::shared_ptr<Json::Value> json)
+    : json_(std::move(json)), conn_(conn) {}
 
   std::shared_ptr<InferenceRequest> getRequest(
     const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
     const BufferRawPtrs &output_buffers,
-    std::vector<size_t> &output_offsets) override;
+    std::vector<size_t> &output_offsets) override {
+#ifdef AMDINFER_ENABLE_LOGGING
+    const auto &logger = this->getLogger();
+#endif
+    try {
+      auto request =
+        RequestBuilder::build(this->json_, input_buffers, input_offsets,
+                              output_buffers, output_offsets);
+      Callback callback =
+        [conn = std::move(this->conn_)](const InferenceResponse &response) {
+          if (response.isError()) {
+            conn->send(response.getError());
+          } else {
+            auto outputs = response.getOutputs();
+            const auto *msg = static_cast<char *>(outputs[0].getData());
+            if (conn->connected()) {
+              conn->send(msg, outputs[0].getSize());
+            }
+          }
+        };
+      request->setCallback(std::move(callback));
+      return request;
+    } catch (const invalid_argument &e) {
+      AMDINFER_LOG_INFO(logger, e.what());
+      this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition,
+                            "Failed to create request");
+      return nullptr;
+    }
+  }
 
-  size_t getInputSize() override;
-  std::vector<size_t> getInputSizes() const override;
-  void errorHandler(const std::exception &e) override;
+  size_t getInputSize() override {
+    auto inputs = this->json_->get("inputs", Json::arrayValue);
+    if (!inputs.isArray()) {
+      throw invalid_argument("'inputs' is not an array");
+    }
+    return inputs.size();
+  }
+
+  std::vector<size_t> getInputSizes() const override {
+    std::vector<size_t> sizes;
+
+    if (!this->json_->isMember("inputs")) {
+      throw invalid_argument("No 'inputs' key present in request");
+    }
+    auto inputs = this->json_->get("inputs", Json::arrayValue);
+    if (!inputs.isArray()) {
+      throw invalid_argument("'inputs' is not an array");
+    }
+
+    for (const auto &tensor : inputs) {
+      // using asCString() doesn't work -> the string is empty
+      const auto raw_type = tensor.get("datatype", "UNKNOWN").asString();
+      auto datatype = DataType(raw_type.c_str());
+
+      const auto shape = tensor.get("shape", Json::arrayValue);
+      size_t size = 1;
+      for (const auto &index : shape) {
+        size *= index.asInt64();
+      }
+
+      sizes.push_back(size * datatype.size());
+    }
+    return sizes;
+  }
+
+  void errorHandler(const std::exception &e) override {
+    AMDINFER_LOG_INFO(this->getLogger(), e.what());
+    this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
+  }
 
  private:
-  void setJson();
-
   std::shared_ptr<Json::Value> json_;
   drogon::WebSocketConnectionPtr conn_;
 };
@@ -134,83 +197,6 @@ void WebsocketServer::handleNewConnection(const HttpRequestPtr &req,
   AMDINFER_LOG_INFO(logger_, "New websocket connection");
   (void)conn;  // suppress unused variable warning
   (void)req;   // suppress unused variable warning
-}
-
-DrogonWs::DrogonWs(const drogon::WebSocketConnectionPtr &conn,
-                   std::shared_ptr<Json::Value> json) {
-  this->conn_ = conn;
-  this->json_ = std::move(json);
-}
-
-size_t DrogonWs::getInputSize() {
-  auto inputs = this->json_->get("inputs", Json::arrayValue);
-  if (!inputs.isArray()) {
-    throw invalid_argument("'inputs' is not an array");
-  }
-  return inputs.size();
-}
-
-std::vector<size_t> DrogonWs::getInputSizes() const {
-  std::vector<size_t> sizes;
-
-  if (!this->json_->isMember("inputs")) {
-    throw invalid_argument("No 'inputs' key present in request");
-  }
-  auto inputs = this->json_->get("inputs", Json::arrayValue);
-  if (!inputs.isArray()) {
-    throw invalid_argument("'inputs' is not an array");
-  }
-
-  for (const auto &tensor : inputs) {
-    // using asCString() doesn't work -> the string is empty
-    const auto raw_type = tensor.get("datatype", "UNKNOWN").asString();
-    auto datatype = DataType(raw_type.c_str());
-
-    const auto shape = tensor.get("shape", Json::arrayValue);
-    size_t size = 1;
-    for (const auto &index : shape) {
-      size *= index.asInt64();
-    }
-
-    sizes.push_back(size * datatype.size());
-  }
-  return sizes;
-}
-
-std::shared_ptr<InferenceRequest> DrogonWs::getRequest(
-  const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offset,
-  const BufferRawPtrs &output_buffers, std::vector<size_t> &output_offset) {
-#ifdef AMDINFER_ENABLE_LOGGING
-  const auto &logger = this->getLogger();
-#endif
-  try {
-    auto request = RequestBuilder::build(
-      this->json_, input_buffers, input_offset, output_buffers, output_offset);
-    Callback callback =
-      [conn = std::move(this->conn_)](const InferenceResponse &response) {
-        if (response.isError()) {
-          conn->send(response.getError());
-        } else {
-          auto outputs = response.getOutputs();
-          const auto *msg = static_cast<char *>(outputs[0].getData());
-          if (conn->connected()) {
-            conn->send(msg, outputs[0].getSize());
-          }
-        }
-      };
-    request->setCallback(std::move(callback));
-    return request;
-  } catch (const invalid_argument &e) {
-    AMDINFER_LOG_INFO(logger, e.what());
-    this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition,
-                          "Failed to create request");
-    return nullptr;
-  }
-}
-
-void DrogonWs::errorHandler(const std::exception &e) {
-  AMDINFER_LOG_INFO(this->getLogger(), e.what());
-  this->conn_->shutdown(drogon::CloseCode::kUnexpectedCondition, e.what());
 }
 
 }  // namespace amdinfer::http

@@ -50,4 +50,8 @@ std::chrono::high_resolution_clock::time_point ProtocolWrapper::getTime()
 const Logger& ProtocolWrapper::getLogger() const { return this->logger_; }
 #endif
 
+const std::vector<InferenceRequestInput>& ProtocolWrapper::getInputs() const {
+  return inputs_;
+}
+
 }  // namespace amdinfer

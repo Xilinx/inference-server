@@ -33,6 +33,7 @@
 #include "amdinfer/core/exceptions.hpp"  // for invalid_argument
 #include "amdinfer/core/memory_pool/pool.hpp"
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequestInput
 #include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
 #include "amdinfer/core/worker_info.hpp"
 #include "amdinfer/declarations.hpp"         // for ProtocolWrapperPtr

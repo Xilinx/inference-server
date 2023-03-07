@@ -30,6 +30,7 @@
 #include "amdinfer/core/memory_pool/pool.hpp"    // for MemoryPool
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
+#include "amdinfer/core/predict_api.hpp"         // for InferenceRequestInput
 #include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
 #include "amdinfer/declarations.hpp"             // for BufferPtrs
 #include "amdinfer/observation/logging.hpp"      // for initLogger, LogLevel

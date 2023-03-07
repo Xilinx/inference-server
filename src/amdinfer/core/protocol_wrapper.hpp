@@ -66,6 +66,8 @@ class ProtocolWrapper {
 
   virtual std::vector<size_t> getInputSizes() const = 0;
   // virtual std::vector<size_t> getOutputSizes() = 0;
+
+  const std::vector<InferenceRequestInput> &getInputs() const;
   /**
    * @brief Construct an InferenceRequest using the data in the ProtocolWrapper
    *
@@ -97,6 +99,7 @@ class ProtocolWrapper {
 #ifdef AMDINFER_ENABLE_LOGGING
   [[nodiscard]] const Logger &getLogger() const;
 #endif
+  std::vector<InferenceRequestInput> inputs_;
 
  private:
 #ifdef AMDINFER_ENABLE_LOGGING
