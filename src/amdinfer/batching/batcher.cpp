@@ -34,7 +34,7 @@
 namespace amdinfer {
 
 /**
- * @brief The C++ ProtocolWrapper class encapsulates incoming requests from the
+ * @brief The C++ RequestContainer class encapsulates incoming requests from the
  * C++ API to the batcher.
  *
  */

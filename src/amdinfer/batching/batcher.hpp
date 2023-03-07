@@ -129,7 +129,7 @@ class Batcher {
  private:
   /**
    * @brief The doRun method defines the exact process by which the batcher
-   * consumes incoming ProtocolWrapper objects and uses them to create batches.
+   * consumes incoming RequestContainer objects and uses them to create batches.
    *
    * @param allocators vector of allocators that may be used to get memory
    */

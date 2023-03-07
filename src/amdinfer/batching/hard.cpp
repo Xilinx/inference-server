@@ -31,7 +31,7 @@
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
-#include "amdinfer/declarations.hpp"               // for ProtocolWrapperPtr
+#include "amdinfer/declarations.hpp"               // for RequestContainerPtr
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue

@@ -32,7 +32,7 @@
 
 namespace amdinfer {
 
-class ProtocolWrapper;
+class RequestContainer;
 class ParameterMap;
 
 class SharedState {

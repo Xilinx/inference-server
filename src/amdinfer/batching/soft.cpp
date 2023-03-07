@@ -35,7 +35,7 @@
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/worker_info.hpp"
-#include "amdinfer/declarations.hpp"         // for ProtocolWrapperPtr
+#include "amdinfer/declarations.hpp"         // for RequestContainerPtr
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_DEBUG
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"  // for Trace
