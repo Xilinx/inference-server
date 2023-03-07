@@ -55,7 +55,6 @@ add_library(
   ${CORE_OBJS}
   ${HELPER_OBJS}
   ${OBSERVATION_OBJS}
-  ${PROTOCOL_WRAPPER_OBJS}
   ${SERVER_OBJS}
   ${UTIL_OBJS}
 )
@@ -72,7 +71,6 @@ add_library(
   ${CORE_OBJS}
   ${HELPER_OBJS}
   ${OBSERVATION_OBJS}
-  ${PROTOCOL_WRAPPER_OBJS}
   ${SERVER_OBJS}
   ${UTIL_OBJS}
 )

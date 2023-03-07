@@ -232,8 +232,8 @@ int main(int argc, char* argv[]) {
   }
 
   // TODO(varunsh): expose to the outside
-  const uint16_t http_port = 8998;
-  const uint16_t grpc_port = 50'051;
+  [[maybe_unused]] const uint16_t http_port = 8998;
+  [[maybe_unused]] const uint16_t grpc_port = 50'051;
 
   if (client_id == "native") {
     if (remote_server) {
@@ -241,16 +241,20 @@ int main(int argc, char* argv[]) {
       return 1;
     }
     client = std::make_unique<amdinfer::NativeClient>(&(server.value()));
+#ifdef AMDINFER_ENABLE_HTTP
   } else if (client_id == "HTTP") {
     client = std::make_unique<amdinfer::HttpClient>(address);
     if (!remote_server) {
       server.value().startHttp(http_port);
     }
+#endif
+#ifdef AMDINFER_ENABLE_GRPC
   } else if (client_id == "gRPC") {
     client = std::make_unique<amdinfer::GrpcClient>(address);
     if (!remote_server) {
       server.value().startGrpc(grpc_port);
     }
+#endif
   } else {
     std::cerr << "Client must be one of 'native', 'HTTP', or 'gRPC'\n";
     return 1;

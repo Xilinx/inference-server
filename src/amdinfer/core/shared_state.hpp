@@ -48,10 +48,12 @@ class SharedState {
   ModelMetadata modelMetadata(const std::string& model);
 
   void modelInfer(const std::string& model,
-                  std::unique_ptr<ProtocolWrapper> request);
+                  std::unique_ptr<RequestContainer> request);
 
   static Kernels getHardware();
   static bool hasHardware(const std::string& name, int num);
+
+  const MemoryPool* getPool() const;
 
   void setRepository(const std::filesystem::path& repository_path,
                      bool load_existing);

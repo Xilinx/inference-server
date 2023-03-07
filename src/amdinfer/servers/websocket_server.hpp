@@ -27,10 +27,9 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
-#include "amdinfer/declarations.hpp"           // for BufferRawPtrs
-#include "amdinfer/observation/logging.hpp"    // for LoggerPtr
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/declarations.hpp"         // for BufferRawPtrs
+#include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
 namespace Json {  // NOLINT(readability-identifier-naming)
 class Value;

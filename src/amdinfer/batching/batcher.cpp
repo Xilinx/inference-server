@@ -25,12 +25,11 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/buffers/buffer.hpp"         // IWYU pragma: keep
-#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequestInput
-#include "amdinfer/core/protocol_wrapper.hpp"  // IWYU pragma: keep
-#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
-#include "amdinfer/observation/logging.hpp"    // for Logger, Loggers, Logger...
+#include "amdinfer/buffers/buffer.hpp"             // IWYU pragma: keep
+#include "amdinfer/core/memory_pool/pool.hpp"      // for MemoryPool
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Logger...
 
 namespace amdinfer {
 
@@ -41,7 +40,7 @@ namespace amdinfer {
  */
 
 Batcher::Batcher(MemoryPool* pool) : pool_(pool) {
-  this->input_queue_ = std::make_shared<BlockingQueue<ProtocolWrapperPtr>>();
+  this->input_queue_ = std::make_shared<BlockingQueue<RequestContainerPtr>>();
   this->output_queue_ = std::make_shared<BatchPtrQueue>();
   this->status_ = BatcherStatus::New;
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -80,13 +79,13 @@ void Batcher::setName(const std::string& name) { this->model_ = name; }
 
 std::string Batcher::getName() const { return this->model_; }
 
-BlockingQueue<ProtocolWrapperPtr>* Batcher::getInputQueue() {
+BlockingQueue<RequestContainerPtr>* Batcher::getInputQueue() {
   return this->input_queue_.get();
 }
 
 BatchPtrQueue* Batcher::getOutputQueue() { return this->output_queue_.get(); }
 
-void Batcher::enqueue(ProtocolWrapperPtr request) const {
+void Batcher::enqueue(RequestContainerPtr request) const {
   this->input_queue_->enqueue(std::move(request));
 }
 

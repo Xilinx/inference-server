@@ -61,6 +61,13 @@ void InferenceRequest::addInputTensor(InferenceRequestInput input) {
   this->inputs_.push_back(std::move(input));
 }
 
+void InferenceRequest::setInputTensorData(size_t index, void *data) {
+  if (index < inputs_.size()) {
+    auto &input = inputs_.at(index);
+    input.setData(data);
+  }
+}
+
 const std::vector<InferenceRequestInput> &InferenceRequest::getInputs() const {
   return this->inputs_;
 }

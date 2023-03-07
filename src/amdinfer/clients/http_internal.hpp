@@ -35,7 +35,6 @@
 #include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_TRA...
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap (ptr ...
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
-#include "amdinfer/core/protocol_wrapper.hpp"      // for ProtocolWrapper
 #include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
 #include "amdinfer/util/traits.hpp"                // for is_any_v
 
@@ -52,18 +51,6 @@ Json::Value mapParametersToJson(ParameterMap *parameters);
 
 InferenceResponse mapJsonToResponse(Json::Value *json);
 Json::Value mapRequestToJson(const InferenceRequest &request);
-
-template <>
-class InferenceRequestBuilder<std::shared_ptr<Json::Value>> {
- public:
-  static InferenceRequestPtr build(const std::shared_ptr<Json::Value> &req,
-                                   const BufferRawPtrs &input_buffers,
-                                   std::vector<size_t> &input_offsets,
-                                   const BufferRawPtrs &output_buffers,
-                                   std::vector<size_t> &output_offsets);
-};
-
-using RequestBuilder = InferenceRequestBuilder<std::shared_ptr<Json::Value>>;
 
 #ifdef AMDINFER_ENABLE_TRACING
 void propagate(drogon::HttpResponse *resp, const StringMap &context);

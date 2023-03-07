@@ -33,7 +33,7 @@ MemoryPool::MemoryPool() {
 }
 
 std::unique_ptr<Buffer> MemoryPool::get(
-  const std::vector<MemoryAllocators>& allocators, size_t size) {
+  const std::vector<MemoryAllocators>& allocators, size_t size) const {
   for (const auto& allocator : allocators) {
     void* address = nullptr;
     try {
@@ -48,7 +48,7 @@ std::unique_ptr<Buffer> MemoryPool::get(
   throw runtime_error("Memory could not be allocated");
 }
 
-void MemoryPool::put(std::unique_ptr<Buffer> memory) {
+void MemoryPool::put(std::unique_ptr<Buffer> memory) const {
   auto* buffer = dynamic_cast<CpuBuffer*>(memory.get());
   const auto allocator = buffer->getAllocator();
   const auto* address = buffer->data(0);

@@ -18,9 +18,8 @@
 #include "amdinfer/batching/soft.hpp"          // for SoftBatcher
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequestInput
-#include "amdinfer/core/protocol_wrapper.hpp"  // IWYU pragma: keep
-#include "amdinfer/core/worker_info.hpp"       // for WorkerInfo
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for initLogger, LogLevel, Log...
 #include "gtest/gtest.h"                     // for Test, SuiteApiResolver, TEST
 

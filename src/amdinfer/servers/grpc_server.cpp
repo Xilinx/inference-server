@@ -43,15 +43,14 @@
 #include "amdinfer/core/exceptions.hpp"            // for invalid_argument
 #include "amdinfer/core/parameters.hpp"            // for ParameterMap
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper, Interfac...
-#include "amdinfer/core/shared_state.hpp"      // for SharedState
-#include "amdinfer/declarations.hpp"           // for BufferRawPtrs, Infe...
-#include "amdinfer/observation/observer.hpp"  // for Logger, Loggers
-#include "amdinfer/util/containers.hpp"       // for containerProduct
-#include "amdinfer/util/string.hpp"           // for toLower
-#include "amdinfer/util/traits.hpp"           // IWYU pragma: keep
-#include "predict_api.grpc.pb.h"              // for GRPCInferenceServic...
-#include "predict_api.pb.h"                   // for InferTensorContents
+#include "amdinfer/core/shared_state.hpp"          // for SharedState
+#include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
+#include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
+#include "amdinfer/util/containers.hpp"            // for containerProduct
+#include "amdinfer/util/string.hpp"                // for toLower
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
+#include "predict_api.pb.h"                        // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;
@@ -228,47 +227,6 @@ struct WriteData {
   }
 };
 
-template <>
-class InferenceRequestInputBuilder<
-  inference::ModelInferRequest_InferInputTensor> {
- public:
-  static InferenceRequestInput build(
-    const inference::ModelInferRequest_InferInputTensor& req,
-    Buffer* input_buffer, size_t offset) {
-    Observer observer;
-    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
-
-    AMDINFER_LOG_TRACE(observer.logger,
-                       "Creating InferenceRequestInput from proto tensor");
-
-    InferenceRequestInput input;
-    input.name_ = req.name();
-    input.shape_.reserve(req.shape_size());
-    for (const auto& index : req.shape()) {
-      input.shape_.push_back(static_cast<size_t>(index));
-    }
-    input.data_type_ = DataType(req.datatype().c_str());
-
-    input.parameters_ = mapProtoToParameters(req.parameters());
-
-    auto size = input.getSize();
-    auto* dest = static_cast<std::byte*>(input_buffer->data(offset));
-    AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
-                                          " elements of type " +
-                                          input.data_type_.str() + " to " +
-                                          util::addressToString(dest));
-
-    switchOverTypes(WriteData(), input.getDatatype(), input_buffer, &req,
-                    offset, size, observer);
-
-    input.data_ = dest;
-    return input;
-  }
-};
-
-using InputBuilder =
-  InferenceRequestInputBuilder<inference::ModelInferRequest_InferInputTensor>;
-
 #ifdef AMDINFER_ENABLE_LOGGING
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define CALLDATA_IMPL(endpoint, type)                                      \
@@ -336,79 +294,104 @@ const inference::ModelInferRequest& getRequest() const {
 inference::ModelInferResponse& getReply() { return this->reply_; }
 CALLDATA_IMPL_END
 
-template <>
-class InferenceRequestBuilder<CallDataModelInfer*> {
- public:
-  static InferenceRequestPtr build(const CallDataModelInfer* req,
-                                   const BufferRawPtrs& input_buffers,
-                                   std::vector<size_t>& input_offsets,
-                                   const BufferRawPtrs& output_buffers,
-                                   std::vector<size_t>& output_offsets) {
-    Observer observer;
-    AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
+InferenceRequestInput getInput(
+  const inference::ModelInferRequest_InferInputTensor& req,
+  const MemoryPool* pool) {
+  Observer observer;
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
-    AMDINFER_LOG_TRACE(observer.logger,
-                       "Creating InferenceRequest from proto tensor");
+  AMDINFER_LOG_TRACE(observer.logger,
+                     "Creating InferenceRequestInput from proto tensor");
 
-    auto request = std::make_shared<InferenceRequest>();
-    const auto& grpc_request = req->getRequest();
+  InferenceRequestInput input;
+  input.setName(req.name());
 
-    request->id_ = grpc_request.id();
-
-    request->parameters_ = mapProtoToParameters(grpc_request.parameters());
-
-    request->callback_ = nullptr;
-
-    for (const auto& input : grpc_request.inputs()) {
-      const auto& buffers = input_buffers;
-      auto index = 0;
-      for (const auto& buffer : buffers) {
-        auto& offset = input_offsets[index];
-
-        request->inputs_.push_back(InputBuilder::build(input, buffer, offset));
-        const auto& last_input = request->inputs_.back();
-        offset += (last_input.getSize() * last_input.getDatatype().size());
-        index++;
-      }
-    }
-
-    // TODO(varunsh): output_offset is currently ignored! The size of the
-    // output needs to come from the worker but we have no such information.
-    if (grpc_request.outputs_size() != 0) {
-      for (const auto& output : grpc_request.outputs()) {
-        // TODO(varunsh): we're ignoring incoming output data
-        (void)output;
-        const auto& buffers = output_buffers;
-        auto index = 0;
-        for (const auto& buffer : buffers) {
-          auto& offset = output_offsets[index];
-
-          request->outputs_.emplace_back();
-          request->outputs_.back().setData(
-            static_cast<std::byte*>(buffer->data(offset)));
-          index++;
-        }
-      }
-    } else {
-      for (const auto& input : grpc_request.inputs()) {
-        (void)input;  // suppress unused variable warning
-        const auto& buffers = output_buffers;
-        for (size_t j = 0; j < buffers.size(); j++) {
-          const auto& buffer = buffers[j];
-          const auto& offset = output_offsets[j];
-
-          request->outputs_.emplace_back();
-          request->outputs_.back().setData(
-            static_cast<std::byte*>(buffer->data(offset)));
-        }
-      }
-    }
-
-    return request;
+  std::vector<uint64_t> shape_vector;
+  shape_vector.reserve(req.shape_size());
+  for (const auto& index : req.shape()) {
+    shape_vector.push_back(static_cast<size_t>(index));
   }
-};
+  input.setShape(shape_vector);
+  input.setDatatype(DataType(req.datatype().c_str()));
 
-using RequestBuilder = InferenceRequestBuilder<CallDataModelInfer*>;
+  input.setParameters(mapProtoToParameters(req.parameters()));
+
+  auto size = input.getSize();
+  auto buffer =
+    pool->get({MemoryAllocators::Cpu}, size * input.getDatatype().size());
+  input.setData(buffer->data(0));
+  // auto* dest = static_cast<std::byte*>(input_buffer->data(offset));
+  AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
+                                        " elements of type " +
+                                        input.getDatatype().str() + " to " +
+                                        util::addressToString(buffer->data(0)));
+
+  switchOverTypes(WriteData(), input.getDatatype(), buffer.get(), &req, 0, size,
+                  observer);
+
+  return input;
+}
+
+InferenceRequestOutput getOutput(
+  const inference::ModelInferRequest_InferRequestedOutputTensor& proto) {
+  InferenceRequestOutput output;
+  output.setData(nullptr);
+  output.setName(proto.name());
+  output.setParameters(mapProtoToParameters(proto.parameters()));
+  return output;
+}
+
+void setCallback(InferenceRequest* request, CallDataModelInfer* calldata) {
+  Callback callback = [calldata](const InferenceResponse& response) {
+    if (response.isError()) {
+      calldata->finish(
+        ::grpc::Status(StatusCode::UNKNOWN, response.getError()));
+      return;
+    }
+    try {
+      mapResponseToProto(response, calldata->getReply());
+    } catch (const invalid_argument& e) {
+      calldata->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
+      return;
+    }
+
+    // #ifdef AMDINFER_ENABLE_TRACING
+    //   const auto &context = response.getContext();
+    //   propagate(resp.get(), context);
+    // #endif
+    calldata->finish(::grpc::Status::OK);
+  };
+  request->setCallback(std::move(callback));
+}
+
+InferenceRequestPtr getRequest(const inference::ModelInferRequest& grpc_request,
+                               const MemoryPool* pool) {
+  Observer observer;
+  AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
+
+  AMDINFER_LOG_TRACE(observer.logger,
+                     "Creating InferenceRequest from proto tensor");
+
+  auto request = std::make_shared<InferenceRequest>();
+
+  request->setID(grpc_request.id());
+
+  request->setParameters(mapProtoToParameters(grpc_request.parameters()));
+
+  request->setCallback(nullptr);
+
+  for (const auto& input : grpc_request.inputs()) {
+    request->addInputTensor(getInput(input, pool));
+  }
+
+  if (grpc_request.outputs_size() != 0) {
+    for (const auto& output : grpc_request.outputs()) {
+      request->addOutputTensor(getOutput(output));
+    }
+  }
+
+  return request;
+}
 
 // CALLDATA_IMPL(StreamModelInfer, ServerStream);
 
@@ -437,72 +420,6 @@ void grpcUnaryCallback(CallDataModelInfer* calldata,
   // #endif
   calldata->finish(::grpc::Status::OK);
 }
-
-class GrpcApiUnary : public ProtocolWrapper {
- public:
-  /**
-   * @brief Construct a new GrpcApiUnary object
-   *
-   * @param req
-   * @param callback
-   */
-  explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {}
-
-  std::shared_ptr<InferenceRequest> getRequest(
-    const BufferRawPtrs& input_buffers, std::vector<size_t>& input_offsets,
-    const BufferRawPtrs& output_buffers,
-    std::vector<size_t>& output_offsets) override {
-#ifdef AMDINFER_ENABLE_LOGGING
-    const auto& logger = this->getLogger();
-#endif
-    try {
-      auto request =
-        RequestBuilder::build(this->calldata_, input_buffers, input_offsets,
-                              output_buffers, output_offsets);
-      // Callback callback =
-      //   std::bind(grpcUnaryCallback, this->calldata_, std::placeholders::_1);
-      Callback callback =
-        [calldata = this->calldata_](const InferenceResponse& response) {
-          grpcUnaryCallback(calldata, response);
-        };
-      request->setCallback(std::move(callback));
-      return request;
-    } catch (const invalid_argument& e) {
-      AMDINFER_LOG_INFO(logger, e.what());
-      errorHandler(e);
-      return nullptr;
-    }
-  }
-
-  size_t getInputSize() override {
-    return calldata_->getRequest().inputs_size();
-  }
-
-  [[nodiscard]] std::vector<size_t> getInputSizes() const override {
-    std::vector<size_t> sizes;
-
-    auto inputs = calldata_->getRequest().inputs();
-
-    for (const auto& tensor : inputs) {
-      const auto& raw_type = tensor.datatype();
-      auto datatype = DataType(raw_type.c_str());
-
-      const auto& shape = tensor.shape();
-      auto size = util::containerProduct(shape);
-
-      sizes.push_back(size * datatype.size());
-    }
-    return sizes;
-  }
-
-  void errorHandler(const std::exception& e) override {
-    AMDINFER_LOG_INFO(this->getLogger(), e.what());
-    calldata_->finish(::grpc::Status(StatusCode::UNKNOWN, e.what()));
-  }
-
- private:
-  CallDataModelInfer* calldata_;
-};
 
 CALLDATA_IMPL(ServerLive, Unary) {
   reply_.set_live(true);
@@ -637,12 +554,15 @@ void CallDataModelInfer::handleRequest() noexcept {
 #endif
 
   try {
-    auto request = std::make_unique<GrpcApiUnary>(this);
+    auto request = amdinfer::getRequest(request_, state_->getPool());
+    setCallback(request.get(), this);
+    auto request_container = std::make_unique<RequestContainer>();
+    request_container->request = request;
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
-    request->setTrace(std::move(trace));
+    request_container->trace = std::move(trace);
 #endif
-    state_->modelInfer(model, std::move(request));
+    state_->modelInfer(model, std::move(request_container));
   } catch (const invalid_argument& e) {
     AMDINFER_LOG_INFO(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));

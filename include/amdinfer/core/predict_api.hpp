@@ -353,6 +353,14 @@ class InferenceRequest {
    * @param input an existing InferenceRequestInput object
    */
   void addInputTensor(InferenceRequestInput input);
+
+  /**
+   * @brief Set the data pointer for an input tensor, if it exists
+   *
+   * @param index index for the input tensor
+   * @param data pointer to assign to its data member
+   */
+  void setInputTensorData(size_t index, void *data);
   /**
    * @brief Adds a new output tensor to this request
    *

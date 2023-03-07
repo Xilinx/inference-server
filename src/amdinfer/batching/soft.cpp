@@ -32,9 +32,8 @@
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"  // for invalid_argument
 #include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for InferenceRequestInput
-#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrapper
+#include "amdinfer/core/parameters.hpp"            // for ParameterMap
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/worker_info.hpp"
 #include "amdinfer/declarations.hpp"         // for ProtocolWrapperPtr
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_DEBUG
@@ -84,7 +83,7 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
     util::Timer timer{true};
 
     do {
-      ProtocolWrapperPtr req;
+      RequestContainerPtr req;
       if (first_request) {
         // wait for the first request
         this->input_queue_->wait_dequeue(req);
@@ -108,17 +107,16 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         break;
       }
 
-      auto input_size = req->getInputSize();
+      auto request = req->request;
+      auto& inputs = request->getInputs();
+      auto input_size = inputs.size();
       if (input_size == 0) {
-        auto error = invalid_argument("Input size is zero");
-        req->errorHandler(error);
+        request->runCallbackError("Input size is zero");
         continue;
       }
 
       if (first_request) {
-        auto input_sizes = req->getInputSizes();
-
-        input_buffers.reserve(input_sizes.size());
+        input_buffers.reserve(input_size);
         // auto output_sizes = req->getOutputSizes();
         // TODO(varunsh): the spec does not require the request to have outputs
         // additionally, the output size could be variable so this should be
@@ -127,9 +125,10 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         // std::vector<BufferPtr> output_buffers;
         // output_buffers.reserve(output_sizes.size());
         // std::vector<size_t> output_offset(output_buffers.size(), 0);
-        for (const auto& tensor_size : input_sizes) {
-          input_buffers.push_back(
-            pool_->get(allocators, tensor_size * batch_size_));
+        for (const auto& input : inputs) {
+          input_buffers.push_back(pool_->get(
+            allocators,
+            input.getSize() * input.getDatatype().size() * batch_size_));
         }
         // for(const auto& tensor_size : output_sizes) {
         //   output_buffers.push_back(pool_->get(allocators, tensor_size));
@@ -142,7 +141,7 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
       auto raw_outputs = batch->getRawOutputBuffers();
 
 #ifdef AMDINFER_ENABLE_TRACING
-      auto trace = req->getTrace();
+      auto& trace = req->trace;
       trace->startSpan("soft_batcher");
 #endif
 
@@ -152,25 +151,28 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
 #endif
 
       auto old_input_offset = input_offset;
-      // auto old_output_offset = output_offset;
-      auto new_req =
-        req->getRequest(raw_inputs, input_offset, raw_outputs, output_offset);
-      if (new_req == nullptr) {
-        AMDINFER_LOG_DEBUG(logger, "Making request for " + this->model_ +
-                                     " failed. Reverting buffers.");
-        input_offset = old_input_offset;
-        // output_offset = old_output_offset;
-      } else {
-        batch->addRequest(new_req);
-        batch_size++;
+
+      for (auto i = 0U; i < input_size; ++i) {
+        const auto& input = inputs[i];
+        auto* raw_input = raw_inputs[i];
+        auto& offset = input_offset[i];
+
+        auto new_offset =
+          raw_input->write(input.getData(), offset,
+                           input.getSize() * input.getDatatype().size());
+        request->setInputTensorData(i, raw_input->data(offset));
+        offset = new_offset;
+      }
+
+      batch->addRequest(request);
+      batch_size++;
 #ifdef AMDINFER_ENABLE_TRACING
-        trace->endSpan();
-        batch->addTrace(std::move(trace));
+      trace->endSpan();
+      batch->addTrace(std::move(trace));
 #endif
 #ifdef AMDINFER_ENABLE_METRICS
-        batch->addTime(req->getTime());
+      batch->addTime(req->start_time);
 #endif
-      }
       first_request = false;
     } while (batch_size % this->batch_size_ != 0 && run);
 

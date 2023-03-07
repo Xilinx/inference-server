@@ -26,12 +26,11 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
-#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
-#include "amdinfer/core/parameters.hpp"          // for ParameterMap
-#include "amdinfer/core/protocol_wrapper.hpp"    // for ProtocolWrapper
-#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
+#include "amdinfer/core/parameters.hpp"  // for ParameterMap
+#include "amdinfer/core/predict_api_internal.hpp"  // for RequestContainer
+#include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCount...
 #include "amdinfer/observation/tracing.hpp"      // for startTrace, Trace
 #include "amdinfer/servers/server.hpp"           // for Server
@@ -82,6 +81,33 @@ std::string NativeClient::workerLoad(const std::string& worker,
   return impl_->state->workerLoad(worker_lower, parameters);
 }
 
+InferenceRequestPtr getRequest(const InferenceRequest& req,
+                               const MemoryPool* pool) {
+  auto request = std::make_shared<InferenceRequest>(req);
+
+  const auto& inputs = request->getInputs();
+  int i = 0;
+  for (const auto& input : inputs) {
+    auto size = input.getSize() * input.getDatatype().size();
+    auto buffer = pool->get({MemoryAllocators::Cpu}, size);
+    buffer->write(input.getData(), 0, size);
+    request->setInputTensorData(i, buffer->data(0));
+    i++;
+  }
+
+  return request;
+}
+
+InferenceResponseFuture setCallback(InferenceRequest* request) {
+  auto promise = std::make_shared<std::promise<amdinfer::InferenceResponse>>();
+  auto future = promise->get_future();
+  Callback callback = [promise](const InferenceResponse& response) {
+    promise->set_value(response);
+  };
+  request->setCallback(std::move(callback));
+  return future;
+}
+
 InferenceResponseFuture NativeClient::modelInferAsync(
   const std::string& model, const InferenceRequest& request) const {
 #ifdef AMDINFER_ENABLE_METRICS
@@ -92,13 +118,16 @@ InferenceResponseFuture NativeClient::modelInferAsync(
   auto trace = startTrace(&(__func__[0]));
   trace->startSpan("C++ enqueue");
 #endif
-  auto api = std::make_unique<CppNativeApi>(request);
-  auto future = api->getPromise()->get_future();
+  auto new_request = getRequest(request, impl_->state->getPool());
+  auto future = setCallback(new_request.get());
+  auto request_container = std::make_unique<RequestContainer>();
+  request_container->request = std::move(new_request);
+
 #ifdef AMDINFER_ENABLE_TRACING
   trace->endSpan();
-  api->setTrace(std::move(trace));
+  request_container->trace = std::move(trace);
 #endif
-  impl_->state->modelInfer(model, std::move(api));
+  impl_->state->modelInfer(model, std::move(request_container));
 
   return future;
 }

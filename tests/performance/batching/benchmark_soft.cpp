@@ -30,15 +30,15 @@
 #include <utility>   // for move
 #include <vector>    // for vector
 
-#include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
-#include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
-#include "amdinfer/core/memory_pool/pool.hpp"    // for MemoryPool
-#include "amdinfer/core/parameters.hpp"          // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
-#include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
-#include "amdinfer/declarations.hpp"             // for BufferPtrs
-#include "amdinfer/observation/logging.hpp"      // for LogOptions, initLogger
+#include "amdinfer/batching/soft.hpp"          // for BatchPtr, SoftBatcher
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::U...
+#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
+#include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Req...
+#include "amdinfer/core/predict_api_internal.hpp"  // for RequestContainer
+#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/declarations.hpp"               // for BufferPtrs
+#include "amdinfer/observation/logging.hpp"        // for LogOptions, initLogger
 #include "gtest/gtest.h"
 
 namespace amdinfer {
@@ -49,7 +49,8 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
  public:
   void enqueue(int count) {
     for (auto i = 0; i < count; ++i) {
-      auto req = std::make_unique<CppNativeApi>(this->request_);
+      auto req = std::make_unique<RequestContainer>();
+      req->request = this->request_;
       batcher_->enqueue(std::move(req));
     }
   }
@@ -103,9 +104,9 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
       data_[i] = static_cast<uint8_t>(i);
     }
 
-    this->request_ = InferenceRequest();
-    this->request_.addInputTensor(static_cast<void*>(data_.data()), data_shape,
-                                  DataType::Uint8);
+    request_ = std::make_shared<InferenceRequest>();
+    request_->addInputTensor(static_cast<void*>(data_.data()), data_shape,
+                             DataType::Uint8);
   }
 
   void TearDown([[maybe_unused]] const ::benchmark::State& state) override {
@@ -115,7 +116,7 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
 
  private:
   std::vector<uint8_t> data_;
-  InferenceRequest request_;
+  InferenceRequestPtr request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;
   MemoryPool pool_;

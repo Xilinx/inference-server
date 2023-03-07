@@ -40,8 +40,8 @@ class MemoryPool {
   MemoryPool();
 
   std::unique_ptr<Buffer> get(const std::vector<MemoryAllocators>& allocators,
-                              size_t size);
-  void put(std::unique_ptr<Buffer> memory);
+                              size_t size) const;
+  void put(std::unique_ptr<Buffer> memory) const;
 
  private:
   std::unordered_map<MemoryAllocators, std::unique_ptr<MemoryAllocator>>

@@ -40,10 +40,9 @@
 #include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
 #include "amdinfer/core/exceptions.hpp"            // invalid_argument
 #include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
-#include "amdinfer/core/protocol_wrapper.hpp"  // for ProtocolWrappers, Inte...
-#include "amdinfer/observation/logging.hpp"    // for Logger
-#include "amdinfer/util/traits.hpp"            // IWYU pragma: keep
-#include "half/half.hpp"                       // for half
+#include "amdinfer/observation/logging.hpp"        // for Logger
+#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
+#include "half/half.hpp"                           // for half
 
 namespace amdinfer {
 
