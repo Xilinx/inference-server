@@ -340,7 +340,6 @@ class DrogonHttp : public ProtocolWrapper {
    */
   DrogonHttp(const drogon::HttpRequestPtr &req, DrogonCallback callback)
     : req_(req), callback_(std::move(callback)) {
-    this->type_ = ProtocolWrappers::DrogonHttp;
     this->json_ = parseJson(req_.get());
   }
 

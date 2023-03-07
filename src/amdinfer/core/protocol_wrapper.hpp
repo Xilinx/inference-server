@@ -39,19 +39,6 @@ class InferenceRequest;
 namespace amdinfer {
 
 /**
- * @brief The ProtocolWrappers identifies the ProtocolWrapper. New
- * ProtocolWrappers can be added by extending this enumeration.
- *
- */
-enum class ProtocolWrappers {
-  Unknown,
-  DrogonHttp,
-  DrogonWs,
-  Cpp,
-  Grpc,
-};
-
-/**
  * @brief The ProtocolWrapper class represents an input-agnostic class that
  * can encapsulate incoming requests from different protocols and present a
  * consistent object and interface to the batcher to process all the requests.
@@ -59,10 +46,8 @@ enum class ProtocolWrappers {
  */
 class ProtocolWrapper {
  public:
-  ProtocolWrapper();                     ///< Constructor
   virtual ~ProtocolWrapper() = default;  ///< Destructor
-  /// Get the type of the ProtocolWrapper
-  [[nodiscard]] ProtocolWrappers getType() const;
+
 #ifdef AMDINFER_ENABLE_TRACING
   /// Store the active trace into the ProtocolWrapper for propagation
   void setTrace(TracePtr &&trace);
@@ -103,7 +88,6 @@ class ProtocolWrapper {
   virtual void errorHandler(const std::exception &e) = 0;
 
  protected:
-  ProtocolWrappers type_;
 #ifdef AMDINFER_ENABLE_TRACING
   TracePtr trace_;
 #endif

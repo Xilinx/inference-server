@@ -139,7 +139,6 @@ void WebsocketServer::handleNewConnection(const HttpRequestPtr &req,
 DrogonWs::DrogonWs(const drogon::WebSocketConnectionPtr &conn,
                    std::shared_ptr<Json::Value> json) {
   this->conn_ = conn;
-  this->type_ = ProtocolWrappers::DrogonWs;
   this->json_ = std::move(json);
 }
 

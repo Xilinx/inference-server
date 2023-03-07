@@ -446,9 +446,7 @@ class GrpcApiUnary : public ProtocolWrapper {
    * @param req
    * @param callback
    */
-  explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {
-    this->type_ = ProtocolWrappers::Grpc;
-  }
+  explicit GrpcApiUnary(CallDataModelInfer* calldata) : calldata_(calldata) {}
 
   std::shared_ptr<InferenceRequest> getRequest(
     const BufferRawPtrs& input_buffers, std::vector<size_t>& input_offsets,

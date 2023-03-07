@@ -27,10 +27,6 @@
 
 namespace amdinfer {
 
-ProtocolWrapper::ProtocolWrapper() { this->type_ = ProtocolWrappers::Unknown; }
-
-ProtocolWrappers ProtocolWrapper::getType() const { return this->type_; }
-
 #ifdef AMDINFER_ENABLE_TRACING
 void ProtocolWrapper::setTrace(TracePtr&& trace) {
   this->trace_ = std::move(trace);
