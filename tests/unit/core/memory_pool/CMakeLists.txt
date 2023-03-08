@@ -14,6 +14,8 @@
 
 list(APPEND tests cpu_allocator pool)
 
-list(APPEND tests_libs "cpu_allocator" "memory_pool~buffer~cpuBuffer")
+list(APPEND tests_libs "cpu_allocator~buffer~cpuBuffer"
+            "memory_pool~buffer~cpuBuffer"
+)
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

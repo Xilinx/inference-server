@@ -35,14 +35,10 @@ MemoryPool::MemoryPool() {
 std::unique_ptr<Buffer> MemoryPool::get(
   const std::vector<MemoryAllocators>& allocators, size_t size) const {
   for (const auto& allocator : allocators) {
-    void* address = nullptr;
     try {
-      address = allocators_.at(allocator)->get(size);
+      return allocators_.at(allocator)->get(size);
     } catch (const runtime_error&) {
       continue;
-    }
-    if (address != nullptr) {
-      return std::make_unique<CpuBuffer>(address, allocator);
     }
   }
   throw runtime_error("Memory could not be allocated");

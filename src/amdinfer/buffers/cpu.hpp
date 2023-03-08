@@ -31,7 +31,7 @@
 namespace amdinfer {
 
 /**
- * @brief VectorBuffer uses vectors for storing data
+ * @brief CpuBuffer uses vectors for storing data
  *
  */
 class CpuBuffer : public Buffer {

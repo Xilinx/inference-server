@@ -22,6 +22,8 @@
 
 #include <cstddef>  // for size_t
 
+#include "amdinfer/declarations.hpp"
+
 namespace amdinfer {
 
 struct MemoryHeader {
@@ -39,7 +41,7 @@ class MemoryAllocator {
   virtual ~MemoryAllocator() = default;
 
   // these methods are thread-safe
-  [[nodiscard]] virtual void* get(size_t size) = 0;
+  [[nodiscard]] virtual BufferPtr get(size_t size) = 0;
   virtual void put(const void* address) = 0;
 };
 

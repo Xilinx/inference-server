@@ -23,6 +23,7 @@
 #include <iostream>
 #include <vector>
 
+#include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
 
 namespace amdinfer {
@@ -30,7 +31,7 @@ namespace amdinfer {
 CpuAllocator::CpuAllocator(size_t block_size, size_t max_allocate)
   : max_allocate_(max_allocate), block_size_(block_size) {}
 
-void* CpuAllocator::get(size_t size) {
+BufferPtr CpuAllocator::get(size_t size) {
   const std::lock_guard lock{mutex_};
   auto best = headers_.end();
   const auto end = headers_.end();
@@ -46,7 +47,7 @@ void* CpuAllocator::get(size_t size) {
     if (best->size == size) {
       best->free = false;
       // std::cout << "Matched " << size << " bytes\n";
-      return best->address;
+      return std::make_unique<CpuBuffer>(best->address, MemoryAllocators::Cpu);
     }
     const auto& new_block =
       headers_.emplace(best, best->address, size, false, best->block_id);
@@ -54,7 +55,8 @@ void* CpuAllocator::get(size_t size) {
     best->size -= size;
     best->address += size;
     // std::cout << "Partitioned " << size << " bytes\n";
-    return new_block->address;
+    return std::make_unique<CpuBuffer>(new_block->address,
+                                       MemoryAllocators::Cpu);
   }
 
   auto size_to_allocate = std::max(size, block_size_);
@@ -77,7 +79,7 @@ void* CpuAllocator::get(size_t size) {
   }
 
   // std::cout << "Allocated " << size << " bytes\n";
-  return retval;
+  return std::make_unique<CpuBuffer>(retval, MemoryAllocators::Cpu);
 }
 
 void CpuAllocator::put(const void* address) {
