@@ -19,17 +19,20 @@
 
 #include <tuple>
 
+#include "amdinfer/buffers/buffer.hpp"  // for BufferPtr
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
+#include "amdinfer/testing/gtest.hpp"     // for AssertionResult,...
 
 namespace amdinfer {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitPool, Basic) {
   MemoryPool pool;
+  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
 
-  auto buffer = pool.get({MemoryAllocators::Cpu}, sizeof(int));
+  auto buffer = pool.get({MemoryAllocators::Cpu}, input, 1);
 
   pool.put(std::move(buffer));
 }

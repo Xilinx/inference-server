@@ -317,8 +317,7 @@ InferenceRequestInput getInput(
   input.setParameters(mapProtoToParameters(req.parameters()));
 
   auto size = input.getSize();
-  auto buffer =
-    pool->get({MemoryAllocators::Cpu}, size * input.getDatatype().size());
+  auto buffer = pool->get({MemoryAllocators::Cpu}, input, 1);
   input.setData(buffer->data(0));
   // auto* dest = static_cast<std::byte*>(input_buffer->data(offset));
   AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +

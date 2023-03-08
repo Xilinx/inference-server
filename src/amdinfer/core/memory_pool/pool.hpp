@@ -25,9 +25,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "amdinfer/buffers/buffer.hpp"
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/core/memory_pool/memory_allocator.hpp"
+#include "amdinfer/declarations.hpp"
 
 namespace amdinfer {
 
@@ -40,7 +40,8 @@ class MemoryPool {
   MemoryPool();
 
   std::unique_ptr<Buffer> get(const std::vector<MemoryAllocators>& allocators,
-                              size_t size) const;
+                              const InferenceRequestInput& tensor,
+                              size_t batch_size) const;
   void put(std::unique_ptr<Buffer> memory) const;
 
  private:

@@ -32,6 +32,7 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
+#include "amdinfer/buffers/buffer.hpp"         // for BufferPtr
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/clients/http_internal.hpp"  // for propagate, errorHtt...
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
@@ -367,8 +368,7 @@ InferenceRequestInput getInput(const Json::Value &json,
     input.setParameters(std::make_unique<ParameterMap>());
   }
 
-  auto size = input.getDatatype().size() * util::containerProduct(shape_vector);
-  auto buffer = pool->get({MemoryAllocators::Cpu}, size);
+  auto buffer = pool->get({MemoryAllocators::Cpu}, input, 1);
   if (!json.isMember("data")) {
     throw invalid_argument("No 'data' key present in request input");
   }

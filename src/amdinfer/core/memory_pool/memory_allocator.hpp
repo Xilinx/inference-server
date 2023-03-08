@@ -41,7 +41,8 @@ class MemoryAllocator {
   virtual ~MemoryAllocator() = default;
 
   // these methods are thread-safe
-  [[nodiscard]] virtual BufferPtr get(size_t size) = 0;
+  [[nodiscard]] virtual BufferPtr get(const InferenceRequestInput& tensor,
+                                      size_t batch_size) = 0;
   virtual void put(const void* address) = 0;
 };
 

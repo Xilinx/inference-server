@@ -95,9 +95,7 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         // output_buffers.reserve(output_sizes.size());
         // std::vector<size_t> output_offset(output_buffers.size(), 0);
         for (const auto& input : inputs) {
-          input_buffers.push_back(pool_->get(
-            allocators,
-            input.getSize() * input.getDatatype().size() * batch_size_));
+          input_buffers.push_back(pool_->get(allocators, input, batch_size_));
         }
         // for(const auto& tensor_size : output_sizes) {
         //   output_buffers.push_back(pool_->get(allocators, tensor_size));

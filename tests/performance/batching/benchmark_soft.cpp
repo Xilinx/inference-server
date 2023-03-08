@@ -31,6 +31,7 @@
 #include <vector>    // for vector
 
 #include "amdinfer/batching/soft.hpp"          // for BatchPtr, SoftBatcher
+#include "amdinfer/buffers/buffer.hpp"         // for BufferPtr
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::U...
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap

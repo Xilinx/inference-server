@@ -33,10 +33,11 @@ MemoryPool::MemoryPool() {
 }
 
 std::unique_ptr<Buffer> MemoryPool::get(
-  const std::vector<MemoryAllocators>& allocators, size_t size) const {
+  const std::vector<MemoryAllocators>& allocators,
+  const InferenceRequestInput& tensor, size_t batch_size) const {
   for (const auto& allocator : allocators) {
     try {
-      return allocators_.at(allocator)->get(size);
+      return allocators_.at(allocator)->get(tensor, batch_size);
     } catch (const runtime_error&) {
       continue;
     }

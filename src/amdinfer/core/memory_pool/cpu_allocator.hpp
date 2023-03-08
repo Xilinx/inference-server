@@ -35,7 +35,8 @@ class CpuAllocator : public MemoryAllocator {
  public:
   explicit CpuAllocator(size_t block_size, size_t max_allocated = -1);
 
-  [[nodiscard]] BufferPtr get(size_t size) override;
+  [[nodiscard]] BufferPtr get(const InferenceRequestInput& tensor,
+                              size_t batch_size) override;
   void put(const void* address) override;
 
   // void free(const void* address);

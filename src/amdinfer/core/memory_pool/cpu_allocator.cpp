@@ -25,13 +25,17 @@
 
 #include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/predict_api.hpp"
 
 namespace amdinfer {
 
 CpuAllocator::CpuAllocator(size_t block_size, size_t max_allocate)
   : max_allocate_(max_allocate), block_size_(block_size) {}
 
-BufferPtr CpuAllocator::get(size_t size) {
+BufferPtr CpuAllocator::get(const InferenceRequestInput& tensor,
+                            size_t batch_size) {
+  auto size = tensor.getSize() * tensor.getDatatype().size() * batch_size;
+
   const std::lock_guard lock{mutex_};
   auto best = headers_.end();
   const auto end = headers_.end();
