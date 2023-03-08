@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets cpu)
+list(APPEND targets cpu vart_tensor)
 
 add_library(buffer OBJECT buffer.cpp)
 target_include_directories(buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})

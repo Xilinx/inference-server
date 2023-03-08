@@ -26,6 +26,8 @@
 #include <cstring>  // for memcpy
 #include <string>   // for string
 
+#include "amdinfer/core/memory_pool/memory_allocator.hpp"
+
 // IWYU is creating a cycle with adding/removing this header
 // IWYU pragma: no_include <algorithm>
 
@@ -37,6 +39,8 @@ namespace amdinfer {
  */
 class Buffer {
  public:
+  explicit Buffer(MemoryAllocators allocator);
+
   /// Destroy the Buffer object
   virtual ~Buffer() = default;
 
@@ -86,6 +90,11 @@ class Buffer {
       return this->write(&value, offset, sizeof(T));
     }
   }
+
+  MemoryAllocators getAllocator() const;
+
+ private:
+  MemoryAllocators allocator_;
 };
 
 }  // namespace amdinfer

@@ -26,6 +26,8 @@
 
 namespace amdinfer {
 
+enum class MemoryAllocators { Cpu, VartTensor };
+
 struct MemoryHeader {
   std::byte* address;
   bool free;

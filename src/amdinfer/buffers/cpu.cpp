@@ -26,7 +26,7 @@
 namespace amdinfer {
 
 CpuBuffer::CpuBuffer(void* data, MemoryAllocators allocator)
-  : allocator_(allocator), data_(static_cast<std::byte*>(data)) {}
+  : Buffer(allocator), data_(static_cast<std::byte*>(data)) {}
 
 void* CpuBuffer::data(size_t offset) { return data_ + offset; }
 

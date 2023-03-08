@@ -31,10 +31,6 @@
 
 namespace amdinfer {
 
-enum class MemoryAllocators { Cpu };
-
-using Memory = std::pair<MemoryAllocators, void*>;
-
 class MemoryPool {
  public:
   MemoryPool();
