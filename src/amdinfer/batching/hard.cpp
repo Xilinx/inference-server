@@ -26,6 +26,7 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
+#include "amdinfer/buffers/cpu.hpp"            // for CpuBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_METRICS
 #include "amdinfer/core/exceptions.hpp"        // for invalid_argument
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
@@ -117,6 +118,8 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         auto new_offset =
           raw_input->write(input.getData(), offset,
                            input.getSize() * input.getDatatype().size());
+        pool_->put(
+          std::make_unique<CpuBuffer>(input.getData(), MemoryAllocators::Cpu));
         request->setInputTensorData(i, raw_input->data(offset));
         offset = new_offset;
       }

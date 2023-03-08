@@ -24,6 +24,7 @@
 #include <vector>            // for vector
 
 #include "amdinfer/batching/soft.hpp"          // for BatchPtr, SoftBatcher
+#include "amdinfer/buffers/cpu.hpp"            // for CpuBuffer
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
 #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::U...
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
@@ -110,9 +111,12 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
 
     this->batcher_->start({MemoryAllocators::Cpu});
 
-    data_.resize(data_size);
+    buffer_ = pool_.get({MemoryAllocators::Cpu}, data_size);
+
+    auto* data = static_cast<uint8_t*>(buffer_->data(0));
+
     for (uint8_t i = 0; i < data_size; i++) {
-      data_[i] = i;
+      data[i] = i;
     }
   }
 
@@ -164,14 +168,13 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
 
   InferenceRequestPtr createRequest() {
     auto request = std::make_shared<InferenceRequest>();
-    request->addInputTensor(static_cast<void*>(data_.data()), data_shape_,
-                            DataType::Uint8);
+    request->addInputTensor(buffer_->data(0), data_shape_, DataType::Uint8);
     return request;
   }
 
  private:
   int data_size_ = 0;
-  std::vector<uint8_t> data_;
+  BufferPtr buffer_;
   std::initializer_list<uint64_t> data_shape_;
   InferenceRequestPtr request_;
   std::optional<WorkerInfo> worker_;
