@@ -25,6 +25,34 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 Unreleased
 ----------
 
+Added
+^^^^^
+
+* An example MLPerf app using the inference server API (:pr:`129`)
+* Google Benchmark for writing performance-tracking tests (:pr:`147`)
+
+Changed
+^^^^^^^
+
+* Refactor how global state is managed (:pr:`125`)
+* Require the server as an argument for creating the NativeClient (:pr:`125`)
+* Use a global memory pool to allocate memory for incoming requests (:pr:`149`)
+* Resolve the request at the incoming server rather than the batcher (:pr:`164`)
+
+Deprecated
+^^^^^^^^^^
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+* Use the right unit for batcher timeout (:pr:`129`)
+
+Security
+^^^^^^^^
+
 :github:`0.3.0 <Xilinx/inference-server/releases/tag/v0.3.0>` - 2023-02-01
 --------------------------------------------------------------------------
 

@@ -35,7 +35,7 @@ docs/cpp_api
 # files
 callgrind.out.*
 vgcore.*
-docker-compose.yml
+/docker-compose*.yml
 *.log
 *.out
 *.pyc

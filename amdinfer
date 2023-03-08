@@ -242,13 +242,8 @@ class WriteComposeFile:
                 "The yaml package is required for this command but could not be imported.",
             )
 
-        with open(f"docker/docker-compose.base.yml", "r") as f:
-            config = yaml.safe_load(f)
-
         with open(f"docker/docker-compose.{profile}.yml", "r") as f:
-            supplement = yaml.safe_load(f)
-
-        cls.merge(config, supplement)
+            config = yaml.safe_load(f)
 
         for service in config["services"]:
             if args.devices:
@@ -259,7 +254,7 @@ class WriteComposeFile:
         if args.dry_run:
             print(json.dumps(config, indent=2))
         else:
-            with open("docker-compose.yml", "w") as f:
+            with open(f"docker-compose.{profile}.yml", "w") as f:
                 yaml.dump(config, f)
 
 
@@ -1204,11 +1199,13 @@ class Up:
             args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
-            extra_flags = "--abort-on-container-exit --exit-code-from amdinfer-tester"
+            extra_flags = f"--abort-on-container-exit --exit-code-from amdinfer-tester-{args.profile}"
         elif args.profile == "autotest-dev":
             args.name = "amdinfer-dev" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
-            extra_flags = "--abort-on-container-exit --exit-code-from amdinfer"
+            extra_flags = (
+                f"--abort-on-container-exit --exit-code-from amdinfer-{args.profile}"
+            )
         elif args.profile == "test":
             args.tag = args.registry
             extra_flags = "--detach"
@@ -1221,7 +1218,9 @@ class Up:
 
         image = f"{args.tag}:{args.version}"
 
-        command = f"docker-compose up {extra_flags}"
+        command = (
+            f"docker-compose -f docker-compose.{args.profile}.yml up {extra_flags}"
+        )
 
         if args.dry_run:
             print(f"IMAGE: {image}")
@@ -1230,7 +1229,7 @@ class Up:
             print(f"VERSION: {args.version}")
             print("AKS_ROOT: $PWD/external/aks")
         else:
-            with open("docker-compose.yml", "r") as f:
+            with open(f"docker-compose.{args.profile}.yml", "r") as f:
                 filedata = f.read()
                 filedata = "# " + command + "\n" + filedata
                 filedata = filedata.replace("$IMAGE", image)
@@ -1238,7 +1237,7 @@ class Up:
                 filedata = filedata.replace("$REGISTRY", args.registry)
                 filedata = filedata.replace("$VERSION", args.version)
                 filedata = filedata.replace("$AKS_ROOT", "$PWD/external/aks")
-            with open("docker-compose.yml", "w") as f:
+            with open(f"docker-compose.{args.profile}.yml", "w") as f:
                 f.write(filedata)
 
         if not args.write_only:
@@ -1256,7 +1255,7 @@ class Up:
             "-p",
             "--profile",
             action="store",
-            help=f"profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev",
+            help="profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev",
             default="autotest-dev",
         )
         command_group.add_argument(
@@ -1268,20 +1267,20 @@ class Up:
         command_group.add_argument(
             "--suffix",
             action="store",
-            help=f"String to append to the tag of the Docker image to use. Defaults to empty string",
+            help="String to append to the tag of the Docker image to use. Defaults to empty string",
             default="",
         )
         command_group.add_argument(
             "-v",
             "--version",
             action="store",
-            help=f"Version of the Docker images to run. Defaults to latest",
+            help="Version of the Docker images to run. Defaults to latest",
             default="latest",
         )
         command_group.add_argument(
             "--write-only",
             action="store_true",
-            help=f"Only generate docker-compose.yml without running it",
+            help="Only generate docker-compose.yml without running it",
         )
         subparser.set_defaults(func=cls.parse)
 
