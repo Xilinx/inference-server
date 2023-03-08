@@ -19,6 +19,8 @@
 
 #include "amdinfer/batching/batch.hpp"
 
+#include <cassert>
+
 #include "amdinfer/buffers/buffer.hpp"
 #include "amdinfer/observation/tracing.hpp"
 
