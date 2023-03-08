@@ -147,6 +147,13 @@ def add_user(manager):
 
 
 def add_dev_tools(manager: PackageManager):
+    if manager.name == "apt":
+        cpp_package = "g++"
+    elif manager.name == "yum":
+        cpp_package = "gcc-c++"
+    else:
+        raise ValueError(f"Unknown base image type: {manager.name}")
+
     return textwrap.dedent(
         f"""\
         RUN {manager.update} \\
@@ -155,7 +162,7 @@ def add_dev_tools(manager: PackageManager):
                 git \\
                 # need cc for libb64, and gcc gets installed by xrt as a dependency
                 gcc \\
-                g++ \\
+                {cpp_package} \\
                 make \\
                 # used to get packages
                 wget \\
