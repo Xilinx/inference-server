@@ -95,7 +95,7 @@ class Batcher {
   [[nodiscard]] std::string getName() const;
 
   /// Get the batcher's input queue (used to enqueue new requests)
-  BlockingQueue<InterfacePtr>* getInputQueue();
+  BlockingQueue<RequestContainerPtr>* getInputQueue();
   /// Get the batcher's output queue (used to push batches to the worker group)
   BatchPtrQueue* getOutputQueue();
 
@@ -108,7 +108,7 @@ class Batcher {
    *
    * @param request
    */
-  void enqueue(InterfacePtr request) const;
+  void enqueue(RequestContainerPtr request) const;
 
   /// End the batcher
   void end();
@@ -119,7 +119,7 @@ class Batcher {
 #endif
 
   size_t batch_size_ = 1;
-  std::shared_ptr<BlockingQueue<InterfacePtr>> input_queue_;
+  std::shared_ptr<BlockingQueue<RequestContainerPtr>> input_queue_;
   std::shared_ptr<BatchPtrQueue> output_queue_;
   std::thread thread_;
   std::string model_;
@@ -129,7 +129,7 @@ class Batcher {
  private:
   /**
    * @brief The doRun method defines the exact process by which the batcher
-   * consumes incoming Interface objects and uses them to create batches.
+   * consumes incoming RequestContainer objects and uses them to create batches.
    *
    * @param allocators vector of allocators that may be used to get memory
    */

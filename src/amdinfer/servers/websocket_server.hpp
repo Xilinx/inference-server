@@ -28,7 +28,6 @@
 #include <vector>     // for vector
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/interface.hpp"       // for Interface
 #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
 #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
 
@@ -42,32 +41,6 @@ class SharedState;
 }  // namespace amdinfer
 
 namespace amdinfer::http {
-
-/**
- * @brief The DrogonWs Interface class encapsulates incoming requests from
- * Drogon's Websocket interface to the batcher.
- *
- */
-class DrogonWs : public Interface {
- public:
-  DrogonWs(const drogon::WebSocketConnectionPtr &conn,
-           std::shared_ptr<Json::Value> json);
-
-  std::shared_ptr<InferenceRequest> getRequest(
-    const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
-    const BufferRawPtrs &output_buffers,
-    std::vector<size_t> &output_offsets) override;
-
-  size_t getInputSize() override;
-  std::vector<size_t> getInputSizes() const override;
-  void errorHandler(const std::exception &e) override;
-
- private:
-  void setJson();
-
-  std::shared_ptr<Json::Value> json_;
-  drogon::WebSocketConnectionPtr conn_;
-};
 
 /**
  * @brief The Websocket server handles incoming websocket requests. Currently,

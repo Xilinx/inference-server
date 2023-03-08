@@ -28,8 +28,8 @@ class Buffer;
 
 class Batch;
 
-class Interface;
-using InterfacePtr = std::unique_ptr<Interface>;
+class RequestContainer;
+using RequestContainerPtr = std::unique_ptr<RequestContainer>;
 class WorkerInfo;
 
 struct UpdateCommand;

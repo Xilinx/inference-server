@@ -22,13 +22,13 @@
 #include <cassert>      // for assert
 #include <type_traits>  // for __decay_and_strip<>::__type
 
-#include "amdinfer/batching/batcher.hpp"  // for Batcher
-#include "amdinfer/build_options.hpp"     // for kMaxModelNameSize
-#include "amdinfer/core/exceptions.hpp"   // for invalid_argument
-#include "amdinfer/core/interface.hpp"    // IWYU pragma: keep
-#include "amdinfer/core/parameters.hpp"   // for ParameterMap
-#include "amdinfer/core/worker_info.hpp"  // for WorkerInfo
-#include "amdinfer/util/thread.hpp"       // for setThreadName
+#include "amdinfer/batching/batcher.hpp"           // for Batcher
+#include "amdinfer/build_options.hpp"              // for kMaxModelNameSize
+#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
+#include "amdinfer/core/parameters.hpp"            // for ParameterMap
+#include "amdinfer/core/predict_api_internal.hpp"  // for RequestContainer
+#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/util/thread.hpp"                // for setThreadName
 
 namespace amdinfer {
 
@@ -69,12 +69,12 @@ void Endpoints::unload(const std::string& endpoint) {
 
 // TODO(varunsh): race condition if workers are shutting down
 void Endpoints::infer(const std::string& endpoint,
-                      std::unique_ptr<Interface> request) const {
+                      std::unique_ptr<RequestContainer> request) const {
   WorkerInfo* worker = this->unsafeGet(endpoint);
   if (worker == nullptr) {
     throw invalid_argument("Worker " + endpoint + " not found");
   }
-  auto* batcher = worker->getBatcher();
+  const auto* batcher = worker->getBatcher();
   batcher->enqueue(std::move(request));
 }
 
@@ -139,6 +139,8 @@ ModelMetadata Endpoints::metadata(const std::string& endpoint) {
   }
   return metadata;
 }
+
+const MemoryPool* Endpoints::getPool() const { return &pool_; }
 
 // TODO(varunsh): if multiple commands sent post-shutdown, they will linger
 // in the queue and may cause problems

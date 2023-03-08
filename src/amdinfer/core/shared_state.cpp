@@ -33,12 +33,12 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_VITIS
 #include "amdinfer/core/endpoints.hpp"         // for Endpoints
 #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
-#include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
-#include "amdinfer/util/string.hpp"            // for isLower
-#include "amdinfer/version.hpp"                // for kAmdinferVersion
+#include "amdinfer/core/predict_api_internal.hpp"  // for ServerMetadata, ModelMe...
+#include "amdinfer/observation/observer.hpp"
+#include "amdinfer/util/string.hpp"  // for isLower
+#include "amdinfer/version.hpp"      // for kAmdinferVersion
 
 #ifdef AMDINFER_ENABLE_VITIS
 #include <sockpp/socket.h>         // for socket, socket_initializer
@@ -99,7 +99,7 @@ void SharedState::workerUnload(const std::string& worker) {
 }
 
 void SharedState::modelInfer(const std::string& model,
-                             std::unique_ptr<Interface> request) {
+                             std::unique_ptr<RequestContainer> request) {
   endpoints_.infer(model, std::move(request));
 }
 
@@ -185,6 +185,8 @@ bool SharedState::hasHardware(const std::string& name, int num) {
   }
   return kernel_iterator->second >= num;
 }
+
+const MemoryPool* SharedState::getPool() const { return endpoints_.getPool(); }
 
 void SharedState::setRepository(const fs::path& repository_path,
                                 bool load_existing) {

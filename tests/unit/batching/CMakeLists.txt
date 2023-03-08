@@ -18,13 +18,13 @@ list(APPEND tests soft soft_batching)
 list(
   APPEND
     tests_libs
-    "$<TARGET_OBJECTS:batcher>~fake_observation~interface~\
+    "$<TARGET_OBJECTS:batcher>~fake_observation~\
       $<TARGET_OBJECTS:fake_worker_info_buffers_infinite>~predict_api~\
       parameters~data_types~$<TARGET_OBJECTS:softBatcher>~timer~memory_pool~batch~cpuBuffer~buffer"
-    "$<TARGET_OBJECTS:batcher>~fake_observation~interface~\
+    "$<TARGET_OBJECTS:batcher>~fake_observation~\
       $<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~data_types~\
       parameters~$<TARGET_OBJECTS:softBatcher>~cpuBuffer~buffer~\
-      $<TARGET_OBJECTS:native_internal>~timer~memory_pool~batch"
+      timer~memory_pool~batch"
 )
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

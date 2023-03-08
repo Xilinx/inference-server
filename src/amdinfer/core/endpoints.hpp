@@ -37,7 +37,7 @@
 
 namespace amdinfer {
 
-class Interface;
+class RequestContainer;
 class ParameterMap;
 class WorkerInfo;
 
@@ -90,7 +90,7 @@ class Endpoints {
   void unload(const std::string& endpoint);
 
   void infer(const std::string& endpoint,
-             std::unique_ptr<Interface> request) const;
+             std::unique_ptr<RequestContainer> request) const;
 
   bool exists(const std::string& endpoint);
   // WorkerInfo* get(const std::string& endpoint);
@@ -98,6 +98,8 @@ class Endpoints {
 
   std::vector<std::string> list();
   ModelMetadata metadata(const std::string& endpoint);
+
+  const MemoryPool* getPool() const;
 
   void shutdown();
 

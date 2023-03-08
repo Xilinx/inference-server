@@ -23,17 +23,17 @@
 #include <utility>           // for move
 #include <vector>            // for vector
 
-#include "amdinfer/batching/soft.hpp"            // for BatchPtr, SoftBatcher
-#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/clients/native_internal.hpp"  // for CppNativeApi
-#include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
-#include "amdinfer/core/memory_pool/pool.hpp"    // for MemoryPool
-#include "amdinfer/core/parameters.hpp"          // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"         // for InferenceRequest, Req...
-#include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
-#include "amdinfer/declarations.hpp"             // for BufferPtrs
-#include "amdinfer/observation/logging.hpp"      // for initLogger, LogLevel
-#include "gtest/gtest.h"                         // for ParamIteratorInterface
+#include "amdinfer/batching/soft.hpp"          // for BatchPtr, SoftBatcher
+#include "amdinfer/buffers/cpu.hpp"            // for CpuBuffer
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::U...
+#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequest, Req...
+#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/declarations.hpp"               // for BufferPtrs
+#include "amdinfer/observation/logging.hpp"        // for initLogger, LogLevel
+#include "gtest/gtest.h"                           // for ParamIteratorInterface
 
 namespace amdinfer {
 
@@ -111,9 +111,12 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
 
     this->batcher_->start({MemoryAllocators::Cpu});
 
-    data_.resize(data_size);
+    buffer_ = pool_.get({MemoryAllocators::Cpu}, data_size);
+
+    auto* data = static_cast<uint8_t*>(buffer_->data(0));
+
     for (uint8_t i = 0; i < data_size; i++) {
-      data_[i] = i;
+      data[i] = i;
     }
   }
 
@@ -156,30 +159,24 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
           compareData(buffer.get(), j * data_size_);
         }
       }
-
-      const auto& reqs = batch->getRequests();
-      for (const auto& req : reqs) {
-        req->runCallback(InferenceResponse());
-      }
     }
   }
 
-  void enqueue(std::unique_ptr<CppNativeApi> req) {
+  void enqueue(std::unique_ptr<RequestContainer> req) {
     batcher_->enqueue(std::move(req));
   }
 
-  InferenceRequest createRequest() {
-    InferenceRequest request;
-    request.addInputTensor(static_cast<void*>(data_.data()), data_shape_,
-                           DataType::Uint8);
+  InferenceRequestPtr createRequest() {
+    auto request = std::make_shared<InferenceRequest>();
+    request->addInputTensor(buffer_->data(0), data_shape_, DataType::Uint8);
     return request;
   }
 
  private:
   int data_size_ = 0;
-  std::vector<uint8_t> data_;
+  BufferPtr buffer_;
   std::initializer_list<uint64_t> data_shape_;
-  InferenceRequest request_;
+  InferenceRequestPtr request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;
   MemoryPool pool_;
@@ -191,8 +188,8 @@ TEST_P(UnitSoftBatcherFixture, BasicBatching) {  // NOLINT
 
   for (const auto& i : requests) {
     for (auto j = 0; j < i; ++j) {
-      auto request = createRequest();
-      auto req = std::make_unique<CppNativeApi>(request);
+      auto req = std::make_unique<RequestContainer>();
+      req->request = createRequest();
       this->enqueue(std::move(req));
     }
   }

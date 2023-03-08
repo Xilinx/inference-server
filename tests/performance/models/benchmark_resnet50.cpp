@@ -165,19 +165,23 @@ void resnet50(benchmark::State& st, Args&&... args) {
   parameters.put("output_classes", output_classes);
   parameters.put("batch_size", batch_size);
 
-  const auto default_http_port = 8998;
-  const auto default_grpc_port = 50'051;
+  [[maybe_unused]] const auto default_http_port = 8998;
+  [[maybe_unused]] const auto default_grpc_port = 50'051;
 
   amdinfer::Server server;
   std::unique_ptr<amdinfer::Client> client;
   if (client_index == 0) {
     client = std::make_unique<amdinfer::NativeClient>(&server);
+#ifdef AMDINFER_ENABLE_HTTP
   } else if (client_index == 1) {
     server.startHttp(default_http_port);
     client = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
+#endif
+#ifdef AMDINFER_ENABLE_GRPC
   } else if (client_index == 2) {
     server.startGrpc(default_grpc_port);
     client = std::make_unique<amdinfer::GrpcClient>("127.0.0.1:50051");
+#endif
   } else {
     st.SkipWithError("Unknown client index passed");
     return;

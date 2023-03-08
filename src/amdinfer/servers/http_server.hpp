@@ -26,7 +26,8 @@
 #include <string>      // for allocator, string
 
 #include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_HTTP, PROT...
-#include "amdinfer/observation/logging.hpp"  // for LoggerPtr
+#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBuilder
+#include "amdinfer/observation/logging.hpp"        // for LoggerPtr
 
 #ifdef AMDINFER_ENABLE_HTTP
 #include <drogon/HttpController.h>  // for ADD_METHOD_TO, HttpContro...
@@ -38,8 +39,12 @@
 namespace amdinfer {
 
 class SharedState;
+class MemoryPool;
 
 #ifdef AMDINFER_ENABLE_HTTP
+
+InferenceRequestPtr getRequest(const std::shared_ptr<Json::Value> &json,
+                               const MemoryPool *pool);
 
 /**
  * @brief The HTTP server for handling REST requests extends the base

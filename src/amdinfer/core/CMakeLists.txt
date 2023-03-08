@@ -20,7 +20,6 @@ list(
          worker_info
          data_types
          data_types_internal
-         interface
          model_repository
          parameters
          shared_state
