@@ -31,7 +31,7 @@ Overview
 --------
 
 :numref:`architecture_overview` shows a high-level view of the Server's architecture.
-At the top, we have a client who can make a request to the Server using HTTP/REST, WebSocket, or the C++ API [#f1]_.
+At the top, we have a client who can make a request to the Server using HTTP/REST, WebSocket, gRPC or the C++ API [#f1]_.
 This request must be made to a particular worker that must be active in the Server.
 Each received request is passed to a batcher associated with the targeted worker independent of its origin.
 The batcher will combine individual requests into a batch and pass it to the worker for execution.
@@ -45,11 +45,8 @@ Ingestion
 
 There are a number of ways to get data into the system for inference.
 In general, each protocol has a custom interface to the client and requires explicit handling in the Server to accept this initial request.
-After receiving the client's request in the Server, each supported protocols' handler packs the request into an implementation of a ``RequestContainer`` object.
-This virtual class is defined in the Server and provides the batcher with a standard way of interacting with data from different ingestion protocols.
-Since all protocols push an implementation of this class to the batcher, they are treated equally by the rest of the Server.
-The only protocol-specific logic applies at the end of the worker when it replies back to the client in a protocol-specific manner.
-This structure also enables easy extension of the Server to add new protocols by extending the ``RequestContainer`` class.
+After receiving the client's request in the Server, each supported protocols' handler converts the incoming data into an ``InferenceRequest`` object.
+This object, plus some metadata, is packed into a ``RequestContainer`` object and passed to the appropriate batcher.
 
 API
 ^^^
@@ -69,6 +66,7 @@ It also doesn't have the notion of load-time parameters.
 In our case, there are parameters we need to pass at load-time, which results in potentially different endpoints if multiple workers with different configurations are loaded at once.
 To maintain compatibility, we do guarantee that the first worker loaded for a particular model, independent of configuration, will be at the same endpoint as the load request.
 Therefore, a KServe client is free to ignore the contents of the response and make requests to the endpoint without resulting in errors.
+There's also a ``modelLoad`` API which behaves more similarly to how KServe expects and is intended for use with using the server with a model repository.
 
 We currently do not support the optional version information associated with a model defined in the KServe specification.
 After a particular worker is loaded, inference requests can be made to it by constructing the appropriate request object and sending it to the prediction endpoint.
@@ -94,6 +92,16 @@ Drogon also provides a WebSocket server, which is currently used experimentally 
 The WebSocket API is custom.
 At this time, the client provides a URL to a video that the worker will retrieve and analyze frame-by-frame and send back to the client but this is subject to change.
 The WebSocket server code is in ``src/amdinfer/servers/websocket_server.*``.
+
+gRPC
+^^^^
+
+The gRPC functionality is provided through a custom implementation of a gRPC server.
+There are some examples in the `gRPC repository on Github <https://github.com/grpc/grpc/blob/master/examples/cpp>`__ that can be used for reference.
+It makes new dynamic objects to keep track of the incoming requests and a state machine is embedded inside to track state.
+A pointer to this object, ``CallData``, is put into the callback for the request so when the worker finishes this request, it will use it to respond to the request.
+After the response, the state machine is marked to finish and the object deallocates itself.
+The gRPC server code is in ``src/amdinfer/servers/grpc_server.*``.
 
 C++ API
 ^^^^^^^
@@ -137,17 +145,16 @@ This configuration is determined at compile-time and built into the definition o
 A ``Batch`` is made up of three basic components: ``InferenceRequest`` objects and input/output buffers.
 ``InferenceRequest`` objects are direct C++ implementations of the information present in the KServe API of an inference request structured in a similar format.
 They provide an ingestion-agnostic data format that all workers can process.
-The worker group that the batcher is attached to provides a set of input/output buffers from a pool of buffers that it allocates.
-These buffers are available in a queue for that batcher to pull from when it has incoming requests to batch together.
-Most commonly, each buffer can be used to represent one batch-size worth of contiguous memory but its exact nature depends on the buffer implementation that the worker is using.
+The batcher is responsible for getting memory from the memory pool that is sized appropriately to contain the incoming batch size of data as a buffer.
+The worker provides a list of allocators that the batcher is allowed to use when requesting memory.
+Most commonly, each buffer can be used to represent one batch-size worth of contiguous memory but its exact nature depends on the buffer implementation that the worker has requested.
 In this case, the batcher's job is to take individual requests and move its data into one slot of this buffer and construct the corresponding ``InferenceRequest`` object.
 Batchers have some flexibility with how these batches are constructed, which is why multiple batcher implementations are possible and supported in the AMD Inference Server.
 For example, one batcher may allow partial batches to be pushed on after enough time whereas this may not be allowed by another batcher.
 
-Batchers use the ``RequestContainer`` object's ``getRequest()`` method to help create batches.
-This method must be implemented by each interface and governs how, given some buffers and counters, the particular ingestion method's data should be converted to an ``InferenceRequest`` and its data is copied over to the buffers.
-THis method allows batchers to process all ingestion methods without knowing about the details of how the data may be stored internally in the ``RequestContainer``.
-
+Assuming that contiguous batches are expected, the batcher should request memory from the pool on the first request of a new batch.
+As new requests come in, their data is copied over to the newly allocated memory so it's contiguous for downstream processing.
+The memory that was used initially by the ingestion layer can now be freed.
 
 .. _architectureWorkers:
 
@@ -171,14 +178,12 @@ This class defines the lifecycle methods of the worker that are called by the Se
 This lifecycle is defined as follows:
 
 #.	``init()``: perform low-cost initialization of the worker
-#.	``allocate()``: allocate memory buffers that are used to hold input and output data for the worker. `Buffering` is further discussed below.
 #.	``acquire()``: acquire any hardware accelerators/resources and/or perform any high-cost initialization for the worker
 #.	``run()``: the main body of the worker performs the chosen computations on incoming batches
 #.	``release()``: release any hardware accelerators/resources
-#.	``deallocate()``: free the memory buffers allocated by this worker
 #.	``destroy()``: perform any final operations prior to shutdown
 
-The first three steps set up the worker while the latter three tear it down and are performed in this order by the Server.
+The first two steps set up the worker while the latter two tear it down and are performed in this order by the Server.
 The body of these methods must be provided by each worker implementation in the corresponding ``doX()`` methods (e.g. ``doInit()``).
 At load-time, the server will create an instance of the worker using its ``getWorker()`` method:
 
@@ -188,14 +193,22 @@ At load-time, the server will create an instance of the worker using its ``getWo
         amdinfer::workers::Worker* getWorker() { return new amdinfer::workers::MyWorkerClass(); }
     }
 
-This instance is saved internally and the first three methods above are called to initialize the worker.
+This instance is saved internally and the first two methods above are called to initialize the worker.
 The worker's batcher is also started by the server at this time.
 Finally, the worker's ``run()`` method is started as a separate thread with the batcher's output queue passed as the input queue to the worker.
 This method performs the body of the work.
 In an infinite loop, this method should wait for incoming batches from the worker's input queue, process the requests, and respond to the clients.
 
-To unload a worker, the Manager sends a ``nullptr`` to the worker, which should terminate the ``run()`` thread.
-This thread is joined and the last three lifecycle methods are called to safely clean up the worker.
+To unload a worker, the State sends a ``nullptr`` to the worker, which should terminate the ``run()`` thread.
+This thread is joined and the last two lifecycle methods are called to safely clean up the worker.
+
+Workers must also define a ``getAllocators()`` method to choose which allocators can be used by the batcher when it's preparing the incoming batch.
+
+.. code-block:: c++
+
+    std::vector<MemoryAllocators> MyWorkerClass::getAllocators() const {
+        return {MemoryAllocators::Cpu};
+    }
 
 Improving Performance
 ^^^^^^^^^^^^^^^^^^^^^
@@ -237,8 +250,15 @@ XModel
     ..
 
 As perhaps the most complex worker thus far, the architecture of the XModel worker is examined here in greater detail.
-The XModel worker is intended to run an arbitrary XModel specified by the user on a Xilinx FPGA [#f3]_.
+The XModel worker is intended to run an arbitrary XModel specified by the user on a Xilinx FPGA [#f2]_.
 We take a look at the lifecycle of this worker in the following sections.
+The XModel worker is using the ``VartTensor`` allocator.
+
+.. code-block:: c++
+
+    std::vector<MemoryAllocators> Xmodel::getAllocators() const {
+        return {MemoryAllocators::VartTensor};
+    }
 
 Initialization
 """"""""""""""
@@ -248,13 +268,6 @@ This XModel file is opened and parsed to get the graph and the first DPU subgrap
 In the future, we may support running an arbitrary number of subgraphs but this simple case is often sufficient.
 Using this subgraph, we create a *Runner*, which is a thread-safe object defined in the Vitis-AI runtime and is responsible for submitting requests to the FPGA.
 These objects are all saved as part of the internal state of the worker.
-
-Allocation
-""""""""""
-
-We use a special buffer backend for the this worker: the VartTensorBuffer.
-This custom type provides better compatibility with using the Runner as that expects ``vart::TensorBuffer`` objects to pass data to the FPGA.
-Therefore, this worker creates buffers using this backend and passes them to the Manager.
 
 Acquisition
 """""""""""
@@ -282,57 +295,25 @@ Cleanup
 There is almost no special cleanup required as the Vitis-AI objects that are part of the worker's state are smart pointers and are cleaned by the worker's destructor.
 THe only non-default implementation of the clean-up functions is to stop the internal thread pool and join the threads.
 
-Buffering
----------
+Shared State
+------------
 
-.. _fig_buffering:
-.. figure:: assets/buffer_lifecycle.png
-    :alt: Diagram showing the buffer lifecycle
-    :height: 400px
-    :align: left
-
-    The buffer lifecycle
-
-Buffers are used to hold data internally within the server after receiving a request.
-The implementations of buffers are in ``src/amdinfer/buffers``.
-
-The lifecycle of buffers is shown in :numref:`fig_buffering`.
-In ``allocate()``, the worker creates a buffer pool made of some number of buffers.
-Using a buffer pool saves the cost of constantly allocating dynamic memory for each new request.
-Instead, we can reuse the same set of buffers that are allocated by the worker at one time.
-They are initially provided by the worker to the Manager which maintains a queue of buffers for storing the coalesced requests for one batch.
-The buffers of all the workers in one group are maintained in this common queue.
-They are consumed from the pool as the batcher creates batches and then the worker returns them to the pool after finishing work on a batch.
-If the batcher needs a buffer but there are none available, the batcher can block execution until a buffer becomes available.
-Thus, the number of buffers in the pool controls the number of active batches for a particular worker group.
-Currently, there's no mechanism to change the number of buffers in the pool at run-time short of allocating a new worker or sending a large request that forces the automatic allocation of more buffers.
-In the future, the number of buffers may be controllable from the Manager and dynamically managed depending on the number of requests.
-
-Multiple kinds of buffer backends are supported by providing the appropriate wrappers.
-For example, a simple implementation may use buffers allocated in CPU memory.
-For more advanced sharing of data and to minimize data movement, buffers may be allocated in shared memory or on hardware accelerators.
-Buffer backends extend the ``Buffer`` class.
-They provide methods to write different data types into the buffer and access the underlying data at some offset.
-
-Manager
--------
-
-The shared state of the AMD Inference Server is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in :numref:`architecture_detail`.
-This information enables the ingestion protocols to query the Manager to retrieve a pointer to the correct batcher to use to push the ``RequestContainer`` object to the right one corresponding to the targeted worker.
-To manage multiple versions of workers that may be running with different configurations, the Manager stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
+The shared state of the AMD Inference Server is maintained by the ``shared_state``—the active workers, their buffer pools, the endpoints, the load-time parameters associated with them, global memory pool and the repository—is visualized in :numref:`architecture_detail`.
+This information enables the ingestion protocols to query the State to retrieve a pointer to the correct batcher to use to push the ``RequestContainer`` object to the right one corresponding to the targeted worker.
+To manage multiple versions of workers that may be running with different configurations, the State stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
 In the case that it's assigned to an existing worker group, the previously allocated endpoint is returned to the client.
 If a new worker group is created, a new endpoint is reserved for this worker group and returned to the client.
-The implementation is in ``src/amdinfer/core/manager.*``.
+The implementation is in ``src/amdinfer/core/shared_state.*``, ``src/amdinfer/core/endpoints.*`` and ``src/amdinfer/core/model_repository.*``.
 
-Loading a new worker results in the creation of a new ``WorkerInfo`` (see ``src/amdinfer/core/worker_info.*``) object which the Manager uses internally to hold all the information associated with the worker.
+Loading a new worker results in the creation of a new ``WorkerInfo`` (see ``src/amdinfer/core/worker_info.*``) object which the State uses internally to hold all the information associated with the worker.
 The worker class instance, its batcher, and its buffer pool are all stored in this object.
 The ``WorkerInfo`` object provides two methods to create new workers: its constructor and an ``addAndStartWorker()`` method.
 The former is used for a brand-new worker and creates queues for the buffer pools and initializes the private members of the class.
 The latter loads the shared library associated with the worker, creates and saves the instance of the worker class, and starts its ``run()`` method in a new thread.
 
-The Manager also provides methods to safely modify the shared state such as loading or unloading new workers.
+The State also provides methods to safely modify the shared state such as loading or unloading new workers.
 Such actions must be taken with care because there are many threads that may need to modify state or make decisions based on the current state.
-The Manager uses a queue and a separate thread for this purpose.
+The State uses a queue and a separate thread for this purpose.
 All methods that modify state enqueue requests to this queue.
 These methods may be called from a multi-threaded context and so multiple duplicate or contradictory requests are possible.
 The queue enforces serialization and defines an ordering for all incoming requests so they can be processed in this order by the new thread.
@@ -367,13 +348,12 @@ Look at :ref:`metrics:metrics` for more information.
 Tracing
 ^^^^^^^
 
-The Server uses :github:`jaeger-client-cpp <jaegertracing/jaeger-client-cpp>` [#f2]_ to provide tracing.
+The Server uses :github:`opentelemetry-cpp <open-telemetry/opentelemetry-cpp>` to provide tracing.
 Tracing tracks the time taken for different sections of the architecture to process a single request.
-This data can be visualized in the Jaeger UI.
+This data can be visualized in the Jaeger UI or Grafana.
 Tracing data can be disabled at compile-time with a CMake option.
 
 Look at :ref:`tracing:tracing` for more information.
 
-.. [#f1] Some methods are only available through HTTP at this time. Using the C++ API requires compiling an application linked against ``libamdinfer.so`` rather than making requests to a server.
-.. [#f2] This library is deprecating and will be replaced with OpenTelemetry as recommended by Jaeger.
-.. [#f3] There are currently some restrictions on what may be run such as the number of input/output tensors.
+.. [#f1] Using the C++ API requires compiling an application linked against ``libamdinfer.so`` rather than making requests to a server.
+.. [#f2] There are currently some restrictions on what may be run such as the number of input tensors.
