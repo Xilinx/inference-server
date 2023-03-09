@@ -22,6 +22,7 @@
 #include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"
+#include "amdinfer/core/memory_pool/vart_tensor_allocator.hpp"
 
 namespace amdinfer {
 
@@ -30,6 +31,8 @@ const size_t kDefaultCpuBlockSize = 1'048'576;  // arbitrarily 1MiB
 MemoryPool::MemoryPool() {
   allocators_.try_emplace(MemoryAllocators::Cpu,
                           std::make_unique<CpuAllocator>(kDefaultCpuBlockSize));
+  allocators_.try_emplace(MemoryAllocators::VartTensor,
+                          std::make_unique<VartTensorAllocator>());
 }
 
 std::unique_ptr<Buffer> MemoryPool::get(
@@ -46,9 +49,8 @@ std::unique_ptr<Buffer> MemoryPool::get(
 }
 
 void MemoryPool::put(std::unique_ptr<Buffer> memory) const {
-  auto* buffer = dynamic_cast<CpuBuffer*>(memory.get());
-  const auto allocator = buffer->getAllocator();
-  const auto* address = buffer->data(0);
+  const auto allocator = memory->getAllocator();
+  const auto* address = memory->data(0);
   allocators_.at(allocator)->put(address);
 }
 

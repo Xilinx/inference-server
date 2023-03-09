@@ -102,22 +102,29 @@ void CpuAllocator::put(const void* address) {
   }
 
   // if the previous is free and from the same block, merge the two
-  if (auto prev = std::prev(found);
-      prev->block_id == found->block_id && prev->free) {
-    prev->size += found->size;
-    headers_.erase(found);
-    found = prev;
+  if (found != std::begin(headers_)) {
+    auto prev = std::prev(found);
+    if (prev->block_id == found->block_id && prev->free) {
+      prev->size += found->size;
+      headers_.erase(found);
+      found = prev;
+    }
   }
 
   // if the next is free and from the same block, merge the two
-  if (auto next = std::next(found);
-      next->block_id == found->block_id && next->free) {
-    next->size += found->size;
-    next->address = found->address;
-    headers_.erase(found);
+  if (found != std::prev(std::end(headers_))) {
+    auto next = std::next(found);
+    if (next->block_id == found->block_id && next->free) {
+      next->size += found->size;
+      next->address = found->address;
+      headers_.erase(found);
+    } else {
+      found->free = true;
+    }
   } else {
     found->free = true;
   }
+
   // std::cout << "Freed memory\n";
 }
 

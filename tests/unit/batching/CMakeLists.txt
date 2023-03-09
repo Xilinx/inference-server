@@ -20,11 +20,12 @@ list(
     tests_libs
     "$<TARGET_OBJECTS:batcher>~fake_observation~\
       $<TARGET_OBJECTS:fake_worker_info_buffers_infinite>~predict_api~\
-      parameters~data_types~$<TARGET_OBJECTS:softBatcher>~timer~memory_pool~batch~cpuBuffer~buffer"
+      parameters~data_types~$<TARGET_OBJECTS:softBatcher>~timer~memory_pool~\
+      batch~cpuBuffer~buffer~vart::runner~data_types_internal~vart_tensorBuffer"
     "$<TARGET_OBJECTS:batcher>~fake_observation~\
       $<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~data_types~\
       parameters~$<TARGET_OBJECTS:softBatcher>~cpuBuffer~buffer~\
-      timer~memory_pool~batch"
+      timer~memory_pool~batch~vart::runner~data_types_internal~vart_tensorBuffer"
 )
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

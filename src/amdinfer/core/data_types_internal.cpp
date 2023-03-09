@@ -92,13 +92,13 @@ xir::DataType mapTypeToXir(DataType type) {
     case DataType::Uint16:
     case DataType::Uint32:
     case DataType::Uint64:
-      retval.type = xir::DataType::UINT;
+      retval.type = xir::DataType::XUINT;
       break;
     case DataType::Int8:
     case DataType::Int16:
     case DataType::Int32:
     case DataType::Int64:
-      retval.type = xir::DataType::INT;
+      retval.type = xir::DataType::XINT;
       break;
     // case DataType::Fp16 fall through to default handler
     case DataType::Fp32:

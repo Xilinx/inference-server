@@ -47,6 +47,8 @@ class VartTensorBuffer : public Buffer {
    */
   void* data(size_t offset) override;
 
+  vart::TensorBuffer* getTensorBuffer();
+
  private:
   vart::TensorBuffer* data_;
 };

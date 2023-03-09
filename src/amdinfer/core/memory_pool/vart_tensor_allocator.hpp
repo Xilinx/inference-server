@@ -68,8 +68,8 @@ class VartTensorAllocator : public MemoryAllocator {
   std::mutex mutex_;
 
   std::list<VartTensorHeader> headers_;
-  std::vector<std::unique_ptr<xir::Tensor>> tensors_;
-  std::vector<vart::CpuFlatTensorBufferOwned> buffers_;
+  std::list<std::unique_ptr<xir::Tensor>> tensors_;
+  std::list<vart::CpuFlatTensorBufferOwned> buffers_;
 };
 
 }  // namespace amdinfer

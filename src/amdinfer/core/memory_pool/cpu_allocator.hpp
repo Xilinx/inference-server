@@ -48,7 +48,7 @@ class CpuAllocator : public MemoryAllocator {
   size_t block_id_ = 0;
   std::mutex mutex_;
   std::list<MemoryHeader> headers_;
-  std::vector<std::vector<std::byte>> data_;
+  std::list<std::vector<std::byte>> data_;
 };
 
 }  // namespace amdinfer

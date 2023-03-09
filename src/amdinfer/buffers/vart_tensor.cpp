@@ -53,4 +53,6 @@ void* VartTensorBuffer::data(size_t offset) {
   return reinterpret_cast<void*>(data_->data(shape).first);
 }
 
+vart::TensorBuffer* VartTensorBuffer::getTensorBuffer() { return data_; }
+
 }  // namespace amdinfer

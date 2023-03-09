@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(targets cpu_allocator vart_tensor_allocator pool)
+set(targets cpu_allocator pool)
+
+if(${AMDINFER_ENABLE_VITIS})
+  list(APPEND targets vart_tensor_allocator)
+endif()
 
 foreach(target ${targets})
   add_library(${target} OBJECT ${target}.cpp)
@@ -22,6 +26,12 @@ foreach(target ${targets})
 
   list(APPEND MEMORY_POOL_OBJS $<TARGET_OBJECTS:${target}>)
 endforeach()
+
+if(${AMDINFER_ENABLE_VITIS})
+  target_link_libraries(
+    vart_tensor_allocator INTERFACE vart::buffer-object data_types_internal
+  )
+endif()
 
 add_library(memory_pool STATIC ${MEMORY_POOL_OBJS})
 target_link_libraries(memory_pool INTERFACE ${targets})

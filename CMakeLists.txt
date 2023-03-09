@@ -101,7 +101,7 @@ if(NOT HALF_INCLUDE)
 endif()
 
 find_package(xir QUIET)
-find_package(vart CONFIG COMPONENTS runner util QUIET)
+find_package(vart CONFIG COMPONENTS runner util buffer-object QUIET)
 find_package(rt-engine QUIET)
 find_package(unilog QUIET)
 find_package(target-factory QUIET)
