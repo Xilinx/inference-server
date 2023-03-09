@@ -245,16 +245,25 @@ class WriteComposeFile:
         with open(f"docker/docker-compose.{profile}.yml", "r") as f:
             config = yaml.safe_load(f)
 
+        services = []
         for service in config["services"]:
+            services.append(service)
             if args.devices:
                 cls.set_or_extend(
                     config["services"][service], "devices", cls.get_devices()
                 )
 
+        if args.service_suffix:
+            for service in services:
+                new_service = service + args.service_suffix
+                config_str = json.dumps(config)
+                substituted = re.sub(rf"\b{service}\b", new_service, config_str)
+                config = json.loads(substituted)
+
         if args.dry_run:
             print(json.dumps(config, indent=2))
         else:
-            with open(f"docker-compose.{profile}.yml", "w") as f:
+            with open(f"docker-compose.{profile}{args.service_suffix}.yml", "w") as f:
                 yaml.dump(config, f)
 
 
@@ -1218,9 +1227,9 @@ class Up:
 
         image = f"{args.tag}:{args.version}"
 
-        command = (
-            f"docker-compose -f docker-compose.{args.profile}.yml up {extra_flags}"
-        )
+        filename = f"docker-compose.{args.profile}{args.service_suffix}.yml"
+
+        command = f"docker-compose -f {filename} up {extra_flags}"
 
         if args.dry_run:
             print(f"IMAGE: {image}")
@@ -1229,7 +1238,7 @@ class Up:
             print(f"VERSION: {args.version}")
             print("AKS_ROOT: $PWD/external/aks")
         else:
-            with open(f"docker-compose.{args.profile}.yml", "r") as f:
+            with open({filename}, "r") as f:
                 filedata = f.read()
                 filedata = "# " + command + "\n" + filedata
                 filedata = filedata.replace("$IMAGE", image)
@@ -1237,7 +1246,7 @@ class Up:
                 filedata = filedata.replace("$REGISTRY", args.registry)
                 filedata = filedata.replace("$VERSION", args.version)
                 filedata = filedata.replace("$AKS_ROOT", "$PWD/external/aks")
-            with open(f"docker-compose.{args.profile}.yml", "w") as f:
+            with open({filename}, "w") as f:
                 f.write(filedata)
 
         if not args.write_only:
@@ -1268,6 +1277,12 @@ class Up:
             "--suffix",
             action="store",
             help="String to append to the tag of the Docker image to use. Defaults to empty string",
+            default="",
+        )
+        command_group.add_argument(
+            "--service-suffix",
+            action="store",
+            help="String to append to the name of the services. Defaults to empty string",
             default="",
         )
         command_group.add_argument(
