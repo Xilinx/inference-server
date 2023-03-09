@@ -29,12 +29,13 @@ endforeach()
 
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
-    vart_tensor_allocator INTERFACE vart::buffer-object data_types_internal
+    vart_tensor_allocator INTERFACE vart_tensorBuffer vart::runner
+                                    data_types_internal
   )
 endif()
 
 add_library(memory_pool STATIC ${MEMORY_POOL_OBJS})
-target_link_libraries(memory_pool INTERFACE ${targets})
+target_link_libraries(memory_pool INTERFACE ${targets} cpuBuffer)
 set_target_options(memory_pool)
 
 set(MEMORY_POOL ${MEMORY_POOL_OBJS} PARENT_SCOPE)

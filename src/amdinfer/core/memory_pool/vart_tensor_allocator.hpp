@@ -20,6 +20,10 @@
 #ifndef GUARD_AMDINFER_CORE_MEMORY_POOL_VART_TENSOR_ALLOCATOR
 #define GUARD_AMDINFER_CORE_MEMORY_POOL_VART_TENSOR_ALLOCATOR
 
+#include "amdinfer/build_options.hpp"
+
+#ifdef AMDINFER_ENABLE_VITIS
+
 #include <cstddef>
 #include <list>
 #include <mutex>
@@ -73,5 +77,7 @@ class VartTensorAllocator : public MemoryAllocator {
 };
 
 }  // namespace amdinfer
+
+#endif
 
 #endif  // GUARD_AMDINFER_CORE_MEMORY_POOL_VART_TENSOR_ALLOCATOR

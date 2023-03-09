@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets cpu vart_tensor)
+list(APPEND targets cpu)
+
+if(${AMDINFER_ENABLE_VITIS})
+  list(APPEND targets vart_tensor)
+endif()
 
 add_library(buffer OBJECT buffer.cpp)
 target_include_directories(buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})
