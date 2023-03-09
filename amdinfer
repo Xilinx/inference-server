@@ -1238,7 +1238,7 @@ class Up:
             print(f"VERSION: {args.version}")
             print("AKS_ROOT: $PWD/external/aks")
         else:
-            with open({filename}, "r") as f:
+            with open(filename, "r") as f:
                 filedata = f.read()
                 filedata = "# " + command + "\n" + filedata
                 filedata = filedata.replace("$IMAGE", image)
@@ -1246,7 +1246,7 @@ class Up:
                 filedata = filedata.replace("$REGISTRY", args.registry)
                 filedata = filedata.replace("$VERSION", args.version)
                 filedata = filedata.replace("$AKS_ROOT", "$PWD/external/aks")
-            with open({filename}, "w") as f:
+            with open(filename, "w") as f:
                 f.write(filedata)
 
         if not args.write_only:
