@@ -1208,13 +1208,11 @@ class Up:
             args.tag = f"{args.registry}/{args.name}"
         elif args.profile == "autotest":
             args.tag = args.registry
-            extra_flags = f"--abort-on-container-exit --exit-code-from amdinfer-tester-{args.profile}"
+            extra_flags = f"--abort-on-container-exit --exit-code-from amdinfer-tester-{args.profile}{args.service_suffix}"
         elif args.profile == "autotest-dev":
             args.name = "amdinfer-dev" + args.suffix
             args.tag = f"{args.registry}/{args.name}"
-            extra_flags = (
-                f"--abort-on-container-exit --exit-code-from amdinfer-{args.profile}"
-            )
+            extra_flags = f"--abort-on-container-exit --exit-code-from amdinfer-{args.profile}{args.service_suffix}"
         elif args.profile == "test":
             args.tag = args.registry
             extra_flags = "--detach"
