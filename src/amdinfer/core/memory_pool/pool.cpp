@@ -31,8 +31,10 @@ const size_t kDefaultCpuBlockSize = 1'048'576;  // arbitrarily 1MiB
 MemoryPool::MemoryPool() {
   allocators_.try_emplace(MemoryAllocators::Cpu,
                           std::make_unique<CpuAllocator>(kDefaultCpuBlockSize));
+#ifdef AMDINFER_ENABLE_VITIS
   allocators_.try_emplace(MemoryAllocators::VartTensor,
                           std::make_unique<VartTensorAllocator>());
+#endif
 }
 
 std::unique_ptr<Buffer> MemoryPool::get(
