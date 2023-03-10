@@ -32,7 +32,7 @@ services:
     working_dir: /home/amdinfer-user
   amdinfer-tester-autotest:
     # command: [./amdinfer, test, --hostname, amdinfer, --cpp, skip]
-    command: /bin/bash -c "source ~/.env && ./amdinfer test --hostname amdinfer --cpp skip"
+    command: /bin/bash -c "source ~/.env && ./amdinfer test --hostname amdinfer-autotest --cpp skip"
     # tty: true
     # stdin_open: true
     depends_on:
