@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets cpu)
+set(targets cpu)
 
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND targets vart_tensor)

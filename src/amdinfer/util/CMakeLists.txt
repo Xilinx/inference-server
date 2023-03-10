@@ -13,15 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(
-  APPEND targets
-         base64
-         compression
-         ctpl
-         parse_env
-         exec
-         read_nth_line
-         timer
+set(targets
+    base64
+    compression
+    ctpl
+    parse_env
+    exec
+    read_nth_line
+    timer
 )
 
 list(APPEND UTIL_OBJS)

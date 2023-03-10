@@ -13,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(
-  APPEND targets
-         predict_api
-         endpoints
-         worker_info
-         data_types
-         data_types_internal
-         model_repository
-         parameters
-         shared_state
+set(targets
+    predict_api
+    endpoints
+    worker_info
+    data_types
+    data_types_internal
+    model_repository
+    parameters
+    shared_state
 )
 
 foreach(target ${targets})

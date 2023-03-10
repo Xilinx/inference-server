@@ -13,6 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# add all the source directories. These produce object libraries with the same
+# names
+set(targets
+    batching
+    bindings
+    buffers
+    clients
+    core
+    observation
+    servers
+    util
+    workers
+)
+foreach(target ${targets})
+  add_subdirectory(${target})
+endforeach()
+
+# the compiled server binary
 add_executable(amdinfer-server-exe main.cpp)
 target_include_directories(amdinfer-server-exe PRIVATE ${AMDINFER_INCLUDE_DIRS})
 target_link_options(amdinfer-server-exe PRIVATE "LINKER:-E")
@@ -20,40 +38,14 @@ set_target_options(amdinfer-server-exe)
 set_target_properties(
   amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
 )
-
-target_link_libraries(
-  amdinfer-server-exe PRIVATE amdinfer Jsoncpp_lib Drogon::Drogon
-)
-
-add_subdirectory(batching)
-add_subdirectory(bindings)
-add_subdirectory(buffers)
-add_subdirectory(clients)
-add_subdirectory(core)
-add_subdirectory(observation)
-add_subdirectory(servers)
-add_subdirectory(util)
-add_subdirectory(workers)
-
-# Build and install the amdinfer library. The dual static/shared build process is
-# guided by: https://github.com/alexreinking/SharedStaticStarter and its
-# accompanying article.
-
-if(${AMDINFER_BUILD_SHARED})
-  set(type shared)
-else()
-  set(type static)
-endif()
-string(TOUPPER ${type} TYPE)
+target_link_libraries(amdinfer-server-exe PRIVATE amdinfer Drogon::Drogon)
 
 add_library(
-  amdinfer
-  ${TYPE}
+  amdinfer SHARED
   ${BATCHING_OBJS}
   ${BUFFERS_OBJS}
   ${CLIENT_OBJS}
   ${CORE_OBJS}
-  ${HELPER_OBJS}
   ${OBSERVATION_OBJS}
   ${SERVER_OBJS}
   ${UTIL_OBJS}
@@ -64,22 +56,15 @@ target_link_libraries(
 set_target_options(amdinfer)
 
 add_library(
-  amdinfer-server
-  ${TYPE}
-  ${BATCHING_OBJS}
-  ${BUFFERS_OBJS}
-  ${CORE_OBJS}
-  ${HELPER_OBJS}
-  ${OBSERVATION_OBJS}
-  ${SERVER_OBJS}
-  ${UTIL_OBJS}
+  amdinfer-server SHARED ${BATCHING_OBJS} ${BUFFERS_OBJS} ${CORE_OBJS}
+                         ${OBSERVATION_OBJS} ${SERVER_OBJS} ${UTIL_OBJS}
 )
 target_link_libraries(amdinfer-server PRIVATE batching core observation servers)
 set_target_options(amdinfer-server)
 
 add_library(
-  amdinfer-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
-                  ${UTIL_OBJS}
+  amdinfer-client SHARED ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
+                         ${UTIL_OBJS}
 )
 target_link_libraries(amdinfer-client PRIVATE clients core observation)
 set_target_options(amdinfer-client)
@@ -120,8 +105,8 @@ if(NOT SKBUILD)
 
   # cmake-format: off
   install(
-    TARGETS amdinfer amdinfer-client amdinfer-server
-    EXPORT amdinfer_Targets
+    TARGETS amdinfer amdinfer-client amdinfer-server amdinfer-server-exe
+    EXPORT amdinfer
     RUNTIME COMPONENT amdinfer_Runtime
     LIBRARY COMPONENT amdinfer_Runtime
     NAMELINK_COMPONENT amdinfer_Development
@@ -133,22 +118,15 @@ if(NOT SKBUILD)
   )
   # cmake-format: on
 
-  install(
-    TARGETS amdinfer-server-exe
-    EXPORT amdinfer_Server
-    RUNTIME COMPONENT amdinfer_Runtime
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-  )
-
   install(DIRECTORY "${amdinfer_SOURCE_DIR}/include/" TYPE INCLUDE
           COMPONENT amdinfer_Development
   )
 
   install(
-    EXPORT amdinfer_Targets
+    EXPORT amdinfer
     DESTINATION "${amdinfer_INSTALL_CMAKEDIR}"
     NAMESPACE amdinfer::
-    FILE amdinfer-${type}-targets.cmake
+    FILE amdinfer-targets.cmake
     COMPONENT amdinfer_Development
   )
 

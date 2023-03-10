@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets client native)
+set(targets client native)
 
 if(${AMDINFER_ENABLE_HTTP})
   set(targets ${targets} http http_internal websocket)

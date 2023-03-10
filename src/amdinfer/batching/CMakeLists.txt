@@ -14,7 +14,7 @@
 # limitations under the License.
 
 list(APPEND files hard soft)
-list(APPEND targets)
+set(targets "")
 
 add_library(batch OBJECT batch.cpp)
 target_include_directories(batch PRIVATE ${AMDINFER_INCLUDE_DIRS})

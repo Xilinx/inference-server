@@ -16,8 +16,8 @@ add_library(test_main STATIC test_main.cpp)
 target_link_libraries(test_main PUBLIC gtest)
 set_target_options(test_main)
 
-list(APPEND files get_path_to_asset)
-list(APPEND targets)
+set(files get_path_to_asset)
+set(targets "")
 
 foreach(file ${files})
   set(target ${file})

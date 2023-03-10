@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND TARGETS predict_api data_types)
+set(TARGETS predict_api data_types)
 
 list(APPEND LINK_TARGETS)
 

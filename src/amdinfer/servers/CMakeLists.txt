@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets server)
+set(targets server)
 
 if(${AMDINFER_ENABLE_REST})
   set(targets ${targets} http_server websocket_server)

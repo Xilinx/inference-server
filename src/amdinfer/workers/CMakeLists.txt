@@ -15,13 +15,7 @@
 
 include(GNUInstallDirs)
 
-list(
-  APPEND workers
-         Echo
-         EchoMulti
-         InvertImage
-         InvertVideo
-)
+set(workers Echo EchoMulti InvertImage InvertVideo)
 
 if(${AMDINFER_ENABLE_VITIS})
   set(workers ${workers} Xmodel)
