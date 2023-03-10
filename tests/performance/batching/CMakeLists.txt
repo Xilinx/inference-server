@@ -20,8 +20,8 @@ list(
     tests_libs
     "$<TARGET_OBJECTS:batcher>~fake_observation\
       ~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~predict_api~parameters\
-      ~data_types\~$<TARGET_OBJECTS:softBatcher>~cpuBuffer~buffer~memory_pool\
-      ~batch~timer"
+      ~data_types\~batching~buffer~memory_pool\
+      ~data_types_internal~batch~timer"
 )
 
 amdinfer_add_benchmarks("${tests}" "${tests_libs}")

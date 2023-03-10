@@ -15,6 +15,10 @@
 
 list(APPEND targets cpu)
 
+if(${AMDINFER_ENABLE_VITIS})
+  list(APPEND targets vart_tensor)
+endif()
+
 add_library(buffer OBJECT buffer.cpp)
 target_include_directories(buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})
 set_target_options(buffer)

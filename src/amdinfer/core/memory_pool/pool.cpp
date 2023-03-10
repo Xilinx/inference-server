@@ -22,6 +22,7 @@
 #include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"
+#include "amdinfer/core/memory_pool/vart_tensor_allocator.hpp"
 
 namespace amdinfer {
 
@@ -30,28 +31,28 @@ const size_t kDefaultCpuBlockSize = 1'048'576;  // arbitrarily 1MiB
 MemoryPool::MemoryPool() {
   allocators_.try_emplace(MemoryAllocators::Cpu,
                           std::make_unique<CpuAllocator>(kDefaultCpuBlockSize));
+#ifdef AMDINFER_ENABLE_VITIS
+  allocators_.try_emplace(MemoryAllocators::VartTensor,
+                          std::make_unique<VartTensorAllocator>());
+#endif
 }
 
 std::unique_ptr<Buffer> MemoryPool::get(
-  const std::vector<MemoryAllocators>& allocators, size_t size) const {
+  const std::vector<MemoryAllocators>& allocators,
+  const InferenceRequestInput& tensor, size_t batch_size) const {
   for (const auto& allocator : allocators) {
-    void* address = nullptr;
     try {
-      address = allocators_.at(allocator)->get(size);
+      return allocators_.at(allocator)->get(tensor, batch_size);
     } catch (const runtime_error&) {
       continue;
-    }
-    if (address != nullptr) {
-      return std::make_unique<CpuBuffer>(address, allocator);
     }
   }
   throw runtime_error("Memory could not be allocated");
 }
 
 void MemoryPool::put(std::unique_ptr<Buffer> memory) const {
-  auto* buffer = dynamic_cast<CpuBuffer*>(memory.get());
-  const auto allocator = buffer->getAllocator();
-  const auto* address = buffer->data(0);
+  const auto allocator = memory->getAllocator();
+  const auto* address = memory->data(0);
   allocators_.at(allocator)->put(address);
 }
 

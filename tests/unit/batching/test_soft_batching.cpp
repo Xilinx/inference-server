@@ -111,7 +111,9 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
 
     this->batcher_->start({MemoryAllocators::Cpu});
 
-    buffer_ = pool_.get({MemoryAllocators::Cpu}, data_size);
+    InferenceRequestInput input{nullptr, data_shape_, DataType::Uint8};
+
+    buffer_ = pool_.get({MemoryAllocators::Cpu}, input, data_size);
 
     auto* data = static_cast<uint8_t*>(buffer_->data(0));
 

@@ -26,6 +26,7 @@
 #include <string>   // for string
 #include <utility>  // for move
 
+#include "amdinfer/buffers/buffer.hpp"   // for BufferPtr
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/exceptions.hpp"  // for invalid_argument
 #include "amdinfer/core/parameters.hpp"  // for ParameterMap
@@ -89,7 +90,7 @@ InferenceRequestPtr getRequest(const InferenceRequest& req,
   int i = 0;
   for (const auto& input : inputs) {
     auto size = input.getSize() * input.getDatatype().size();
-    auto buffer = pool->get({MemoryAllocators::Cpu}, size);
+    auto buffer = pool->get({MemoryAllocators::Cpu}, input, 1);
     buffer->write(input.getData(), 0, size);
     request->setInputTensorData(i, buffer->data(0));
     i++;

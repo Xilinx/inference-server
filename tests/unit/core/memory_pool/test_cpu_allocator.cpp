@@ -22,9 +22,11 @@
 // #include <string>   // for string, basic_string, alloc...
 // #include <vector>   // for vector
 
+#include "amdinfer/buffers/buffer.hpp"  // for BufferPtr
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"  // for CpuSimpl...
-#include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
+#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
+#include "amdinfer/testing/gtest.hpp"     // for AssertionResult,...
 
 namespace amdinfer {
 
@@ -32,53 +34,66 @@ namespace amdinfer {
 TEST(UnitCpuAllocator, Basic) {
   CpuAllocator allocator{sizeof(int)};
 
-  const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
+  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
 
-  const auto* bar = static_cast<int*>(allocator.get(sizeof(int)));
-  ASSERT_NE(foo, bar);
+  const auto buffer_0 = allocator.get(input, 1);
+  const auto buffer_1 = allocator.get(input, 1);
 
-  allocator.put(foo);
-  allocator.put(bar);
+  const auto* address_0 = static_cast<int*>(buffer_0->data(0));
+  const auto* address_1 = static_cast<int*>(buffer_1->data(0));
+  ASSERT_NE(address_0, address_1);
+
+  allocator.put(address_0);
+  allocator.put(address_1);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitCpuAllocator, Correctness) {
   CpuAllocator allocator{sizeof(int) * 4, sizeof(int) * 4};
+  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
 
-  const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
-  const auto* bar = static_cast<int*>(allocator.get(sizeof(int)));
+  const auto buffer_0 = allocator.get(input, 1);
+  const auto buffer_1 = allocator.get(input, 1);
 
-  ASSERT_EQ(foo + 1, bar);
+  const auto* address_0 = static_cast<int*>(buffer_0->data(0));
+  const auto* address_1 = static_cast<int*>(buffer_1->data(0));
 
-  allocator.put(foo);
-  const auto* baz = static_cast<int*>(allocator.get(sizeof(int)));
+  ASSERT_EQ(address_0 + 1, address_1);
 
-  ASSERT_EQ(foo, baz);
+  allocator.put(address_0);
+  const auto buffer_2 = allocator.get(input, 1);
+  const auto* address_2 = static_cast<int*>(buffer_2->data(0));
 
-  allocator.put(baz);
-  allocator.put(bar);
+  ASSERT_EQ(address_0, address_2);
 
-  const auto* bard = static_cast<int*>(allocator.get(sizeof(int) * 4));
-  ASSERT_EQ(foo, bard);
+  allocator.put(address_2);
+  allocator.put(address_1);
+
+  const auto buffer_3 = allocator.get(input, 4);
+  const auto* address_3 = static_cast<int*>(buffer_3->data(0));
+  ASSERT_EQ(address_0, address_3);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitCpuAllocator, ExceedingMax) {
   CpuAllocator allocator{sizeof(int), sizeof(int)};
+  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
 
-  std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
+  std::ignore = allocator.get(input, 1);
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
-  EXPECT_THROW_CHECK(
-    std::ignore = static_cast<int*>(allocator.get(sizeof(int)));
-    , EXPECT_STREQ(e.what(), "Too much requested");, runtime_error);
+  EXPECT_THROW_CHECK(std::ignore = allocator.get(input, 1);
+                     , EXPECT_STREQ(e.what(), "Too much requested");
+                     , runtime_error);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitCpuAllocator, BadFree) {
   CpuAllocator allocator{sizeof(int)};
+  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
 
-  const auto* foo = static_cast<int*>(allocator.get(sizeof(int)));
-  const auto* bad_address = foo + 1;
+  const auto buffer_0 = allocator.get(input, 1);
+  const auto* address_0 = static_cast<int*>(buffer_0->data(0));
+  const auto* bad_address = address_0 + 1;
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK(allocator.put(bad_address);
                      , EXPECT_STREQ(e.what(), "Address not found");

@@ -44,6 +44,7 @@
 
 #include "amdinfer/batching/batcher.hpp"          // for BatchPtr, Batch
 #include "amdinfer/buffers/buffer.hpp"            // for Buffer
+#include "amdinfer/buffers/vart_tensor.hpp"       // for VartTensorBuffer
 #include "amdinfer/build_options.hpp"             // for AMDINFER_ENABLE_ME...
 #include "amdinfer/core/data_types.hpp"           // for DataType
 #include "amdinfer/core/data_types_internal.hpp"  // for mapXirToType
@@ -97,7 +98,7 @@ std::thread XModel::spawn(BatchPtrQueue* input_queue) {
 }
 
 std::vector<MemoryAllocators> XModel::getAllocators() const {
-  return {MemoryAllocators::Cpu};
+  return {MemoryAllocators::VartTensor};
 }
 
 vart::RunnerExt* XModel::getRunner() {
@@ -212,8 +213,6 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
         }
 #endif
 
-        std::queue<std::pair<uint32_t, int>> futures;
-
         auto input_buffers = batch->getInputBuffers();
         // const auto& output_buffers = batch->getOutputBuffers();
 
@@ -221,27 +220,41 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           logTraceBuffer(getLogger(), buffer->data(0));
         }
 
-        auto inputs_ptr = getRunner()->get_inputs();
-        if (inputs_ptr.size() != input_buffers.size()) {
-          throw invalid_argument("Input size does not match model");
+        std::vector<vart::TensorBuffer*> inputs_ptr;
+        for (const auto& buffer : input_buffers) {
+          auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+          inputs_ptr.emplace_back(vart->getTensorBuffer());
         }
-        for (auto j = 0U; j < input_buffers.size(); ++j) {
-          auto* tensor = inputs_ptr.at(j);
-          auto& buffer = input_buffers.at(j);
 
-          const auto [addr, size] = tensor->data();
-          auto* tensor_addr = reinterpret_cast<void*>(addr);
-
-          std::memcpy(tensor_addr, buffer->data(0), size);
+        BufferPtrs output_buffers;
+        auto output_tensors = this->getRunner()->get_output_tensors();
+        for (const auto* tensor : output_tensors) {
+          auto xir_shape = tensor->get_shape();
+          std::vector<size_t> shape{xir_shape.begin(), xir_shape.end()};
+          auto xir_type = tensor->get_data_type();
+          auto type = mapXirToType(xir_type);
+          InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
+          // the shape includes the batch size so use external batch size 1
+          output_buffers.push_back(
+            pool_->get({MemoryAllocators::VartTensor}, input, 1));
         }
-        auto outputs_ptr = getRunner()->get_outputs();
+
+        std::vector<vart::TensorBuffer*> outputs_ptr;
+        for (const auto& buffer : output_buffers) {
+          auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+          outputs_ptr.emplace_back(vart->getTensorBuffer());
+        }
+
+        // auto outputs_ptr = this->getRunner()->get_outputs();
 
         for (auto* input : inputs_ptr) {
           const auto* tensor = input->get_tensor();
-          input->sync_for_write(
-            0, tensor->get_element_num() / (tensor->get_shape())[0]);
+          auto num = tensor->get_element_num();
+          auto batches = (tensor->get_shape())[0];
+          input->sync_for_write(0, num / batches);
         }
 
+        std::queue<std::pair<uint32_t, int>> futures;
         futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
 
         std::vector<InferenceResponse> responses;

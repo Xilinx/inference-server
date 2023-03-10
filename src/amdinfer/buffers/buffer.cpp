@@ -24,9 +24,13 @@
 
 namespace amdinfer {
 
+Buffer::Buffer(MemoryAllocators allocator) : allocator_(allocator) {}
+
 size_t Buffer::write(void* data, size_t offset, size_t size) {
   std::memcpy(this->data(offset), data, size);
   return offset + size;
 }
+
+MemoryAllocators Buffer::getAllocator() const { return allocator_; }
 
 }  // namespace amdinfer

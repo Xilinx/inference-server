@@ -35,7 +35,8 @@ class CpuAllocator : public MemoryAllocator {
  public:
   explicit CpuAllocator(size_t block_size, size_t max_allocated = -1);
 
-  [[nodiscard]] void* get(size_t size) override;
+  [[nodiscard]] BufferPtr get(const InferenceRequestInput& tensor,
+                              size_t batch_size) override;
   void put(const void* address) override;
 
   // void free(const void* address);
@@ -47,7 +48,7 @@ class CpuAllocator : public MemoryAllocator {
   size_t block_id_ = 0;
   std::mutex mutex_;
   std::list<MemoryHeader> headers_;
-  std::vector<std::vector<std::byte>> data_;
+  std::list<std::vector<std::byte>> data_;
 };
 
 }  // namespace amdinfer
