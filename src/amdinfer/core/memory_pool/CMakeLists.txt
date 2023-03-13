@@ -13,29 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(targets cpu_allocator pool)
+set(base_targets cpu_allocator pool)
+if(${AMDINFER_ENABLE_VITIS})
+  list(APPEND base_targets vart_tensor_allocator)
+endif()
+set(derived_targets "")
+amdinfer_add_targets(
+  targets target_objects "${base_targets}" "${derived_targets}" ""
+)
 
 if(${AMDINFER_ENABLE_VITIS})
-  list(APPEND targets vart_tensor_allocator)
+  target_link_libraries(vart_tensor_allocator INTERFACE vart::runner)
 endif()
 
-foreach(target ${targets})
-  add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${target})
-
-  list(APPEND MEMORY_POOL_OBJS $<TARGET_OBJECTS:${target}>)
-endforeach()
-
-if(${AMDINFER_ENABLE_VITIS})
-  target_link_libraries(
-    vart_tensor_allocator INTERFACE vart_tensorBuffer vart::runner
-                                    data_types_internal
-  )
-endif()
-
-add_library(memory_pool STATIC ${MEMORY_POOL_OBJS})
-target_link_libraries(memory_pool INTERFACE ${targets} cpuBuffer)
-set_target_options(memory_pool)
-
-set(MEMORY_POOL ${MEMORY_POOL_OBJS} PARENT_SCOPE)
+add_library(memory_pool INTERFACE)
+target_link_libraries(memory_pool INTERFACE ${targets} ${target_objects})

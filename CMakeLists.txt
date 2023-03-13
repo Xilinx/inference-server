@@ -72,6 +72,7 @@ include(CTest)
 # these are defined locally in ./cmake/*
 include(SetTargetOptions)
 include(AddOption)
+include(AddTargets)
 
 # check requirements
 find_package(Drogon CONFIG)

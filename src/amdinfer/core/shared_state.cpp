@@ -19,8 +19,8 @@
 
 #include "amdinfer/core/shared_state.hpp"
 
-#include <json/reader.h>  // for CharReaderBuilder, Char...
-#include <json/value.h>   // for Value
+#include <jsoncpp/json/reader.h>  // for CharReaderBuilder, Char...
+#include <jsoncpp/json/value.h>   // for Value
 
 #include <cassert>        // for assert
 #include <filesystem>     // for path

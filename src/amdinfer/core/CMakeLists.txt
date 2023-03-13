@@ -13,7 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(targets
+add_subdirectory(memory_pool)
+
+set(base_targets
     predict_api
     endpoints
     worker_info
@@ -23,58 +25,28 @@ set(targets
     parameters
     shared_state
 )
+set(derived_targets "")
+amdinfer_add_targets(
+  targets target_objects "${base_targets}" "${derived_targets}" _core
+)
 
-foreach(target ${targets})
-  add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${target})
-
-  list(APPEND CORE_OBJS $<TARGET_OBJECTS:${target}>)
-endforeach()
-
-target_link_libraries(endpoints INTERFACE Threads::Threads)
-
-target_link_libraries(shared_state PRIVATE Jsoncpp_lib)
-target_link_libraries(worker_info INTERFACE ${CMAKE_DL_LIBS})
-if(${AMDINFER_ENABLE_VITIS})
-  target_link_libraries(data_types INTERFACE xir)
-  target_link_libraries(shared_state INTERFACE sockpp)
-endif()
-
-if(${AMDINFER_ENABLE_GRPC})
-  add_library(lib_grpc STATIC predict_api.proto)
-  disable_target_linting(lib_grpc)
-  target_include_directories(lib_grpc PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-  target_link_libraries(lib_grpc INTERFACE gRPC::grpc++)
-  set_target_options(lib_grpc)
-
-  get_target_property(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
-  protobuf_generate(TARGET lib_grpc LANGUAGE cpp)
-  protobuf_generate(
-    TARGET lib_grpc
-    LANGUAGE grpc
-    GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
-    PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}"
-  )
-endif()
-
-add_library(lib_config STATIC model_config.proto)
-target_include_directories(lib_config PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(lib_config INTERFACE protobuf::libprotobuf)
-protobuf_generate(TARGET lib_config LANGUAGE cpp)
-disable_target_linting(lib_config)
-set_target_options(lib_config)
+amdinfer_add_protobuf_target(lib_config model_config.proto OFF)
 
 target_include_directories(
   model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>
 )
-target_link_libraries(model_repository INTERFACE lib_config efsw)
+target_link_libraries(model_repository INTERFACE efsw lib_config)
 add_dependencies(model_repository lib_config)
 
-add_subdirectory(memory_pool) # sets MEMORY_POOL
+if(${AMDINFER_ENABLE_VITIS})
+  target_link_libraries(data_types_internal INTERFACE xir)
+  target_link_libraries(shared_state INTERFACE sockpp)
+endif()
 
-add_library(core STATIC ${CORE_OBJS} ${MEMORY_POOL})
-target_link_libraries(core INTERFACE ${targets} memory_pool)
-set_target_options(core)
+if(${AMDINFER_ENABLE_GRPC})
+  amdinfer_add_protobuf_target(lib_grpc predict_api.proto ON)
+  target_link_libraries(lib_grpc INTERFACE gRPC::grpc++)
+endif()
 
-set(CORE_OBJS ${CORE_OBJS} PARENT_SCOPE)
+add_library(core INTERFACE)
+target_link_libraries(core INTERFACE ${targets} ${target_objects} memory_pool)

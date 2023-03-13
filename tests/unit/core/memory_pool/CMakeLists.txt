@@ -16,9 +16,9 @@ list(APPEND tests cpu_allocator pool)
 
 list(
   APPEND tests_libs
-         "cpu_allocator~buffers~cpuBuffer~predict_api~data_types~parameters~\
+         "cpu_allocator~buffers~predict_api~data_types~parameters~\
            data_types_internal"
-         "memory_pool~buffers~cpuBuffer~predict_api~data_types~parameters~\
+         "memory_pool~buffers~predict_api~data_types~parameters~\
            data_types_internal"
 )
 

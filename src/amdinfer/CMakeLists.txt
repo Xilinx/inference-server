@@ -15,19 +15,35 @@
 
 # add all the source directories. These produce object libraries with the same
 # names
-set(targets
-    batching
-    bindings
-    buffers
-    clients
-    core
-    observation
-    servers
-    util
-    workers
-)
+set(client_targets clients core observation util)
+set(server_targets batching buffers core observation servers util)
+set(targets ${client_targets} ${server_targets})
+list(REMOVE_DUPLICATES targets)
+
 foreach(target ${targets})
   add_subdirectory(${target})
+endforeach()
+
+add_library(amdinfer SHARED ${targets})
+target_link_libraries(amdinfer PRIVATE ${targets})
+
+add_library(amdinfer-server SHARED ${server_targets})
+target_link_libraries(amdinfer-server PRIVATE ${server_targets})
+
+add_library(amdinfer-client SHARED ${client_targets})
+target_link_libraries(amdinfer-client PRIVATE ${client_targets})
+
+set(output_libraries amdinfer amdinfer-server amdinfer-client)
+foreach(lib ${output_libraries})
+  set_target_options(${lib})
+
+  # add alias to keep build and install interface the same
+  add_library(amdinfer::${lib} ALIAS ${lib})
+
+  set_target_properties(
+    ${lib} PROPERTIES VERSION ${amdinfer_VERSION}
+                      SOVERSION ${amdinfer_VERSION_MAJOR}
+  )
 endforeach()
 
 # the compiled server binary
@@ -38,49 +54,7 @@ set_target_options(amdinfer-server-exe)
 set_target_properties(
   amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
 )
-target_link_libraries(amdinfer-server-exe PRIVATE amdinfer Drogon::Drogon)
-
-add_library(
-  amdinfer SHARED
-  ${BATCHING_OBJS}
-  ${BUFFERS_OBJS}
-  ${CLIENT_OBJS}
-  ${CORE_OBJS}
-  ${OBSERVATION_OBJS}
-  ${SERVER_OBJS}
-  ${UTIL_OBJS}
-)
-target_link_libraries(
-  amdinfer PRIVATE batching clients core observation servers util
-)
-set_target_options(amdinfer)
-
-add_library(
-  amdinfer-server SHARED ${BATCHING_OBJS} ${BUFFERS_OBJS} ${CORE_OBJS}
-                         ${OBSERVATION_OBJS} ${SERVER_OBJS} ${UTIL_OBJS}
-)
-target_link_libraries(amdinfer-server PRIVATE batching core observation servers)
-set_target_options(amdinfer-server)
-
-add_library(
-  amdinfer-client SHARED ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
-                         ${UTIL_OBJS}
-)
-target_link_libraries(amdinfer-client PRIVATE clients core observation)
-set_target_options(amdinfer-client)
-
-set(output_libraries amdinfer amdinfer-server amdinfer-client)
-foreach(lib ${output_libraries})
-  enable_ipo_on_target(${lib})
-
-  # add alias to keep build and install interface the same
-  add_library(amdinfer::${lib} ALIAS ${lib})
-
-  set_target_properties(
-    ${lib} PROPERTIES VERSION ${amdinfer_VERSION}
-                      SOVERSION ${amdinfer_VERSION_MAJOR}
-  )
-endforeach()
+target_link_libraries(amdinfer-server-exe PRIVATE amdinfer)
 
 # ~~~
 # include(GenerateExportHeader)
@@ -177,7 +151,7 @@ if(${AMDINFER_ENABLE_VITIS})
     )
     list(APPEND deb_dependencies "libpython3")
 
-    install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)
+    # install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)
   endif()
 endif()
 
