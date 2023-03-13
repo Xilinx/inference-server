@@ -78,6 +78,7 @@ void start(SharedState *state, uint16_t port) {
       resp->addHeader("Access-Control-Allow-Origin", "*");
     })
     .setClientMaxBodySize(kMaxClientBodySize)
+    .disableSigtermHandling()
     // .enableRunAsDaemon()
     .run();
 }
