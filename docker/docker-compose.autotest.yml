@@ -15,9 +15,11 @@
 
 version: '3.7'
 services:
-  amdinfer:
+  amdinfer-autotest:
+    devices: []
     extra_hosts:
-      - "amdinfer:127.0.1.1"
+      - "amdinfer-autotest:127.0.1.1"
+    hostname: amdinfer-autotest
     image: $REGISTRY/amdinfer$SUFFIX:$VERSION
     ports:
       - 127.0.0.1:8998:8998 # used for amdinfer server
@@ -26,16 +28,18 @@ services:
       - $PWD/external:/workspace/amdinfer/external:ro
       - $PWD/external/artifacts:/opt/xilinx/amdinfer/artifacts:ro
       - $PWD/tests/assets:/workspace/amdinfer/tests/assets:ro
-  amdinfer-tester:
+      - /opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro
+    working_dir: /home/amdinfer-user
+  amdinfer-tester-autotest:
     # command: [./amdinfer, test, --hostname, amdinfer, --cpp, skip]
-    command: /bin/bash -c "source ~/.env && ./amdinfer test --hostname amdinfer --cpp skip"
+    command: /bin/bash -c "source ~/.env && ./amdinfer test --hostname amdinfer-autotest --cpp skip"
     # tty: true
     # stdin_open: true
     depends_on:
-      - amdinfer
+      - amdinfer-autotest
     extra_hosts:
-      - "amdinfer-tester:127.0.1.1"
-    hostname: amdinfer-tester
+      - "amdinfer-tester-autotest:127.0.1.1"
+    hostname: amdinfer-tester-autotest
     image: $REGISTRY/amdinfer-dev$SUFFIX:$VERSION
     volumes:
       - $PWD:/workspace/amdinfer

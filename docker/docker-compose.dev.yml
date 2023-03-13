@@ -15,11 +15,12 @@
 
 version: '3.7'
 services:
-  amdinfer:
+  amdinfer-dev:
     cap_add:
     - SYS_PTRACE # needed to enable gdb in container
     # this doesn't work with docker-compose run (seems like known bug)
     # container_name: $NAME
+    devices: []
     extra_hosts:
       - "amdinfer-dev:127.0.1.1"
     hostname: amdinfer-dev
@@ -29,6 +30,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - "~/.ssh:/home/amdinfer-user/.ssh:ro"
-      - "$PWD:/workspace/amdinfer"
+      - ~/.ssh:/home/amdinfer-user/.ssh:ro
+      - $PWD:/workspace/amdinfer
+      - /opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro
     working_dir: /workspace/amdinfer
