@@ -14,7 +14,7 @@
 # limitations under the License.
 
 set(base_targets server)
-if(${AMDINFER_ENABLE_REST})
+if(${AMDINFER_ENABLE_HTTP})
   list(APPEND base_targets http_server websocket_server)
 endif()
 if(${AMDINFER_ENABLE_GRPC})
@@ -29,12 +29,8 @@ if(${AMDINFER_ENABLE_AKS})
   target_link_libraries(server INTERFACE aks)
 endif()
 
-if(${AMDINFER_ENABLE_REST})
+if(${AMDINFER_ENABLE_HTTP})
   target_link_libraries(http_server PUBLIC Drogon::Drogon)
-  target_include_directories(
-    http_server
-    PUBLIC $<TARGET_PROPERTY:Drogon::Drogon,INTERFACE_INCLUDE_DIRECTORIES>
-  )
   target_link_libraries(websocket_server PUBLIC Drogon::Drogon)
   target_link_libraries(server PUBLIC http_server)
 endif()

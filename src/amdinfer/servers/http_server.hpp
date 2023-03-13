@@ -57,7 +57,7 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
   explicit HttpServer(SharedState *state);
 
   METHOD_LIST_BEGIN
-#ifdef AMDINFER_ENABLE_REST
+
   /// Register the getServerLive endpoint
   ADD_METHOD_TO(HttpServer::getServerLive, "v2/health/live", drogon::Get,
                 drogon::Options);
@@ -94,14 +94,12 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
   /// Register the workerUnload endpoint
   ADD_METHOD_TO(HttpServer::workerUnload, "v2/workers/{worker}/unload",
                 drogon::Post, drogon::Options);
-#endif
 #ifdef AMDINFER_ENABLE_METRICS
   /// Register the metrics endpoint
   ADD_METHOD_TO(HttpServer::metrics, "metrics", drogon::Get);
 #endif
   METHOD_LIST_END
 
-#ifdef AMDINFER_ENABLE_REST
   /**
    * @brief Returns 200 if server is live and ready to receive metadata and
    * inference requests
@@ -236,7 +234,6 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
     std::string const &worker) const;
-#endif
 
 #ifdef AMDINFER_ENABLE_METRICS
   /**
@@ -256,7 +253,7 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
 #endif
 };
 
-#endif
+#endif  // AMDINFER_ENABLE_HTTP
 
 namespace http {
 

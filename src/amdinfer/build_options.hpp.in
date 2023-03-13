@@ -24,9 +24,7 @@
 
 /// Enables testing
 #cmakedefine AMDINFER_BUILD_TESTING
-/// Enables rest endpoints for inference
-#cmakedefine AMDINFER_ENABLE_REST
-/// Enables  metric collection
+/// Enables metric collection
 #cmakedefine AMDINFER_ENABLE_METRICS
 /// Enables HTTP server
 #cmakedefine AMDINFER_ENABLE_HTTP

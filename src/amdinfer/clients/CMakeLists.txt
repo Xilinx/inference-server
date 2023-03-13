@@ -31,21 +31,9 @@ amdinfer_add_targets(
 )
 
 if(${AMDINFER_ENABLE_HTTP})
-  target_include_directories(
-    http
-    PRIVATE $<TARGET_PROPERTY:Drogon::Drogon,INTERFACE_INCLUDE_DIRECTORIES>
-  )
-  target_include_directories(
-    http_internal
-    PUBLIC $<TARGET_PROPERTY:Drogon::Drogon,INTERFACE_INCLUDE_DIRECTORIES>
-  )
-  target_include_directories(
-    websocket
-    PRIVATE $<TARGET_PROPERTY:Drogon::Drogon,INTERFACE_INCLUDE_DIRECTORIES>
-  )
-  # target_link_libraries(http_internal PRIVATE Drogon::Drogon INTERFACE util)
-  # target_link_libraries(http PRIVATE Drogon::Drogon)
-  # target_link_libraries(websocket PRIVATE Drogon::Drogon)
+  target_link_libraries(http_internal PUBLIC Drogon::Drogon)
+  target_link_libraries(http PRIVATE Drogon::Drogon)
+  target_link_libraries(websocket PRIVATE Drogon::Drogon)
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})
@@ -55,7 +43,6 @@ if(${AMDINFER_ENABLE_GRPC})
   target_include_directories(
     grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )
-  # target_link_libraries(grpc INTERFACE lib_grpc)
 endif()
 
 add_library(clients INTERFACE)

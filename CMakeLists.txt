@@ -132,7 +132,7 @@ configure_file(
 
 # these options get added as AMDINFER_* e.g. AMDINFER_BUILD_TESTING
 message(STATUS "Build Options:")
-add_option("ENABLE_REST" "Enable the REST server" ON)
+add_option("ENABLE_HTTP" "Enable the HTTP server" ON)
 add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
 add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
 add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
@@ -149,13 +149,6 @@ add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
 add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
 add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ${migraphx_FOUND})
 add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
-
-message(STATUS "Derived Options:")
-if(${AMDINFER_ENABLE_REST} OR ${AMDINFER_ENABLE_METRICS})
-  add_derived_option("ENABLE_HTTP" ON)
-else()
-  add_derived_option("ENABLE_HTTP" OFF)
-endif()
 
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)

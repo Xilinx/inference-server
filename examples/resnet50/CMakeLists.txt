@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND examples)
+set(examples "")
 
 if(${AMDINFER_ENABLE_VITIS})
-  if(${AMDINFER_ENABLE_REST})
+  if(${AMDINFER_ENABLE_HTTP})
     list(APPEND examples vitis)
   endif()
 endif()
@@ -31,7 +31,7 @@ if(${AMDINFER_ENABLE_TFZENDNN})
 endif()
 
 if(${AMDINFER_ENABLE_MIGRAPHX})
-  if(${AMDINFER_ENABLE_REST})
+  if(${AMDINFER_ENABLE_HTTP})
     list(APPEND examples migraphx)
   endif()
 endif()

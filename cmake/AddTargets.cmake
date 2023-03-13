@@ -33,6 +33,7 @@ function(amdinfer_add_protobuf_target target file build_grpc)
       GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
       PLUGIN "protoc-gen-grpc=$<TARGET_PROPERTY:gRPC::grpc_cpp_plugin,LOCATION>"
     )
+    target_link_libraries(${target} INTERFACE gRPC::grpc++)
   endif()
 endfunction()
 

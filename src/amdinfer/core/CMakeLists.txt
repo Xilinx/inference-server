@@ -45,7 +45,6 @@ endif()
 
 if(${AMDINFER_ENABLE_GRPC})
   amdinfer_add_protobuf_target(lib_grpc predict_api.proto ON)
-  target_link_libraries(lib_grpc INTERFACE gRPC::grpc++)
 endif()
 
 add_library(core INTERFACE)
