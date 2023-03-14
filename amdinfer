@@ -423,6 +423,9 @@ class Build:
             Path(path).mkdir(parents=True, exist_ok=True)
 
         shared_libs = " ".join(glob.glob(f"{str(build_dir)}/src/amdinfer/workers/*.so"))
+        if not shared_libs:
+            print("No compiled workers found!")
+            sys.exit(1)
         command = f"cp -fs {shared_libs} {path}/"
         run_command(command, args.dry_run)
         command = f"symlinks -rc {path}"

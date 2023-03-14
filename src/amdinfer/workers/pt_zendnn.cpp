@@ -256,7 +256,8 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
     }
     timer.add("infer_stop");
     {
-      auto duration = timer.count<std::milli>("infer_start", "infer_stop");
+      [[maybe_unused]] auto duration =
+        timer.count<std::milli>("infer_start", "infer_stop");
       AMDINFER_LOG_INFO(logger, "Time (ms) taken for " +
                                   std::to_string(batch->size()) +
                                   " images: " + std::to_string(duration));
@@ -308,7 +309,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue) {
       resp.setContext(std::move(context));
 #endif
       timer.stop();
-      auto duration = timer.count<std::milli>();
+      [[maybe_unused]] auto duration = timer.count<std::milli>();
       AMDINFER_LOG_DEBUG(logger,
                          "Total time taken: " + std::to_string(duration));
 

@@ -422,7 +422,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
       migraphx::api::arguments migraphx_output = this->prog_.eval(params);
       timer.add("eval_end");
       auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
-      auto eval_duration_s = eval_duration_us / std::mega::num;
+      [[maybe_unused]] auto eval_duration_s = eval_duration_us / std::mega::num;
       AMDINFER_LOG_INFO(
         logger, std::string("Finished migraphx eval; batch size: ") +
                   std::to_string(batch_size_) + "  elapsed time: " +
@@ -551,7 +551,8 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
 
     timer.add("batch_stop");
     this->returnInputBuffers(std::move(batch));
-    auto duration = timer.count<std::micro>("batch_start", "batch_stop");
+    [[maybe_unused]] auto duration =
+      timer.count<std::micro>("batch_start", "batch_stop");
     AMDINFER_LOG_INFO(
       logger, std::string("Finished migraphx batch processing; batch size: ") +
                 std::to_string(batch_size_) +

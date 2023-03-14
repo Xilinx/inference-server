@@ -48,7 +48,7 @@ function(amdinfer_get_worker_target target filename worker)
                        "${worker_lower}"
   )
   set(${target} worker${worker_pascal} PARENT_SCOPE)
-  set(${filename} file_name PARENT_SCOPE)
+  set(${filename} ${file_name} PARENT_SCOPE)
 endfunction()
 
 foreach(worker ${workers})

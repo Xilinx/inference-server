@@ -214,11 +214,13 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #endif
 
         auto input_buffers = batch->getInputBuffers();
-        // const auto& output_buffers = batch->getOutputBuffers();
+      // const auto& output_buffers = batch->getOutputBuffers();
 
+#ifdef AMDINFER_ENABLE_LOGGING
         for (const auto& buffer : input_buffers) {
           logTraceBuffer(getLogger(), buffer->data(0));
         }
+#endif  // AMDINFER_ENABLE_LOGGING
 
         std::vector<vart::TensorBuffer*> inputs_ptr;
         for (const auto& buffer : input_buffers) {
