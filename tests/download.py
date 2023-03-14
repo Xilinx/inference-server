@@ -24,7 +24,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-tmp_dir = Path("/tmp/amdinfer_get")
+tmp_dir = Path.cwd() / "tmp_downloader"
 artifact_dir = Path.cwd() / "external/artifacts"
 repository_metadata_dir = Path.cwd() / "external/repository_metadata"
 u250_dir = artifact_dir / "u200_u250"

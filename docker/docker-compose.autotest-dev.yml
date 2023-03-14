@@ -15,11 +15,14 @@
 
 version: '3.7'
 services:
-  amdinfer:
+  amdinfer-autotest-dev:
     command: [ ./tools/coverage.sh, "-t", "50" ]
+    devices: []
     extra_hosts:
-      - "amdinfer-dev:127.0.1.1"
-    hostname: amdinfer-dev
+      - "amdinfer-autotest-dev:127.0.1.1"
+    hostname: amdinfer-autotest-dev
+    image: $IMAGE
     volumes:
       - $PWD:/workspace/amdinfer
+      - "/opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro"
     working_dir: /workspace/amdinfer

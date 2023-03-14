@@ -15,11 +15,16 @@
 
 version: '3.7'
 services:
-  amdinfer:
+  amdinfer-prod:
+    devices: []
     extra_hosts:
-      - "amdinfer:127.0.1.1"
+      - "amdinfer-prod:127.0.1.1"
+    hostname: amdinfer-prod
+    image: $IMAGE
     ports:
       - 127.0.0.1::8998 # used for amdinfer server
     volumes:
       - $AKS_ROOT/graph_zoo:/opt/xilinx/amdinfer/aks/graph_zoo
       - $AKS_ROOT/kernel_zoo:/opt/xilinx/amdinfer/aks/kernel_zoo
+      - /opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro
+    working_dir: /home/amdinfer-user

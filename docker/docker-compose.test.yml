@@ -15,10 +15,12 @@
 
 version: '3.7'
 services:
-  amdinfer:
+  amdinfer-test:
     command: [/bin/bash]
+    devices: []
     extra_hosts:
-      - "amdinfer:127.0.1.1"
+      - "amdinfer-test:127.0.1.1"
+    hostname: amdinfer-test
     image: $REGISTRY/amdinfer$SUFFIX:$VERSION
     ports:
       - 127.0.0.1:8998:8998 # used for amdinfer server
@@ -27,13 +29,15 @@ services:
     volumes:
       - $AKS_ROOT/graph_zoo:/opt/xilinx/amdinfer/aks/graph_zoo
       - $AKS_ROOT/kernel_zoo:/opt/xilinx/amdinfer/aks/kernel_zoo
-  amdinfer-tester:
+      - /opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro
+    working_dir: /home/amdinfer-user
+  amdinfer-tester-test:
     command: [/bin/bash]
     depends_on:
-      - amdinfer
+      - amdinfer-test
     extra_hosts:
-      - "amdinfer-tester:127.0.1.1"
-    hostname: amdinfer-tester
+      - "amdinfer-tester-test:127.0.1.1"
+    hostname: amdinfer-tester-test
     image: $REGISTRY/amdinfer-dev$SUFFIX:$VERSION
     stdin_open: true
     tty: true
