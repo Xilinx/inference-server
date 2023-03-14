@@ -24,6 +24,7 @@ foreach(target ${targets})
   add_subdirectory(${target})
 endforeach()
 add_subdirectory(workers)
+add_subdirectory(bindings)
 
 add_library(amdinfer SHARED ${targets})
 target_link_libraries(amdinfer PRIVATE ${targets})

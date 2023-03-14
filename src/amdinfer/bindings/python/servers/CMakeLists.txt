@@ -13,21 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND TARGETS server)
+set(derived_targets server)
 
-list(APPEND LINK_TARGETS)
+amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)
 
-foreach(target ${TARGETS})
-  add_library(${target}_py OBJECT ${target}.cpp)
+foreach(target ${derived_targets})
   target_include_directories(
-    ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..
-                         ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
+    ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
   )
-  target_link_libraries(${target}_py PRIVATE ${Python_LIBRARIES} amdinfer)
-  set_target_options(${target}_py)
-  add_dependencies(${target}_py pybind11Mkdoc)
-
-  set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)
 endforeach()
 
-set(SERVER_OBJS ${LINK_TARGETS} PARENT_SCOPE)
+add_library(servers_py INTERFACE)
+target_link_libraries(servers_py INTERFACE ${targets} ${target_objects})
+add_dependencies(servers_py pybind11Mkdoc)
