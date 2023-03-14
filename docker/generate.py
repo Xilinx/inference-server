@@ -309,14 +309,14 @@ def get_xrm_xrt_packages(package_manager):
     if package_manager == "apt":
         return textwrap.dedent(
             """\
-            && wget --quiet -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202120.2.12.427_20.04-amd64-xrt.deb \\
-            && wget --quiet -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202120.1.3.29_20.04-x86_64.deb \\"""
+            && wget --quiet -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202220.2.14.354_20.04-amd64-xrt.deb \\
+            && wget --quiet -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202220.1.5.212_20.04-x86_64.deb \\"""
         )
     elif package_manager == "yum":
         return textwrap.dedent(
             """\
-            && wget --quiet -O xrt.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrt_202120.2.12.427_7.8.2003-x86_64-xrt.rpm \\
-            && wget --quiet -O xrm.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrm_202120.1.3.29_7.8.2003-x86_64.rpm \\"""
+            && wget --quiet -O xrt.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrt_202220.2.14.354_7.8.2003-x86_64-xrt.rpm \\
+            && wget --quiet -O xrm.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrm_202220.1.5.212_7.8.2003-x86_64.rpm \\"""
         )
     raise ValueError(f"Unknown base image type: {package_manager}")
 
@@ -411,14 +411,18 @@ def build_vitis():
             && cat install_manifest.txt > ${MANIFESTS_DIR}/json-c.txt
 
         # Install Vitis AI runtime and build dependencies
-        RUN git clone --recursive --single-branch --branch v2.5 --depth 1 https://github.com/Xilinx/Vitis-AI.git \\
-            && export VITIS_ROOT=/tmp/Vitis-AI/src/Vitis-AI-Runtime/VART \\
+        RUN git clone --recursive --single-branch --branch v3.0 --depth 1 https://github.com/Xilinx/Vitis-AI.git \\
+            && export VITIS_ROOT=/tmp/Vitis-AI/src/vai_runtime \\
             && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \\
             cd ${VITIS_ROOT}/unilog \\
+            && sed -i '33i   if(NOT TARGET glog::glog)' ./cmake/config.cmake.in \\
+            && sed -i '35i   endif()' ./cmake/config.cmake.in \\
             && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \\
             && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
             && cat install_manifest.txt > ${MANIFESTS_DIR}/unilog.txt \\
             && cd ${VITIS_ROOT}/xir \\
+            # remove protobuf inclusion from the config
+            && sed -i '42 s/./#&/' ./cmake/config.cmake.in \\
             && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build --build-python \\
             && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
             && cat install_manifest.txt > ${MANIFESTS_DIR}/xir.txt \\
@@ -432,7 +436,8 @@ def build_vitis():
             && cat install_manifest.txt > ${MANIFESTS_DIR}/vart.txt \\
             && cd ${VITIS_ROOT}/rt-engine \\
             # find the required components. Adding this was needed when using Boost from Ubuntu apt repositories
-            && sed -i '42i find_package(Boost COMPONENTS system filesystem thread serialization)' ./CMakeLists.txt \\
+            && sed -i '41s/.*/find_package(Boost COMPONENTS system filesystem thread serialization)/' ./CMakeLists.txt \\
+            && sed -i '35s/.*/find_package(protobuf REQUIRED)/' ./CMakeLists.txt \\
             && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --cmake-options="-DBUILD_TESTS=OFF" --install-prefix /usr/local/ \\
             && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
             && cat install_manifest.txt > ${MANIFESTS_DIR}/rt-engine.txt \\
