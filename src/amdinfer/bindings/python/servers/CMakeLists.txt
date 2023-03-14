@@ -21,8 +21,8 @@ foreach(target ${derived_targets})
   target_include_directories(
     ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
   )
+  add_dependencies(${target}_py pybind11Mkdoc)
 endforeach()
 
 add_library(servers_py INTERFACE)
 target_link_libraries(servers_py INTERFACE ${targets} ${target_objects})
-add_dependencies(servers_py pybind11Mkdoc)

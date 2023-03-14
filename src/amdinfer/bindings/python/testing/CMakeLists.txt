@@ -21,8 +21,8 @@ foreach(target ${derived_targets})
     ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
                          ${AMDINFER_TEST_INCLUDE_DIRS}
   )
+  add_dependencies(${target}_py pybind11Mkdoc)
 endforeach()
 
 add_library(testing_py INTERFACE)
 target_link_libraries(testing_py INTERFACE ${targets} ${target_objects} testing)
-add_dependencies(testing_py pybind11Mkdoc)
