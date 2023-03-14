@@ -19,5 +19,7 @@ amdinfer_add_targets(
   targets target_objects "${base_targets}" "${derived_targets}" _batcher
 )
 
+target_link_libraries(soft_batcher INTERFACE util)
+
 add_library(batching INTERFACE)
 target_link_libraries(batching INTERFACE ${targets} ${target_objects})

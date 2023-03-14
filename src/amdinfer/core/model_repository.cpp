@@ -89,7 +89,7 @@ void parseModel(const fs::path& repository, const std::string& model,
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
   int file_descriptor = open(config_path.c_str(), O_RDONLY | O_CLOEXEC);
-  Logger logger{Loggers::Server};
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   if (file_descriptor < 0) {
     throw file_not_found_error("Config file " + config_path.string() +
                                " could not be opened");
@@ -149,7 +149,7 @@ void ModelRepository::setRepository(const fs::path& repository_path,
                                     bool load_existing) {
   repository_ = repository_path;
   if (fs::exists(repository_path) && load_existing) {
-    Logger logger{Loggers::Server};
+    AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
     for (const auto& path : fs::directory_iterator(repository_)) {
       if (path.is_directory()) {
         auto model = path.path().filename();
@@ -182,7 +182,7 @@ void UpdateListener::handleFileAction(
   [[maybe_unused]] efsw::WatchID watch_id, const std::string& dir,
   const std::string& filename, efsw::Action action,
   [[maybe_unused]] std::string old_filename) {
-  Logger logger{Loggers::Server};
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   // arbitrary delay to make sure filesystem has settled
   const std::chrono::milliseconds delay{100};
   if (filename == "config.pbtxt") {

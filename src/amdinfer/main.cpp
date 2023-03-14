@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 
   amdinfer::Server server;
 
-  amdinfer::Logger logger{amdinfer::Loggers::Server};
+  AMDINFER_IF_LOGGING(amdinfer::Logger logger{amdinfer::Loggers::Server};)
 
   // if repository monitoring is enabled, the existing models there must be
   // loaded so the server can properly track if they're deleted

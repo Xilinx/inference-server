@@ -38,6 +38,8 @@ target_include_directories(
 target_link_libraries(model_repository INTERFACE efsw lib_config)
 add_dependencies(model_repository lib_config)
 
+target_link_libraries(shared_state INTERFACE Jsoncpp_lib)
+
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(data_types_internal INTERFACE xir)
   target_link_libraries(shared_state INTERFACE sockpp)
