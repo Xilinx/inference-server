@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set(docstrings_filepath ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp)
+set(AMDINFER_PYTHON_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}
+                                 ${Python_INCLUDE_DIRS}
+)
+
 find_package(Pybind11Mkdoc)
 if(${Pybind11Mkdoc_FOUND})
   file(GLOB_RECURSE ALL_PUBLIC_HEADER_FILES CONFIGURE_DEPENDS
@@ -25,31 +30,33 @@ if(${Pybind11Mkdoc_FOUND})
   )
 
   add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
-    COMMAND
-      pybind11-mkdoc -o ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
-      ${ALL_PUBLIC_HEADER_FILES} ${CXX_STANDARD_FLAG}
-      -I${AMDINFER_PUBLIC_INCLUDE_DIRS}
+    OUTPUT ${docstrings_filepath}
+    COMMAND pybind11-mkdoc -o ${docstrings_filepath} ${ALL_PUBLIC_HEADER_FILES}
+            ${CXX_STANDARD_FLAG} -I${AMDINFER_PUBLIC_INCLUDE_DIRS}
     DEPENDS ${ALL_PUBLIC_HEADER_FILES}
   )
 else()
-  configure_file(
-    helpers/auto_docstrings.hpp.in
-    ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
-  )
+  configure_file(helpers/auto_docstrings.hpp.in ${docstrings_filepath})
 endif()
 
-add_custom_target(
-  pybind11Mkdoc DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/auto_docstrings.hpp
-)
+add_custom_target(pybind11Mkdoc DEPENDS ${docstrings_filepath})
 
-add_subdirectory(core) # sets CORE_OBJS
-add_subdirectory(clients) # sets CLIENT_OBJS
-add_subdirectory(servers) # sets SERVER_OBJS
+set(targets clients core pre_post servers)
 if(${AMDINFER_BUILD_TESTING})
-  add_subdirectory(testing) # sets TESTING_OBJS
+  list(APPEND targets testing)
 endif()
-add_subdirectory(pre_post) # sets PRE_POST_OBJS
+
+foreach(target ${targets})
+  add_subdirectory(${target})
+endforeach()
+
+set(new_targets ${targets})
+list(
+  TRANSFORM new_targets
+            REPLACE
+            "^(.+)$"
+            "\\1_py"
+)
 
 # add this dummy file to add a dependency on the Pybind11 target so it runs if
 # the amdinfer package isn't installed in pip
@@ -69,12 +76,8 @@ endif()
 pybind11_add_module(amdinfer_py MODULE amdinfer.cpp ${dummy_new_file})
 target_include_directories(amdinfer_py PRIVATE ${AMDINFER_INCLUDE_DIRS})
 target_link_libraries(
-  amdinfer_py PRIVATE amdinfer ${Python_LIBRARIES} ${CORE_OBJS} ${CLIENT_OBJS}
-                      ${SERVER_OBJS} ${PRE_POST_OBJS}
+  amdinfer_py PRIVATE amdinfer ${Python_LIBRARIES} ${new_targets}
 )
-if(${AMDINFER_BUILD_TESTING})
-  target_link_libraries(amdinfer_py PRIVATE ${TESTING_OBJS})
-endif()
 set_target_properties(amdinfer_py PROPERTIES OUTPUT_NAME _amdinfer)
 set_target_options(amdinfer_py)
 

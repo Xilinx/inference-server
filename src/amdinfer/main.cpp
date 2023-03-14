@@ -28,20 +28,19 @@
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_HTTP
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_INFO, Logger
-#include "amdinfer/servers/http_server.hpp"  // for stop
 #include "amdinfer/servers/server.hpp"       // for Server
+
+volatile bool usr_interrupt = false;
 
 /**
  * @brief Handler for incoming interrupt signals
  *
  * @param signum Integer ID for the caught interrupt
  */
-void signalCallbackHandler(int signum) {
+void signalCallbackHandler([[maybe_unused]] int signum) {
   std::cout << "Caught interrupt " << signum
             << ". amdinfer-server is ending...\n";
-#ifdef AMDINFER_ENABLE_HTTP
-  amdinfer::http::stop();
-#endif
+  usr_interrupt = true;
 }
 
 /**
@@ -52,8 +51,17 @@ void signalCallbackHandler(int signum) {
  * @return int Return value at termination
  */
 int main(int argc, char* argv[]) {
+  // block signals while server starts up
+  sigset_t mask;
+  sigset_t old_mask;
+  sigemptyset(&mask);
+  sigaddset(&mask, SIGINT);
+  sigaddset(&mask, SIGTERM);
+  sigprocmask(SIG_BLOCK, &mask, &old_mask);
+
   signal(SIGINT, signalCallbackHandler);
   signal(SIGTERM, signalCallbackHandler);
+
 #ifdef AMDINFER_ENABLE_HTTP
   uint16_t http_port = kDefaultHttpPort;
 #endif
@@ -101,7 +109,7 @@ int main(int argc, char* argv[]) {
 
   amdinfer::Server server;
 
-  amdinfer::Logger logger{amdinfer::Loggers::Server};
+  AMDINFER_IF_LOGGING(amdinfer::Logger logger{amdinfer::Loggers::Server};)
 
   // if repository monitoring is enabled, the existing models there must be
   // loaded so the server can properly track if they're deleted
@@ -124,11 +132,14 @@ int main(int argc, char* argv[]) {
 #ifdef AMDINFER_ENABLE_HTTP
   std::cout << "HTTP server starting at port " << http_port << std::endl;
   server.startHttp(http_port);
-#else
-  while (1) {
-    std::this_thread::yield();
-  }
 #endif
+
+  // wait until right signal occurs to terminate the server
+  sigsuspend(&old_mask);
+  while (!usr_interrupt) {
+    sigsuspend(&old_mask);
+  }
+  sigprocmask(SIG_UNBLOCK, &mask, nullptr);
 
   return 0;
 }

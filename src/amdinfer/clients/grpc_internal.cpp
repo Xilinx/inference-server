@@ -180,7 +180,7 @@ void mapRequestToProto(const InferenceRequest& request,
 struct SetOutputData {
   template <typename T, typename Tensor>
   void operator()(InferenceResponseOutput* output, size_t size, Tensor* tensor,
-                  const Observer& observer) const {
+                  [[maybe_unused]] const Observer& observer) const {
     std::vector<std::byte> data;
     const auto bytes_to_copy = size * sizeof(T);
     data.resize(bytes_to_copy);
@@ -200,7 +200,8 @@ struct SetOutputData {
       output->setData(std::move(data));
     }
 
-    logTraceBuffer(observer.logger, output->getData(), sizeof(T));
+    AMDINFER_IF_LOGGING(
+      logTraceBuffer(observer.logger, output->getData(), sizeof(T));)
   }
 };
 

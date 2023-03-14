@@ -13,80 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(amdinfer-server-exe main.cpp)
-target_include_directories(amdinfer-server-exe PRIVATE ${AMDINFER_INCLUDE_DIRS})
-target_link_options(amdinfer-server-exe PRIVATE "LINKER:-E")
-set_target_options(amdinfer-server-exe)
-set_target_properties(
-  amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
-)
+# add all the source directories. These produce object libraries with the same
+# names
+set(client_targets clients core observation util)
+set(server_targets batching buffers core observation servers util)
+set(targets ${client_targets} ${server_targets})
+list(REMOVE_DUPLICATES targets)
 
-target_link_libraries(
-  amdinfer-server-exe PRIVATE amdinfer Jsoncpp_lib Drogon::Drogon
-)
-
-add_subdirectory(batching)
-add_subdirectory(bindings)
-add_subdirectory(buffers)
-add_subdirectory(clients)
-add_subdirectory(core)
-add_subdirectory(observation)
-add_subdirectory(servers)
-add_subdirectory(util)
+foreach(target ${targets})
+  add_subdirectory(${target})
+endforeach()
 add_subdirectory(workers)
+add_subdirectory(bindings)
 
-# Build and install the amdinfer library. The dual static/shared build process is
-# guided by: https://github.com/alexreinking/SharedStaticStarter and its
-# accompanying article.
+add_library(amdinfer SHARED ${targets})
+target_link_libraries(amdinfer PRIVATE ${targets})
 
-if(${AMDINFER_BUILD_SHARED})
-  set(type shared)
-else()
-  set(type static)
-endif()
-string(TOUPPER ${type} TYPE)
+add_library(amdinfer-server SHARED ${server_targets})
+target_link_libraries(amdinfer-server PRIVATE ${server_targets})
 
-add_library(
-  amdinfer
-  ${TYPE}
-  ${BATCHING_OBJS}
-  ${BUFFERS_OBJS}
-  ${CLIENT_OBJS}
-  ${CORE_OBJS}
-  ${HELPER_OBJS}
-  ${OBSERVATION_OBJS}
-  ${SERVER_OBJS}
-  ${UTIL_OBJS}
-)
-target_link_libraries(
-  amdinfer PRIVATE batching clients core observation servers util
-)
-set_target_options(amdinfer)
-
-add_library(
-  amdinfer-server
-  ${TYPE}
-  ${BATCHING_OBJS}
-  ${BUFFERS_OBJS}
-  ${CORE_OBJS}
-  ${HELPER_OBJS}
-  ${OBSERVATION_OBJS}
-  ${SERVER_OBJS}
-  ${UTIL_OBJS}
-)
-target_link_libraries(amdinfer-server PRIVATE batching core observation servers)
-set_target_options(amdinfer-server)
-
-add_library(
-  amdinfer-client ${TYPE} ${CLIENT_OBJS} ${CORE_OBJS} ${OBSERVATION_OBJS}
-                  ${UTIL_OBJS}
-)
-target_link_libraries(amdinfer-client PRIVATE clients core observation)
-set_target_options(amdinfer-client)
+add_library(amdinfer-client SHARED ${client_targets})
+target_link_libraries(amdinfer-client PRIVATE ${client_targets})
 
 set(output_libraries amdinfer amdinfer-server amdinfer-client)
 foreach(lib ${output_libraries})
-  enable_ipo_on_target(${lib})
+  set_target_options(${lib})
 
   # add alias to keep build and install interface the same
   add_library(amdinfer::${lib} ALIAS ${lib})
@@ -96,6 +47,16 @@ foreach(lib ${output_libraries})
                       SOVERSION ${amdinfer_VERSION_MAJOR}
   )
 endforeach()
+
+# the compiled server binary
+add_executable(amdinfer-server-exe main.cpp)
+target_include_directories(amdinfer-server-exe PRIVATE ${AMDINFER_INCLUDE_DIRS})
+target_link_options(amdinfer-server-exe PRIVATE "LINKER:-E")
+set_target_options(amdinfer-server-exe)
+set_target_properties(
+  amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
+)
+target_link_libraries(amdinfer-server-exe PRIVATE amdinfer)
 
 # ~~~
 # include(GenerateExportHeader)
@@ -120,8 +81,8 @@ if(NOT SKBUILD)
 
   # cmake-format: off
   install(
-    TARGETS amdinfer amdinfer-client amdinfer-server
-    EXPORT amdinfer_Targets
+    TARGETS amdinfer amdinfer-client amdinfer-server amdinfer-server-exe
+    EXPORT amdinfer
     RUNTIME COMPONENT amdinfer_Runtime
     LIBRARY COMPONENT amdinfer_Runtime
     NAMELINK_COMPONENT amdinfer_Development
@@ -133,22 +94,15 @@ if(NOT SKBUILD)
   )
   # cmake-format: on
 
-  install(
-    TARGETS amdinfer-server-exe
-    EXPORT amdinfer_Server
-    RUNTIME COMPONENT amdinfer_Runtime
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-  )
-
   install(DIRECTORY "${amdinfer_SOURCE_DIR}/include/" TYPE INCLUDE
           COMPONENT amdinfer_Development
   )
 
   install(
-    EXPORT amdinfer_Targets
+    EXPORT amdinfer
     DESTINATION "${amdinfer_INSTALL_CMAKEDIR}"
     NAMESPACE amdinfer::
-    FILE amdinfer-${type}-targets.cmake
+    FILE amdinfer-targets.cmake
     COMPONENT amdinfer_Development
   )
 
@@ -199,7 +153,7 @@ if(${AMDINFER_ENABLE_VITIS})
     )
     list(APPEND deb_dependencies "libpython3")
 
-    install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)
+    # install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)
   endif()
 endif()
 

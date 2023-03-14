@@ -15,31 +15,25 @@
 
 include(GNUInstallDirs)
 
-list(
-  APPEND workers
-         Echo
-         EchoMulti
-         InvertImage
-         InvertVideo
-)
+set(workers Echo EchoMulti InvertImage InvertVideo)
 
 if(${AMDINFER_ENABLE_VITIS})
-  set(workers ${workers} Xmodel)
+  list(APPEND workers Xmodel)
 endif()
 
 if(${AMDINFER_ENABLE_TFZENDNN})
-  set(workers ${workers} TfZendnn)
+  list(APPEND workers TfZendnn)
 endif()
 
 if(${AMDINFER_ENABLE_PTZENDNN})
-  set(workers ${workers} PtZendnn)
+  list(APPEND workers PtZendnn)
 endif()
 
 if(${AMDINFER_ENABLE_MIGRAPHX})
-  set(workers ${workers} Migraphx)
+  list(APPEND workers Migraphx)
 endif()
 
-foreach(worker ${workers})
+function(amdinfer_get_worker_target target filename worker)
   # convert name to file name: separate by capital letters, add underscores and
   # lowercase
   string(REGEX MATCHALL "[A-Z][a-z0-9]+" worker_list "${worker}")
@@ -53,13 +47,18 @@ foreach(worker ${workers})
   string(REGEX REPLACE "^.(.*)" "${first_letter}\\1" worker_pascal
                        "${worker_lower}"
   )
-  set(worker_name worker${worker_pascal})
+  set(${target} worker${worker_pascal} PARENT_SCOPE)
+  set(${filename} ${file_name} PARENT_SCOPE)
+endfunction()
 
-  add_library(${worker_name} SHARED ${file_name}.cpp)
-  target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${worker_name})
+foreach(worker ${workers})
+  amdinfer_get_worker_target(target filename ${worker})
 
-  list(APPEND WORKER_TARGETS ${worker_name})
+  add_library(${target} SHARED ${filename}.cpp)
+  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
+  set_target_options(${target})
+
+  list(APPEND WORKER_TARGETS ${target})
 endforeach()
 
 target_link_libraries(
@@ -70,8 +69,7 @@ target_link_libraries(
 )
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
-    workerXmodel PRIVATE parse_env vart-runner target-factory xir observation
-                         util
+    workerXmodel PRIVATE vart-runner target-factory xir observation util
   )
 endif()
 
@@ -104,32 +102,18 @@ if(${AMDINFER_ENABLE_AKS})
   set(aks_workers Resnet50 Resnet50Stream AksDetect AksDetectStream)
 
   foreach(worker ${aks_workers})
-    # convert name to file name: separate by capital letters, add underscores
-    # and lowercase
-    string(REGEX MATCHALL "[A-Z][a-z0-9]+" worker_list "${worker}")
-    string(REPLACE ";" "_" worker_list_str "${worker_list}")
-    string(TOLOWER ${worker_list_str} file_name)
+    amdinfer_get_worker_target(target filename ${worker})
 
-    # convert name to library name: capitalize first letter
-    string(TOLOWER ${worker} worker_lower)
-    string(SUBSTRING ${worker_lower} 0 1 first_letter)
-    string(TOUPPER ${first_letter} first_letter)
-    string(REGEX REPLACE "^.(.*)" "${first_letter}\\1" worker_pascal
-                         "${worker_lower}"
-    )
-    set(worker_name worker${worker_pascal})
-
-    add_library(${worker_name} SHARED ${file_name}.cpp)
-    target_link_options(${worker_name} PUBLIC "LINKER:-E")
+    add_library(${target} SHARED ${filename}.cpp)
+    target_link_options(${target} PUBLIC "LINKER:-E")
     target_link_libraries(
-      ${worker_name} PRIVATE buffers aks vart-runner xir opencv_core
-                             opencv_imgcodecs
+      ${target} PRIVATE aks vart::runner xir opencv_core opencv_imgcodecs
     )
-    target_include_directories(${worker_name} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-    add_dependencies(${worker_name} aks-kernels)
-    set_target_options(${worker_name})
+    target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
+    add_dependencies(${target} aks-kernels)
+    set_target_options(${target})
 
-    list(APPEND WORKER_TARGETS ${worker_name})
+    list(APPEND WORKER_TARGETS ${target})
   endforeach()
 
   target_link_libraries(

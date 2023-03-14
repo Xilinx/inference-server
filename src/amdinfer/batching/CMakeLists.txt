@@ -13,33 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND files hard soft)
-list(APPEND targets)
+set(base_targets batch batcher)
+set(derived_targets hard soft)
+amdinfer_add_targets(
+  targets target_objects "${base_targets}" "${derived_targets}" _batcher
+)
 
-add_library(batch OBJECT batch.cpp)
-target_include_directories(batch PRIVATE ${AMDINFER_INCLUDE_DIRS})
-set_target_options(batch)
+target_link_libraries(soft_batcher INTERFACE util)
 
-add_library(batcher OBJECT batcher.cpp)
-target_include_directories(batcher PRIVATE ${AMDINFER_INCLUDE_DIRS})
-set_target_options(batcher)
-
-set(BATCHING_OBJS $<TARGET_OBJECTS:batch> $<TARGET_OBJECTS:batcher>)
-
-foreach(file ${files})
-  set(target ${file}Batcher)
-  add_library(${target} OBJECT ${file}.cpp)
-  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${target})
-
-  list(APPEND BATCHING_OBJS $<TARGET_OBJECTS:${target}>)
-  list(APPEND targets ${target})
-endforeach()
-
-target_link_libraries(softBatcher INTERFACE timer)
-
-add_library(batching STATIC ${BATCHING_OBJS})
-target_link_libraries(batching INTERFACE batch batcher ${targets} buffers)
-set_target_options(batching)
-
-set(BATCHING_OBJS ${BATCHING_OBJS} PARENT_SCOPE)
+add_library(batching INTERFACE)
+target_link_libraries(batching INTERFACE ${targets} ${target_objects})

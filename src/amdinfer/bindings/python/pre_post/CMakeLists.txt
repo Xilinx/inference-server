@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(pre_post_py OBJECT pre_post.cpp)
-target_include_directories(
-  pre_post_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${AMDINFER_INCLUDE_DIRS}
-                      ${Python_INCLUDE_DIRS}
-)
-target_link_libraries(
-  pre_post_py PRIVATE ${Python_LIBRARIES} opencv_core opencv_imgproc
-                      opencv_imgcodecs
-)
-set_target_options(pre_post_py)
-add_dependencies(pre_post_py pybind11Mkdoc)
+set(derived_targets image_preprocess)
 
-set(PRE_POST_OBJS pre_post_py PARENT_SCOPE)
+amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)
+
+foreach(target ${derived_targets})
+  target_include_directories(
+    ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
+  )
+  add_dependencies(${target}_py pybind11Mkdoc)
+endforeach()
+
+add_library(pre_post_py INTERFACE)
+target_link_libraries(
+  pre_post_py INTERFACE ${targets} ${target_objects} opencv_core opencv_imgproc
+                        opencv_imgcodecs
+)

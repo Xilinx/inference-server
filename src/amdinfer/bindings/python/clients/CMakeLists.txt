@@ -13,27 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets client native)
+set(derived_targets client native)
 
 if(${AMDINFER_ENABLE_HTTP})
-  list(APPEND targets http websocket)
+  list(APPEND derived_targets http websocket)
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})
-  list(APPEND targets grpc)
+  list(APPEND derived_targets grpc)
 endif()
 
-foreach(target ${targets})
-  add_library(${target}_py OBJECT ${target}.cpp)
-  target_include_directories(
-    ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..
-                         ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
-  )
-  target_link_libraries(${target}_py PRIVATE ${Python_LIBRARIES} amdinfer)
-  set_target_options(${target}_py)
-  add_dependencies(${target}_py pybind11Mkdoc)
+amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)
 
-  set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)
+foreach(target ${derived_targets})
+  target_include_directories(
+    ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
+  )
+  add_dependencies(${target}_py pybind11Mkdoc)
 endforeach()
 
-set(CLIENT_OBJS ${LINK_TARGETS} PARENT_SCOPE)
+add_library(clients_py INTERFACE)
+target_link_libraries(clients_py INTERFACE ${targets} ${target_objects})

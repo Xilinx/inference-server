@@ -13,32 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND TARGETS predict_api data_types)
+set(derived_targets predict_api data_types exceptions)
 
-list(APPEND LINK_TARGETS)
+amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)
 
-add_library(exceptions_py OBJECT exceptions.cpp)
-target_include_directories(
-  exceptions_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${AMDINFER_INCLUDE_DIRS}
-                        ${Python_INCLUDE_DIRS}
-)
-target_link_libraries(exceptions_py PRIVATE ${Python_LIBRARIES})
-set_target_options(exceptions_py)
-add_dependencies(exceptions_py pybind11Mkdoc)
-
-set(LINK_TARGETS ${LINK_TARGETS} exceptions_py)
-
-foreach(target ${TARGETS})
-  add_library(${target}_py OBJECT ${target}.cpp)
+foreach(target ${derived_targets})
   target_include_directories(
-    ${target}_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..
-                         ${AMDINFER_INCLUDE_DIRS} ${Python_INCLUDE_DIRS}
+    ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
   )
-  target_link_libraries(${target}_py PRIVATE ${Python_LIBRARIES} amdinfer)
-  set_target_options(${target}_py)
   add_dependencies(${target}_py pybind11Mkdoc)
-
-  set(LINK_TARGETS ${LINK_TARGETS} ${target}_py)
 endforeach()
 
-set(CORE_OBJS ${LINK_TARGETS} PARENT_SCOPE)
+add_library(core_py INTERFACE)
+target_link_libraries(core_py INTERFACE ${targets} ${target_objects})

@@ -74,11 +74,13 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
     parameters.put("timeout", kTimeoutMs);
     parameters.put("batch_size", batch_size);
 
+#ifdef AMDINFER_ENABLE_LOGGING
     LogOptions options;
     options.logger_name = "server";
     options.console_enable = true;
     options.file_enable = false;
     initLogger(options);
+#endif  // AMDINFER_ENABLE_LOGGING
 
     this->batcher_.emplace(&pool_, &parameters);
     this->batcher_->setName("test");

@@ -284,7 +284,8 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue) {
     status_ =
       this->session_->Run(input_pair, {output_node_}, {}, &output_tensor);
     timer.add("infer_stop");
-    auto duration = timer.count<std::milli>("infer_start", "infer_stop");
+    [[maybe_unused]] auto duration =
+      timer.count<std::milli>("infer_start", "infer_stop");
     AMDINFER_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
                                 " images: " + std::to_string(duration));
 

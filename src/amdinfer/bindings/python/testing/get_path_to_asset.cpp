@@ -17,11 +17,11 @@
  * @brief Implements the Python bindings for the server.hpp header
  */
 
+#include "amdinfer/testing/get_path_to_asset.hpp"
+
 #include <pybind11/cast.h>      // for arg
 #include <pybind11/pybind11.h>  // for class_, init
 #include <pybind11/stl.h>       // IWYU pragma: keep
-
-#include "amdinfer/testing/get_path_to_asset.hpp"
 
 namespace py = pybind11;
 

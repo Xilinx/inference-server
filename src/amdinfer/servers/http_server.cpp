@@ -78,6 +78,7 @@ void start(SharedState *state, uint16_t port) {
       resp->addHeader("Access-Control-Allow-Origin", "*");
     })
     .setClientMaxBodySize(kMaxClientBodySize)
+    .disableSigtermHandling()
     // .enableRunAsDaemon()
     .run();
 }
@@ -178,7 +179,7 @@ HttpServer::HttpServer(SharedState *state) : state_(state) {
   AMDINFER_LOG_DEBUG(logger_, "Constructed HttpServer");
 }
 
-#ifdef AMDINFER_ENABLE_REST
+#ifdef AMDINFER_ENABLE_HTTP
 
 void HttpServer::getServerLive(
   const HttpRequestPtr &req,
@@ -653,7 +654,7 @@ void HttpServer::workerUnload(
   callback(resp);
 }
 
-#endif  // AMDINFER_ENABLE_REST
+#endif  // AMDINFER_ENABLE_HTTP
 
 #ifdef AMDINFER_ENABLE_METRICS
 void HttpServer::metrics(

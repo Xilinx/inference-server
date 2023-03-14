@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.21)
 
-# parse version
+# parse the VERSION file in the current directory and extract it into variables
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ver)
 string(REPLACE "\n" "" ver ${ver})
 string(REGEX MATCHALL "([0-9]+)|-(.*)\\+" result ${ver})
@@ -46,11 +46,10 @@ project(
 
 # Only do these if this is the main project, and not if it is included through
 # add_subdirectory
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+if(PROJECT_IS_TOP_LEVEL)
   set(CMAKE_CXX_STANDARD 17)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
-  set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
   set(CMAKE_CXX_LINKER_WRAPPER_FLAG "-Wl,")
   add_link_options("LINKER:--as-needed")
@@ -61,19 +60,19 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Coverage"
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
-
-  set(AMDINFER_BUILD_TESTING_DEFAULT ON)
-else()
-  set(AMDINFER_BUILD_TESTING_DEFAULT OFF)
 endif()
+
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 if(CMAKE_BUILD_TYPE MATCHES Coverage)
   include(CodeCoverage)
 endif()
 include(CMakeDependentOption)
 include(CTest)
+# these are defined locally in ./cmake/*
 include(SetTargetOptions)
 include(AddOption)
+include(AddTargets)
 
 # check requirements
 find_package(Drogon CONFIG)
@@ -131,8 +130,9 @@ configure_file(
   ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp
 )
 
+# these options get added as AMDINFER_* e.g. AMDINFER_BUILD_TESTING
 message(STATUS "Build Options:")
-add_option("ENABLE_REST" "Enable the REST server" ON)
+add_option("ENABLE_HTTP" "Enable the HTTP server" ON)
 add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
 add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
 add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
@@ -142,20 +142,13 @@ add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${AMDINFER_VITIS_FOUND})
 add_option("BUILD_EXAMPLES" "Build examples" ON)
 add_option("BUILD_APPS" "Build apps" ON)
 add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
-add_option("BUILD_TESTING" "Build C++ tests" ${AMDINFER_BUILD_TESTING_DEFAULT})
+add_option("BUILD_TESTING" "Build C++ tests" ${PROJECT_IS_TOP_LEVEL})
 add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
 add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
 add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
 add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
 add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ${migraphx_FOUND})
 add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
-
-message(STATUS "Derived Options:")
-if(${AMDINFER_ENABLE_REST} OR ${AMDINFER_ENABLE_METRICS})
-  add_derived_option("ENABLE_HTTP" ON)
-else()
-  add_derived_option("ENABLE_HTTP" OFF)
-endif()
 
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)

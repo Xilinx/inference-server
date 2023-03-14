@@ -365,7 +365,7 @@ void setCallback(InferenceRequest* request, CallDataModelInfer* calldata) {
 
 InferenceRequestPtr getRequest(const inference::ModelInferRequest& grpc_request,
                                const MemoryPool* pool) {
-  Observer observer;
+  [[maybe_unused]] Observer observer;
   AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Server});
 
   AMDINFER_LOG_TRACE(observer.logger,

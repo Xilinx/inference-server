@@ -13,27 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets cpu)
+set(base_targets buffer)
+set(derived_targets cpu)
+if(${AMDINFER_ENABLE_VITIS})
+  list(APPEND derived_targets vart_tensor)
+endif()
+amdinfer_add_targets(
+  targets target_objects "${base_targets}" "${derived_targets}" _buffer
+)
 
 if(${AMDINFER_ENABLE_VITIS})
-  list(APPEND targets vart_tensor)
+  target_link_libraries(vart_tensor_buffer INTERFACE vart::runner)
 endif()
 
-add_library(buffer OBJECT buffer.cpp)
-target_include_directories(buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})
-set_target_options(buffer)
-
-list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:buffer>)
-
-foreach(target ${targets})
-  add_library(${target}Buffer OBJECT ${target}.cpp)
-  target_include_directories(${target}Buffer PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${target}Buffer)
-
-  list(APPEND BUFFERS_OBJS $<TARGET_OBJECTS:${target}Buffer>)
-endforeach()
-
-add_library(buffers STATIC ${BUFFERS_OBJS})
-set_target_options(buffers)
-
-set(BUFFERS_OBJS ${BUFFERS_OBJS} PARENT_SCOPE)
+add_library(buffers INTERFACE)
+target_link_libraries(buffers INTERFACE ${targets} ${target_objects})

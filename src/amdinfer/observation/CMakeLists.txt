@@ -13,49 +13,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(OBSERVATION_OBJS "")
-set(targets "")
-
+set(base_targets "")
 if(${AMDINFER_ENABLE_LOGGING})
-  add_library(logging OBJECT logging.cpp)
-  target_link_libraries(logging INTERFACE spdlog)
-  target_include_directories(logging PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(logging)
-
-  list(APPEND targets logging)
-
-  set(OBSERVATION_OBJS ${OBSERVATION_OBJS} $<TARGET_OBJECTS:logging>)
+  list(APPEND base_targets logging)
 endif()
+if(${AMDINFER_ENABLE_METRICS})
+  list(APPEND base_targets metrics)
+endif()
+if(${AMDINFER_ENABLE_TRACING})
+  list(APPEND base_targets tracing)
+endif()
+set(derived_targets "")
+amdinfer_add_targets(
+  targets target_objects "${base_targets}" "${derived_targets}" ""
+)
 
 if(${AMDINFER_ENABLE_METRICS})
-  add_library(metrics OBJECT metrics.cpp)
   target_link_libraries(metrics INTERFACE prometheus-cpp-core util)
-  target_include_directories(metrics PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(metrics)
-
-  list(APPEND targets metrics)
-
-  set(OBSERVATION_OBJS ${OBSERVATION_OBJS} $<TARGET_OBJECTS:metrics>)
 endif()
-
 if(${AMDINFER_ENABLE_TRACING})
-  add_library(tracing OBJECT tracing.cpp)
-  target_include_directories(tracing PRIVATE ${AMDINFER_INCLUDE_DIRS})
   # switch opentelemetry_exporter_jaeger_trace to
   # opentelemetry_exporter_ostream_span for debugging traces locally
   target_link_libraries(
     tracing INTERFACE opentelemetry_trace libopentelemetry_resources.so
                       opentelemetry_exporter_jaeger_trace
   )
-  set_target_options(tracing)
-
-  list(APPEND targets tracing)
-
-  set(OBSERVATION_OBJS ${OBSERVATION_OBJS} $<TARGET_OBJECTS:tracing>)
 endif()
 
-add_library(observation STATIC ${OBSERVATION_OBJS})
-target_link_libraries(observation INTERFACE ${targets})
-set_target_options(observation)
-
-set(OBSERVATION_OBJS ${OBSERVATION_OBJS} PARENT_SCOPE)
+add_library(observation INTERFACE)
+target_link_libraries(observation INTERFACE ${targets} ${target_objects})

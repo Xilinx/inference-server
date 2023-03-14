@@ -13,33 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND targets server)
-
-if(${AMDINFER_ENABLE_REST})
-  set(targets ${targets} http_server websocket_server)
+set(base_targets server)
+if(${AMDINFER_ENABLE_HTTP})
+  list(APPEND base_targets http_server websocket_server)
 endif()
-
 if(${AMDINFER_ENABLE_GRPC})
-  set(targets ${targets} grpc_server)
+  list(APPEND base_targets grpc_server)
 endif()
-
-foreach(target ${targets})
-  add_library(${target} OBJECT ${target}.cpp)
-  target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(${target})
-
-  list(APPEND SERVER_OBJS $<TARGET_OBJECTS:${target}>)
-endforeach()
-
-target_link_libraries(server PRIVATE Jsoncpp_lib core observation)
+set(derived_targets "")
+amdinfer_add_targets(
+  targets target_objects "${base_targets}" "${derived_targets}" ""
+)
 
 if(${AMDINFER_ENABLE_AKS})
   target_link_libraries(server INTERFACE aks)
 endif()
 
-if(${AMDINFER_ENABLE_REST})
-  target_link_libraries(http_server PUBLIC clients Drogon::Drogon)
+if(${AMDINFER_ENABLE_HTTP})
+  target_link_libraries(http_server PUBLIC Drogon::Drogon)
   target_link_libraries(websocket_server PUBLIC Drogon::Drogon)
+  target_link_libraries(server PUBLIC http_server)
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})
@@ -50,8 +43,5 @@ if(${AMDINFER_ENABLE_GRPC})
   add_dependencies(grpc_server lib_grpc)
 endif()
 
-add_library(servers STATIC ${SERVER_OBJS})
-target_link_libraries(servers INTERFACE ${targets})
-set_target_options(servers)
-
-set(SERVER_OBJS ${SERVER_OBJS} PARENT_SCOPE)
+add_library(servers INTERFACE)
+target_link_libraries(servers INTERFACE ${targets} ${target_objects})

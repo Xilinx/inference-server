@@ -17,6 +17,8 @@
  * @brief Implements the Python bindings for pre_post
  */
 
+#include "amdinfer/pre_post/image_preprocess.hpp"  // for ImageOrder
+
 #include <pybind11/cast.h>      // for arg, cast
 #include <pybind11/numpy.h>     // for array_t
 #include <pybind11/pybind11.h>  // for sequence, module_
@@ -29,7 +31,6 @@
 #include <vector>  // for vector
 
 #include "amdinfer/core/predict_api.hpp"               // IWYU pragma: keep
-#include "amdinfer/pre_post/image_preprocess.hpp"      // for ImageOrder
 #include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Postpr...
 
 // InferenceResponseOutput needs the full definition, not a forward declare

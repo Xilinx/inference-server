@@ -12,13 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(testing_py OBJECT testing.cpp)
-target_include_directories(
-  testing_py PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/.. ${AMDINFER_INCLUDE_DIRS}
-                     ${Python_INCLUDE_DIRS} ${AMDINFER_TEST_INCLUDE_DIRS}
-)
-target_link_libraries(testing_py PRIVATE ${Python_LIBRARIES} testing)
-set_target_options(testing_py)
-add_dependencies(testing_py pybind11Mkdoc)
+set(derived_targets get_path_to_asset)
 
-set(TESTING_OBJS testing_py PARENT_SCOPE)
+amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)
+
+foreach(target ${derived_targets})
+  target_include_directories(
+    ${target}_py PRIVATE ${AMDINFER_PYTHON_INCLUDE_DIRS}
+                         ${AMDINFER_TEST_INCLUDE_DIRS}
+  )
+  add_dependencies(${target}_py pybind11Mkdoc)
+endforeach()
+
+add_library(testing_py INTERFACE)
+target_link_libraries(testing_py INTERFACE ${targets} ${target_objects} testing)

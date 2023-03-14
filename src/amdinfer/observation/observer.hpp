@@ -17,27 +17,20 @@
 
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/core/data_types.hpp"
-#include "amdinfer/util/string.hpp"
-
-#ifdef AMDINFER_ENABLE_LOGGING
 #include "amdinfer/observation/logging.hpp"  // IWYU pragma: export
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
 #include "amdinfer/observation/metrics.hpp"  // IWYU pragma: export
-#endif
-
-#ifdef AMDINFER_ENABLE_TRACING
 #include "amdinfer/observation/tracing.hpp"  // IWYU pragma: export
-#endif
+#include "amdinfer/util/string.hpp"
 
 namespace amdinfer {
 
 const auto kNumTraceData = 5U;
 
 struct Observer {
-  AMDINFER_IF_LOGGING(Logger logger);
+  AMDINFER_IF_LOGGING(Logger logger;)
 };
+
+#ifdef AMDINFER_ENABLE_LOGGING
 
 inline void logTraceBuffer([[maybe_unused]] const Logger& logger, void* data,
                            size_t size = sizeof(char)) {
@@ -53,6 +46,8 @@ inline void logTraceBuffer([[maybe_unused]] const Logger& logger, void* data,
   AMDINFER_LOG_TRACE(
     logger, "Buffer(" + util::addressToString(data) + ") has bytes: " + bytes);
 }
+
+#endif  // AMDINFER_ENABLE_LOGGING
 
 }  // namespace amdinfer
 
