@@ -209,13 +209,11 @@ ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
 }
 
 void HttpClient::modelLoad(const std::string& model,
-                           ParameterMap* parameters) const {
+                           const ParameterMap& parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
-  if (parameters != nullptr) {
-    json = mapParametersToJson(parameters);
-  }
+  json = mapParametersToJson(parameters);
 
   auto req = createPostRequest(json, "/v2/repository/models/" + model + "/load",
                                impl_->getHeaders());
@@ -243,13 +241,11 @@ void HttpClient::modelUnload(const std::string& model) const {
 }
 
 std::string HttpClient::workerLoad(const std::string& worker,
-                                   ParameterMap* parameters) const {
+                                   const ParameterMap& parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
-  if (parameters != nullptr) {
-    json = mapParametersToJson(parameters);
-  }
+  json = mapParametersToJson(parameters);
 
   auto req = createPostRequest(json, "/v2/workers/" + worker + "/load",
                                impl_->getHeaders());

@@ -38,7 +38,7 @@ void test(amdinfer::Client* client) {
 
   EXPECT_FALSE(client->modelReady(worker));
 
-  const auto endpoint = client->workerLoad(worker, nullptr);
+  const auto endpoint = client->workerLoad(worker, {});
   EXPECT_EQ(endpoint, worker);
 
   // arbitrarily set to 10ms

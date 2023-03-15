@@ -197,7 +197,7 @@ std::vector<std::string> GrpcClient::modelList() const {
 }
 
 void GrpcClient::modelLoad(const std::string& model,
-                           ParameterMap* parameters) const {
+                           const ParameterMap& parameters) const {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -205,9 +205,7 @@ void GrpcClient::modelLoad(const std::string& model,
 
   request.set_name(model);
   auto* params = request.mutable_parameters();
-  if (parameters != nullptr) {
-    mapParametersToProto(parameters->data(), params);
-  }
+  mapParametersToProto(parameters.data(), params);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelLoad(&context, request, &reply);
@@ -234,7 +232,7 @@ void GrpcClient::modelUnload(const std::string& model) const {
 }
 
 std::string GrpcClient::workerLoad(const std::string& worker,
-                                   ParameterMap* parameters) const {
+                                   const ParameterMap& parameters) const {
   inference::WorkerLoadRequest request;
   inference::WorkerLoadResponse reply;
 
@@ -242,9 +240,7 @@ std::string GrpcClient::workerLoad(const std::string& worker,
 
   request.set_name(worker);
   auto* params = request.mutable_parameters();
-  if (parameters != nullptr) {
-    mapParametersToProto(parameters->data(), params);
-  }
+  mapParametersToProto(parameters.data(), params);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->WorkerLoad(&context, request, &reply);

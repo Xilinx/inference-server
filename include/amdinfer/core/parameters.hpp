@@ -91,7 +91,7 @@ class ParameterMap : public Serializable {
    * @return T
    */
   template <typename T>
-  T get(const std::string &key) {
+  T get(const std::string &key) const {
     auto &value = this->parameters_.at(key);
     return std::get<T>(value);
   }
@@ -102,7 +102,7 @@ class ParameterMap : public Serializable {
    * @param key name of the parameter to check
    * @return bool
    */
-  bool has(const std::string &key);
+  bool has(const std::string &key) const;
 
   /**
    * @brief Rename the key associated with a parameter. If the new key already
@@ -130,10 +130,14 @@ class ParameterMap : public Serializable {
   /// Returns a read/write iterator to the first parameter in the object
   Iterator begin();
   /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstIterator begin() const;
+  /// Returns a read iterator to the first parameter in the object
   [[nodiscard]] ConstIterator cbegin() const;
 
   /// Returns a read/write iterator to one past the last parameter in the object
   Iterator end();
+  /// Returns a read iterator to one past the last parameter in the object
+  [[nodiscard]] ConstIterator end() const;
   /// Returns a read iterator to one past the last parameter in the object
   [[nodiscard]] ConstIterator cend() const;
 

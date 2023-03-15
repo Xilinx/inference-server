@@ -44,13 +44,11 @@ void wrapGrpcClient(py::module_ &m) {
     .def("modelMetadata", &GrpcClient::modelMetadata, py::arg("model"),
          DOCS(GrpcClient, modelMetadata))
     .def("modelLoad", &GrpcClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
-         DOCS(GrpcClient, modelLoad))
+         py::arg("parameters") = ParameterMap(), DOCS(GrpcClient, modelLoad))
     .def("modelUnload", &GrpcClient::modelUnload, py::arg("model"),
          DOCS(GrpcClient, modelUnload))
     .def("workerLoad", &GrpcClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
-         DOCS(GrpcClient, workerLoad))
+         py::arg("parameters") = ParameterMap(), DOCS(GrpcClient, workerLoad))
     .def("workerUnload", &GrpcClient::workerUnload, py::arg("model"),
          DOCS(GrpcClient, workerUnload))
     .def("modelInfer", &GrpcClient::modelInfer, py::arg("model"),

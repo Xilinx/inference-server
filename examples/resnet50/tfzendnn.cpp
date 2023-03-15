@@ -136,7 +136,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   parameters.put("input_node", args.input_node);
   parameters.put("output_node", args.output_node);
   parameters.put("batch_size", args.batch_size);
-  std::string endpoint = client->workerLoad("tfzendnn", &parameters);
+  std::string endpoint = client->workerLoad("tfzendnn", parameters);
   amdinfer::waitUntilModelReady(client, endpoint);
   // -load
   return endpoint;

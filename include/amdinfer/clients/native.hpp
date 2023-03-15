@@ -118,7 +118,7 @@ class NativeClient : public Client {
    * @param parameters load-time parameters for the worker supporting the model
    */
   void modelLoad(const std::string& model,
-                 ParameterMap* parameters) const override;
+                 const ParameterMap& parameters) const override;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
@@ -164,8 +164,8 @@ class NativeClient : public Client {
    * @param parameters load-time parameters for the worker
    * @return std::string
    */
-  [[nodiscard]] std::string workerLoad(const std::string& worker,
-                                       ParameterMap* parameters) const override;
+  [[nodiscard]] std::string workerLoad(
+    const std::string& worker, const ParameterMap& parameters) const override;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.

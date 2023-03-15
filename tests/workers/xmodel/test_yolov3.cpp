@@ -61,7 +61,7 @@ void postprocess(const amdinfer::InferenceResponseOutput& output) {
   (void)output;
 }
 
-std::string workerLoad(Client* client, ParameterMap* parameters) {
+std::string workerLoad(Client* client, const ParameterMap& parameters) {
   return client->workerLoad("Xmodel", parameters);
 }
 
@@ -104,7 +104,7 @@ void test0(Client* client) {
   parameters.put("model", xmodel);
 
   auto images = preprocess({test_asset});
-  auto endpoint = workerLoad(client, &parameters);
+  auto endpoint = workerLoad(client, parameters);
   auto requests = constructRequests(images);
   auto responses = inferAsyncOrdered(client, endpoint, requests);
   validate(responses);

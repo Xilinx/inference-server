@@ -56,7 +56,7 @@ void ParameterMap::erase(const std::string &key) {
   }
 }
 
-bool ParameterMap::has(const std::string &key) {
+bool ParameterMap::has(const std::string &key) const {
   return this->parameters_.find(key) != this->parameters_.end();
 }
 
@@ -71,11 +71,17 @@ size_t ParameterMap::size() const { return parameters_.size(); }
 bool ParameterMap::empty() const { return parameters_.empty(); }
 
 ParameterMap::Iterator ParameterMap::begin() { return parameters_.begin(); }
+ParameterMap::ConstIterator ParameterMap::begin() const {
+  return parameters_.cbegin();
+}
 ParameterMap::ConstIterator ParameterMap::cbegin() const {
   return parameters_.cbegin();
 }
 
 ParameterMap::Iterator ParameterMap::end() { return parameters_.end(); }
+ParameterMap::ConstIterator ParameterMap::end() const {
+  return parameters_.cend();
+}
 ParameterMap::ConstIterator ParameterMap::cend() const {
   return parameters_.cend();
 }

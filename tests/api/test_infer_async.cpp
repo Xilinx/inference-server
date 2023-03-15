@@ -27,7 +27,7 @@ namespace amdinfer {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client(&server_);
-  auto endpoint = client.workerLoad("echo", nullptr);
+  auto endpoint = client.workerLoad("echo", {});
   EXPECT_EQ(endpoint, "echo");
 
   std::vector<uint32_t> img_data;

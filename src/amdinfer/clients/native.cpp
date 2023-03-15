@@ -62,23 +62,14 @@ ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
 }
 
 void NativeClient::modelLoad(const std::string& model,
-                             ParameterMap* parameters) const {
+                             const ParameterMap& parameters) const {
   auto model_lower = util::toLower(model);
-  if (parameters == nullptr) {
-    ParameterMap params;
-    impl_->state->modelLoad(model_lower, &params);
-  } else {
-    impl_->state->modelLoad(model_lower, parameters);
-  }
+  impl_->state->modelLoad(model_lower, parameters);
 }
 
 std::string NativeClient::workerLoad(const std::string& worker,
-                                     ParameterMap* parameters) const {
+                                     const ParameterMap& parameters) const {
   auto worker_lower = util::toLower(worker);
-  if (parameters == nullptr) {
-    ParameterMap params;
-    return impl_->state->workerLoad(worker_lower, &params);
-  }
   return impl_->state->workerLoad(worker_lower, parameters);
 }
 

@@ -43,26 +43,26 @@ namespace amdinfer {
 
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
-  ParameterMap* parameters) {
+  ParameterMap& parameters) {
   using ParameterType = inference::InferParameter::ParameterChoiceCase;
   for (const auto& [key, value] : params) {
     auto type = value.parameter_choice_case();
     switch (type) {
       case ParameterType::kBoolParam: {
-        parameters->put(key, value.bool_param());
+        parameters.put(key, value.bool_param());
         break;
       }
       case ParameterType::kInt64Param: {
         // TODO(varunsh): parameters should switch to uint64?
-        parameters->put(key, static_cast<int>(value.int64_param()));
+        parameters.put(key, static_cast<int>(value.int64_param()));
         break;
       }
       case ParameterType::kDoubleParam: {
-        parameters->put(key, value.double_param());
+        parameters.put(key, value.double_param());
         break;
       }
       case ParameterType::kStringParam: {
-        parameters->put(key, value.string_param());
+        parameters.put(key, value.string_param());
         break;
       }
       default: {
@@ -73,18 +73,12 @@ void mapProtoToParameters(
   }
 }
 
-ParameterMapPtr mapProtoToParameters(
+ParameterMap mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params) {
-  auto parameters = std::make_shared<ParameterMap>();
-  mapProtoToParameters(params, parameters.get());
+  ParameterMap parameters;
+  mapProtoToParameters(params, parameters);
 
   return parameters;
-}
-
-void mapProtoToParameters(
-  const google::protobuf::Map<std::string, inference::InferParameter>& params,
-  ParameterMap& parameters) {
-  mapProtoToParameters(params, &parameters);
 }
 
 // refer to cppreference for std::visit
@@ -148,11 +142,10 @@ void mapRequestToProto(const InferenceRequest& request,
                      "Mapping the InferenceRequest to proto object");
   grpc_request.set_id(request.getID());
 
-  if (const auto* parameters = request.getParameters(); parameters != nullptr) {
-    auto params = parameters->data();
-    auto* grpc_parameters = grpc_request.mutable_parameters();
-    mapParametersToProto(params, grpc_parameters);
-  }
+  const auto& parameters = request.getParameters();
+  auto params = parameters.data();
+  auto* grpc_parameters = grpc_request.mutable_parameters();
+  mapParametersToProto(params, grpc_parameters);
 
   const auto& inputs = request.getInputs();
   for (const auto& input : inputs) {
@@ -167,7 +160,7 @@ void mapRequestToProto(const InferenceRequest& request,
     }
     auto datatype = input.getDatatype();
     tensor->set_datatype(datatype.str());
-    mapParametersToProto(input.getParameters()->data(),
+    mapParametersToProto(input.getParameters().data(),
                          tensor->mutable_parameters());
 
     switchOverTypes(AddDataToTensor(), input.getDatatype(), input.getData(),

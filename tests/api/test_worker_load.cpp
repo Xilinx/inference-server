@@ -27,10 +27,10 @@ void test(amdinfer::Client* client) {
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  auto endpoint = client->workerLoad(worker, nullptr);
+  auto endpoint = client->workerLoad(worker, {});
   EXPECT_EQ(endpoint, worker);
   // do a redundant load
-  endpoint = client->workerLoad(worker, nullptr);
+  endpoint = client->workerLoad(worker, {});
   EXPECT_EQ(endpoint, worker);
 
   // load the same worker with a different config
@@ -38,11 +38,11 @@ void test(amdinfer::Client* client) {
   // arbitrarily set to 100 just to create a different config
   const auto max_buffer_num = 100;
   parameters.put("max_buffer_num", max_buffer_num);
-  auto endpoint_1 = client->workerLoad(worker, &parameters);
+  auto endpoint_1 = client->workerLoad(worker, parameters);
   EXPECT_EQ(endpoint_1, "echo-0");
 
   parameters.put("share", false);
-  endpoint_1 = client->workerLoad(worker, &parameters);
+  endpoint_1 = client->workerLoad(worker, parameters);
   EXPECT_EQ(endpoint_1, "echo-0");
 
   EXPECT_TRUE(client->modelReady(endpoint));

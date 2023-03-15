@@ -123,7 +123,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
 #endif
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      auto key = req->getParameters()->get<std::string>("key");
+      auto key = req->getParameters().get<std::string>("key");
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
 
@@ -144,8 +144,8 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         // contains the number of frames in the video;
         auto count = static_cast<int32_t>(
           cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
-        if (input.getParameters()->has("count")) {
-          count = input.getParameters()->get<int32_t>("count");
+        if (input.getParameters().has("count")) {
+          count = input.getParameters().get<int32_t>("count");
         }
         double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
 

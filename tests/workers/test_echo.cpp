@@ -49,8 +49,8 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
     // NOLINTNEXTLINE(google-readability-casting)
     input_0.setData((void*)(&(inputs[0])));
     if (params.add_input_parameters) {
-      auto parameters = std::make_shared<ParameterMap>();
-      parameters->put("key_0", "value");
+      ParameterMap parameters;
+      parameters.put("key_0", "value");
       input_0.setParameters(parameters);
     }
 
@@ -63,8 +63,8 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
       InferenceRequestOutput output;
       output.setName("echo");
       if (params.add_input_parameters) {
-        auto parameters = std::make_shared<ParameterMap>();
-        parameters->put("key", "another_value");
+        ParameterMap parameters;
+        parameters.put("key", "another_value");
         output.setParameters(parameters);
       }
       for (auto i = 0; i < params.multiplier; i++) {
@@ -78,9 +78,9 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
     if (params.add_request_parameters) {
       const auto key_3 = 1.2;  // arbitrary value
-      auto parameters = std::make_shared<ParameterMap>();
-      parameters->put("key_2", true);
-      parameters->put("key_3", key_3);
+      ParameterMap parameters;
+      parameters.put("key_2", true);
+      parameters.put("key_3", key_3);
       request.setParameters(parameters);
     }
 
@@ -103,7 +103,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
       EXPECT_EQ(data[0], golden_outputs[0]);
       EXPECT_EQ(output.getDatatype(), DataType::Uint32);
       EXPECT_EQ(output.getName(), "echo");
-      EXPECT_TRUE(output.getParameters()->empty());
+      EXPECT_TRUE(output.getParameters().empty());
       auto shape = output.getShape();
       EXPECT_EQ(shape.size(), 1);
       EXPECT_EQ(shape[0], 1);
@@ -119,7 +119,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
 TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
   amdinfer::NativeClient client(&server);
-  const auto endpoint = client.workerLoad("echo", nullptr);
+  const auto endpoint = client.workerLoad("echo", {});
 
   auto request = this->constructRequest();
 
@@ -139,7 +139,7 @@ TEST_P(EchoParamFixture, EchoGrpc) {  // NOLINT
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
-  const auto endpoint = client.workerLoad("echo", nullptr);
+  const auto endpoint = client.workerLoad("echo", {});
 
   auto request = this->constructRequest();
 

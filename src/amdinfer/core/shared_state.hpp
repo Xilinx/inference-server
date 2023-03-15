@@ -37,9 +37,10 @@ class ParameterMap;
 
 class SharedState {
  public:
-  void modelLoad(const std::string& model, ParameterMap* parameters);
+  void modelLoad(const std::string& model, const ParameterMap& parameters);
   void modelUnload(const std::string& model);
-  std::string workerLoad(const std::string& worker, ParameterMap* parameters);
+  std::string workerLoad(const std::string& worker,
+                         const ParameterMap& parameters);
   void workerUnload(const std::string& worker);
 
   static ServerMetadata serverMetadata();

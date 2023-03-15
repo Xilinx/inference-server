@@ -33,7 +33,7 @@ void test(amdinfer::Client* client) {
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  client->modelLoad(model, nullptr);
+  client->modelLoad(model, {});
 
   EXPECT_TRUE(client->modelReady(model));
 

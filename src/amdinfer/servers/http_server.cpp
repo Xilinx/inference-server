@@ -36,8 +36,8 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/clients/http_internal.hpp"  // for propagate, errorHtt...
 #include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
-#include "amdinfer/core/parameters.hpp"        // for ParameterMapPtr
-#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
+#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMap
 #include "amdinfer/core/shared_state.hpp"          // for SharedState
 #include "amdinfer/observation/logging.hpp"       // for Logger, AMDINFER_LOG...
 #include "amdinfer/observation/metrics.hpp"       // for Metrics, MetricCoun...
@@ -365,8 +365,6 @@ InferenceRequestInput getInput(const Json::Value &json,
   if (json.isMember("parameters")) {
     auto parameters = json.get("parameters", Json::objectValue);
     input.setParameters(mapJsonToParameters(parameters));
-  } else {
-    input.setParameters(std::make_unique<ParameterMap>());
   }
 
   auto buffer = pool->get({MemoryAllocators::Cpu}, input, 1);
@@ -395,8 +393,6 @@ InferenceRequestOutput getOutput(const Json::Value &json) {
   if (json.isMember("parameters")) {
     auto parameters = json.get("parameters", Json::objectValue);
     output.setParameters(mapJsonToParameters(parameters));
-  } else {
-    output.setParameters(std::make_unique<ParameterMap>());
   }
   return output;
 }
@@ -437,8 +433,6 @@ InferenceRequestPtr getRequest(const std::shared_ptr<Json::Value> &json,
   if (json->isMember("parameters")) {
     auto parameters = json->get("parameters", Json::objectValue);
     request->setParameters(mapJsonToParameters(parameters));
-  } else {
-    request->setParameters(std::make_unique<ParameterMap>());
   }
 
   if (!json->isMember("inputs")) {
@@ -529,18 +523,16 @@ void HttpServer::modelLoad(
   AMDINFER_LOG_INFO(logger_, "Received modelLoad request for " + model_lower);
 
   auto json = req->getJsonObject();
-  ParameterMapPtr parameters = nullptr;
+  ParameterMap parameters;
   if (json != nullptr) {
     parameters = mapJsonToParameters(*json);
-  } else {
-    parameters = std::make_unique<ParameterMap>();
   }
 #ifdef AMDINFER_ENABLE_TRACING
-  trace->setAttributes(parameters.get());
+  trace->setAttributes(parameters);
 #endif
 
   try {
-    state_->modelLoad(model_lower, parameters.get());
+    state_->modelLoad(model_lower, parameters);
   } catch (const runtime_error &e) {
     AMDINFER_LOG_ERROR(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -594,11 +586,9 @@ void HttpServer::workerLoad(
 #endif
 
   auto json = req->getJsonObject();
-  ParameterMapPtr parameters = nullptr;
+  ParameterMap parameters;
   if (json != nullptr) {
     parameters = mapJsonToParameters(*json);
-  } else {
-    parameters = std::make_unique<ParameterMap>();
   }
 
   auto worker_lower = util::toLower(worker);
@@ -609,11 +599,11 @@ void HttpServer::workerLoad(
   AMDINFER_LOG_INFO(logger_, "Received load request is for " + worker_lower);
 
 #ifdef AMDINFER_ENABLE_TRACING
-  trace->setAttributes(parameters.get());
+  trace->setAttributes(parameters);
 #endif
   HttpResponsePtr resp;
   try {
-    auto endpoint = state_->workerLoad(worker_lower, parameters.get());
+    auto endpoint = state_->workerLoad(worker_lower, parameters);
     resp = HttpResponse::newHttpResponse();
     resp->setBody(endpoint);
   } catch (const runtime_error &e) {

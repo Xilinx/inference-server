@@ -155,7 +155,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // Optional: specifies how long the batcher should wait for more requests
   // before sending the batch on
   parameters.put("timeout", timeout_ms);
-  std::string endpoint = client->workerLoad("migraphx", &parameters);
+  std::string endpoint = client->workerLoad("migraphx", parameters);
   amdinfer::waitUntilModelReady(client, endpoint);
   // -load
   return endpoint;

@@ -113,15 +113,20 @@ class InferenceRequestInput : public Serializable {
   void setDatatype(DataType type);
 
   /// Gets the input tensor's parameters
-  [[nodiscard]] ParameterMap *getParameters() const {
-    return this->parameters_.get();
+  [[nodiscard]] const ParameterMap &getParameters() const & {
+    return this->parameters_;
   }
+
+  [[nodiscard]] ParameterMap getParameters() && {
+    return std::move(this->parameters_);
+  }
+
   /**
    * @brief Sets the input tensor's parameters
    *
    * @param parameters pointer to parameters to assign
    */
-  void setParameters(ParameterMapPtr parameters) {
+  void setParameters(ParameterMap parameters) {
     parameters_ = std::move(parameters);
   }
 
@@ -161,9 +166,7 @@ class InferenceRequestInput : public Serializable {
     os << "\n";
     os << "  Datatype: " << my_class.data_type_.str() << "\n";
     os << "  Parameters:\n";
-    if (my_class.parameters_ != nullptr) {
-      os << *(my_class.parameters_.get()) << "\n";
-    }
+    os << my_class.parameters_ << "\n";
     os << "  Data: " << my_class.getData() << "\n";
     return os;
   }
@@ -172,12 +175,9 @@ class InferenceRequestInput : public Serializable {
   std::string name_;
   std::vector<uint64_t> shape_;
   DataType data_type_;
-  ParameterMapPtr parameters_;
+  ParameterMap parameters_;
   void *data_;
   std::vector<std::byte> shared_data_;
-
-  template <typename U>
-  friend class InferenceRequestInputBuilder;
 };
 
 /**
@@ -205,19 +205,18 @@ class InferenceRequestOutput {
    *
    * @param parameters pointer to parameters to assign
    */
-  void setParameters(ParameterMapPtr parameters) {
+  void setParameters(ParameterMap parameters) {
     parameters_ = std::move(parameters);
   }
   /// @brief Gets the output tensor's parameters
-  ParameterMap *getParameters() { return parameters_.get(); }
+  const ParameterMap &getParameters() const & { return parameters_; }
+  /// @brief Gets the output tensor's parameters
+  ParameterMap getParameters() && { return std::move(parameters_); }
 
  private:
   std::string name_;
-  ParameterMapPtr parameters_;
+  ParameterMap parameters_;
   void *data_;
-
-  template <typename U>
-  friend class InferenceRequestOutputBuilder;
 };
 
 /**
@@ -389,30 +388,32 @@ class InferenceRequest {
    */
   void setID(std::string_view id) { id_ = id; }
 
-  /// Get a pointer to the request's parameters
-  [[nodiscard]] ParameterMap *getParameters() const {
-    return this->parameters_.get();
+  /// Get the request's parameters
+  [[nodiscard]] const ParameterMap &getParameters() const & {
+    return parameters_;
+  }
+  /// Get the request's parameters
+  [[nodiscard]] ParameterMap getParameters() && {
+    return std::move(parameters_);
   }
   /**
    * @brief Sets the parameters for the request
    *
    * @param parameters pointer to the parameters
    */
-  void setParameters(ParameterMapPtr parameters) {
+  void setParameters(ParameterMap parameters) {
     parameters_ = std::move(parameters);
   }
 
  private:
   std::string id_;
-  ParameterMapPtr parameters_;
+  ParameterMap parameters_;
   std::vector<InferenceRequestInput> inputs_;
   std::vector<InferenceRequestOutput> outputs_;
   Callback callback_;
 
   // TODO(varunsh): do we need this still?
   friend class FakeInferenceRequest;
-  template <typename U>
-  friend class InferenceRequestBuilder;
 };
 using InferenceResponsePromisePtr =
   std::shared_ptr<std::promise<InferenceResponse>>;

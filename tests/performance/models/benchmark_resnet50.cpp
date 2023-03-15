@@ -189,7 +189,7 @@ void resnet50(benchmark::State& st, Args&&... args) {
 
   amdinfer::waitUntilServerReady(client.get());
 
-  auto endpoint = client->workerLoad(name, &parameters);
+  auto endpoint = client->workerLoad(name, parameters);
   assert(endpoint == name);
 
   std::vector<std::string> paths{image_location};

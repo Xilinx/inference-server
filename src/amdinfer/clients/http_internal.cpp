@@ -46,17 +46,17 @@
 
 namespace amdinfer {
 
-ParameterMapPtr mapJsonToParameters(Json::Value json) {
-  auto parameters = std::make_shared<ParameterMap>();
+ParameterMap mapJsonToParameters(Json::Value json) {
+  ParameterMap parameters;
   for (auto const &id : json.getMemberNames()) {
     if (json[id].isString()) {
-      parameters->put(id, json[id].asString());
+      parameters.put(id, json[id].asString());
     } else if (json[id].isBool()) {
-      parameters->put(id, json[id].asBool());
+      parameters.put(id, json[id].asBool());
     } else if (json[id].isUInt()) {
-      parameters->put(id, json[id].asInt());
+      parameters.put(id, json[id].asInt());
     } else if (json[id].isDouble()) {
-      parameters->put(id, json[id].asDouble());
+      parameters.put(id, json[id].asDouble());
     } else {
       throw invalid_argument("Unknown parameter type, skipping");
     }
@@ -74,10 +74,10 @@ struct Overloaded : Ts... {
 template <class... Ts>
 Overloaded(Ts...) -> Overloaded<Ts...>;
 
-Json::Value mapParametersToJson(ParameterMap *parameters) {
+Json::Value mapParametersToJson(const ParameterMap &parameters) {
   Json::Value json = Json::objectValue;
 
-  for (const auto &parameter : *parameters) {
+  for (const auto &parameter : parameters) {
     const auto &key = parameter.first;
     const auto &value = parameter.second;
     std::visit(Overloaded{[&](bool arg) { json[key] = arg; },
@@ -145,20 +145,16 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
 Json::Value mapRequestToJson(const InferenceRequest &request) {
   Json::Value json;
   json["id"] = request.getID();
-  auto *parameters = request.getParameters();
-  json["parameters"] =
-    parameters != nullptr ? mapParametersToJson(parameters) : Json::objectValue;
+  const auto &parameters = request.getParameters();
+  json["parameters"] = mapParametersToJson(parameters);
   json["inputs"] = Json::arrayValue;
   const auto &inputs = request.getInputs();
   for (const auto &input : inputs) {
     Json::Value json_input;
     json_input["name"] = input.getName();
     json_input["datatype"] = input.getDatatype().str();
+    json_input["parameters"] = mapParametersToJson(input.getParameters());
     json_input["shape"] = Json::arrayValue;
-    parameters = request.getParameters();
-    json_input["parameters"] = parameters != nullptr
-                                 ? mapParametersToJson(parameters)
-                                 : Json::objectValue;
     for (const auto &index : input.getShape()) {
       json_input["shape"].append(static_cast<Json::UInt64>(index));
     }

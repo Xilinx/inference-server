@@ -91,13 +91,11 @@ InferenceRequestInput::InferenceRequestInput(void *data,
   this->data_ = data;
   this->shape_ = std::move(shape);
   this->name_ = std::move(name);
-  this->parameters_ = std::make_unique<ParameterMap>();
 }
 
 InferenceRequestInput::InferenceRequestInput() : data_type_(DataType::Uint32) {
   this->data_ = nullptr;
   this->name_ = "";
-  this->parameters_ = std::make_unique<ParameterMap>();
 }
 
 void InferenceRequestInput::setName(std::string name) {
@@ -143,7 +141,7 @@ size_t InferenceRequestInput::serializeSize() const {
   size += name_.length();
   size += shape_.size() * sizeof(uint64_t);
   size += sizeof(uint8_t);
-  size += parameters_->serializeSize();
+  size += parameters_.serializeSize();
   if (!shared_data_.empty()) {
     size += shared_data_.size();
   } else {
@@ -156,7 +154,7 @@ void InferenceRequestInput::serialize(std::byte *data_out) const {
   InferenceRequestInputSizes metadata{name_.length(),
                                       shape_.size() * sizeof(uint64_t),
                                       sizeof(uint8_t),
-                                      parameters_->serializeSize(),
+                                      parameters_.serializeSize(),
                                       0,
                                       0};
   if (!shared_data_.empty()) {
@@ -169,7 +167,7 @@ void InferenceRequestInput::serialize(std::byte *data_out) const {
   data_out = copy(shape_.data(), data_out, metadata.shape);
   data_out =
     copy(static_cast<uint8_t>(data_type_), data_out, metadata.data_type);
-  parameters_->serialize(data_out);
+  parameters_.serialize(data_out);
   data_out += metadata.parameters;
   if (!shared_data_.empty()) {
     amdinfer::copy(shared_data_.data(), data_out, metadata.shared_data);
@@ -196,9 +194,8 @@ void InferenceRequestInput::deserialize(const std::byte *data_in) {
   data_in += metadata.data_type;
   data_type_ = static_cast<DataType::Value>(type);
 
-  parameters_ = std::make_shared<ParameterMap>();
-  parameters_->deserialize(data_in);
-  data_in += parameters_->serializeSize();
+  parameters_.deserialize(data_in);
+  data_in += parameters_.serializeSize();
 
   if (metadata.shared_data != 0) {
     shared_data_.resize(metadata.shared_data);
@@ -211,16 +208,13 @@ void InferenceRequestInput::deserialize(const std::byte *data_in) {
 InferenceRequestOutput::InferenceRequestOutput() {
   this->data_ = nullptr;
   this->name_ = "";
-  this->parameters_ = std::make_unique<ParameterMap>();
 }
 
 void InferenceRequestOutput::setName(const std::string &name) {
   this->name_ = name;
 }
 
-InferenceResponse::InferenceResponse() {
-  this->parameters_ = std::make_unique<ParameterMap>();
-}
+InferenceResponse::InferenceResponse() = default;
 
 InferenceResponse::InferenceResponse(const std::string &error_msg) {
   this->parameters_ = nullptr;

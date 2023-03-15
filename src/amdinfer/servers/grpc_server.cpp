@@ -487,7 +487,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto* model = request_.mutable_name();
   util::toLower(model);
   try {
-    state_->modelLoad(*model, parameters.get());
+    state_->modelLoad(*model, parameters);
   } catch (const runtime_error& e) {
     AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -516,7 +516,7 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   util::toLower(model);
 
   try {
-    auto endpoint = state_->workerLoad(*model, parameters.get());
+    auto endpoint = state_->workerLoad(*model, parameters);
     reply_.set_endpoint(endpoint);
     finish(::grpc::Status::OK);
   } catch (const runtime_error& e) {

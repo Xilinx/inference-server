@@ -44,7 +44,7 @@ void test(amdinfer::Client* client) {
 
   EXPECT_TRUE(client->modelList().empty());
 
-  client->modelLoad(model, nullptr);
+  client->modelLoad(model, {});
   EXPECT_TRUE(client->modelReady(model));
 
   auto img = cv::imread(path);

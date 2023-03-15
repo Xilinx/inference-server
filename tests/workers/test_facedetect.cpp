@@ -51,9 +51,8 @@ void dequeueValidate(FutureQueue& my_queue, int num_images) {
       auto size = output.getSize();
       EXPECT_STREQ(output.getName().c_str(), "");
       EXPECT_STREQ(output.getDatatype().str(), "FP32");
-      auto* parameters = output.getParameters();
-      ASSERT_NE(parameters, nullptr);
-      EXPECT_TRUE(parameters->empty());
+      const auto& parameters = output.getParameters();
+      EXPECT_TRUE(parameters.empty());
       auto num_boxes = 1;
       auto shape = output.getShape();
       EXPECT_EQ(shape.size(), 2);

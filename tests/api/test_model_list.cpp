@@ -29,7 +29,7 @@ void test(amdinfer::Client* client) {
   auto models_0 = client->modelList();
   EXPECT_TRUE(models_0.empty());
 
-  const auto endpoint = client->workerLoad(worker, nullptr);
+  const auto endpoint = client->workerLoad(worker, {});
   EXPECT_EQ(endpoint, worker);
   EXPECT_TRUE(client->modelReady(endpoint));
 
@@ -38,7 +38,7 @@ void test(amdinfer::Client* client) {
   EXPECT_EQ(models.at(0), endpoint);
 
   const std::string worker_2 = "invertimage";
-  const auto endpoint_2 = client->workerLoad(worker_2, nullptr);
+  const auto endpoint_2 = client->workerLoad(worker_2, {});
   EXPECT_EQ(endpoint_2, worker_2);
   EXPECT_TRUE(client->modelReady(endpoint_2));
 
