@@ -15,7 +15,7 @@
 
 include(GNUInstallDirs)
 
-set(workers Echo EchoMulti InvertImage InvertVideo)
+set(workers Echo EchoMulti InvertImage InvertVideo CPlusPlus)
 
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND workers Xmodel)
@@ -36,7 +36,7 @@ endif()
 function(amdinfer_get_worker_target target filename worker)
   # convert name to file name: separate by capital letters, add underscores and
   # lowercase
-  string(REGEX MATCHALL "[A-Z][a-z0-9]+" worker_list "${worker}")
+  string(REGEX MATCHALL "[A-Z][a-z0-9]*" worker_list "${worker}")
   string(REPLACE ";" "_" worker_list_str "${worker_list}")
   string(TOLOWER ${worker_list_str} file_name)
 

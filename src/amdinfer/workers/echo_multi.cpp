@@ -106,7 +106,7 @@ void EchoMulti::doAcquire([[maybe_unused]] ParameterMap* parameters) {
       {static_cast<uint64_t>(kInputLengths.at(i))});
   }
   for (auto i = 0; i < kOutputTensors; ++i) {
-    this->metadata_.addInputTensor(
+    this->metadata_.addOutputTensor(
       "input" + std::to_string(i), DataType::Uint32,
       {static_cast<uint64_t>(kOutputLengths.at(i))});
   }

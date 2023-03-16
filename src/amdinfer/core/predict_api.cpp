@@ -35,6 +35,8 @@ void InferenceRequest::setCallback(Callback &&callback) {
   callback_ = std::move(callback);
 }
 
+Callback InferenceRequest::getCallback() { return std::move(callback_); }
+
 void InferenceRequest::runCallbackOnce(const InferenceResponse &response) {
   if (this->callback_ != nullptr) {
     (this->callback_)(response);
@@ -162,15 +164,15 @@ void InferenceRequestInput::serialize(std::byte *data_out) const {
   } else {
     metadata.data = sizeof(data_);
   }
-  data_out = copy(metadata, data_out, sizeof(InferenceRequestInputSizes));
-  data_out = copy(name_.c_str(), data_out, metadata.name);
-  data_out = copy(shape_.data(), data_out, metadata.shape);
+  data_out = util::copy(metadata, data_out, sizeof(InferenceRequestInputSizes));
+  data_out = util::copy(name_.c_str(), data_out, metadata.name);
+  data_out = util::copy(shape_.data(), data_out, metadata.shape);
   data_out =
-    copy(static_cast<uint8_t>(data_type_), data_out, metadata.data_type);
+    util::copy(static_cast<uint8_t>(data_type_), data_out, metadata.data_type);
   parameters_.serialize(data_out);
   data_out += metadata.parameters;
   if (!shared_data_.empty()) {
-    amdinfer::copy(shared_data_.data(), data_out, metadata.shared_data);
+    util::copy(shared_data_.data(), data_out, metadata.shared_data);
   } else {
     std::memcpy(data_out, &data_, metadata.data);
   }
@@ -287,6 +289,11 @@ void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
   this->inputs_.emplace_back(name, datatype, new_shape);
 }
 
+void ModelMetadata::addInputTensor(const InferenceRequestInput &tensor) {
+  this->inputs_.emplace_back(tensor.getName(), tensor.getDatatype(),
+                             tensor.getShape());
+}
+
 void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
                                     std::initializer_list<uint64_t> shape) {
   this->outputs_.emplace_back(name, datatype, shape);
@@ -297,6 +304,11 @@ void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
   std::vector<uint64_t> new_shape;
   std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
   this->outputs_.emplace_back(name, datatype, new_shape);
+}
+
+void ModelMetadata::addOutputTensor(const InferenceRequestInput &tensor) {
+  this->outputs_.emplace_back(tensor.getName(), tensor.getDatatype(),
+                              tensor.getShape());
 }
 
 const std::string &ModelMetadata::getName() const { return this->name_; }

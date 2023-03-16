@@ -314,6 +314,11 @@ class InferenceRequest {
    */
   void setCallback(Callback &&callback);
   /**
+   * @brief Get the request's callback function used by the last worker to
+   * respond back to the client
+   */
+  Callback getCallback();
+  /**
    * @brief Runs the request's callback function.
    *
    * @param response the response data
@@ -480,6 +485,12 @@ class ModelMetadata final {
    */
   void addInputTensor(const std::string &name, DataType datatype,
                       std::vector<int> shape);
+  /**
+   * @brief Adds an input tensor to this model
+   *
+   * @param tensor
+   */
+  void addInputTensor(const InferenceRequestInput &tensor);
 
   /**
    * @brief Gets the input tensor' metadata for this model
@@ -506,6 +517,12 @@ class ModelMetadata final {
    */
   void addOutputTensor(const std::string &name, DataType datatype,
                        std::vector<int> shape);
+  /**
+   * @brief Adds an output tensor to this model
+   *
+   * @param tensor
+   */
+  void addOutputTensor(const InferenceRequestInput &tensor);
 
   /// @brief Gets the output tensors' metadata for this model
   [[nodiscard]] const std::vector<ModelMetadataTensor> &getOutputs() const;

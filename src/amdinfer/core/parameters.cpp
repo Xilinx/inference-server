@@ -113,30 +113,30 @@ size_t ParameterMap::serializeSize() const {
 void ParameterMap::serialize(std::byte *data_out) const {
   auto size = this->size();
   std::string foo;
-  data_out = copy(size, data_out, sizeof(size_t));
+  data_out = util::copy(size, data_out, sizeof(size_t));
   for (const auto &[key, value] : parameters_) {
-    data_out = copy(value.index(), data_out, sizeof(size_t));
-    data_out = copy(key.size(), data_out, sizeof(size_t));
+    data_out = util::copy(value.index(), data_out, sizeof(size_t));
+    data_out = util::copy(key.size(), data_out, sizeof(size_t));
     std::visit(
       [&](const auto &param) {
         using T = std::decay_t<decltype(param)>;
         if constexpr (std::is_same_v<T, std::string>) {
-          data_out = copy(param.size(), data_out, sizeof(size_t));
+          data_out = util::copy(param.size(), data_out, sizeof(size_t));
         } else {
-          data_out = copy(sizeof(param), data_out, sizeof(size_t));
+          data_out = util::copy(sizeof(param), data_out, sizeof(size_t));
         }
       },
       value);
   }
   for (const auto &[key, value] : parameters_) {
-    data_out = copy(key.c_str(), data_out, key.size());
+    data_out = util::copy(key.c_str(), data_out, key.size());
     std::visit(
       [&](const auto &param) {
         using T = std::decay_t<decltype(param)>;
         if constexpr (std::is_same_v<T, std::string>) {
-          data_out = copy(param.c_str(), data_out, param.size());
+          data_out = util::copy(param.c_str(), data_out, param.size());
         } else {
-          data_out = copy(param, data_out, sizeof(param));
+          data_out = util::copy(param, data_out, sizeof(param));
         }
       },
       value);

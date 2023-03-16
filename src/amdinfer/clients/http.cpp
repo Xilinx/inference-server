@@ -276,7 +276,9 @@ void HttpClient::workerUnload(const std::string& worker) const {
 auto createInferenceRequest(const std::string& model,
                             const InferenceRequest& request,
                             const StringMap& headers) {
-  assert(!request.getInputs().empty());
+  if (request.getInputs().empty()) {
+    throw invalid_argument("The request's inputs cannot be empty");
+  }
 
   auto json = mapRequestToJson(request);
   return createPostRequest(json, "/v2/models/" + model + "/infer", headers);
