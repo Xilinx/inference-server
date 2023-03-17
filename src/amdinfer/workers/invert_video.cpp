@@ -154,7 +154,10 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         output.setName("key");
         output.setDatatype(DataType::String);
         auto message = constructMessage(key, std::to_string(fps));
-        output.setData(message.data());
+        std::vector<std::byte> buffer;
+        buffer.resize(message.size());
+        memcpy(buffer.data(), message.data(), message.size());
+        output.setData(std::move(buffer));
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
@@ -180,7 +183,9 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
           output.setName("image");
           output.setDatatype(DataType::String);
           message = constructMessage(key, encoded);
-          output.setData(message.data());
+          buffer.resize(message.size());
+          memcpy(buffer.data(), message.data(), message.size());
+          output.setData(std::move(buffer));
           output.setShape({message.size()});
           resp.addOutput(output);
           req->runCallback(resp);

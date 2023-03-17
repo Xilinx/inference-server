@@ -24,7 +24,7 @@
 #include <vector>
 
 #include "amdinfer/core/data_types.hpp"
-#include "amdinfer/core/mixins.hpp"
+#include "amdinfer/core/inference_tensor.hpp"
 #include "amdinfer/core/parameters.hpp"
 #include "amdinfer/declarations.hpp"
 
@@ -33,7 +33,7 @@ namespace amdinfer {
 /**
  * @brief Holds an inference request's input data
  */
-class InferenceRequestInput : public Serializable {
+class InferenceRequestInput : public InferenceTensor {
  public:
   /// Constructs a new InferenceRequestInput object
   InferenceRequestInput();
@@ -49,62 +49,10 @@ class InferenceRequestInput : public Serializable {
   InferenceRequestInput(void *data, std::vector<uint64_t> shape,
                         DataType data_type, std::string name = "");
 
-  /// Sets the request's data
+  /// Set the request's data
   void setData(void *buffer);
-  /// Sets the request's shared data
-  void setData(std::vector<std::byte> &&buffer);
-  /// Checks if the stored data is shared
-  [[nodiscard]] bool sharedData() const;
-
-  /// Gets a pointer to the request's data
+  /// Get a pointer to the request's data
   [[nodiscard]] void *getData() const;
-
-  /// Gets the input tensor's name
-  [[nodiscard]] const std::string &getName() const { return this->name_; }
-  /// Sets the input tensor's name
-  void setName(std::string name);
-
-  /// Gets the input tensor's shape
-  [[nodiscard]] const std::vector<uint64_t> &getShape() const {
-    return this->shape_;
-  }
-  /// Sets the tensor's shape
-  void setShape(std::initializer_list<uint64_t> shape) { this->shape_ = shape; }
-  /// Sets the tensor's shape
-  void setShape(const std::vector<uint64_t> &shape) { this->shape_ = shape; }
-  /// Sets the tensor's shape
-  void setShape(const std::vector<int32_t> &shape) {
-    this->shape_.reserve(shape.size());
-    for (const auto &index : shape) {
-      this->shape_.push_back(index);
-    }
-  }
-
-  /// Gets the input tensor's datatype
-  [[nodiscard]] DataType getDatatype() const { return this->data_type_; }
-  /// Set the tensor's data type
-  void setDatatype(DataType type);
-
-  /// Gets the input tensor's parameters
-  [[nodiscard]] const ParameterMap &getParameters() const & {
-    return this->parameters_;
-  }
-
-  [[nodiscard]] ParameterMap getParameters() && {
-    return std::move(this->parameters_);
-  }
-
-  /**
-   * @brief Sets the input tensor's parameters
-   *
-   * @param parameters pointer to parameters to assign
-   */
-  void setParameters(ParameterMap parameters) {
-    parameters_ = std::move(parameters);
-  }
-
-  /// Get the tensor's size (number of elements)
-  [[nodiscard]] size_t getSize() const;
 
   /**
    * @brief Returns the size of the serialized data
@@ -117,40 +65,24 @@ class InferenceRequestInput : public Serializable {
    * be sufficient space to store the serialized object.
    *
    * @param data_out
+   * @return std::byte* updated address
    */
-  void serialize(std::byte *data_out) const override;
+  std::byte *serialize(std::byte *data_out) const override;
   /**
    * @brief Deserializes the data at the provided memory address to initialize
    * this object. If the memory cannot be deserialized, an exception is thrown.
    *
    * @param data_in a pointer to the serialized data for this object type
+   * @return std::byte* updated address
    */
-  void deserialize(const std::byte *data_in) override;
+  const std::byte *deserialize(const std::byte *data_in) override;
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
-                                  InferenceRequestInput const &my_class) {
-    os << "InferenceRequestInput:\n";
-    os << "  Name: " << my_class.name_ << "\n";
-    os << "  Shape: ";
-    for (const auto &index : my_class.shape_) {
-      os << index << ",";
-    }
-    os << "\n";
-    os << "  Datatype: " << my_class.data_type_.str() << "\n";
-    os << "  Parameters:\n";
-    os << my_class.parameters_ << "\n";
-    os << "  Data: " << my_class.getData() << "\n";
-    return os;
-  }
+                                  InferenceRequestInput const &my_class);
 
  private:
-  std::string name_;
-  std::vector<uint64_t> shape_;
-  DataType data_type_;
-  ParameterMap parameters_;
-  void *data_;
-  std::vector<std::byte> shared_data_;
+  void *data_ = nullptr;
 };
 
 /**

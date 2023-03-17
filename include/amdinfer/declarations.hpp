@@ -29,8 +29,6 @@ using RequestContainerPtr = std::unique_ptr<RequestContainer>;
 
 class InferenceRequest;
 class InferenceResponse;
-class InferenceRequestInput;
-using InferenceResponseOutput = InferenceRequestInput;
 using InferenceResponsePromisePtr =
   std::shared_ptr<std::promise<InferenceResponse>>;
 using Callback = std::function<void(const InferenceResponse &)>;
@@ -42,7 +40,7 @@ using BufferRawPtrs = std::vector<Buffer *>;
 
 using InferenceRequestPtr = std::shared_ptr<InferenceRequest>;
 
-using InferenceResponseFuture = std::future<amdinfer::InferenceResponse>;
+using InferenceResponseFuture = std::future<InferenceResponse>;
 
 using StringMap = std::unordered_map<std::string, std::string>;
 

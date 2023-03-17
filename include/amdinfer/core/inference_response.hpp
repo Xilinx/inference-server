@@ -20,11 +20,67 @@
 #ifndef GUARD_AMDINFER_CORE_INFERENCE_RESPONSE
 #define GUARD_AMDINFER_CORE_INFERENCE_RESPONSE
 
-#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/parameters.hpp"  // for ParameterMap
-#include "amdinfer/declarations.hpp"     // for InferenceResponseOutput
+#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/inference_tensor.hpp"  // for InferenceTensor
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
+#include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
 
 namespace amdinfer {
+
+/**
+ * @brief Holds an inference request's input data
+ */
+class InferenceResponseOutput : public InferenceTensor {
+ public:
+  /// Constructs a new InferenceResponseOutput object
+  InferenceResponseOutput();
+
+  // /**
+  //  * @brief Construct a new InferenceResponseOutput object
+  //  *
+  //  * @param data pointer to data
+  //  * @param shape shape of the data
+  //  * @param data_type type of the data
+  //  * @param name name to assign
+  //  */
+  // InferenceResponseOutput(void *data, std::vector<uint64_t> shape,
+  //                       DataType data_type, std::string name = "");
+
+  /// Set the request's data
+  void setData(std::vector<std::byte> &&buffer);
+  /// Get a pointer to the request's data
+  [[nodiscard]] void *getData() const;
+
+  /**
+   * @brief Returns the size of the serialized data
+   *
+   * @return size_t
+   */
+  [[nodiscard]] size_t serializeSize() const override;
+  /**
+   * @brief Serializes the object to the provided memory address. There should
+   * be sufficient space to store the serialized object.
+   *
+   * @param data_out
+   * @return std::byte* updated address
+   */
+  std::byte *serialize(std::byte *data_out) const override;
+  /**
+   * @brief Deserializes the data at the provided memory address to initialize
+   * this object. If the memory cannot be deserialized, an exception is thrown.
+   *
+   * @param data_in a pointer to the serialized data for this object type
+   * @return std::byte* updated address
+   */
+  const std::byte *deserialize(const std::byte *data_in) override;
+
+  /// Provides an implementation to print the class with std::cout to an ostream
+  friend std::ostream &operator<<(std::ostream &os,
+                                  InferenceResponseOutput const &my_class);
+
+ private:
+  std::vector<std::byte> data_;
+};
 
 /**
  * @brief Creates an inference response object based on KServe's V2 spec that

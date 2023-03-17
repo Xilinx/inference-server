@@ -20,6 +20,7 @@
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
 #include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
+#include "amdinfer/util/memory.hpp"
 
 namespace amdinfer {
 
@@ -71,6 +72,67 @@ std::ostream &operator<<(std::ostream &os, InferenceResponse const &self) {
     os << "    " << output << "\n";
   }
   os << "  Error Message: " << self.error_msg_ << "\n";
+  return os;
+}
+
+InferenceResponseOutput::InferenceResponseOutput()
+  : InferenceTensor("", {}, DataType::Unknown) {}
+
+void InferenceResponseOutput::setData(std::vector<std::byte> &&buffer) {
+  data_ = std::move(buffer);
+}
+
+void *InferenceResponseOutput::getData() const {
+  return (void *)data_.data();  // NOLINT(google-readability-casting)
+}
+
+struct InferenceResponseOutputSizes {
+  size_t data;
+};
+
+size_t InferenceResponseOutput::serializeSize() const {
+  auto size = InferenceTensor::serializeSize();
+  size += sizeof(InferenceResponseOutputSizes);
+  size += data_.size();
+  return size;
+}
+
+std::byte *InferenceResponseOutput::serialize(std::byte *data_out) const {
+  auto *data = data_out;
+  data = InferenceTensor::serialize(data);
+
+  InferenceResponseOutputSizes metadata{data_.size()};
+  data = util::copy(metadata, data, sizeof(InferenceResponseOutputSizes));
+  data = util::copy(data_.data(), data, metadata.data);
+  assert(data_out + this->serializeSize() == data);
+  return data;
+}
+
+const std::byte *InferenceResponseOutput::deserialize(
+  const std::byte *data_in) {
+  data_in = InferenceTensor::deserialize(data_in);
+
+  const auto metadata =
+    *reinterpret_cast<const InferenceResponseOutputSizes *>(data_in);
+  data_in += sizeof(InferenceResponseOutputSizes);
+
+  data_.resize(metadata.data);
+  return util::copy(data_in, data_.data(), metadata.data);
+}
+
+std::ostream &operator<<(std::ostream &os,
+                         InferenceResponseOutput const &self) {
+  os << "InferenceResponseOutput:\n";
+  os << "  Name: " << self.getName() << "\n";
+  os << "  Shape: ";
+  for (const auto &index : self.getShape()) {
+    os << index << ",";
+  }
+  os << "\n";
+  os << "  Datatype: " << self.getDatatype().str() << "\n";
+  os << "  Parameters:\n";
+  os << self.getParameters() << "\n";
+  os << "  Data: " << self.getData() << "\n";
   return os;
 }
 

@@ -509,7 +509,6 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
               output.setName(output_name);
             }
             output.setShape(lengths);
-            output.setData(results);
 
             // Copy migraphx results to a buffer and add to output
             std::vector<std::byte> buffer;

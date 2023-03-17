@@ -57,7 +57,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
   // need to use function pointer to disambiguate overloaded function
   // NOLINTNEXTLINE(readability-identifier-naming)
   auto setShape =
-    static_cast<void (InferenceRequestInput::*)(const std::vector<uint64_t> &)>(
+    static_cast<void (InferenceRequestInput::*)(std::vector<uint64_t>)>(
       &InferenceRequestInput::setShape);
 
   py::class_<InferenceRequestInput>(m, "InferenceRequestInput")
@@ -80,10 +80,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def(
       "setStringData",
       [](amdinfer::InferenceRequestInput &self, std::string &str) {
-        std::vector<std::byte> data;
-        data.resize(str.length());
-        memcpy(data.data(), str.data(), str.length());
-        self.setData(std::move(data));
+        self.setData(str.data());
       },
       KeepAliveAssign())
     .def("getUint8Data", &getData<uint8_t>, KeepAliveReturn())
@@ -105,8 +102,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
                   &InferenceRequestInput::setDatatype)
     .def_property("parameters", &InferenceRequestInput::getParameters,
                   &InferenceRequestInput::setParameters)
-    .def("getSize", &InferenceRequestInput::getSize,
-         DOCS(InferenceRequestInput, getSize))
+    .def("getSize", &InferenceRequestInput::getSize, DOCS(Tensor, getSize))
     .def("__repr__",
          [](const InferenceRequestInput &self) {
            return "InferenceRequestInput(" + std::to_string(self.getSize()) +

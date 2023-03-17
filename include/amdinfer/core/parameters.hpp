@@ -153,14 +153,14 @@ class ParameterMap : public Serializable {
    *
    * @param data_out
    */
-  void serialize(std::byte *data_out) const override;
+  std::byte *serialize(std::byte *data_out) const override;
   /**
    * @brief Deserializes the data at the provided memory address to initialize
    * this object. If the memory cannot be deserialized, an exception is thrown.
    *
    * @param data_in a pointer to the serialized data for this object type
    */
-  void deserialize(const std::byte *data_in) override;
+  const std::byte *deserialize(const std::byte *data_in) override;
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os, const ParameterMap &self) {

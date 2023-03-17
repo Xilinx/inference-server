@@ -73,6 +73,80 @@ void wrapInferenceResponse(py::module_ &m) {
     .def("__str__", &amdinfer::toString<InferenceResponse>);
 }
 
-void wrapInferenceResponses(py::module &m) { wrapInferenceResponse(m); }
+template <typename T>
+py::array_t<T> getData(const amdinfer::InferenceRequestInput &self) {
+  auto *data = static_cast<T *>(self.getData());
+  return py::array_t<T>(self.getSize(), data);
+
+  // return py::memoryview::from_memory(data->data(), self.getSize());
+}
+
+template <typename T>
+void setData(amdinfer::InferenceRequestInput &self, py::array_t<T> &b) {
+  // NOLINTNEXTLINE(google-readability-casting)
+  self.setData((void *)(b.data()));
+}
+
+void wrapInferenceResponseOutput(py::module_ &m) {
+  // need to use function pointer to disambiguate overloaded function
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  auto setShape =
+    static_cast<void (InferenceResponseOutput::*)(std::vector<uint64_t>)>(
+      &InferenceResponseOutput::setShape);
+
+  py::class_<InferenceResponseOutput>(m, "InferenceResponseOutput")
+    .def(py::init<>(), DOCS(InferenceResponseOutput))
+    .def("setUint8Data", &setData<uint8_t>, KeepAliveAssign())
+    .def("setUint16Data", &setData<uint16_t>, KeepAliveAssign())
+    .def("setUint32Data", &setData<uint32_t>, KeepAliveAssign())
+    .def("setUint64Data", &setData<uint64_t>, KeepAliveAssign())
+    .def("setInt8Data", &setData<int8_t>, KeepAliveAssign())
+    .def("setInt16Data", &setData<int16_t>, KeepAliveAssign())
+    .def("setInt32Data", &setData<int32_t>, KeepAliveAssign())
+    .def("setInt64Data", &setData<int64_t>, KeepAliveAssign())
+    .def("setFp16Data", &setData<amdinfer::fp16>, KeepAliveAssign())
+    .def("setFp32Data", &setData<float>, KeepAliveAssign())
+    .def("setFp64Data", &setData<double>, KeepAliveAssign())
+    .def(
+      "setStringData",
+      [](amdinfer::InferenceResponseOutput &self, std::string &str) {
+        std::vector<std::byte> data;
+        data.resize(str.length());
+        memcpy(data.data(), str.data(), str.length());
+        self.setData(std::move(data));
+      },
+      KeepAliveAssign())
+    .def("getUint8Data", &getData<uint8_t>, KeepAliveReturn())
+    .def("getUint16Data", &getData<uint16_t>, KeepAliveReturn())
+    .def("getUint32Data", &getData<uint32_t>, KeepAliveReturn())
+    .def("getUint64Data", &getData<uint64_t>, KeepAliveReturn())
+    .def("getInt8Data", &getData<int8_t>, KeepAliveReturn())
+    .def("getInt16Data", &getData<int16_t>, KeepAliveReturn())
+    .def("getInt32Data", &getData<int32_t>, KeepAliveReturn())
+    .def("getInt64Data", &getData<int64_t>, KeepAliveReturn())
+    .def("getFp16Data", &getData<amdinfer::fp16>, KeepAliveReturn())
+    .def("getFp32Data", &getData<float>, KeepAliveReturn())
+    .def("getFp64Data", &getData<double>, KeepAliveReturn())
+    .def("getStringData", &getData<char>, KeepAliveReturn())
+    .def_property("name", &InferenceResponseOutput::getName,
+                  &InferenceResponseOutput::setName)
+    .def_property("shape", &InferenceResponseOutput::getShape, setShape)
+    .def_property("datatype", &InferenceResponseOutput::getDatatype,
+                  &InferenceResponseOutput::setDatatype)
+    .def_property("parameters", &InferenceResponseOutput::getParameters,
+                  &InferenceResponseOutput::setParameters)
+    .def("getSize", &InferenceResponseOutput::getSize, DOCS(Tensor, getSize))
+    .def("__repr__",
+         [](const InferenceResponseOutput &self) {
+           return "InferenceResponseOutput(" + std::to_string(self.getSize()) +
+                  ")";
+         })
+    .def("__str__", &amdinfer::toString<InferenceResponseOutput>);
+}
+
+void wrapInferenceResponses(py::module &m) {
+  wrapInferenceResponseOutput(m);
+  wrapInferenceResponse(m);
+}
 
 }  // namespace amdinfer

@@ -110,37 +110,40 @@ size_t ParameterMap::serializeSize() const {
   return size;
 }
 
-void ParameterMap::serialize(std::byte *data_out) const {
+std::byte *ParameterMap::serialize(std::byte *data_out) const {
+  auto *data = data_out;
   auto size = this->size();
   std::string foo;
-  data_out = util::copy(size, data_out, sizeof(size_t));
+  data = util::copy(size, data, sizeof(size_t));
   for (const auto &[key, value] : parameters_) {
-    data_out = util::copy(value.index(), data_out, sizeof(size_t));
-    data_out = util::copy(key.size(), data_out, sizeof(size_t));
+    data = util::copy(value.index(), data, sizeof(size_t));
+    data = util::copy(key.size(), data, sizeof(size_t));
     std::visit(
       [&](const auto &param) {
         using T = std::decay_t<decltype(param)>;
         if constexpr (std::is_same_v<T, std::string>) {
-          data_out = util::copy(param.size(), data_out, sizeof(size_t));
+          data = util::copy(param.size(), data, sizeof(size_t));
         } else {
-          data_out = util::copy(sizeof(param), data_out, sizeof(size_t));
+          data = util::copy(sizeof(param), data, sizeof(size_t));
         }
       },
       value);
   }
   for (const auto &[key, value] : parameters_) {
-    data_out = util::copy(key.c_str(), data_out, key.size());
+    data = util::copy(key.c_str(), data, key.size());
     std::visit(
       [&](const auto &param) {
         using T = std::decay_t<decltype(param)>;
         if constexpr (std::is_same_v<T, std::string>) {
-          data_out = util::copy(param.c_str(), data_out, param.size());
+          data = util::copy(param.c_str(), data, param.size());
         } else {
-          data_out = util::copy(param, data_out, sizeof(param));
+          data = util::copy(param, data, sizeof(param));
         }
       },
       value);
   }
+  assert(data_out + this->serializeSize() == data);
+  return data;
 }
 
 /**
@@ -161,7 +164,7 @@ template <typename... Ts>
   return kTable.at(i)();
 }
 
-void ParameterMap::deserialize(const std::byte *data_in) {
+const std::byte *ParameterMap::deserialize(const std::byte *data_in) {
   parameters_.clear();
 
   auto size = std::to_integer<size_t>(*data_in);
@@ -199,6 +202,7 @@ void ParameterMap::deserialize(const std::byte *data_in) {
       param);
     parameters_.try_emplace(key, param);
   }
+  return data_in;
 }
 
 }  // namespace amdinfer

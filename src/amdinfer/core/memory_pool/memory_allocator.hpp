@@ -22,6 +22,7 @@
 
 #include <cstddef>  // for size_t
 
+#include "amdinfer/core/inference_request.hpp"
 #include "amdinfer/declarations.hpp"
 
 namespace amdinfer {

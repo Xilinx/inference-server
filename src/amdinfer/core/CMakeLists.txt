@@ -18,6 +18,8 @@ add_subdirectory(memory_pool)
 set(base_targets
     inference_request
     inference_response
+    inference_tensor
+    tensor
     model_metadata
     endpoints
     worker_info
@@ -39,6 +41,16 @@ target_include_directories(
 )
 target_link_libraries(model_repository INTERFACE efsw lib_config)
 add_dependencies(model_repository lib_config)
+
+target_link_libraries(inference_tensor INTERFACE $<TARGET_OBJECTS:tensor>)
+target_link_libraries(
+  inference_request INTERFACE inference_tensor
+                              $<TARGET_OBJECTS:inference_tensor>
+)
+target_link_libraries(
+  inference_response INTERFACE inference_tensor
+                               $<TARGET_OBJECTS:inference_tensor>
+)
 
 target_link_libraries(shared_state INTERFACE Jsoncpp_lib)
 

@@ -24,15 +24,17 @@ class Serializable {
    * be sufficient space to store the serialized object.
    *
    * @param data_out
+   * @return std::byte* the updated address
    */
-  virtual void serialize(std::byte* data_out) const = 0;
+  virtual std::byte* serialize(std::byte* data_out) const = 0;
   /**
    * @brief Deserializes the data at the provided memory address to initialize
    * this object. If the memory cannot be deserialized, an exception is thrown.
    *
    * @param data_in a pointer to the serialized data for this object type
+   * @return std::byte* the updated address
    */
-  virtual void deserialize(const std::byte* data_in) = 0;
+  virtual const std::byte* deserialize(const std::byte* data_in) = 0;
 };
 
 }  // namespace amdinfer

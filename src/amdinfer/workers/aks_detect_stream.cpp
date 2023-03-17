@@ -196,7 +196,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         std::string metadata = "[" + std::to_string(video_width) + "," +
                                std::to_string(video_height) + "]";
         auto message = constructMessage(key, std::to_string(fps), metadata);
-        output.setData(message.data());
+        std::vector<std::byte> buffer;
+        buffer.resize(message.size());
+        memcpy(buffer.data(), message.data(), message.size());
+        output.setData(std::move(buffer));
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
@@ -290,7 +293,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
               output.setName("image");
               output.setDatatype(DataType::String);
               auto message = constructMessage(key, frames.front(), labels[j]);
-              output.setData(message.data());
+              std::vector<std::byte> buffer;
+              buffer.resize(message.size());
+              memcpy(buffer.data(), message.data(), message.size());
+              output.setData(std::move(buffer));
               output.setShape({message.size()});
               resp.addOutput(output);
               req->runCallback(resp);
@@ -339,7 +345,9 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             output.setName("image");
             output.setDatatype(DataType::String);
             auto message = constructMessage(key, frames.front(), labels[j]);
-            output.setData(message.data());
+            buffer.resize(message.size());
+            memcpy(buffer.data(), message.data(), message.size());
+            output.setData(std::move(buffer));
             output.setShape({message.size()});
             resp.addOutput(output);
             req->runCallback(resp);
