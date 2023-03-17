@@ -16,10 +16,9 @@
 if(${AMDINFER_ENABLE_GRPC})
 
   list(APPEND tests grpc_internal)
-  list(
-    APPEND
-      tests_libs
-      "grpc_internal~lib_grpc~predict_api~data_types~parameters~observation"
+  list(APPEND tests_libs
+              "grpc_internal~lib_grpc~data_types~parameters~observation~\
+        inference_request~inference_response~model_metadata"
   )
   amdinfer_add_unit_tests("${tests}" "${tests_libs}")
 

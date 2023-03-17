@@ -27,6 +27,9 @@
 #include <unordered_map>  // for unordered_map
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"
 
 namespace py = pybind11;
 

@@ -26,8 +26,9 @@
 #include <vector>      // for vector
 
 #include "amdinfer/core/endpoints.hpp"         // for Endpoints
+#include "amdinfer/core/model_metadata.hpp"    // for ModelMetadata
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
-#include "amdinfer/core/predict_api.hpp"       // for ModelMetadata, ServerM...
+#include "amdinfer/core/server_metadata.hpp"   // for ServerMetadata
 #include "amdinfer/declarations.hpp"           // for Kernels
 
 namespace amdinfer {

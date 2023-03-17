@@ -17,24 +17,27 @@
  * @brief
  */
 
-#include <tuple>
+#ifndef GUARD_AMDINFER_CORE_SERVER_METADATA
+#define GUARD_AMDINFER_CORE_SERVER_METADATA
 
-#include "amdinfer/buffers/buffer.hpp"  // for BufferPtr
-#include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/inference_request.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
+#include <string>
+#include <unordered_set>
 
 namespace amdinfer {
 
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitPool, Basic) {
-  MemoryPool pool;
-  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
-
-  auto buffer = pool.get({MemoryAllocators::Cpu}, input, 1);
-
-  pool.put(std::move(buffer));
-}
+struct ServerMetadata {
+  /// Name of the server
+  std::string name;
+  /// Version of the server
+  std::string version;
+  /**
+   * @brief The extensions supported by the server. The KServe specification
+   * allows servers to support custom extensions and return them with a
+   * metadata request.
+   */
+  std::unordered_set<std::string> extensions;
+};
 
 }  // namespace amdinfer
+
+#endif  // GUARD_AMDINFER_CORE_SERVER_METADATA

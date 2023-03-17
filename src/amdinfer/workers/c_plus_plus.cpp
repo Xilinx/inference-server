@@ -31,11 +31,12 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "amdinfer/batching/hard.hpp"        // for HardBatcher
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint32
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infer...
+#include "amdinfer/batching/hard.hpp"    // for HardBatcher
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"  // for DataType, DataType::Uint32
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest, Infe...
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/metrics.hpp"  // for Metrics
@@ -249,7 +250,6 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
       MetricCounterIDs::PipelineIngressWorker);
 #endif
 
-    auto* run_ptr = getFunction(handle_, "run");
     auto new_batch = std::make_unique<Batch>();
     if (!(input_tensors_.empty() || output_tensors_.empty())) {
       std::vector<BufferPtr> input_buffers;
@@ -271,12 +271,14 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
         new_batch->addRequest(new_request);
       }
       new_batch->setBuffers(std::move(input_buffers), {});
+
+      auto* run_ptr = getFunction(handle_, "run");
       auto* runModel =
         reinterpret_cast<void (*)(amdinfer::Batch*, amdinfer::Batch*)>(run_ptr);
 
       runModel(batch.get(), new_batch.get());
     } else {
-      // unsupported for now
+      // TODO(varunsh): support this use case
       throw invalid_argument(
         "Cannot run a model with an unknown tensor shapes");
     }

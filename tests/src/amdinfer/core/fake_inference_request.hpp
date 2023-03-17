@@ -18,14 +18,14 @@
  * @brief Defines the fake predict API InferenceRequest
  */
 
-#ifndef GUARD_AMDINFER_CORE_FAKE_PREDICT_API
-#define GUARD_AMDINFER_CORE_FAKE_PREDICT_API
+#ifndef GUARD_SRC_AMDINFER_CORE_FAKE_INFERENCE_REQUEST
+#define GUARD_SRC_AMDINFER_CORE_FAKE_INFERENCE_REQUEST
 
 #include <cstddef>  // for size_t
 #include <vector>   // for vector
 
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest, Infere...
-#include "amdinfer/declarations.hpp"      // for BufferRawPtrs
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
+#include "amdinfer/declarations.hpp"            // for BufferRawPtrs
 
 namespace amdinfer {
 
@@ -46,4 +46,4 @@ class FakeInferenceRequest : public InferenceRequest {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_CORE_FAKE_PREDICT_API
+#endif  // GUARD_SRC_AMDINFER_CORE_FAKE_INFERENCE_REQUEST

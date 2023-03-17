@@ -18,15 +18,15 @@
  * @brief Implements the fake predict api InferenceRequest
  */
 
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/fake_inference_request.hpp"  // for FakeInferenceRequest
 
 #include <cstddef>  // for size_t
 #include <memory>   // for make_unique
 #include <string>   // for string
 #include <vector>   // for vector
 
-#include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "amdinfer/declarations.hpp"           // for BufferRawPtrs
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequestInput
+#include "amdinfer/declarations.hpp"            // for BufferRawPtrs
 
 namespace amdinfer {
 

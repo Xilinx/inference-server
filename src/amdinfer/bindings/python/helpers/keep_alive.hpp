@@ -17,24 +17,21 @@
  * @brief
  */
 
-#include <tuple>
+#ifndef GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_KEEP_ALIVE
+#define GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_KEEP_ALIVE
 
-#include "amdinfer/buffers/buffer.hpp"  // for BufferPtr
-#include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/inference_request.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
+#include <pybind11/pybind11.h>
 
 namespace amdinfer {
 
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitPool, Basic) {
-  MemoryPool pool;
-  InferenceRequestInput input{nullptr, {1}, DataType::Int32};
+// https://pybind11.readthedocs.io/en/stable/advanced/functions.html#keep-alive
+constexpr auto kKeepAliveReturn = 0;
+constexpr auto kKeepAliveSelf = 1;
+constexpr auto kKeepAliveArg0 = 2;
 
-  auto buffer = pool.get({MemoryAllocators::Cpu}, input, 1);
-
-  pool.put(std::move(buffer));
-}
+using KeepAliveReturn = pybind11::keep_alive<kKeepAliveReturn, kKeepAliveSelf>;
+using KeepAliveAssign = pybind11::keep_alive<kKeepAliveSelf, kKeepAliveArg0>;
 
 }  // namespace amdinfer
+
+#endif  // GUARD_AMDINFER_BINDINGS_PYTHON_HELPERS_KEEP_ALIVE

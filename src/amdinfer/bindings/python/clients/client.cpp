@@ -24,6 +24,9 @@
 #include <pybind11/pybind11.h>  // for module_, sequence, class_, pybind11
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+
 namespace py = pybind11;
 
 namespace amdinfer {

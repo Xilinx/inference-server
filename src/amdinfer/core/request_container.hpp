@@ -19,10 +19,11 @@
  * responses
  */
 
-#ifndef GUARD_AMDINFER_CORE_PREDICT_API_INTERNAL
-#define GUARD_AMDINFER_CORE_PREDICT_API_INTERNAL
+#ifndef GUARD_AMDINFER_CORE_REQUEST_CONTAINER_INTERNAL
+#define GUARD_AMDINFER_CORE_REQUEST_CONTAINER_INTERNAL
 
-#include "amdinfer/core/predict_api.hpp"  // IWYU pragma: export
+#include "amdinfer/build_options.hpp"
+#include "amdinfer/declarations.hpp"
 
 namespace amdinfer {
 
@@ -38,4 +39,4 @@ struct RequestContainer {
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_CORE_PREDICT_API_INTERNAL
+#endif  // GUARD_AMDINFER_CORE_REQUEST_CONTAINER_INTERNAL

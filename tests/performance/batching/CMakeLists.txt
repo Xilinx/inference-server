@@ -18,8 +18,8 @@ list(APPEND tests soft)
 list(
   APPEND tests_libs
          "fake_observation~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~\
-      predict_api~parameters~data_types\~batching~buffers~memory_pool\
-      ~data_types_internal"
+            parameters~inference_request~inference_response~data_types~\
+            batching~buffers~memory_pool~data_types_internal"
 )
 
 amdinfer_add_benchmarks("${tests}" "${tests_libs}")

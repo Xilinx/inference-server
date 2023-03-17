@@ -20,9 +20,9 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::Uint8
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
-#include "gtest/gtest.h"                  // for Message, TestPartResult, Test
+#include "amdinfer/core/data_types.hpp"         // for DataType, DataType::Uint8
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequestInput
+#include "gtest/gtest.h"  // for Message, TestPartResult, Test
 
 namespace amdinfer {
 

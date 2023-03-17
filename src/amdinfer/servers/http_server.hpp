@@ -26,8 +26,8 @@
 #include <string>      // for allocator, string
 
 #include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_HTTP, PROT...
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBuilder
-#include "amdinfer/observation/logging.hpp"        // for LoggerPtr
+#include "amdinfer/core/request_container.hpp"  // for InferenceRequestBuilder
+#include "amdinfer/observation/logging.hpp"     // for LoggerPtr
 
 #ifdef AMDINFER_ENABLE_HTTP
 #include <drogon/HttpController.h>  // for ADD_METHOD_TO, HttpContro...

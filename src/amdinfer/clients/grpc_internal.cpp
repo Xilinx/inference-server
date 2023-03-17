@@ -31,13 +31,16 @@
 #include <variant>  // for visit
 #include <vector>   // for vector, _Bit_reference
 
-#include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LO...
-#include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMap
-#include "amdinfer/declarations.hpp"               // for InferenceResponseOu...
-#include "amdinfer/observation/observer.hpp"       // for kNumTraceData
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "predict_api.pb.h"                        // for ModelInferResponse_...
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LO...
+#include "amdinfer/core/data_types.hpp"          // for DataType, mapTypeToStr
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/model_metadata.hpp"      // for ModelMetadata
+#include "amdinfer/core/request_container.hpp"   // for ParameterMap
+#include "amdinfer/declarations.hpp"             // for InferenceResponseOu...
+#include "amdinfer/observation/observer.hpp"     // for kNumTraceData
+#include "amdinfer/util/traits.hpp"              // IWYU pragma: keep
+#include "inference.pb.h"                        // for ModelInferResponse_...
 
 namespace amdinfer {
 

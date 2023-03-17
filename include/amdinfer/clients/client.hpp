@@ -25,8 +25,9 @@
 #include <string>   // for string
 #include <vector>   // for vector
 
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
-#include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
+#include "amdinfer/core/model_metadata.hpp"   // for ModelMetadata
+#include "amdinfer/core/server_metadata.hpp"  // for ServerMetadata
+#include "amdinfer/declarations.hpp"          // for InferenceResponseFuture
 
 namespace amdinfer {
 

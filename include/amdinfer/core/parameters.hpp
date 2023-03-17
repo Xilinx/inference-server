@@ -185,4 +185,47 @@ using ParameterMapPtr = std::shared_ptr<ParameterMap>;
 
 }  // namespace amdinfer
 
+namespace std {
+template <>
+/**
+ * @brief Overload the "less than" operator so we can compare two
+ * RequestParameter objects. We need this functionality to store objects of
+ * this class in a map. Note, since hashing is not implemented, these objects
+ * cannot be stored in an unordered_map.
+ *
+ */
+struct less<amdinfer::ParameterMap> {
+  /**
+   * @brief Implementation of the comparison of two RequestParameter objects.
+   * We compare the size and then check each key is present and finally, compare
+   * the key values. The types supported in ParameterMap all support
+   * direct comparison with the "less than" operator already.
+   *
+   * @param lhs the RequestParameter object on the left-hand-side
+   * @param rhs the RequestParameter object on the right-hand-side
+   * @return bool
+   */
+  bool operator()(const amdinfer::ParameterMap &lhs,
+                  const amdinfer::ParameterMap &rhs) const {
+    auto lhs_size = lhs.size();
+    auto rhs_size = rhs.size();
+    auto lhs_map = lhs.data();
+    auto rhs_map = rhs.data();
+    if (lhs_size == rhs_size) {
+      for (const auto &[key, lhs_value] : lhs_map) {
+        if (rhs_map.find(key) == rhs_map.end()) {
+          return true;
+        }
+        const auto &rhs_value = rhs_map.at(key);
+        if (lhs_value != rhs_value) {
+          return lhs_value < rhs_value;
+        }
+      }
+      return false;
+    }
+    return lhs_size < rhs_size;
+  }
+};
+}  // namespace std
+
 #endif  // GUARD_AMDINFER_CORE_PARAMETERS

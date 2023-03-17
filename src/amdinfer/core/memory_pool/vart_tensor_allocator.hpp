@@ -31,8 +31,8 @@
 #include <vector>
 #include <xir/tensor/tensor.hpp>  // for Tensor
 
+#include "amdinfer/core/data_types.hpp"
 #include "amdinfer/core/memory_pool/memory_allocator.hpp"
-#include "amdinfer/core/predict_api.hpp"
 
 namespace amdinfer {
 

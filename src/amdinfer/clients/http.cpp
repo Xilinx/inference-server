@@ -33,8 +33,10 @@
 #include <utility>        // for tuple_element<>::type
 #include <vector>
 
-#include "amdinfer/clients/http_internal.hpp"  // for mapParametersToJson
-#include "amdinfer/core/exceptions.hpp"        // for bad_status
+#include "amdinfer/clients/http_internal.hpp"    // for mapParametersToJson
+#include "amdinfer/core/exceptions.hpp"          // for bad_status
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
 namespace amdinfer {
 

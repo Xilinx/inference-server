@@ -25,7 +25,7 @@
 
 #include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/core/inference_request.hpp"
 
 namespace amdinfer {
 

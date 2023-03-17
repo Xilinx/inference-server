@@ -41,11 +41,12 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"     // for BatchPtr, Batch, BatchP...
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint32
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/batching/batcher.hpp"  // for BatchPtr, Batch, BatchP...
+#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::Uint32
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricSummaryIDs

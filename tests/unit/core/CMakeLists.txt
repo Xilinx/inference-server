@@ -17,6 +17,8 @@ add_subdirectory(memory_pool)
 
 list(APPEND tests inference_request_input parameter_map)
 
-list(APPEND tests_libs "predict_api~parameters" "parameters")
+list(APPEND tests_libs "inference_request~parameters~inference_response"
+            "parameters"
+)
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

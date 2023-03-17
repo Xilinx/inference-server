@@ -29,12 +29,13 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/buffers/cpu.hpp"      // for CpuBuffer
-#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_METRICS
-#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
+#include "amdinfer/buffers/cpu.hpp"             // for CpuBuffer
+#include "amdinfer/build_options.hpp"           // for AMDINFER_ENABLE_METRICS
+#include "amdinfer/core/exceptions.hpp"         // for invalid_argument
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
 #include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/core/parameters.hpp"            // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/parameters.hpp"         // for ParameterMap
+#include "amdinfer/core/request_container.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/worker_info.hpp"
 #include "amdinfer/declarations.hpp"         // for RequestContainerPtr
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_DEBUG

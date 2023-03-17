@@ -28,11 +28,12 @@
 #include <thread>                 // for thread
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/batcher.hpp"     // for Batch, BatchPtrQueue
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::String
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/batching/batcher.hpp"  // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr

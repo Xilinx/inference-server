@@ -30,7 +30,8 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "amdinfer/core/predict_api.hpp"               // IWYU pragma: keep
+#include "amdinfer/core/inference_request.hpp"
+#include "amdinfer/core/inference_response.hpp"
 #include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Postpr...
 
 // InferenceResponseOutput needs the full definition, not a forward declare

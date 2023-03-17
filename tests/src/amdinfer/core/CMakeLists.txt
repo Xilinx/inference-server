@@ -15,7 +15,7 @@
 
 list(
   APPEND targets
-         predict_api
+         fake_inference_request
          worker_info_buffers_infinite
          worker_info_buffers_finite
          # data_types

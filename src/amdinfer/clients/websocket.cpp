@@ -35,8 +35,10 @@
 #include <chrono>   // for milliseconds
 #include <thread>   // for sleep_for
 
-#include "amdinfer/clients/http.hpp"           // for HttpClient
-#include "amdinfer/clients/http_internal.hpp"  // for mapRequestToJson
+#include "amdinfer/clients/http.hpp"             // for HttpClient
+#include "amdinfer/clients/http_internal.hpp"    // for mapRequestToJson
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
 namespace amdinfer {
 

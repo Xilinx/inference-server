@@ -49,8 +49,9 @@
 #include "amdinfer/core/data_types.hpp"           // for DataType
 #include "amdinfer/core/data_types_internal.hpp"  // for mapXirToType
 #include "amdinfer/core/exceptions.hpp"           // for invalid_argument
+#include "amdinfer/core/inference_request.hpp"    // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"   // for InferenceResponse
 #include "amdinfer/core/parameters.hpp"           // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"          // for InferenceResponse
 #include "amdinfer/declarations.hpp"              // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"      // for Loggers, Metrics...
 #include "amdinfer/util/containers.hpp"           // for containerProduct

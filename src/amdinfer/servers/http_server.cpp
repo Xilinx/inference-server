@@ -32,13 +32,15 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "amdinfer/buffers/buffer.hpp"         // for BufferPtr
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/clients/http_internal.hpp"  // for propagate, errorHtt...
-#include "amdinfer/core/exceptions.hpp"        // for runtime_error, inva...
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMap
-#include "amdinfer/core/shared_state.hpp"          // for SharedState
+#include "amdinfer/buffers/buffer.hpp"            // for BufferPtr
+#include "amdinfer/build_options.hpp"             // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/clients/http_internal.hpp"     // for propagate, errorHtt...
+#include "amdinfer/core/exceptions.hpp"           // for runtime_error, inva...
+#include "amdinfer/core/inference_request.hpp"    // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"   // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"           // for ParameterMap
+#include "amdinfer/core/request_container.hpp"    // for ParameterMap
+#include "amdinfer/core/shared_state.hpp"         // for SharedState
 #include "amdinfer/observation/logging.hpp"       // for Logger, AMDINFER_LOG...
 #include "amdinfer/observation/metrics.hpp"       // for Metrics, MetricCoun...
 #include "amdinfer/observation/tracing.hpp"       // for startTrace, Trace

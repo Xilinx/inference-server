@@ -25,10 +25,10 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/buffers/buffer.hpp"             // IWYU pragma: keep
-#include "amdinfer/core/memory_pool/pool.hpp"      // for MemoryPool
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
+#include "amdinfer/buffers/buffer.hpp"          // IWYU pragma: keep
+#include "amdinfer/core/memory_pool/pool.hpp"   // for MemoryPool
+#include "amdinfer/core/request_container.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
 #include "amdinfer/observation/logging.hpp"  // for Logger, Loggers, Logger...
 
 namespace amdinfer {

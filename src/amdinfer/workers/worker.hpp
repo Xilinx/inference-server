@@ -32,7 +32,7 @@
 #include "amdinfer/buffers/buffer.hpp"
 #include "amdinfer/build_options.hpp"
 #include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/core/model_metadata.hpp"
 #include "amdinfer/observation/logging.hpp"
 
 namespace amdinfer {

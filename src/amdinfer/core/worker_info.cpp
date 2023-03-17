@@ -33,9 +33,9 @@
 
 #include "amdinfer/batching/batcher.hpp"  // for Batcher, BatcherStatus, Bat...
 #include "amdinfer/core/exceptions.hpp"   // for invalid_argument, external_...
-#include "amdinfer/core/memory_pool/pool.hpp"      // for MemoryPool
-#include "amdinfer/core/parameters.hpp"            // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for ModelMetadata
+#include "amdinfer/core/memory_pool/pool.hpp"   // for MemoryPool
+#include "amdinfer/core/parameters.hpp"         // for ParameterMap
+#include "amdinfer/core/request_container.hpp"  // for ModelMetadata
 #include "amdinfer/workers/worker.hpp"  // for Worker, WorkerStatus, Worke...
 
 namespace amdinfer {

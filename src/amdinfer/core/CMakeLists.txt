@@ -16,7 +16,9 @@
 add_subdirectory(memory_pool)
 
 set(base_targets
-    predict_api
+    inference_request
+    inference_response
+    model_metadata
     endpoints
     worker_info
     data_types
@@ -46,7 +48,7 @@ if(${AMDINFER_ENABLE_VITIS})
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})
-  amdinfer_add_protobuf_target(lib_grpc predict_api.proto ON)
+  amdinfer_add_protobuf_target(lib_grpc inference.proto ON)
 endif()
 
 add_library(core INTERFACE)

@@ -18,8 +18,9 @@
  */
 
 #include "amdinfer/batching/batch.hpp"
+#include "amdinfer/core/inference_request.hpp"
+#include "amdinfer/core/inference_response.hpp"
 #include "amdinfer/core/parameters.hpp"
-#include "amdinfer/core/predict_api.hpp"
 #include "amdinfer/observation/logging.hpp"
 #include "amdinfer/observation/metrics.hpp"
 #include "amdinfer/observation/tracing.hpp"
@@ -63,36 +64,19 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
     const auto& new_inputs = new_request->getInputs();
     for (auto i = 0U; i < inputs_size; ++i) {
       auto* input_buffer = inputs[i].getData();
-      // std::byte* output_buffer = outputs[i].getData();
-      // auto* input_buffer = dynamic_cast<VectorBuffer*>(input_ptr);
-      // auto* output_buffer = dynamic_cast<VectorBuffer*>(output_ptr);
 
       uint32_t value = *static_cast<uint32_t*>(input_buffer);
 
-      // this is my operation: add one to the read argument. While this can't
-      // raise an exception, if exceptions can happen, they should be handled
       try {
         value++;
       } catch (const std::exception& e) {
         AMDINFER_LOG_ERROR(logger, e.what());
-        req->runCallbackError("Something went wrong");
+        new_request->runCallbackError("Something went wrong");
         continue;
       }
 
-      // amdinfer::InferenceRequestInput new_input;
-      // new_input.setDatatype(amdinfer::DataType::Uint32);
-      // new_input.setName(inputs[i].getName());
-      // new_input.setShape({1});
-      // new_input.setParameters(inputs[i].getParameters());
-
       amdinfer::util::copy(value,
                            static_cast<std::byte*>(new_inputs.at(i).getData()));
-
-      // std::vector<std::byte> buffer;
-      // buffer.resize(sizeof(uint32_t));
-      // memcpy(buffer.data(), &value, sizeof(uint32_t));
-      // output.setData(std::move(buffer));
-      // resp.addOutput(output);
     }
 
 #ifdef AMDINFER_ENABLE_TRACING

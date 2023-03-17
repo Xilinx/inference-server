@@ -27,7 +27,7 @@
 #include "amdinfer/buffers/vart_tensor.hpp"
 #include "amdinfer/core/data_types_internal.hpp"
 #include "amdinfer/core/exceptions.hpp"
-#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/core/inference_request.hpp"
 
 namespace amdinfer {
 

@@ -36,13 +36,16 @@
 #include <utility>      // for move
 #include <variant>      // for visit
 
-#include "amdinfer/buffers/buffer.hpp"             // for Buffer
-#include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "amdinfer/core/exceptions.hpp"            // invalid_argument
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
-#include "amdinfer/observation/logging.hpp"        // for Logger
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "half/half.hpp"                           // for half
+#include "amdinfer/buffers/buffer.hpp"           // for Buffer
+#include "amdinfer/core/data_types.hpp"          // for DataType, mapTypeToStr
+#include "amdinfer/core/exceptions.hpp"          // invalid_argument
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/model_metadata.hpp"      // for ModelMetadata
+#include "amdinfer/core/request_container.hpp"   // for InferenceRequestOutput
+#include "amdinfer/observation/logging.hpp"      // for Logger
+#include "amdinfer/util/traits.hpp"              // IWYU pragma: keep
+#include "half/half.hpp"                         // for half
 
 namespace amdinfer {
 

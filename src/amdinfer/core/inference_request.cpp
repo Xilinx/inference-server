@@ -1,5 +1,4 @@
-// Copyright 2021 Xilinx, Inc.
-// Copyright 2022 Advanced Micro Devices, Inc.
+// Copyright 2023 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,19 +14,14 @@
 
 /**
  * @file
- * @brief Implements the objects used to hold incoming inference requests
+ * @brief
  */
 
-#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/core/inference_request.hpp"
 
-#include <algorithm>  // for copy
-#include <cstring>    // for memcpy
-#include <iterator>   // for back_insert_iterator, back_inse...
-#include <utility>    // for pair, make_pair, move
-
-#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/util/containers.hpp"  // for containerProduct
-#include "amdinfer/util/memory.hpp"      // for copy
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/util/containers.hpp"          // for containerProduct
+#include "amdinfer/util/memory.hpp"              // for copy
 
 namespace amdinfer {
 
@@ -214,120 +208,6 @@ InferenceRequestOutput::InferenceRequestOutput() {
 
 void InferenceRequestOutput::setName(const std::string &name) {
   this->name_ = name;
-}
-
-InferenceResponse::InferenceResponse() = default;
-
-InferenceResponse::InferenceResponse(const std::string &error_msg) {
-  this->parameters_ = nullptr;
-  this->error_msg_ = error_msg;
-}
-
-void InferenceResponse::setID(const std::string &id) { this->id_ = id; }
-
-void InferenceResponse::setModel(const std::string &model) {
-  this->model_ = model;
-}
-
-std::string InferenceResponse::getModel() { return this->model_; }
-
-bool InferenceResponse::isError() const { return !this->error_msg_.empty(); }
-
-std::string InferenceResponse::getError() const { return this->error_msg_; }
-
-void InferenceResponse::addOutput(const InferenceResponseOutput &output) {
-  this->outputs_.push_back(output);
-}
-
-std::vector<InferenceResponseOutput> InferenceResponse::getOutputs() const {
-  return this->outputs_;
-}
-
-#ifdef AMDINFER_ENABLE_TRACING
-void InferenceResponse::setContext(StringMap &&context) {
-  this->context_ = std::move(context);
-}
-
-const StringMap &InferenceResponse::getContext() const {
-  return this->context_;
-}
-#endif
-
-ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
-                                         DataType datatype,
-                                         std::vector<uint64_t> shape)
-  : datatype_(datatype) {
-  this->name_ = name;
-  this->shape_ = std::move(shape);
-}
-
-const std::string &ModelMetadataTensor::getName() const { return this->name_; }
-
-const DataType &ModelMetadataTensor::getDataType() const {
-  return this->datatype_;
-}
-const std::vector<uint64_t> &ModelMetadataTensor::getShape() const {
-  return this->shape_;
-}
-
-ModelMetadata::ModelMetadata(const std::string &name,
-                             const std::string &platform) {
-  this->name_ = name;
-  this->platform_ = platform;
-  this->ready_ = false;
-}
-
-void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
-                                   std::initializer_list<uint64_t> shape) {
-  this->inputs_.emplace_back(name, datatype, shape);
-}
-
-void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
-                                   std::vector<int> shape) {
-  std::vector<uint64_t> new_shape;
-  std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
-  this->inputs_.emplace_back(name, datatype, new_shape);
-}
-
-void ModelMetadata::addInputTensor(const InferenceRequestInput &tensor) {
-  this->inputs_.emplace_back(tensor.getName(), tensor.getDatatype(),
-                             tensor.getShape());
-}
-
-void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
-                                    std::initializer_list<uint64_t> shape) {
-  this->outputs_.emplace_back(name, datatype, shape);
-}
-
-void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
-                                    std::vector<int> shape) {
-  std::vector<uint64_t> new_shape;
-  std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
-  this->outputs_.emplace_back(name, datatype, new_shape);
-}
-
-void ModelMetadata::addOutputTensor(const InferenceRequestInput &tensor) {
-  this->outputs_.emplace_back(tensor.getName(), tensor.getDatatype(),
-                              tensor.getShape());
-}
-
-const std::string &ModelMetadata::getName() const { return this->name_; }
-void ModelMetadata::setName(const std::string &name) { this->name_ = name; }
-
-void ModelMetadata::setReady(bool ready) { this->ready_ = ready; }
-
-bool ModelMetadata::isReady() const { return this->ready_; }
-
-const std::string &ModelMetadata::getPlatform() const {
-  return this->platform_;
-}
-
-const std::vector<ModelMetadataTensor> &ModelMetadata::getInputs() const {
-  return this->inputs_;
-}
-
-const std::vector<ModelMetadataTensor> &ModelMetadata::getOutputs() const {
-  return this->outputs_;
 }
 
 }  // namespace amdinfer
