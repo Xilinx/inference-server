@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::workers::toDataType(migraphx_shape_datatype_t)
-   :project: amdinfer

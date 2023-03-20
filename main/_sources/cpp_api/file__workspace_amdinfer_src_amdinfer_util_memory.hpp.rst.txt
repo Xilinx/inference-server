@@ -9,7 +9,6 @@ File memory.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines helper functions associated with managing memory. 
 
 
@@ -47,9 +46,19 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_request.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_response.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_tensor.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_parameters.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
 
 
 
@@ -60,10 +69,12 @@ Namespaces
 
 - :ref:`namespace_amdinfer`
 
+- :ref:`namespace_amdinfer__util`
+
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_memory_8hpp_1a884a4d99e70f8bcffb6037ef76a92535`
+- :ref:`exhale_function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c`
 

@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::createGetRequest(const std::string&, const StringMap&)
-   :project: amdinfer

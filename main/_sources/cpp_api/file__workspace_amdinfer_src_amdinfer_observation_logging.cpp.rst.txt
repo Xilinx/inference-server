@@ -9,7 +9,6 @@ File logging.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements logging. 
 
 
@@ -45,7 +44,7 @@ Includes
 
 - ``iterator``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``spdlog/sinks/basic_file_sink.h``
 
@@ -55,7 +54,7 @@ Includes
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 

@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: kMaxGrpcMessageSize
-   :project: amdinfer

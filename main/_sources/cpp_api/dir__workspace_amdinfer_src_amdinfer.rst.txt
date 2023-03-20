@@ -9,7 +9,6 @@ Directory amdinfer
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/src/amdinfer``
 
 Subdirectories
@@ -19,6 +18,7 @@ Subdirectories
 - :ref:`dir__workspace_amdinfer_src_amdinfer_buffers`
 - :ref:`dir__workspace_amdinfer_src_amdinfer_clients`
 - :ref:`dir__workspace_amdinfer_src_amdinfer_core`
+- :ref:`dir__workspace_amdinfer_src_amdinfer_models`
 - :ref:`dir__workspace_amdinfer_src_amdinfer_observation`
 - :ref:`dir__workspace_amdinfer_src_amdinfer_pre_post`
 - :ref:`dir__workspace_amdinfer_src_amdinfer_servers`

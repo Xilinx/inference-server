@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: amdinfer::workers::kImageChannels
-   :project: amdinfer

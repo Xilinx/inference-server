@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::mapParametersToProto(const std::map<std::string, amdinfer::Parameter, std::less<>>&, google::protobuf::Map<std::string, inference::InferParameter> *)
-   :project: amdinfer

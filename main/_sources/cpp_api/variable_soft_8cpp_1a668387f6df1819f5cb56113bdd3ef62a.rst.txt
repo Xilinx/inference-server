@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: kDefaultTimeout
-   :project: amdinfer

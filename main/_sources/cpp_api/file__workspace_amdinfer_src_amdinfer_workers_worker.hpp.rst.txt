@@ -9,7 +9,6 @@ File worker.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the Worker class. 
 
 
@@ -41,13 +40,15 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
 
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
 - ``limits``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -55,7 +56,7 @@ Includes
 
 - ``utility``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -70,6 +71,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 

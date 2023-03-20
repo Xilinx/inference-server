@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::getTensorContents(Tensor *)
-   :project: amdinfer

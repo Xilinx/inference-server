@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::waitUntilServerReady(const Client *)
-   :project: amdinfer

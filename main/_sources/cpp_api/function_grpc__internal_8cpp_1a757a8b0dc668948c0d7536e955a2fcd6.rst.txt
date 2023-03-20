@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::mapResponseToProto(InferenceResponse, inference::ModelInferResponse&)
-   :project: amdinfer

@@ -25,6 +25,8 @@ Classes
 
 - :ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetectStream`
 
+- :ref:`exhale_class_classamdinfer_1_1workers_1_1CPlusPlus`
+
 - :ref:`exhale_class_classamdinfer_1_1workers_1_1Echo`
 
 - :ref:`exhale_class_classamdinfer_1_1workers_1_1EchoMulti`
@@ -61,6 +63,8 @@ Functions
 
 - :ref:`exhale_function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59`
 
+- :ref:`exhale_function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830`
+
 - :ref:`exhale_function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899`
 
 
@@ -78,7 +82,7 @@ Variables
 
 - :ref:`exhale_variable_aks__detect_8cpp_1a42d9aa2fce61d9debb309bcea9830853`
 
-- :ref:`exhale_variable_aks__detect_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6`
+- :ref:`exhale_variable_resnet50__stream_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6`
 
 - :ref:`exhale_variable_aks__detect_8cpp_1aef4b7872e7395e2c7fdf950685bc2c94`
 

@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::autoExpandEnvironmentVariables(std::string&)
-   :project: amdinfer

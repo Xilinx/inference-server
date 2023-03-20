@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -110,23 +108,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -183,7 +189,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -307,12 +350,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -323,6 +368,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -334,8 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#metrics">Metrics</a></li>
@@ -404,10 +449,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="python">
-<h1>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h1>
+<h1>Python<a class="headerlink" href="#python" title="Permalink to this heading">¶</a></h1>
 <p>The Python library for the AMD Inference Server allows you to communicate with the server using Python.</p>
 <section id="install-the-python-library">
-<h2>Install the Python library<a class="headerlink" href="#install-the-python-library" title="Permalink to this headline">¶</a></h2>
+<h2>Install the Python library<a class="headerlink" href="#install-the-python-library" title="Permalink to this heading">¶</a></h2>
 <p>The Python library is built and installed in the development container as part of the regular CMake build.
 To install it outside Docker or in different containers, you can use <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>amdinfer
@@ -419,7 +464,7 @@ To install it outside Docker or in different containers, you can use <code class
 If you are using the latest server from <code class="docutils literal notranslate"><span class="pre">main</span></code>, you may need to install the Python library with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--pre</span> <span class="pre">amdinfer</span></code> to install a pre-release package, if it exists.</p>
 </div>
 <section id="build-wheels">
-<h3>Build wheels<a class="headerlink" href="#build-wheels" title="Permalink to this headline">¶</a></h3>
+<h3>Build wheels<a class="headerlink" href="#build-wheels" title="Permalink to this heading">¶</a></h3>
 <p>You can build wheels for the Python library to make a precompiled package that can be installed in any Linux host, container or environment.
 It is recommended to perform the following steps on a fresh clone of the inference server repository.
 These instructions assume you’re only building wheels for x86_64 Linux with CPython.</p>
@@ -456,7 +501,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 </section>
 </section>
 <section id="module-amdinfer">
-<span id="api"></span><h2>API<a class="headerlink" href="#module-amdinfer" title="Permalink to this headline">¶</a></h2>
+<span id="api"></span><h2>API<a class="headerlink" href="#module-amdinfer" title="Permalink to this heading">¶</a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="amdinfer.BadStatus">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">BadStatus</span></span><a class="headerlink" href="#amdinfer.BadStatus" title="Permalink to this definition">¶</a></dt>
@@ -735,7 +780,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -755,7 +800,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -766,7 +811,7 @@ is for.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -774,8 +819,9 @@ is for.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.modelLoad">
-<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a model with the given name and load-time parameters. This
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.GrpcClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.GrpcClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; None</p>
+<p>Loads a model with the given name and load-time parameters. This
 method assumes that a directory with this model name already exists in
 the model repository directory for the server containing the model and
 its metadata in the right format.</p>
@@ -796,7 +842,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -811,7 +857,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -833,7 +879,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -844,7 +890,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -855,7 +901,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -863,8 +909,9 @@ in functionality to workerUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.GrpcClient.workerLoad">
-<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.GrpcClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.GrpcClient.workerLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; str</p>
+<p>Loads a worker with the given name and load-time parameters.</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
 </dd>
@@ -872,7 +919,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -916,7 +963,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -936,7 +983,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -947,7 +994,7 @@ is for.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -955,8 +1002,9 @@ is for.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.modelLoad">
-<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a model with the given name and load-time parameters. This
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.HttpClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.HttpClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; None</p>
+<p>Loads a model with the given name and load-time parameters. This
 method assumes that a directory with this model name already exists in
 the model repository directory for the server containing the model and
 its metadata in the right format.</p>
@@ -977,7 +1025,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -992,7 +1040,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1014,7 +1062,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -1025,7 +1073,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -1036,7 +1084,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1044,8 +1092,9 @@ in functionality to workerUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.HttpClient.workerLoad">
-<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.HttpClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.HttpClient.workerLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; str</p>
+<p>Loads a worker with the given name and load-time parameters.</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
 </dd>
@@ -1053,7 +1102,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -1077,19 +1126,19 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a request from an image or list of images</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>images</strong> (<em>image</em>) – Images may be numpy arrays or filepaths or a list of these</p></li>
 <li><p><strong>asTensor</strong> (<em>bool</em><em>, </em><em>optional</em>) – Send data as a tensor or as base64-encoded string. Defaults to True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>TypeError</strong> – Raised if an unknown image format is passed</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Request object</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest">InferenceRequest</a></p>
 </dd>
 </dl>
@@ -1169,16 +1218,30 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: amdinfer._amdinfer.InferenceRequestInput) -&gt; None</p></li>
 </ol>
-<p>Holds an inference request’s input data</p>
+<p>Constructs a new InferenceRequestInput object</p>
 <ol class="arabic simple" start="2">
-<li><p>__init__(self: amdinfer._amdinfer.InferenceRequestInput, data: capsule, shape: List[int], dataType: amdinfer._amdinfer.DataType, name: str = ‘’) -&gt; None</p></li>
+<li><p>__init__(self: amdinfer._amdinfer.InferenceRequestInput, tensor: amdinfer._amdinfer.InferenceTensor) -&gt; None</p></li>
 </ol>
+<p>Constructs a new InferenceRequestInput object</p>
+<ol class="arabic simple" start="3">
+<li><p>__init__(self: amdinfer._amdinfer.InferenceRequestInput, tensor: amdinfer._amdinfer.Tensor) -&gt; None</p></li>
+</ol>
+<p>Constructs a new InferenceRequestInput object</p>
+<ol class="arabic simple" start="4">
+<li><p>__init__(self: amdinfer._amdinfer.InferenceRequestInput, data: capsule, shape: List[int], data_type: amdinfer._amdinfer.DataType, data: str = ‘’) -&gt; None</p></li>
+</ol>
+<p>Construct a new InferenceRequestInput object</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">data</span></code>:</dt><dd><p>pointer to data</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">shape</span></code>:</dt><dd><p>shape of the data</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">data_type</span></code>:</dt><dd><p>type of the data</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name to assign</p>
+</dd>
+</dl>
 </dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.datatype">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datatype</span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.datatype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.getFp16Data">
@@ -1216,12 +1279,6 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.getSize">
-<span class="sig-name descname"><span class="pre">getSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.getSize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the tensor’s size (number of elements)</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.getStringData">
 <span class="sig-name descname"><span class="pre">getStringData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.getStringData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1244,16 +1301,6 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.getUint8Data">
 <span class="sig-name descname"><span class="pre">getUint8Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.getUint8Data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.parameters">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1293,7 +1340,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.setStringData">
-<span class="sig-name descname"><span class="pre">setStringData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.setStringData" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">setStringData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.setStringData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1314,11 +1361,6 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.setUint8Data">
 <span class="sig-name descname"><span class="pre">setUint8Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.setUint8Data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1368,7 +1410,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.addOutput">
-<span class="sig-name descname"><span class="pre">addOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.addOutput" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">addOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.addOutput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds an output tensor to the response</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">output</span></code>:</dt><dd><p>an output tensor</p>
@@ -1389,13 +1431,13 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.getOutputs">
-<span class="sig-name descname"><span class="pre">getOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getOutputs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getOutputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a vector of the requested output information</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.getParameters">
-<span class="sig-name descname"><span class="pre">getParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getParameters" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getParameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a pointer to the parameters associated with this response</p>
 </dd></dl>
 
@@ -1422,6 +1464,187 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">InferenceResponseOutput</span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds an inference request’s input data</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.datatype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datatype</span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.datatype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getFp16Data">
+<span class="sig-name descname"><span class="pre">getFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray[half_float::half]</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getFp16Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getFp32Data">
+<span class="sig-name descname"><span class="pre">getFp32Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getFp32Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getFp64Data">
+<span class="sig-name descname"><span class="pre">getFp64Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getFp64Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getInt16Data">
+<span class="sig-name descname"><span class="pre">getInt16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int16</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getInt16Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getInt32Data">
+<span class="sig-name descname"><span class="pre">getInt32Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getInt32Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getInt64Data">
+<span class="sig-name descname"><span class="pre">getInt64Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int64</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getInt64Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getInt8Data">
+<span class="sig-name descname"><span class="pre">getInt8Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getInt8Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getSize">
+<span class="sig-name descname"><span class="pre">getSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tensor’s size (number of elements)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getStringData">
+<span class="sig-name descname"><span class="pre">getStringData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getStringData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getUint16Data">
+<span class="sig-name descname"><span class="pre">getUint16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint16</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getUint16Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getUint32Data">
+<span class="sig-name descname"><span class="pre">getUint32Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getUint32Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getUint64Data">
+<span class="sig-name descname"><span class="pre">getUint64Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint64</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getUint64Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getUint8Data">
+<span class="sig-name descname"><span class="pre">getUint8Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getUint8Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setFp16Data">
+<span class="sig-name descname"><span class="pre">setFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">amdinfer.InferenceResponseOutput,</span> <span class="pre">arg0:</span> <span class="pre">numpy.ndarray[half_float::half]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setFp16Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setFp32Data">
+<span class="sig-name descname"><span class="pre">setFp32Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setFp32Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setFp64Data">
+<span class="sig-name descname"><span class="pre">setFp64Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setFp64Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setInt16Data">
+<span class="sig-name descname"><span class="pre">setInt16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int16</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setInt16Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setInt32Data">
+<span class="sig-name descname"><span class="pre">setInt32Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int32</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setInt32Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setInt64Data">
+<span class="sig-name descname"><span class="pre">setInt64Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int64</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setInt64Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setInt8Data">
+<span class="sig-name descname"><span class="pre">setInt8Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int8</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setInt8Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setStringData">
+<span class="sig-name descname"><span class="pre">setStringData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setStringData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setUint16Data">
+<span class="sig-name descname"><span class="pre">setUint16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint16</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setUint16Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setUint32Data">
+<span class="sig-name descname"><span class="pre">setUint32Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint32</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setUint32Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setUint64Data">
+<span class="sig-name descname"><span class="pre">setUint64Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint64</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setUint64Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setUint8Data">
+<span class="sig-name descname"><span class="pre">setUint8Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setUint8Data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="amdinfer.InferenceTensor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">InferenceTensor</span></span><a class="headerlink" href="#amdinfer.InferenceTensor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.InferenceTensor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.InferenceTensor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: amdinfer._amdinfer.InferenceTensor, name: str, shape: List[int], dataType: amdinfer._amdinfer.DataType) -&gt; None</p></li>
+</ol>
+<p>Construct a new InferenceTensor object</p>
+<ol class="arabic simple" start="2">
+<li><p>__init__(self: amdinfer._amdinfer.InferenceTensor, tensor: amdinfer._amdinfer.Tensor) -&gt; None</p></li>
+</ol>
+<p>Construct a new InferenceTensor object</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.InferenceTensor.parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#amdinfer.InferenceTensor.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py exception">
 <dt class="sig sig-object py" id="amdinfer.InvalidArgumentError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">InvalidArgumentError</span></span><a class="headerlink" href="#amdinfer.InvalidArgumentError" title="Permalink to this definition">¶</a></dt>
@@ -1444,28 +1667,28 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.addInputTensor">
-<span class="sig-name descname"><span class="pre">addInputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.addInputTensor" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">addInputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.addInputTensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds an input tensor to this model</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the tensor</p>
 </dd>
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">datatype</span></code>:</dt><dd><p>datatype of the tensor</p>
-</dd>
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">shape</span></code>:</dt><dd><p>shape of the tensor</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">datatype</span></code>:</dt><dd><p>datatype of the tensor</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.ModelMetadata.addOutputTensor">
-<span class="sig-name descname"><span class="pre">addOutputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.addOutputTensor" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">addOutputTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.addOutputTensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds an output tensor to this model</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the tensor</p>
 </dd>
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">datatype</span></code>:</dt><dd><p>datatype of the tensor</p>
-</dd>
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">shape</span></code>:</dt><dd><p>shape of the tensor</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">datatype</span></code>:</dt><dd><p>datatype of the tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1495,48 +1718,11 @@ in functionality to modelUnload and is provided for symmetry.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">ModelMetadataTensor</span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a new Model Metadata Tensor object</p>
-<dl class="simple">
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">name</span></code>:</dt><dd><p>name of the tensor</p>
-</dd>
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">datatype</span></code>:</dt><dd><p>the datatype this tensor accepts</p>
-</dd>
-<dt>Parameter <code class="docutils literal notranslate"><span class="pre">shape</span></code>:</dt><dd><p>the expected shape of the data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.getDataType">
-<span class="sig-name descname"><span class="pre">getDataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.getDataType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the datatype that this tensor accepts</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.getName">
-<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.getName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the name of the tensor</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.ModelMetadataTensor.getShape">
-<span class="sig-name descname"><span class="pre">getShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadataTensor" title="amdinfer.ModelMetadataTensor"><span class="pre">amdinfer.ModelMetadataTensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.ModelMetadataTensor.getShape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the expected shape of the data</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="amdinfer.NativeClient">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">NativeClient</span></span><a class="headerlink" href="#amdinfer.NativeClient" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1551,7 +1737,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -1571,7 +1757,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -1582,7 +1768,7 @@ is for.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -1590,8 +1776,9 @@ is for.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.modelLoad">
-<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a model with the given name and load-time parameters. This
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.NativeClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.NativeClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; None</p>
+<p>Loads a model with the given name and load-time parameters. This
 method assumes that a directory with this model name already exists in
 the model repository directory for the server containing the model and
 its metadata in the right format.</p>
@@ -1612,7 +1799,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -1627,7 +1814,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1649,7 +1836,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -1660,7 +1847,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -1671,7 +1858,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1679,8 +1866,9 @@ in functionality to workerUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.NativeClient.workerLoad">
-<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.NativeClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.NativeClient.workerLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; str</p>
+<p>Loads a worker with the given name and load-time parameters.</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
 </dd>
@@ -1688,7 +1876,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -1708,25 +1896,24 @@ in functionality to modelUnload and is provided for symmetry.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">RequestParameters</span></span><a class="headerlink" href="#amdinfer.RequestParameters" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">ParameterMap</span></span><a class="headerlink" href="#amdinfer.ParameterMap" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Holds any parameters from JSON (defined by KServe spec as one of bool,
-number or string). We further restrict numbers to be doubles or int32.</p>
-</dd></dl>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.empty">
-<span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.empty" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.empty">
+<span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the parameters are empty</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.erase">
-<span class="sig-name descname"><span class="pre">erase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.erase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes a parameter</p>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.erase">
+<span class="sig-name descname"><span class="pre">erase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.erase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a parameter, if it exists. No error is raised if it doesn’t
+exist</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>name of the parameter to remove</p>
 </dd>
@@ -1734,10 +1921,9 @@ number or string). We further restrict numbers to be doubles or int32.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.getBool">
-<span class="sig-name descname"><span class="pre">getBool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getBool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
-if a bad type is used.</p>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.getBool">
+<span class="sig-name descname"><span class="pre">getBool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.getBool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the named parameter</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
 </dd>
@@ -1745,17 +1931,16 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>T*</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>T</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.getFloat">
-<span class="sig-name descname"><span class="pre">getFloat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getFloat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
-if a bad type is used.</p>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.getFloat">
+<span class="sig-name descname"><span class="pre">getFloat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.getFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the named parameter</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
 </dd>
@@ -1763,17 +1948,16 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>T*</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>T</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.getInt">
-<span class="sig-name descname"><span class="pre">getInt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getInt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
-if a bad type is used.</p>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.getInt">
+<span class="sig-name descname"><span class="pre">getInt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.getInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the named parameter</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
 </dd>
@@ -1781,17 +1965,16 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>T*</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>T</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.getString">
-<span class="sig-name descname"><span class="pre">getString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.getString" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or
-if a bad type is used.</p>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.getString">
+<span class="sig-name descname"><span class="pre">getString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.getString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the named parameter</p>
 <dl class="simple">
 <dt>Template parameter <code class="docutils literal notranslate"><span class="pre">T</span></code>:</dt><dd><p>type of parameter. Must be (bool|double|int32_t|std::string)</p>
 </dd>
@@ -1799,33 +1982,33 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>T*</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>T</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.has">
-<span class="sig-name descname"><span class="pre">has</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.has" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.has">
+<span class="sig-name descname"><span class="pre">has</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.has" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a particular parameter exists</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">key</span></code>:</dt><dd><p>name of the parameter to check</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.put">
-<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.RequestParameters.put" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.ParameterMap.put" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
-<li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: bool) -&gt; None</p></li>
+<li><p>put(self: amdinfer._amdinfer.ParameterMap, arg0: str, arg1: bool) -&gt; None</p></li>
 </ol>
 <p>Puts in a key-value pair</p>
 <dl class="simple">
@@ -1835,7 +2018,7 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <ol class="arabic simple" start="2">
-<li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: float) -&gt; None</p></li>
+<li><p>put(self: amdinfer._amdinfer.ParameterMap, arg0: str, arg1: float) -&gt; None</p></li>
 </ol>
 <p>Puts in a key-value pair</p>
 <dl class="simple">
@@ -1845,7 +2028,7 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <ol class="arabic simple" start="3">
-<li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: int) -&gt; None</p></li>
+<li><p>put(self: amdinfer._amdinfer.ParameterMap, arg0: str, arg1: int) -&gt; None</p></li>
 </ol>
 <p>Puts in a key-value pair</p>
 <dl class="simple">
@@ -1855,7 +2038,7 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <ol class="arabic simple" start="4">
-<li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: str) -&gt; None</p></li>
+<li><p>put(self: amdinfer._amdinfer.ParameterMap, arg0: str, arg1: str) -&gt; None</p></li>
 </ol>
 <p>Puts in a key-value pair</p>
 <dl class="simple">
@@ -1865,7 +2048,7 @@ if a bad type is used.</p>
 </dd>
 </dl>
 <ol class="arabic simple" start="5">
-<li><p>put(self: amdinfer._amdinfer.RequestParameters, arg0: str, arg1: str) -&gt; None</p></li>
+<li><p>put(self: amdinfer._amdinfer.ParameterMap, arg0: str, arg1: str) -&gt; None</p></li>
 </ol>
 <p>Puts in a key-value pair</p>
 <dl class="simple">
@@ -1877,8 +2060,8 @@ if a bad type is used.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.RequestParameters.size">
-<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.RequestParameters.size" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="amdinfer.ParameterMap.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ParameterMap" title="amdinfer.ParameterMap"><span class="pre">amdinfer.ParameterMap</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.ParameterMap.size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the number of parameters</p>
 </dd></dl>
 
@@ -1900,8 +2083,10 @@ if a bad type is used.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.enableRepositoryMonitoring">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enableRepositoryMonitoring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_polling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.enableRepositoryMonitoring" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn on active monitoring of the model repository path for new files</p>
+<span class="sig-name descname"><span class="pre">enableRepositoryMonitoring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_polling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.enableRepositoryMonitoring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on active monitoring of the model repository path for new files.
+A model repository must be set with setModelRepository() before
+calling this method.</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_polling</span></code>:</dt><dd><p>set to true to use polling to check the directory for new files,
 false to use events. Note that events may not work well on all
@@ -1912,10 +2097,12 @@ platforms.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.Server.setModelRepository">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setModelRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">os.PathLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.setModelRepository" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">setModelRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Server" title="amdinfer.Server"><span class="pre">amdinfer.Server</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">os.PathLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_existing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Server.setModelRepository" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the path to the model repository associated with this server</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">path</span></code>:</dt><dd><p>path to the model repository</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">load_existing</span></code>:</dt><dd><p>load all existing models found at the path</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1985,6 +2172,38 @@ metadata request.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="amdinfer.Tensor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">Tensor</span></span><a class="headerlink" href="#amdinfer.Tensor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.Tensor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Tensor" title="amdinfer.Tensor"><span class="pre">amdinfer.Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.DataType" title="amdinfer.DataType"><span class="pre">amdinfer.DataType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.Tensor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe a tensor with a name, shape and datatype</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.Tensor.datatype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datatype</span></span><a class="headerlink" href="#amdinfer.Tensor.datatype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.Tensor.getSize">
+<span class="sig-name descname"><span class="pre">getSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.Tensor" title="amdinfer.Tensor"><span class="pre">amdinfer.Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#amdinfer.Tensor.getSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tensor’s size (number of elements)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.Tensor.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#amdinfer.Tensor.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="amdinfer.Tensor.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#amdinfer.Tensor.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">WebSocketClient</span></span><a class="headerlink" href="#amdinfer.WebSocketClient" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
@@ -2017,7 +2236,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -2037,7 +2256,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -2063,7 +2282,7 @@ side using the IDs of the responses.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -2071,8 +2290,9 @@ side using the IDs of the responses.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.modelLoad">
-<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a model with the given name and load-time parameters. This
+<span class="sig-name descname"><span class="pre">modelLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.WebSocketClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.WebSocketClient.modelLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; None</p>
+<p>Loads a model with the given name and load-time parameters. This
 method assumes that a directory with this model name already exists in
 the model repository directory for the server containing the model and
 its metadata in the right format.</p>
@@ -2093,7 +2313,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -2108,7 +2328,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -2122,7 +2342,7 @@ modelInferWs request. The user should know beforehand how many
 messages are expected and should call this method the same number of
 times.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::string a JSON object encoded as a string</p>
 </dd>
 </dl>
@@ -2144,7 +2364,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -2155,7 +2375,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -2166,7 +2386,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -2174,8 +2394,9 @@ in functionality to workerUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.WebSocketClient.workerLoad">
-<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.RequestParameters" title="amdinfer.RequestParameters"><span class="pre">amdinfer.RequestParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.workerLoad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a worker with the given name and load-time parameters.</p>
+<span class="sig-name descname"><span class="pre">workerLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">amdinfer.WebSocketClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters:</span> <span class="pre">amdinfer.ParameterMap</span> <span class="pre">=</span> <span class="pre">ParameterMap(0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.WebSocketClient.workerLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>) -&gt; str</p>
+<p>Loads a worker with the given name and load-time parameters.</p>
 <dl class="simple">
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">worker</span></code>:</dt><dd><p>name of the worker to load</p>
 </dd>
@@ -2183,7 +2404,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -2214,7 +2435,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="amdinfer.inference_request_to_dict">
-<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">inference_request_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.inference_request_to_dict" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">inference_request_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">InferenceRequest</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.inference_request_to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2222,7 +2443,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">parallel_infer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.parallel_infer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make an inference to the server in parallel with n processes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>amdinfer.client</em>) – Client to make the inference with</p></li>
 <li><p><strong>model</strong> (<em>str</em>) – Name of the model/worker to make the inference</p></li>
@@ -2230,10 +2451,10 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <li><p><strong>processes</strong> (<em>int</em>) – number of processes to use</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Responses for each request</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[<a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse">amdinfer.InferenceResponse</a>]</p>
 </dd>
 </dl>
@@ -2247,6 +2468,11 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="amdinfer.start_http_client_server">
 <span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">start_http_client_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.start_http_client_server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="amdinfer.stringToArray">
+<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">stringToArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.stringToArray" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2284,7 +2510,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

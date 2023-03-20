@@ -9,7 +9,6 @@ File main.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Parses the command-line arguments and implements the entrypoint for the amdinfer-server executable. 
 
 
@@ -39,8 +38,6 @@ Includes
 
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
-- ``amdinfer/servers/http_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`)
-
 - ``amdinfer/servers/server.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_servers_server.hpp`)
 
 - ``csignal``
@@ -66,5 +63,12 @@ Functions
 
 - :ref:`exhale_function_main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97`
 
-- :ref:`exhale_function_main_8cpp_1a7a9794689e7aab6ea77930fe77d7475f`
+- :ref:`exhale_function_main_8cpp_1ac6ad5461171288abe55dfb76ea2b9118`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_main_8cpp_1a17ace24a7aa554efe78b7d28fc83e129`
 

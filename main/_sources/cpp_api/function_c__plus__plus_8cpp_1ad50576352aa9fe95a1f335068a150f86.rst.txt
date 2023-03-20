@@ -1,0 +1,13 @@
+.. _exhale_function_c__plus__plus_8cpp_1ad50576352aa9fe95a1f335068a150f86:
+
+Function amdinfer::getFunction
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::getFunction(void *, const std::string&)

@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::modelMetadataTensorToJson(const ModelMetadataTensor&)
-   :project: amdinfer

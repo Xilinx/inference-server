@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::setThreadName(const std::string&)
-   :project: amdinfer

@@ -9,7 +9,6 @@ File aks_detect.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the AKS detect worker. 
 
 
@@ -43,15 +42,15 @@ Includes
 
 - ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
 
-- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
-
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
-- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -85,7 +84,7 @@ Includes
 
 - ``future``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``opencv2/core.hpp``
 
@@ -101,7 +100,7 @@ Includes
 
 - ``vart/tensor_buffer.hpp``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 - ``xir/tensor/tensor.hpp``
 
@@ -144,8 +143,6 @@ Variables
 - :ref:`exhale_variable_aks__detect_8cpp_1a04c17f159348c95b8f43e30dd5870d13`
 
 - :ref:`exhale_variable_aks__detect_8cpp_1a42d9aa2fce61d9debb309bcea9830853`
-
-- :ref:`exhale_variable_aks__detect_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6`
 
 - :ref:`exhale_variable_aks__detect_8cpp_1aef4b7872e7395e2c7fdf950685bc2c94`
 

@@ -11,4 +11,3 @@ Typedef Documentation
 
 
 .. doxygentypedef:: amdinfer::fp16
-   :project: amdinfer

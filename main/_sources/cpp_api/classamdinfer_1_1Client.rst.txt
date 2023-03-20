@@ -23,7 +23,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::Client
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

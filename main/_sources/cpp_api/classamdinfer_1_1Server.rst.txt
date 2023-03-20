@@ -21,7 +21,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::Server
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

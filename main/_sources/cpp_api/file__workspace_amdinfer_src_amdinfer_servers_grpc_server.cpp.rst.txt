@@ -9,7 +9,6 @@ File grpc_server.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the gRPC server. 
 
 
@@ -45,11 +44,13 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
 
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
-- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/core/shared_state.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`)
 
@@ -58,6 +59,8 @@ Includes
 - ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
 
 - ``amdinfer/servers/grpc_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.hpp`)
+
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
 
 - ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -79,11 +82,11 @@ Includes
 
 - ``grpcpp/grpcpp.h``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``inference.grpc.pb.h``
 
-- ``predict_api.grpc.pb.h``
+- ``inference.pb.h``
 
-- ``predict_api.pb.h``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -93,7 +96,7 @@ Includes
 
 - ``utility``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -147,24 +150,26 @@ Classes
 
 - :ref:`exhale_class_classamdinfer_1_1CallDataWorkerUnload`
 
-- :ref:`exhale_class_classamdinfer_1_1GrpcApiUnary`
-
 - :ref:`exhale_class_classamdinfer_1_1GrpcServer`
-
-- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4`
-
-- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4`
 
 
 Functions
 ---------
 
 
+- :ref:`exhale_function_grpc__server_8cpp_1ad7d47b9afef4ed43ad59aa45f592737e`
+
+- :ref:`exhale_function_grpc__server_8cpp_1aa8dbb41520acad4bc0f3590a62f516dd`
+
+- :ref:`exhale_function_grpc__server_8cpp_1ac8a8307a4bb6284d0c08ecf50abe9013`
+
 - :ref:`exhale_function_grpc__server_8cpp_1acd5880aba6baa79251eba9aa507f2dd4`
 
 - :ref:`exhale_function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1`
 
 - :ref:`exhale_function_grpc__server_8cpp_1a17fb6a89fb9a16380c4f07f999c78fb6`
+
+- :ref:`exhale_function_grpc__server_8cpp_1af023a215479a2732eb486a97860222cb`
 
 
 Defines

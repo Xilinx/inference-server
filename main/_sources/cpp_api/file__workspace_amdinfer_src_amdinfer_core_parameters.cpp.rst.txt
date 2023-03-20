@@ -9,7 +9,6 @@ File parameters.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the associated containers for the Parameter object. 
 
 
@@ -49,7 +48,7 @@ Includes
 
 - ``type_traits``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 

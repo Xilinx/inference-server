@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::constructMessage(const std::string&, const std::string&)
-   :project: amdinfer

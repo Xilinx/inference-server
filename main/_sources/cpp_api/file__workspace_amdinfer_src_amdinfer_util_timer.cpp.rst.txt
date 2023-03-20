@@ -9,7 +9,6 @@ File timer.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements a helper timer class. 
 
 

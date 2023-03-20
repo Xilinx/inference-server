@@ -9,7 +9,6 @@ File pt_zendnn.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the PtZendnn worker. 
 
 
@@ -39,17 +38,17 @@ Includes
 
 - ``amdinfer/batching/hard.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.hpp`)
 
-- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
-
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -77,7 +76,7 @@ Includes
 
 - ``filesystem``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -89,7 +88,7 @@ Includes
 
 - ``utility``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 

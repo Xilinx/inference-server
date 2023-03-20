@@ -8,7 +8,6 @@ File endpoints.cpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -38,9 +37,9 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
-
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
 

@@ -1,0 +1,31 @@
+.. _exhale_class_classamdinfer_1_1Tensor:
+
+Class Tensor
+============
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_tensor.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::Serializable`` (:ref:`exhale_class_classamdinfer_1_1Serializable`)
+
+
+Derived Type
+************
+
+- ``public amdinfer::InferenceTensor`` (:ref:`exhale_class_classamdinfer_1_1InferenceTensor`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::Tensor
+   :members:
+   :protected-members:
+   :undoc-members:

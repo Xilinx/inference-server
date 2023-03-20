@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::base64Encode(const char *, size_t)
-   :project: amdinfer

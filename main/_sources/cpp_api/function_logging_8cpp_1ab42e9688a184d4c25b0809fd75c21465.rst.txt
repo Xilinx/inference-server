@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::getLevel(LogLevel)
-   :project: amdinfer

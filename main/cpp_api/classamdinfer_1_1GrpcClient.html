@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -43,7 +41,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class GrpcClient::GrpcClientImpl" href="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl.html" />
-    <link rel="prev" title="Class GrpcApiUnary" href="classamdinfer_1_1GrpcApiUnary.html" /> 
+    <link rel="prev" title="Class file_read_error" href="classamdinfer_1_1file__read__error.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -110,23 +108,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -183,7 +189,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -307,12 +350,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -323,6 +368,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -334,8 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#metrics">Metrics</a></li>
@@ -405,30 +450,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="class-grpcclient">
-<span id="exhale-class-classamdinfer-1-1grpcclient"></span><h1>Class GrpcClient<a class="headerlink" href="#class-grpcclient" title="Permalink to this headline">¶</a></h1>
+<span id="exhale-class-classamdinfer-1-1grpcclient"></span><h1>Class GrpcClient<a class="headerlink" href="#class-grpcclient" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp.html#file-workspace-amdinfer-include-amdinfer-clients-grpc-hpp"><span class="std std-ref">File grpc.hpp</span></a></p></li>
 </ul>
 <section id="nested-relationships">
-<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Permalink to this headline">¶</a></h2>
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Permalink to this heading">¶</a></h2>
 <section id="nested-types">
-<h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this headline">¶</a></h3>
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl.html#exhale-class-classamdinfer-1-1grpcclient-1-1grpcclientimpl"><span class="std std-ref">Class GrpcClient::GrpcClientImpl</span></a></p></li>
 </ul>
 </section>
 </section>
 <section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this heading">¶</a></h2>
 <section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::Client</span></code> (<a class="reference internal" href="classamdinfer_1_1Client.html#exhale-class-classamdinfer-1-1client"><span class="std std-ref">Class Client</span></a>)</p></li>
 </ul>
 </section>
 </section>
 <section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10GrpcClientE">
 <span id="_CPPv3N8amdinfer10GrpcClientE"></span><span id="_CPPv2N8amdinfer10GrpcClientE"></span><span id="amdinfer::GrpcClient"></span><span class="target" id="classamdinfer_1_1GrpcClient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClient</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1Client.html#_CPPv4N8amdinfer6ClientE" title="amdinfer::Client"><span class="n"><span class="pre">Client</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClientE" title="Permalink to this definition">¶</a><br /></dt>
@@ -442,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer10GrpcClient10GrpcClientERKNSt6stringE"></span><span id="_CPPv2N8amdinfer10GrpcClient10GrpcClientERKNSt6stringE"></span><span id="amdinfer::GrpcClient::GrpcClient__ssCR"></span><span class="target" id="classamdinfer_1_1GrpcClient_1adfa5694fc2d820468d2c36f5232b2f2f"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient10GrpcClientERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1GrpcClient"><span class="std std-ref">GrpcClient</span></a> object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>address</strong> – Address of the server to connect to </p>
 </dd>
 </dl>
@@ -453,7 +498,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer10GrpcClient10GrpcClientERKNSt10shared_ptrIN4grpc7ChannelEEE"></span><span id="_CPPv2N8amdinfer10GrpcClient10GrpcClientERKNSt10shared_ptrIN4grpc7ChannelEEE"></span><span id="amdinfer::GrpcClient::GrpcClient__std::shared_ptr:grpc::Channel:CR"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a1b0a9c6b0d3a92317ea4a1316982efb9"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GrpcClient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">grpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Channel</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">channel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10GrpcClient10GrpcClientERKNSt10shared_ptrIN4grpc7ChannelEEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1GrpcClient"><span class="std std-ref">GrpcClient</span></a> object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel</strong> – an existing gRPC channel to reuse to connect to the server </p>
 </dd>
 </dl>
@@ -494,8 +539,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient14serverMetadataEv"></span><span id="_CPPv2NK8amdinfer10GrpcClient14serverMetadataEv"></span><span id="amdinfer::GrpcClient::serverMetadataC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a7a69c9cfa52e0ce805f96c4f1256c572"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="structamdinfer_1_1ServerMetadata.html#_CPPv4N8amdinfer14ServerMetadataE" title="amdinfer::ServerMetadata"><span class="n"><span class="pre">ServerMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverMetadata</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient14serverMetadataEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the server metadata as a <a class="reference internal" href="../cpp_user_api.html#structamdinfer_1_1ServerMetadata"><span class="std std-ref">ServerMetadata</span></a> object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../cpp_user_api.html#structamdinfer_1_1ServerMetadata"><span class="std std-ref">ServerMetadata</span></a> </p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../cpp_user_api.html#structamdinfer_1_1ServerMetadata"><span class="std std-ref">ServerMetadata</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,7 +550,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient10serverLiveEv"></span><span id="_CPPv2NK8amdinfer10GrpcClient10serverLiveEv"></span><span id="amdinfer::GrpcClient::serverLiveC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1af8f2c2a5761e000cb61b2c025649d975"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverLive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient10serverLiveEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the server is live. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise </p>
 </dd>
 </dl>
@@ -516,7 +561,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient11serverReadyEv"></span><span id="_CPPv2NK8amdinfer10GrpcClient11serverReadyEv"></span><span id="amdinfer::GrpcClient::serverReadyC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a61f60cfe94e2587d21e6631690c377f3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serverReady</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient11serverReadyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the server is ready. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise </p>
 </dd>
 </dl>
@@ -527,10 +572,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient10modelReadyERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer10GrpcClient10modelReadyERKNSt6stringE"></span><span id="amdinfer::GrpcClient::modelReady__ssCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a98e9b188130b7d09483d63c06f02d34a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelReady</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient10modelReadyERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if a model/worker is ready. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>model</strong> – name of the model to check </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool - true if model is ready, false otherwise </p>
 </dd>
 </dl>
@@ -541,21 +586,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient13modelMetadataERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer10GrpcClient13modelMetadataERKNSt6stringE"></span><span id="amdinfer::GrpcClient::modelMetadata__ssCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1ac2846db67329ccdf83bfe9744b938357"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadataE" title="amdinfer::ModelMetadata"><span class="n"><span class="pre">ModelMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelMetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient13modelMetadataERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the metadata associated with a ready model/worker. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>model</strong> – name of the model/worker to get metadata </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1ModelMetadata"><span class="std std-ref">ModelMetadata</span></a> </p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1ModelMetadata"><span class="std std-ref">ModelMetadata</span></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringEP12ParameterMap">
-<span id="_CPPv3NK8amdinfer10GrpcClient9modelLoadERKNSt6stringEP12ParameterMap"></span><span id="_CPPv2NK8amdinfer10GrpcClient9modelLoadERKNSt6stringEP12ParameterMap"></span><span id="amdinfer::GrpcClient::modelLoad__ssCR.ParameterMapPC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a536ef8388793fcfd1cdf49b30019a264"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <a class="reference internal" href="classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE" title="amdinfer::ParameterMap"><span class="n"><span class="pre">ParameterMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringEP12ParameterMap" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap">
+<span id="_CPPv3NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap"></span><span id="_CPPv2NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap"></span><span id="amdinfer::GrpcClient::modelLoad__ssCR.ParameterMapCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a2c97ceef407bfb23e3f05448b240f508"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE" title="amdinfer::ParameterMap"><span class="n"><span class="pre">ParameterMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Loads a model with the given name and load-time parameters. This method assumes that a directory with this model name already exists in the model repository directory for the server containing the model and its metadata in the right format. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> – name of the model to load from the model repository directory </p></li>
 <li><p><strong>parameters</strong> – load-time parameters for the worker supporting the model </p></li>
@@ -569,7 +614,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient11modelUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer10GrpcClient11modelUnloadERKNSt6stringE"></span><span id="amdinfer::GrpcClient::modelUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a0ab07c79adb7bbbec2ae5c065074e2ff"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient11modelUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Unloads a previously loaded model and shut it down. This is identical in functionality to workerUnload and is provided for symmetry. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>model</strong> – name of the model to unload </p>
 </dd>
 </dl>
@@ -580,14 +625,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer10GrpcClient10modelInferERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::GrpcClient::modelInfer__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a4993c3d4c46606054dd0d93430af96e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceResponse.html#_CPPv4N8amdinfer17InferenceResponseE" title="amdinfer::InferenceResponse"><span class="n"><span class="pre">InferenceResponse</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInfer</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient10modelInferERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Makes a synchronous inference request to the given model/worker. The contents of the request depends on the model/worker that the request is for. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> – name of the model/worker to request inference to </p></li>
 <li><p><strong>request</strong> – the request </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a> </p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1InferenceResponse"><span class="std std-ref">InferenceResponse</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -597,13 +642,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="_CPPv2NK8amdinfer10GrpcClient15modelInferAsyncERKNSt6stringERK16InferenceRequest"></span><span id="amdinfer::GrpcClient::modelInferAsync__ssCR.InferenceRequestCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a033a83b106c82a35dab329a3d64debd8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d.html#_CPPv4N8amdinfer23InferenceResponseFutureE" title="amdinfer::InferenceResponseFuture"><span class="n"><span class="pre">InferenceResponseFuture</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelInferAsync</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequestE" title="amdinfer::InferenceRequest"><span class="n"><span class="pre">InferenceRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">request</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient15modelInferAsyncERKNSt6stringERK16InferenceRequest" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Makes an asynchronous inference request to the given model/worker. The contents of the request depends on the model/worker that the request is for. The user must save the Future object and use it to get the results of the inference later. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> – name of the model/worker to request inference to </p></li>
 <li><p><strong>request</strong> – the request </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>InferenceResponseFuture </p>
 </dd>
 </dl>
@@ -614,24 +659,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient9modelListEv"></span><span id="_CPPv2NK8amdinfer10GrpcClient9modelListEv"></span><span id="amdinfer::GrpcClient::modelListC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1ab47c9dbd5e4f7adf3d10c4edbdda7c12"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modelList</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient9modelListEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets a list of active models on the server, returning their names. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt; </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringEP12ParameterMap">
-<span id="_CPPv3NK8amdinfer10GrpcClient10workerLoadERKNSt6stringEP12ParameterMap"></span><span id="_CPPv2NK8amdinfer10GrpcClient10workerLoadERKNSt6stringEP12ParameterMap"></span><span id="amdinfer::GrpcClient::workerLoad__ssCR.ParameterMapPC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1afaea5422213685f1acad8cfa63dbd25d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span>, <a class="reference internal" href="classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE" title="amdinfer::ParameterMap"><span class="n"><span class="pre">ParameterMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringEP12ParameterMap" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap">
+<span id="_CPPv3NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap"></span><span id="_CPPv2NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap"></span><span id="amdinfer::GrpcClient::workerLoad__ssCR.ParameterMapCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1ad97a57b2887bd51b1a61081fe5c447df"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerLoad</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE" title="amdinfer::ParameterMap"><span class="n"><span class="pre">ParameterMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Loads a worker with the given name and load-time parameters. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>worker</strong> – name of the worker to load </p></li>
 <li><p><strong>parameters</strong> – load-time parameters for the worker </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>std::string </p>
 </dd>
 </dl>
@@ -642,7 +687,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient12workerUnloadERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer10GrpcClient12workerUnloadERKNSt6stringE"></span><span id="amdinfer::GrpcClient::workerUnload__ssCRC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1a125908519db1ce59137b23ab8356111d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">workerUnload</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">worker</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient12workerUnloadERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Unloads a previously loaded worker and shut it down. This is identical in functionality to modelUnload and is provided for symmetry. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>worker</strong> – name of the worker to unload </p>
 </dd>
 </dl>
@@ -653,13 +698,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer10GrpcClient11hasHardwareERKNSt6stringEi"></span><span id="_CPPv2NK8amdinfer10GrpcClient11hasHardwareERKNSt6stringEi"></span><span id="amdinfer::GrpcClient::hasHardware__ssCR.iC"></span><span class="target" id="classamdinfer_1_1GrpcClient_1abf43cc205ef53c0f0990bcda2c400faf"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hasHardware</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10GrpcClient11hasHardwareERKNSt6stringEi" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the server has the requested number of a specific hardware device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – name of the hardware device to check </p></li>
 <li><p><strong>num</strong> – number of the device that should exist at minimum </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool - true if server has at least the requested number of the hardware device, false otherwise </p>
 </dd>
 </dl>
@@ -703,7 +748,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                   </style>
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="classamdinfer_1_1GrpcApiUnary.html" class="btn btn-neutral float-left" title="Class GrpcApiUnary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="classamdinfer_1_1file__read__error.html" class="btn btn-neutral float-left" title="Class file_read_error" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="classamdinfer_1_1GrpcClient_1_1GrpcClientImpl.html" class="btn btn-neutral float-right" title="Class GrpcClient::GrpcClientImpl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -711,7 +756,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

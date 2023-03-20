@@ -70,7 +70,7 @@ Program Listing for File tracing.hpp
      void setAttribute(opentelemetry::nostd::string_view key,
                        const opentelemetry::common::AttributeValue& value);
    
-     void setAttributes(ParameterMap* parameters);
+     void setAttributes(const ParameterMap& parameters);
    
      StringMap propagate();
    
@@ -83,8 +83,6 @@ Program Listing for File tracing.hpp
        spans_;
      // std::unique_ptr<opentelemetry::trace::Scope> scope_;
    };
-   
-   using TracePtr = std::unique_ptr<Trace>;
    
    TracePtr startTrace(const char* name);
    

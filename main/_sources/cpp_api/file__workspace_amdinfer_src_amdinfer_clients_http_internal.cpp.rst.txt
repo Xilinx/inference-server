@@ -9,7 +9,6 @@ File http_internal.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the internal objects used for HTTP/REST. 
 
 
@@ -45,13 +44,15 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
 
-- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
-
-- ``amdinfer/util/compression.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_compression.hpp`)
 
 - ``amdinfer/util/traits.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`)
 
@@ -101,51 +102,24 @@ Classes
 
 - :ref:`exhale_struct_structamdinfer_1_1Overloaded`
 
-- :ref:`exhale_struct_structamdinfer_1_1SetInputData`
-
 - :ref:`exhale_struct_structamdinfer_1_1SetOutputData`
-
-- :ref:`exhale_struct_structamdinfer_1_1WriteData`
-
-- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
-
-- :ref:`exhale_class_classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
 
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_http__internal_8cpp_1a90265777686e06d56b25b0bc843eef9e`
-
-- :ref:`exhale_function_http__internal_8cpp_1afa990983f0c809168a33aae411a99f8b`
-
 - :ref:`exhale_function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b`
 
-- :ref:`exhale_function_http__internal_8cpp_1a35f336b6080d807deb64cb9d082d19b5`
+- :ref:`exhale_function_http__internal_8cpp_1ab552d950b2047e8257bf47b64521a3d1`
 
 - :ref:`exhale_function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3`
 
-- :ref:`exhale_function_http__internal_8cpp_1acc26de4cacac0bd1e7b5dc5b1b802c3a`
+- :ref:`exhale_function_http__internal_8cpp_1ac5e6afcc5f724e1759b2bfe6db7e7ec0`
 
 - :ref:`exhale_function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537`
 
 - :ref:`exhale_function_http__internal_8cpp_1a263e4c7efb3c93d6fc48499bc4a46548`
 
 - :ref:`exhale_function_http__internal_8cpp_1a20f514dbb8f33ccf800d6fe95d9dc475`
-
-- :ref:`exhale_function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d`
-
-- :ref:`exhale_function_http__internal_8cpp_1acbfb678bfa4431649f17750ea346f33c`
-
-
-Typedefs
---------
-
-
-- :ref:`exhale_typedef_http__internal_8cpp_1a78092124400e8e02cce73782a3ed0832`
-
-- :ref:`exhale_typedef_http__internal_8cpp_1ac0c25a8d874c058c0256360834443885`
-
-- :ref:`exhale_typedef_http__internal_8cpp_1a9a8b533ecefc7f30d6f3377cf897f1c8`
 

@@ -1,0 +1,16 @@
+.. _exhale_struct_structamdinfer_1_1TensorSizes:
+
+Struct TensorSizes
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::TensorSizes
+   :members:
+   :protected-members:
+   :undoc-members:

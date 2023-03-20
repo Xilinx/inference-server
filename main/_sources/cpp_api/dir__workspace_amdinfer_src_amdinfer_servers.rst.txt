@@ -9,7 +9,6 @@ Directory servers
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/src/amdinfer/servers``
 
 

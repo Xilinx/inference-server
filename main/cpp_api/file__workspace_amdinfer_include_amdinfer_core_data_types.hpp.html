@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -108,23 +106,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -181,7 +187,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -305,12 +348,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -321,6 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -332,8 +378,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#metrics">Metrics</a></li>
@@ -402,10 +447,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="file-data-types-hpp">
-<span id="file-workspace-amdinfer-include-amdinfer-core-data-types-hpp"></span><h1>File data_types.hpp<a class="headerlink" href="#file-data-types-hpp" title="Permalink to this headline">¶</a></h1>
+<span id="file-workspace-amdinfer-include-amdinfer-core-data-types-hpp"></span><h1>File data_types.hpp<a class="headerlink" href="#file-data-types-hpp" title="Permalink to this heading">¶</a></h1>
 <p>↰ <a class="reference internal" href="dir__workspace_amdinfer_include_amdinfer_core.html#dir-workspace-amdinfer-include-amdinfer-core"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/include/amdinfer/core</span></code>)</p>
 <p>Defines the used data types.</p>
-<div class="contents local topic" id="contents">
+<nav class="contents local" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#definition-workspace-amdinfer-include-amdinfer-core-data-types-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/include/amdinfer/core/data_types.hpp</span></code>)</a></p></li>
@@ -416,9 +461,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="#functions" id="id6">Functions</a></p></li>
 <li><p><a class="reference internal" href="#typedefs" id="id7">Typedefs</a></p></li>
 </ul>
-</div>
+</nav>
 <section id="definition-workspace-amdinfer-include-amdinfer-core-data-types-hpp">
-<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/include/amdinfer/core/data_types.hpp</span></code>)<a class="headerlink" href="#definition-workspace-amdinfer-include-amdinfer-core-data-types-hpp" title="Permalink to this headline">¶</a></h2>
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/include/amdinfer/core/data_types.hpp</span></code>)<a class="headerlink" href="#definition-workspace-amdinfer-include-amdinfer-core-data-types-hpp" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="program_listing_file__workspace_amdinfer_include_amdinfer_core_data_types.hpp.html">Program Listing for File data_types.hpp</a></li>
@@ -426,7 +471,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </section>
 <section id="includes">
-<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/exceptions.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp.html#file-workspace-amdinfer-include-amdinfer-core-exceptions-hpp"><span class="std std-ref">File exceptions.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cstddef</span></code></p></li>
@@ -438,14 +483,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </section>
 <section id="included-by">
-<h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline">¶</a></h2>
+<h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp.html#file-workspace-amdinfer-src-amdinfer-buffers-vector-buffer-hpp"><span class="std std-ref">File vector_buffer.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp.html#file-workspace-amdinfer-src-amdinfer-buffers-cpu-hpp"><span class="std std-ref">File cpu.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp.html#file-workspace-amdinfer-src-amdinfer-clients-grpc-cpp"><span class="std std-ref">File grpc.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp.html#file-workspace-amdinfer-src-amdinfer-clients-grpc-internal-cpp"><span class="std std-ref">File grpc_internal.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp.html#file-workspace-amdinfer-src-amdinfer-clients-grpc-internal-hpp"><span class="std std-ref">File grpc_internal.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp.html#file-workspace-amdinfer-src-amdinfer-clients-http-internal-cpp"><span class="std std-ref">File http_internal.cpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp.html#file-workspace-amdinfer-src-amdinfer-clients-native-internal-cpp"><span class="std std-ref">File native_internal.cpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp.html#file-workspace-amdinfer-src-amdinfer-clients-http-internal-hpp"><span class="std std-ref">File http_internal.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_clients_native.cpp.html#file-workspace-amdinfer-src-amdinfer-clients-native-cpp"><span class="std std-ref">File native.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_data_types.cpp.html#file-workspace-amdinfer-src-amdinfer-core-data-types-cpp"><span class="std std-ref">File data_types.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_data_types_internal.hpp.html#file-workspace-amdinfer-src-amdinfer-core-data-types-internal-hpp"><span class="std std-ref">File data_types_internal.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_observation_observer.hpp.html#file-workspace-amdinfer-src-amdinfer-observation-observer-hpp"><span class="std std-ref">File observer.hpp</span></a></p></li>
@@ -453,6 +499,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-aks-cpp"><span class="std std-ref">File aks.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-aks-detect-cpp"><span class="std std-ref">File aks_detect.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-aks-detect-stream-cpp"><span class="std std-ref">File aks_detect_stream.cpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-c-plus-plus-cpp"><span class="std std-ref">File c_plus_plus.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-echo-cpp"><span class="std std-ref">File echo.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-echo-multi-cpp"><span class="std std-ref">File echo_multi.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-invert-image-cpp"><span class="std std-ref">File invert_image.cpp</span></a></p></li>
@@ -464,31 +511,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-tf-zendnn-cpp"><span class="std std-ref">File tf_zendnn.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-xmodel-cpp"><span class="std std-ref">File xmodel.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_amdinfer.hpp.html#file-workspace-amdinfer-include-amdinfer-amdinfer-hpp"><span class="std std-ref">File amdinfer.hpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp.html#file-workspace-amdinfer-include-amdinfer-core-predict-api-hpp"><span class="std std-ref">File predict_api.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp.html#file-workspace-amdinfer-include-amdinfer-core-inference-request-hpp"><span class="std std-ref">File inference_request.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp.html#file-workspace-amdinfer-include-amdinfer-core-model-metadata-hpp"><span class="std std-ref">File model_metadata.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_tensor.hpp.html#file-workspace-amdinfer-include-amdinfer-core-tensor-hpp"><span class="std std-ref">File tensor.hpp</span></a></p></li>
 </ul>
 </section>
 <section id="namespaces">
-<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="namespace_amdinfer.html#namespace-amdinfer"><span class="std std-ref">Namespace amdinfer</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_amdinfer__detail.html#namespace-amdinfer-detail"><span class="std std-ref">Namespace amdinfer::detail</span></a></p></li>
 </ul>
 </section>
 <section id="classes">
-<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="classamdinfer_1_1DataType.html#exhale-class-classamdinfer-1-1datatype"><span class="std std-ref">Class DataType</span></a></p></li>
 </ul>
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="function_data__types_8hpp_1a9f421600e40d463aae440ef86d990f77.html#exhale-function-data-types-8hpp-1a9f421600e40d463aae440ef86d990f77"><span class="std std-ref">Function amdinfer::detail::hash</span></a></p></li>
 <li><p><a class="reference internal" href="function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb.html#exhale-function-data-types-8hpp-1a4b401163a3bc8d860d096ab1b00a87eb"><span class="std std-ref">Template Function amdinfer::switchOverTypes</span></a></p></li>
 </ul>
 </section>
 <section id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="typedef_data__types_8hpp_1ae6aa5769eb83832379c792c300d4566c.html#exhale-typedef-data-types-8hpp-1ae6aa5769eb83832379c792c300d4566c"><span class="std std-ref">Typedef amdinfer::fp16</span></a></p></li>
 </ul>
@@ -514,7 +563,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

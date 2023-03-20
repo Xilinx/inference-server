@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::split(std::string_view, std::string_view)
-   :project: amdinfer

@@ -32,7 +32,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::CallDataBase
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

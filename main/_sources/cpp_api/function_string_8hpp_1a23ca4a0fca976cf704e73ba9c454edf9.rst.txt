@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::startsWith(std::string_view, std::string_view)
-   :project: amdinfer

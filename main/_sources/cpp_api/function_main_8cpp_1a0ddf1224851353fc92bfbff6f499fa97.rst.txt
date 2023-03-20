@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: main(int, char *)
-   :project: amdinfer

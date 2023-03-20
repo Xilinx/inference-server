@@ -31,7 +31,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::runtime_error
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

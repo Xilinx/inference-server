@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::expandType(std::size_t)
-   :project: amdinfer

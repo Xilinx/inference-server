@@ -9,7 +9,6 @@ File logging.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines logging. 
 
 
@@ -37,7 +36,7 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -57,17 +56,19 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
 
@@ -82,6 +83,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 
@@ -104,31 +107,6 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
 
 
-
-
-Namespaces
-----------
-
-
-- :ref:`namespace_amdinfer`
-
-
-Classes
--------
-
-
-- :ref:`exhale_struct_structamdinfer_1_1LogOptions`
-
-- :ref:`exhale_class_classamdinfer_1_1Logger`
-
-
-Enums
------
-
-
-- :ref:`exhale_enum_logging_8hpp_1a5f2178ac8de54222377d5c4a64f986ad`
-
-- :ref:`exhale_enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27`
 
 
 Defines

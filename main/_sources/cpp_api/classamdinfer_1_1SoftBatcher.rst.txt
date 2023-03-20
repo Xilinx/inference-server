@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::SoftBatcher
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

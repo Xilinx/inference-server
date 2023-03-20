@@ -9,7 +9,6 @@ File hard.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the hard batcher implementation. 
 
 
@@ -44,6 +43,8 @@ Included By
 
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 

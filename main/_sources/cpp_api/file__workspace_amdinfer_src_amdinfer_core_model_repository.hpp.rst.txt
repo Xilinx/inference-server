@@ -8,7 +8,6 @@ File model_repository.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -34,7 +33,7 @@ Includes
 
 - ``filesystem``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 

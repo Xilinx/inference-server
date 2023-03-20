@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -110,23 +108,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -183,7 +189,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -307,12 +350,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -323,6 +368,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -334,8 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#metrics">Metrics</a></li>
@@ -405,21 +450,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="fpgas-vitis-ai">
-<h1>FPGAs - Vitis AI<a class="headerlink" href="#fpgas-vitis-ai" title="Permalink to this headline">¶</a></h1>
+<h1>FPGAs - Vitis AI<a class="headerlink" href="#fpgas-vitis-ai" title="Permalink to this heading">¶</a></h1>
 <p>Using the AMD Inference Server with Vitis AI and FPGAs requires some additional setup prior to use.</p>
 <section id="set-up-the-host-and-fpgas">
-<h2>Set up the host and FPGAs<a class="headerlink" href="#set-up-the-host-and-fpgas" title="Permalink to this headline">¶</a></h2>
+<h2>Set up the host and FPGAs<a class="headerlink" href="#set-up-the-host-and-fpgas" title="Permalink to this heading">¶</a></h2>
 <p>The details for setting up your host are available online in the <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/2.5/setup">Vitis AI</a> repository.
 These instructions will depend on whether you are using <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/2.5/setup/alveo">Alveo cards</a> or <a class="reference external" href="https://github.com/Xilinx/Vitis-AI/tree/2.5/setup/vck5000">VCK5000</a>.
 In essence, you will need to install software, program the shell on the FPGA(s) and download XCLBINs.</p>
 <section id="software">
-<h3>Software<a class="headerlink" href="#software" title="Permalink to this headline">¶</a></h3>
+<h3>Software<a class="headerlink" href="#software" title="Permalink to this heading">¶</a></h3>
 <p>You need to install the Xilinx Runtime (XRT) to communicate with the FPGA over PCIe.
 The XRT version on the host should match the one installed in the container where the server will be running.
 The Xilinx Resource Manager (XRM) is not needed on the host because it is already installed in the container.</p>
 </section>
 <section id="shell">
-<h3>Shell<a class="headerlink" href="#shell" title="Permalink to this headline">¶</a></h3>
+<h3>Shell<a class="headerlink" href="#shell" title="Permalink to this heading">¶</a></h3>
 <p>The Vitis AI repository contains scripts to install packages and flash the shell on your FPGA.
 They use XRT to program the FPGA.
 In most cases, flashing the shell will be a one-time act as it is persistent.
@@ -429,7 +474,7 @@ Follow the instructions in the scripts to install the secondary shell.</p>
 If this executable is not on your PATH, it should be in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/xrt/bin</span></code>.</p>
 </section>
 <section id="xclbins">
-<h3>XCLBINs<a class="headerlink" href="#xclbins" title="Permalink to this headline">¶</a></h3>
+<h3>XCLBINs<a class="headerlink" href="#xclbins" title="Permalink to this heading">¶</a></h3>
 <p>The XCLBINs define the DPU that will run on the FPGA.
 By default, these are installed in <code class="docutils literal notranslate"><span class="pre">/opt/xilinx/overlaybins/&lt;DPU&gt;/*</span></code>
 The environment variable <code class="docutils literal notranslate"><span class="pre">XLNX_VART_FIRMWARE</span></code> must be set where the inference server is running to point to the directory where the XCLBINs for your FPGA are.
@@ -438,7 +483,7 @@ Alternatively, you can also copy XCLBINs directly into the container as well.</p
 </section>
 </section>
 <section id="build-an-image">
-<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this headline">¶</a></h2>
+<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this heading">¶</a></h2>
 <p>To build an image with Vitis AI enabled, you need to add the <code class="docutils literal notranslate"><span class="pre">--vitis</span></code> to the <code class="docutils literal notranslate"><span class="pre">amdinfer</span> <span class="pre">dockerize</span></code> command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the Dockerfile</span>
 python3<span class="w"> </span>docker/generate.py
@@ -459,7 +504,7 @@ There are a few ways to achieve this:</p>
 </ol>
 </section>
 <section id="start-an-image">
-<h2>Start an image<a class="headerlink" href="#start-an-image" title="Permalink to this headline">¶</a></h2>
+<h2>Start an image<a class="headerlink" href="#start-an-image" title="Permalink to this heading">¶</a></h2>
 <p>The development container can be started with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>run<span class="w"> </span>--dev
 </pre></div>
@@ -483,7 +528,7 @@ The exact name of the resource will depend on which FPGA and shell you are tryin
 </div>
 </section>
 <section id="get-assets-and-models">
-<h2>Get assets and models<a class="headerlink" href="#get-assets-and-models" title="Permalink to this headline">¶</a></h2>
+<h2>Get assets and models<a class="headerlink" href="#get-assets-and-models" title="Permalink to this heading">¶</a></h2>
 <p>You can download the assets and models used for tests and examples with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>get<span class="w"> </span>--vitis
 </pre></div>
@@ -515,7 +560,7 @@ Make sure you have compatible tools, shells and XCLBINs with <a class="reference
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

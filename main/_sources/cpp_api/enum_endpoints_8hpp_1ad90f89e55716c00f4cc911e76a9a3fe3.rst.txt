@@ -11,4 +11,3 @@ Enum Documentation
 
 
 .. doxygenenum:: amdinfer::UpdateCommandType
-   :project: amdinfer

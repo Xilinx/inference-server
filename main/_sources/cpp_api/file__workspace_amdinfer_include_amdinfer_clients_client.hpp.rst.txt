@@ -9,7 +9,6 @@ File client.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the base class for all clients. 
 
 
@@ -35,7 +34,9 @@ Includes
 --------
 
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/server_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_server_metadata.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -43,7 +44,7 @@ Includes
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 

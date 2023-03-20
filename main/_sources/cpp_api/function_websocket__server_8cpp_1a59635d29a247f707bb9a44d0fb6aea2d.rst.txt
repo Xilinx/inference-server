@@ -1,0 +1,13 @@
+.. _exhale_function_websocket__server_8cpp_1a59635d29a247f707bb9a44d0fb6aea2d:
+
+Function amdinfer::http::setCallback
+====================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::http::setCallback(InferenceRequest *, drogon::WebSocketConnectionPtr)

@@ -30,7 +30,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::NativeClient
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

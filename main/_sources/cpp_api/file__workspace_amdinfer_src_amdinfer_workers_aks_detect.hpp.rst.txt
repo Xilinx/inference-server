@@ -9,7 +9,6 @@ File aks_detect.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines shared objects for AksDetect workers. 
 
 

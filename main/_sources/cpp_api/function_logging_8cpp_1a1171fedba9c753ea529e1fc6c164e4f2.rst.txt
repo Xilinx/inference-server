@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::initLogger(const LogOptions&)
-   :project: amdinfer

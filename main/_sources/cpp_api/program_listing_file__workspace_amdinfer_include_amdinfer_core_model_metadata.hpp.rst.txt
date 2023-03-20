@@ -1,0 +1,82 @@
+
+.. _program_listing_file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp:
+
+Program Listing for File model_metadata.hpp
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp>` (``/workspace/amdinfer/include/amdinfer/core/model_metadata.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2023 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_CORE_MODEL_METADATA
+   #define GUARD_AMDINFER_CORE_MODEL_METADATA
+   
+   #include <string>
+   #include <vector>
+   
+   #include "amdinfer/core/data_types.hpp"
+   #include "amdinfer/core/tensor.hpp"
+   
+   namespace amdinfer {
+   
+   class InferenceRequestInput;
+   
+   using ModelMetadataTensor = Tensor;
+   
+   class ModelMetadata {
+    public:
+     ModelMetadata(const std::string &name, const std::string &platform);
+   
+     void addInputTensor(const std::string &name,
+                         std::initializer_list<uint64_t> shape, DataType datatype);
+     void addInputTensor(const std::string &name, std::vector<int> shape,
+                         DataType datatype);
+     void addInputTensor(const Tensor &tensor);
+   
+     [[nodiscard]] const std::vector<ModelMetadataTensor> &getInputs() const;
+   
+     void addOutputTensor(const std::string &name,
+                          std::initializer_list<uint64_t> shape,
+                          DataType datatype);
+     void addOutputTensor(const std::string &name, std::vector<int> shape,
+                          DataType datatype);
+     void addOutputTensor(const Tensor &tensor);
+   
+     [[nodiscard]] const std::vector<ModelMetadataTensor> &getOutputs() const;
+   
+     void setName(const std::string &name);
+     [[nodiscard]] const std::string &getName() const;
+   
+     [[nodiscard]] const std::string &getPlatform() const;
+   
+     void setReady(bool ready);
+     [[nodiscard]] bool isReady() const;
+   
+    private:
+     std::string name_;
+     std::vector<std::string> versions_;
+     std::string platform_;
+     std::vector<ModelMetadataTensor> inputs_;
+     std::vector<ModelMetadataTensor> outputs_;
+     bool ready_;
+   };
+   
+   }  // namespace amdinfer
+   
+   #endif  // GUARD_AMDINFER_CORE_MODEL_METADATA

@@ -32,8 +32,9 @@ Program Listing for File client.hpp
    #include <string>   // for string
    #include <vector>   // for vector
    
-   #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
-   #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
+   #include "amdinfer/core/model_metadata.hpp"   // for ModelMetadata
+   #include "amdinfer/core/server_metadata.hpp"  // for ServerMetadata
+   #include "amdinfer/declarations.hpp"          // for InferenceResponseFuture
    
    namespace amdinfer {
    
@@ -51,7 +52,7 @@ Program Listing for File client.hpp
        const std::string& model) const = 0;
    
      virtual void modelLoad(const std::string& model,
-                            ParameterMap* parameters) const = 0;
+                            const ParameterMap& parameters) const = 0;
      virtual void modelUnload(const std::string& model) const = 0;
    
      [[nodiscard]] virtual InferenceResponse modelInfer(
@@ -61,7 +62,7 @@ Program Listing for File client.hpp
      [[nodiscard]] virtual std::vector<std::string> modelList() const = 0;
    
      virtual std::string workerLoad(const std::string& worker,
-                                    ParameterMap* parameters) const = 0;
+                                    const ParameterMap& parameters) const = 0;
      virtual void workerUnload(const std::string& worker) const = 0;
    
      [[nodiscard]] virtual bool hasHardware(const std::string& name,

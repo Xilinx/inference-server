@@ -15,6 +15,7 @@ Derived Types
 - ``public amdinfer::workers::Aks`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Aks`)
 - ``public amdinfer::workers::AksDetect`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetect`)
 - ``public amdinfer::workers::AksDetectStream`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetectStream`)
+- ``public amdinfer::workers::CPlusPlus`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1CPlusPlus`)
 - ``public amdinfer::workers::Echo`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Echo`)
 - ``public amdinfer::workers::EchoMulti`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1EchoMulti`)
 - ``public amdinfer::workers::InvertImage`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1InvertImage`)
@@ -32,7 +33,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::workers::Worker
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: amdinfer::kPercentile50
-   :project: amdinfer

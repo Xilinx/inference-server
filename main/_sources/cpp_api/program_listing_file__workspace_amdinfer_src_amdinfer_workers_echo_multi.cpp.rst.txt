@@ -36,21 +36,21 @@ Program Listing for File echo_multi.cpp
    #include <utility>  // for move
    #include <vector>   // for vector
    
-   #include "amdinfer/batching/hard.hpp"          // for HardBatcher
-   #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-   #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_TRACING
-   #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::Uint32
-   #include "amdinfer/core/parameters.hpp"        // for ParameterMap
-   #include "amdinfer/core/predict_api.hpp"       // for InferenceRequest, Infer...
-   #include "amdinfer/declarations.hpp"           // for BufferPtr, InferenceRes...
-   #include "amdinfer/observation/logging.hpp"    // for Logger
-   #include "amdinfer/observation/metrics.hpp"    // for Metrics
-   #include "amdinfer/observation/tracing.hpp"    // for startFollowSpan, SpanPtr
-   #include "amdinfer/util/containers.hpp"        // for containerSum
-   #include "amdinfer/util/queue.hpp"             // for BufferPtrsQueue
-   #include "amdinfer/util/thread.hpp"            // for setThreadName
-   #include "amdinfer/util/timer.hpp"             // for Timer
-   #include "amdinfer/workers/worker.hpp"         // for Worker
+   #include "amdinfer/batching/hard.hpp"    // for HardBatcher
+   #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
+   #include "amdinfer/core/data_types.hpp"  // for DataType, DataType::Uint32
+   #include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+   #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+   #include "amdinfer/core/parameters.hpp"          // for ParameterMap
+   #include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
+   #include "amdinfer/observation/logging.hpp"  // for Logger
+   #include "amdinfer/observation/metrics.hpp"  // for Metrics
+   #include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
+   #include "amdinfer/util/containers.hpp"      // for containerSum
+   #include "amdinfer/util/queue.hpp"           // for BufferPtrsQueue
+   #include "amdinfer/util/thread.hpp"          // for setThreadName
+   #include "amdinfer/util/timer.hpp"           // for Timer
+   #include "amdinfer/workers/worker.hpp"       // for Worker
    
    namespace amdinfer {
    
@@ -65,22 +65,22 @@ Program Listing for File echo_multi.cpp
     public:
      using Worker::Worker;
      std::thread spawn(BatchPtrQueue* input_queue) override;
+     [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
    
     private:
      void doInit(ParameterMap* parameters) override;
-     size_t doAllocate(size_t num) override;
      void doAcquire(ParameterMap* parameters) override;
      void doRun(BatchPtrQueue* input_queue) override;
      void doRelease() override;
-     void doDeallocate() override;
      void doDestroy() override;
    
      // workers define what batcher implementation should be used for them.
      // if not explicitly defined here, a default value is used from worker.hpp.
      using Worker::makeBatcher;
-     std::vector<std::unique_ptr<Batcher>> makeBatcher(
-       int num, ParameterMap* parameters) override {
-       return this->makeBatcher<HardBatcher>(num, parameters);
+     std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
+                                                       ParameterMap* parameters,
+                                                       MemoryPool* pool) override {
+       return this->makeBatcher<HardBatcher>(num, parameters, pool);
      };
    };
    
@@ -88,15 +88,12 @@ Program Listing for File echo_multi.cpp
      return std::thread(&EchoMulti::run, this, input_queue);
    }
    
-   void EchoMulti::doInit(ParameterMap* parameters) {
-     constexpr auto kMaxBufferNum = 50;
-     constexpr auto kBatchSize = 1;
+   std::vector<MemoryAllocators> EchoMulti::getAllocators() const {
+     return {MemoryAllocators::Cpu};
+   }
    
-     auto max_buffer_num = kMaxBufferNum;
-     if (parameters->has("max_buffer_num")) {
-       max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-     }
-     this->max_buffer_num_ = max_buffer_num;
+   void EchoMulti::doInit(ParameterMap* parameters) {
+     constexpr auto kBatchSize = 1;
    
      auto batch_size = kBatchSize;
      if (parameters->has("batch_size")) {
@@ -105,40 +102,16 @@ Program Listing for File echo_multi.cpp
      this->batch_size_ = batch_size;
    }
    
-   size_t EchoMulti::doAllocate(size_t num) {
-     constexpr auto kBufferNum = 10U;
-     size_t buffer_num =
-       static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-   
-     for (size_t i = 0; i < buffer_num; ++i) {
-       BufferPtrs vec;
-       for (auto j = 0; j < kInputTensors; ++j) {
-         vec.emplace_back(std::make_unique<VectorBuffer>(
-           kInputLengths.at(j) * this->batch_size_, DataType::Uint32));
-       }
-       this->input_buffers_->enqueue(std::move(vec));
-     }
-     for (size_t i = 0; i < buffer_num; i++) {
-       BufferPtrs vec;
-       for (auto j = 0; j < kOutputTensors; ++j) {
-         vec.emplace_back(std::make_unique<VectorBuffer>(
-           kOutputLengths.at(j) * this->batch_size_, DataType::Uint32));
-       }
-       this->output_buffers_->enqueue(std::move(vec));
-     }
-     return buffer_num;
-   }
-   
    void EchoMulti::doAcquire([[maybe_unused]] ParameterMap* parameters) {
      for (auto i = 0; i < kInputTensors; ++i) {
-       this->metadata_.addInputTensor(
-         "input" + std::to_string(i), DataType::Uint32,
-         {static_cast<uint64_t>(kInputLengths.at(i))});
+       this->metadata_.addInputTensor("input" + std::to_string(i),
+                                      {static_cast<uint64_t>(kInputLengths.at(i))},
+                                      DataType::Uint32);
      }
      for (auto i = 0; i < kOutputTensors; ++i) {
-       this->metadata_.addInputTensor(
-         "input" + std::to_string(i), DataType::Uint32,
-         {static_cast<uint64_t>(kOutputLengths.at(i))});
+       this->metadata_.addOutputTensor(
+         "input" + std::to_string(i),
+         {static_cast<uint64_t>(kOutputLengths.at(i))}, DataType::Uint32);
      }
    }
    
@@ -195,7 +168,11 @@ Program Listing for File echo_multi.cpp
    
            InferenceResponseOutput output;
            output.setDatatype(DataType::Uint32);
-           std::string output_name = outputs[i].getName();
+           std::string output_name;
+           if (static_cast<size_t>(i) < outputs.size()) {
+             output_name = outputs[i].getName();
+           }
+   
            if (output_name.empty()) {
              output.setName(inputs[0].getName());
            } else {
@@ -228,12 +205,12 @@ Program Listing for File echo_multi.cpp
                                                duration);
    #endif
        }
+       this->returnInputBuffers(std::move(batch));
      }
      AMDINFER_LOG_INFO(logger, "EchoMulti ending");
    }
    
    void EchoMulti::doRelease() {}
-   void EchoMulti::doDeallocate() {}
    void EchoMulti::doDestroy() {}
    
    }  // namespace workers

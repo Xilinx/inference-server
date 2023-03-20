@@ -9,7 +9,6 @@ File exceptions.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the exception classes. Exception classes follow lower-case snake case name syntax of the standard exceptions in std. 
 
 
@@ -60,6 +59,12 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
 

@@ -37,22 +37,22 @@ Program Listing for File pt_zendnn.cpp
    #include <utility>     // for move
    #include <vector>      // for vector
    
-   #include "amdinfer/batching/hard.hpp"          // for Batch, BatchPtrQueue
-   #include "amdinfer/buffers/vector_buffer.hpp"  // for VectorBuffer
-   #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-   #include "amdinfer/core/data_types.hpp"        // for DataType, DataType::FP32
-   #include "amdinfer/core/exceptions.hpp"        // for external_error, file_no...
-   #include "amdinfer/core/parameters.hpp"        // for ParameterMap
-   #include "amdinfer/core/predict_api.hpp"       // for InferenceResponse, Requ...
-   #include "amdinfer/declarations.hpp"           // for InferenceResponseOutput
-   #include "amdinfer/observation/logging.hpp"    // for Logger, AMDINFER_LOG_INFO
-   #include "amdinfer/observation/metrics.hpp"    // for Metrics, MetricCounterIDs
-   #include "amdinfer/observation/tracing.hpp"    // for Trace
-   #include "amdinfer/util/containers.hpp"        // for containerProduct
-   #include "amdinfer/util/thread.hpp"            // for setThreadName
-   #include "amdinfer/util/timer.hpp"             // for Timer
-   #include "amdinfer/workers/worker.hpp"         // for Worker, kNumBufferAuto
-   #include "torch/script.h"                      // for IValue, Tensor, Device
+   #include "amdinfer/batching/hard.hpp"    // for Batch, BatchPtrQueue
+   #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_LOGGING
+   #include "amdinfer/core/data_types.hpp"  // for DataType, DataType::FP32
+   #include "amdinfer/core/exceptions.hpp"  // for external_error, file_no...
+   #include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+   #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+   #include "amdinfer/core/parameters.hpp"          // for ParameterMap
+   #include "amdinfer/declarations.hpp"             // for InferenceResponseOutput
+   #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_INFO
+   #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
+   #include "amdinfer/observation/tracing.hpp"  // for Trace
+   #include "amdinfer/util/containers.hpp"      // for containerProduct
+   #include "amdinfer/util/thread.hpp"          // for setThreadName
+   #include "amdinfer/util/timer.hpp"           // for Timer
+   #include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
+   #include "torch/script.h"                    // for IValue, Tensor, Device
    
    namespace fs = std::filesystem;
    
@@ -66,14 +66,13 @@ Program Listing for File pt_zendnn.cpp
     public:
      using Worker::Worker;
      std::thread spawn(BatchPtrQueue* input_queue) override;
+     [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
    
     private:
      void doInit(ParameterMap* parameters) override;
-     size_t doAllocate(size_t num) override;
      void doAcquire(ParameterMap* parameters) override;
      void doRun(BatchPtrQueue* input_queue) override;
      void doRelease() override;
-     void doDeallocate() override;
      void doDestroy() override;
    
      // workers define what batcher implementation should be used for them.
@@ -101,15 +100,12 @@ Program Listing for File pt_zendnn.cpp
      return std::thread(&PtZendnn::run, this, input_queue);
    }
    
-   void PtZendnn::doInit(ParameterMap* parameters) {
-     constexpr auto kMaxBufferNum = 64;
-     constexpr auto kBatchSize = 1;
+   std::vector<MemoryAllocators> PtZendnn::getAllocators() const {
+     return {MemoryAllocators::Cpu};
+   }
    
-     auto max_buffer_num = kMaxBufferNum;
-     if (parameters->has("max_buffer_num")) {
-       max_buffer_num = parameters->get<int32_t>("max_buffer_num");
-     }
-     this->max_buffer_num_ = max_buffer_num;
+   void PtZendnn::doInit(ParameterMap* parameters) {
+     constexpr auto kBatchSize = 1;
    
      auto batch_size = kBatchSize;
      if (parameters->has("batch_size")) {
@@ -131,18 +127,6 @@ Program Listing for File pt_zendnn.cpp
      if (parameters->has("output_classes")) {
        output_classes_ = parameters->get<int32_t>("output_classes");
      }
-   }
-   
-   size_t PtZendnn::doAllocate(size_t num) {
-     constexpr auto kBufferNum = 10U;
-     size_t buffer_num =
-       static_cast<int>(num) == kNumBufferAuto ? kBufferNum : num;
-   
-     VectorBuffer::allocate(this->input_buffers_, buffer_num,
-                            image_size_ * this->batch_size_, input_dt_);
-     VectorBuffer::allocate(this->output_buffers_, buffer_num,
-                            output_classes_ * this->batch_size_, DataType::FP32);
-     return buffer_num;
    }
    
    void PtZendnn::doAcquire(ParameterMap* parameters) {
@@ -187,9 +171,9 @@ Program Listing for File pt_zendnn.cpp
    
      // Adding metadata for input and output
      this->metadata_.addInputTensor(
-       "input", input_dt_,
-       {this->batch_size_, image_height_, image_width_, image_channels_});
-     this->metadata_.addOutputTensor("output", DataType::FP32, {0});
+       "input", {this->batch_size_, image_height_, image_width_, image_channels_},
+       input_dt_);
+     this->metadata_.addOutputTensor("output", {0}, DataType::FP32);
      this->metadata_.setName("PtZendnn");
    }
    
@@ -274,7 +258,8 @@ Program Listing for File pt_zendnn.cpp
        }
        timer.add("infer_stop");
        {
-         auto duration = timer.count<std::milli>("infer_start", "infer_stop");
+         [[maybe_unused]] auto duration =
+           timer.count<std::milli>("infer_start", "infer_stop");
          AMDINFER_LOG_INFO(logger, "Time (ms) taken for " +
                                      std::to_string(batch->size()) +
                                      " images: " + std::to_string(duration));
@@ -305,9 +290,13 @@ Program Listing for File pt_zendnn.cpp
                   response_size * sizeof(float));
            output.setData(std::move(buffer));
    
-           std::string output_name = outputs[i].getName();
+           std::string output_name;
+           if (i < outputs.size()) {
+             output_name = outputs[i].getName();
+           }
+   
            if (output_name.empty()) {
-             output.setName(inputs[i].getName());
+             output.setName(inputs[0].getName());
            } else {
              output.setName(output_name);
            }
@@ -322,7 +311,7 @@ Program Listing for File pt_zendnn.cpp
          resp.setContext(std::move(context));
    #endif
          timer.stop();
-         auto duration = timer.count<std::milli>();
+         [[maybe_unused]] auto duration = timer.count<std::milli>();
          AMDINFER_LOG_DEBUG(logger,
                             "Total time taken: " + std::to_string(duration));
    
@@ -335,12 +324,12 @@ Program Listing for File pt_zendnn.cpp
                                                duration);
    #endif
        }
+       this->returnInputBuffers(std::move(batch));
      }
      AMDINFER_LOG_INFO(logger, "PtZendnn ending");
    }
    
    void PtZendnn::doRelease() {}
-   void PtZendnn::doDeallocate() {}
    void PtZendnn::doDestroy() {}
    
    }  // namespace amdinfer::workers

@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::invalid_argument
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

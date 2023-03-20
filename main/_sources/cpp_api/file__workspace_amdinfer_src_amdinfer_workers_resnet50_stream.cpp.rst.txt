@@ -9,7 +9,6 @@ File resnet50_stream.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the ResNet50Stream worker. 
 
 
@@ -43,15 +42,15 @@ Includes
 
 - ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
 
-- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
-
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
-- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -75,7 +74,7 @@ Includes
 
 - ``future``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``opencv2/core.hpp``
 
@@ -95,7 +94,7 @@ Includes
 
 - ``vart/tensor_buffer.hpp``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 - ``xir/tensor/tensor.hpp``
 
@@ -145,6 +144,8 @@ Variables
 - :ref:`exhale_variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da`
 
 - :ref:`exhale_variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab`
+
+- :ref:`exhale_variable_resnet50__stream_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6`
 
 - :ref:`exhale_variable_resnet50__stream_8cpp_1aa1000a0c48850c27d70bea0534ee229f`
 

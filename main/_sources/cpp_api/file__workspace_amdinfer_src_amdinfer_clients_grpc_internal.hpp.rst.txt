@@ -9,7 +9,6 @@ File grpc_internal.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the internal objects used for gRPC. 
 
 

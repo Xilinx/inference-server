@@ -8,7 +8,6 @@ File websocket_server.cpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -32,15 +31,19 @@ Includes
 
 - ``algorithm``
 
-- ``amdinfer/clients/http_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`)
-
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/core/shared_state.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`)
 
 - ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/servers/http_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.hpp`)
 
 - ``amdinfer/servers/websocket_server.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp`)
 
@@ -50,7 +53,7 @@ Includes
 
 - ``json/value.h``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -68,4 +71,11 @@ Namespaces
 - :ref:`namespace_amdinfer`
 
 - :ref:`namespace_amdinfer__http`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_websocket__server_8cpp_1a59635d29a247f707bb9a44d0fb6aea2d`
 

@@ -9,7 +9,6 @@ File http_server.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the HTTP REST server. 
 
 
@@ -37,6 +36,8 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
+
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
 - ``cstdint``
@@ -51,11 +52,11 @@ Included By
 -----------
 
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
 
 
 

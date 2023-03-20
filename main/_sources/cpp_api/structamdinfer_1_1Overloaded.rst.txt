@@ -20,7 +20,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: amdinfer::Overloaded
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

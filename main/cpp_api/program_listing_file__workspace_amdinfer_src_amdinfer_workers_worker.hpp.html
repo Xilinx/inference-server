@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -108,23 +106,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -181,7 +187,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -305,12 +348,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -321,6 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -332,8 +378,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#metrics">Metrics</a></li>
@@ -402,7 +447,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="program-listing-for-file-worker-hpp">
-<span id="program-listing-file-workspace-amdinfer-src-amdinfer-workers-worker-hpp"></span><h1>Program Listing for File worker.hpp<a class="headerlink" href="#program-listing-for-file-worker-hpp" title="Permalink to this headline">¶</a></h1>
+<span id="program-listing-file-workspace-amdinfer-src-amdinfer-workers-worker-hpp"></span><h1>Program Listing for File worker.hpp<a class="headerlink" href="#program-listing-for-file-worker-hpp" title="Permalink to this heading">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_worker.hpp.html#file-workspace-amdinfer-src-amdinfer-workers-worker-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/worker.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Copyright 2021 Xilinx, Inc.</span>
 <span class="c1">// Copyright 2022 Advanced Micro Devices, Inc.</span>
@@ -432,7 +477,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/soft.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/buffer.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/memory_pool/pool.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/model_metadata.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="w"> </span><span class="p">{</span>
@@ -444,12 +490,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">WorkerStatus</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">New</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Init</span><span class="p">,</span>
-<span class="w">  </span><span class="n">Allocate</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Acquire</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Run</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Inactive</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Release</span><span class="p">,</span>
-<span class="w">  </span><span class="n">Deallocate</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Destroy</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Dead</span>
 <span class="p">};</span>
@@ -459,22 +503,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">Worker</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">platform</span><span class="p">)</span>
 <span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">metadata_</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">platform</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">New</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_buffers_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_buffers_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">max_buffer_num_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UINT_MAX</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Worker</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="nf">spawn</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
+<span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">Init</span><span class="p">;</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doInit</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">allocate</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">Allocate</span><span class="p">;</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doAllocate</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">acquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">Acquire</span><span class="p">;</span>
@@ -491,51 +529,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">metadata_</span><span class="p">.</span><span class="n">setReady</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doRelease</span><span class="p">();</span>
 <span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">deallocate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">Deallocate</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doDeallocate</span><span class="p">();</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_buffers_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_buffers_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">Destroy</span><span class="p">;</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">doDestroy</span><span class="p">();</span>
 <span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="o">::</span><span class="n">Dead</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">returnBuffers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">BufferPtrs</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">,</span>
-<span class="w">                     </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">BufferPtrs</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">output_buffers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_buffers_</span><span class="o">-&gt;</span><span class="n">enqueue_bulk</span><span class="p">(</span>
-<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">input_buffers</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">()),</span><span class="w"> </span><span class="n">input_buffers</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">());</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_buffers_</span><span class="o">-&gt;</span><span class="n">enqueue_bulk</span><span class="p">(</span>
-<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">output_buffers</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">()),</span><span class="w"> </span><span class="n">output_buffers</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">());</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setInputBuffers</span><span class="p">(</span><span class="n">BufferPtrsQueue</span><span class="o">*</span><span class="w"> </span><span class="n">buffers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_buffers_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setOutputBuffers</span><span class="p">(</span><span class="n">BufferPtrsQueue</span><span class="o">*</span><span class="w"> </span><span class="n">buffers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_buffers_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">getMaxBufferNum</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">max_buffer_num_</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setPool</span><span class="p">(</span><span class="n">MemoryPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">pool_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">getBatchSize</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="n">WorkerStatus</span><span class="w"> </span><span class="n">getStatus</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">status_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Batcher</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">makeBatcher</span><span class="p">(</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">makeBatcher</span><span class="o">&lt;</span><span class="n">SoftBatcher</span><span class="o">&gt;</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">,</span><span class="w"> </span><span class="n">MemoryPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">makeBatcher</span><span class="o">&lt;</span><span class="n">SoftBatcher</span><span class="o">&gt;</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">,</span><span class="w"> </span><span class="n">pool</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
 
 <span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Batcher</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">makeBatcher</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">,</span>
-<span class="w">                                                    </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                                    </span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="n">MemoryPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Batcher</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">batchers</span><span class="p">;</span>
-<span class="w">    </span><span class="n">batchers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">parameters</span><span class="p">));</span>
+<span class="w">    </span><span class="n">batchers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">));</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">batchers</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">batchers</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">get</span><span class="p">())));</span>
@@ -550,19 +565,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Logger</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getLogger</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">logger_</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 <span class="cp">#endif</span>
 
-<span class="w">  </span><span class="n">BufferPtrsQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_buffers_</span><span class="p">;</span>
-<span class="w">  </span><span class="n">BufferPtrsQueue</span><span class="o">*</span><span class="w"> </span><span class="n">output_buffers_</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">max_buffer_num_</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">batch_size_</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">returnInputBuffers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Batch</span><span class="o">&gt;</span><span class="w"> </span><span class="n">batch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getInputBuffers</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">buffers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">pool_</span><span class="o">-&gt;</span><span class="n">put</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="n">ModelMetadata</span><span class="w"> </span><span class="n">metadata_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">MemoryPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool_</span><span class="p">;</span>
 
 <span class="w"> </span><span class="k">private</span><span class="o">:</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">doInit</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">doAllocate</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doAcquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRun</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRelease</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDeallocate</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDestroy</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
@@ -600,7 +618,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

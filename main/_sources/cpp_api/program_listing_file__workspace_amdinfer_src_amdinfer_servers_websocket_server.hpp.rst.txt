@@ -40,7 +40,6 @@ Program Listing for File websocket_server.hpp
    #include <vector>     // for vector
    
    #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-   #include "amdinfer/core/interface.hpp"       // for Interface
    #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
    #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
    
@@ -54,26 +53,6 @@ Program Listing for File websocket_server.hpp
    }  // namespace amdinfer
    
    namespace amdinfer::http {
-   
-   class DrogonWs : public Interface {
-    public:
-     DrogonWs(const drogon::WebSocketConnectionPtr &conn,
-              std::shared_ptr<Json::Value> json);
-   
-     std::shared_ptr<InferenceRequest> getRequest(
-       const BufferRawPtrs &input_buffers, std::vector<size_t> &input_offsets,
-       const BufferRawPtrs &output_buffers,
-       std::vector<size_t> &output_offsets) override;
-   
-     size_t getInputSize() override;
-     void errorHandler(const std::exception &e) override;
-   
-    private:
-     void setJson();
-   
-     std::shared_ptr<Json::Value> json_;
-     drogon::WebSocketConnectionPtr conn_;
-   };
    
    class WebsocketServer
      : public drogon::WebSocketController<WebsocketServer, false> {

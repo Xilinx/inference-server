@@ -9,7 +9,6 @@ File build_options.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the build information. This file is updated automatically by CMake. To update, recompile the amdinfer source code. 
 
 
@@ -37,6 +36,8 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
@@ -57,11 +58,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 
@@ -95,6 +96,8 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
@@ -119,7 +122,7 @@ Included By
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
 
-- :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`
 
 
 
@@ -143,8 +146,6 @@ Defines
 - :ref:`exhale_define_build__options_8hpp_1a09f1b0969760f1246ed1119f0dd21b07`
 
 - :ref:`exhale_define_build__options_8hpp_1a38bb3a11b32b47c7085751e7ad658fc1`
-
-- :ref:`exhale_define_build__options_8hpp_1a5f100257574974f2ab3c02fdee919c1b`
 
 - :ref:`exhale_define_build__options_8hpp_1a1cb70e7b50dde20c79c992b551337b16`
 

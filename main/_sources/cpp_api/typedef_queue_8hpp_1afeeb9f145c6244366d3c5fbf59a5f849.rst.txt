@@ -11,4 +11,3 @@ Typedef Documentation
 
 
 .. doxygentypedef:: amdinfer::BufferPtrsQueue
-   :project: amdinfer

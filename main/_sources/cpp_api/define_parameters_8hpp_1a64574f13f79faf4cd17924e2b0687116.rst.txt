@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: GUARD_AMDINFER_CORE_PARAMETERS
-   :project: amdinfer

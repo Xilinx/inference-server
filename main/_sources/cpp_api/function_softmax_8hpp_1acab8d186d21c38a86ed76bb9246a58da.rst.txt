@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::pre_post::calcSoftmax(const T *, size_t, double *)
-   :project: amdinfer

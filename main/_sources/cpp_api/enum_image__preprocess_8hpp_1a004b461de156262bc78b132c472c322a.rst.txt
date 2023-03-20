@@ -11,4 +11,3 @@ Enum Documentation
 
 
 .. doxygenenum:: amdinfer::pre_post::ImageOrder
-   :project: amdinfer

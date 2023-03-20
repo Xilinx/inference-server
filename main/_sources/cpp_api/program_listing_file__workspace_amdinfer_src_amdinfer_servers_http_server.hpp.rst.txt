@@ -33,7 +33,8 @@ Program Listing for File http_server.hpp
    #include <string>      // for allocator, string
    
    #include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_HTTP, PROT...
-   #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
+   #include "amdinfer/core/request_container.hpp"  // for InferenceRequestBuilder
+   #include "amdinfer/observation/logging.hpp"     // for LoggerPtr
    
    #ifdef AMDINFER_ENABLE_HTTP
    #include <drogon/HttpController.h>  // for ADD_METHOD_TO, HttpContro...
@@ -45,15 +46,19 @@ Program Listing for File http_server.hpp
    namespace amdinfer {
    
    class SharedState;
+   class MemoryPool;
    
    #ifdef AMDINFER_ENABLE_HTTP
+   
+   InferenceRequestPtr getRequest(const std::shared_ptr<Json::Value> &json,
+                                  const MemoryPool *pool);
    
    class HttpServer : public drogon::HttpController<HttpServer, false> {
     public:
      explicit HttpServer(SharedState *state);
    
      METHOD_LIST_BEGIN
-   #ifdef AMDINFER_ENABLE_REST
+   
      ADD_METHOD_TO(HttpServer::getServerLive, "v2/health/live", drogon::Get,
                    drogon::Options);
      ADD_METHOD_TO(HttpServer::getServerReady, "v2/health/ready", drogon::Get,
@@ -78,13 +83,10 @@ Program Listing for File http_server.hpp
                    drogon::Post, drogon::Options);
      ADD_METHOD_TO(HttpServer::workerUnload, "v2/workers/{worker}/unload",
                    drogon::Post, drogon::Options);
-   #endif
    #ifdef AMDINFER_ENABLE_METRICS
      ADD_METHOD_TO(HttpServer::metrics, "metrics", drogon::Get);
    #endif
      METHOD_LIST_END
-   
-   #ifdef AMDINFER_ENABLE_REST
    
      void getServerLive(
        const drogon::HttpRequestPtr &req,
@@ -140,7 +142,6 @@ Program Listing for File http_server.hpp
        const drogon::HttpRequestPtr &req,
        std::function<void(const drogon::HttpResponsePtr &)> &&callback,
        std::string const &worker) const;
-   #endif
    
    #ifdef AMDINFER_ENABLE_METRICS
    
@@ -155,7 +156,7 @@ Program Listing for File http_server.hpp
    #endif
    };
    
-   #endif
+   #endif  // AMDINFER_ENABLE_HTTP
    
    namespace http {
    

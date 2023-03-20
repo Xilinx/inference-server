@@ -30,7 +30,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::GrpcClient
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

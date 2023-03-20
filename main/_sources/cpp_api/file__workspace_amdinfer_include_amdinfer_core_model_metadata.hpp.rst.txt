@@ -1,0 +1,86 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp:
+
+File model_metadata.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer_core>` (``/workspace/amdinfer/include/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/core/model_metadata.hpp``)
+-----------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/tensor.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_tensor.hpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_metadata.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_client.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1ModelMetadata`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_model__metadata_8hpp_1a3c11f1db8b5cac2c685eea18138065cb`
+

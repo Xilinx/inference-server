@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::createInferenceRequest(const std::string&, const InferenceRequest&, const StringMap&)
-   :project: amdinfer

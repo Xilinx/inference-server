@@ -11,4 +11,3 @@ Typedef Documentation
 
 
 .. doxygentypedef:: ServerBuilder
-   :project: amdinfer

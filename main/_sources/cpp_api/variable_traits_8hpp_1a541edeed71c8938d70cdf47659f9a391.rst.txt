@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: amdinfer::util::is_any_v
-   :project: amdinfer

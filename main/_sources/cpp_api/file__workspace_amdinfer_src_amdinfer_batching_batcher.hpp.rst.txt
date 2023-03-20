@@ -9,7 +9,6 @@ File batcher.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the base batcher implementation. 
 
 
@@ -35,6 +34,8 @@ Includes
 --------
 
 
+- ``amdinfer/batching/batch.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`)
+
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
@@ -47,17 +48,15 @@ Includes
 
 - ``amdinfer/util/queue.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
 
-- ``chrono``
-
 - ``cstddef``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 - ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -105,8 +104,6 @@ Classes
 -------
 
 
-- :ref:`exhale_class_classamdinfer_1_1Batch`
-
 - :ref:`exhale_class_classamdinfer_1_1Batcher`
 
 
@@ -120,8 +117,6 @@ Enums
 Typedefs
 --------
 
-
-- :ref:`exhale_typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae`
 
 - :ref:`exhale_typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89`
 

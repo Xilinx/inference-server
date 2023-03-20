@@ -9,7 +9,6 @@ File tracing.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines tracing. 
 
 
@@ -41,7 +40,7 @@ Includes
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``stack``
 
@@ -51,6 +50,8 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
@@ -59,9 +60,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.cpp`
 
@@ -76,6 +79,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 

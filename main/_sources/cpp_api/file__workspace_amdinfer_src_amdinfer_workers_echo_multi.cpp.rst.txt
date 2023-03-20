@@ -9,7 +9,6 @@ File echo_multi.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the EchoMulti worker. 
 
 
@@ -37,15 +36,15 @@ Includes
 
 - ``amdinfer/batching/hard.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.hpp`)
 
-- ``amdinfer/buffers/vector_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`)
-
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
-- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -75,7 +74,7 @@ Includes
 
 - ``cstring``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -85,7 +84,7 @@ Includes
 
 - ``utility``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -112,18 +111,5 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_echo__multi_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
-
-
-Variables
----------
-
-
-- :ref:`exhale_variable_echo__multi_8cpp_1afa0b765105e95ab377c99ba05b254d06`
-
-- :ref:`exhale_variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898`
-
-- :ref:`exhale_variable_echo__multi_8cpp_1a416f1fc1c3bce51d97065301d41db581`
-
-- :ref:`exhale_variable_echo__multi_8cpp_1af0ec89de1369c878ed2a32a0e0227448`
+- :ref:`exhale_function_workers_2echo__multi_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
 

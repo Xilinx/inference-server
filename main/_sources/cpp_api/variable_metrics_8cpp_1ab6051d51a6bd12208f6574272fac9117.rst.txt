@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: amdinfer::kPercentile99
-   :project: amdinfer

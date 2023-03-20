@@ -63,8 +63,14 @@ Program Listing for File parameters.cpp
      }
    }
    
-   bool ParameterMap::has(const std::string &key) {
+   bool ParameterMap::has(const std::string &key) const {
      return this->parameters_.find(key) != this->parameters_.end();
+   }
+   
+   void ParameterMap::rename(const std::string &key, const std::string &new_key) {
+     auto node = parameters_.extract(key);
+     node.key() = new_key;
+     parameters_.insert(std::move(node));
    }
    
    size_t ParameterMap::size() const { return parameters_.size(); }
@@ -72,11 +78,17 @@ Program Listing for File parameters.cpp
    bool ParameterMap::empty() const { return parameters_.empty(); }
    
    ParameterMap::Iterator ParameterMap::begin() { return parameters_.begin(); }
+   ParameterMap::ConstIterator ParameterMap::begin() const {
+     return parameters_.cbegin();
+   }
    ParameterMap::ConstIterator ParameterMap::cbegin() const {
      return parameters_.cbegin();
    }
    
    ParameterMap::Iterator ParameterMap::end() { return parameters_.end(); }
+   ParameterMap::ConstIterator ParameterMap::end() const {
+     return parameters_.cend();
+   }
    ParameterMap::ConstIterator ParameterMap::cend() const {
      return parameters_.cend();
    }
@@ -105,37 +117,40 @@ Program Listing for File parameters.cpp
      return size;
    }
    
-   void ParameterMap::serialize(std::byte *data_out) const {
+   std::byte *ParameterMap::serialize(std::byte *data_out) const {
+     auto *data = data_out;
      auto size = this->size();
      std::string foo;
-     data_out = copy(size, data_out, sizeof(size_t));
+     data = util::copy(size, data, sizeof(size_t));
      for (const auto &[key, value] : parameters_) {
-       data_out = copy(value.index(), data_out, sizeof(size_t));
-       data_out = copy(key.size(), data_out, sizeof(size_t));
+       data = util::copy(value.index(), data, sizeof(size_t));
+       data = util::copy(key.size(), data, sizeof(size_t));
        std::visit(
          [&](const auto &param) {
            using T = std::decay_t<decltype(param)>;
            if constexpr (std::is_same_v<T, std::string>) {
-             data_out = copy(param.size(), data_out, sizeof(size_t));
+             data = util::copy(param.size(), data, sizeof(size_t));
            } else {
-             data_out = copy(sizeof(param), data_out, sizeof(size_t));
+             data = util::copy(sizeof(param), data, sizeof(size_t));
            }
          },
          value);
      }
      for (const auto &[key, value] : parameters_) {
-       data_out = copy(key.c_str(), data_out, key.size());
+       data = util::copy(key.c_str(), data, key.size());
        std::visit(
          [&](const auto &param) {
            using T = std::decay_t<decltype(param)>;
            if constexpr (std::is_same_v<T, std::string>) {
-             data_out = copy(param.c_str(), data_out, param.size());
+             data = util::copy(param.c_str(), data, param.size());
            } else {
-             data_out = copy(param, data_out, sizeof(param));
+             data = util::copy(param, data, sizeof(param));
            }
          },
          value);
      }
+     assert(data_out + this->serializeSize() == data);
+     return data;
    }
    
    template <typename... Ts>
@@ -146,7 +161,7 @@ Program Listing for File parameters.cpp
      return kTable.at(i)();
    }
    
-   void ParameterMap::deserialize(const std::byte *data_in) {
+   const std::byte *ParameterMap::deserialize(const std::byte *data_in) {
      parameters_.clear();
    
      auto size = std::to_integer<size_t>(*data_in);
@@ -184,6 +199,7 @@ Program Listing for File parameters.cpp
          param);
        parameters_.try_emplace(key, param);
      }
+     return data_in;
    }
    
    }  // namespace amdinfer

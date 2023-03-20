@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::http::start(SharedState *, uint16_t)
-   :project: amdinfer

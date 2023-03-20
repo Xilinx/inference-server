@@ -9,7 +9,6 @@ File http_internal.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the internal objects used for HTTP/REST. 
 
 
@@ -37,13 +36,15 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
-- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
 
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
-- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
-
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/util/traits.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`)
 
 - ``cstddef``
 
@@ -57,11 +58,11 @@ Includes
 
 - ``json/value.h``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -77,8 +78,6 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
-
 
 
 
@@ -93,14 +92,12 @@ Classes
 -------
 
 
-- :ref:`exhale_class_classamdinfer_1_1DrogonHttp`
-
-- :ref:`exhale_class_classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4`
+- :ref:`exhale_struct_structamdinfer_1_1SetInputData`
 
 
-Typedefs
---------
+Functions
+---------
 
 
-- :ref:`exhale_typedef_http__internal_8hpp_1a7137f2088c425db6fdd74b1be1fe0663`
+- :ref:`exhale_function_http__internal_8hpp_1afa990983f0c809168a33aae411a99f8b`
 

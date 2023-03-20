@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::inferAsyncOrdered(Client *, const std::string&, const std::vector<InferenceRequest>&)
-   :project: amdinfer

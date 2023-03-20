@@ -32,6 +32,8 @@ Program Listing for File buffer.hpp
    #include <cstring>  // for memcpy
    #include <string>   // for string
    
+   #include "amdinfer/core/memory_pool/memory_allocator.hpp"
+   
    // IWYU is creating a cycle with adding/removing this header
    // IWYU pragma: no_include <algorithm>
    
@@ -39,11 +41,11 @@ Program Listing for File buffer.hpp
    
    class Buffer {
     public:
+     explicit Buffer(MemoryAllocators allocator);
+   
      virtual ~Buffer() = default;
    
      virtual void* data(size_t offset) = 0;
-   
-     virtual void reset() = 0;
    
      virtual size_t write(void* data, size_t offset, size_t size);
    
@@ -64,10 +66,14 @@ Program Listing for File buffer.hpp
          // this->write_counter_ += value.length() + 1;
          return offset + value.length() + 1;
        } else {
-         std::memcpy(this->data(offset), &value, sizeof(T));
-         return offset + sizeof(T);
+         return this->write(&value, offset, sizeof(T));
        }
      }
+   
+     MemoryAllocators getAllocator() const;
+   
+    private:
+     MemoryAllocators allocator_;
    };
    
    }  // namespace amdinfer

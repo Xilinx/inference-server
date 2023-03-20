@@ -1,0 +1,13 @@
+.. _exhale_function_native_8cpp_1a909af7a914df81895bf0a4dda591f13d:
+
+Function amdinfer::setCallback(InferenceRequest \*)
+===================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::setCallback(InferenceRequest *)

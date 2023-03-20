@@ -26,11 +26,10 @@ Program Listing for File shared_state.cpp
    
    #include "amdinfer/core/shared_state.hpp"
    
-   #include <json/reader.h>  // for CharReaderBuilder, Char...
-   #include <json/value.h>   // for Value
+   #include <jsoncpp/json/reader.h>  // for CharReaderBuilder, Char...
+   #include <jsoncpp/json/value.h>   // for Value
    
    #include <cassert>        // for assert
-   #include <cctype>         // for tolower
    #include <filesystem>     // for path
    #include <iostream>       // for operator<<, basic_ostream
    #include <string>         // for string, operator+, stoi
@@ -41,11 +40,12 @@ Program Listing for File shared_state.cpp
    #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_VITIS
    #include "amdinfer/core/endpoints.hpp"         // for Endpoints
    #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
-   #include "amdinfer/core/interface.hpp"         // IWYU pragma: keep
    #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
    #include "amdinfer/core/parameters.hpp"        // for ParameterMap
-   #include "amdinfer/core/predict_api.hpp"       // for ServerMetadata, ModelMe...
-   #include "amdinfer/version.hpp"                // for kAmdinferVersion
+   #include "amdinfer/core/request_container.hpp"  // for ServerMetadata, ModelMe...
+   #include "amdinfer/observation/observer.hpp"
+   #include "amdinfer/util/string.hpp"  // for isLower
+   #include "amdinfer/version.hpp"      // for kAmdinferVersion
    
    #ifdef AMDINFER_ENABLE_VITIS
    #include <sockpp/socket.h>         // for socket, socket_initializer
@@ -79,14 +79,13 @@ Program Listing for File shared_state.cpp
    }
    
    void SharedState::modelLoad(const std::string& model,
-                               ParameterMap* parameters) {
-     assert(parameters != nullptr);
-     for (const auto& c : model) {
-       assert(c == std::tolower(c));
-     }
+                               const ParameterMap& parameters) {
+     assert(util::isLower(model));
    
-     parseModel(repository_.getRepository(), model, parameters);
-     endpoints_.load(model, *parameters);
+     ParameterMap updated_parameters = parameters;
+   
+     parseModel(repository_.getRepository(), model, &updated_parameters);
+     endpoints_.load(model, updated_parameters);
    }
    
    void SharedState::modelUnload(const std::string& model) {
@@ -94,25 +93,21 @@ Program Listing for File shared_state.cpp
    }
    
    std::string SharedState::workerLoad(const std::string& worker,
-                                       ParameterMap* parameters) {
-     assert(parameters != nullptr);
-     for (const auto& c : worker) {
-       assert(c == std::tolower(c));
-     }
+                                       const ParameterMap& parameters) {
+     assert(util::isLower(worker));
    
-     parameters->put("worker", worker);
-     return endpoints_.load(worker, *parameters);
+     auto updated_parameters = parameters;
+     updated_parameters.put("worker", worker);
+     return endpoints_.load(worker, updated_parameters);
    }
    
    void SharedState::workerUnload(const std::string& worker) {
-     for (const auto& c : worker) {
-       assert(c == std::tolower(c));
-     }
+     assert(util::isLower(worker));
      endpoints_.unload(worker);
    }
    
    void SharedState::modelInfer(const std::string& model,
-                                std::unique_ptr<Interface> request) {
+                                std::unique_ptr<RequestContainer> request) {
      endpoints_.infer(model, std::move(request));
    }
    
@@ -198,6 +193,8 @@ Program Listing for File shared_state.cpp
      }
      return kernel_iterator->second >= num;
    }
+   
+   const MemoryPool* SharedState::getPool() const { return endpoints_.getPool(); }
    
    void SharedState::setRepository(const fs::path& repository_path,
                                    bool load_existing) {

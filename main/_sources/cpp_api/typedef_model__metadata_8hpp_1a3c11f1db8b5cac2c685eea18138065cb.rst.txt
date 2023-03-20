@@ -1,0 +1,13 @@
+.. _exhale_typedef_model__metadata_8hpp_1a3c11f1db8b5cac2c685eea18138065cb:
+
+Typedef amdinfer::ModelMetadataTensor
+=====================================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::ModelMetadataTensor

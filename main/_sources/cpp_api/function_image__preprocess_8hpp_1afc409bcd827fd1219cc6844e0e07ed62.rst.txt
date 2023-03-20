@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::pre_post::detail::nestedLoop(int, int, int, T *, F)
-   :project: amdinfer

@@ -8,7 +8,6 @@ File observer.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -34,6 +33,12 @@ Includes
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
 - ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 
@@ -45,6 +50,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
 
@@ -65,13 +72,6 @@ Classes
 
 
 - :ref:`exhale_struct_structamdinfer_1_1Observer`
-
-
-Functions
----------
-
-
-- :ref:`exhale_function_observer_8hpp_1adff966f58637552655053b2a0ad05c96`
 
 
 Variables

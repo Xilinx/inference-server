@@ -27,7 +27,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::CallData
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

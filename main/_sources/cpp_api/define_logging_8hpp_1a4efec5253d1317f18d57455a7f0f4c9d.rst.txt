@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: AMDINFER_LOG_WARN
-   :project: amdinfer

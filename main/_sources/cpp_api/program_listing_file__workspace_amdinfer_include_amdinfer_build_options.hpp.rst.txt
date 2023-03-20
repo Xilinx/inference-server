@@ -29,7 +29,6 @@ Program Listing for File build_options.hpp
    #define GUARD_AMDINFER_BUILD_OPTIONS_HPP
    
    #define AMDINFER_BUILD_TESTING
-   #define AMDINFER_ENABLE_REST
    #define AMDINFER_ENABLE_METRICS
    #define AMDINFER_ENABLE_HTTP
    #define AMDINFER_ENABLE_GRPC

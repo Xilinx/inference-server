@@ -1,0 +1,74 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp:
+
+File memory_allocator.hpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core_memory_pool>` (``/workspace/amdinfer/src/amdinfer/core/memory_pool``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/memory_pool/memory_allocator.hpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/tensor.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_tensor.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``cstddef``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1MemoryHeader`
+
+- :ref:`exhale_class_classamdinfer_1_1MemoryAllocator`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9`
+

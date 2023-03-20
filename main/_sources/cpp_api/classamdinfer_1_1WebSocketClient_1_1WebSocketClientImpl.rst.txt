@@ -17,7 +17,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::WebSocketClient::WebSocketClientImpl
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

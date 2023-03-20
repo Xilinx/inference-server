@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: AMDINFER_ENABLE_MIGRAPHX
-   :project: amdinfer

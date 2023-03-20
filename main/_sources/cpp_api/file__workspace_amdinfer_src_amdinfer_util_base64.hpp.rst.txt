@@ -9,7 +9,6 @@ File base64.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines base64 encoding/decoding. 
 
 

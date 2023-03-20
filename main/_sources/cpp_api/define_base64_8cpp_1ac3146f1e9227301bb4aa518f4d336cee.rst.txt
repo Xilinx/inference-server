@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: BUFFERSIZE
-   :project: amdinfer

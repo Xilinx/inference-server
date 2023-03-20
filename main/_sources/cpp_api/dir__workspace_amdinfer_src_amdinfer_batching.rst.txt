@@ -9,13 +9,14 @@ Directory batching
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/src/amdinfer/batching``
 
 
 Files
 -----
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`

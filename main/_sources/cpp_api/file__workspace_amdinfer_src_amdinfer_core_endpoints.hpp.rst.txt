@@ -8,7 +8,6 @@ File endpoints.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -32,7 +31,11 @@ Includes
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
@@ -42,7 +45,7 @@ Includes
 
 - ``map``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
@@ -52,7 +55,7 @@ Includes
 
 - ``utility``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 

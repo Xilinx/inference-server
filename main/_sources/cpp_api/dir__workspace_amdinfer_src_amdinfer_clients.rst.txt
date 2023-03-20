@@ -9,7 +9,6 @@ Directory clients
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/src/amdinfer/clients``
 
 
@@ -24,8 +23,6 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp`
 
 

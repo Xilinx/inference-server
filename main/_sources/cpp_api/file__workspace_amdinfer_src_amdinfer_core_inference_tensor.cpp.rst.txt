@@ -1,0 +1,46 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_inference_tensor.cpp:
+
+File inference_tensor.cpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/inference_tensor.cpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_inference_tensor.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/inference_tensor.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_tensor.hpp`)
+
+- ``amdinfer/util/memory.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

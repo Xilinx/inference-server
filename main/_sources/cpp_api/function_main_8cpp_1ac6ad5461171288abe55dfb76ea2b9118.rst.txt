@@ -1,0 +1,13 @@
+.. _exhale_function_main_8cpp_1ac6ad5461171288abe55dfb76ea2b9118:
+
+Function signalCallbackHandler
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: signalCallbackHandler(] int)

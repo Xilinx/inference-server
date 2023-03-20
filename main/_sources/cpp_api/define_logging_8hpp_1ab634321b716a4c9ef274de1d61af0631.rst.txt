@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: AMDINFER_LOG_ERROR
-   :project: amdinfer

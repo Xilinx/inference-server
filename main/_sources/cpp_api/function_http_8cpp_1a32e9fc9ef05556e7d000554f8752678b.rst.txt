@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::createPostRequest(const Json::Value&, const std::string&, const StringMap&)
-   :project: amdinfer

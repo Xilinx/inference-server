@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::workers::ResNet50Stream
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

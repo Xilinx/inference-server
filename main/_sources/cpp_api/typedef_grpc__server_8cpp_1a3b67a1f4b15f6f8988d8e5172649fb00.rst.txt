@@ -11,4 +11,3 @@ Typedef Documentation
 
 
 .. doxygentypedef:: ServerAsyncResponseWriter
-   :project: amdinfer

@@ -3,7 +3,7 @@
 Class Batch
 ===========
 
-- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`
 
 
 Class Documentation
@@ -11,7 +11,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::Batch
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

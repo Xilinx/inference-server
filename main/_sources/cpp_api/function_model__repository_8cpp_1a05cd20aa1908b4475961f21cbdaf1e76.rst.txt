@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::parseModel(const fs::path&, const std::string&, ParameterMap *)
-   :project: amdinfer

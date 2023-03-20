@@ -17,7 +17,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: amdinfer::Server::ServerImpl
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

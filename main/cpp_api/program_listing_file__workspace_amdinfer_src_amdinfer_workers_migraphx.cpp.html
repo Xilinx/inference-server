@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -108,23 +106,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -181,7 +187,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -305,12 +348,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -321,6 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -332,8 +378,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#metrics">Metrics</a></li>
@@ -402,7 +447,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="program-listing-for-file-migraphx-cpp">
-<span id="program-listing-file-workspace-amdinfer-src-amdinfer-workers-migraphx-cpp"></span><h1>Program Listing for File migraphx.cpp<a class="headerlink" href="#program-listing-for-file-migraphx-cpp" title="Permalink to this headline">¶</a></h1>
+<span id="program-listing-file-workspace-amdinfer-src-amdinfer-workers-migraphx-cpp"></span><h1>Program Listing for File migraphx.cpp<a class="headerlink" href="#program-listing-for-file-migraphx-cpp" title="Permalink to this heading">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-migraphx-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/migraphx.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Copyright 2022 Advanced Micro Devices, Inc.</span>
 <span class="c1">//</span>
@@ -436,21 +481,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="c1">                // for move</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span><span class="c1">                 // for vector</span>
 
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/hard.hpp&quot;</span><span class="c1">          // for BatchPtr, Batch, Batch...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/vector_buffer.hpp&quot;</span><span class="c1">  // for VectorBuffer</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">          // for AMDINFER_ENABLE_LOGGING</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">        // for DataType, operator&lt;&lt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">        // for invalid_argument, runt...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span><span class="c1">        // for ParameterMap</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/predict_api.hpp&quot;</span><span class="c1">       // for InferenceRequest, Infe...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">           // for InferenceResponseOutput</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">    // for AMDINFER_LOG_INFO, AMD...</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span><span class="c1">    // for Metrics, MetricCounterIDs</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/containers.hpp&quot;</span><span class="c1">        // for containerProduct</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">             // for BufferPtrsQueue</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/thread.hpp&quot;</span><span class="c1">            // for setThreadName</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/timer.hpp&quot;</span><span class="c1">             // for Timer</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/workers/worker.hpp&quot;</span><span class="c1">         // for Worker, kNumBufferAuto</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/hard.hpp&quot;</span><span class="c1">           // for BatchPtr, Batch, Batch...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/build_options.hpp&quot;</span><span class="c1">           // for AMDINFER_ENABLE_LOGGING</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/data_types.hpp&quot;</span><span class="c1">         // for DataType, operator&lt;&lt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/exceptions.hpp&quot;</span><span class="c1">         // for invalid_argument, runt...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/inference_request.hpp&quot;</span><span class="c1">  // for InferenceRequest</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/inference_response.hpp&quot;</span><span class="c1">  // for InferenceResponse</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span><span class="c1">          // for ParameterMap</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/declarations.hpp&quot;</span><span class="c1">             // for InferenceResponseOutput</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for AMDINFER_LOG_INFO, AMD...</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span><span class="c1">  // for Metrics, MetricCounterIDs</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/containers.hpp&quot;</span><span class="c1">      // for containerProduct</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">           // for BufferPtrsQueue</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/thread.hpp&quot;</span><span class="c1">          // for setThreadName</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/timer.hpp&quot;</span><span class="c1">           // for Timer</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/workers/worker.hpp&quot;</span><span class="c1">       // for Worker, kNumBufferAuto</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="o">::</span><span class="nn">workers</span><span class="w"> </span><span class="p">{</span>
 
@@ -458,14 +503,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w"> </span><span class="k">public</span><span class="o">:</span>
 <span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">Worker</span><span class="o">::</span><span class="n">Worker</span><span class="p">;</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="nf">spawn</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 
 <span class="w"> </span><span class="k">private</span><span class="o">:</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">doInit</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">doAllocate</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doAcquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRun</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRelease</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDeallocate</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDestroy</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 
 <span class="w">  </span><span class="c1">// the model file to be loaded.  Supported types are *.onnx and *.mxr</span>
@@ -488,10 +532,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">input_queue</span><span class="p">);</span>
 <span class="p">}</span>
 
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">MemoryAllocators</span><span class="o">::</span><span class="n">Cpu</span><span class="p">};</span>
+<span class="p">}</span>
+
 <span class="c1">// Enum-to-enum conversion to let us read data type from migraphx model.</span>
 <span class="c1">// The definitions are taken from the MIGraphX macro</span>
 <span class="c1">// MIGRAPHX_SHAPE_VISIT_TYPES</span>
-<span class="n">DataType</span><span class="w"> </span><span class="nf">toDataType</span><span class="p">(</span><span class="n">migraphx_shape_datatype_t</span><span class="w"> </span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">DataType</span><span class="w"> </span><span class="n">toDataType</span><span class="p">(</span><span class="n">migraphx_shape_datatype_t</span><span class="w"> </span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// case 0 is tuple_type which we don&#39;t support here</span>
 <span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">migraphx_shape_bool_type</span><span class="p">:</span>
@@ -523,7 +571,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">MIGraphXWorker::doInit</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doInit</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// default batch size; client may request a change. Arbitrarily set to 64</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">default_batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span>
 
@@ -534,7 +582,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#endif</span>
 <span class="w">  </span><span class="c1">// stringstream used for formatting logger messages</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">smsg</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="nf">smsg</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; MIGraphXWorker::doInit </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 
@@ -562,8 +610,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="c1">//                        Load the model.</span>
 <span class="w">  </span><span class="c1">//</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">filepath</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_file_</span><span class="p">);</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_file_</span><span class="p">);</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">onnx_path</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_file_</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">compiled_path</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_file_</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">onnx_path</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_file_</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// Filename processing.</span>
 <span class="w">  </span><span class="c1">// Take the root of the given model file name and look for either an *.mxr</span>
@@ -578,7 +626,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">replace_extension</span><span class="p">(</span><span class="s">&quot;.onnx&quot;</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// Is there an mxr file?</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">good</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Load the compiled MessagePack (*.mxr) file</span>
 <span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
@@ -677,34 +725,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sh</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
 <span class="w">  </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">shapes</span><span class="w"> </span><span class="n">output_shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_output_shapes</span><span class="p">();</span>
 <span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-<span class="p">}</span>
 
-<span class="kt">size_t</span><span class="w"> </span><span class="nf">MIGraphXWorker::doAllocate</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span>
-<span class="cp">#endif</span>
-<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MIGraphXWorker::doAllocate&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="c1">//</span>
-<span class="w">  </span><span class="c1">// Allocate</span>
-<span class="w">  </span><span class="c1">//</span>
-<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">kBufferNum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3U</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">buffer_num</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">kNumBufferAuto</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">kBufferNum</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">num</span><span class="p">;</span>
-<span class="w">  </span><span class="c1">// Allocate enough to hold buffer_num batches&#39; worth of input sets.</span>
-<span class="w">  </span><span class="c1">// Extra batches allow server to hold more requests at one time</span>
-<span class="w">  </span><span class="c1">// todo:  this try/catch was observed to just get stuck when batch size</span>
-<span class="w">  </span><span class="c1">// is too big (approx. 56 for Yolov4 model); how to catch the error?</span>
-
-<span class="w">  </span><span class="c1">// Calculate the total number of bytes required for all inputs</span>
-
-<span class="w">  </span><span class="n">BufferPtrs</span><span class="w"> </span><span class="n">buffer_vec</span><span class="p">;</span>
-
-<span class="w">  </span><span class="n">migraphx</span><span class="o">::</span><span class="n">program_parameter_shapes</span><span class="w"> </span><span class="n">input_shapes</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">.</span><span class="n">get_parameter_shapes</span><span class="p">();</span>
-
-<span class="w">  </span><span class="c1">// Work out the max. size of any input buffer, in bytes.  We&#39;ll allocate all</span>
-<span class="w">  </span><span class="c1">// of them the same size in case a request puts them in mixed-up order.</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">max_buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">aname</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">input_shapes</span><span class="p">.</span><span class="n">names</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">shape</span><span class="w"> </span><span class="n">ashape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_shapes</span><span class="p">[</span><span class="n">aname</span><span class="p">];</span>
 <span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">llen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ashape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
@@ -712,52 +733,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">asize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ashape</span><span class="p">.</span><span class="n">bytes</span><span class="p">();</span>
 <span class="w">    </span><span class="c1">// size of a single request input (divide by batch size)</span>
 <span class="w">    </span><span class="n">input_sizes_</span><span class="p">[</span><span class="n">aname</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asize</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="n">ashape</span><span class="p">.</span><span class="n">lengths</span><span class="p">().</span><span class="n">begin</span><span class="p">());</span>
-<span class="w">    </span><span class="n">max_buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">max_buffer</span><span class="p">,</span><span class="w"> </span><span class="n">asize</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="c1">// Now, allocate the input and output buffers.</span>
-
-<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">aname</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">input_shapes</span><span class="p">.</span><span class="n">names</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">ashape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_shapes</span><span class="p">[</span><span class="n">aname</span><span class="p">];</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">llen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ashape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
-
-<span class="w">      </span><span class="c1">// todo: test whether VectorBuffer::allocate() does this in the right</span>
-<span class="w">      </span><span class="c1">// order for multiple (kBufferNum) sets of buffers. It wasn&#39;t designed to</span>
-<span class="w">      </span><span class="c1">// be called in a loop like this.  Using 1 in place of kBufferNum</span>
-
-<span class="w">      </span><span class="n">buffer_vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">VectorBuffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">max_buffer</span><span class="p">,</span><span class="w"> </span><span class="n">DataType</span><span class="o">::</span><span class="n">Uint8</span><span class="p">));</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">input_buffers_</span><span class="o">-&gt;</span><span class="n">enqueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">buffer_vec</span><span class="p">));</span>
-
-<span class="w">    </span><span class="c1">// Calculate max. output buffer size</span>
-<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">out_buffer_size</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">shapes</span><span class="w"> </span><span class="n">output_shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">.</span><span class="n">get_output_shapes</span><span class="p">();</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ash</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">output_shapes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">out_buffer_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">out_buffer_size</span><span class="p">,</span><span class="w"> </span><span class="n">ash</span><span class="p">.</span><span class="n">bytes</span><span class="p">());</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="c1">// Output buffers aren&#39;t used by the engine at time of writing this,</span>
-<span class="w">    </span><span class="c1">// but allocate them anyway. (Use number of outputs for kBufferNum)</span>
-<span class="w">    </span><span class="n">VectorBuffer</span><span class="o">::</span><span class="n">allocate</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">output_buffers_</span><span class="p">,</span><span class="w"> </span><span class="n">output_shapes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span>
-<span class="w">                           </span><span class="n">out_buffer_size</span><span class="p">,</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Int8</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span>
-<span class="w">      </span><span class="n">logger</span><span class="p">,</span>
-<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;MIGraphXWorker couldn&#39;t allocate buffer (batch size &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;)&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">runtime_error</span><span class="p">{</span><span class="s">&quot;MIGraphXWorker couldn&#39;t allocate buffer&quot;</span><span class="p">};</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;MIGraphXWorker::doAllocate() added &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                              </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">buffer_num</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; buffers&quot;</span><span class="p">);</span>
-
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">buffer_num</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">MIGraphXWorker::doAcquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">parameters</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doAcquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">parameters</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">MIGraphXWorker::doRun</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doRun</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span>
 <span class="cp">#endif</span>
@@ -767,7 +748,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="w">  </span><span class="c1">// stringstream used for formatting logger messages</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">smsg</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="nf">smsg</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">//</span>
 <span class="w">  </span><span class="c1">//  Wait for requests from the batcher in an infinite loop.  This thread will</span>
@@ -883,7 +864,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">arguments</span><span class="w"> </span><span class="n">migraphx_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="p">);</span>
 <span class="w">      </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;eval_end&quot;</span><span class="p">);</span>
 <span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;eval_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;eval_end&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mega</span><span class="o">::</span><span class="n">num</span><span class="p">;</span>
+<span class="w">      </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mega</span><span class="o">::</span><span class="n">num</span><span class="p">;</span>
 <span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
 <span class="w">        </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Finished migraphx eval; batch size: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">                  </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;  elapsed time: &quot;</span><span class="w"> </span><span class="o">+</span>
@@ -969,7 +950,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">              </span><span class="n">output</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="n">output_name</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="n">setShape</span><span class="p">(</span><span class="n">lengths</span><span class="p">);</span>
-<span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="n">setData</span><span class="p">(</span><span class="n">results</span><span class="p">);</span>
 
 <span class="w">            </span><span class="c1">// Copy migraphx results to a buffer and add to output</span>
 <span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
@@ -1011,7 +991,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;batch_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">returnInputBuffers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">batch</span><span class="p">));</span>
+<span class="w">    </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;batch_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
 <span class="w">      </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Finished migraphx batch processing; batch size: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
@@ -1020,9 +1002,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Migraphx::doRun ending&quot;</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">MIGraphXWorker::doRelease</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-<span class="kt">void</span><span class="w"> </span><span class="nf">MIGraphXWorker::doDeallocate</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
-<span class="kt">void</span><span class="w"> </span><span class="nf">MIGraphXWorker::doDestroy</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doRelease</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doDestroy</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// namespace amdinfer::workers</span>
 
@@ -1056,7 +1037,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

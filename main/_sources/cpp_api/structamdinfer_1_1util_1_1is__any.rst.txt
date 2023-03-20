@@ -20,7 +20,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: amdinfer::util::is_any
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

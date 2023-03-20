@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -110,23 +108,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -183,7 +189,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -307,12 +350,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -323,6 +368,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -334,8 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#metrics">Metrics</a></li>
@@ -404,19 +449,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="architecture">
-<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
-<figure class="align-left" id="id4">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading">¶</a></h1>
+<figure class="align-left" id="id3">
 <span id="architecture-overview"></span><a class="reference internal image-reference" href="_images/architecture.png"><img alt="Diagram showing AMD Inference Server's architecture" src="_images/architecture.png" style="height: 400px;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Server architecture overview</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Server architecture overview</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 <div class="legend">
 </div>
 </figcaption>
 </figure>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference internal" href="#architecture-overview"><span class="std std-numref">Fig. 1</span></a> shows a high-level view of the Server’s architecture.
-At the top, we have a client who can make a request to the Server using HTTP/REST, WebSocket, or the C++ API <a class="footnote-reference brackets" href="#f1" id="id1">1</a>.
+At the top, we have a client who can make a request to the Server using HTTP/REST, WebSocket, gRPC or the C++ API <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
 This request must be made to a particular worker that must be active in the Server.
 Each received request is passed to a batcher associated with the targeted worker independent of its origin.
 The batcher will combine individual requests into a batch and pass it to the worker for execution.
@@ -426,16 +471,13 @@ This flexibility enables the Server to take advantage of any hardware accelerato
 The response to the client is made using the same API as the original request.</p>
 </section>
 <section id="ingestion">
-<h2>Ingestion<a class="headerlink" href="#ingestion" title="Permalink to this headline">¶</a></h2>
+<h2>Ingestion<a class="headerlink" href="#ingestion" title="Permalink to this heading">¶</a></h2>
 <p>There are a number of ways to get data into the system for inference.
 In general, each protocol has a custom interface to the client and requires explicit handling in the Server to accept this initial request.
-After receiving the client’s request in the Server, each supported protocols’ handler packs the request into an implementation of an <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object.
-This virtual class is defined in the Server and provides the batcher with a standard way of interacting with data from different ingestion protocols.
-Since all protocols push an implementation of this class to the batcher, they are treated equally by the rest of the Server.
-The only protocol-specific logic applies at the end of the worker when it replies back to the client in a protocol-specific manner.
-This structure also enables easy extension of the Server to add new protocols by extending the <code class="docutils literal notranslate"><span class="pre">Interface</span></code> class.</p>
+After receiving the client’s request in the Server, each supported protocols’ handler converts the incoming data into an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> object.
+This object, plus some metadata, is packed into a <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> object and passed to the appropriate batcher.</p>
 <section id="api">
-<h3>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
+<h3>API<a class="headerlink" href="#api" title="Permalink to this heading">¶</a></h3>
 <p>The APIs used for this project are based on ‘<a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>’ where possible.
 The API defines endpoints in different categories: health, metrics and prediction.
 The health APIs define endpoints to get Server metadata and check server readiness.
@@ -449,13 +491,14 @@ With KServe, the load API returns only the status code and the requests are made
 It also doesn’t have the notion of load-time parameters.
 In our case, there are parameters we need to pass at load-time, which results in potentially different endpoints if multiple workers with different configurations are loaded at once.
 To maintain compatibility, we do guarantee that the first worker loaded for a particular model, independent of configuration, will be at the same endpoint as the load request.
-Therefore, a KServe client is free to ignore the contents of the response and make requests to the endpoint without resulting in errors.</p>
+Therefore, a KServe client is free to ignore the contents of the response and make requests to the endpoint without resulting in errors.
+There’s also a <code class="docutils literal notranslate"><span class="pre">modelLoad</span></code> API which behaves more similarly to how KServe expects and is intended for use with using the server with a model repository.</p>
 <p>We currently do not support the optional version information associated with a model defined in the KServe specification.
 After a particular worker is loaded, inference requests can be made to it by constructing the appropriate request object and sending it to the prediction endpoint.
 The format of the request object in HTTP matches KServe’s specification while an equivalent C++ object is used for the C++ API.</p>
 </section>
 <section id="http-rest-and-websocket">
-<h3>HTTP/REST and WebSocket<a class="headerlink" href="#http-rest-and-websocket" title="Permalink to this headline">¶</a></h3>
+<h3>HTTP/REST and WebSocket<a class="headerlink" href="#http-rest-and-websocket" title="Permalink to this heading">¶</a></h3>
 <p>The HTTP/REST and WebSocket functionality in the Server is provided using <a class="reference external" href="https://github.com/drogonframework/drogon">Drogon</a>. We chose to use Drogon for our web framework for a few reasons:</p>
 <ul class="simple">
 <li><p>Based on the benchmarks at ‘<a class="reference external" href="https://github.com/TechEmpower/FrameworkBenchmarks/">&lt;TechEmpower</a>’, Drogon is high-performing (unlike CppCMS and Treefrog)</p></li>
@@ -466,30 +509,39 @@ The format of the request object in HTTP matches KServe’s specification while 
 Drogon uses a configurable number of threads to run these request handlers.
 When a REST request is made to an endpoint, the request data and callback function are provided for the handler to process the request and then respond to the client.
 To avoid blocking the finite number of handler threads with potentially long-running inference requests, we use an asynchronous architecture in the handler.
-The received request is packed into an <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object and pushed into a <a class="reference external" href="https://github.com/cameron314/concurrentqueue">thread-safe lock-free multi producer/consumer queue</a> to go to the target worker’s batcher.
+The received request is packed into a <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> object and pushed into a <a class="reference external" href="https://github.com/cameron314/concurrentqueue">thread-safe lock-free multi producer/consumer queue</a> to go to the target worker’s batcher.
 The HTTP server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/http_server.*</span></code>.</p>
 <p>Drogon also provides a WebSocket server, which is currently used experimentally to run predictions on videos from certain workers.
 The WebSocket API is custom.
 At this time, the client provides a URL to a video that the worker will retrieve and analyze frame-by-frame and send back to the client but this is subject to change.
 The WebSocket server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/websocket_server.*</span></code>.</p>
 </section>
+<section id="grpc">
+<h3>gRPC<a class="headerlink" href="#grpc" title="Permalink to this heading">¶</a></h3>
+<p>The gRPC functionality is provided through a custom implementation of a gRPC server.
+There are some examples in the <a class="reference external" href="https://github.com/grpc/grpc/blob/master/examples/cpp">gRPC repository on Github</a> that can be used for reference.
+It makes new dynamic objects to keep track of the incoming requests and a state machine is embedded inside to track state.
+A pointer to this object, <code class="docutils literal notranslate"><span class="pre">CallData</span></code>, is put into the callback for the request so when the worker finishes this request, it will use it to respond to the request.
+After the response, the state machine is marked to finish and the object deallocates itself.
+The gRPC server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/grpc_server.*</span></code>.</p>
+</section>
 <section id="c-api">
-<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this heading">¶</a></h3>
 <p>The C++ API allows users to compile custom applications that link directly to the Server’s backend.
 As a result, using the C++ API will yield the highest performance of any ingestion method.</p>
 <p>The C++ API provides functions similar to the prediction API used in HTTP.
 The API lets users load workers and make inference requests.
-The inference request is packed into an <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object and pushed to the target worker’s batcher.
+The inference request is packed into a <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> object and pushed to the target worker’s batcher.
 An <code class="docutils literal notranslate"><span class="pre">std::promise</span></code> is returned to the user to retrieve the result.</p>
 <p>The public API is defined in <code class="docutils literal notranslate"><span class="pre">include/amdinfer/clients/native.hpp</span></code> and the implementation is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/clients/native.cpp</span></code>.</p>
 </section>
 </section>
 <section id="batching">
-<h2>Batching<a class="headerlink" href="#batching" title="Permalink to this headline">¶</a></h2>
-<figure class="align-left" id="id5">
+<h2>Batching<a class="headerlink" href="#batching" title="Permalink to this heading">¶</a></h2>
+<figure class="align-left" id="id4">
 <span id="architecture-detail"></span><a class="reference internal image-reference" href="_images/architecture_detailed.png"><img alt="Diagram showing more detail in to the AMD Inference Server's architecture" src="_images/architecture_detailed.png" style="height: 400px;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">More detailed look at the Server architecture</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">More detailed look at the Server architecture</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 <div class="legend">
 </div>
 </figcaption>
@@ -501,25 +553,25 @@ The Server incorporates batching as a transparent step in the pipeline that grou
 The implementations of the batchers are in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/batching</span></code>.</p>
 <p>The base batcher class defines a common interface for all batcher implementations and has some basic common properties.
 Each batcher has two thread-safe queues (one for input and one for output), a configured batch size and a string identifying the worker group it’s attached to.
-The batcher runs as a separate thread that monitors its input queue to process incoming <code class="docutils literal notranslate"><span class="pre">Interface</span></code> objects from all ingestion methods and pushes completed <code class="docutils literal notranslate"><span class="pre">Batch</span></code> objects on the output queue.
+The batcher runs as a separate thread that monitors its input queue to process incoming <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> objects from all ingestion methods and pushes completed <code class="docutils literal notranslate"><span class="pre">Batch</span></code> objects on the output queue.
 Each batcher implementation defines a <code class="docutils literal notranslate"><span class="pre">run()</span></code> method that provides the logic with which the batcher produces a batch.
 A worker (and by extension, the worker group) specifies which batcher implementation should be used to prepare batches for it (as well as the batch size) and each worker group shares a set of batchers.
 This configuration is determined at compile-time and built into the definition of the worker.</p>
 <p>A <code class="docutils literal notranslate"><span class="pre">Batch</span></code> is made up of three basic components: <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> objects and input/output buffers.
 <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> objects are direct C++ implementations of the information present in the KServe API of an inference request structured in a similar format.
 They provide an ingestion-agnostic data format that all workers can process.
-The worker group that the batcher is attached to provides a set of input/output buffers from a pool of buffers that it allocates.
-These buffers are available in a queue for that batcher to pull from when it has incoming requests to batch together.
-Most commonly, each buffer can be used to represent one batch-size worth of contiguous memory but its exact nature depends on the buffer implementation that the worker is using.
+The batcher is responsible for getting memory from the memory pool that is sized appropriately to contain the incoming batch size of data as a buffer.
+The worker provides a list of allocators that the batcher is allowed to use when requesting memory.
+Most commonly, each buffer can be used to represent one batch-size worth of contiguous memory but its exact nature depends on the buffer implementation that the worker has requested.
 In this case, the batcher’s job is to take individual requests and move its data into one slot of this buffer and construct the corresponding <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> object.
 Batchers have some flexibility with how these batches are constructed, which is why multiple batcher implementations are possible and supported in the AMD Inference Server.
 For example, one batcher may allow partial batches to be pushed on after enough time whereas this may not be allowed by another batcher.</p>
-<p>Batchers use the <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object’s <code class="docutils literal notranslate"><span class="pre">getRequest()</span></code> method to help create batches.
-This method must be implemented by each interface and governs how, given some buffers and counters, the particular ingestion method’s data should be converted to an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> and its data is copied over to the buffers.
-THis method allows batchers to process all ingestion methods without knowing about the details of how the data may be stored internally in the <code class="docutils literal notranslate"><span class="pre">Interface</span></code>.</p>
+<p>Assuming that contiguous batches are expected, the batcher should request memory from the pool on the first request of a new batch.
+As new requests come in, their data is copied over to the newly allocated memory so it’s contiguous for downstream processing.
+The memory that was used initially by the ingestion layer can now be freed.</p>
 </section>
 <section id="workers">
-<span id="architectureworkers"></span><h2>Workers<a class="headerlink" href="#workers" title="Permalink to this headline">¶</a></h2>
+<span id="architectureworkers"></span><h2>Workers<a class="headerlink" href="#workers" title="Permalink to this heading">¶</a></h2>
 <p>Workers perform the computation.
 They are the smallest unit that the Server manages.
 A worker may be as simple or complex as you like: as long as it adheres to the interface.
@@ -528,20 +580,18 @@ Thus, new workers can be loaded and unloaded without stopping the server.</p>
 <p>Workers are defined in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/workers</span></code>.
 The <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file builds each worker as <code class="docutils literal notranslate"><span class="pre">libworkerX.so</span></code> where <em>X</em> corresponds to the name of the C++ file defining the worker in PascalCase.</p>
 <section id="organization-and-lifecycle">
-<h3>Organization and Lifecycle<a class="headerlink" href="#organization-and-lifecycle" title="Permalink to this headline">¶</a></h3>
+<h3>Organization and Lifecycle<a class="headerlink" href="#organization-and-lifecycle" title="Permalink to this heading">¶</a></h3>
 <p>The base Worker class provides the template of all workers for the Server.
 This class defines the lifecycle methods of the worker that are called by the Server.
 This lifecycle is defined as follows:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">init()</span></code>: perform low-cost initialization of the worker</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">allocate()</span></code>: allocate memory buffers that are used to hold input and output data for the worker. <cite>Buffering</cite> is further discussed below.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">acquire()</span></code>: acquire any hardware accelerators/resources and/or perform any high-cost initialization for the worker</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">run()</span></code>: the main body of the worker performs the chosen computations on incoming batches</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">release()</span></code>: release any hardware accelerators/resources</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">deallocate()</span></code>: free the memory buffers allocated by this worker</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">destroy()</span></code>: perform any final operations prior to shutdown</p></li>
 </ol>
-<p>The first three steps set up the worker while the latter three tear it down and are performed in this order by the Server.
+<p>The first two steps set up the worker while the latter two tear it down and are performed in this order by the Server.
 The body of these methods must be provided by each worker implementation in the corresponding <code class="docutils literal notranslate"><span class="pre">doX()</span></code> methods (e.g. <code class="docutils literal notranslate"><span class="pre">doInit()</span></code>).
 At load-time, the server will create an instance of the worker using its <code class="docutils literal notranslate"><span class="pre">getWorker()</span></code> method:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span>
@@ -549,16 +599,22 @@ At load-time, the server will create an instance of the worker using its <code c
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>This instance is saved internally and the first three methods above are called to initialize the worker.
+<p>This instance is saved internally and the first two methods above are called to initialize the worker.
 The worker’s batcher is also started by the server at this time.
 Finally, the worker’s <code class="docutils literal notranslate"><span class="pre">run()</span></code> method is started as a separate thread with the batcher’s output queue passed as the input queue to the worker.
 This method performs the body of the work.
 In an infinite loop, this method should wait for incoming batches from the worker’s input queue, process the requests, and respond to the clients.</p>
-<p>To unload a worker, the Manager sends a <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> to the worker, which should terminate the <code class="docutils literal notranslate"><span class="pre">run()</span></code> thread.
-This thread is joined and the last three lifecycle methods are called to safely clean up the worker.</p>
+<p>To unload a worker, the State sends a <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> to the worker, which should terminate the <code class="docutils literal notranslate"><span class="pre">run()</span></code> thread.
+This thread is joined and the last two lifecycle methods are called to safely clean up the worker.</p>
+<p>Workers must also define a <code class="docutils literal notranslate"><span class="pre">getAllocators()</span></code> method to choose which allocators can be used by the batcher when it’s preparing the incoming batch.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MyWorkerClass</span><span class="o">::</span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">MemoryAllocators</span><span class="o">::</span><span class="n">Cpu</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 <section id="improving-performance">
-<h3>Improving Performance<a class="headerlink" href="#improving-performance" title="Permalink to this headline">¶</a></h3>
+<h3>Improving Performance<a class="headerlink" href="#improving-performance" title="Permalink to this heading">¶</a></h3>
 <p>Having multiple workers of the same kind can improve performance if there are many incoming batches.
 Multiple identical workers are grouped into one worker group (see <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>).
 Each worker group shares one batcher group i.e. each batcher in a batcher group pushes its batches to a common queue that each worker in a worker group is dequeuing from.
@@ -567,7 +623,7 @@ Therefore, each worker should only pull from this common queue when it can actua
 To load a new worker into an existing group, the worker should be loaded with the load-time parameter <code class="docutils literal notranslate"><span class="pre">share</span></code> set to <em>false</em>.</p>
 </section>
 <section id="external-processing">
-<h3>External Processing<a class="headerlink" href="#external-processing" title="Permalink to this headline">¶</a></h3>
+<h3>External Processing<a class="headerlink" href="#external-processing" title="Permalink to this heading">¶</a></h3>
 <p>Workers, by virtue of their generic structure, may be highly complex and call entirely external applications for processing data.
 The AMD Inference Server supports this use case and suggests the following for organizing code:</p>
 <ul class="simple">
@@ -582,40 +638,40 @@ The AMD Inference Server supports this use case and suggests the following for o
 For example, the Server will eventually need to send health check requests to workers that must be responded to appropriately.</p>
 </section>
 <section id="xmodel">
-<h3>XModel<a class="headerlink" href="#xmodel" title="Permalink to this headline">¶</a></h3>
-<figure class="align-left" id="id6">
+<h3>XModel<a class="headerlink" href="#xmodel" title="Permalink to this heading">¶</a></h3>
+<figure class="align-left" id="id5">
 <span id="fig-xmodel"></span><a class="reference internal image-reference" href="_images/xmodel.png"><img alt="Diagram showing the structure of the XModel worker" src="_images/xmodel.png" style="height: 300px;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">The XModel worker</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">The XModel worker</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
 <div class="legend">
 </div>
 </figcaption>
 </figure>
 <p>As perhaps the most complex worker thus far, the architecture of the XModel worker is examined here in greater detail.
-The XModel worker is intended to run an arbitrary XModel specified by the user on a Xilinx FPGA <a class="footnote-reference brackets" href="#f3" id="id2">3</a>.
-We take a look at the lifecycle of this worker in the following sections.</p>
+The XModel worker is intended to run an arbitrary XModel specified by the user on a Xilinx FPGA <a class="footnote-reference brackets" href="#f2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.
+We take a look at the lifecycle of this worker in the following sections.
+The XModel worker is using the <code class="docutils literal notranslate"><span class="pre">VartTensor</span></code> allocator.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Xmodel</span><span class="o">::</span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">MemoryAllocators</span><span class="o">::</span><span class="n">VartTensor</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <section id="initialization">
-<h4>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h4>
+<h4>Initialization<a class="headerlink" href="#initialization" title="Permalink to this heading">¶</a></h4>
 <p>The XModel worker needs a path to an XModel to run at load-time.
 This XModel file is opened and parsed to get the graph and the first DPU subgraph (i.e. the first subgraph in the graph that is supposed to run on the FPGA).
 In the future, we may support running an arbitrary number of subgraphs but this simple case is often sufficient.
 Using this subgraph, we create a <em>Runner</em>, which is a thread-safe object defined in the Vitis-AI runtime and is responsible for submitting requests to the FPGA.
 These objects are all saved as part of the internal state of the worker.</p>
 </section>
-<section id="allocation">
-<h4>Allocation<a class="headerlink" href="#allocation" title="Permalink to this headline">¶</a></h4>
-<p>We use a special buffer backend for the this worker: the VartTensorBuffer.
-This custom type provides better compatibility with using the Runner as that expects <code class="docutils literal notranslate"><span class="pre">vart::TensorBuffer</span></code> objects to pass data to the FPGA.
-Therefore, this worker creates buffers using this backend and passes them to the Manager.</p>
-</section>
 <section id="acquisition">
-<h4>Acquisition<a class="headerlink" href="#acquisition" title="Permalink to this headline">¶</a></h4>
+<h4>Acquisition<a class="headerlink" href="#acquisition" title="Permalink to this heading">¶</a></h4>
 <p>Since the Runner is thread-safe, we can use multiple threads to push data to the FPGA from the same Runner to improve throughput.
 To enable this functionality, we incorporate an internal thread pool in the XModel worker.
 Here, we set the size of this thread pool based on user parameters.</p>
 </section>
 <section id="run">
-<h4>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h4>
+<h4>Run<a class="headerlink" href="#run" title="Permalink to this heading">¶</a></h4>
 <p>As with all workers, the XModel worker pulls batches from its inputs queue and checks if it’s a <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> before continuing to process the batch.
 If valid, the batch is pushed into the thread pool, which internally assigns a lambda function to one of its internal threads to perform the processing.
 This lambda function performs the same work that other workers normally perform directly in the <code class="docutils literal notranslate"><span class="pre">run()</span></code> method itself.
@@ -626,73 +682,46 @@ If the number is above a configured amount, then the worker doesn’t pull more 
 This throttling is necessary for the work-stealing model for workers to work.</p>
 </section>
 <section id="cleanup">
-<h4>Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this headline">¶</a></h4>
+<h4>Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this heading">¶</a></h4>
 <p>There is almost no special cleanup required as the Vitis-AI objects that are part of the worker’s state are smart pointers and are cleaned by the worker’s destructor.
 THe only non-default implementation of the clean-up functions is to stop the internal thread pool and join the threads.</p>
 </section>
 </section>
 </section>
-<section id="buffering">
-<h2>Buffering<a class="headerlink" href="#buffering" title="Permalink to this headline">¶</a></h2>
-<figure class="align-left" id="id7">
-<span id="fig-buffering"></span><a class="reference internal image-reference" href="_images/buffer_lifecycle.png"><img alt="Diagram showing the buffer lifecycle" src="_images/buffer_lifecycle.png" style="height: 400px;" /></a>
-<figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">The buffer lifecycle</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-<p>Buffers are used to hold data internally within the server after receiving a request.
-The implementations of buffers are in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/buffers</span></code>.</p>
-<p>The lifecycle of buffers is shown in <a class="reference internal" href="#fig-buffering"><span class="std std-numref">Fig. 4</span></a>.
-In <code class="docutils literal notranslate"><span class="pre">allocate()</span></code>, the worker creates a buffer pool made of some number of buffers.
-Using a buffer pool saves the cost of constantly allocating dynamic memory for each new request.
-Instead, we can reuse the same set of buffers that are allocated by the worker at one time.
-They are initially provided by the worker to the Manager which maintains a queue of buffers for storing the coalesced requests for one batch.
-The buffers of all the workers in one group are maintained in this common queue.
-They are consumed from the pool as the batcher creates batches and then the worker returns them to the pool after finishing work on a batch.
-If the batcher needs a buffer but there are none available, the batcher can block execution until a buffer becomes available.
-Thus, the number of buffers in the pool controls the number of active batches for a particular worker group.
-Currently, there’s no mechanism to change the number of buffers in the pool at run-time short of allocating a new worker or sending a large request that forces the automatic allocation of more buffers.
-In the future, the number of buffers may be controllable from the Manager and dynamically managed depending on the number of requests.</p>
-<p>Multiple kinds of buffer backends are supported by providing the appropriate wrappers.
-For example, a simple implementation may use buffers allocated in CPU memory.
-For more advanced sharing of data and to minimize data movement, buffers may be allocated in shared memory or on hardware accelerators.
-Buffer backends extend the <code class="docutils literal notranslate"><span class="pre">Buffer</span></code> class.
-They provide methods to write different data types into the buffer and access the underlying data at some offset.</p>
-</section>
-<section id="manager">
-<h2>Manager<a class="headerlink" href="#manager" title="Permalink to this headline">¶</a></h2>
-<p>The shared state of the AMD Inference Server is maintained by the Manager: the active workers, their buffer pools, the endpoints and load-time parameters associated with them and is visualized+ in <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>.
-This information enables the ingestion protocols to query the Manager to retrieve a pointer to the correct batcher to use to push the <code class="docutils literal notranslate"><span class="pre">Interface</span></code> object to the right one corresponding to the targeted worker.
-To manage multiple versions of workers that may be running with different configurations, the Manager stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
+<section id="shared-state">
+<h2>Shared State<a class="headerlink" href="#shared-state" title="Permalink to this heading">¶</a></h2>
+<p>The shared state of the AMD Inference Server is maintained by the <code class="docutils literal notranslate"><span class="pre">shared_state</span></code>—the active workers, their buffer pools, the endpoints, the load-time parameters associated with them, global memory pool and the repository—is visualized in <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>.
+This information enables the ingestion protocols to query the State to retrieve a pointer to the correct batcher to use to push the <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> object to the right one corresponding to the targeted worker.
+To manage multiple versions of workers that may be running with different configurations, the State stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
 In the case that it’s assigned to an existing worker group, the previously allocated endpoint is returned to the client.
 If a new worker group is created, a new endpoint is reserved for this worker group and returned to the client.
-The implementation is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/manager.*</span></code>.</p>
-<p>Loading a new worker results in the creation of a new <code class="docutils literal notranslate"><span class="pre">WorkerInfo</span></code> (see <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/worker_info.*</span></code>) object which the Manager uses internally to hold all the information associated with the worker.
+The implementation is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/shared_state.*</span></code>, <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/endpoints.*</span></code> and <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/model_repository.*</span></code>.</p>
+<p>Loading a new worker results in the creation of a new <code class="docutils literal notranslate"><span class="pre">WorkerInfo</span></code> (see <code class="docutils literal notranslate"><span class="pre">src/amdinfer/core/worker_info.*</span></code>) object which the State uses internally to hold all the information associated with the worker.
 The worker class instance, its batcher, and its buffer pool are all stored in this object.
 The <code class="docutils literal notranslate"><span class="pre">WorkerInfo</span></code> object provides two methods to create new workers: its constructor and an <code class="docutils literal notranslate"><span class="pre">addAndStartWorker()</span></code> method.
 The former is used for a brand-new worker and creates queues for the buffer pools and initializes the private members of the class.
 The latter loads the shared library associated with the worker, creates and saves the instance of the worker class, and starts its <code class="docutils literal notranslate"><span class="pre">run()</span></code> method in a new thread.</p>
-<p>The Manager also provides methods to safely modify the shared state such as loading or unloading new workers.
+<p>The State also provides methods to safely modify the shared state such as loading or unloading new workers.
 Such actions must be taken with care because there are many threads that may need to modify state or make decisions based on the current state.
-The Manager uses a queue and a separate thread for this purpose.
+The State uses a queue and a separate thread for this purpose.
 All methods that modify state enqueue requests to this queue.
 These methods may be called from a multi-threaded context and so multiple duplicate or contradictory requests are possible.
 The queue enforces serialization and defines an ordering for all incoming requests so they can be processed in this order by the new thread.
 Here, duplicate or contradictory requests can be silently dropped so the shared state isn’t corrupted.</p>
 </section>
 <section id="observation">
-<h2>Observation<a class="headerlink" href="#observation" title="Permalink to this headline">¶</a></h2>
+<h2>Observation<a class="headerlink" href="#observation" title="Permalink to this heading">¶</a></h2>
 <p>Visibility into the server and its operations is provided through logging, metrics and tracing.
 The implementations of these components is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/observation</span></code>.</p>
 <section id="logging">
-<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this heading">¶</a></h3>
 <p>The Server uses <a class="reference external" href="https://github.com/gabime/spdlog">spdlog</a> to provide logging.
 By default, one logger is configured with <code class="docutils literal notranslate"><span class="pre">initLogging()</span></code>, which logs data to a file on the disk and prints warning messages to the terminal as well.
 The preprocesser directive form of logging is used throughout the Server, which enables all logging data to be optionally removed at compile-time.</p>
 <p>Look at <a class="reference internal" href="logging.html#logs"><span class="std std-ref">Logs</span></a> for more information.</p>
 </section>
 <section id="metrics">
-<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
+<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this heading">¶</a></h3>
 <p>The Server uses <a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">prometheus-cpp</a> to provide metric collection in the Prometheus format.
 The metric data can be queried via the web server at the <code class="docutils literal notranslate"><span class="pre">/metrics</span></code> endpoint.
 At compile-time, the metrics of interest must be defined in the <code class="docutils literal notranslate"><span class="pre">Metrics</span></code> class.
@@ -701,23 +730,22 @@ Metric collection can be disabled at compile-time with a CMake option.</p>
 <p>Look at <a class="reference internal" href="metrics.html#metrics"><span class="std std-ref">Metrics</span></a> for more information.</p>
 </section>
 <section id="tracing">
-<h3>Tracing<a class="headerlink" href="#tracing" title="Permalink to this headline">¶</a></h3>
-<p>The Server uses <a class="reference external" href="https://github.com/jaegertracing/jaeger-client-cpp">jaeger-client-cpp</a> <a class="footnote-reference brackets" href="#f2" id="id3">2</a> to provide tracing.
+<h3>Tracing<a class="headerlink" href="#tracing" title="Permalink to this heading">¶</a></h3>
+<p>The Server uses <a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">opentelemetry-cpp</a> to provide tracing.
 Tracing tracks the time taken for different sections of the architecture to process a single request.
-This data can be visualized in the Jaeger UI.
+This data can be visualized in the Jaeger UI or Grafana.
 Tracing data can be disabled at compile-time with a CMake option.</p>
 <p>Look at <a class="reference internal" href="tracing.html#tracing"><span class="std std-ref">Tracing</span></a> for more information.</p>
-<dl class="footnote brackets">
-<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Some methods are only available through HTTP at this time. Using the C++ API requires compiling an application linked against <code class="docutils literal notranslate"><span class="pre">libamdinfer.so</span></code> rather than making requests to a server.</p>
-</dd>
-<dt class="label" id="f2"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
-<dd><p>This library is deprecating and will be replaced with OpenTelemetry as recommended by Jaeger.</p>
-</dd>
-<dt class="label" id="f3"><span class="brackets"><a class="fn-backref" href="#id2">3</a></span></dt>
-<dd><p>There are currently some restrictions on what may be run such as the number of input/output tensors.</p>
-</dd>
-</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Using the C++ API requires compiling an application linked against <code class="docutils literal notranslate"><span class="pre">libamdinfer.so</span></code> rather than making requests to a server.</p>
+</aside>
+<aside class="footnote brackets" id="f2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>There are currently some restrictions on what may be run such as the number of input tensors.</p>
+</aside>
+</aside>
 </section>
 </section>
 </section>
@@ -744,7 +772,7 @@ Tracing data can be disabled at compile-time with a CMake option.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

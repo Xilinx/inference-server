@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: amdinfer::kNumTraceData
-   :project: amdinfer

@@ -3,7 +3,7 @@
 Struct SetInputData
 ===================
 
-- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
 
 
 Struct Documentation
@@ -11,7 +11,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: amdinfer::SetInputData
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

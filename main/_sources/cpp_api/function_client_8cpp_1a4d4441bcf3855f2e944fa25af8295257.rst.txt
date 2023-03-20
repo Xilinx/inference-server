@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::inferAsyncOrderedBatched(Client *, const std::string&, const std::vector<InferenceRequest>&, size_t)
-   :project: amdinfer

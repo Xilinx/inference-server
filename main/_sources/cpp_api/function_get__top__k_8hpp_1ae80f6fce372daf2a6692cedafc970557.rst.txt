@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::pre_post::getTopK(const double *, size_t, int)
-   :project: amdinfer

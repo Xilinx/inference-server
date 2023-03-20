@@ -9,7 +9,6 @@ File data_types.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines the used data types. 
 
 
@@ -55,7 +54,7 @@ Included By
 -----------
 
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp`
 
@@ -65,7 +64,9 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types.cpp`
 
@@ -80,6 +81,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 
@@ -103,7 +106,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
 
-- :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_tensor.hpp`
 
 
 

@@ -3,7 +3,7 @@
 Class InferenceRequest
 ======================
 
-- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`
 
 
 Class Documentation
@@ -11,7 +11,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::InferenceRequest
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

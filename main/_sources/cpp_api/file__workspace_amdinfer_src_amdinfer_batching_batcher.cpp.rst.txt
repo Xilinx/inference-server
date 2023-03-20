@@ -9,7 +9,6 @@ File batcher.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the base batcher and CppNativeApi interface. 
 
 
@@ -39,7 +38,9 @@ Includes
 
 - ``amdinfer/buffers/buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`)
 
-- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
 
@@ -47,7 +48,7 @@ Includes
 
 - ``cassert``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 

@@ -12,8 +12,8 @@ Inheritance Relationships
 Derived Types
 *************
 
-- ``public amdinfer::InferenceRequestInput`` (:ref:`exhale_class_classamdinfer_1_1InferenceRequestInput`)
 - ``public amdinfer::ParameterMap`` (:ref:`exhale_class_classamdinfer_1_1ParameterMap`)
+- ``public amdinfer::Tensor`` (:ref:`exhale_class_classamdinfer_1_1Tensor`)
 
 
 Class Documentation
@@ -21,7 +21,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::Serializable
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: CALLDATA_IMPL_END
-   :project: amdinfer

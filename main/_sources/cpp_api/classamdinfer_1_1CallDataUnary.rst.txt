@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::CallDataUnary
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

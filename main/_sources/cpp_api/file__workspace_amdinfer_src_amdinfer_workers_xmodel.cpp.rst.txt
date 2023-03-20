@@ -9,7 +9,6 @@ File xmodel.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the XModel worker. 
 
 
@@ -41,7 +40,7 @@ Includes
 
 - ``amdinfer/buffers/buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`)
 
-- ``amdinfer/buffers/vart_tensor_buffer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp`)
+- ``amdinfer/buffers/vart_tensor.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.hpp`)
 
 - ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
 
@@ -51,9 +50,11 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -87,7 +88,7 @@ Includes
 
 - ``ext/alloc_traits.h``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``queue`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
 
@@ -105,7 +106,7 @@ Includes
 
 - ``vart/tensor_buffer.hpp``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 - ``vitis/ai/target_factory.hpp``
 

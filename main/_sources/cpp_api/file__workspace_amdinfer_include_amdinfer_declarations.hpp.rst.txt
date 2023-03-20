@@ -8,7 +8,6 @@ File declarations.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -32,13 +31,13 @@ Includes
 
 - ``future``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
 - ``unordered_map``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -46,13 +45,13 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp`
 
@@ -60,9 +59,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`
 
@@ -81,6 +82,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 
@@ -114,7 +117,9 @@ Included By
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp`
 
-- :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`
 
 
 
@@ -134,17 +139,21 @@ Typedefs
 
 - :ref:`exhale_typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8`
 
-- :ref:`exhale_typedef_declarations_8hpp_1ae43152e77216115d2665d62c4c8020ca`
+- :ref:`exhale_typedef_declarations_8hpp_1a252a94fc1c3d1443ba63ec66f9fdbe48`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a08788239a50c8739700f08f0a6ede4e5`
 
 - :ref:`exhale_typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe`
 
-- :ref:`exhale_typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d`
+- :ref:`exhale_typedef_declarations_8hpp_1a40bb0f0fa8a04fc6952014b045c3418d`
 
-- :ref:`exhale_typedef_declarations_8hpp_1a69968e7d35b8ae122d52452c7e00ed9d`
-
-- :ref:`exhale_typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723`
+- :ref:`exhale_typedef_declarations_8hpp_1a68c2a90f38823c9713e56fd203b2b88d`
 
 - :ref:`exhale_typedef_declarations_8hpp_1aa4fc4532a6cc2a392046e1a720d80ad4`
 
+- :ref:`exhale_typedef_declarations_8hpp_1a352d9cb1ac3039b2f272613d5d2e2c09`
+
 - :ref:`exhale_typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf`
+
+- :ref:`exhale_typedef_declarations_8hpp_1a364c78e9355139ec245113811681b4a0`
 

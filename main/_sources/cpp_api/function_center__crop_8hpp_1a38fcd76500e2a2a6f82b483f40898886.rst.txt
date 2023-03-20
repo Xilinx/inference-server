@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::pre_post::centerCrop(cv::Mat, int, int)
-   :project: amdinfer

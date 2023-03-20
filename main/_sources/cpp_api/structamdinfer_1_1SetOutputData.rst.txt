@@ -11,7 +11,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: amdinfer::SetOutputData
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

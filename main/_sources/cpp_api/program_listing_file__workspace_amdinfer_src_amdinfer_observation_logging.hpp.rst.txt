@@ -65,21 +65,6 @@ Program Listing for File logging.hpp
    
    // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
    #define AMDINFER_IF_LOGGING(args) args
-   #else
-   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define AMDINFER_LOG_TRACE(logger, message)
-   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define AMDINFER_LOG_DEBUG(logger, message)
-   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define AMDINFER_LOG_INFO(logger, message)
-   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define AMDINFER_LOG_WARN(logger, message)
-   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define AMDINFER_LOG_ERROR(logger, message)
-   
-   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-   #define AMDINFER_IF_LOGGING(args)
-   #endif
    
    namespace amdinfer {
    
@@ -125,5 +110,21 @@ Program Listing for File logging.hpp
    std::string getLogDirectory();
    
    }  // namespace amdinfer
+   
+   #else
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define AMDINFER_LOG_TRACE(logger, message)
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define AMDINFER_LOG_DEBUG(logger, message)
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define AMDINFER_LOG_INFO(logger, message)
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define AMDINFER_LOG_WARN(logger, message)
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define AMDINFER_LOG_ERROR(logger, message)
+   
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define AMDINFER_IF_LOGGING(args)
+   #endif  // AMDINFER_ENABLE_LOGGING
    
    #endif  // GUARD_AMDINFER_OBSERVATION_LOGGING

@@ -1,0 +1,26 @@
+.. _dir__workspace_amdinfer_src_amdinfer_core_memory_pool:
+
+
+Directory memory_pool
+=====================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/workspace/amdinfer/src/amdinfer/core/memory_pool``
+
+
+Files
+-----
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.hpp`
+
+

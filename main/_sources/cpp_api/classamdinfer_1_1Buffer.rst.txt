@@ -12,8 +12,8 @@ Inheritance Relationships
 Derived Types
 *************
 
+- ``public amdinfer::CpuBuffer`` (:ref:`exhale_class_classamdinfer_1_1CpuBuffer`)
 - ``public amdinfer::VartTensorBuffer`` (:ref:`exhale_class_classamdinfer_1_1VartTensorBuffer`)
-- ``public amdinfer::VectorBuffer`` (:ref:`exhale_class_classamdinfer_1_1VectorBuffer`)
 
 
 Class Documentation
@@ -21,7 +21,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::Buffer
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

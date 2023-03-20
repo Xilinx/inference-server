@@ -1,0 +1,16 @@
+.. _exhale_struct_structamdinfer_1_1RequestContainer:
+
+Struct RequestContainer
+=======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::RequestContainer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::CallDataServerMetadata
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

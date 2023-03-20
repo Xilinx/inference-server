@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::mapProtoToModelMetadata(const inference::ModelMetadataResponse&)
-   :project: amdinfer

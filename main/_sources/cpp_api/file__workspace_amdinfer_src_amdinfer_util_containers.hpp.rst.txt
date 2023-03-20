@@ -9,7 +9,6 @@ File containers.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements helpful functions for working with containers in the standard library. 
 
 
@@ -41,7 +40,7 @@ Includes
 
 - ``type_traits``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -49,11 +48,19 @@ Included By
 -----------
 
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_request.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
 

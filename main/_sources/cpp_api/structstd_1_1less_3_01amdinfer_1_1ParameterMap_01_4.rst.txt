@@ -3,7 +3,7 @@
 Template Struct less< amdinfer::ParameterMap >
 ==============================================
 
-- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`
 
 
 Struct Documentation
@@ -11,7 +11,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: std::less< amdinfer::ParameterMap >
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

@@ -25,15 +25,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="_static/tabs.js"></script>
@@ -108,23 +106,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -181,7 +187,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -305,12 +348,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -321,6 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -332,8 +378,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="architecture.html#metrics">Metrics</a></li>
@@ -420,6 +465,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
@@ -448,17 +494,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
         <li><a href="python.html#amdinfer.InferenceResponse.__init__">(amdinfer.InferenceResponse method)</a>
 </li>
-        <li><a href="python.html#amdinfer.ModelMetadata.__init__">(amdinfer.ModelMetadata method)</a>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.__init__">(amdinfer.InferenceResponseOutput method)</a>
 </li>
-        <li><a href="python.html#amdinfer.ModelMetadataTensor.__init__">(amdinfer.ModelMetadataTensor method)</a>
+        <li><a href="python.html#amdinfer.InferenceTensor.__init__">(amdinfer.InferenceTensor method)</a>
+</li>
+        <li><a href="python.html#amdinfer.ModelMetadata.__init__">(amdinfer.ModelMetadata method)</a>
 </li>
         <li><a href="python.html#amdinfer.NativeClient.__init__">(amdinfer.NativeClient method)</a>
 </li>
-        <li><a href="python.html#amdinfer.RequestParameters.__init__">(amdinfer.RequestParameters method)</a>
+        <li><a href="python.html#amdinfer.ParameterMap.__init__">(amdinfer.ParameterMap method)</a>
 </li>
         <li><a href="python.html#amdinfer.Server.__init__">(amdinfer.Server method)</a>
 </li>
         <li><a href="python.html#amdinfer.ServerMetadata.__init__">(amdinfer.ServerMetadata method)</a>
+</li>
+        <li><a href="python.html#amdinfer.Tensor.__init__">(amdinfer.Tensor method)</a>
 </li>
         <li><a href="python.html#amdinfer.WebSocketClient.__init__">(amdinfer.WebSocketClient method)</a>
 </li>
@@ -506,19 +556,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch10addRequestE19InferenceRequestPtr">amdinfer::Batch::addRequest (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch5BatchEPK10WorkerInfo">amdinfer::Batch::Batch (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch5BatchERK5Batch">[1]</a>, <a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch5BatchERR5Batch">[2]</a>
-</li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch5beginEv">amdinfer::Batch::begin (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch5emptyEv">amdinfer::Batch::empty (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch3endEv">amdinfer::Batch::end (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch15getInputBuffersEv">amdinfer::Batch::getInputBuffers (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch15getInputBuffersEv">amdinfer::Batch::getInputBuffers (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch12getInputSizeEv">amdinfer::Batch::getInputSize (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch16getOutputBuffersEv">amdinfer::Batch::getOutputBuffers (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch16getOutputBuffersEv">amdinfer::Batch::getOutputBuffers (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch13getOutputSizeEv">amdinfer::Batch::getOutputSize (C++ function)</a>
 </li>
@@ -530,21 +578,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch11getRequestsEv">amdinfer::Batch::getRequests (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5BatchaSERK5Batch">amdinfer::Batch::operator= (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5BatchaSERR5Batch">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5Batch10setBuffersE10BufferPtrs10BufferPtrs">amdinfer::Batch::setBuffers (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4NK8amdinfer5Batch4sizeEv">amdinfer::Batch::size (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Batch.html#_CPPv4N8amdinfer5BatchD0Ev">amdinfer::Batch::~Batch (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7BatcherE">amdinfer::Batcher (C++ class)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher11batch_size_E">amdinfer::Batcher::batch_size_ (C++ member)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherEP12ParameterMap">amdinfer::Batcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherERK7Batcher">[1]</a>, <a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherERR7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherEv">[3]</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherEP10MemoryPool">amdinfer::Batcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherEP10MemoryPoolP12ParameterMap">[1]</a>, <a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherERK7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7BatcherERR7Batcher">[3]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher3endEv">amdinfer::Batcher::end (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7enqueueE12InterfacePtr">amdinfer::Batcher::enqueue (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4NK8amdinfer7Batcher7enqueueE19RequestContainerPtr">amdinfer::Batcher::enqueue (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher13getInputQueueEv">amdinfer::Batcher::getInputQueue (C++ function)</a>
 </li>
@@ -552,7 +598,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher14getOutputQueueEv">amdinfer::Batcher::getOutputQueue (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher9getStatusEv">amdinfer::Batcher::getStatus (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4NK8amdinfer7Batcher9getStatusEv">amdinfer::Batcher::getStatus (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher12input_queue_E">amdinfer::Batcher::input_queue_ (C++ member)</a>
 </li>
@@ -564,13 +610,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher11parameters_E">amdinfer::Batcher::parameters_ (C++ member)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher3runEP10WorkerInfo">amdinfer::Batcher::run (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher5pool_E">amdinfer::Batcher::pool_ (C++ member)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher3runERKNSt6vectorI16MemoryAllocatorsEE">amdinfer::Batcher::run (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher12setBatchSizeE6size_t">amdinfer::Batcher::setBatchSize (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7setNameERKNSt6stringE">amdinfer::Batcher::setName (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher5startEP10WorkerInfo">amdinfer::Batcher::start (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher5startERKNSt6vectorI16MemoryAllocatorsEE">amdinfer::Batcher::start (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Batcher.html#_CPPv4N8amdinfer7Batcher7thread_E">amdinfer::Batcher::thread_ (C++ member)</a>
 </li>
@@ -586,7 +634,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/enum_batcher_8hpp_1a5277d7d1a11facb999262c1ffa1cf5a8.html#_CPPv4N8amdinfer13BatcherStatus3RunE">amdinfer::BatcherStatus::Run (C++ enumerator)</a>
 </li>
-      <li><a href="cpp_api/typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae.html#_CPPv4N8amdinfer8BatchPtrE">amdinfer::BatchPtr (C++ type)</a>
+      <li><a href="cpp_api/typedef_batch_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae.html#_CPPv4N8amdinfer8BatchPtrE">amdinfer::BatchPtr (C++ type)</a>, <a href="cpp_api/typedef_batcher_8hpp_1a85d63a3c6b580841f91e53b2a83e20ae.html#_CPPv4N8amdinfer8BatchPtrE">[1]</a>
 </li>
       <li><a href="cpp_api/typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE">amdinfer::BatchPtrQueue (C++ type)</a>
 </li>
@@ -594,9 +642,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6BufferE">amdinfer::Buffer (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6Buffer6BufferE16MemoryAllocators">amdinfer::Buffer::Buffer (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6Buffer4dataE6size_t">amdinfer::Buffer::data (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6Buffer5resetEv">amdinfer::Buffer::reset (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4NK8amdinfer6Buffer12getAllocatorEv">amdinfer::Buffer::getAllocator (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4I0EN8amdinfer6Buffer5writeE6size_t1T6size_t">amdinfer::Buffer::write (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6Buffer5writeEPv6size_t6size_t">[1]</a>
 </li>
@@ -610,9 +660,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/typedef_queue_8hpp_1ad6d1b639ebd1fcf68a289f9d3cbd061d.html#_CPPv4N8amdinfer18BufferPtrsQueuePtrE">amdinfer::BufferPtrsQueuePtr (C++ type)</a>
 </li>
-      <li><a href="cpp_api/typedef_declarations_8hpp_1ae43152e77216115d2665d62c4c8020ca.html#_CPPv4N8amdinfer13BufferRawPtrsE">amdinfer::BufferRawPtrs (C++ type)</a>
+      <li><a href="cpp_api/typedef_declarations_8hpp_1a252a94fc1c3d1443ba63ec66f9fdbe48.html#_CPPv4N8amdinfer13BufferRawPtrsE">amdinfer::BufferRawPtrs (C++ type)</a>, <a href="cpp_api/typedef_declarations_8hpp_1ae43152e77216115d2665d62c4c8020ca.html#_CPPv4N8amdinfer13BufferRawPtrsE">[1]</a>
 </li>
-      <li><a href="cpp_api/typedef_predict__api_8hpp_1a08788239a50c8739700f08f0a6ede4e5.html#_CPPv4N8amdinfer8CallbackE">amdinfer::Callback (C++ type)</a>
+      <li><a href="cpp_api/typedef_declarations_8hpp_1a08788239a50c8739700f08f0a6ede4e5.html#_CPPv4N8amdinfer8CallbackE">amdinfer::Callback (C++ type)</a>, <a href="cpp_api/typedef_predict__api_8hpp_1a08788239a50c8739700f08f0a6ede4e5.html#_CPPv4N8amdinfer8CallbackE">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1CallData.html#_CPPv4I00EN8amdinfer8CallDataE">amdinfer::CallData (C++ class)</a>
 </li>
@@ -812,7 +862,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client9modelListEv">amdinfer::Client::modelList (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client9modelLoadERKNSt6stringEP12ParameterMap">amdinfer::Client::modelLoad (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::Client::modelLoad (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client13modelMetadataERKNSt6stringE">amdinfer::Client::modelMetadata (C++ function)</a>
 </li>
@@ -826,7 +876,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client11serverReadyEv">amdinfer::Client::serverReady (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client10workerLoadERKNSt6stringEP12ParameterMap">amdinfer::Client::workerLoad (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::Client::workerLoad (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Client.html#_CPPv4NK8amdinfer6Client12workerUnloadERKNSt6stringE">amdinfer::Client::workerUnload (C++ function)</a>
 </li>
@@ -836,17 +886,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.html#_CPPv4N8amdinfer16constructMessageERKNSt6stringERKNSt6stringERKNSt6stringE">amdinfer::constructMessage (C++ function)</a>, <a href="cpp_api/function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a.html#_CPPv4N8amdinfer16constructMessageERKNSt6stringERKNSt6stringE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1CppNativeApi.html#_CPPv4N8amdinfer12CppNativeApiE">amdinfer::CppNativeApi (C++ class)</a>
+      <li><a href="cpp_api/classamdinfer_1_1CpuAllocator.html#_CPPv4N8amdinfer12CpuAllocatorE">amdinfer::CpuAllocator (C++ class)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1CppNativeApi.html#_CPPv4N8amdinfer12CppNativeApi12CppNativeApiE16InferenceRequest">amdinfer::CppNativeApi::CppNativeApi (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1CpuAllocator.html#_CPPv4N8amdinfer12CpuAllocator12CpuAllocatorE6size_t6size_t">amdinfer::CpuAllocator::CpuAllocator (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1CppNativeApi.html#_CPPv4N8amdinfer12CppNativeApi12errorHandlerERKNSt9exceptionE">amdinfer::CppNativeApi::errorHandler (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1CpuAllocator.html#_CPPv4N8amdinfer12CpuAllocator3getERK6Tensor6size_t">amdinfer::CpuAllocator::get (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1CppNativeApi.html#_CPPv4N8amdinfer12CppNativeApi12getInputSizeEv">amdinfer::CppNativeApi::getInputSize (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1CpuAllocator.html#_CPPv4N8amdinfer12CpuAllocator3putEPKv">amdinfer::CpuAllocator::put (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1CppNativeApi.html#_CPPv4N8amdinfer12CppNativeApi10getPromiseEv">amdinfer::CppNativeApi::getPromise (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1CpuBuffer.html#_CPPv4N8amdinfer9CpuBufferE">amdinfer::CpuBuffer (C++ class)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1CppNativeApi.html#_CPPv4N8amdinfer12CppNativeApi10getRequestERK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::CppNativeApi::getRequest (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1CpuBuffer.html#_CPPv4N8amdinfer9CpuBuffer9CpuBufferEPv16MemoryAllocators">amdinfer::CpuBuffer::CpuBuffer (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1CpuBuffer.html#_CPPv4N8amdinfer9CpuBuffer4dataE6size_t">amdinfer::CpuBuffer::data (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d.html#_CPPv4N8amdinfer16createGetRequestERKNSt6stringERK9StringMap">amdinfer::createGetRequest (C++ function)</a>
 </li>
@@ -904,17 +956,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/function_data__types_8hpp_1a9f421600e40d463aae440ef86d990f77.html#_CPPv4N8amdinfer6detail4hashENSt11string_viewE">amdinfer::detail::hash (C++ function)</a>
 </li>
-      <li><a href="cpp_api/typedef_http__internal_8hpp_1a7137f2088c425db6fdd74b1be1fe0663.html#_CPPv4N8amdinfer14DrogonCallbackE">amdinfer::DrogonCallback (C++ type)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1DrogonHttp.html#_CPPv4N8amdinfer10DrogonHttpE">amdinfer::DrogonHttp (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1DrogonHttp.html#_CPPv4N8amdinfer10DrogonHttp10DrogonHttpERKN6drogon14HttpRequestPtrE14DrogonCallback">amdinfer::DrogonHttp::DrogonHttp (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1DrogonHttp.html#_CPPv4N8amdinfer10DrogonHttp12errorHandlerERKNSt9exceptionE">amdinfer::DrogonHttp::errorHandler (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1DrogonHttp.html#_CPPv4N8amdinfer10DrogonHttp12getInputSizeEv">amdinfer::DrogonHttp::getInputSize (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1DrogonHttp.html#_CPPv4N8amdinfer10DrogonHttp10getRequestERK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::DrogonHttp::getRequest (C++ function)</a>
+      <li><a href="cpp_api/typedef_http__internal_8hpp_1a7137f2088c425db6fdd74b1be1fe0663.html#_CPPv4N8amdinfer14DrogonCallbackE">amdinfer::DrogonCallback (C++ type)</a>, <a href="cpp_api/typedef_http__server_8cpp_1a7137f2088c425db6fdd74b1be1fe0663.html#_CPPv4N8amdinfer14DrogonCallbackE">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Endpoints.html#_CPPv4N8amdinfer9EndpointsE">amdinfer::Endpoints (C++ class)</a>
 </li>
@@ -922,7 +964,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Endpoints.html#_CPPv4N8amdinfer9Endpoints6existsERKNSt6stringE">amdinfer::Endpoints::exists (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Endpoints.html#_CPPv4NK8amdinfer9Endpoints5inferERKNSt6stringENSt10unique_ptrI9InterfaceEE">amdinfer::Endpoints::infer (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1Endpoints.html#_CPPv4NK8amdinfer9Endpoints7getPoolEv">amdinfer::Endpoints::getPool (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Endpoints.html#_CPPv4NK8amdinfer9Endpoints5inferERKNSt6stringENSt10unique_ptrI16RequestContainerEE">amdinfer::Endpoints::infer (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1Endpoints.html#_CPPv4N8amdinfer9Endpoints4listEv">amdinfer::Endpoints::list (C++ function)</a>
 </li>
@@ -940,7 +984,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1environment__not__set__error.html#_CPPv4N8amdinfer25environment_not_set_errorE">amdinfer::environment_not_set_error (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer25environment_not_set_errorE">[1]</a>
 </li>
-      <li><a href="cpp_api/function_http__internal_8cpp_1a90265777686e06d56b25b0bc843eef9e.html#_CPPv4N8amdinfer17errorHttpResponseERKNSt6stringEi">amdinfer::errorHttpResponse (C++ function)</a>
+      <li><a href="cpp_api/function_http__internal_8cpp_1a90265777686e06d56b25b0bc843eef9e.html#_CPPv4N8amdinfer17errorHttpResponseERKNSt6stringEi">amdinfer::errorHttpResponse (C++ function)</a>, <a href="cpp_api/function_http__server_8cpp_1a90265777686e06d56b25b0bc843eef9e.html#_CPPv4N8amdinfer17errorHttpResponseERKNSt6stringEi">[1]</a>
 </li>
       <li><a href="cpp_api/function_parameters_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3.html#_CPPv4IDpEN8amdinfer10expandTypeENSt7variantIDp2TsEENSt6size_tE">amdinfer::expandType (C++ function)</a>, <a href="cpp_api/function_predict__api_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3.html#_CPPv4IDpEN8amdinfer10expandTypeENSt7variantIDp2TsEENSt6size_tE">[1]</a>
 </li>
@@ -954,9 +998,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/typedef_data__types_8hpp_1ae6aa5769eb83832379c792c300d4566c.html#_CPPv4N8amdinfer4fp16E">amdinfer::fp16 (C++ type)</a>
 </li>
+      <li><a href="cpp_api/function_c__plus__plus_8cpp_1ad50576352aa9fe95a1f335068a150f86.html#_CPPv4N8amdinfer11getFunctionEPvRKNSt6stringE">amdinfer::getFunction (C++ function)</a>
+</li>
+      <li><a href="cpp_api/function_grpc__server_8cpp_1ad7d47b9afef4ed43ad59aa45f592737e.html#_CPPv4N8amdinfer8getInputERKN9inference34ModelInferRequest_InferInputTensorEPK10MemoryPool">amdinfer::getInput (C++ function)</a>
+</li>
       <li><a href="cpp_api/function_logging_8cpp_1ab42e9688a184d4c25b0809fd75c21465.html#_CPPv4N8amdinfer8getLevelE8LogLevel">amdinfer::getLevel (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_logging_8cpp_1abf296c165ec250f986192b7ec61a0eeb.html#_CPPv4N8amdinfer15getLogDirectoryEv">amdinfer::getLogDirectory (C++ function)</a>
+</li>
+      <li><a href="cpp_api/function_grpc__server_8cpp_1aa8dbb41520acad4bc0f3590a62f516dd.html#_CPPv4N8amdinfer9getOutputERKN9inference44ModelInferRequest_InferRequestedOutputTensorE">amdinfer::getOutput (C++ function)</a>
+</li>
+      <li><a href="cpp_api/function_grpc__server_8cpp_1ac8a8307a4bb6284d0c08ecf50abe9013.html#_CPPv4N8amdinfer10getRequestERKN9inference17ModelInferRequestEPK10MemoryPool">amdinfer::getRequest (C++ function)</a>, <a href="cpp_api/function_native_8cpp_1a3b9123d1a7ba3f8791dd743f14e97bb8.html#_CPPv4N8amdinfer10getRequestERK16InferenceRequestPK10MemoryPool">[1]</a>
 </li>
       <li><a href="cpp_api/function_grpc__internal_8hpp_1a060fbd208a90079d68fd5a5bb0d21ac6.html#_CPPv4I00EN8amdinfer17getTensorContentsEPDaP6Tensor">amdinfer::getTensorContents (C++ function)</a>
 </li>
@@ -965,16 +1017,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <li><a href="cpp_api/function_grpc__server_8cpp_1acd5880aba6baa79251eba9aa507f2dd4.html#_CPPv4N8amdinfer4grpc5startEP11SharedStatei">amdinfer::grpc::start (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1.html#_CPPv4N8amdinfer4grpc4stopEv">amdinfer::grpc::stop (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcApiUnary.html#_CPPv4N8amdinfer12GrpcApiUnaryE">amdinfer::GrpcApiUnary (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcApiUnary.html#_CPPv4N8amdinfer12GrpcApiUnary12errorHandlerERKNSt9exceptionE">amdinfer::GrpcApiUnary::errorHandler (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcApiUnary.html#_CPPv4N8amdinfer12GrpcApiUnary12getInputSizeEv">amdinfer::GrpcApiUnary::getInputSize (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcApiUnary.html#_CPPv4N8amdinfer12GrpcApiUnary10getRequestERK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::GrpcApiUnary::getRequest (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcApiUnary.html#_CPPv4N8amdinfer12GrpcApiUnary12GrpcApiUnaryEP18CallDataModelInfer">amdinfer::GrpcApiUnary::GrpcApiUnary (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4N8amdinfer10GrpcClientE">amdinfer::GrpcClient (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientE">[1]</a>
 </li>
@@ -994,7 +1036,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient9modelListEv">amdinfer::GrpcClient::modelList (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient9modelListEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringEP12ParameterMap">amdinfer::GrpcClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::GrpcClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient13modelMetadataERKNSt6stringE">amdinfer::GrpcClient::modelMetadata (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient13modelMetadataERKNSt6stringE">[1]</a>
 </li>
@@ -1010,7 +1052,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient11serverReadyEv">amdinfer::GrpcClient::serverReady (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient11serverReadyEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringEP12ParameterMap">amdinfer::GrpcClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::GrpcClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1GrpcClient.html#_CPPv4NK8amdinfer10GrpcClient12workerUnloadERKNSt6stringE">amdinfer::GrpcClient::workerUnload (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient12workerUnloadERKNSt6stringE">[1]</a>
 </li>
@@ -1032,17 +1074,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcherE">amdinfer::HardBatcher (C++ class)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherEP12ParameterMap">amdinfer::HardBatcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherERK7Batcher">[1]</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherERR7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherEv">[3]</a>
+      <li><a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherEP10MemoryPool">amdinfer::HardBatcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherEP10MemoryPoolP12ParameterMap">[1]</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherERK7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1HardBatcher.html#_CPPv4N8amdinfer11HardBatcher7BatcherERR7Batcher">[3]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1http_1_1DrogonWs.html#_CPPv4N8amdinfer4http8DrogonWsE">amdinfer::http::DrogonWs (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1http_1_1DrogonWs.html#_CPPv4N8amdinfer4http8DrogonWs8DrogonWsERKN6drogon22WebSocketConnectionPtrENSt10shared_ptrIN4Json5ValueEEE">amdinfer::http::DrogonWs::DrogonWs (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1http_1_1DrogonWs.html#_CPPv4N8amdinfer4http8DrogonWs12errorHandlerERKNSt9exceptionE">amdinfer::http::DrogonWs::errorHandler (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1http_1_1DrogonWs.html#_CPPv4N8amdinfer4http8DrogonWs12getInputSizeEv">amdinfer::http::DrogonWs::getInputSize (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1http_1_1DrogonWs.html#_CPPv4N8amdinfer4http8DrogonWs10getRequestERK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::http::DrogonWs::getRequest (C++ function)</a>
+      <li><a href="cpp_api/function_websocket__server_8cpp_1a59635d29a247f707bb9a44d0fb6aea2d.html#_CPPv4N8amdinfer4http11setCallbackEP16InferenceRequestN6drogon22WebSocketConnectionPtrE">amdinfer::http::setCallback (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_http__server_8cpp_1a51d427f7d55612404bc5ed3f0441efb7.html#_CPPv4N8amdinfer4http5startEP11SharedState8uint16_t">amdinfer::http::start (C++ function)</a>
 </li>
@@ -1080,7 +1114,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient9modelListEv">amdinfer::HttpClient::modelList (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient9modelListEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient9modelLoadERKNSt6stringEP12ParameterMap">amdinfer::HttpClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient9modelLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::HttpClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient9modelLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient13modelMetadataERKNSt6stringE">amdinfer::HttpClient::modelMetadata (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient13modelMetadataERKNSt6stringE">[1]</a>
 </li>
@@ -1096,7 +1130,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient11serverReadyEv">amdinfer::HttpClient::serverReady (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient11serverReadyEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient10workerLoadERKNSt6stringEP12ParameterMap">amdinfer::HttpClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient10workerLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::HttpClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient10workerLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1HttpClient.html#_CPPv4NK8amdinfer10HttpClient12workerUnloadERKNSt6stringE">amdinfer::HttpClient::workerUnload (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient12workerUnloadERKNSt6stringE">[1]</a>
 </li>
@@ -1112,6 +1146,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest15addOutputTensorERK22InferenceRequestOutput">amdinfer::InferenceRequest::addOutputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest15addOutputTensorERK22InferenceRequestOutput">[1]</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest11getCallbackEv">amdinfer::InferenceRequest::getCallback (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest11getCallbackEv">[1]</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4NK8amdinfer16InferenceRequest5getIDEv">amdinfer::InferenceRequest::getID (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest5getIDEv">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4NK8amdinfer16InferenceRequest9getInputsEv">amdinfer::InferenceRequest::getInputs (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest9getInputsEv">[1]</a>
@@ -1120,7 +1156,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4NK8amdinfer16InferenceRequest10getOutputsEv">amdinfer::InferenceRequest::getOutputs (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest10getOutputsEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4NK8amdinfer16InferenceRequest13getParametersEv">amdinfer::InferenceRequest::getParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest13getParametersEv">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4NKR8amdinfer16InferenceRequest13getParametersEv">amdinfer::InferenceRequest::getParameters (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4NO8amdinfer16InferenceRequest13getParametersEv">[1]</a>, <a href="cpp_user_api.html#_CPPv4NKR8amdinfer16InferenceRequest13getParametersEv">[2]</a>, <a href="cpp_user_api.html#_CPPv4NO8amdinfer16InferenceRequest13getParametersEv">[3]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest16InferenceRequestEv">amdinfer::InferenceRequest::InferenceRequest (C++ function)</a>
 </li>
@@ -1134,23 +1170,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest5setIDENSt11string_viewE">amdinfer::InferenceRequest::setID (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest5setIDENSt11string_viewE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest13setParametersE15ParameterMapPtr">amdinfer::InferenceRequest::setParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest13setParametersE15ParameterMapPtr">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest18setInputTensorDataE6size_tPv">amdinfer::InferenceRequest::setInputTensorData (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest18setInputTensorDataE6size_tPv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder.html#_CPPv4I0EN8amdinfer23InferenceRequestBuilderE">amdinfer::InferenceRequestBuilder (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder.html#_CPPv4N8amdinfer23InferenceRequestBuilder5buildE1TR6size_tRKNSt6vectorI13BufferRawPtrsEERNSt6vectorI6size_tEERKNSt6vectorI13BufferRawPtrsEERNSt6vectorI6size_tEERK6size_tR6size_t">amdinfer::InferenceRequestBuilder::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4.html#_CPPv4IEN8amdinfer23InferenceRequestBuilderIP18CallDataModelInferEE">amdinfer::InferenceRequestBuilder&lt;CallDataModelInfer*&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder_3_01CallDataModelInfer_01_5_01_4.html#_CPPv4N8amdinfer23InferenceRequestBuilderIP18CallDataModelInferE5buildEPK18CallDataModelInferRK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::InferenceRequestBuilder&lt;CallDataModelInfer*&gt;::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder_3_01InferenceRequest_01_4.html#_CPPv4IEN8amdinfer23InferenceRequestBuilderI16InferenceRequestEE">amdinfer::InferenceRequestBuilder&lt;InferenceRequest&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder_3_01InferenceRequest_01_4.html#_CPPv4N8amdinfer23InferenceRequestBuilderI16InferenceRequestE5buildERK16InferenceRequestRK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::InferenceRequestBuilder&lt;InferenceRequest&gt;::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html#_CPPv4IEN8amdinfer23InferenceRequestBuilderINSt10shared_ptrIN4Json5ValueEEEEE">amdinfer::InferenceRequestBuilder&lt;std::shared_ptr&lt;Json::Value&gt;&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html#_CPPv4N8amdinfer23InferenceRequestBuilderINSt10shared_ptrIN4Json5ValueEEEE5buildERKNSt10shared_ptrIN4Json5ValueEEERK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::InferenceRequestBuilder&lt;std::shared_ptr&lt;Json::Value&gt;&gt;::build (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequest.html#_CPPv4N8amdinfer16InferenceRequest13setParametersE12ParameterMap">amdinfer::InferenceRequest::setParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest13setParametersE12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInputE">amdinfer::InferenceRequestInput (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInputE">[1]</a>
 </li>
@@ -1158,17 +1180,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput7getDataEv">amdinfer::InferenceRequestInput::getData (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput7getDataEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput11getDatatypeEv">amdinfer::InferenceRequestInput::getDatatype (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput11getDatatypeEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput7getNameEv">amdinfer::InferenceRequestInput::getName (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput7getNameEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput13getParametersEv">amdinfer::InferenceRequestInput::getParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput13getParametersEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput8getShapeEv">amdinfer::InferenceRequestInput::getShape (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput8getShapeEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput7getSizeEv">amdinfer::InferenceRequestInput::getSize (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput7getSizeEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE">amdinfer::InferenceRequestInput::InferenceRequestInput (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[3]</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE">amdinfer::InferenceRequestInput::InferenceRequestInput (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK15InferenceTensor">[1]</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK6Tensor">[2]</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[3]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE">[4]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK15InferenceTensor">[5]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK6Tensor">[6]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[7]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput">amdinfer::InferenceRequestInput::operator&lt;&lt; (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput">[1]</a>
 </li>
@@ -1176,47 +1188,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput13serializeSizeEv">amdinfer::InferenceRequestInput::serializeSize (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput13serializeSizeEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv">amdinfer::InferenceRequestInput::setData (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataERRNSt6vectorINSt4byteEEE">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataERRNSt6vectorINSt4byteEEE">[3]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput11setDatatypeE8DataType">amdinfer::InferenceRequestInput::setDatatype (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput11setDatatypeE8DataType">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput7setNameENSt6stringE">amdinfer::InferenceRequestInput::setName (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput7setNameENSt6stringE">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput13setParametersE15ParameterMapPtr">amdinfer::InferenceRequestInput::setParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput13setParametersE15ParameterMapPtr">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput8setShapeENSt16initializer_listI8uint64_tEE">amdinfer::InferenceRequestInput::setShape (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI7int32_tEE">[1]</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI8uint64_tEE">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput8setShapeENSt16initializer_listI8uint64_tEE">[3]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI7int32_tEE">[4]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput8setShapeERKNSt6vectorI8uint64_tEE">[5]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4NK8amdinfer21InferenceRequestInput10sharedDataEv">amdinfer::InferenceRequestInput::sharedData (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput10sharedDataEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder.html#_CPPv4I0EN8amdinfer28InferenceRequestInputBuilderE">amdinfer::InferenceRequestInputBuilder (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder.html#_CPPv4N8amdinfer28InferenceRequestInputBuilder5buildERK1TP6Buffer6size_t">amdinfer::InferenceRequestInputBuilder::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4.html#_CPPv4IEN8amdinfer28InferenceRequestInputBuilderIN9inference34ModelInferRequest_InferInputTensorEEE">amdinfer::InferenceRequestInputBuilder&lt;inference::ModelInferRequest_InferInputTensor&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder_3_01inference_1_1ModelInferRequest__InferInputTensor_01_4.html#_CPPv4N8amdinfer28InferenceRequestInputBuilderIN9inference34ModelInferRequest_InferInputTensorEE5buildERKN9inference34ModelInferRequest_InferInputTensorEP6Buffer6size_t">amdinfer::InferenceRequestInputBuilder&lt;inference::ModelInferRequest_InferInputTensor&gt;::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4.html#_CPPv4IEN8amdinfer28InferenceRequestInputBuilderI21InferenceRequestInputEE">amdinfer::InferenceRequestInputBuilder&lt;InferenceRequestInput&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4.html#_CPPv4N8amdinfer28InferenceRequestInputBuilderI21InferenceRequestInputE5buildERK21InferenceRequestInputP6Buffer6size_t">amdinfer::InferenceRequestInputBuilder&lt;InferenceRequestInput&gt;::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html#_CPPv4IEN8amdinfer28InferenceRequestInputBuilderINSt10shared_ptrIN4Json5ValueEEEEE">amdinfer::InferenceRequestInputBuilder&lt;std::shared_ptr&lt;Json::Value&gt;&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html#_CPPv4N8amdinfer28InferenceRequestInputBuilderINSt10shared_ptrIN4Json5ValueEEEE5buildERKNSt10shared_ptrIN4Json5ValueEEEP6Buffer6size_t">amdinfer::InferenceRequestInputBuilder&lt;std::shared_ptr&lt;Json::Value&gt;&gt;::build (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestInput.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv">amdinfer::InferenceRequestInput::setData (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv">[1]</a>
 </li>
       <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizesE">amdinfer::InferenceRequestInputSizes (C++ struct)</a>
 </li>
       <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizes4dataE">amdinfer::InferenceRequestInputSizes::data (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizes9data_typeE">amdinfer::InferenceRequestInputSizes::data_type (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizes4nameE">amdinfer::InferenceRequestInputSizes::name (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizes10parametersE">amdinfer::InferenceRequestInputSizes::parameters (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizes5shapeE">amdinfer::InferenceRequestInputSizes::shape (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1InferenceRequestInputSizes.html#_CPPv4N8amdinfer26InferenceRequestInputSizes11shared_dataE">amdinfer::InferenceRequestInputSizes::shared_data (C++ member)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4N8amdinfer22InferenceRequestOutputE">amdinfer::InferenceRequestOutput (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutputE">[1]</a>
 </li>
@@ -1224,7 +1200,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4NK8amdinfer22InferenceRequestOutput7getNameEv">amdinfer::InferenceRequestOutput::getName (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer22InferenceRequestOutput7getNameEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4N8amdinfer22InferenceRequestOutput13getParametersEv">amdinfer::InferenceRequestOutput::getParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput13getParametersEv">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4NKR8amdinfer22InferenceRequestOutput13getParametersEv">amdinfer::InferenceRequestOutput::getParameters (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4NO8amdinfer22InferenceRequestOutput13getParametersEv">[1]</a>, <a href="cpp_user_api.html#_CPPv4NKR8amdinfer22InferenceRequestOutput13getParametersEv">[2]</a>, <a href="cpp_user_api.html#_CPPv4NO8amdinfer22InferenceRequestOutput13getParametersEv">[3]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4N8amdinfer22InferenceRequestOutput22InferenceRequestOutputEv">amdinfer::InferenceRequestOutput::InferenceRequestOutput (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput22InferenceRequestOutputEv">[1]</a>
 </li>
@@ -1232,15 +1208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4N8amdinfer22InferenceRequestOutput7setNameERKNSt6stringE">amdinfer::InferenceRequestOutput::setName (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput7setNameERKNSt6stringE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4N8amdinfer22InferenceRequestOutput13setParametersE15ParameterMapPtr">amdinfer::InferenceRequestOutput::setParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput13setParametersE15ParameterMapPtr">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutputBuilder.html#_CPPv4I0EN8amdinfer29InferenceRequestOutputBuilderE">amdinfer::InferenceRequestOutputBuilder (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutputBuilder.html#_CPPv4N8amdinfer29InferenceRequestOutputBuilder5buildERK1T">amdinfer::InferenceRequestOutputBuilder::build (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html#_CPPv4IEN8amdinfer29InferenceRequestOutputBuilderINSt10shared_ptrIN4Json5ValueEEEEE">amdinfer::InferenceRequestOutputBuilder&lt;std::shared_ptr&lt;Json::Value&gt;&gt; (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutputBuilder_3_01std_1_1shared__ptr_3_01Json_1_1Value_01_4_01_4.html#_CPPv4N8amdinfer29InferenceRequestOutputBuilderINSt10shared_ptrIN4Json5ValueEEEE5buildERKNSt10shared_ptrIN4Json5ValueEEE">amdinfer::InferenceRequestOutputBuilder&lt;std::shared_ptr&lt;Json::Value&gt;&gt;::build (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceRequestOutput.html#_CPPv4N8amdinfer22InferenceRequestOutput13setParametersE12ParameterMap">amdinfer::InferenceRequestOutput::setParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput13setParametersE12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe.html#_CPPv4N8amdinfer19InferenceRequestPtrE">amdinfer::InferenceRequestPtr (C++ type)</a>
 </li>
@@ -1270,11 +1238,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1InferenceResponse.html#_CPPv4N8amdinfer17InferenceResponse8setModelERKNSt6stringE">amdinfer::InferenceResponse::setModel (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse8setModelERKNSt6stringE">[1]</a>
 </li>
-      <li><a href="cpp_api/typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d.html#_CPPv4N8amdinfer23InferenceResponseFutureE">amdinfer::InferenceResponseFuture (C++ type)</a>
+      <li><a href="cpp_api/typedef_declarations_8hpp_1a405b5e55988b1398107e8bdff0fefc3d.html#_CPPv4N8amdinfer23InferenceResponseFutureE">amdinfer::InferenceResponseFuture (C++ type)</a>, <a href="cpp_api/typedef_declarations_8hpp_1a40bb0f0fa8a04fc6952014b045c3418d.html#_CPPv4N8amdinfer23InferenceResponseFutureE">[1]</a>
 </li>
-      <li><a href="cpp_api/typedef_declarations_8hpp_1a69968e7d35b8ae122d52452c7e00ed9d.html#_CPPv4N8amdinfer23InferenceResponseOutputE">amdinfer::InferenceResponseOutput (C++ type)</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4N8amdinfer23InferenceResponseOutputE">amdinfer::InferenceResponseOutput (C++ class)</a>
 </li>
-      <li><a href="cpp_api/typedef_predict__api_8hpp_1a68c2a90f38823c9713e56fd203b2b88d.html#_CPPv4N8amdinfer27InferenceResponsePromisePtrE">amdinfer::InferenceResponsePromisePtr (C++ type)</a>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4N8amdinfer23InferenceResponseOutput11deserializeEPKNSt4byteE">amdinfer::InferenceResponseOutput::deserialize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4NK8amdinfer23InferenceResponseOutput7getDataEv">amdinfer::InferenceResponseOutput::getData (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4N8amdinfer23InferenceResponseOutput23InferenceResponseOutputEv">amdinfer::InferenceResponseOutput::InferenceResponseOutput (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4N8amdinfer23InferenceResponseOutputlsERNSt7ostreamERK23InferenceResponseOutput">amdinfer::InferenceResponseOutput::operator&lt;&lt; (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4NK8amdinfer23InferenceResponseOutput9serializeEPNSt4byteE">amdinfer::InferenceResponseOutput::serialize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4NK8amdinfer23InferenceResponseOutput13serializeSizeEv">amdinfer::InferenceResponseOutput::serializeSize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceResponseOutput.html#_CPPv4N8amdinfer23InferenceResponseOutput7setDataERRNSt6vectorINSt4byteEEE">amdinfer::InferenceResponseOutput::setData (C++ function)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1InferenceResponseOutputSizes.html#_CPPv4N8amdinfer28InferenceResponseOutputSizesE">amdinfer::InferenceResponseOutputSizes (C++ struct)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1InferenceResponseOutputSizes.html#_CPPv4N8amdinfer28InferenceResponseOutputSizes4dataE">amdinfer::InferenceResponseOutputSizes::data (C++ member)</a>
+</li>
+      <li><a href="cpp_api/typedef_declarations_8hpp_1a68c2a90f38823c9713e56fd203b2b88d.html#_CPPv4N8amdinfer27InferenceResponsePromisePtrE">amdinfer::InferenceResponsePromisePtr (C++ type)</a>, <a href="cpp_api/typedef_predict__api_8hpp_1a68c2a90f38823c9713e56fd203b2b88d.html#_CPPv4N8amdinfer27InferenceResponsePromisePtrE">[1]</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4N8amdinfer15InferenceTensorE">amdinfer::InferenceTensor (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4N8amdinfer15InferenceTensor11deserializeEPKNSt4byteE">amdinfer::InferenceTensor::deserialize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4NKR8amdinfer15InferenceTensor13getParametersEv">amdinfer::InferenceTensor::getParameters (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4NO8amdinfer15InferenceTensor13getParametersEv">[1]</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4N8amdinfer15InferenceTensor15InferenceTensorENSt6stringENSt6vectorI8uint64_tEE8DataType">amdinfer::InferenceTensor::InferenceTensor (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4N8amdinfer15InferenceTensor15InferenceTensorERK6Tensor">[1]</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4NK8amdinfer15InferenceTensor9serializeEPNSt4byteE">amdinfer::InferenceTensor::serialize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4NK8amdinfer15InferenceTensor13serializeSizeEv">amdinfer::InferenceTensor::serializeSize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1InferenceTensor.html#_CPPv4N8amdinfer15InferenceTensor13setParametersE12ParameterMap">amdinfer::InferenceTensor::setParameters (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93.html#_CPPv4N8amdinfer23initializeClientLoggingEv">amdinfer::initializeClientLogging (C++ function)</a>
 </li>
@@ -1282,125 +1282,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/function_logging_8cpp_1a1171fedba9c753ea529e1fc6c164e4f2.html#_CPPv4N8amdinfer10initLoggerERK10LogOptions">amdinfer::initLogger (C++ function)</a>
 </li>
-      <li><a href="cpp_api/typedef_http__internal_8cpp_1a78092124400e8e02cce73782a3ed0832.html#_CPPv4N8amdinfer12InputBuilderE">amdinfer::InputBuilder (C++ type)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9InterfaceE">amdinfer::Interface (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9Interface12errorHandlerERKNSt9exceptionE">amdinfer::Interface::errorHandler (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9Interface12getInputSizeEv">amdinfer::Interface::getInputSize (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9Interface10getRequestERK13BufferRawPtrsRNSt6vectorI6size_tEERK13BufferRawPtrsRNSt6vectorI6size_tEE">amdinfer::Interface::getRequest (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4NK8amdinfer9Interface7getTypeEv">amdinfer::Interface::getType (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9Interface9InterfaceEv">amdinfer::Interface::Interface (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9Interface5type_E">amdinfer::Interface::type_ (C++ member)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Interface.html#_CPPv4N8amdinfer9InterfaceD0Ev">amdinfer::Interface::~Interface (C++ function)</a>
-</li>
-      <li><a href="cpp_api/typedef_declarations_8hpp_1a0b08557614072d06cab7624a903fd723.html#_CPPv4N8amdinfer12InterfacePtrE">amdinfer::InterfacePtr (C++ type)</a>
-</li>
-      <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceTypeE">amdinfer::InterfaceType (C++ enum)</a>
-</li>
-      <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType3CppE">amdinfer::InterfaceType::Cpp (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType10DrogonHttpE">amdinfer::InterfaceType::DrogonHttp (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType8DrogonWsE">amdinfer::InterfaceType::DrogonWs (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType4GrpcE">amdinfer::InterfaceType::Grpc (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_interface_8hpp_1a2f1c337cd175cabc3a786e0f5712e123.html#_CPPv4N8amdinfer13InterfaceType7UnknownE">amdinfer::InterfaceType::Unknown (C++ enumerator)</a>
-</li>
       <li><a href="cpp_api/classamdinfer_1_1invalid__argument.html#_CPPv4N8amdinfer16invalid_argumentE">amdinfer::invalid_argument (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16invalid_argumentE">[1]</a>
 </li>
-      <li><a href="cpp_api/function_http__internal_8cpp_1afa990983f0c809168a33aae411a99f8b.html#_CPPv4I0EN8amdinfer15jsonValueToTypeEDaRKN4Json5ValueE">amdinfer::jsonValueToType (C++ function)</a>
+      <li><a href="cpp_api/function_http__internal_8cpp_1afa990983f0c809168a33aae411a99f8b.html#_CPPv4I0EN8amdinfer15jsonValueToTypeEDaRKN4Json5ValueE">amdinfer::jsonValueToType (C++ function)</a>, <a href="cpp_api/function_http__internal_8hpp_1afa990983f0c809168a33aae411a99f8b.html#_CPPv4I0EN8amdinfer15jsonValueToTypeEDaRKN4Json5ValueE">[1]</a>
+</li>
+      <li><a href="cpp_api/variable_pool_8cpp_1a5cecd49087cfcb52ba4aa002d391c321.html#_CPPv4N8amdinfer20kDefaultCpuBlockSizeE">amdinfer::kDefaultCpuBlockSize (C++ member)</a>
 </li>
       <li><a href="cpp_api/typedef_declarations_8hpp_1aa4fc4532a6cc2a392046e1a720d80ad4.html#_CPPv4N8amdinfer7KernelsE">amdinfer::Kernels (C++ type)</a>
 </li>
-      <li><a href="cpp_api/variable_echo__multi_8cpp_1afa0b765105e95ab377c99ba05b254d06.html#_CPPv4N8amdinfer13kInputLengthsE">amdinfer::kInputLengths (C++ member)</a>
+      <li><a href="cpp_api/variable_c__plus__plus_8cpp_1a71667fd42c5cef1a3e32e5c03ae40091.html#_CPPv4N8amdinfer13kInputLengthsE">amdinfer::kInputLengths (C++ member)</a>, <a href="cpp_api/variable_echo__multi_8cpp_1afa0b765105e95ab377c99ba05b254d06.html#_CPPv4N8amdinfer13kInputLengthsE">[1]</a>, <a href="cpp_api/variable_models_2echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.html#_CPPv4N8amdinfer13kInputLengthsE">[2]</a>
 </li>
-      <li><a href="cpp_api/variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898.html#_CPPv4N8amdinfer13kInputTensorsE">amdinfer::kInputTensors (C++ member)</a>
+      <li><a href="cpp_api/variable_c__plus__plus_8cpp_1a99f0d6272c799cd29afc336c68feb898.html#_CPPv4N8amdinfer13kInputTensorsE">amdinfer::kInputTensors (C++ member)</a>, <a href="cpp_api/variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898.html#_CPPv4N8amdinfer13kInputTensorsE">[1]</a>, <a href="cpp_api/variable_models_2echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.html#_CPPv4N8amdinfer13kInputTensorsE">[2]</a>
 </li>
       <li><a href="cpp_api/variable_worker_8hpp_1afff06a8b4498d235dc378329775cf03d.html#_CPPv4N8amdinfer14kNumBufferAutoE">amdinfer::kNumBufferAuto (C++ member)</a>
 </li>
       <li><a href="cpp_api/variable_observer_8hpp_1ad1d17f4a2117c6141e8dfe1727c6cb92.html#_CPPv4N8amdinfer13kNumTraceDataE">amdinfer::kNumTraceData (C++ member)</a>
 </li>
-      <li><a href="cpp_api/variable_echo__multi_8cpp_1a416f1fc1c3bce51d97065301d41db581.html#_CPPv4N8amdinfer14kOutputLengthsE">amdinfer::kOutputLengths (C++ member)</a>
+      <li><a href="cpp_api/variable_c__plus__plus_8cpp_1a697d63ad64f3f8bfc5a6299ce8bccdc1.html#_CPPv4N8amdinfer14kOutputLengthsE">amdinfer::kOutputLengths (C++ member)</a>, <a href="cpp_api/variable_echo__multi_8cpp_1a416f1fc1c3bce51d97065301d41db581.html#_CPPv4N8amdinfer14kOutputLengthsE">[1]</a>, <a href="cpp_api/variable_models_2echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.html#_CPPv4N8amdinfer14kOutputLengthsE">[2]</a>
 </li>
-      <li><a href="cpp_api/variable_echo__multi_8cpp_1af0ec89de1369c878ed2a32a0e0227448.html#_CPPv4N8amdinfer14kOutputTensorsE">amdinfer::kOutputTensors (C++ member)</a>
+      <li><a href="cpp_api/variable_c__plus__plus_8cpp_1af0ec89de1369c878ed2a32a0e0227448.html#_CPPv4N8amdinfer14kOutputTensorsE">amdinfer::kOutputTensors (C++ member)</a>, <a href="cpp_api/variable_echo__multi_8cpp_1af0ec89de1369c878ed2a32a0e0227448.html#_CPPv4N8amdinfer14kOutputTensorsE">[1]</a>, <a href="cpp_api/variable_models_2echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.html#_CPPv4N8amdinfer14kOutputTensorsE">[2]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp_api/variable_metrics_8cpp_1ade316533d688f2811817fa7a1a73f084.html#_CPPv4N8amdinfer13kPercentile50E">amdinfer::kPercentile50 (C++ member)</a>
 </li>
       <li><a href="cpp_api/variable_metrics_8cpp_1a214ca5f30222281458498214a0d9300c.html#_CPPv4N8amdinfer13kPercentile90E">amdinfer::kPercentile90 (C++ member)</a>
 </li>
       <li><a href="cpp_api/variable_metrics_8cpp_1ab6051d51a6bd12208f6574272fac9117.html#_CPPv4N8amdinfer13kPercentile99E">amdinfer::kPercentile99 (C++ member)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1Logger.html#_CPPv4N8amdinfer6LoggerE">amdinfer::Logger (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Logger.html#_CPPv4NK8amdinfer6Logger3getEv">amdinfer::Logger::get (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Logger.html#_CPPv4N8amdinfer6Logger6LoggerE7Loggers">amdinfer::Logger::Logger (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Logger.html#_CPPv4N8amdinfer6Logger6LoggerEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1Logger.html#_CPPv4N8amdinfer6Logger3setE7Loggers">amdinfer::Logger::set (C++ function)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a5f2178ac8de54222377d5c4a64f986ad.html#_CPPv4N8amdinfer7LoggersE">amdinfer::Loggers (C++ enum)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a5f2178ac8de54222377d5c4a64f986ad.html#_CPPv4N8amdinfer7Loggers6ClientE">amdinfer::Loggers::Client (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a5f2178ac8de54222377d5c4a64f986ad.html#_CPPv4N8amdinfer7Loggers6ServerE">amdinfer::Loggers::Server (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a5f2178ac8de54222377d5c4a64f986ad.html#_CPPv4N8amdinfer7Loggers4TestE">amdinfer::Loggers::Test (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevelE">amdinfer::LogLevel (C++ enum)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevel5DebugE">amdinfer::LogLevel::Debug (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevel5ErrorE">amdinfer::LogLevel::Error (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevel4InfoE">amdinfer::LogLevel::Info (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevel3OffE">amdinfer::LogLevel::Off (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevel5TraceE">amdinfer::LogLevel::Trace (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_logging_8hpp_1a7546a5fe8db550cd7a7f925cca061e27.html#_CPPv4N8amdinfer8LogLevel4WarnE">amdinfer::LogLevel::Warn (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptionsE">amdinfer::LogOptions (C++ struct)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptions14console_enableE">amdinfer::LogOptions::console_enable (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptions13console_levelE">amdinfer::LogOptions::console_level (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptions11file_enableE">amdinfer::LogOptions::file_enable (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptions10file_levelE">amdinfer::LogOptions::file_level (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptions13log_directoryE">amdinfer::LogOptions::log_directory (C++ member)</a>
-</li>
-      <li><a href="cpp_api/structamdinfer_1_1LogOptions.html#_CPPv4N8amdinfer10LogOptions11logger_nameE">amdinfer::LogOptions::logger_name (C++ member)</a>
-</li>
-      <li><a href="cpp_api/function_observer_8hpp_1adff966f58637552655053b2a0ad05c96.html#_CPPv4N8amdinfer14logTraceBufferERK6LoggerPv6size_t">amdinfer::logTraceBuffer (C++ function)</a>
-</li>
       <li><a href="cpp_api/function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b.html#_CPPv4N8amdinfer22mapJsonToModelMetadataEPKN4Json5ValueE">amdinfer::mapJsonToModelMetadata (C++ function)</a>
 </li>
-      <li><a href="cpp_api/function_http__internal_8cpp_1a35f336b6080d807deb64cb9d082d19b5.html#_CPPv4N8amdinfer19mapJsonToParametersEN4Json5ValueE">amdinfer::mapJsonToParameters (C++ function)</a>, <a href="cpp_api/function_http__internal_8cpp_1ae9a219aa864779f813bc00edc3a861c0.html#_CPPv4N8amdinfer19mapJsonToParametersEN4Json5ValueE">[1]</a>
+      <li><a href="cpp_api/function_http__internal_8cpp_1a35f336b6080d807deb64cb9d082d19b5.html#_CPPv4N8amdinfer19mapJsonToParametersEN4Json5ValueE">amdinfer::mapJsonToParameters (C++ function)</a>, <a href="cpp_api/function_http__internal_8cpp_1ab552d950b2047e8257bf47b64521a3d1.html#_CPPv4N8amdinfer19mapJsonToParametersEN4Json5ValueE">[1]</a>, <a href="cpp_api/function_http__internal_8cpp_1ae9a219aa864779f813bc00edc3a861c0.html#_CPPv4N8amdinfer19mapJsonToParametersEN4Json5ValueE">[2]</a>
 </li>
       <li><a href="cpp_api/function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3.html#_CPPv4N8amdinfer17mapJsonToResponseEPN4Json5ValueE">amdinfer::mapJsonToResponse (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf.html#_CPPv4N8amdinfer23mapModelMetadataToProtoERK13ModelMetadataRN9inference21ModelMetadataResponseE">amdinfer::mapModelMetadataToProto (C++ function)</a>
 </li>
-      <li><a href="cpp_api/function_http__internal_8cpp_1acc26de4cacac0bd1e7b5dc5b1b802c3a.html#_CPPv4N8amdinfer19mapParametersToJsonEP12ParameterMap">amdinfer::mapParametersToJson (C++ function)</a>
+      <li><a href="cpp_api/function_http__internal_8cpp_1ac5e6afcc5f724e1759b2bfe6db7e7ec0.html#_CPPv4N8amdinfer19mapParametersToJsonERK12ParameterMap">amdinfer::mapParametersToJson (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580.html#_CPPv4N8amdinfer20mapParametersToProtoERKNSt3mapINSt6stringEN8amdinfer9ParameterENSt4lessIEEEEPN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">amdinfer::mapParametersToProto (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec.html#_CPPv4N8amdinfer23mapProtoToModelMetadataERKN9inference21ModelMetadataResponseE">amdinfer::mapProtoToModelMetadata (C++ function)</a>
 </li>
-      <li><a href="cpp_api/function_grpc__internal_8cpp_1a54829da37e86837ed95fd9b4775135bf.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">amdinfer::mapProtoToParameters (C++ function)</a>, <a href="cpp_api/function_grpc__internal_8cpp_1a810895b7fc432ac1fdda46f6b426644a.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEER12ParameterMap">[1]</a>, <a href="cpp_api/function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">[2]</a>, <a href="cpp_api/function_grpc__internal_8cpp_1ae460b92cd5f64db78436cebbe777f27b.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEEP12ParameterMap">[3]</a>
+      <li><a href="cpp_api/function_grpc__internal_8cpp_1a54829da37e86837ed95fd9b4775135bf.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">amdinfer::mapProtoToParameters (C++ function)</a>, <a href="cpp_api/function_grpc__internal_8cpp_1a810895b7fc432ac1fdda46f6b426644a.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEER12ParameterMap">[1]</a>, <a href="cpp_api/function_grpc__internal_8cpp_1a976514706c6b64c1fdd73fc85fa7a917.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">[2]</a>, <a href="cpp_api/function_grpc__internal_8cpp_1ae0fbf34987a03cce20609d5767c07eba.html#_CPPv4N8amdinfer20mapProtoToParametersERKN6google8protobuf3MapINSt6stringEN9inference14InferParameterEEE">[3]</a>
 </li>
       <li><a href="cpp_api/function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f.html#_CPPv4N8amdinfer21mapProtoToParameters2ERKN6google8protobuf3MapINSt6stringEN9inference15InferParameter2EEEP12ParameterMap">amdinfer::mapProtoToParameters2 (C++ function)</a>
 </li>
@@ -1412,11 +1334,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6.html#_CPPv4N8amdinfer18mapResponseToProtoE17InferenceResponseRN9inference18ModelInferResponseE">amdinfer::mapResponseToProto (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryAllocator.html#_CPPv4N8amdinfer15MemoryAllocatorE">amdinfer::MemoryAllocator (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryAllocator.html#_CPPv4N8amdinfer15MemoryAllocator3getERK6Tensor6size_t">amdinfer::MemoryAllocator::get (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryAllocator.html#_CPPv4N8amdinfer15MemoryAllocator3putEPKv">amdinfer::MemoryAllocator::put (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryAllocator.html#_CPPv4N8amdinfer15MemoryAllocatorD0Ev">amdinfer::MemoryAllocator::~MemoryAllocator (C++ function)</a>
+</li>
+      <li><a href="cpp_api/enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocatorsE">amdinfer::MemoryAllocators (C++ enum)</a>
+</li>
+      <li><a href="cpp_api/enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocators3CpuE">amdinfer::MemoryAllocators::Cpu (C++ enumerator)</a>
+</li>
+      <li><a href="cpp_api/enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocators10VartTensorE">amdinfer::MemoryAllocators::VartTensor (C++ enumerator)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1MemoryHeader.html#_CPPv4N8amdinfer12MemoryHeaderE">amdinfer::MemoryHeader (C++ struct)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cpp_api/structamdinfer_1_1MemoryHeader.html#_CPPv4N8amdinfer12MemoryHeader7addressE">amdinfer::MemoryHeader::address (C++ member)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1MemoryHeader.html#_CPPv4N8amdinfer12MemoryHeader8block_idE">amdinfer::MemoryHeader::block_id (C++ member)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1MemoryHeader.html#_CPPv4N8amdinfer12MemoryHeader4freeE">amdinfer::MemoryHeader::free (C++ member)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1MemoryHeader.html#_CPPv4N8amdinfer12MemoryHeader12MemoryHeaderEPNSt4byteE6size_tb6size_t">amdinfer::MemoryHeader::MemoryHeader (C++ function)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1MemoryHeader.html#_CPPv4N8amdinfer12MemoryHeader4sizeE">amdinfer::MemoryHeader::size (C++ member)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryPool.html#_CPPv4N8amdinfer10MemoryPoolE">amdinfer::MemoryPool (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryPool.html#_CPPv4NK8amdinfer10MemoryPool3getERKNSt6vectorI16MemoryAllocatorsEERK6Tensor6size_t">amdinfer::MemoryPool::get (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryPool.html#_CPPv4N8amdinfer10MemoryPool10MemoryPoolEv">amdinfer::MemoryPool::MemoryPool (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1MemoryPool.html#_CPPv4NK8amdinfer10MemoryPool3putENSt10unique_ptrI6BufferEE">amdinfer::MemoryPool::put (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadataE">amdinfer::ModelMetadata (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadataE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringE8DataTypeNSt16initializer_listI8uint64_tEE">amdinfer::ModelMetadata::addInputTensor (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringE8DataTypeNSt6vectorIiEE">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringE8DataTypeNSt16initializer_listI8uint64_tEE">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringE8DataTypeNSt6vectorIiEE">[3]</a>
+      <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERK6Tensor">amdinfer::ModelMetadata::addInputTensor (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt16initializer_listI8uint64_tEE8DataType">[1]</a>, <a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERK6Tensor">[3]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt16initializer_listI8uint64_tEE8DataType">[4]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt6vectorIiEE8DataType">[5]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringE8DataTypeNSt16initializer_listI8uint64_tEE">amdinfer::ModelMetadata::addOutputTensor (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringE8DataTypeNSt6vectorIiEE">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringE8DataTypeNSt16initializer_listI8uint64_tEE">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringE8DataTypeNSt6vectorIiEE">[3]</a>
+      <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERK6Tensor">amdinfer::ModelMetadata::addOutputTensor (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt16initializer_listI8uint64_tEE8DataType">[1]</a>, <a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERK6Tensor">[3]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt16initializer_listI8uint64_tEE8DataType">[4]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt6vectorIiEE8DataType">[5]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4NK8amdinfer13ModelMetadata9getInputsEv">amdinfer::ModelMetadata::getInputs (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer13ModelMetadata9getInputsEv">[1]</a>
 </li>
@@ -1434,15 +1392,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadata8setReadyEb">amdinfer::ModelMetadata::setReady (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata8setReadyEb">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadataTensor.html#_CPPv4N8amdinfer19ModelMetadataTensorE">amdinfer::ModelMetadataTensor (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer19ModelMetadataTensorE">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadataTensor.html#_CPPv4NK8amdinfer19ModelMetadataTensor11getDataTypeEv">amdinfer::ModelMetadataTensor::getDataType (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer19ModelMetadataTensor11getDataTypeEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadataTensor.html#_CPPv4NK8amdinfer19ModelMetadataTensor7getNameEv">amdinfer::ModelMetadataTensor::getName (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer19ModelMetadataTensor7getNameEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadataTensor.html#_CPPv4NK8amdinfer19ModelMetadataTensor8getShapeEv">amdinfer::ModelMetadataTensor::getShape (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer19ModelMetadataTensor8getShapeEv">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1ModelMetadataTensor.html#_CPPv4N8amdinfer19ModelMetadataTensor19ModelMetadataTensorERKNSt6stringE8DataTypeNSt6vectorI8uint64_tEE">amdinfer::ModelMetadataTensor::ModelMetadataTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer19ModelMetadataTensor19ModelMetadataTensorERKNSt6stringE8DataTypeNSt6vectorI8uint64_tEE">[1]</a>
+      <li><a href="cpp_api/typedef_model__metadata_8hpp_1a3c11f1db8b5cac2c685eea18138065cb.html#_CPPv4N8amdinfer19ModelMetadataTensorE">amdinfer::ModelMetadataTensor (C++ type)</a>
 </li>
       <li><a href="cpp_api/function_http__internal_8cpp_1a263e4c7efb3c93d6fc48499bc4a46548.html#_CPPv4N8amdinfer25modelMetadataTensorToJsonERK19ModelMetadataTensor">amdinfer::modelMetadataTensorToJson (C++ function)</a>
 </li>
@@ -1468,7 +1418,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient9modelListEv">amdinfer::NativeClient::modelList (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient9modelListEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringEP12ParameterMap">amdinfer::NativeClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::NativeClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE">amdinfer::NativeClient::modelMetadata (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE">[1]</a>
 </li>
@@ -1490,7 +1440,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient11serverReadyEv">amdinfer::NativeClient::serverReady (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient11serverReadyEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP12ParameterMap">amdinfer::NativeClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::NativeClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1NativeClient.html#_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE">amdinfer::NativeClient::workerUnload (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE">[1]</a>
 </li>
@@ -1498,11 +1448,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/structamdinfer_1_1Observer.html#_CPPv4N8amdinfer8ObserverE">amdinfer::Observer (C++ struct)</a>
 </li>
-      <li><a href="cpp_api/structamdinfer_1_1Observer.html#_CPPv4N8amdinfer8Observer19AMDINFER_IF_LOGGINGE6Logger">amdinfer::Observer::AMDINFER_IF_LOGGING (C++ function)</a>
+      <li><a href="cpp_api/function_c__plus__plus_8cpp_1a9e6917e8d658979c637569428360219e.html#_CPPv4N8amdinfer9openModelERKNSt6stringE">amdinfer::openModel (C++ function)</a>
 </li>
-      <li><a href="cpp_api/function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49.html#_CPPv4N8amdinferlsERNSt7ostreamERK8DataType">amdinfer::operator&lt;&lt; (C++ function)</a>
-</li>
-      <li><a href="cpp_api/typedef_http__internal_8cpp_1ac0c25a8d874c058c0256360834443885.html#_CPPv4N8amdinfer13OutputBuilderE">amdinfer::OutputBuilder (C++ type)</a>
+      <li><a href="cpp_api/function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49.html#_CPPv4N8amdinferlsERNSt7ostreamERK8DataType">amdinfer::operator&lt;&lt; (C++ function)</a>, <a href="cpp_api/function_inference__request_8cpp_1ac5a218218c06390bff837a4d000785c0.html#_CPPv4N8amdinferlsERNSt7ostreamERK21InferenceRequestInput">[1]</a>, <a href="cpp_api/function_inference__response_8cpp_1a290fdc985518c3879979b4c24a4622dc.html#_CPPv4N8amdinferlsERNSt7ostreamERK23InferenceResponseOutput">[2]</a>, <a href="cpp_api/function_inference__response_8cpp_1a91b7e6ea3d7b34694d38e2d596167625.html#_CPPv4N8amdinferlsERNSt7ostreamERK17InferenceResponse">[3]</a>
 </li>
       <li><a href="cpp_api/function_grpc__internal_8cpp_1aedf702344a580ab5481f76a200fe60e5.html#_CPPv4IDpEN8amdinfer10OverloadedE10OverloadedIDp2TsEDp2Ts">amdinfer::Overloaded (C++ function)</a>
 
@@ -1514,7 +1462,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE">amdinfer::ParameterMap (C++ class)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMapE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap5beginEv">amdinfer::ParameterMap::begin (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap5beginEv">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap5beginEv">amdinfer::ParameterMap::begin (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4NK8amdinfer12ParameterMap5beginEv">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap5beginEv">[2]</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap5beginEv">[3]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4NK8amdinfer12ParameterMap6cbeginEv">amdinfer::ParameterMap::cbegin (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap6cbeginEv">[1]</a>
 </li>
@@ -1526,17 +1474,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4NK8amdinfer12ParameterMap5emptyEv">amdinfer::ParameterMap::empty (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap5emptyEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3endEv">amdinfer::ParameterMap::end (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3endEv">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3endEv">amdinfer::ParameterMap::end (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4NK8amdinfer12ParameterMap3endEv">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3endEv">[2]</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap3endEv">[3]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap5eraseERKNSt6stringE">amdinfer::ParameterMap::erase (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap5eraseERKNSt6stringE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4I0EN8amdinfer12ParameterMap3getE1TRKNSt6stringE">amdinfer::ParameterMap::get (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4I0EN8amdinfer12ParameterMap3getE1TRKNSt6stringE">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4I0ENK8amdinfer12ParameterMap3getE1TRKNSt6stringE">amdinfer::ParameterMap::get (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4I0ENK8amdinfer12ParameterMap3getE1TRKNSt6stringE">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3hasERKNSt6stringE">amdinfer::ParameterMap::has (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3hasERKNSt6stringE">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4NK8amdinfer12ParameterMap3hasERKNSt6stringE">amdinfer::ParameterMap::has (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap3hasERKNSt6stringE">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMaplsERNSt7ostreamERK12ParameterMap">amdinfer::ParameterMap::operator&lt;&lt; (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMaplsERNSt7ostreamERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t">amdinfer::ParameterMap::put (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc">[1]</a>, <a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE">[2]</a>, <a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEb">[3]</a>, <a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEd">[4]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t">[5]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc">[6]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE">[7]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEb">[8]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEd">[9]</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE">amdinfer::ParameterMap::rename (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1ParameterMap.html#_CPPv4NK8amdinfer12ParameterMap9serializeEPNSt4byteE">amdinfer::ParameterMap::serialize (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap9serializeEPNSt4byteE">[1]</a>
 </li>
@@ -1546,11 +1496,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/typedef_parameters_8hpp_1a26002ca91b4305088f6e975fb162cc81.html#_CPPv4N8amdinfer15ParameterMapPtrE">amdinfer::ParameterMapPtr (C++ type)</a>
 </li>
-      <li><a href="cpp_api/function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d.html#_CPPv4N8amdinfer9parseJsonEPKN6drogon11HttpRequestE">amdinfer::parseJson (C++ function)</a>
+      <li><a href="cpp_api/function_http__internal_8cpp_1a9daff85fd67e50b69f84f3802297ff7d.html#_CPPv4N8amdinfer9parseJsonEPKN6drogon11HttpRequestE">amdinfer::parseJson (C++ function)</a>, <a href="cpp_api/function_http__server_8cpp_1a9daff85fd67e50b69f84f3802297ff7d.html#_CPPv4N8amdinfer9parseJsonEPKN6drogon11HttpRequestE">[1]</a>
 </li>
       <li><a href="cpp_api/function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76.html#_CPPv4N8amdinfer10parseModelERKN2fs4pathERKNSt6stringEP12ParameterMap">amdinfer::parseModel (C++ function)</a>, <a href="cpp_api/function_model__repository_8hpp_1a94c9f9dd875588ecd02da3459c46da36.html#_CPPv4N8amdinfer10parseModelERKNSt10filesystem4pathERKNSt6stringEP12ParameterMap">[1]</a>
 </li>
-      <li><a href="cpp_api/function_http__internal_8cpp_1acbfb678bfa4431649f17750ea346f33c.html#_CPPv4N8amdinfer13parseResponseE17InferenceResponse">amdinfer::parseResponse (C++ function)</a>
+      <li><a href="cpp_api/function_http__internal_8cpp_1acbfb678bfa4431649f17750ea346f33c.html#_CPPv4N8amdinfer13parseResponseE17InferenceResponse">amdinfer::parseResponse (C++ function)</a>, <a href="cpp_api/function_http__server_8cpp_1acbfb678bfa4431649f17750ea346f33c.html#_CPPv4N8amdinfer13parseResponseE17InferenceResponse">[1]</a>
 </li>
       <li><a href="cpp_api/function_softmax_8hpp_1acab8d186d21c38a86ed76bb9246a58da.html#_CPPv4I0EN8amdinfer8pre_post11calcSoftmaxEvPK1T6size_tPd">amdinfer::pre_post::calcSoftmax (C++ function)</a>
 </li>
@@ -1614,7 +1564,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/function_resnet50__postprocess_8hpp_1a50359236db961994e219d8eff7ae2aec.html#_CPPv4I0EN8amdinfer8pre_post19resnet50PostprocessENSt6vectorIiEEPK1T6size_ti">amdinfer::pre_post::resnet50Postprocess (C++ function)</a>
 </li>
-      <li><a href="cpp_api/typedef_http__internal_8cpp_1a9a8b533ecefc7f30d6f3377cf897f1c8.html#_CPPv4N8amdinfer14RequestBuilderE">amdinfer::RequestBuilder (C++ type)</a>
+      <li><a href="cpp_api/structamdinfer_1_1RequestContainer.html#_CPPv4N8amdinfer16RequestContainerE">amdinfer::RequestContainer (C++ struct)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1RequestContainer.html#_CPPv4N8amdinfer16RequestContainer7requestE">amdinfer::RequestContainer::request (C++ member)</a>
+</li>
+      <li><a href="cpp_api/typedef_declarations_8hpp_1a352d9cb1ac3039b2f272613d5d2e2c09.html#_CPPv4N8amdinfer19RequestContainerPtrE">amdinfer::RequestContainerPtr (C++ type)</a>
 </li>
       <li><a href="cpp_api/function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4.html#_CPPv4N8amdinfer12runInferenceEPN9inference20GRPCInferenceService4StubERKNSt6stringERK16InferenceRequest">amdinfer::runInference (C++ function)</a>
 </li>
@@ -1664,6 +1618,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/structamdinfer_1_1ServerMetadata.html#_CPPv4N8amdinfer14ServerMetadata7versionE">amdinfer::ServerMetadata::version (C++ member)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer14ServerMetadata7versionE">[1]</a>
 </li>
+      <li><a href="cpp_api/function_grpc__server_8cpp_1af023a215479a2732eb486a97860222cb.html#_CPPv4N8amdinfer11setCallbackEP16InferenceRequestP18CallDataModelInfer">amdinfer::setCallback (C++ function)</a>, <a href="cpp_api/function_native_8cpp_1a909af7a914df81895bf0a4dda591f13d.html#_CPPv4N8amdinfer11setCallbackEP16InferenceRequest">[1]</a>
+</li>
       <li><a href="cpp_api/structamdinfer_1_1SetInputData.html#_CPPv4N8amdinfer12SetInputDataE">amdinfer::SetInputData (C++ struct)</a>
 </li>
       <li><a href="cpp_api/structamdinfer_1_1SetInputData.html#_CPPv4I0ENK8amdinfer12SetInputDataclEvPN4Json5ValueEPv6size_t">amdinfer::SetInputData::operator() (C++ function)</a>
@@ -1678,13 +1634,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState11getHardwareEv">amdinfer::SharedState::getHardware (C++ function)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4NK8amdinfer11SharedState7getPoolEv">amdinfer::SharedState::getPool (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState11hasHardwareERKNSt6stringEi">amdinfer::SharedState::hasHardware (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState10modelInferERKNSt6stringENSt10unique_ptrI9InterfaceEE">amdinfer::SharedState::modelInfer (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState10modelInferERKNSt6stringENSt10unique_ptrI16RequestContainerEE">amdinfer::SharedState::modelInfer (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState9modelListEv">amdinfer::SharedState::modelList (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState9modelLoadERKNSt6stringEP12ParameterMap">amdinfer::SharedState::modelLoad (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::SharedState::modelLoad (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState13modelMetadataERKNSt6stringE">amdinfer::SharedState::modelMetadata (C++ function)</a>
 </li>
@@ -1696,13 +1654,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState13setRepositoryERKNSt10filesystem4pathEb">amdinfer::SharedState::setRepository (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState10workerLoadERKNSt6stringEP12ParameterMap">amdinfer::SharedState::workerLoad (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::SharedState::workerLoad (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SharedState.html#_CPPv4N8amdinfer11SharedState12workerUnloadERKNSt6stringE">amdinfer::SharedState::workerUnload (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcherE">amdinfer::SoftBatcher (C++ class)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherEP12ParameterMap">amdinfer::SoftBatcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherERK7Batcher">[1]</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherERR7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherEv">[3]</a>
+      <li><a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherEP10MemoryPool">amdinfer::SoftBatcher::Batcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherEP10MemoryPoolP12ParameterMap">[1]</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherERK7Batcher">[2]</a>, <a href="cpp_api/classamdinfer_1_1SoftBatcher.html#_CPPv4N8amdinfer11SoftBatcher7BatcherERR7Batcher">[3]</a>
 </li>
       <li><a href="cpp_api/enum_status_8hpp_1a913436294d314192e3d1ef856c142de3.html#_CPPv4N8amdinfer6StatusE">amdinfer::Status (C++ enum)</a>
 </li>
@@ -1714,7 +1672,41 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf.html#_CPPv4N8amdinfer9StringMapE">amdinfer::StringMap (C++ type)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4N8amdinfer6TensorE">amdinfer::Tensor (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4N8amdinfer6Tensor11deserializeEPKNSt4byteE">amdinfer::Tensor::deserialize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NK8amdinfer6Tensor11getDatatypeEv">amdinfer::Tensor::getDatatype (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NKR8amdinfer6Tensor7getNameEv">amdinfer::Tensor::getName (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NO8amdinfer6Tensor7getNameEv">[1]</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NKR8amdinfer6Tensor8getShapeEv">amdinfer::Tensor::getShape (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NO8amdinfer6Tensor8getShapeEv">[1]</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NK8amdinfer6Tensor7getSizeEv">amdinfer::Tensor::getSize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NK8amdinfer6Tensor9serializeEPNSt4byteE">amdinfer::Tensor::serialize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4NK8amdinfer6Tensor13serializeSizeEv">amdinfer::Tensor::serializeSize (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4N8amdinfer6Tensor11setDatatypeE8DataType">amdinfer::Tensor::setDatatype (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4N8amdinfer6Tensor7setNameENSt6stringE">amdinfer::Tensor::setName (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4N8amdinfer6Tensor8setShapeENSt6vectorI8uint64_tEE">amdinfer::Tensor::setShape (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1Tensor.html#_CPPv4N8amdinfer6Tensor6TensorENSt6stringENSt6vectorI8uint64_tEE8DataType">amdinfer::Tensor::Tensor (C++ function)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1TensorSizes.html#_CPPv4N8amdinfer11TensorSizesE">amdinfer::TensorSizes (C++ struct)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1TensorSizes.html#_CPPv4N8amdinfer11TensorSizes9data_typeE">amdinfer::TensorSizes::data_type (C++ member)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1TensorSizes.html#_CPPv4N8amdinfer11TensorSizes4nameE">amdinfer::TensorSizes::name (C++ member)</a>
+</li>
+      <li><a href="cpp_api/structamdinfer_1_1TensorSizes.html#_CPPv4N8amdinfer11TensorSizes5shapeE">amdinfer::TensorSizes::shape (C++ member)</a>
+</li>
       <li><a href="cpp_api/function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39.html#_CPPv4N8amdinfer9terminateEv">amdinfer::terminate (C++ function)</a>
+</li>
+      <li><a href="cpp_api/typedef_declarations_8hpp_1a364c78e9355139ec245113811681b4a0.html#_CPPv4N8amdinfer8TracePtrE">amdinfer::TracePtr (C++ type)</a>
 </li>
       <li><a href="cpp_api/structamdinfer_1_1UpdateCommand.html#_CPPv4N8amdinfer13UpdateCommandE">amdinfer::UpdateCommand (C++ struct)</a>
 </li>
@@ -1775,6 +1767,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <li><a href="cpp_api/structamdinfer_1_1util_1_1is__any.html#_CPPv4I0DpEN8amdinfer4util6is_anyE">amdinfer::util::is_any (C++ struct)</a>
 </li>
       <li><a href="cpp_api/variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391.html#_CPPv4I0DpEN8amdinfer4util8is_any_vE">amdinfer::util::is_any_v (C++ member)</a>
+</li>
+      <li><a href="cpp_api/function_string_8hpp_1af7be5da4787523697f32822ac12bfaef.html#_CPPv4N8amdinfer4util7isLowerENSt11string_viewE">amdinfer::util::isLower (C++ function)</a>
 </li>
       <li><a href="cpp_api/variable_ctpl_8cpp_1a3d0e67ce722206db215f42681f069659.html#_CPPv4N8amdinfer4util17kThreadPoolLengthE">amdinfer::util::kThreadPoolLength (C++ member)</a>
 </li>
@@ -1840,19 +1834,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1VartTensorBuffer.html#_CPPv4N8amdinfer16VartTensorBuffer15getTensorBufferEv">amdinfer::VartTensorBuffer::getTensorBuffer (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1VartTensorBuffer.html#_CPPv4N8amdinfer16VartTensorBuffer5resetEv">amdinfer::VartTensorBuffer::reset (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1VartTensorBuffer.html#_CPPv4N8amdinfer16VartTensorBuffer16VartTensorBufferEPKcRNSt6vectorI7int32_tEEN3xir8DataTypeE">amdinfer::VartTensorBuffer::VartTensorBuffer (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1VartTensorBuffer.html#_CPPv4N8amdinfer16VartTensorBuffer16VartTensorBufferERKNSt6stringERNSt6vectorI7int32_tEEN3xir8DataTypeE">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1VectorBuffer.html#_CPPv4N8amdinfer12VectorBufferE">amdinfer::VectorBuffer (C++ class)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1VectorBuffer.html#_CPPv4N8amdinfer12VectorBuffer8allocateEP15BufferPtrsQueue6size_t6size_t8DataType">amdinfer::VectorBuffer::allocate (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1VectorBuffer.html#_CPPv4N8amdinfer12VectorBuffer4dataE6size_t">amdinfer::VectorBuffer::data (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1VectorBuffer.html#_CPPv4N8amdinfer12VectorBuffer5resetEv">amdinfer::VectorBuffer::reset (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1VectorBuffer.html#_CPPv4N8amdinfer12VectorBuffer12VectorBufferEi8DataType">amdinfer::VectorBuffer::VectorBuffer (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1VartTensorBuffer.html#_CPPv4N8amdinfer16VartTensorBuffer16VartTensorBufferEPv16MemoryAllocators">amdinfer::VartTensorBuffer::VartTensorBuffer (C++ function)</a>
 </li>
       <li><a href="cpp_api/function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd.html#_CPPv4N8amdinfer19waitUntilModelReadyEPK6ClientRKNSt6stringE">amdinfer::waitUntilModelReady (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer19waitUntilModelReadyEPK6ClientRKNSt6stringE">[1]</a>
 </li>
@@ -1872,7 +1854,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient9modelListEv">amdinfer::WebSocketClient::modelList (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelListEv">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient9modelLoadERKNSt6stringEP12ParameterMap">amdinfer::WebSocketClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::WebSocketClient::modelLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient13modelMetadataERKNSt6stringE">amdinfer::WebSocketClient::modelMetadata (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient13modelMetadataERKNSt6stringE">[1]</a>
 </li>
@@ -1908,7 +1890,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImplD0Ev">amdinfer::WebSocketClient::WebSocketClientImpl::~WebSocketClientImpl (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImplD0Ev">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient10workerLoadERKNSt6stringEP12ParameterMap">amdinfer::WebSocketClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient10workerLoadERKNSt6stringEP12ParameterMap">[1]</a>
+      <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::WebSocketClient::workerLoad (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient10workerLoadERKNSt6stringERK12ParameterMap">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WebSocketClient.html#_CPPv4NK8amdinfer15WebSocketClient12workerUnloadERKNSt6stringE">amdinfer::WebSocketClient::workerUnload (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient12workerUnloadERKNSt6stringE">[1]</a>
 </li>
@@ -1916,27 +1898,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfoE">amdinfer::WorkerInfo (C++ class)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo17addAndStartWorkerERKNSt6stringEP12ParameterMap">amdinfer::WorkerInfo::addAndStartWorker (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo8allocateE6size_t">amdinfer::WorkerInfo::allocate (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo17addAndStartWorkerERKNSt6stringEP12ParameterMapP10MemoryPool">amdinfer::WorkerInfo::addAndStartWorker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10getBatcherEv">amdinfer::WorkerInfo::getBatcher (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo12getBatchSizeEv">amdinfer::WorkerInfo::getBatchSize (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo12getBufferNumEv">amdinfer::WorkerInfo::getBufferNum (C++ function)</a>
-</li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo12getGroupSizeEv">amdinfer::WorkerInfo::getGroupSize (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo14getInputBufferEv">amdinfer::WorkerInfo::getInputBuffer (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo15getMaxBufferNumEv">amdinfer::WorkerInfo::getMaxBufferNum (C++ function)</a>
-</li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo11getMetadataEv">amdinfer::WorkerInfo::getMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo15getOutputBufferEv">amdinfer::WorkerInfo::getOutputBuffer (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo14inputSizeValidE6size_t">amdinfer::WorkerInfo::inputSizeValid (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo4joinENSt6thread2idE">amdinfer::WorkerInfo::join (C++ function)</a>
 </li>
@@ -1944,19 +1914,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfoaSERK10WorkerInfo">amdinfer::WorkerInfo::operator= (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfoaSERR10WorkerInfo">[1]</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo14putInputBufferERR10BufferPtrs">amdinfer::WorkerInfo::putInputBuffer (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4NK8amdinfer10WorkerInfo15putOutputBufferERR10BufferPtrs">amdinfer::WorkerInfo::putOutputBuffer (C++ function)</a>
-</li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo8shutdownEv">amdinfer::WorkerInfo::shutdown (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo6unloadEv">amdinfer::WorkerInfo::unload (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERK10WorkerInfo">amdinfer::WorkerInfo::WorkerInfo (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMap">[1]</a>, <a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERR10WorkerInfo">[2]</a>
+      <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERK10WorkerInfo">amdinfer::WorkerInfo::WorkerInfo (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPool">[1]</a>, <a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERR10WorkerInfo">[2]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1WorkerInfo.html#_CPPv4N8amdinfer10WorkerInfoD0Ev">amdinfer::WorkerInfo::~WorkerInfo (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Aks.html#_CPPv4N8amdinfer7workers3AksE">amdinfer::workers::Aks (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Aks.html#_CPPv4NK8amdinfer7workers3Aks13getAllocatorsEv">amdinfer::workers::Aks::getAllocators (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Aks.html#_CPPv4N8amdinfer7workers3Aks5spawnEP13BatchPtrQueue">amdinfer::workers::Aks::spawn (C++ function)</a>
 </li>
@@ -1964,15 +1932,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4N8amdinfer7workers9AksDetectE">amdinfer::workers::AksDetect (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4NK8amdinfer7workers9AksDetect13getAllocatorsEv">amdinfer::workers::AksDetect::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4N8amdinfer7workers9AksDetect5spawnEP13BatchPtrQueue">amdinfer::workers::AksDetect::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetect.html#_CPPv4N8amdinfer7workers9AksDetect6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::AksDetect::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4N8amdinfer7workers15AksDetectStreamE">amdinfer::workers::AksDetectStream (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4NK8amdinfer7workers15AksDetectStream13getAllocatorsEv">amdinfer::workers::AksDetectStream::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4N8amdinfer7workers15AksDetectStream5spawnEP13BatchPtrQueue">amdinfer::workers::AksDetectStream::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1AksDetectStream.html#_CPPv4N8amdinfer7workers15AksDetectStream6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::AksDetectStream::Worker (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1CPlusPlus.html#_CPPv4N8amdinfer7workers9CPlusPlusE">amdinfer::workers::CPlusPlus (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1CPlusPlus.html#_CPPv4NK8amdinfer7workers9CPlusPlus13getAllocatorsEv">amdinfer::workers::CPlusPlus::getAllocators (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1CPlusPlus.html#_CPPv4N8amdinfer7workers9CPlusPlus5spawnEP13BatchPtrQueue">amdinfer::workers::CPlusPlus::spawn (C++ function)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1CPlusPlus.html#_CPPv4N8amdinfer7workers9CPlusPlus6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::CPlusPlus::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/structamdinfer_1_1workers_1_1DetectResponse.html#_CPPv4N8amdinfer7workers14DetectResponseE">amdinfer::workers::DetectResponse (C++ struct)</a>
 </li>
@@ -1990,11 +1970,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Echo.html#_CPPv4N8amdinfer7workers4EchoE">amdinfer::workers::Echo (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Echo.html#_CPPv4NK8amdinfer7workers4Echo13getAllocatorsEv">amdinfer::workers::Echo::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Echo.html#_CPPv4N8amdinfer7workers4Echo5spawnEP13BatchPtrQueue">amdinfer::workers::Echo::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Echo.html#_CPPv4N8amdinfer7workers4Echo6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::Echo::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1EchoMulti.html#_CPPv4N8amdinfer7workers9EchoMultiE">amdinfer::workers::EchoMulti (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1EchoMulti.html#_CPPv4NK8amdinfer7workers9EchoMulti13getAllocatorsEv">amdinfer::workers::EchoMulti::getAllocators (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1EchoMulti.html#_CPPv4N8amdinfer7workers9EchoMulti5spawnEP13BatchPtrQueue">amdinfer::workers::EchoMulti::spawn (C++ function)</a>
 </li>
@@ -2002,11 +1986,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4N8amdinfer7workers11InvertImageE">amdinfer::workers::InvertImage (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4NK8amdinfer7workers11InvertImage13getAllocatorsEv">amdinfer::workers::InvertImage::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4N8amdinfer7workers11InvertImage5spawnEP13BatchPtrQueue">amdinfer::workers::InvertImage::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertImage.html#_CPPv4N8amdinfer7workers11InvertImage6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::InvertImage::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertVideo.html#_CPPv4N8amdinfer7workers11InvertVideoE">amdinfer::workers::InvertVideo (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertVideo.html#_CPPv4NK8amdinfer7workers11InvertVideo13getAllocatorsEv">amdinfer::workers::InvertVideo::getAllocators (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1InvertVideo.html#_CPPv4N8amdinfer7workers11InvertVideo5spawnEP13BatchPtrQueue">amdinfer::workers::InvertVideo::spawn (C++ function)</a>
 </li>
@@ -2022,7 +2010,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/variable_aks__detect_8cpp_1a42d9aa2fce61d9debb309bcea9830853.html#_CPPv4N8amdinfer7workers12kImageHeightE">amdinfer::workers::kImageHeight (C++ member)</a>
 </li>
-      <li><a href="cpp_api/variable_aks__detect_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6.html#_CPPv4N8amdinfer7workers10kImageSizeE">amdinfer::workers::kImageSize (C++ member)</a>
+      <li><a href="cpp_api/variable_aks__detect_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6.html#_CPPv4N8amdinfer7workers10kImageSizeE">amdinfer::workers::kImageSize (C++ member)</a>, <a href="cpp_api/variable_resnet50__stream_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6.html#_CPPv4N8amdinfer7workers10kImageSizeE">[1]</a>
 </li>
       <li><a href="cpp_api/variable_aks__detect_8cpp_1aef4b7872e7395e2c7fdf950685bc2c94.html#_CPPv4N8amdinfer7workers11kImageWidthE">amdinfer::workers::kImageWidth (C++ member)</a>
 </li>
@@ -2046,6 +2034,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.html#_CPPv4N8amdinfer7workers14MIGraphXWorkerE">amdinfer::workers::MIGraphXWorker (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.html#_CPPv4NK8amdinfer7workers14MIGraphXWorker13getAllocatorsEv">amdinfer::workers::MIGraphXWorker::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.html#_CPPv4N8amdinfer7workers14MIGraphXWorker5spawnEP13BatchPtrQueue">amdinfer::workers::MIGraphXWorker::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.html#_CPPv4N8amdinfer7workers14MIGraphXWorker6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::MIGraphXWorker::Worker (C++ function)</a>
@@ -2054,11 +2044,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4N8amdinfer7workers8PtZendnnE">amdinfer::workers::PtZendnn (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4NK8amdinfer7workers8PtZendnn13getAllocatorsEv">amdinfer::workers::PtZendnn::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4N8amdinfer7workers8PtZendnn5spawnEP13BatchPtrQueue">amdinfer::workers::PtZendnn::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1PtZendnn.html#_CPPv4N8amdinfer7workers8PtZendnn6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::PtZendnn::Worker (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50.html#_CPPv4N8amdinfer7workers8ResNet50E">amdinfer::workers::ResNet50 (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50.html#_CPPv4NK8amdinfer7workers8ResNet5013getAllocatorsEv">amdinfer::workers::ResNet50::getAllocators (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50.html#_CPPv4N8amdinfer7workers8ResNet505spawnEP13BatchPtrQueue">amdinfer::workers::ResNet50::spawn (C++ function)</a>
 </li>
@@ -2066,11 +2060,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4N8amdinfer7workers14ResNet50StreamE">amdinfer::workers::ResNet50Stream (C++ class)</a>
 </li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4NK8amdinfer7workers14ResNet50Stream13getAllocatorsEv">amdinfer::workers::ResNet50Stream::getAllocators (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4N8amdinfer7workers14ResNet50Stream5spawnEP13BatchPtrQueue">amdinfer::workers::ResNet50Stream::spawn (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1ResNet50Stream.html#_CPPv4N8amdinfer7workers14ResNet50Stream6WorkerERKNSt6stringERKNSt6stringE">amdinfer::workers::ResNet50Stream::Worker (C++ function)</a>
 </li>
+      <li><a href="cpp_api/function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830.html#_CPPv4N8amdinfer7workers7respondEP5Batch">amdinfer::workers::respond (C++ function)</a>
+</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1TfZendnn.html#_CPPv4N8amdinfer7workers8TfZendnnE">amdinfer::workers::TfZendnn (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1TfZendnn.html#_CPPv4NK8amdinfer7workers8TfZendnn13getAllocatorsEv">amdinfer::workers::TfZendnn::getAllocators (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1TfZendnn.html#_CPPv4N8amdinfer7workers8TfZendnn5spawnEP13BatchPtrQueue">amdinfer::workers::TfZendnn::spawn (C++ function)</a>
 </li>
@@ -2082,17 +2082,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker7acquireEP12ParameterMap">amdinfer::workers::Worker::acquire (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker8allocateE6size_t">amdinfer::workers::Worker::allocate (C++ function)</a>
-</li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker11batch_size_E">amdinfer::workers::Worker::batch_size_ (C++ member)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker10deallocateEv">amdinfer::workers::Worker::deallocate (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker7destroyEv">amdinfer::workers::Worker::destroy (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4NK8amdinfer7workers6Worker12getBatchSizeEv">amdinfer::workers::Worker::getBatchSize (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4NK8amdinfer7workers6Worker13getAllocatorsEv">amdinfer::workers::Worker::getAllocators (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4NK8amdinfer7workers6Worker15getMaxBufferNumEv">amdinfer::workers::Worker::getMaxBufferNum (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4NK8amdinfer7workers6Worker12getBatchSizeEv">amdinfer::workers::Worker::getBatchSize (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4NK8amdinfer7workers6Worker11getMetadataEv">amdinfer::workers::Worker::getMetadata (C++ function)</a>
 </li>
@@ -2100,25 +2096,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker4initEP12ParameterMap">amdinfer::workers::Worker::init (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker14input_buffers_E">amdinfer::workers::Worker::input_buffers_ (C++ member)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4I0EN8amdinfer7workers6Worker11makeBatcherENSt6vectorINSt10unique_ptrI7BatcherEEEEiP12ParameterMap">amdinfer::workers::Worker::makeBatcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker11makeBatcherEiP12ParameterMap">[1]</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker15max_buffer_num_E">amdinfer::workers::Worker::max_buffer_num_ (C++ member)</a>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4I0EN8amdinfer7workers6Worker11makeBatcherENSt6vectorINSt10unique_ptrI7BatcherEEEEiP12ParameterMapP10MemoryPool">amdinfer::workers::Worker::makeBatcher (C++ function)</a>, <a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker11makeBatcherEiP12ParameterMapP10MemoryPool">[1]</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker9metadata_E">amdinfer::workers::Worker::metadata_ (C++ member)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker15output_buffers_E">amdinfer::workers::Worker::output_buffers_ (C++ member)</a>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker5pool_E">amdinfer::workers::Worker::pool_ (C++ member)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker7releaseEv">amdinfer::workers::Worker::release (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker13returnBuffersENSt10unique_ptrINSt6vectorI10BufferPtrsEEEENSt10unique_ptrINSt6vectorI10BufferPtrsEEEE">amdinfer::workers::Worker::returnBuffers (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker18returnInputBuffersENSt10unique_ptrI5BatchEE">amdinfer::workers::Worker::returnInputBuffers (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker3runEP13BatchPtrQueue">amdinfer::workers::Worker::run (C++ function)</a>
 </li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker15setInputBuffersEP15BufferPtrsQueue">amdinfer::workers::Worker::setInputBuffers (C++ function)</a>
-</li>
-      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker16setOutputBuffersEP15BufferPtrsQueue">amdinfer::workers::Worker::setOutputBuffers (C++ function)</a>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker7setPoolEP10MemoryPool">amdinfer::workers::Worker::setPool (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6Worker5spawnEP13BatchPtrQueue">amdinfer::workers::Worker::spawn (C++ function)</a>
 </li>
@@ -2130,11 +2120,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_api/enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.html#_CPPv4N8amdinfer7workers12WorkerStatus7AcquireE">amdinfer::workers::WorkerStatus::Acquire (C++ enumerator)</a>
 </li>
-      <li><a href="cpp_api/enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.html#_CPPv4N8amdinfer7workers12WorkerStatus8AllocateE">amdinfer::workers::WorkerStatus::Allocate (C++ enumerator)</a>
-</li>
       <li><a href="cpp_api/enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.html#_CPPv4N8amdinfer7workers12WorkerStatus4DeadE">amdinfer::workers::WorkerStatus::Dead (C++ enumerator)</a>
-</li>
-      <li><a href="cpp_api/enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.html#_CPPv4N8amdinfer7workers12WorkerStatus10DeallocateE">amdinfer::workers::WorkerStatus::Deallocate (C++ enumerator)</a>
 </li>
       <li><a href="cpp_api/enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.html#_CPPv4N8amdinfer7workers12WorkerStatus7DestroyE">amdinfer::workers::WorkerStatus::Destroy (C++ enumerator)</a>
 </li>
@@ -2149,6 +2135,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <li><a href="cpp_api/enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.html#_CPPv4N8amdinfer7workers12WorkerStatus3RunE">amdinfer::workers::WorkerStatus::Run (C++ enumerator)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1XModel.html#_CPPv4N8amdinfer7workers6XModelE">amdinfer::workers::XModel (C++ class)</a>
+</li>
+      <li><a href="cpp_api/classamdinfer_1_1workers_1_1XModel.html#_CPPv4NK8amdinfer7workers6XModel13getAllocatorsEv">amdinfer::workers::XModel::getAllocators (C++ function)</a>
 </li>
       <li><a href="cpp_api/classamdinfer_1_1workers_1_1XModel.html#_CPPv4N8amdinfer7workers6XModel5spawnEP13BatchPtrQueue">amdinfer::workers::XModel::spawn (C++ function)</a>
 </li>
@@ -2173,8 +2161,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <li><a href="cpp_api/define_build__options_8hpp_1a09f1b0969760f1246ed1119f0dd21b07.html#c.AMDINFER_ENABLE_MIGRAPHX">AMDINFER_ENABLE_MIGRAPHX (C macro)</a>
 </li>
       <li><a href="cpp_api/define_build__options_8hpp_1a38bb3a11b32b47c7085751e7ad658fc1.html#c.AMDINFER_ENABLE_PTZENDNN">AMDINFER_ENABLE_PTZENDNN (C macro)</a>
-</li>
-      <li><a href="cpp_api/define_build__options_8hpp_1a5f100257574974f2ab3c02fdee919c1b.html#c.AMDINFER_ENABLE_REST">AMDINFER_ENABLE_REST (C macro)</a>
 </li>
       <li><a href="cpp_api/define_build__options_8hpp_1a1cb70e7b50dde20c79c992b551337b16.html#c.AMDINFER_ENABLE_TFZENDNN">AMDINFER_ENABLE_TFZENDNN (C macro)</a>
 </li>
@@ -2232,8 +2218,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python.html#amdinfer.InferenceRequestOutput.data">data (amdinfer.InferenceRequestOutput property)</a>
 </li>
-      <li><a href="python.html#amdinfer.InferenceRequestInput.datatype">datatype (amdinfer.InferenceRequestInput property)</a>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput.datatype">datatype (amdinfer.InferenceResponseOutput property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.Tensor.datatype">(amdinfer.Tensor property)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python.html#amdinfer.DataType">DataType (class in amdinfer)</a>
@@ -2246,15 +2236,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.RequestParameters.empty">empty() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.empty">empty() (amdinfer.ParameterMap method)</a>
 </li>
-      <li><a href="python.html#amdinfer.Server.enableRepositoryMonitoring">enableRepositoryMonitoring() (amdinfer.Server static method)</a>
+      <li><a href="python.html#amdinfer.Server.enableRepositoryMonitoring">enableRepositoryMonitoring() (amdinfer.Server method)</a>
 </li>
       <li><a href="python.html#amdinfer.EnvironmentNotSetError">EnvironmentNotSetError</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.RequestParameters.erase">erase() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.erase">erase() (amdinfer.ParameterMap method)</a>
 </li>
       <li><a href="python.html#amdinfer.ServerMetadata.extensions">extensions (amdinfer.ServerMetadata property)</a>
 </li>
@@ -2308,40 +2298,64 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.RequestParameters.getBool">getBool() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.getBool">getBool() (amdinfer.ParameterMap method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceResponse.getContext">getContext() (amdinfer.InferenceResponse method)</a>
 </li>
-      <li><a href="python.html#amdinfer.ModelMetadataTensor.getDataType">getDataType() (amdinfer.ModelMetadataTensor method)</a>
-</li>
       <li><a href="python.html#amdinfer.InferenceResponse.getError">getError() (amdinfer.InferenceResponse method)</a>
 </li>
-      <li><a href="python.html#amdinfer.RequestParameters.getFloat">getFloat() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.getFloat">getFloat() (amdinfer.ParameterMap method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getFp16Data">getFp16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getFp16Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getFp32Data">getFp32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getFp32Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getFp64Data">getFp64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getFp64Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequest.getInputs">getInputs() (amdinfer.InferenceRequest method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceRequest.getInputSize">getInputSize() (amdinfer.InferenceRequest method)</a>
 </li>
-      <li><a href="python.html#amdinfer.RequestParameters.getInt">getInt() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.getInt">getInt() (amdinfer.ParameterMap method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getInt16Data">getInt16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt16Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getInt32Data">getInt32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt32Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getInt64Data">getInt64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt64Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getInt8Data">getInt8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt8Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.ModelMetadataTensor.getName">getName() (amdinfer.ModelMetadataTensor method)</a>
-</li>
       <li><a href="python.html#amdinfer.InferenceRequest.getOutputs">getOutputs() (amdinfer.InferenceRequest method)</a>
 
       <ul>
@@ -2352,22 +2366,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="python.html#amdinfer.ModelMetadata.getPlatform">getPlatform() (amdinfer.ModelMetadata method)</a>
 </li>
-      <li><a href="python.html#amdinfer.ModelMetadataTensor.getShape">getShape() (amdinfer.ModelMetadataTensor method)</a>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput.getSize">getSize() (amdinfer.InferenceResponseOutput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.Tensor.getSize">(amdinfer.Tensor method)</a>
 </li>
-      <li><a href="python.html#amdinfer.InferenceRequestInput.getSize">getSize() (amdinfer.InferenceRequestInput method)</a>
-</li>
-      <li><a href="python.html#amdinfer.RequestParameters.getString">getString() (amdinfer.RequestParameters method)</a>
+      </ul></li>
+      <li><a href="python.html#amdinfer.ParameterMap.getString">getString() (amdinfer.ParameterMap method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getStringData">getStringData() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getStringData">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getUint16Data">getUint16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint16Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getUint32Data">getUint32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint32Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getUint64Data">getUint64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint64Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.getUint8Data">getUint8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint8Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="cpp_api/classgoogle_1_1protobuf_1_1Map.html#_CPPv4I00EN6google8protobuf3MapE">google::protobuf::Map (C++ class)</a>
 </li>
       <li><a href="python.html#amdinfer.GrpcClient">GrpcClient (class in amdinfer)</a>
@@ -2380,7 +2416,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.RequestParameters.has">has() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.has">has() (amdinfer.ParameterMap method)</a>
 </li>
       <li><a href="python.html#amdinfer.GrpcClient.hasHardware">hasHardware() (amdinfer.GrpcClient method)</a>
 
@@ -2424,8 +2460,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="python.html#amdinfer.InferenceResponse">InferenceResponse (class in amdinfer)</a>
 </li>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput">InferenceResponseOutput (class in amdinfer)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceTensor">InferenceTensor (class in amdinfer)</a>
+</li>
       <li><a href="python.html#amdinfer.DataType.INT16">INT16 (amdinfer.DataType attribute)</a>
 
       <ul>
@@ -2540,8 +2580,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li><a href="python.html#amdinfer.WebSocketClient.modelMetadata">(amdinfer.WebSocketClient method)</a>
 </li>
       </ul></li>
-      <li><a href="python.html#amdinfer.ModelMetadataTensor">ModelMetadataTensor (class in amdinfer)</a>
-</li>
       <li><a href="python.html#amdinfer.GrpcClient.modelReady">modelReady() (amdinfer.GrpcClient method)</a>
 
       <ul>
@@ -2580,13 +2618,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <li><a href="python.html#amdinfer.DataType.Value.name">name (amdinfer.DataType.Value property)</a>
 
       <ul>
-        <li><a href="python.html#amdinfer.InferenceRequestInput.name">(amdinfer.InferenceRequestInput property)</a>
-</li>
         <li><a href="python.html#amdinfer.InferenceRequestOutput.name">(amdinfer.InferenceRequestOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.name">(amdinfer.InferenceResponseOutput property)</a>
 </li>
         <li><a href="python.html#amdinfer.ModelMetadata.name">(amdinfer.ModelMetadata property)</a>
 </li>
         <li><a href="python.html#amdinfer.ServerMetadata.name">(amdinfer.ServerMetadata property)</a>
+</li>
+        <li><a href="python.html#amdinfer.Tensor.name">(amdinfer.Tensor property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -2601,27 +2641,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python.html#amdinfer.parallel_infer">parallel_infer() (in module amdinfer)</a>
 </li>
+      <li><a href="python.html#amdinfer.ParameterMap">ParameterMap (class in amdinfer)</a>
+</li>
       <li><a href="python.html#amdinfer.InferenceRequest.parameters">parameters (amdinfer.InferenceRequest property)</a>
 
       <ul>
-        <li><a href="python.html#amdinfer.InferenceRequestInput.parameters">(amdinfer.InferenceRequestInput property)</a>
-</li>
         <li><a href="python.html#amdinfer.InferenceRequestOutput.parameters">(amdinfer.InferenceRequestOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.parameters">(amdinfer.InferenceResponseOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceTensor.parameters">(amdinfer.InferenceTensor property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.RequestParameters.put">put() (amdinfer.RequestParameters method)</a>
+      <li><a href="python.html#amdinfer.ParameterMap.put">put() (amdinfer.ParameterMap method)</a>
 </li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.RequestParameters">RequestParameters (class in amdinfer)</a>
-</li>
-  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python.html#amdinfer.RuntimeError">RuntimeError</a>
 </li>
@@ -2670,41 +2710,93 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <li><a href="python.html#amdinfer.InferenceResponse.setContext">setContext() (amdinfer.InferenceResponse method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setFp16Data">setFp16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setFp16Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setFp32Data">setFp32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setFp32Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setFp64Data">setFp64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setFp64Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setInt16Data">setInt16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt16Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setInt32Data">setInt32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt32Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setInt64Data">setInt64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python.html#amdinfer.InferenceRequestInput.setInt64Data">setInt64Data() (amdinfer.InferenceRequestInput method)</a>
-</li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setInt8Data">setInt8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt8Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
-      <li><a href="python.html#amdinfer.Server.setModelRepository">setModelRepository() (amdinfer.Server static method)</a>
+      </ul></li>
+      <li><a href="python.html#amdinfer.Server.setModelRepository">setModelRepository() (amdinfer.Server method)</a>
 </li>
       <li><a href="python.html#amdinfer.ModelMetadata.setReady">setReady() (amdinfer.ModelMetadata method)</a>
 </li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setStringData">setStringData() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setStringData">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setUint16Data">setUint16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint16Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setUint32Data">setUint32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint32Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setUint64Data">setUint64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint64Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.InferenceRequestInput.setUint8Data">setUint8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint8Data">(amdinfer.InferenceResponseOutput method)</a>
 </li>
-      <li><a href="python.html#amdinfer.InferenceRequestInput.shape">shape (amdinfer.InferenceRequestInput property)</a>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput.shape">shape (amdinfer.InferenceResponseOutput property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.Tensor.shape">(amdinfer.Tensor property)</a>
 </li>
+      </ul></li>
       <li><a href="python.html#amdinfer.DataType.size">size() (amdinfer.DataType method)</a>
 
       <ul>
-        <li><a href="python.html#amdinfer.RequestParameters.size">(amdinfer.RequestParameters method)</a>
+        <li><a href="python.html#amdinfer.ParameterMap.size">(amdinfer.ParameterMap method)</a>
 </li>
       </ul></li>
       <li><a href="python.html#amdinfer.start_http_client_server">start_http_client_server() (in module amdinfer)</a>
@@ -2729,6 +2821,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li><a href="python.html#amdinfer.DataType.Value.STRING">(amdinfer.DataType.Value attribute)</a>
 </li>
       </ul></li>
+      <li><a href="python.html#amdinfer.stringToArray">stringToArray() (in module amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.Tensor">Tensor (class in amdinfer)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -2842,7 +2944,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::grpcUnaryCallback(CallDataModelInfer *, const InferenceResponse&)
-   :project: amdinfer

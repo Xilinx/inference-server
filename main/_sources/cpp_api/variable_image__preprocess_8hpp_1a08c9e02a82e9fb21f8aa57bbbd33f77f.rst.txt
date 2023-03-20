@@ -11,4 +11,3 @@ Variable Documentation
 
 
 .. doxygenvariable:: amdinfer::pre_post::kDefaultImageSize
-   :project: amdinfer

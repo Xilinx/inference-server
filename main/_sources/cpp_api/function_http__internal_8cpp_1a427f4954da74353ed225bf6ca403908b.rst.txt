@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::mapJsonToModelMetadata(const Json::Value *)
-   :project: amdinfer

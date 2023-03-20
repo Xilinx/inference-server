@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::pre_post::imagePreprocess(const std::vector<std::string>&, const ImagePreprocessOptions<T, 3>&)
-   :project: amdinfer

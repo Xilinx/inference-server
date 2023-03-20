@@ -9,7 +9,6 @@ File data_types_internal.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the type-related methods internally. 
 
 

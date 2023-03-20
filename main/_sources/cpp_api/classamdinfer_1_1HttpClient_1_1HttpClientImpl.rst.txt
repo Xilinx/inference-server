@@ -17,7 +17,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::HttpClient::HttpClientImpl
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

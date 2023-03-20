@@ -32,9 +32,8 @@ Program Listing for File native.hpp
    #include <string>  // for string
    #include <vector>  // for vector
    
-   #include "amdinfer/clients/client.hpp"    // IWYU pragma: export
-   #include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only) const
-   #include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
+   #include "amdinfer/clients/client.hpp"  // IWYU pragma: export
+   #include "amdinfer/declarations.hpp"    // for InferenceResponseFuture
    
    namespace amdinfer {
    
@@ -59,7 +58,7 @@ Program Listing for File native.hpp
        const std::string& model) const override;
    
      void modelLoad(const std::string& model,
-                    ParameterMap* parameters) const override;
+                    const ParameterMap& parameters) const override;
      void modelUnload(const std::string& model) const override;
    
      [[nodiscard]] InferenceResponse modelInfer(
@@ -68,8 +67,8 @@ Program Listing for File native.hpp
        const std::string& model, const InferenceRequest& request) const override;
      [[nodiscard]] std::vector<std::string> modelList() const override;
    
-     [[nodiscard]] std::string workerLoad(const std::string& worker,
-                                          ParameterMap* parameters) const override;
+     [[nodiscard]] std::string workerLoad(
+       const std::string& worker, const ParameterMap& parameters) const override;
      void workerUnload(const std::string& worker) const override;
    
      [[nodiscard]] bool hasHardware(const std::string& name,

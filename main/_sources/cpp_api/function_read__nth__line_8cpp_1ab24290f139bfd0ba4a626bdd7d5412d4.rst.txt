@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::readNthLine(const std::string&, int)
-   :project: amdinfer

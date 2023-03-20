@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::serverHasExtension(const Client *, const std::string&)
-   :project: amdinfer

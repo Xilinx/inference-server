@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -26,15 +26,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
@@ -110,23 +108,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id3">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id7">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -183,7 +189,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -307,12 +350,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-your-work">Sign Your Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-pull-requests">Raise pull requests</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../contributing.html#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -323,6 +368,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#ingestion">Ingestion</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#api">API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#grpc">gRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#c-api">C++ API</a></li>
 </ul>
 </li>
@@ -334,8 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#xmodel">XModel</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#buffering">Buffering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../architecture.html#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#shared-state">Shared State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html#observation">Observation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#logging">Logging</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../architecture.html#metrics">Metrics</a></li>
@@ -405,21 +450,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="class-parametermap">
-<span id="exhale-class-classamdinfer-1-1parametermap"></span><h1>Class ParameterMap<a class="headerlink" href="#class-parametermap" title="Permalink to this headline">¶</a></h1>
+<span id="exhale-class-classamdinfer-1-1parametermap"></span><h1>Class ParameterMap<a class="headerlink" href="#class-parametermap" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_parameters.hpp.html#file-workspace-amdinfer-include-amdinfer-core-parameters-hpp"><span class="std std-ref">File parameters.hpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this heading">¶</a></h2>
 <section id="base-type">
-<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::Serializable</span></code> (<a class="reference internal" href="classamdinfer_1_1Serializable.html#exhale-class-classamdinfer-1-1serializable"><span class="std std-ref">Class Serializable</span></a>)</p></li>
 </ul>
 </section>
 </section>
 <section id="class-documentation">
-<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMapE">
 <span id="_CPPv3N8amdinfer12ParameterMapE"></span><span id="_CPPv2N8amdinfer12ParameterMapE"></span><span id="amdinfer::ParameterMap"></span><span class="target" id="classamdinfer_1_1ParameterMap"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ParameterMap</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1Serializable.html#_CPPv4N8amdinfer12SerializableE" title="amdinfer::Serializable"><span class="n"><span class="pre">Serializable</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMapE" title="Permalink to this definition">¶</a><br /></dt>
@@ -431,7 +476,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringEb"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringEb"></span><span id="amdinfer::ParameterMap::put__ssCR.b"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a398199d7c428d2e4a4c8a6ba877fea21"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Puts in a key-value pair. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
 <li><p><strong>value</strong> – value to store </p></li>
@@ -445,7 +490,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringEd"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringEd"></span><span id="amdinfer::ParameterMap::put__ssCR.double"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a3583f3ba3de3e364bb7d35a2ca0051d6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Puts in a key-value pair. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
 <li><p><strong>value</strong> – value to store </p></li>
@@ -459,7 +504,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t"></span><span id="amdinfer::ParameterMap::put__ssCR.int32_t"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a0c589410b4413695c1223a846d30ce43"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Puts in a key-value pair. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
 <li><p><strong>value</strong> – value to store </p></li>
@@ -473,7 +518,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE"></span><span id="amdinfer::ParameterMap::put__ssCR.ssCR"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a60de5f95a0da6023b215eeb99e059300"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Puts in a key-value pair. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
 <li><p><strong>value</strong> – value to store </p></li>
@@ -487,7 +532,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringEPKc"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringEPKc"></span><span id="amdinfer::ParameterMap::put__ssCR.cCP"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a4f2e929c798871b992f9e0d14a85559f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Puts in a key-value pair. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
 <li><p><strong>value</strong> – value to store </p></li>
@@ -497,32 +542,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0EN8amdinfer12ParameterMap3getE1TRKNSt6stringE">
-<span id="_CPPv3I0EN8amdinfer12ParameterMap3getERKNSt6stringE"></span><span id="_CPPv2I0EN8amdinfer12ParameterMap3getERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classamdinfer_1_1ParameterMap_1a4565cf54f45ad4ae2e5abbc9bdf87e63"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8amdinfer12ParameterMap3getE1TRKNSt6stringE" title="amdinfer::ParameterMap::get::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8amdinfer12ParameterMap3getE1TRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Gets a pointer to the named parameter. Returns nullptr if not found or if a bad type is used. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK8amdinfer12ParameterMap3getE1TRKNSt6stringE">
+<span id="_CPPv3I0ENK8amdinfer12ParameterMap3getERKNSt6stringE"></span><span id="_CPPv2I0ENK8amdinfer12ParameterMap3getERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classamdinfer_1_1ParameterMap_1aa1a274a34a5577e1b177fec351069928"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK8amdinfer12ParameterMap3getE1TRKNSt6stringE" title="amdinfer::ParameterMap::get::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK8amdinfer12ParameterMap3getE1TRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the named parameter. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Template Parameters</dt>
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>T</strong> – type of parameter. Must be (bool|double|int32_t|std::string) </p>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>key</strong> – parameter to get </p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>T* </p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>T </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3hasERKNSt6stringE">
-<span id="_CPPv3N8amdinfer12ParameterMap3hasERKNSt6stringE"></span><span id="_CPPv2N8amdinfer12ParameterMap3hasERKNSt6stringE"></span><span id="amdinfer::ParameterMap::has__ssCR"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a2e64ed4161b6c1727ff5933424940e15"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3hasERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12ParameterMap3hasERKNSt6stringE">
+<span id="_CPPv3NK8amdinfer12ParameterMap3hasERKNSt6stringE"></span><span id="_CPPv2NK8amdinfer12ParameterMap3hasERKNSt6stringE"></span><span id="amdinfer::ParameterMap::has__ssCRC"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a66a266c5d144a28d99af408ab8d7cd3c"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12ParameterMap3hasERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if a particular parameter exists. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> – name of the parameter to check </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE">
+<span id="_CPPv3N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE"></span><span id="amdinfer::ParameterMap::rename__ssCR.ssCR"></span><span class="target" id="classamdinfer_1_1ParameterMap_1ae5ba4557e009b691949f63ba6fe0e9cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rename</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">new_key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Rename the key associated with a parameter. If the new key already exists, its value is not overwritten and the old key is just erased. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – </p></li>
+<li><p><strong>new_key</strong> – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -530,9 +589,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap5eraseERKNSt6stringE">
 <span id="_CPPv3N8amdinfer12ParameterMap5eraseERKNSt6stringE"></span><span id="_CPPv2N8amdinfer12ParameterMap5eraseERKNSt6stringE"></span><span id="amdinfer::ParameterMap::erase__ssCR"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a7f1bf3d5475f28df590cfcf14613447d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">erase</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap5eraseERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Removes a parameter. </p>
+<dd><p>Removes a parameter, if it exists. No error is raised if it doesn’t exist. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> – name of the parameter to remove </p>
 </dd>
 </dl>
@@ -558,8 +617,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap5beginEv">
-<span id="_CPPv3N8amdinfer12ParameterMap5beginEv"></span><span id="_CPPv2N8amdinfer12ParameterMap5beginEv"></span><span id="amdinfer::ParameterMap::begin"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a7f4645412c50b49058a8d16b815074cc"></span><span class="n"><span class="pre">Iterator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer12ParameterMap5beginEv"></span><span id="_CPPv2N8amdinfer12ParameterMap5beginEv"></span><span id="amdinfer::ParameterMap::begin"></span><span class="target" id="classamdinfer_1_1ParameterMap_1acfb6561ba8fc7dbe6063a4a73b9e093d"></span><span class="n"><span class="pre">Iterator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap5beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a read/write iterator to the first parameter in the object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12ParameterMap5beginEv">
+<span id="_CPPv3NK8amdinfer12ParameterMap5beginEv"></span><span id="_CPPv2NK8amdinfer12ParameterMap5beginEv"></span><span id="amdinfer::ParameterMap::beginC"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a57d53e4505b6386845460147f8dfcccb"></span><span class="n"><span class="pre">ConstIterator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12ParameterMap5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a read iterator to the first parameter in the object. </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -570,8 +635,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3endEv">
-<span id="_CPPv3N8amdinfer12ParameterMap3endEv"></span><span id="_CPPv2N8amdinfer12ParameterMap3endEv"></span><span id="amdinfer::ParameterMap::end"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a2519cfd8dfe9cece00f35f6deffef320"></span><span class="n"><span class="pre">Iterator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer12ParameterMap3endEv"></span><span id="_CPPv2N8amdinfer12ParameterMap3endEv"></span><span id="amdinfer::ParameterMap::end"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a5c72a9c3978274fb947569d4edbb0801"></span><span class="n"><span class="pre">Iterator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a read/write iterator to one past the last parameter in the object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12ParameterMap3endEv">
+<span id="_CPPv3NK8amdinfer12ParameterMap3endEv"></span><span id="_CPPv2NK8amdinfer12ParameterMap3endEv"></span><span id="amdinfer::ParameterMap::endC"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a86fefd0bd832b8a6288802d7e1dff3ea"></span><span class="n"><span class="pre">ConstIterator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12ParameterMap3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a read iterator to one past the last parameter in the object. </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -585,7 +656,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer12ParameterMap13serializeSizeEv"></span><span id="_CPPv2NK8amdinfer12ParameterMap13serializeSizeEv"></span><span id="amdinfer::ParameterMap::serializeSizeC"></span><span class="target" id="classamdinfer_1_1ParameterMap_1aab10177f937ee191abcd13e48fc596dc"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serializeSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12ParameterMap13serializeSizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the size of the serialized data. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>size_t </p>
 </dd>
 </dl>
@@ -593,10 +664,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer12ParameterMap9serializeEPNSt4byteE">
-<span id="_CPPv3NK8amdinfer12ParameterMap9serializeEPNSt4byteE"></span><span id="_CPPv2NK8amdinfer12ParameterMap9serializeEPNSt4byteE"></span><span id="amdinfer::ParameterMap::serialize__std::bytePC"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a2f6b85ba62c3fb405963ffb13ee42c32"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">serialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12ParameterMap9serializeEPNSt4byteE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK8amdinfer12ParameterMap9serializeEPNSt4byteE"></span><span id="_CPPv2NK8amdinfer12ParameterMap9serializeEPNSt4byteE"></span><span id="amdinfer::ParameterMap::serialize__std::bytePC"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a097e7dc1088827ec5d1509d7b1e72a51"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">serialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer12ParameterMap9serializeEPNSt4byteE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serializes the object to the provided memory address. There should be sufficient space to store the serialized object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data_out</strong> – </p>
 </dd>
 </dl>
@@ -604,10 +675,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap11deserializeEPKNSt4byteE">
-<span id="_CPPv3N8amdinfer12ParameterMap11deserializeEPKNSt4byteE"></span><span id="_CPPv2N8amdinfer12ParameterMap11deserializeEPKNSt4byteE"></span><span id="amdinfer::ParameterMap::deserialize__std::byteCP"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a1272739bb888fa127e48fdf971d199e4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deserialize</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data_in</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap11deserializeEPKNSt4byteE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer12ParameterMap11deserializeEPKNSt4byteE"></span><span id="_CPPv2N8amdinfer12ParameterMap11deserializeEPKNSt4byteE"></span><span id="amdinfer::ParameterMap::deserialize__std::byteCP"></span><span class="target" id="classamdinfer_1_1ParameterMap_1ae55e1062e30d7f5ff6825cf950bb72a0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">deserialize</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data_in</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap11deserializeEPKNSt4byteE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Deserializes the data at the provided memory address to initialize this object. If the memory cannot be deserialized, an exception is thrown. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data_in</strong> – a pointer to the serialized data for this object type </p>
 </dd>
 </dl>
@@ -650,7 +721,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on February 16, 2023.
+      <span class="lastupdated">Last updated on March 20, 2023.
       </span></p>
   </div>
 

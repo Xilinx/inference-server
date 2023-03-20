@@ -9,7 +9,6 @@ File worker_info.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the WorkerInfo class - information the Manager saves on each active worker. 
 
 
@@ -39,11 +38,11 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
-- ``amdinfer/core/interface.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`)
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
 
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
-- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
 

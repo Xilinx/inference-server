@@ -9,7 +9,6 @@ Directory core
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/include/amdinfer/core``
 
 
@@ -18,8 +17,13 @@ Files
 
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_tensor.hpp`
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_mixins.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`
 - :ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`
-- :ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_server_metadata.hpp`
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_tensor.hpp`
 
 

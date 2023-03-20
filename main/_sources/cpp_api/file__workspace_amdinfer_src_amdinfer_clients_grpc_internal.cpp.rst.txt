@@ -9,7 +9,6 @@ File grpc_internal.cpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Implements the internal objects used for gRPC. 
 
 
@@ -41,7 +40,13 @@ Includes
 
 - ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
 
-- ``amdinfer/core/predict_api_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`)
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
 
 - ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
 
@@ -59,15 +64,15 @@ Includes
 
 - ``google/protobuf/stubs/common.h``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``inference.pb.h``
 
-- ``predict_api.pb.h``
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
 - ``utility``
 
 - ``variant``
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -100,11 +105,9 @@ Functions
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580`
 
-- :ref:`exhale_function_grpc__internal_8cpp_1ae460b92cd5f64db78436cebbe777f27b`
-
-- :ref:`exhale_function_grpc__internal_8cpp_1a54829da37e86837ed95fd9b4775135bf`
-
 - :ref:`exhale_function_grpc__internal_8cpp_1a810895b7fc432ac1fdda46f6b426644a`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a976514706c6b64c1fdd73fc85fa7a917`
 
 - :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
 

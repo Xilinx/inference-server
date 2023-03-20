@@ -48,11 +48,15 @@ Functions
 
 - :ref:`exhale_function_containers_8hpp_1a95954e812c96e615ffc44e525f706868`
 
+- :ref:`exhale_function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c`
+
 - :ref:`exhale_function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327`
 
 - :ref:`exhale_function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f`
 
 - :ref:`exhale_function_timer_8cpp_1a8a0c21722d4843898884016ab59ba783`
+
+- :ref:`exhale_function_string_8hpp_1af7be5da4787523697f32822ac12bfaef`
 
 - :ref:`exhale_function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210`
 

@@ -42,6 +42,7 @@ Program Listing for File worker_info.hpp
    class Batcher;
    class ParameterMap;
    class ModelMetadata;
+   class MemoryPool;
    namespace workers {
    class Worker;
    }  // namespace workers
@@ -51,7 +52,8 @@ Program Listing for File worker_info.hpp
    
    class WorkerInfo {
     public:
-     WorkerInfo(const std::string& name, ParameterMap* parameters);
+     WorkerInfo(const std::string& name, ParameterMap* parameters,
+                MemoryPool* pool);
      ~WorkerInfo();                           
      WorkerInfo(WorkerInfo const&) = delete;  
      WorkerInfo& operator=(const WorkerInfo&) = delete;
@@ -62,23 +64,11 @@ Program Listing for File worker_info.hpp
      void join(std::thread::id id);
      void joinAll();  
    
-     void addAndStartWorker(const std::string& name, ParameterMap* parameters);
+     void addAndStartWorker(const std::string& name, ParameterMap* parameters,
+                            MemoryPool* pool);
    
      void unload();
      void shutdown();
-   
-     [[nodiscard]] BufferPtrs getInputBuffer() const;
-     [[nodiscard]] BufferPtrs getOutputBuffer() const;
-     void putInputBuffer(BufferPtrs&& buffer) const;
-     void putOutputBuffer(BufferPtrs&& buffer) const;
-   
-     [[nodiscard]] bool inputSizeValid(size_t size) const;
-   
-     [[nodiscard]] auto getBufferNum() const { return this->buffer_num_; }
-   
-     [[nodiscard]] auto getMaxBufferNum() const { return this->max_buffer_num_; }
-   
-     void allocate(size_t request_size);
    
      [[nodiscard]] size_t getGroupSize() const;
    
@@ -90,10 +80,6 @@ Program Listing for File worker_info.hpp
      std::map<std::thread::id, std::thread> worker_threads_;
      std::map<std::thread::id, workers::Worker*> workers_;
      std::vector<std::unique_ptr<Batcher>> batchers_;
-     BufferPtrsQueuePtr input_buffer_ptr_;
-     BufferPtrsQueuePtr output_buffer_ptr_;
-     size_t buffer_num_ = 0;
-     size_t max_buffer_num_ = 0;
      size_t batch_size_ = 1;
    
      friend class Manager;

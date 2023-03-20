@@ -9,8 +9,12 @@ Directory core
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/src/amdinfer/core``
+
+Subdirectories
+--------------
+
+- :ref:`dir__workspace_amdinfer_src_amdinfer_core_memory_pool`
 
 
 Files
@@ -21,15 +25,17 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_request.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_response.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_tensor.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_metadata.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_parameters.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
 

@@ -17,7 +17,6 @@ Struct Documentation
 
 
 .. doxygenstruct:: amdinfer::NativeClient::NativeClientImpl
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

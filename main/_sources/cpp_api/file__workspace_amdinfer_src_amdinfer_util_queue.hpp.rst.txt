@@ -8,7 +8,6 @@ File queue.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -34,9 +33,9 @@ Includes
 
 - ``concurrentqueue/blockingconcurrentqueue.h``
 
-- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 
@@ -50,11 +49,13 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
 

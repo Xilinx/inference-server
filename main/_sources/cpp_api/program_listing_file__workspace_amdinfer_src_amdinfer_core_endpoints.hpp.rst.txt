@@ -36,15 +36,16 @@ Program Listing for File endpoints.hpp
    #include <utility>        // for move
    #include <vector>         // for vector
    
-   #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE...
-   #include "amdinfer/core/predict_api.hpp"     // for ModelMetadata
-   #include "amdinfer/observation/logging.hpp"  // for Logger, Loggers
-   #include "amdinfer/util/queue.hpp"           // for BlockingQueue
+   #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE...
+   #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
+   #include "amdinfer/core/model_metadata.hpp"    // for ModelMetadata
+   #include "amdinfer/core/parameters.hpp"        // for ParameterMap
+   #include "amdinfer/observation/logging.hpp"    // for Logger, Loggers
+   #include "amdinfer/util/queue.hpp"             // for BlockingQueue
    
    namespace amdinfer {
    
-   class Interface;
-   class ParameterMap;
+   class RequestContainer;
    class WorkerInfo;
    
    enum class UpdateCommandType {
@@ -78,7 +79,7 @@ Program Listing for File endpoints.hpp
      void unload(const std::string& endpoint);
    
      void infer(const std::string& endpoint,
-                std::unique_ptr<Interface> request) const;
+                std::unique_ptr<RequestContainer> request) const;
    
      bool exists(const std::string& endpoint);
      // WorkerInfo* get(const std::string& endpoint);
@@ -86,6 +87,8 @@ Program Listing for File endpoints.hpp
    
      std::vector<std::string> list();
      ModelMetadata metadata(const std::string& endpoint);
+   
+     const MemoryPool* getPool() const;
    
      void shutdown();
    
@@ -101,6 +104,7 @@ Program Listing for File endpoints.hpp
      std::unordered_map<std::string, std::unique_ptr<WorkerInfo>> workers_;
      UpdateCommandQueue update_queue_;
      std::thread update_thread_;
+     MemoryPool pool_;
    #ifdef AMDINFER_ENABLE_LOGGING
      Logger logger_{Loggers::Server};
    #endif

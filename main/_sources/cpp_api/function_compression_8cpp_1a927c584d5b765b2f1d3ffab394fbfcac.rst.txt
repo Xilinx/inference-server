@@ -11,4 +11,3 @@ Function Documentation
 
 
 .. doxygenfunction:: amdinfer::util::zDecompress(const char *, int)
-   :project: amdinfer

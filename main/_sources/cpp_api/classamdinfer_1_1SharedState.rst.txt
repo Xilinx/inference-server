@@ -11,7 +11,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::SharedState
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

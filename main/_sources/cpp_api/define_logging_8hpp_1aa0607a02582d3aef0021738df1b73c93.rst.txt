@@ -11,4 +11,3 @@ Define Documentation
 
 
 .. doxygendefine:: AMDINFER_IF_LOGGING
-   :project: amdinfer

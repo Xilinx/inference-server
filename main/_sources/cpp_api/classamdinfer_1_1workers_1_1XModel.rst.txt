@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::workers::XModel
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

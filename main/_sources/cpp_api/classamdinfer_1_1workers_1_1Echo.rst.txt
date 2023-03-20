@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::workers::Echo
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

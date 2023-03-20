@@ -30,7 +30,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::WebSocketClient
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

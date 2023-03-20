@@ -11,4 +11,3 @@ Typedef Documentation
 
 
 .. doxygentypedef:: VidProps
-   :project: amdinfer

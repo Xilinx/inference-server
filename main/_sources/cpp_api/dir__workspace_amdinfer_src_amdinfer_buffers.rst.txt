@@ -9,7 +9,6 @@ Directory buffers
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 *Directory path:* ``/workspace/amdinfer/src/amdinfer/buffers``
 
 
@@ -18,9 +17,9 @@ Files
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor_buffer.hpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`
-- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.hpp`
 
 

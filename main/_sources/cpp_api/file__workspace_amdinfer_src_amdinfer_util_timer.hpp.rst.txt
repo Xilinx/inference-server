@@ -9,7 +9,6 @@ File timer.hpp
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
 
-
 Defines a helper timer class. 
 
 
@@ -51,6 +50,10 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_timer.cpp`
@@ -58,6 +61,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
 

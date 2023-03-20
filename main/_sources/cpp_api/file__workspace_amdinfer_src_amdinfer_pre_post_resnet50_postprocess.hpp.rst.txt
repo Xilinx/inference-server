@@ -8,7 +8,6 @@ File resnet50_postprocess.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -34,7 +33,7 @@ Includes
 
 - ``amdinfer/pre_post/softmax.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp`)
 
-- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+- ``vector``
 
 
 

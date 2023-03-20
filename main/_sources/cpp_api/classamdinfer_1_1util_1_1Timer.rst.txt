@@ -11,7 +11,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::util::Timer
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:
