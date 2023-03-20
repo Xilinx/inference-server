@@ -14,7 +14,7 @@
 
 include(GNUInstallDirs)
 
-set(filenames echo)
+set(filenames echo echo_multi)
 set(targets "")
 
 function(amdinfer_get_target_name target filename)

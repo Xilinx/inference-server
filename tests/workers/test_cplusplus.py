@@ -96,3 +96,89 @@ class TestCPlusPlus:
         """
         request = self.construct_request()
         self.send_request(request)
+
+
+@pytest.mark.usefixtures("load")
+class TestCPlusPlus2:
+    """
+    Test the CPlusPlus worker
+    """
+
+    @staticmethod
+    def get_config():
+        model = "CPlusPlus"
+        parameters = {"model": "echo_multi", "batch_size": 2, "timeout": 1000}
+        return (model, parameters)
+
+    inputs = [[3], [2, 7]]
+    golden_outputs = [[3], [2, 7, 3, 2], [7, 3, 2]]
+
+    @classmethod
+    def construct_request(cls):
+        """
+        Construct a standard request subject to some options
+
+        Returns:
+            InferenceRequest: The constructed request
+        """
+
+        request = amdinfer.InferenceRequest()
+        for i in cls.inputs:
+            input_0 = amdinfer.InferenceRequestInput()
+            input_0.name = "echoMulti0"
+            input_0.datatype = amdinfer.DataType.UINT32
+            input_0.shape = [len(i)]
+            input_0.setUint32Data(np.array(i, np.uint32))
+            request.addInputTensor(input_0)
+
+        return request
+
+    def send_request(self, request, input_tensors=1):
+        """
+        Sends the given request to the server and asserts common checks
+
+        Args:
+            request (InferenceRequest): Request to send to the server
+            input_tensors (int): Number of times the two input tensors are repeated
+
+        Returns:
+            dict: Response as a dictionary
+        """
+
+        requests = [request] * 2
+        try:
+            responses = amdinfer.inferAsyncOrdered(
+                self.rest_client, self.endpoint, requests
+            )
+        except ConnectionError:
+            pytest.fail(
+                "Connection to the amdinfer server ended without response!", False
+            )
+
+        for response in responses:
+            assert not response.isError(), response.getError()
+            assert response.model == "CPlusPlus"
+
+            outputs = response.getOutputs()
+            assert len(outputs) == len(self.golden_outputs)
+
+            for i in range(len(outputs)):
+                output = outputs[i]
+                golden_output = self.golden_outputs[i]
+                if not isinstance(golden_output, list):
+                    golden_output = [golden_output]
+                data: list = output.getUint32Data()
+                assert len(data) == len(golden_output)
+                assert output.datatype == amdinfer.DataType.UINT32
+                assert output.name == "output" + str(i)
+                assert output.parameters.empty()
+                assert output.shape == [len(golden_output)]
+                print(data)
+                assert (data == golden_output).all(), data
+
+    def test_c_plus_plus(self):
+        """
+        Send a request to test c_plus_plus
+        """
+        request = self.construct_request()
+        self.send_request(request)

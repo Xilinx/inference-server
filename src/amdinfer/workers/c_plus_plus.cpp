@@ -152,7 +152,8 @@ void respond(Batch* batch) {
     auto inputs = req->getInputs();
     auto outputs = req->getOutputs();
     for (unsigned int i = 0; i < inputs.size(); i++) {
-      const auto* input_buffer = inputs[i].getData();
+      const auto& input = inputs[i];
+      const auto* input_buffer = input.getData();
 
       InferenceResponseOutput output;
       output.setDatatype(DataType::Uint32);
@@ -162,14 +163,15 @@ void respond(Batch* batch) {
       }
 
       if (output_name.empty()) {
-        output.setName(inputs[0].getName());
+        output.setName(input.getName());
       } else {
         output.setName(output_name);
       }
-      output.setShape({1});
+      output.setShape(input.getShape());
       std::vector<std::byte> buffer;
-      buffer.resize(sizeof(uint32_t));
-      memcpy(buffer.data(), input_buffer, sizeof(uint32_t));
+      const auto size = input.getSize() * input.getDatatype().size();
+      buffer.resize(size);
+      memcpy(buffer.data(), input_buffer, size);
       output.setData(std::move(buffer));
       resp.addOutput(output);
     }
@@ -263,7 +265,8 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
         for (const auto& tensor : output_tensors_) {
           new_request->addInputTensor(InferenceRequestInput{tensor});
           new_request->setInputTensorData(
-            index, input_buffers.at(index)->data(i * tensor.getSize()));
+            index, input_buffers.at(index)->data(i * tensor.getSize() *
+                                                 tensor.getDatatype().size()));
           index++;
         }
         new_batch->addRequest(new_request);
