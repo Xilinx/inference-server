@@ -148,8 +148,8 @@ ModelMetadata mapProtoToModelMetadata(
     for (const auto& index : input.shape()) {
       shape.push_back(static_cast<int>(index));
     }
-    metadata.addInputTensor(input.name(), DataType(input.datatype().c_str()),
-                            shape);
+    metadata.addInputTensor(input.name(), shape,
+                            DataType(input.datatype().c_str()));
   }
   const auto& outputs = resp.outputs();
   for (const auto& output : outputs) {
@@ -158,8 +158,8 @@ ModelMetadata mapProtoToModelMetadata(
     for (const auto& index : output.shape()) {
       shape.push_back(static_cast<int>(index));
     }
-    metadata.addInputTensor(output.name(), DataType(output.datatype().c_str()),
-                            shape);
+    metadata.addInputTensor(output.name(), shape,
+                            DataType(output.datatype().c_str()));
   }
   return metadata;
 }

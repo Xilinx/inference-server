@@ -36,8 +36,7 @@ class MemoryPool {
   MemoryPool();
 
   std::unique_ptr<Buffer> get(const std::vector<MemoryAllocators>& allocators,
-                              const InferenceRequestInput& tensor,
-                              size_t batch_size) const;
+                              const Tensor& tensor, size_t batch_size) const;
   void put(std::unique_ptr<Buffer> memory) const;
 
  private:

@@ -138,10 +138,10 @@ void AksDetect::doAcquire(ParameterMap* parameters) {
   this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
   this->metadata_.addInputTensor(
-    "input", DataType::Int8,
-    {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
+    "input", {this->batch_size_, kImageHeight, kImageWidth, kImageChannels},
+    DataType::Int8);
   // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", DataType::Uint32, {0});
+  this->metadata_.addOutputTensor("output", {0}, DataType::Uint32);
   this->metadata_.setName(this->graph_name_);
 }
 

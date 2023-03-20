@@ -39,24 +39,13 @@ namespace py = pybind11;
 namespace amdinfer {
 
 void wrapModelMetadata(py::module_ &m) {
-  py::class_<ModelMetadataTensor>(m, "ModelMetadataTensor")
-    .def(py::init<const std::string &, amdinfer::DataType,
-                  std::vector<uint64_t>>(),
-         DOCS(ModelMetadataTensor, ModelMetadataTensor))
-    .def("getName", &ModelMetadataTensor::getName,
-         DOCS(ModelMetadataTensor, getName))
-    .def("getDataType", &ModelMetadataTensor::getDataType,
-         DOCS(ModelMetadataTensor, getDataType))
-    .def("getShape", &ModelMetadataTensor::getShape,
-         DOCS(ModelMetadataTensor, getShape));
-
   // NOLINTNEXTLINE(readability-identifier-naming)
   auto addInputTensor = static_cast<void (ModelMetadata::*)(
-    const std::string &, amdinfer::DataType, std::vector<int>)>(
+    const std::string &, std::vector<int>, amdinfer::DataType)>(
     &ModelMetadata::addInputTensor);
   // NOLINTNEXTLINE(readability-identifier-naming)
   auto addOutputTensor = static_cast<void (ModelMetadata::*)(
-    const std::string &, amdinfer::DataType, std::vector<int>)>(
+    const std::string &, std::vector<int>, amdinfer::DataType)>(
     &ModelMetadata::addOutputTensor);
   py::class_<ModelMetadata>(m, "ModelMetadata")
     .def(py::init<const std::string &, const std::string &>(),

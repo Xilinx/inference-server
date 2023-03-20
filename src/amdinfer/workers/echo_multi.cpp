@@ -102,14 +102,14 @@ void EchoMulti::doInit(ParameterMap* parameters) {
 
 void EchoMulti::doAcquire([[maybe_unused]] ParameterMap* parameters) {
   for (auto i = 0; i < kInputTensors; ++i) {
-    this->metadata_.addInputTensor(
-      "input" + std::to_string(i), DataType::Uint32,
-      {static_cast<uint64_t>(kInputLengths.at(i))});
+    this->metadata_.addInputTensor("input" + std::to_string(i),
+                                   {static_cast<uint64_t>(kInputLengths.at(i))},
+                                   DataType::Uint32);
   }
   for (auto i = 0; i < kOutputTensors; ++i) {
     this->metadata_.addOutputTensor(
-      "input" + std::to_string(i), DataType::Uint32,
-      {static_cast<uint64_t>(kOutputLengths.at(i))});
+      "input" + std::to_string(i),
+      {static_cast<uint64_t>(kOutputLengths.at(i))}, DataType::Uint32);
   }
 }
 

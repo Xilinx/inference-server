@@ -23,23 +23,6 @@
 
 namespace amdinfer {
 
-ModelMetadataTensor::ModelMetadataTensor(const std::string &name,
-                                         DataType datatype,
-                                         std::vector<uint64_t> shape)
-  : datatype_(datatype) {
-  this->name_ = name;
-  this->shape_ = std::move(shape);
-}
-
-const std::string &ModelMetadataTensor::getName() const { return this->name_; }
-
-const DataType &ModelMetadataTensor::getDataType() const {
-  return this->datatype_;
-}
-const std::vector<uint64_t> &ModelMetadataTensor::getShape() const {
-  return this->shape_;
-}
-
 ModelMetadata::ModelMetadata(const std::string &name,
                              const std::string &platform) {
   this->name_ = name;
@@ -47,38 +30,40 @@ ModelMetadata::ModelMetadata(const std::string &name,
   this->ready_ = false;
 }
 
-void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
-                                   std::initializer_list<uint64_t> shape) {
-  this->inputs_.emplace_back(name, datatype, shape);
+void ModelMetadata::addInputTensor(const std::string &name,
+                                   std::initializer_list<uint64_t> shape,
+                                   DataType datatype) {
+  this->inputs_.emplace_back(name, shape, datatype);
 }
 
-void ModelMetadata::addInputTensor(const std::string &name, DataType datatype,
-                                   std::vector<int> shape) {
+void ModelMetadata::addInputTensor(const std::string &name,
+                                   std::vector<int> shape, DataType datatype) {
   std::vector<uint64_t> new_shape;
   std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
-  this->inputs_.emplace_back(name, datatype, new_shape);
+  this->inputs_.emplace_back(name, new_shape, datatype);
 }
 
-void ModelMetadata::addInputTensor(const InferenceRequestInput &tensor) {
-  this->inputs_.emplace_back(tensor.getName(), tensor.getDatatype(),
-                             tensor.getShape());
+void ModelMetadata::addInputTensor(const Tensor &tensor) {
+  this->inputs_.emplace_back(tensor.getName(), tensor.getShape(),
+                             tensor.getDatatype());
 }
 
-void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
-                                    std::initializer_list<uint64_t> shape) {
-  this->outputs_.emplace_back(name, datatype, shape);
+void ModelMetadata::addOutputTensor(const std::string &name,
+                                    std::initializer_list<uint64_t> shape,
+                                    DataType datatype) {
+  this->outputs_.emplace_back(name, shape, datatype);
 }
 
-void ModelMetadata::addOutputTensor(const std::string &name, DataType datatype,
-                                    std::vector<int> shape) {
+void ModelMetadata::addOutputTensor(const std::string &name,
+                                    std::vector<int> shape, DataType datatype) {
   std::vector<uint64_t> new_shape;
   std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
-  this->outputs_.emplace_back(name, datatype, new_shape);
+  this->outputs_.emplace_back(name, new_shape, datatype);
 }
 
-void ModelMetadata::addOutputTensor(const InferenceRequestInput &tensor) {
-  this->outputs_.emplace_back(tensor.getName(), tensor.getDatatype(),
-                              tensor.getShape());
+void ModelMetadata::addOutputTensor(const Tensor &tensor) {
+  this->outputs_.emplace_back(tensor.getName(), tensor.getShape(),
+                              tensor.getDatatype());
 }
 
 const std::string &ModelMetadata::getName() const { return this->name_; }

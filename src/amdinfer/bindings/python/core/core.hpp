@@ -34,12 +34,16 @@ void wrapServerMetadata(pybind11::module_ &);
 void wrapInferenceRequests(pybind11::module_ &);
 void wrapInferenceResponses(pybind11::module_ &);
 void wrapModelMetadata(pybind11::module_ &);
+void wrapTensor(pybind11::module_ &);
+void wrapInferenceTensor(pybind11::module_ &);
 
 void inline wrapCore(pybind11::module_ &m) {
   wrapExceptions(m);
   wrapDataType(m);
   wrapParameterMap(m);
   wrapServerMetadata(m);
+  wrapTensor(m);
+  wrapInferenceTensor(m);
   wrapInferenceRequests(m);
   wrapInferenceResponses(m);
   wrapModelMetadata(m);

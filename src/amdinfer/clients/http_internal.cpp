@@ -185,7 +185,7 @@ void propagate(drogon::HttpResponse *resp, const StringMap &context) {
 Json::Value modelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
-  ret["datatype"] = metadata.getDataType().str();
+  ret["datatype"] = metadata.getDatatype().str();
   ret["shape"] = Json::arrayValue;
   for (const auto &index : metadata.getShape()) {
     ret["shape"].append(static_cast<Json::UInt64>(index));
@@ -218,9 +218,8 @@ ModelMetadata mapJsonToModelMetadata(const Json::Value *json) {
     for (const auto &index : input["shape"]) {
       shape.push_back(index.asInt());
     }
-    metadata.addInputTensor(input["name"].asString(),
-                            DataType(input["datatype"].asString().c_str()),
-                            shape);
+    metadata.addInputTensor(input["name"].asString(), shape,
+                            DataType(input["datatype"].asString().c_str()));
   }
   for (const auto &output : json->get("outputs", Json::arrayValue)) {
     std::vector<int> shape;
@@ -228,9 +227,8 @@ ModelMetadata mapJsonToModelMetadata(const Json::Value *json) {
     for (const auto &index : output["shape"]) {
       shape.push_back(index.asInt());
     }
-    metadata.addOutputTensor(output["name"].asString(),
-                             DataType(output["datatype"].asString().c_str()),
-                             shape);
+    metadata.addOutputTensor(output["name"].asString(), shape,
+                             DataType(output["datatype"].asString().c_str()));
   }
   return metadata;
 }

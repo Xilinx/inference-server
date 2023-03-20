@@ -24,39 +24,13 @@
 #include <vector>
 
 #include "amdinfer/core/data_types.hpp"
+#include "amdinfer/core/tensor.hpp"
 
 namespace amdinfer {
 
 class InferenceRequestInput;
 
-/**
- * @brief This class holds the metadata associated with an input tensor
- *
- */
-class ModelMetadataTensor {
- public:
-  /**
-   * @brief Construct a new Model Metadata Tensor object
-   *
-   * @param name name of the tensor
-   * @param datatype the datatype this tensor accepts
-   * @param shape the expected shape of the data
-   */
-  ModelMetadataTensor(const std::string &name, DataType datatype,
-                      std::vector<uint64_t> shape);
-
-  /// @brief Gets the name of the tensor
-  [[nodiscard]] const std::string &getName() const;
-  /// @brief Gets the datatype that this tensor accepts
-  [[nodiscard]] const DataType &getDataType() const;
-  /// @brief Gets the expected shape of the data
-  [[nodiscard]] const std::vector<uint64_t> &getShape() const;
-
- private:
-  std::string name_;
-  DataType datatype_;
-  std::vector<uint64_t> shape_;
-};
+using ModelMetadataTensor = Tensor;
 
 /**
  * @brief This class holds the metadata associated with a model (per the KServe
@@ -77,26 +51,26 @@ class ModelMetadata {
    * @brief Adds an input tensor to this model
    *
    * @param name name of the tensor
-   * @param datatype datatype of the tensor
    * @param shape shape of the tensor
+   * @param datatype datatype of the tensor
    */
-  void addInputTensor(const std::string &name, DataType datatype,
-                      std::initializer_list<uint64_t> shape);
+  void addInputTensor(const std::string &name,
+                      std::initializer_list<uint64_t> shape, DataType datatype);
   /**
    * @brief Adds an input tensor to this model
    *
    * @param name name of the tensor
-   * @param datatype datatype of the tensor
    * @param shape shape of the tensor
+   * @param datatype datatype of the tensor
    */
-  void addInputTensor(const std::string &name, DataType datatype,
-                      std::vector<int> shape);
+  void addInputTensor(const std::string &name, std::vector<int> shape,
+                      DataType datatype);
   /**
    * @brief Adds an input tensor to this model
    *
    * @param tensor
    */
-  void addInputTensor(const InferenceRequestInput &tensor);
+  void addInputTensor(const Tensor &tensor);
 
   /**
    * @brief Gets the input tensor' metadata for this model
@@ -109,26 +83,27 @@ class ModelMetadata {
    * @brief Adds an output tensor to this model
    *
    * @param name name of the tensor
-   * @param datatype datatype of the tensor
    * @param shape shape of the tensor
+   * @param datatype datatype of the tensor
    */
-  void addOutputTensor(const std::string &name, DataType datatype,
-                       std::initializer_list<uint64_t> shape);
+  void addOutputTensor(const std::string &name,
+                       std::initializer_list<uint64_t> shape,
+                       DataType datatype);
   /**
    * @brief Adds an output tensor to this model
    *
    * @param name name of the tensor
-   * @param datatype datatype of the tensor
    * @param shape shape of the tensor
+   * @param datatype datatype of the tensor
    */
-  void addOutputTensor(const std::string &name, DataType datatype,
-                       std::vector<int> shape);
+  void addOutputTensor(const std::string &name, std::vector<int> shape,
+                       DataType datatype);
   /**
    * @brief Adds an output tensor to this model
    *
    * @param tensor
    */
-  void addOutputTensor(const InferenceRequestInput &tensor);
+  void addOutputTensor(const Tensor &tensor);
 
   /// @brief Gets the output tensors' metadata for this model
   [[nodiscard]] const std::vector<ModelMetadataTensor> &getOutputs() const;

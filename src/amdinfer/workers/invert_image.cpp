@@ -122,11 +122,13 @@ void InvertImage::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
   this->metadata_.addInputTensor(
-    "input", DataType::Uint8,
-    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
+    "input",
+    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels},
+    DataType::Uint8);
   this->metadata_.addOutputTensor(
-    "output", DataType::Uint32,
-    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
+    "output",
+    {this->batch_size_, kMaxImageHeight, kMaxImageWidth, kMaxImageChannels},
+    DataType::Uint32);
 }
 
 void InvertImage::doRun(BatchPtrQueue* input_queue) {

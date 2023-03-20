@@ -34,8 +34,7 @@ namespace amdinfer {
 VartTensorAllocator::VartTensorAllocator(size_t max_allocate)
   : max_allocate_(max_allocate) {}
 
-BufferPtr VartTensorAllocator::get(const InferenceRequestInput& tensor,
-                                   size_t batch_size) {
+BufferPtr VartTensorAllocator::get(const Tensor& tensor, size_t batch_size) {
   const auto& name = tensor.getName();
   const auto& shape = tensor.getShape();
   const auto datatype = tensor.getDatatype();

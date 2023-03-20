@@ -119,10 +119,10 @@ void Aks::doAcquire(ParameterMap* parameters) {
     throw external_error("AKS graph " + graph_name + " not found");
   }
 
-  this->metadata_.addInputTensor("input", DataType::Fp32,
-                                 {this->batch_size_, 1});
-  this->metadata_.addOutputTensor("output", DataType::Fp32,
-                                  {this->batch_size_, 1});
+  this->metadata_.addInputTensor("input", {this->batch_size_, 1},
+                                 DataType::Fp32);
+  this->metadata_.addOutputTensor("output", {this->batch_size_, 1},
+                                  DataType::Fp32);
   this->metadata_.setName(graph_name);
 }
 

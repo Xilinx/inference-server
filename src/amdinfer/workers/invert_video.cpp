@@ -95,11 +95,11 @@ const auto kMaxUrlLength = 128;
 void InvertVideo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::String, {kMaxUrlLength});
+  this->metadata_.addInputTensor("input", {kMaxUrlLength}, DataType::String);
   // TODO(varunsh): output is variable
   this->metadata_.addOutputTensor(
-    "output", DataType::Int8,
-    {kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
+    "output", {kMaxImageHeight, kMaxImageWidth, kMaxImageChannels},
+    DataType::Int8);
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {

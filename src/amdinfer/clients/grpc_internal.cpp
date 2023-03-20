@@ -261,7 +261,7 @@ void mapModelMetadataToProto(const ModelMetadata& metadata,
   for (const auto& input : inputs) {
     auto* tensor = resp.add_inputs();
     tensor->set_name(input.getName());
-    tensor->set_datatype(input.getDataType().str());
+    tensor->set_datatype(input.getDatatype().str());
     const auto& shape = input.getShape();
     for (const auto& i : shape) {
       tensor->add_shape(i);
@@ -271,7 +271,7 @@ void mapModelMetadataToProto(const ModelMetadata& metadata,
   for (const auto& output : outputs) {
     auto* tensor = resp.add_outputs();
     tensor->set_name(output.getName());
-    tensor->set_datatype(output.getDataType().str());
+    tensor->set_datatype(output.getDatatype().str());
     const auto& shape = output.getShape();
     for (const auto& i : shape) {
       tensor->add_shape(i);

@@ -86,6 +86,11 @@ InferenceRequestInput::InferenceRequestInput(void *data,
   : InferenceTensor(std::move(name), std::move(shape), data_type),
     data_(data) {}
 
+InferenceRequestInput::InferenceRequestInput(const InferenceTensor &tensor)
+  : InferenceTensor(tensor) {}
+InferenceRequestInput::InferenceRequestInput(const Tensor &tensor)
+  : InferenceTensor(tensor) {}
+
 InferenceRequestInput::InferenceRequestInput()
   : InferenceTensor("", {}, DataType::Unknown) {}
 

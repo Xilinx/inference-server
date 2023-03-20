@@ -37,6 +37,10 @@ class InferenceRequestInput : public InferenceTensor {
  public:
   /// Constructs a new InferenceRequestInput object
   InferenceRequestInput();
+  /// Constructs a new InferenceRequestInput object
+  explicit InferenceRequestInput(const InferenceTensor &tensor);
+  /// Constructs a new InferenceRequestInput object
+  explicit InferenceRequestInput(const Tensor &tensor);
 
   /**
    * @brief Construct a new InferenceRequestInput object

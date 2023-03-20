@@ -162,7 +162,7 @@ void XModel::doAcquire(ParameterMap* parameters) {
   auto input_shape = input_tensors[0]->get_shape();
   auto input_type = mapXirToType(input_tensors[0]->get_data_type());
   this->batch_size_ = input_shape[0];
-  this->metadata_.addInputTensor("input", input_type, input_shape);
+  this->metadata_.addInputTensor("input", input_shape, input_type);
 
   auto output_tensors = runner_->get_output_tensors();
   for (const auto* tensor : output_tensors) {
@@ -172,8 +172,8 @@ void XModel::doAcquire(ParameterMap* parameters) {
     output_size_.emplace_back(
       util::containerProduct(output_shape.begin() + 1, output_shape.end()));
     // TODO(varunsh): what should we return here?
-    this->metadata_.addOutputTensor("output", output_type_.back(),
-                                    output_shape);
+    this->metadata_.addOutputTensor("output", output_shape,
+                                    output_type_.back());
   }
 }
 

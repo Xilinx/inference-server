@@ -27,8 +27,11 @@ namespace amdinfer {
 
 class InferenceTensor : public Tensor {
  public:
+  /// Construct a new InferenceTensor object
   InferenceTensor(std::string name, std::vector<uint64_t> shape,
                   DataType data_type);
+  /// Construct a new InferenceTensor object
+  explicit InferenceTensor(const Tensor &tensor);
 
   /// Get the tensor's parameters
   [[nodiscard]] const ParameterMap &getParameters() const &;

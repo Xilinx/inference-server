@@ -31,6 +31,8 @@ const ParameterMap& InferenceTensor::getParameters() const& {
   return this->parameters_;
 }
 
+InferenceTensor::InferenceTensor(const Tensor& tensor) : Tensor(tensor) {}
+
 ParameterMap InferenceTensor::getParameters() && {
   return std::move(this->parameters_);
 }
@@ -48,8 +50,8 @@ size_t InferenceTensor::serializeSize() const {
 std::byte* InferenceTensor::serialize(std::byte* data_out) const {
   auto* data = data_out;
   data = Tensor::serialize(data);
-  parameters_.serialize(data);
-  assert(data_out + this->serializeSize() == data);
+  data = parameters_.serialize(data);
+  assert(data_out + InferenceTensor::serializeSize() == data);
   return data;
 }
 

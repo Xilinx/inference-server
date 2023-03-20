@@ -21,6 +21,8 @@ set(derived_targets
     server_metadata
     data_types
     exceptions
+    tensor
+    inference_tensor
 )
 
 amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)

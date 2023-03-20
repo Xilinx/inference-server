@@ -95,8 +95,8 @@ void Echo::doInit(ParameterMap* parameters) {
 void Echo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::Uint32, {1});
-  this->metadata_.addOutputTensor("output", DataType::Uint32, {1});
+  this->metadata_.addInputTensor("input", {1}, DataType::Uint32);
+  this->metadata_.addOutputTensor("output", {1}, DataType::Uint32);
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {

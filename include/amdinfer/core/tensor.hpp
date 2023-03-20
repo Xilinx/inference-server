@@ -35,8 +35,6 @@ class Tensor : public Serializable {
  public:
   Tensor(std::string name, std::vector<uint64_t> shape, DataType data_type);
 
-  virtual ~Tensor() = default;
-
   /// Get the tensor's name
   [[nodiscard]] const std::string &getName() const &;
   [[nodiscard]] std::string getName() &&;

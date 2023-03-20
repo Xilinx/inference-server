@@ -117,8 +117,8 @@ class CPlusPlus : public Worker {
   void doDestroy() override;
 
   void* handle_;
-  std::vector<InferenceRequestInput> input_tensors_;
-  std::vector<InferenceRequestInput> output_tensors_;
+  std::vector<Tensor> input_tensors_;
+  std::vector<Tensor> output_tensors_;
 
   // workers define what batcher implementation should be used for them.
   // if not explicitly defined here, a default value is used from worker.hpp.
@@ -215,8 +215,7 @@ void CPlusPlus::doInit(ParameterMap* parameters) {
 void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {
   auto* input_ptr = getFunction(handle_, "getInputs");
   auto* getInputs =
-    reinterpret_cast<std::vector<amdinfer::InferenceRequestInput> (*)()>(
-      input_ptr);
+    reinterpret_cast<std::vector<amdinfer::Tensor> (*)()>(input_ptr);
   input_tensors_ = getInputs();
   for (const auto& tensor : input_tensors_) {
     metadata_.addInputTensor(tensor);
@@ -224,8 +223,7 @@ void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {
 
   auto* output_ptr = getFunction(handle_, "getOutputs");
   auto* getOutputs =
-    reinterpret_cast<std::vector<amdinfer::InferenceRequestInput> (*)()>(
-      output_ptr);
+    reinterpret_cast<std::vector<amdinfer::Tensor> (*)()>(output_ptr);
   output_tensors_ = getOutputs();
   for (const auto& tensor : output_tensors_) {
     metadata_.addOutputTensor(tensor);
@@ -263,7 +261,7 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
         auto new_request = std::make_shared<InferenceRequest>();
         int index = 0;
         for (const auto& tensor : output_tensors_) {
-          new_request->addInputTensor(tensor);
+          new_request->addInputTensor(InferenceRequestInput{tensor});
           new_request->setInputTensorData(
             index, input_buffers.at(index)->data(i * tensor.getSize()));
           index++;

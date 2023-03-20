@@ -205,9 +205,9 @@ void TfZendnn::doAcquire(ParameterMap* parameters) {
 
   // Adding metadata for input and output
   this->metadata_.addInputTensor(
-    "input", input_dt_,
-    {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", DataType::Fp32, {output_classes_});
+    "input", {this->batch_size_, image_height_, image_width_, image_channels_},
+    input_dt_);
+  this->metadata_.addOutputTensor("output", {output_classes_}, DataType::Fp32);
   this->metadata_.setName("TfZendnn");
 }
 

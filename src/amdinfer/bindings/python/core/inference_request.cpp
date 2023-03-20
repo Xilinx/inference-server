@@ -54,18 +54,17 @@ void setData(amdinfer::InferenceRequestInput &self, py::array_t<T> &b) {
 }
 
 void wrapInferenceRequestInput(py::module_ &m) {
-  // need to use function pointer to disambiguate overloaded function
-  // NOLINTNEXTLINE(readability-identifier-naming)
-  auto setShape =
-    static_cast<void (InferenceRequestInput::*)(std::vector<uint64_t>)>(
-      &InferenceRequestInput::setShape);
-
-  py::class_<InferenceRequestInput>(m, "InferenceRequestInput")
-    .def(py::init<>(), DOCS(InferenceRequestInput))
-    .def(py::init<void *, std::vector<uint64_t>, amdinfer::DataType,
-                  std::string>(),
-         DOCS(InferenceRequestInput, 2), py::arg("data"), py::arg("shape"),
-         py::arg("dataType"), py::arg("name") = "")
+  py::class_<InferenceRequestInput, InferenceTensor>(m, "InferenceRequestInput")
+    .def(py::init<>(), DOCS(InferenceRequestInput, InferenceRequestInput))
+    .def(py::init<const InferenceTensor &>(),
+         DOCS(InferenceRequestInput, InferenceRequestInput, 2),
+         py::arg("tensor"))
+    .def(py::init<const Tensor &>(),
+         DOCS(InferenceRequestInput, InferenceRequestInput, 3),
+         py::arg("tensor"))
+    .def(py::init<void *, std::vector<uint64_t>, DataType, std::string>(),
+         DOCS(InferenceRequestInput, InferenceRequestInput, 4), py::arg("data"),
+         py::arg("shape"), py::arg("data_type"), py::arg("data") = "")
     .def("setUint8Data", &setData<uint8_t>, KeepAliveAssign())
     .def("setUint16Data", &setData<uint16_t>, KeepAliveAssign())
     .def("setUint32Data", &setData<uint32_t>, KeepAliveAssign())
@@ -77,12 +76,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def("setFp16Data", &setData<amdinfer::fp16>, KeepAliveAssign())
     .def("setFp32Data", &setData<float>, KeepAliveAssign())
     .def("setFp64Data", &setData<double>, KeepAliveAssign())
-    .def(
-      "setStringData",
-      [](amdinfer::InferenceRequestInput &self, std::string &str) {
-        self.setData(str.data());
-      },
-      KeepAliveAssign())
+    .def("setStringData", &setData<unsigned char>, KeepAliveAssign())
     .def("getUint8Data", &getData<uint8_t>, KeepAliveReturn())
     .def("getUint16Data", &getData<uint16_t>, KeepAliveReturn())
     .def("getUint32Data", &getData<uint32_t>, KeepAliveReturn())
@@ -95,14 +89,6 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def("getFp32Data", &getData<float>, KeepAliveReturn())
     .def("getFp64Data", &getData<double>, KeepAliveReturn())
     .def("getStringData", &getData<char>, KeepAliveReturn())
-    .def_property("name", &InferenceRequestInput::getName,
-                  &InferenceRequestInput::setName)
-    .def_property("shape", &InferenceRequestInput::getShape, setShape)
-    .def_property("datatype", &InferenceRequestInput::getDatatype,
-                  &InferenceRequestInput::setDatatype)
-    .def_property("parameters", &InferenceRequestInput::getParameters,
-                  &InferenceRequestInput::setParameters)
-    .def("getSize", &InferenceRequestInput::getSize, DOCS(Tensor, getSize))
     .def("__repr__",
          [](const InferenceRequestInput &self) {
            return "InferenceRequestInput(" + std::to_string(self.getSize()) +

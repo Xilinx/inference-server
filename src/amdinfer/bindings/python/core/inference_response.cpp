@@ -74,7 +74,7 @@ void wrapInferenceResponse(py::module_ &m) {
 }
 
 template <typename T>
-py::array_t<T> getData(const amdinfer::InferenceRequestInput &self) {
+py::array_t<T> getData(const amdinfer::InferenceResponseOutput &self) {
   auto *data = static_cast<T *>(self.getData());
   return py::array_t<T>(self.getSize(), data);
 
@@ -82,9 +82,11 @@ py::array_t<T> getData(const amdinfer::InferenceRequestInput &self) {
 }
 
 template <typename T>
-void setData(amdinfer::InferenceRequestInput &self, py::array_t<T> &b) {
-  // NOLINTNEXTLINE(google-readability-casting)
-  self.setData((void *)(b.data()));
+void setData(amdinfer::InferenceResponseOutput &self, py::array_t<T> &b) {
+  std::vector<std::byte> data;
+  data.resize(b.size());
+  memcpy(data.data(), b.data(), b.size());
+  self.setData(std::move(data));
 }
 
 void wrapInferenceResponseOutput(py::module_ &m) {
@@ -94,7 +96,8 @@ void wrapInferenceResponseOutput(py::module_ &m) {
     static_cast<void (InferenceResponseOutput::*)(std::vector<uint64_t>)>(
       &InferenceResponseOutput::setShape);
 
-  py::class_<InferenceResponseOutput>(m, "InferenceResponseOutput")
+  py::class_<InferenceResponseOutput, InferenceTensor>(
+    m, "InferenceResponseOutput")
     .def(py::init<>(), DOCS(InferenceResponseOutput))
     .def("setUint8Data", &setData<uint8_t>, KeepAliveAssign())
     .def("setUint16Data", &setData<uint16_t>, KeepAliveAssign())
@@ -111,8 +114,8 @@ void wrapInferenceResponseOutput(py::module_ &m) {
       "setStringData",
       [](amdinfer::InferenceResponseOutput &self, std::string &str) {
         std::vector<std::byte> data;
-        data.resize(str.length());
-        memcpy(data.data(), str.data(), str.length());
+        data.resize(str.size());
+        memcpy(data.data(), str.data(), str.size());
         self.setData(std::move(data));
       },
       KeepAliveAssign())

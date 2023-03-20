@@ -170,9 +170,9 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
 
   // Adding metadata for input and output
   this->metadata_.addInputTensor(
-    "input", input_dt_,
-    {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", DataType::FP32, {0});
+    "input", {this->batch_size_, image_height_, image_width_, image_channels_},
+    input_dt_);
+  this->metadata_.addOutputTensor("output", {0}, DataType::FP32);
   this->metadata_.setName("PtZendnn");
 }
 

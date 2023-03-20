@@ -72,7 +72,7 @@ std::byte *Tensor::serialize(std::byte *data_out) const {
   data = util::copy(name_.c_str(), data, metadata.name);
   data = util::copy(shape_.data(), data, metadata.shape);
   data = util::copy(static_cast<uint8_t>(data_type_), data, metadata.data_type);
-  assert(data_out + this->serializeSize() == data);
+  assert(data_out + Tensor::serializeSize() == data);
   return data;
 }
 

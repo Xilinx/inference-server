@@ -41,7 +41,10 @@ TEST(UnitInferenceRequestInput, SerDes) {
   serial_data.reserve(req.serializeSize());
   req.serialize(serial_data.data());
 
+  std::vector<char> new_data_vector;
+  new_data_vector.resize(data_size);
   InferenceRequestInput new_req;
+  new_req.setData(new_data_vector.data());
   new_req.deserialize(serial_data.data());
 
   EXPECT_NE(req.getData(), new_req.getData());
