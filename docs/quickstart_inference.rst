@@ -78,6 +78,7 @@ These examples assume a ResNet50 model trained on the ImageNet dataset is availa
 
     $ wget :amdinferRawFull:`examples/resnet50/imagenet_classes.txt`
     $ wget :amdinferRawFull:`tests/assets/dog-3619020_640.jpg`
+    $ wget :amdinferRawFull:`examples/resnet50/resnet.py`
 
 .. tabs::
 

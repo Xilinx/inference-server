@@ -707,6 +707,7 @@ def install_python_packages():
                 exhale \\
                 sphinx-tabs \\
                 sphinxcontrib-openapi \\
+                sphinxcontrib-jquery \\
                 # install linting tools
                 black \\
                 cpplint \\
