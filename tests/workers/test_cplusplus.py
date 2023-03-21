@@ -26,8 +26,8 @@ class TestCPlusPlus:
 
     @staticmethod
     def get_config():
-        model = "CPlusPlus"
-        parameters = {"model": "echo"}
+        model = ["CPlusPlus", "Responder"]
+        parameters = [{"model": "echo"}, {}]
         return (model, parameters)
 
     inputs = [3]
@@ -73,7 +73,7 @@ class TestCPlusPlus:
             )
 
         assert not response.isError(), response.getError()
-        assert response.model == "CPlusPlus"
+        assert response.model == "Responder"
 
         outputs = response.getOutputs()
         assert len(outputs) == 1 * input_tensors
@@ -106,8 +106,8 @@ class TestCPlusPlus2:
 
     @staticmethod
     def get_config():
-        model = "CPlusPlus"
-        parameters = {"model": "echo_multi", "batch_size": 2, "timeout": 1000}
+        model = ["CPlusPlus", "Responder"]
+        parameters = [{"model": "echo_multi", "batch_size": 2, "timeout": 1000}, {}]
         return (model, parameters)
 
     inputs = [[3], [2, 7]]
@@ -157,7 +157,7 @@ class TestCPlusPlus2:
 
         for response in responses:
             assert not response.isError(), response.getError()
-            assert response.model == "CPlusPlus"
+            assert response.model == "Responder"
 
             outputs = response.getOutputs()
             assert len(outputs) == len(self.golden_outputs)

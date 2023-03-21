@@ -234,13 +234,22 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
   std::string worker_name = endpoint;
   if (parameters->has("worker")) {
     worker_name = parameters->get<std::string>("worker");
+  } else {
+    parameters->put("worker", worker_name);
   }
 
   // if the worker doesn't exist yet, we need to create it
   try {
     if (worker_info == nullptr) {
+      BatchPtrQueue* next = nullptr;
+      if (parameters->has("next")) {
+        auto next_endpoint = parameters->get<std::string>("next");
+        const auto* next_info = this->unsafeGet(next_endpoint);
+        next = next_info->getInputQueue();
+      }
+
       auto new_worker =
-        std::make_unique<WorkerInfo>(worker_name, parameters, &pool_);
+        std::make_unique<WorkerInfo>(worker_name, parameters, &pool_, next);
       this->workers_.try_emplace(endpoint, std::move(new_worker));
       // if the worker exists but the share parameter is false, we need to add
       // one

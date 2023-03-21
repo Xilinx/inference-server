@@ -36,7 +36,8 @@
 namespace amdinfer {
 
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
-                       MemoryPool* pool) {
+                       MemoryPool* pool, BatchPtrQueue* next)
+  : next_(next) {
   this->batch_size_ = 1;
 
   this->addAndStartWorker(name, parameters, pool);

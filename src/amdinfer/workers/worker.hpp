@@ -135,6 +135,8 @@ class Worker {
 
   ModelMetadata getMetadata() const { return this->metadata_; }
 
+  void setNext(BatchPtrQueue* batcher) { next_ = batcher; }
+
  protected:
 #ifdef AMDINFER_ENABLE_LOGGING
   [[nodiscard]] const Logger& getLogger() const { return logger_; };
@@ -150,6 +152,7 @@ class Worker {
   size_t batch_size_ = 1;
   ModelMetadata metadata_;
   MemoryPool* pool_;
+  BatchPtrQueue* next_;
 
  private:
   /// Perform low-cost initialization of the worker

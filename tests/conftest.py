@@ -210,28 +210,42 @@ def server(xprocess, request):
 def load(request, server):
     test_model, test_parameters = request.cls.get_config()
 
-    assert test_model
+    if isinstance(test_model, str):
+        test_model = [test_model]
+        test_parameters = [test_parameters]
 
-    parameters = amdinfer.ParameterMap()
-    if test_parameters is not None:
-        for key, value in test_parameters.items():
-            parameters.put(key, value)
+    assert test_model
+    assert len(test_model) == len(test_parameters)
 
     request.cls.rest_client = rest_client(request)
     request.cls.ws_client = ws_client(request)
 
-    response = request.cls.rest_client.workerLoad(test_model, parameters)
-    request.cls.endpoint = response
+    endpoints = []
+    for worker, params in zip(reversed(test_model), reversed(test_parameters)):
+        parameters = amdinfer.ParameterMap()
+        if params is not None:
+            for key, value in params.items():
+                parameters.put(key, value)
 
-    while not request.cls.rest_client.modelReady(response):
-        time.sleep(1)
+        if endpoints:
+            parameters.put("next", endpoints[-1])
+
+        endpoint = request.cls.rest_client.workerLoad(worker, parameters)
+        endpoints.append(endpoint)
+
+        while not request.cls.rest_client.modelReady(endpoint):
+            time.sleep(1)
+
+    # update the endpoint with the newest worker in the chain
+    request.cls.endpoint = endpoints[-1]
 
     yield  # perform testing
 
-    request.cls.rest_client.modelUnload(response)
+    for endpoint in reversed(endpoints):
+        request.cls.rest_client.modelUnload(endpoint)
 
-    while request.cls.rest_client.modelReady(response):
-        time.sleep(1)
+        while request.cls.rest_client.modelReady(endpoint):
+            time.sleep(1)
 
     request.cls.ws_client = None
     request.cls.rest_client = None

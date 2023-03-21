@@ -105,7 +105,8 @@ workers::Worker* getWorker(const std::string& name) {
 }
 
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
-                       MemoryPool* pool) {
+                       MemoryPool* pool, BatchPtrQueue* next)
+  : next_(next) {
   this->addAndStartWorker(name, parameters, pool);
 }
 
@@ -134,6 +135,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
 
   this->batch_size_ = worker->getBatchSize();
   worker->setPool(pool);
+  worker->setNext(next_);
 
   if (this->batchers_.empty()) {
     int32_t batcher_count = 1;
@@ -162,6 +164,10 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
 }
 
 Batcher* WorkerInfo::getBatcher() { return this->batchers_[0].get(); }
+
+BatchPtrQueue* WorkerInfo::getInputQueue() const {
+  return batchers_[0]->getOutputQueue();
+}
 
 void WorkerInfo::join(std::thread::id id) {
   auto& thread = worker_threads_.at(id);

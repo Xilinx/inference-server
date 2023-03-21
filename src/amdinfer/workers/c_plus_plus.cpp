@@ -284,10 +284,10 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
         "Cannot run a model with an unknown tensor shapes");
     }
 
-    respond(new_batch.get());
+    assert(next_ != nullptr);
+    next_->enqueue(std::move(new_batch));
 
     this->returnInputBuffers(std::move(batch));
-    this->returnInputBuffers(std::move(new_batch));
   }
   AMDINFER_LOG_INFO(logger, "CPlusPlus ending");
 }
